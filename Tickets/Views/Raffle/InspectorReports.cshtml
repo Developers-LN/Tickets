@@ -1,0 +1,65 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Reportes de Inspectoría";
+}
+<div class="col-lg-12 no-padder" ng-controller="RaffleForInspectorReporController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!-- START panel-->
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Sorteo</th>
+                                <th class="text-center">Premiados No Impreso</th>
+                                <th class="text-center">Premiados Vendidos</th>
+                                <th class="text-center">PREMIADOS</th>
+                                <th class="text-center">PREMIADOS CADUCADOS</th>
+                                <th class="text-center">CUADRE DE SORTEO</th>
+                                <th class="text-center">CUADRE DE SORTEO RESUMIDO</th>
+                                <th class="text-center">Resumen de Asignaciones</th>
+                                <th class="text-center">Asignaciones</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="raffle in raffles">
+                                <td>{{raffle.id}}</td>
+                                <td class="text-center">
+                                    <a href="/Reports/NoPrintedNumbesAward?raffleId={{raffle.id}}" target="_blank" title="Imprimir Numeros premiados no impreso"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/InvoicedNumbersAward?raffleId={{raffle.id}}" target="_blank" title="Numeros premiados Facturados"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/NumbesAward?raffleId={{raffle.id}}" target="_blank" title="Numeros premiados"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/NumbesAwardExpired?raffleId={{raffle.id}}" target="_blank" title="Numeros premiados Caducados"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/RaffleGeneralOver?raffleId={{raffle.id}}" target="_blank" title="Cuadre del sorteo"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/RaffleGeneralOverR?raffleId={{raffle.id}}" target="_blank" title="Cuadre del sorteo Resumido"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/AllocationSummary?raffleId={{raffle.id}}" target="_blank" title="Imprimir: Resumen Asignaciones"><i class="fa fa-print"></i></a>
+                                </td>
+
+                                <td class="text-center">
+                                    <a href="/Reports/AllocatinosNumbers?raffleId={{raffle.id}}" target="_blank" title="Imprimir: Reporte Asignaciones"><i class="fa fa-print"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

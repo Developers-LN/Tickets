@@ -1,0 +1,135 @@
+﻿@model List<Tickets.Models.Invoice>
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "VentasLoteria365";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+}
+
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>REPORTE DE VENTAS LOTERIA 365</b>
+            
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <div class="col-lg-6 no-padder text-right">
+
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+
+
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">FACTURAS</th>
+                    <th class="text-center">BILLETES VENDIDOS</th>
+                    <th class="text-center">CANTIDAD DE FRACCIONES VENDIDAS</th>
+                    <th class="text-center">CANTIDAD DE FRACCIONES NO VENDIDAS</th>
+                    <th class="text-center">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+
+                    var invoices = Model.AsEnumerable().
+                        GroupBy(c => c.ClientId).Select(c => new
+                        {
+                            client = c.FirstOrDefault().Client.Name,
+                            allocations = c.Select(s => new
+                            {
+                                id = s.Id,
+                                client = s.Client.Name,
+                                clientid = s.ClientId,
+                                raffleid = s.RaffleId,
+                                fractions = s.InvoiceTickets.FirstOrDefault().TicketAllocationNumber.FractionTo - s.InvoiceTickets.FirstOrDefault().TicketAllocationNumber.FractionFrom + 1,
+                                numbers = s.InvoiceTickets.Select(i => i.TicketAllocationNumber).Count(),
+                                amount = s.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == s.Client.PriceId).FactionPrice,
+                                production = s.Raffle.Prospect.Production,
+                                invoiceid = s.InvoiceTickets.FirstOrDefault().TicketNumberAllocationId
+
+                            }).ToList()
+                        }).ToList();
+
+                    var totalValue = 0.0m;
+                    int totalFraction = 0;
+                    int totalNumber = 0;
+                }
+                @foreach (var client in invoices)
+                {
+                    <tr>
+                        <th colspan="6">@client.client - @client.allocations.FirstOrDefault().raffleid</th>
+                    </tr>
+                    foreach (var invoice in client.allocations)
+                    {
+                        int Fractions = invoice.fractions * invoice.numbers;
+                        int fraccionesnovendidas = invoice.production - Fractions;
+                        var Value = invoice.amount * Fractions;
+
+                        <tr>
+                            <td class="text-center"><b>@invoice.id</b></td>
+                            <td class="text-center">@invoice.numbers</td>
+                                <td class="text-center">@Fractions.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-center">@fraccionesnovendidas</td>
+                                <td class="text-center">@Value.ToString("c", new System.Globalization.CultureInfo("es-Do"))</td>
+                            </tr>
+                        totalNumber += invoice.numbers;
+                        totalFraction += Fractions;
+                        totalValue += Value;
+
+                    }
+                }
+
+            </tbody>
+            <tfoot>
+                <tr class="" style="border-top: 4px double black">
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center">@totalFraction.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-center"></td>
+                    <td class="text-right" style="font-weight: bold;">Total General: @((totalValue).ToString("c", new System.Globalization.CultureInfo("es-Do")))</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

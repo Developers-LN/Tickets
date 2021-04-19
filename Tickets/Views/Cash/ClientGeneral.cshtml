@@ -1,0 +1,71 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Cuentas por Cobrar";
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="AccountReceivableReportsController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 m-b-xs no-padder">
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <label class="col-lg-12 control-label-left">Sorteos: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="cash.RaffleId" ng-change="update()">
+                                    <option value="0">Todos los sorteos</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                </select>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <label class="col-lg-12 control-label-left">Cliente: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="cash.ClientId">
+                                    <option value="0">Todos los clientes</option>
+                                    <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
+                                </select>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <label class="col-lg-12 control-label-left">Fecha de Inicio: </label>
+                            <div class="col-lg-11" style="padding-right: 0">
+                                <input type="date"
+                                       id="startDate"
+                                       class="form-control"
+                                       ng-model="cash.StartDate" ,
+                                        />
+                            </div>
+                            <div class="col-lg-1 no-padder">
+                                <button id="reset-date" class="btn btn-square btn-warning"><i class="fa fa-times"></i></button>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <label class="col-lg-12 control-label-left">Fecha Fin: </label>
+                            <div class="col-lg-11" style="padding-right: 0">
+                                <input type="date"
+                                       id="endDate"
+                                       class="form-control"
+                                       ng-model="cash.EndDate" ,
+                                        />
+                            </div>
+                            <div class="col-lg-1 no-padder">
+                                <button id="reset-date1" class="btn btn-square btn-warning"><i class="fa fa-times"></i></button>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a href="#/report/invoiceDetailList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Salir</a>
+        <a ng-click="printReport()" class="mr btn btn-square btn-primary"><i class="fa fa-print"></i> Generar Reporte</a>
+    </div>
+</div>

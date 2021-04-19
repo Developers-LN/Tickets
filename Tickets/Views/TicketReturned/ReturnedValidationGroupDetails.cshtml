@@ -1,0 +1,58 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Detalle de Grupo Devolución (Validación)";
+}
+<div class="col-lg-12 no-padder" ng-controller="ReturnedValidationGroupDetailsController" ng-init="app.title = '@(ViewBag.Title)'">
+
+
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 well no-padder">
+                    <div class="col-lg-4">Sorteo: #<b>{{returns[0].RaffleId}} - {{returns[0].RaffleDesc}}</b></div>
+                    <div class="col-lg-4">Grupo: <b>{{returns[0].ReturnedGroup}}</b></div>
+                </div>
+                <div class="row-border hover">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th class="hide"></th>
+                                <th>Cliente</th>
+                                <th>Numeros</th>
+                                <th>Fracción inicio</th>
+                                <th>Fracción Fin</th>
+                                <th>Usuario</th>
+                                <th style="width:150px;">Fecha</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="return in returns">
+                                <td class="hide">{{returned.Id}}</td>
+                                <td ng-bind="return.ClientDesc"></td>
+                                <td ng-bind="addZeroToNumber((return.Production - 1), return.NumberDesc)"></td>
+                                <td ng-bind="return.FractionFrom"></td>
+                                <td ng-bind="return.FractionTo"></td>
+                                <td ng-bind="return.UserDesc"></td>
+                                <td>{{(return.CreateDate | date:"dd/MM/yyyy h:mm:ss a")}}</td>
+                                <td class="text-center"></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="8"><strong>Cantidad de Registros: {{parseNumber(returns.length)}}</strong></td>
+                            </tr>
+                            <tr>
+                                <td colspan="8"><strong>Cantidad de Fracciones: {{parseNumber(fractionTotal)}}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a href="#/ticket/returnedValidation" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+    </div>
+</div>

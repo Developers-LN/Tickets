@@ -1,0 +1,207 @@
+﻿@model List<Tickets.Models.IdentifyBach>
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "HISTORICO DE PAGO";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    var raffleId = Model.FirstOrDefault().RaffleId;
+}
+
+<style>
+    .col-lg-12{
+        width: 100%;
+        float: left;
+    }
+    .col-lg-4 {
+        width: 33.333%;
+         float: left;
+    }
+    .col-lg-6{
+        width: 50%;
+        float: left;
+    } 
+    
+    .text-center {
+        text-align: center;
+    }
+    .text-right {
+        text-align:right;
+    }
+    .text-left {
+        text-align:left;
+    }
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png"/>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>REPORTE DE DEUDAS PARA EL SORTEO NO. @raffleId</b>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br/>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">CLIENTE</th>
+                    <th class="text-center">LOTE</th>
+                    <th class="text-center">PAGADAS ?</th>
+                    <th class="text-center">FRACCIONES PREMIADAS</th>
+                    <th class="text-right">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var awards = context.RaffleAwards.AsEnumerable().Where(r => r.RaffleId == Model.FirstOrDefault().RaffleId).ToList();
+                    var IdentifyBachsPayed = Model.Where(i => Tickets.Models.Utils.IdentifyBachIsPayedMayor(i, awards) || Tickets.Models.Utils.IdentifyBachIsPayedMinor(i, awards)).GroupBy(r => r.RaffleId).Select(s => new
+                    {
+                        raffleName = s.FirstOrDefault().RaffleId + " - " + s.FirstOrDefault().Raffle.Name,
+                        clients = s.GroupBy(i => i.ClientId).Select(i => new
+                        {
+                            clientName = i.FirstOrDefault().Client.Name,
+                            identifyBachs = i
+                        })
+                    }).ToList();
+                    
+                    var IdentifyBachsNoPayed = Model.Where(i => Tickets.Models.Utils.IdentifyBachIsPayedMayor(i, awards) == false && Tickets.Models.Utils.IdentifyBachIsPayedMinor(i, awards) == false).GroupBy(r => r.RaffleId).Select(s => new
+                    {
+                        raffleName = s.FirstOrDefault().RaffleId + " - " + s.FirstOrDefault().Raffle.Name,
+                        clients = s.GroupBy(i => i.ClientId).Select(i => new
+                        {
+                            clientName = i.FirstOrDefault().Client.Name,
+                            identifyBachs = i.ToList()
+                        }).ToList()
+                    }).ToList();
+                }
+
+                <tr>
+                    <th class="text-left" colspan="5" style="padding-left: 100px; background-color: aliceblue;">PAGADAS</th>
+                </tr>
+                @foreach (var raffle in IdentifyBachsPayed)
+                {
+                    decimal finalTotalPayed = 0;
+                    int finalTotalFraction = 0;
+                    int totalClientFractions = 0;
+                    decimal totalClientPayed = 0;
+                    foreach (var client in raffle.clients)
+                    {
+                        <tr>
+                            <th class="text-left" colspan="5" style="padding-left: 50px">@client.clientName</th>
+                        </tr>
+                        foreach (var identify in client.identifyBachs)
+                        {
+                            var identifyFractions = 0;
+                            var identifyFractionValue = 0.0M;
+                            foreach (var number in identify.IdentifyNumbers)
+                            {
+                                var awardList = awards.Where(a => a.ControlNumber == number.TicketAllocationNumber.Number);
+                                identifyFractions += (number.FractionTo - number.FractionFrom + 1);
+                                foreach (var award in awardList)
+                                {
+                                    identifyFractionValue += (number.FractionTo - number.FractionFrom + 1) * (award.Award.Value / (award.Raffle.Prospect.LeafFraction * award.Raffle.Prospect.LeafNumber));
+                                }
+                            }
+                            <tr>
+                                <td class="text-center"></td>
+                                <td class="text-center">@identify.Id</td>
+                                <td class="text-center">SI</td>
+                                <td class="text-center">@identifyFractions</td>
+                                <td class="text-right" style="font-weight:bold;">@(identifyFractionValue.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            </tr>
+                            totalClientFractions += identifyFractions;
+                            totalClientPayed += identifyFractionValue;
+                        }
+                        <tr class="total">
+                            <td class="text-right" colspan="3">Total Cliente Pagado:..</td>
+                            <td class="text-center" style="font-weight:bold;"> @totalClientFractions</td>
+                            <td class="text-right" style="font-weight:bold;">Total Cliente: @totalClientPayed.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        </tr>
+                        finalTotalPayed += totalClientPayed;
+                        finalTotalFraction += totalClientFractions;
+                    }
+                    <tr class="total">
+                        <td class="text-right" style="font-weight:bold; background-color:#e0e0e0" colspan="3">TOTAL PAGADO:..</td>
+                        <td class="text-center" style="font-weight:bold; background-color:#e0e0e0">@finalTotalFraction</td>
+                        <td class="text-right" style="font-weight:bold; background-color:#e0e0e0">@finalTotalPayed.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                }
+
+                <tr>
+                    <th class="text-left" colspan="5" style="padding-left: 100px; background-color: aliceblue;">NO PAGADAS</th>
+                </tr>
+                @foreach (var raffle in IdentifyBachsNoPayed)
+                {
+                    decimal finalTotalNoPayed = 0;
+                    int finalTotalFraction = 0;
+                    int totalClientFractions = 0;
+                    decimal totalClientPayed = 0;
+                    foreach (var client in raffle.clients)
+                    {
+                        <tr>
+                            <th class="text-left" colspan="5" style="padding-left: 50px">@client.clientName</th>
+                        </tr>
+                        foreach (var identify in client.identifyBachs)
+                        {
+                            var identifyFractions = 0;
+                            var identifyFractionValue = 0.0M;
+                            foreach (var number in identify.IdentifyNumbers)
+                            {
+                                var awardList = awards.Where( a=> a.ControlNumber == number.TicketAllocationNumber.Number);
+                                identifyFractions += (number.FractionTo - number.FractionFrom + 1);
+                                foreach( var award in awardList){
+                                    identifyFractionValue += (number.FractionTo - number.FractionFrom + 1) * (award.Award.Value / (award.Raffle.Prospect.LeafFraction * award.Raffle.Prospect.LeafNumber));
+                                }
+                            }
+                            <tr>
+                                <td class="text-center"></td>
+                                <td class="text-center">@identify.Id</td>
+                                <td class="text-center">NO</td>
+                                <td class="text-center">@identifyFractions</td>
+                                <td class="text-right" style="font-weight:bold;">@(identifyFractionValue.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            </tr>
+                            totalClientFractions += identifyFractions;
+                            totalClientPayed += identifyFractionValue;
+                        }
+                        <tr class="total">
+                            <td class="text-right" colspan="3">Total Cliente No Pagado:..</td>
+                            <td class="text-center" style="font-weight:bold;"> @totalClientFractions</td>
+                            <td class="text-right" style="font-weight:bold;">Total Cliente: @totalClientPayed.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        </tr>
+                        finalTotalNoPayed += totalClientPayed;
+                        finalTotalFraction += totalClientFractions;
+                    }
+
+                    <tr class="total">
+                        <td  colspan="3" style="font-weight:bold; background-color:#e0e0e0" class="text-right" >TOTAL NO PAGADO:..</td>
+                        <td class="text-center" style="font-weight:bold; background-color:#e0e0e0">@finalTotalFraction</td>
+                        <td class="text-right" style="font-weight:bold; background-color:#e0e0e0">@finalTotalNoPayed.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

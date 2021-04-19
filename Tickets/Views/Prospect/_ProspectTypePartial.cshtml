@@ -1,0 +1,20 @@
+@{
+    Layout = null;
+}
+
+<div class="col-lg-12 no-padder">
+    <h4 class="text-center m-b-xs">Seleccione el tipo de prospecto</h4>
+    <div class="col-lg-12">
+        <div class="col-lg-6 text-center m-b-xs">
+            <a ng-click="goStep2(@((int)Tickets.Models.Enums.ProspectTypeEnum.Tickets))" class="btn btn-success" style="font-size: 18pt;"><i class="fa fa-ticket" style="font-size: 42pt;"></i><br />
+                 Prospecto de Billetes</a>
+        </div>
+        <div class="col-lg-6 text-center m-b-xs">
+            <a ng-click="goStep2(@((int)Tickets.Models.Enums.ProspectTypeEnum.Pools))" class="btn btn-info" style="font-size: 18pt;"><i class="fa fa-ticket" style="font-size: 42pt;"></i><br />
+                 Prospecto de Quinielas</a>
+        </div>
+    </div>
+    <div class="mt col-lg-12 no-padder">
+         <a href="#/prospect/prospects" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Cancelar</a>
+    </div>
+</div>

@@ -1,0 +1,660 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Creación de Prospecto";
+    var context = new Tickets.Models.TicketsEntities();
+    int byFractionId = (int)Tickets.Models.Enums.CatalogGroupEnum.ByFraction;
+}
+<!-- START panel-->
+<style>
+    .dataTables_No hay datos {
+        display: none !important;
+    }
+</style>
+<div class="col-lg-12 no-padder" ng-controller="ProspectCreateController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="wizard">
+                <ul class="steps-bar">
+                    <li ng-class="{'active':activeStep&gt;=1}">
+                        <span>Definir la creación</span>
+                    </li>
+                    <li ng-class="{'active':activeStep&gt;=2}" ng-click="topGoToStep(2)">
+                        <span>Diseño de Prospecto</span>
+                    </li>
+                    <li ng-class="{'active':activeStep&gt;=3}" ng-click="topGoToStep(3)">
+                        <span>Administración de Precios</span>
+                    </li>
+                    <li ng-class="{'active':activeStep&gt;=4}" ng-click="topGoToStep(4)">
+                        <span>Asignación de premios</span>
+                    </li>
+                    <li ng-class="{'active':activeStep&gt;=5}" ng-click="topGoToStep(5)">
+                        <span>Verificar</span>
+                    </li>
+                </ul>
+                <div ng-show="activeStep==1" class="wizard-step">
+                    <h4>Definir la Creación</h4>
+                    <div class="col-lg-12">
+                        <div class="col-lg-6 no-padder">
+                            <div class="radio c-radio">
+                                <label>
+                                    <input type="radio" name="typeRadio" value="new" checked="checked">
+                                    <span class="fa fa-circle"></span>Nuevo prospecto
+                                </label>
+                            </div>
+                            <div class="radio c-radio">
+                                <label>
+                                    <input type="radio" name="typeRadio" value="exist">
+                                    <span class="fa fa-circle"></span>Nuevo prospecto tomando uno existente.
+                                </label>
+                            </div>
+
+                            <fieldset class="hide" id="existenProspectDropDown">
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left no-padder">Prospectos existente:  <span class="color-red">*</span></label>
+                                    <div class="col-lg-12 no-padder">
+                                        <select ng-required="true" class="form-control" id="existenProspect">
+                                            <option selected="selected" disabled="disabled" value="0">Seleccione un prospectos existente</option>
+                                            <option ng-repeat="prospect in allProspectList" value="{{prospect.Id}}">{{prospect.Name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="mt col-lg-12 no-padder">
+                        <div class="col-lg-6 no-padder">
+                            <a ui-sref="app.prospectlist" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Cancelar</a>
+                        </div>
+                        <div class="col-lg-6 no-padder text-right">
+                            <a ng-click="goStepTow()" class="btn btn-primary">Siguiente <i class="fa fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="activeStep==2" class="wizard-step">
+                    <h4>Diseño de Prospecto</h4>
+                    <div class="col-lg-6 no-padder">
+                        <input type="hidden"
+                               ng-model="prospect.Id" />
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="text"
+                                           ng-model="prospect.Name"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Titulo: </label>
+                                <div class="col-lg-12">
+                                    <textarea class="form-control input-sm"
+                                              ng-model="prospect.Description"
+                                              style="max-height: 109px; height: 37px;"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Precio de venta por fracción: <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           min="0"
+                                           ng-model="prospect.Price"
+                                           class="form-control input-sm"
+                                           ng-required="true">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Grupo:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" id="groupDescription" class="form-control input-sm" ng-model="prospect.GroupId">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un grupo</option>
+                                        <option ng-repeat="group in groups" value="{{group.value}}">{{group.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Producción:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           min="0"
+                                           ng-model="prospect.Production"
+                                           class="form-control input-sm"
+                                           ng-required="true">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Porcentaje de devoluciones:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           ng-min="0"
+                                           ng-max="100"
+                                           ng-model="prospect.MaxReturnTickets"
+                                           class="form-control input-sm"
+                                           ng-required="true">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Hojas por número: <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           min="0"
+                                           ng-model="prospect.LeafNumber"
+                                           class="form-control input-sm"
+                                           ng-required="true">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label">Fracción por hojas:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           min="0"
+                                           ng-model="prospect.LeafFraction"
+                                           class="form-control input-sm"
+                                           ng-required="true">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label">Fecha de Expiración:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="date"
+                                           ng-model="prospect.ExpirateDate"
+                                           class="form-control input-sm">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label">Formato de Impresión:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" id="impresionTypeDescription" class="form-control input-sm" ng-model="prospect.ImpresionType">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione una forma de impresión</option>
+                                        <option ng-repeat="printTechnique in printTechniques" value="{{printTechnique.value}}">{{printTechnique.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Estado:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-show="prospect.Statu !== 22" ng-required="true" id="statuDescription" class="form-control input-sm" ng-model="prospect.Statu">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un estado</option>
+                                        <option ng-repeat="statu in prospectStatus" ng-show="(statu.value===20 || statu.value===21)" value="{{statu.value}}">{{statu.text}}</option>
+                                    </select>
+                                    <label class="well well-info" ng-show="prospect.Statu === 22">{{prospect.StatuDescription}}</label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="mt col-lg-12 no-padder">
+                        <div class="col-lg-6 no-padder">
+                            <a ui-sref="app.prospectlist" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Cancelar</a>
+                        </div>
+                        <div class="col-lg-6 no-padder text-right">
+                            <a ng-click="activeStep=1" ng-show="prospect.Id==0" class="btn btn-default">Regresar <i class="fa fa-arrow-left"></i></a>
+                            <a ng-click="goStepThree()" class="btn btn-primary">Siguiente <i class="fa fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-show="activeStep==3" class="wizard-step">
+                    <h4>
+                        Administración de Premios
+                        <a popover-placement="right" popover="{{convertToHTML()}}" popover-title="Información"><i class="fa fa-question-circle"></i></a>
+                    </h4>
+                    <div class="col-lg-12 no-padder">
+                        <div class="form-group col-lg-3">
+                            <label class="col-lg-12 no-padder control-label-left">Tipo de precio:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12 no-padder">
+                                <select ng-disabled="price.PriceId > 0" class="form-control input-sm" ng-model="price.PriceId" id="priceTypeDropDown">
+                                    <option disabled="disabled" value="0" selected="selected"> Seleccione un tipo de precio</option>
+                                    <option ng-repeat="typePrice in typePricesFiltered" value="{{typePrice.value}}">{{typePrice.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label class="col-lg-12 no-padder control-label-left">Precio Billete:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12 no-padder">
+                                <input type="number"
+                                       ng-min="0"
+                                       ng-model="price.TicketPrice"
+                                       ng-change="changeTicketPrice()"
+                                       step="any"
+                                       class="form-control input-sm" />
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label class="col-lg-12 no-padder control-label-left">Precio Serie:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12 no-padder">
+                                <input type="number"
+                                       ng-min="0"
+                                       ng-model="price.SeriePrice"
+                                       step="any"
+                                       class="form-control input-sm" />
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label class="col-lg-12 no-padder control-label-left">Precio Fracción:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12 no-padder">
+                                <input type="number"
+                                       ng-min="0"
+                                       ng-model="price.FactionPrice"
+                                       step="any"
+                                       class="form-control input-sm" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 text-right m-b-xs">
+                        <button ng-click="clearPrice()" type="button" class="btn btn-default">Cancelar</button>
+                        <button ng-click="addPrice()" type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+
+                    <div class="col-lg-12 no-padder">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo de Precio</th>
+                                    <th>Precio de Billete</th>
+                                    <th>Precio de Serie</th>
+                                    <th>Precio de Fracción</th>
+                                    <th class="editColumm">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="price in prospect.Prospect_Price">
+                                    <td>{{price.PriceDesc}}</td>
+                                    <td>{{parseMoney(price.TicketPrice)}}</td>
+                                    <td>{{parseMoney(price.SeriePrice)}}</td>
+                                    <td>{{parseMoney(price.FactionPrice)}}</td>
+                                    <td>
+                                        <a ng-click="editPrice(price)" title="Moificar Premio"><i class="fa fa-pencil-square-o"></i></a>
+                                        <a ng-click="deletePrice(price)" title="Borrar Premio"><i class="fa fa-times"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt col-lg-12 no-padder">
+                        <div class="col-lg-6 no-padder">
+                            <a ui-sref="app.prospectlist" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Cancelar</a>
+                        </div>
+                        <div class="col-lg-6 no-padder text-right">
+                            <a ng-click="activeStep=2" class="btn btn-default">Regresar <i class="fa fa-arrow-left"></i></a>
+                            <a ng-click="goStepFour()" class="btn btn-primary">Siguiente <i class="fa fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="activeStep==4" class="wizard-step">
+                    <h4>Asignación de Premios</h4>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Administración de premio</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <form name="awardCreateForm" novalidate>
+                                            <input type="hidden"
+                                                   class="hide"
+                                                   ng-model="award.Id" />
+                                            <div class="col-lg-4 no-padder">
+                                                <div class="form-group">
+                                                    <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
+                                                    <div class="col-lg-12">
+                                                        <input type="text"
+                                                               ng-model="award.Name"
+                                                               class="form-control input-sm"
+                                                               ng-required="true" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-lg-12 control-label-left">Descripción: </label>
+                                                    <div class="col-lg-12">
+                                                        <textarea class="form-control input-sm"
+                                                                  ng-model="award.Description"
+                                                                  style="max-height: 109px; height: 37px;"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-lg-12 control-label-left">Orden:  <span class="color-red">*</span></label>
+                                                    <div class="col-lg-12">
+                                                        <input type="number"
+                                                               min="0"
+                                                               ng-model="award.OrderAward"
+                                                               step="any"
+                                                               class="form-control input-sm"
+                                                               ng-required="true" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 no-padder">
+                                                <div class="form-group">
+                                                    <label class="col-lg-12 control-label-left">Tipo de premio: <span class="color-red">*</span></label>
+                                                    <div class="col-lg-12">
+                                                        <select id="typesAwardIdDropdown" class="form-control input-sm" ng-model="award.TypesAwardId" ng-change="updateAwardTypeValue()">
+                                                            <option selected="selected" disabled="disabled" value="0">Seleccione un tipo premio</option>
+                                                            <option ng-repeat="awardType in awardTypes" value="{{awardType.value}}">{{awardType.text}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-lg-12 control-label-left">Premio origen: </label>
+                                                    <div class="col-lg-12">
+                                                        <select id="sourceAwardDropdown" class="form-control input-sm" ng-model="award.SourceAward">
+                                                            <option selected="selected" value="Null"></option>
+                                                            <option ng-repeat="award in prospect.Awards" value="{{award.OrderAward}}">{{award.Name}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-lg-12 control-label-left">Por Fracción: <span class="color-red">*</span></label>
+                                                    <div class="col-lg-12">
+                                                        <select ng-required="true" id="byFractionDropdown"
+                                                                ng-disabled="disabledByFraction == false"
+                                                                class="form-control input-sm" ng-model="award.ByFraction">
+                                                            <option selected="selected" disabled="disabled" value="0">Seleccione la fracción</option>
+                                                            @foreach (var statu in context.Catalogs.Where(c => c.IdGroup == byFractionId))
+                                                            {
+                                                                <option value="@statu.Id">@statu.NameDetail</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 no-padder">
+                                                <div class="form-group">
+                                                    <label class="col-lg-12 control-label-left">Cantidad: <span class="color-red">*</span></label>
+                                                    <div class="col-lg-12">
+                                                        <input type="number"
+                                                               min="0"
+                                                               max="{{(prospect.Production/prospect.LeafFraction-1)}}"
+                                                               ng-max="(prospect.Production/prospect.LeafFraction-1)"
+                                                               ng-model="award.Quantity"
+                                                               ng-disabled="disabledByQuantity == false"
+                                                               step="any"
+                                                               class="form-control input-sm"
+                                                               ng-required="true" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-lg-12 control-label">Valor:  <span class="color-red">*</span></label>
+                                                    <div class="col-lg-12">
+                                                        <input step="any"
+                                                               type="number"
+                                                               min="0"
+                                                               ng-model="award.Value"
+                                                               class="form-control input-sm"
+                                                               ng-required="true" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-lg-12 control-label-left">Terminal: </label>
+                                                    <div class="col-lg-12">
+                                                        <input type="number"
+                                                               ng-disabled="disabledTerminal == false"
+                                                               min="0"
+                                                               ng-model="award.Terminal"
+                                                               step="any"
+                                                               class="form-control input-sm" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                    <button ng-click="saveAwardForm()" type="button" class="btn btn-primary">Guardar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Button trigger modal -->
+                    <div class="col-lg-12 text-right m-b-xs no-padder">
+                        <a class="btn btn-square btn-success" ng-click="editAward()">
+                            <i class="fa fa-plus-square"></i> Agregar premios
+                        </a>
+                    </div>
+                    <div class="col-lg-12 no-padder">
+                        <table id="awardDatatable" class="table dataTableGrid">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Tipo de Premio</th>
+                                    <th>Premio Origen</th>
+                                    <th>Orden</th>
+                                    <th>Cantidad</th>
+                                    <th>Terminal</th>
+                                    <th>Por Fracción</th>
+                                    <th>Valor</th>
+                                    <th class="editColumm">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="currentAward in prospect.Awards">
+                                    <td>{{currentAward.Name}}</td>
+                                    <td>{{currentAward.TypesAwardDesc}}</td>
+                                    <td>{{currentAward.SourceAwardDescription}}</td>
+                                    <td>{{currentAward.OrderAward}}</td>
+                                    <td>{{parseNumber(currentAward.Quantity)}}</td>
+                                    <td>{{currentAward.Terminal}}</td>
+                                    <td>{{currentAward.ByFractionDescription}}</td>
+                                    <td>{{parseMoney(currentAward.Value)}}</td>
+                                    <td>
+                                        <a ng-click="editAward(currentAward)" title="Moificar Premio"><i class="fa fa-pencil-square-o"></i></a>
+                                        <a ng-click="deleteAward(currentAward)" title="Borrar Premio"><i class="fa fa-times"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="text-right"></td>
+                                    <td class="text-right"></td>
+                                    <td class="text-right"></td>
+                                    <td class="text-right"></td>
+                                    <td class="text-right"></td>
+                                    <td class="text-right"></td>
+                                    <td class="text-right">Total...:</td>
+                                    <td class="text-right">{{parseMoney(showTotal())}}</td>
+                                    <td class="text-right"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="mt col-lg-12 no-padder">
+                        <div class="col-lg-6 no-padder">
+                            <a ui-sref="app.prospectlist" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Cancelar</a>
+                        </div>
+                        <div class="col-lg-6 no-padder text-right">
+                            <a ng-click="activeStep=3" class="btn btn-default">Regresar <i class="fa fa-arrow-left"></i></a>
+                            <a ng-click="goStepFive()" class="btn btn-primary">Siguiente <i class="fa fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="activeStep==5" class="wizard-step">
+                    <h4>Verificación</h4>
+                    <hr />
+                    <div class="col-lg-12 m-b-xs">
+                        <div class="col-lg-6 no-padder">
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-3 control-label-left">Nombre:</span><span class="col-lg-8">
+                                        <a href="" editable-text="prospect.Name">{{ prospect.Name || &apos;No hay datos&apos; }}</a>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-3 control-label-left">Descripción:</span><span class="col-lg-8">
+                                        <a href="" editable-textarea="prospect.Description" e-rows="3" e-cols="30">{{ prospect.Description || &apos;No hay datos&apos; }}</a>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-3 control-label-left">Precio de venta:</span><span class="col-lg-8">
+                                        <a href="" editable-number="prospect.Price" e-min="0">{{ parseMoney(prospect.Price)  || &apos;No hay datos&apos; }}</a>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-3 control-label-left">Grupo:</span><span class="col-lg-8">
+                                        <a href="" editable-select="prospect.GroupId" e-ng-options="s.value as s.text for s in groups">{{showGroupDescription()}}</a>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-3 control-label-left">Producción:</span><span class="col-lg-8">
+                                        <a href="" editable-number="prospect.Production" e-min="0">{{parseMoney(prospect.Production).substring(3, parseMoney(prospect.Production).length - 3) || &apos;No hay datos&apos; }}</a>
+                                    </span>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6 no-padder">
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label-left">Hojas por número:</span><span class="col-lg-8">
+                                        <a href="" editable-number="prospect.LeafNumber" e-min="0">{{ prospect.LeafNumber || &apos;No hay datos&apos;  }}</a>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label">Fracción por hojas:</span><span class="col-lg-8">
+                                        <a href="" editable-number="prospect.LeafFraction" e-min="0">{{ prospect.LeafFraction || &apos;No hay datos&apos;  }}</a>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label">Fecha de Expiración:</span><span class="col-lg-8">
+                                        <a href="" editable-date="prospect.ExpirateDate">{{ (prospect.ExpirateDate | date:"dd/MM/yyyy") || 'No hay datos' }}</a>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label">Formato de Impresión:</span><span class="col-lg-8">
+                                        <a href="" editable-select="prospect.ImpresionType" e-ng-options="s.value as s.text for s in printTechniques">{{showPrintTechniquesDescription()}}</a>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label-left">Estado:</span><span class="col-lg-8">
+                                        <a href="" editable-select="prospect.Statu" e-ng-options="s.value as s.text for s in prospectStatus">{{showStatuDescription()}}</a>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label">Porcentaje de devoluciones:</span><span class="col-lg-8">
+                                        <a href="" editable-number="prospect.MaxReturnTickets" e-min="0">{{ prospect.MaxReturnTickets || &apos;No hay datos&apos;  }}</a>
+                                    </span>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <h4>Precios</h4>
+                    <hr />
+                    <div class="col-lg-12 m-b-xs no-padder">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo de precio</th>
+                                    <th>Precio Billete</th>
+                                    <th>Precio Serie</th>
+                                    <th>Precio Fracción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="price in prospect.Prospect_Price">
+                                    <td>{{price.PriceDesc}}</td>
+                                    <td>{{parseMoney(price.TicketPrice)}}</td>
+                                    <td>{{parseMoney(price.SeriePrice)}}</td>
+                                    <td>{{parseMoney(price.FactionPrice)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4>Premios</h4>
+                    <hr />
+                    <div class="col-lg-12 m-b-xs no-padder">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Tipo de Premio</th>
+                                    <th>Premio Origen</th>
+                                    <th>Orden</th>
+                                    <th>Cantidad</th>
+                                    <th>Terminal</th>
+                                    <th>Por Fracción</th>
+                                    <th class="text-center">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="current in prospect.Awards">
+                                    <td>{{current.Name}}</td>
+                                    <td>{{current.TypesAwardDesc}}</td>
+                                    <td>{{current.SourceAwardDescription}}</td>
+                                    <td>{{current.OrderAward}}</td>
+                                    <td>{{parseNumber(current.Quantity)}}</td>
+                                    <td>{{current.Terminal}}</td>
+                                    <td>{{current.ByFractionDescription}}</td>
+                                    <td class="text-right">{{parseMoney(current.Value)}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="text-right"></td>
+                                    <td class="text-right"></td>
+                                    <td class="text-right"></td>
+                                    <td class="text-right"></td>
+                                    <td class="text-right"></td>
+                                    <td class="text-right"></td>
+                                    <td class="text-right">Total...:</td>
+                                    <td class="text-right"><b>{{parseMoney(showTotal())}}</b></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="col-lg-12 no-padder">
+                        <div class="col-lg-6 no-padder">
+                            <a ng-click="returnBack()" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> {{viewMode === true? 'Salir': 'Cancelar'}}</a>
+                        </div>
+                        <div class="col-lg-6 no-padder text-right">
+                            <a ng-click="activeStep=4" class="btn btn-default" ng-show="viewMode !== true">Regresar <i class="fa fa-arrow-left"></i></a>
+                            <a ng-click="saveProspectForm()" class="btn btn-primary" ng-show="viewMode !== true">Finalizar <i class="fa fa-floppy-o"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

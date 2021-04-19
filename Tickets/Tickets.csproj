@@ -1,0 +1,3113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{61CA1513-2471-4C44-8670-31B780F8BC85}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tickets</RootNamespace>
+    <AssemblyName>Tickets</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AttributeRouting, Version=3.5.6.0, Culture=neutral, PublicKeyToken=c10f85d521a011a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\AttributeRouting.Core.3.5.6\lib\net40\AttributeRouting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AttributeRouting.Web, Version=3.5.6.0, Culture=neutral, PublicKeyToken=c10f85d521a011a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\AttributeRouting.Core.Web.3.5.6\lib\net40\AttributeRouting.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AttributeRouting.Web.Mvc, Version=3.5.6.0, Culture=neutral, PublicKeyToken=c10f85d521a011a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\AttributeRouting.3.5.6\lib\net40\AttributeRouting.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.32.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.32\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlRenderer, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlRenderer.Core.1.5.0.6\lib\net45\HtmlRenderer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MembershipAdapter">
+      <HintPath>..\packages\MembershipAdapter.0.7.1\lib\net40\MembershipAdapter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.3\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.3\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.1.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.1.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.4.1.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.4.1.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.4.1.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.4.1.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.4.1.1\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.1.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.4.1.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebHelpers.3.2.7\lib\net45\Microsoft.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NReco.ImageGenerator, Version=1.2.0.0, Culture=neutral, PublicKeyToken=0ef6c878974c90ac, processorArchitecture=MSIL">
+      <HintPath>..\packages\NReco.ImageGenerator.1.2.0\lib\net45\NReco.ImageGenerator.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="WebActivator, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivator.1.0.0.0\lib\WebActivator.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.3.2.7\lib\net45\WebMatrix.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.WebData, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.3.2.7\lib\net45\WebMatrix.WebData.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\AttributeRoutingConfig.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AgencyController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\CashController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\CatalogApiController.cs" />
+    <Compile Include="Controllers\ClientApiController.cs" />
+    <Compile Include="Controllers\ClientController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\ConfigController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\TicketSuscriberApiController.cs" />
+    <Compile Include="Controllers\TicketSuscriberController.cs" />
+    <Compile Include="Controllers\TicketIdentifyApiController.cs" />
+    <Compile Include="Controllers\TicketIdentifyController.cs" />
+    <Compile Include="Controllers\TicketReturnedApiController.cs" />
+    <Compile Include="Controllers\TicketReturnedController.cs" />
+    <Compile Include="Controllers\TicketInvoiceApiController.cs" />
+    <Compile Include="Controllers\TicketInvoiceController.cs" />
+    <Compile Include="Controllers\RaffleApiController.cs" />
+    <Compile Include="Controllers\DashboardController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\EmployeeController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\FileUpload.ashx.cs">
+      <DependentUpon>FileUpload.ashx</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\IntegrationAPIController.cs" />
+    <Compile Include="Controllers\IntegrationController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\LayoutController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\MailController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\ProspectApiController.cs" />
+    <Compile Include="Controllers\ProspectController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\RaffleController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\ReportsController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\SecurityController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\TemplatesController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\TicketAllocationApiController.cs" />
+    <Compile Include="Controllers\TicketAllocationController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\TicketPrintApiController.cs" />
+    <Compile Include="Controllers\TicketPrintController.cs" />
+    <Compile Include="Controllers\TypesAwardController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\WorkflowApiController.cs" />
+    <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Agency.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Award.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AwardCertification.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Cash.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CashClose.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Catalog.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CertificationNumber.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Client.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Clients\ClientModel.cs" />
+    <Compile Include="Models\DistTown.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EmailUtil.cs" />
+    <Compile Include="Models\Employee.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Enums\AllocationTypeEnum.cs" />
+    <Compile Include="Models\Enums\ReportByEmailEnum.cs" />
+    <Compile Include="Models\Enums\AwardCertificationStatuEnum.cs" />
+    <Compile Include="Models\GenericErrorResponse.cs" />
+    <Compile Include="Models\IdentifyBach.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IdentifyBachPayment.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IdentifyNumber.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Invoice.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InvoiceDetail.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InvoiceTicket.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Log.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Module.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NoteCredit.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NoteCreditReceiptPayment.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OverduelBill.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PreviousDebtPayment.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductionCost.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Prospect.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Prospect_Price.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Province.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Raffle.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RaffleAward.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Raffles\AwardCertModel.cs" />
+    <Compile Include="Models\ReceiptPayment.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ReceivablePayment.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ReportByEmail.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ReturnedOpen.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Rol_Module.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RRentabilidadSorteo.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SystemConfig.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TicketAllocation.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TicketAllocationNumber.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TicketRePrint.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TicketRePrintNumber.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TicketReturn.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TicketSuscriber.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TicketSuscriberNumber.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ticket\TicketReturnedModel.cs" />
+    <Compile Include="Models\Ticket\TicketInvoiceNumberModel.cs" />
+    <Compile Include="Models\Ticket\TicketSuscriberNumberModel.cs" />
+    <Compile Include="Models\Town.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TypesAward.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\User.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\webpages_Membership.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\webpages_OAuthMembership.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\webpages_Roles.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Workflow.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WorkflowProccess.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Workflows\WorkflowModel.cs" />
+    <Compile Include="Models\Workflows\ProccessModel.cs" />
+    <Compile Include="Models\RequestResponseModel.cs" />
+    <Compile Include="Models\Enums\ProspectTypeEnum.cs" />
+    <Compile Include="Models\PaymentReceivableReportModel.cs" />
+    <Compile Include="Models\Config\WorkflowTypeModel.cs" />
+    <Compile Include="Models\Config\WorkflowTypeUserModel.cs" />
+    <Compile Include="Models\Config\SystemConfigModel.cs" />
+    <Compile Include="Models\Config\CatalogModel.cs" />
+    <Compile Include="Models\Enums\CatalogGroupEnum.cs" />
+    <Compile Include="Models\Enums\ClientGroupEnum.cs" />
+    <Compile Include="Models\Enums\CheckInEnum.cs" />
+    <Compile Include="Models\Enums\IdentifyBachTypeEnum.cs" />
+    <Compile Include="Models\Enums\AwardTypeEnum.cs" />
+    <Compile Include="Models\Enums\InvoiceConditionEnum.cs" />
+    <Compile Include="Models\Enums\AllocationStatuEnum.cs" />
+    <Compile Include="Models\Enums\ClientStatuEnum.cs" />
+    <Compile Include="Models\Enums\TicketReprintStatuEnum.cs" />
+    <Compile Include="Models\Enums\TicketReturnedStatuEnum.cs" />
+    <Compile Include="Models\Enums\WorkflowProccessStatuEnum.cs" />
+    <Compile Include="Models\Enums\ByFractionEnum.cs" />
+    <Compile Include="Models\Enums\WorkflowStatusEnum.cs" />
+    <Compile Include="Models\Enums\GeneralStatusEnum.cs" />
+    <Compile Include="Models\Enums\TicketStatusEnum.cs" />
+    <Compile Include="Models\Enums\RaffleStatusEnum.cs" />
+    <Compile Include="Models\Enums\BachIdentifyStatuEnum.cs" />
+    <Compile Include="Models\Enums\ProspectStatuEnum.cs" />
+    <Compile Include="Models\Enums\LogActionsEnum.cs" />
+    <Compile Include="Models\Enums\CashStatusEnum.cs" />
+    <Compile Include="Models\Enums\RaffleAwardTypeEnum.cs" />
+    <Compile Include="Models\Enums\TypesAwardCreationEnum.cs" />
+    <Compile Include="Models\Enums\InvoicePaymentStatuEnum.cs" />
+    <Compile Include="Models\Enums\PaymentTypeEnum.cs" />
+    <Compile Include="Models\JSON\JSONObjects.cs" />
+    <Compile Include="Models\Prospects\AwardModel.cs" />
+    <Compile Include="Models\Prospects\ProspectModel.cs" />
+    <Compile Include="Models\Prospects\ProspectPriceModel.cs" />
+    <Compile Include="Models\Raffles\RaffleModel.cs" />
+    <Compile Include="Models\Ticket\TicketReprintNumberModel.cs" />
+    <Compile Include="Models\Ticket\TicketReprintModel.cs" />
+    <Compile Include="Models\Raffles\VirtualRaffleModel.cs" />
+    <Compile Include="Models\ReultRequestModel.cs" />
+    <Compile Include="Models\SecuritytModels.cs" />
+    <Compile Include="Models\Tickets.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tickets.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tickets.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tickets.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tickets.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ticket\AwardNumberModel.cs" />
+    <Compile Include="Models\Ticket\AwardTicketModel.cs" />
+    <Compile Include="Models\Ticket\CopyAllocationModel.cs" />
+    <Compile Include="Models\Ticket\InvoicePaymentModel.cs" />
+    <Compile Include="Models\Raffles\RaffleAwardModel.cs" />
+    <Compile Include="Models\Ticket\ReassignModel.cs" />
+    <Compile Include="Models\Ticket\MoveReturnedGroupModel.cs" />
+    <Compile Include="Models\Ticket\InvoiceModel.cs" />
+    <Compile Include="Models\Ticket\OpenReturnedModel.cs" />
+    <Compile Include="Models\Ticket\NumberTransactionModel.cs" />
+    <Compile Include="Models\Ticket\TicketAllocationNumberModel.cs" />
+    <Compile Include="Models\Ticket\TicketModel.cs" />
+    <Compile Include="Models\Ticket\TicketIdentifyModel.cs" />
+    <Compile Include="Models\Ticket\TicketReturnedNumberModel.cs" />
+    <Compile Include="Models\Ticket\TicketAllocationModel.cs" />
+    <Compile Include="Models\Ticket\TicketInvoiceModel.cs" />
+    <Compile Include="Models\Ticket\TicketSuscriberModel.cs" />
+    <Compile Include="Models\Utils.cs" />
+    <Compile Include="Models\WorkflowType.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WorkflowType_User.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\XML\XMLObjects.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples\RoleSettings.cs" />
+    <Compile Include="Samples\SampleRoleRepository.cs" />
+    <Compile Include="Samples\SampleUserRepository.cs" />
+    <Compile Include="Samples\UserSettings.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\EntityFramework.dll" />
+    <Content Include="bin\EntityFramework.SqlServer.dll" />
+    <Content Include="bin\MembershipAdapter.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Core.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Owin.dll" />
+    <Content Include="bin\Microsoft.Owin.dll" />
+    <Content Include="bin\Microsoft.Owin.Host.SystemWeb.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Cookies.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Facebook.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Google.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.OAuth.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Twitter.dll" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Owin.dll" />
+    <Content Include="bin\System.Net.Http.Formatting.dll" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Http.dll" />
+    <Content Include="bin\System.Web.Http.WebHost.dll" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\Tickets.dll" />
+    <Content Include="bin\Tickets.pdb" />
+    <Content Include="bin\WebGrease.dll" />
+    <Content Include="bin\WebMatrix.Data.dll" />
+    <Content Include="bin\WebMatrix.WebData.dll" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\reports.css" />
+    <Content Include="Content\styles.css" />
+    <Content Include="Content\styles.css.map" />
+    <Content Include="Controllers\FileUpload.ashx" />
+    <Content Include="email\Templates\logo.png" />
+    <Content Include="email\Templates\template.html" />
+    <Content Include="email\Templates\template_overduelbill.html" />
+    <Content Include="email\test.html" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Images\bg1.jpg" />
+    <Content Include="Images\bg2.jpg" />
+    <Content Include="Images\bg3.jpg" />
+    <Content Include="Images\bg4.JPG" />
+    <Content Include="Images\bg5.jpg" />
+    <Content Include="Images\bg6.jpg" />
+    <Content Include="Images\dummy.png" />
+    <Content Include="Images\favicon.ico" />
+    <Content Include="Images\loader.gif" />
+    <Content Include="Images\logo-gray.png" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\mb-sample.jpg" />
+    <Content Include="Images\placeholder.png" />
+    <Content Include="Images\profile-head.jpg" />
+    <Content Include="Images\profile.jpg" />
+    <Content Include="Images\sort_asc.png" />
+    <Content Include="Images\sort_asc_disabled.png" />
+    <Content Include="Images\sort_both.png" />
+    <Content Include="Images\sort_desc.png" />
+    <Content Include="Images\sort_desc_disabled.png" />
+    <Content Include="Images\tickets-bg.png" />
+    <Content Include="Images\user\01.jpg" />
+    <Content Include="Images\user\02.jpg" />
+    <Content Include="Images\user\03.jpg" />
+    <Content Include="Images\user\04.jpg" />
+    <Content Include="Images\user\05.jpg" />
+    <Content Include="Images\user\06.jpg" />
+    <Content Include="Images\user\07.jpg" />
+    <Content Include="Images\user\08.jpg" />
+    <Content Include="Manual\css\corporate.css" />
+    <Content Include="Manual\css\prettyPhoto.css" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\abrir-y-cuadrar-caja.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\administrar-de-precios.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\agregar-abonados.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\agregar-nueva-asignacion-.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\aplicar-nota-de-credito.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\aprobar-clientes.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\aprobar-prospecto.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\aprobar-reimpresion-de-billetes.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\asignacion-y-abonados.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\asignar-premios.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\auxiliares.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\borrar-un-grupo-de-devoluciones.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\caja-.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\cambiar-contrasena.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\certificacion-de-devoluciones-premiadas.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\consulta-de-lotes-previamente-creados.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\consultar-asignacion-.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\consultar-billetes-devueltos.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\consultar-devoluciones.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\consultar-facturas.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\copiar-asignaciones-de-sorteo-anterior.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\creacion-de-notas-de-credito.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\crear-clientes.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\crear-de-agencias.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\crear-departamentos.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\crear-empleados.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\crear-nuevo-prospecto.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\crear-nuevos-sorteos.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\cuentas-por-cobrar.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\definir-datos-del-sorteo.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\definir-nuevo-tipo-de-premio.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\definir-parametros-de-creacion.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\devoluciones.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\disenar-prospecto.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\eliminar-asignacion.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\enviar-una-asignacion-a-impresion.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\facturacion.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\generar-nuevas-facturas.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\generar-sorteo-virtual.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\identificacion-y-pago-de-premios.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\impresion-y-reimpresion-de-billetes.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\imprimir-billetes.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\imprimir-de-reporte-de-asignacion.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\imprimir-recibo-de-saldos-a-clientes-1.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\imprimir-recibo-de-saldos-a-clientes.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\inicio-de-sesion.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\modificar-un-registro-en-un-grupo-de-devoluciones.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\mostrar-premios.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\pagar-deuda-anterior.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\prospectos.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\realizar-las-devoluciones.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\reapertura-de-devoluciones.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\reimprimir-billetes.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\reporte-de-tipos-de-premios--lista-.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\reporte-general-de-sorteo.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\reportes.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\revisar-de-premios.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\solicitar-reimpresion-de-billetes.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\sorteo.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\sustituir-contrasena.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\tipos-de-premio.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\transferencias-de-asignaciones.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\trazabilidad-del-billete.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\validar-devoluciones.png" />
+    <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\verificar-prospecto.png" />
+    <Content Include="Manual\images\prettyPhoto\default\default_thumb.png" />
+    <Content Include="Manual\images\prettyPhoto\default\loader.gif" />
+    <Content Include="Manual\images\prettyPhoto\default\sprite.png" />
+    <Content Include="Manual\images\prettyPhoto\default\sprite_next.png" />
+    <Content Include="Manual\images\prettyPhoto\default\sprite_prev.png" />
+    <Content Include="Manual\images\prettyPhoto\default\sprite_x.png" />
+    <Content Include="Manual\images\prettyPhoto\default\sprite_y.png" />
+    <Content Include="Manual\images\ui\icon-zoom.png" />
+    <Content Include="Manual\images\ui\texture.png" />
+    <Content Include="Manual\js\jquery-1.6.1.min.js" />
+    <Content Include="Manual\js\jquery.prettyPhoto.js" />
+    <Content Include="Manual\Manual.html" />
+    <Content Include="Scripts\app.module.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\custom\tickestMain.js" />
+    <Content Include="Scripts\modules\agency\agency.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\client.general.balance.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\account.receivable.reports.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\cash.reports.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\cash.close.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\account.payments.reports.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\invoice.detail.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\invoice.cash.reports.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\previous.debt.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\payment.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\client\client.general.report.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\client\client.print.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\client\client.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\client\client.create.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\config\config.productioncost.controller.js" />
+    <Content Include="Scripts\modules\config\system.config.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\dashboard\about.us.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\integration\electronic.ticket.xml.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\prospect\all.prospect.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\prospect\prospect.step6.verify.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\prospect\prospect.step3.desing.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\prospect\prospect.step5.award.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\prospect\prospect.step4.price.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\prospect\prospect.step2.create.type.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\prospect\prospect.create.wizard.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\prospect\workflow.prospect.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\prospect\prospect.approved.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\prospect\prospect.create.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\prospect\prospect.susped.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\allocation.copy.controller.js" />
+    <Content Include="Scripts\modules\raffle\inspector.report.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\dashboard.raffle.report.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\raffle.ProfitabilityRaffle.js" />
+    <Content Include="Scripts\modules\ticketInvoice\invoice.list.suspend.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketAllocation\allocation.copy.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\active.raffle.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\raffle.print.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\raffle.generate.types.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketPrint\reprint.approved.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\raffle.openreturned.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\raffle.create.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\raffle.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\raffle.virtual.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\raffle.generate.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketPrint\ticket.reprint.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketPrint\workflow.reprint.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\security\change.password.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketAllocation\allocation.summary.reports.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketAllocation\allocation.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketReturned\returned.award.reports.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketAllocation\allocation.details.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketPrint\allocation.review.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketAllocation\allocation.create.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketPrint\allocation.print.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketPrint\reprint.create.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketPrint\reprint.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketReturned\returned.validation.group.details.Controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketReturned\returned.validation.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketReturned\returned.list.query.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketReturned\returned.group.details.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketAllocation\ticket.reassign.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketSuscriber\suscriber.details.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketPrint\ticket.print.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketSuscriber\suscriber.create.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketSuscriber\suscriber.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketAllocation\number.detail.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketAllocation\identify.detail.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketAllocation\identify.create.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketAllocation\identify.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\typesaward\awards.certifications.controller.js" />
+    <Content Include="Scripts\modules\typesaward\identify.awards.reports.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\typesaward\award.number.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\credit.note.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\credit.note.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\receivable.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\receivable.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\cash\openCash.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\client\client.workflow.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\colors\colors.constant.js" />
+    <Content Include="Scripts\modules\colors\colors.run.js" />
+    <Content Include="Scripts\modules\colors\colors.service.js" />
+    <Content Include="Scripts\modules\common\directives\animate-enabled.directive.js" />
+    <Content Include="Scripts\modules\common\directives\chained-animation.directive.js" />
+    <Content Include="Scripts\modules\common\directives\check-all-table.directive.js" />
+    <Content Include="Scripts\modules\common\directives\fullscreen.directive.js" />
+    <Content Include="Scripts\modules\common\directives\reset-key.directive.js" />
+    <Content Include="Scripts\modules\common\filters\title-case.filter.js" />
+    <Content Include="Scripts\modules\common\services\browser-detection.service.js" />
+    <Content Include="Scripts\modules\common\services\support.service.js" />
+    <Content Include="Scripts\modules\common\services\touch-drag.service.js" />
+    <Content Include="Scripts\modules\config\config.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\config\config.catalog.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\config\config.workflow.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\client\client.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\client\client.services.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\agency\agency.create.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\raffle.raffleAward.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketReturned\returned.award.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketInvoice\invoice.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketReturned\returned.create.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketReturned\returned.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ticketInvoice\invoice.create.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\employee\employee.services.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\employee\employee.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\employee\employee.department.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\raffle.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\raffle\raffle.services.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\custom\login.js" />
+    <Content Include="Scripts\modules\security\security.module.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\security\security.rols.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\security\security.user.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\security\security.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\typesaward\awards.certification.approved.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\typesaward\returned.traceability.controller.js" />
+    <Content Include="Scripts\modules\typesaward\typesAward.services.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\typesaward\typesAward.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\prospect\prospect.list.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\core\config.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\core\constants.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\core\core.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\core\core.run.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\dashboard\dashboard.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\icons\climacon.directive.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\layermorph\layer-morph.directive.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\layermorph\layer-morph.service.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\layout\header-nav.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\layout\ui-sidebar.directive.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\loadingbar\loadingbar.config.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\loadingbar\loadingbar.run.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\ripple\ripple.directive.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\routes\routes.config.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\routes\routes.provider.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\routes\routes.run.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\routes\vendor.constants.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\settings\settings.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\settings\settings.service.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\translator\translator.config.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\translator\translator.service.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\modules\typesaward\awards.cert.workflow.list.contorller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Vendor\alertify\example\assets\css\main.css" />
+    <Content Include="Vendor\alertify\example\assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="Vendor\alertify\example\assets\img\banner.jpg" />
+    <Content Include="Vendor\alertify\example\assets\img\dialogs.png" />
+    <Content Include="Vendor\alertify\example\assets\img\treehouse.png" />
+    <Content Include="Vendor\alertify\example\assets\img\webdev.png" />
+    <Content Include="Vendor\alertify\example\assets\js\lib\sh\shBrushJScript.js" />
+    <Content Include="Vendor\alertify\example\assets\js\lib\sh\shCore.css" />
+    <Content Include="Vendor\alertify\example\assets\js\lib\sh\shCore.js" />
+    <Content Include="Vendor\alertify\example\assets\js\lib\sh\shCoreDefault.css" />
+    <Content Include="Vendor\alertify\example\index.html" />
+    <Content Include="Vendor\alertify\Gruntfile.js" />
+    <Content Include="Vendor\alertify\lib\alertify.js" />
+    <Content Include="Vendor\alertify\lib\alertify-min.js" />
+    <Content Include="Vendor\alertify\src\alertify.js" />
+    <Content Include="Vendor\alertify\test\index.html" />
+    <Content Include="Vendor\alertify\test\qunit\qunit.css" />
+    <Content Include="Vendor\alertify\test\qunit\qunit.js" />
+    <Content Include="Vendor\alertify\test\specs\alert.test.js" />
+    <Content Include="Vendor\alertify\test\specs\confirm.test.js" />
+    <Content Include="Vendor\alertify\test\specs\global.test.js" />
+    <Content Include="Vendor\alertify\test\specs\log.test.js" />
+    <Content Include="Vendor\alertify\test\specs\prompt.test.js" />
+    <Content Include="Vendor\alertify\themes\alertify-bootstrap.css" />
+    <Content Include="Vendor\alertify\themes\alertify-core.css" />
+    <Content Include="Vendor\alertify\themes\alertify.default.css" />
+    <Content Include="Vendor\angular-animate\.bower.json" />
+    <Content Include="Vendor\angular-animate\angular-animate.js" />
+    <Content Include="Vendor\angular-animate\angular-animate.min.js" />
+    <Content Include="Vendor\angular-animate\angular-animate.min.js.map" />
+    <Content Include="Vendor\angular-animate\bower.json" />
+    <Content Include="Vendor\angular-animate\index.js" />
+    <Content Include="Vendor\angular-animate\package.json" />
+    <Content Include="Vendor\angular-animate\README.md" />
+    <Content Include="Vendor\angular-bootstrap\.bower.json" />
+    <Content Include="Vendor\angular-bootstrap\bower.json" />
+    <Content Include="Vendor\angular-bootstrap\ui-bootstrap-tpls.js" />
+    <Content Include="Vendor\angular-bootstrap\ui-bootstrap-tpls.min.js" />
+    <Content Include="Vendor\angular-bootstrap\ui-bootstrap.js" />
+    <Content Include="Vendor\angular-bootstrap\ui-bootstrap.min.js" />
+    <Content Include="Vendor\angular-cookies\.bower.json" />
+    <Content Include="Vendor\angular-cookies\angular-cookies.js" />
+    <Content Include="Vendor\angular-cookies\angular-cookies.min.js" />
+    <Content Include="Vendor\angular-cookies\angular-cookies.min.js.map" />
+    <Content Include="Vendor\angular-cookies\bower.json" />
+    <Content Include="Vendor\angular-cookies\index.js" />
+    <Content Include="Vendor\angular-cookies\package.json" />
+    <Content Include="Vendor\angular-cookies\README.md" />
+    <Content Include="Vendor\angular-loading-bar\.bower.json" />
+    <Content Include="Vendor\angular-loading-bar\bower.json" />
+    <Content Include="Vendor\angular-loading-bar\build\loading-bar.css" />
+    <Content Include="Vendor\angular-loading-bar\build\loading-bar.js" />
+    <Content Include="Vendor\angular-loading-bar\build\loading-bar.min.css" />
+    <Content Include="Vendor\angular-loading-bar\build\loading-bar.min.js" />
+    <Content Include="Vendor\angular-loading-bar\CHANGELOG.md" />
+    <Content Include="Vendor\angular-loading-bar\Gruntfile.js" />
+    <Content Include="Vendor\angular-loading-bar\LICENSE" />
+    <Content Include="Vendor\angular-loading-bar\package.json" />
+    <Content Include="Vendor\angular-loading-bar\README.md" />
+    <Content Include="Vendor\angular-loading-bar\src\loading-bar.css" />
+    <Content Include="Vendor\angular-loading-bar\src\loading-bar.js" />
+    <Content Include="Vendor\angular-resource\.bower.json" />
+    <Content Include="Vendor\angular-resource\angular-resource.js" />
+    <Content Include="Vendor\angular-resource\angular-resource.min.js" />
+    <Content Include="Vendor\angular-resource\angular-resource.min.js.map" />
+    <Content Include="Vendor\angular-resource\bower.json" />
+    <Content Include="Vendor\angular-resource\index.js" />
+    <Content Include="Vendor\angular-resource\package.json" />
+    <Content Include="Vendor\angular-resource\README.md" />
+    <Content Include="Vendor\angular-route\.bower.json" />
+    <Content Include="Vendor\angular-route\angular-route.js" />
+    <Content Include="Vendor\angular-route\angular-route.min.js" />
+    <Content Include="Vendor\angular-route\angular-route.min.js.map" />
+    <Content Include="Vendor\angular-route\bower.json" />
+    <Content Include="Vendor\angular-route\index.js" />
+    <Content Include="Vendor\angular-route\package.json" />
+    <Content Include="Vendor\angular-route\README.md" />
+    <Content Include="Vendor\angular-sanitize\.bower.json" />
+    <Content Include="Vendor\angular-sanitize\angular-sanitize.js" />
+    <Content Include="Vendor\angular-sanitize\angular-sanitize.min.js" />
+    <Content Include="Vendor\angular-sanitize\angular-sanitize.min.js.map" />
+    <Content Include="Vendor\angular-sanitize\bower.json" />
+    <Content Include="Vendor\angular-sanitize\index.js" />
+    <Content Include="Vendor\angular-sanitize\package.json" />
+    <Content Include="Vendor\angular-sanitize\README.md" />
+    <Content Include="Vendor\angular-touch\.bower.json" />
+    <Content Include="Vendor\angular-touch\angular-touch.js" />
+    <Content Include="Vendor\angular-touch\angular-touch.min.js" />
+    <Content Include="Vendor\angular-touch\angular-touch.min.js.map" />
+    <Content Include="Vendor\angular-touch\bower.json" />
+    <Content Include="Vendor\angular-touch\index.js" />
+    <Content Include="Vendor\angular-touch\package.json" />
+    <Content Include="Vendor\angular-touch\README.md" />
+    <Content Include="Vendor\angular-translate-loader-static-files\.bower.json" />
+    <Content Include="Vendor\angular-translate-loader-static-files\angular-translate-loader-static-files.js" />
+    <Content Include="Vendor\angular-translate-loader-static-files\angular-translate-loader-static-files.min.js" />
+    <Content Include="Vendor\angular-translate-loader-static-files\bower.json" />
+    <Content Include="Vendor\angular-translate-loader-static-files\README.md" />
+    <Content Include="Vendor\angular-translate-loader-url\.bower.json" />
+    <Content Include="Vendor\angular-translate-loader-url\angular-translate-loader-url.js" />
+    <Content Include="Vendor\angular-translate-loader-url\angular-translate-loader-url.min.js" />
+    <Content Include="Vendor\angular-translate-loader-url\bower.json" />
+    <Content Include="Vendor\angular-translate-loader-url\README.md" />
+    <Content Include="Vendor\angular-translate-storage-cookie\.bower.json" />
+    <Content Include="Vendor\angular-translate-storage-cookie\angular-translate-storage-cookie.js" />
+    <Content Include="Vendor\angular-translate-storage-cookie\angular-translate-storage-cookie.min.js" />
+    <Content Include="Vendor\angular-translate-storage-cookie\bower.json" />
+    <Content Include="Vendor\angular-translate-storage-cookie\README.md" />
+    <Content Include="Vendor\angular-translate-storage-local\.bower.json" />
+    <Content Include="Vendor\angular-translate-storage-local\angular-translate-storage-local.js" />
+    <Content Include="Vendor\angular-translate-storage-local\angular-translate-storage-local.min.js" />
+    <Content Include="Vendor\angular-translate-storage-local\bower.json" />
+    <Content Include="Vendor\angular-translate-storage-local\README.md" />
+    <Content Include="Vendor\angular-translate\.bower.json" />
+    <Content Include="Vendor\angular-translate\angular-translate.js" />
+    <Content Include="Vendor\angular-translate\angular-translate.min.js" />
+    <Content Include="Vendor\angular-translate\bower.json" />
+    <Content Include="Vendor\angular-translate\README.md" />
+    <Content Include="Vendor\angular-ui-router\.bower.json" />
+    <Content Include="Vendor\angular-ui-router\bower.json" />
+    <Content Include="Vendor\angular-ui-router\CHANGELOG.md" />
+    <Content Include="Vendor\angular-ui-router\CONTRIBUTING.md" />
+    <Content Include="Vendor\angular-ui-router\LICENSE" />
+    <Content Include="Vendor\angular-ui-router\README.md" />
+    <Content Include="Vendor\angular-ui-router\release\angular-ui-router.js" />
+    <Content Include="Vendor\angular-ui-router\release\angular-ui-router.min.js" />
+    <Content Include="Vendor\angular-ui-router\src\common.js" />
+    <Content Include="Vendor\angular-ui-router\src\resolve.js" />
+    <Content Include="Vendor\angular-ui-router\src\state.js" />
+    <Content Include="Vendor\angular-ui-router\src\stateDirectives.js" />
+    <Content Include="Vendor\angular-ui-router\src\stateFilters.js" />
+    <Content Include="Vendor\angular-ui-router\src\templateFactory.js" />
+    <Content Include="Vendor\angular-ui-router\src\urlMatcherFactory.js" />
+    <Content Include="Vendor\angular-ui-router\src\urlRouter.js" />
+    <Content Include="Vendor\angular-ui-router\src\view.js" />
+    <Content Include="Vendor\angular-ui-router\src\viewDirective.js" />
+    <Content Include="Vendor\angular-ui-router\src\viewScroll.js" />
+    <Content Include="Vendor\angular-ui-utils\.bower.json" />
+    <Content Include="Vendor\angular-ui-utils\.travis.yml" />
+    <Content Include="Vendor\angular-ui-utils\bower.json" />
+    <Content Include="Vendor\angular-ui-utils\CHANGELOG.md" />
+    <Content Include="Vendor\angular-ui-utils\ui-utils-ieshiv.js" />
+    <Content Include="Vendor\angular-ui-utils\ui-utils-ieshiv.min.js" />
+    <Content Include="Vendor\angular-ui-utils\ui-utils.js" />
+    <Content Include="Vendor\angular-ui-utils\ui-utils.min.js" />
+    <Content Include="Vendor\angular-xeditable\CHANGELOG.txt" />
+    <Content Include="Vendor\angular-xeditable\dist\css\xeditable.css" />
+    <Content Include="Vendor\angular-xeditable\dist\js\xeditable.js" />
+    <Content Include="Vendor\angular-xeditable\dist\js\xeditable-min.js" />
+    <Content Include="Vendor\AngularJS-Toaster\index.js" />
+    <Content Include="Vendor\AngularJS-Toaster\toaster.css" />
+    <Content Include="Vendor\AngularJS-Toaster\toaster.js" />
+    <Content Include="Vendor\AngularJS-Toaster\toaster.min.css" />
+    <Content Include="Vendor\AngularJS-Toaster\toaster.min.js" />
+    <Content Include="Vendor\angular\.bower.json" />
+    <Content Include="Vendor\angular\angular-csp.css" />
+    <Content Include="Vendor\angular\angular.js" />
+    <Content Include="Vendor\angular\angular.min.js" />
+    <Content Include="Vendor\angular\angular.min.js.gzip" />
+    <Content Include="Vendor\angular\angular.min.js.map" />
+    <Content Include="Vendor\angular\bower.json" />
+    <Content Include="Vendor\angular\index.js" />
+    <Content Include="Vendor\angular\package.json" />
+    <Content Include="Vendor\angular\README.md" />
+    <Content Include="Vendor\animate.css\.bower.json" />
+    <Content Include="Vendor\animate.css\animate-config.json" />
+    <Content Include="Vendor\animate.css\animate.css" />
+    <Content Include="Vendor\animate.css\animate.min.css" />
+    <Content Include="Vendor\animate.css\bower.json" />
+    <Content Include="Vendor\animate.css\Gruntfile.js" />
+    <Content Include="Vendor\animate.css\package.json" />
+    <Content Include="Vendor\animate.css\source\attention_seekers\bounce.css" />
+    <Content Include="Vendor\animate.css\source\attention_seekers\flash.css" />
+    <Content Include="Vendor\animate.css\source\attention_seekers\pulse.css" />
+    <Content Include="Vendor\animate.css\source\attention_seekers\rubberBand.css" />
+    <Content Include="Vendor\animate.css\source\attention_seekers\shake.css" />
+    <Content Include="Vendor\animate.css\source\attention_seekers\swing.css" />
+    <Content Include="Vendor\animate.css\source\attention_seekers\tada.css" />
+    <Content Include="Vendor\animate.css\source\attention_seekers\wobble.css" />
+    <Content Include="Vendor\animate.css\source\bouncing_entrances\bounceIn.css" />
+    <Content Include="Vendor\animate.css\source\bouncing_entrances\bounceInDown.css" />
+    <Content Include="Vendor\animate.css\source\bouncing_entrances\bounceInLeft.css" />
+    <Content Include="Vendor\animate.css\source\bouncing_entrances\bounceInRight.css" />
+    <Content Include="Vendor\animate.css\source\bouncing_entrances\bounceInUp.css" />
+    <Content Include="Vendor\animate.css\source\bouncing_exits\bounceOut.css" />
+    <Content Include="Vendor\animate.css\source\bouncing_exits\bounceOutDown.css" />
+    <Content Include="Vendor\animate.css\source\bouncing_exits\bounceOutLeft.css" />
+    <Content Include="Vendor\animate.css\source\bouncing_exits\bounceOutRight.css" />
+    <Content Include="Vendor\animate.css\source\bouncing_exits\bounceOutUp.css" />
+    <Content Include="Vendor\animate.css\source\fading_entrances\fadeIn.css" />
+    <Content Include="Vendor\animate.css\source\fading_entrances\fadeInDown.css" />
+    <Content Include="Vendor\animate.css\source\fading_entrances\fadeInDownBig.css" />
+    <Content Include="Vendor\animate.css\source\fading_entrances\fadeInLeft.css" />
+    <Content Include="Vendor\animate.css\source\fading_entrances\fadeInLeftBig.css" />
+    <Content Include="Vendor\animate.css\source\fading_entrances\fadeInRight.css" />
+    <Content Include="Vendor\animate.css\source\fading_entrances\fadeInRightBig.css" />
+    <Content Include="Vendor\animate.css\source\fading_entrances\fadeInUp.css" />
+    <Content Include="Vendor\animate.css\source\fading_entrances\fadeInUpBig.css" />
+    <Content Include="Vendor\animate.css\source\fading_exits\fadeOut.css" />
+    <Content Include="Vendor\animate.css\source\fading_exits\fadeOutDown.css" />
+    <Content Include="Vendor\animate.css\source\fading_exits\fadeOutDownBig.css" />
+    <Content Include="Vendor\animate.css\source\fading_exits\fadeOutLeft.css" />
+    <Content Include="Vendor\animate.css\source\fading_exits\fadeOutLeftBig.css" />
+    <Content Include="Vendor\animate.css\source\fading_exits\fadeOutRight.css" />
+    <Content Include="Vendor\animate.css\source\fading_exits\fadeOutRightBig.css" />
+    <Content Include="Vendor\animate.css\source\fading_exits\fadeOutUp.css" />
+    <Content Include="Vendor\animate.css\source\fading_exits\fadeOutUpBig.css" />
+    <Content Include="Vendor\animate.css\source\flippers\flip.css" />
+    <Content Include="Vendor\animate.css\source\flippers\flipInX.css" />
+    <Content Include="Vendor\animate.css\source\flippers\flipInY.css" />
+    <Content Include="Vendor\animate.css\source\flippers\flipOutX.css" />
+    <Content Include="Vendor\animate.css\source\flippers\flipOutY.css" />
+    <Content Include="Vendor\animate.css\source\lightspeed\lightSpeedIn.css" />
+    <Content Include="Vendor\animate.css\source\lightspeed\lightSpeedOut.css" />
+    <Content Include="Vendor\animate.css\source\rotating_entrances\rotateIn.css" />
+    <Content Include="Vendor\animate.css\source\rotating_entrances\rotateInDownLeft.css" />
+    <Content Include="Vendor\animate.css\source\rotating_entrances\rotateInDownRight.css" />
+    <Content Include="Vendor\animate.css\source\rotating_entrances\rotateInUpLeft.css" />
+    <Content Include="Vendor\animate.css\source\rotating_entrances\rotateInUpRight.css" />
+    <Content Include="Vendor\animate.css\source\rotating_exits\rotateOut.css" />
+    <Content Include="Vendor\animate.css\source\rotating_exits\rotateOutDownLeft.css" />
+    <Content Include="Vendor\animate.css\source\rotating_exits\rotateOutDownRight.css" />
+    <Content Include="Vendor\animate.css\source\rotating_exits\rotateOutUpLeft.css" />
+    <Content Include="Vendor\animate.css\source\rotating_exits\rotateOutUpRight.css" />
+    <Content Include="Vendor\animate.css\source\sliding_entrances\slideInDown.css" />
+    <Content Include="Vendor\animate.css\source\sliding_entrances\slideInLeft.css" />
+    <Content Include="Vendor\animate.css\source\sliding_entrances\slideInRight.css" />
+    <Content Include="Vendor\animate.css\source\sliding_entrances\slideInUp.css" />
+    <Content Include="Vendor\animate.css\source\sliding_exits\slideOutDown.css" />
+    <Content Include="Vendor\animate.css\source\sliding_exits\slideOutLeft.css" />
+    <Content Include="Vendor\animate.css\source\sliding_exits\slideOutRight.css" />
+    <Content Include="Vendor\animate.css\source\sliding_exits\slideOutUp.css" />
+    <Content Include="Vendor\animate.css\source\specials\hinge.css" />
+    <Content Include="Vendor\animate.css\source\specials\rollIn.css" />
+    <Content Include="Vendor\animate.css\source\specials\rollOut.css" />
+    <Content Include="Vendor\animate.css\source\zooming_entrances\zoomIn.css" />
+    <Content Include="Vendor\animate.css\source\zooming_entrances\zoomInDown.css" />
+    <Content Include="Vendor\animate.css\source\zooming_entrances\zoomInLeft.css" />
+    <Content Include="Vendor\animate.css\source\zooming_entrances\zoomInRight.css" />
+    <Content Include="Vendor\animate.css\source\zooming_entrances\zoomInUp.css" />
+    <Content Include="Vendor\animate.css\source\zooming_exits\zoomOut.css" />
+    <Content Include="Vendor\animate.css\source\zooming_exits\zoomOutDown.css" />
+    <Content Include="Vendor\animate.css\source\zooming_exits\zoomOutLeft.css" />
+    <Content Include="Vendor\animate.css\source\zooming_exits\zoomOutRight.css" />
+    <Content Include="Vendor\animate.css\source\zooming_exits\zoomOutUp.css" />
+    <Content Include="Vendor\animate.css\source\_base.css" />
+    <Content Include="Vendor\bootstrap-min.js" />
+    <Content Include="Vendor\chart-js\.gitignore" />
+    <Content Include="Vendor\chart-js\Chart.js" />
+    <Content Include="Vendor\chart-js\Chart.min.js" />
+    <Content Include="Vendor\chart-js\gulpfile.js" />
+    <Content Include="Vendor\chart-js\samples\bar.html" />
+    <Content Include="Vendor\chart-js\samples\doughnut.color.html" />
+    <Content Include="Vendor\chart-js\samples\doughnut.html" />
+    <Content Include="Vendor\chart-js\samples\line-customTooltips.html" />
+    <Content Include="Vendor\chart-js\samples\line.html" />
+    <Content Include="Vendor\chart-js\samples\pie-customTooltips.html" />
+    <Content Include="Vendor\chart-js\samples\pie.html" />
+    <Content Include="Vendor\chart-js\samples\polar-area.html" />
+    <Content Include="Vendor\chart-js\samples\radar.html" />
+    <Content Include="Vendor\chart-js\src\Chart.Bar.js" />
+    <Content Include="Vendor\chart-js\src\Chart.Core.js" />
+    <Content Include="Vendor\chart-js\src\Chart.Doughnut.js" />
+    <Content Include="Vendor\chart-js\src\Chart.Line.js" />
+    <Content Include="Vendor\chart-js\src\Chart.PolarArea.js" />
+    <Content Include="Vendor\chart-js\src\Chart.Radar.js" />
+    <Content Include="Vendor\datatables\license.txt" />
+    <Content Include="Vendor\datatables\media\css\jquery.dataTables.css" />
+    <Content Include="Vendor\datatables\media\css\jquery-dataTables-min.css" />
+    <Content Include="Vendor\datatables\media\css\jquery.dataTables_themeroller.css" />
+    <Content Include="Vendor\datatables\media\images\favicon.ico" />
+    <Content Include="Vendor\datatables\media\images\sort_asc.png" />
+    <Content Include="Vendor\datatables\media\images\sort_asc_disabled.png" />
+    <Content Include="Vendor\datatables\media\images\sort_both.png" />
+    <Content Include="Vendor\datatables\media\images\sort_desc.png" />
+    <Content Include="Vendor\datatables\media\images\sort_desc_disabled.png" />
+    <Content Include="Vendor\datatables\media\js\jquery.dataTables.js" />
+    <Content Include="Vendor\datatables\media\js\jquery-dataTables-min.js" />
+    <Content Include="Vendor\datatables\media\js\jquery.js" />
+    <Content Include="Vendor\datatables\media\res\dt_ES.txt" />
+    <Content Include="Vendor\datepicker\css\datepicker.css" />
+    <Content Include="Vendor\datepicker\js\bootstrap-datepicker.js" />
+    <Content Include="Vendor\feather\.bower.json" />
+    <Content Include="Vendor\feather\csh\feather-v1.1.csh" />
+    <Content Include="Vendor\feather\psd\feather-v1.1.psd" />
+    <Content Include="Vendor\feather\README.md" />
+    <Content Include="Vendor\feather\svg\air-play.svg" />
+    <Content Include="Vendor\feather\svg\align-center.svg" />
+    <Content Include="Vendor\feather\svg\align-justify.svg" />
+    <Content Include="Vendor\feather\svg\align-left.svg" />
+    <Content Include="Vendor\feather\svg\align-right.svg" />
+    <Content Include="Vendor\feather\svg\alt.svg" />
+    <Content Include="Vendor\feather\svg\anchor.svg" />
+    <Content Include="Vendor\feather\svg\archive.svg" />
+    <Content Include="Vendor\feather\svg\arrow-down.svg" />
+    <Content Include="Vendor\feather\svg\arrow-left.svg" />
+    <Content Include="Vendor\feather\svg\arrow-right.svg" />
+    <Content Include="Vendor\feather\svg\arrow-up.svg" />
+    <Content Include="Vendor\feather\svg\bag.svg" />
+    <Content Include="Vendor\feather\svg\ban.svg" />
+    <Content Include="Vendor\feather\svg\bar-graph-2.svg" />
+    <Content Include="Vendor\feather\svg\bar-graph.svg" />
+    <Content Include="Vendor\feather\svg\battery.svg" />
+    <Content Include="Vendor\feather\svg\bell.svg" />
+    <Content Include="Vendor\feather\svg\book.svg" />
+    <Content Include="Vendor\feather\svg\box.svg" />
+    <Content Include="Vendor\feather\svg\briefcase.svg" />
+    <Content Include="Vendor\feather\svg\camera.svg" />
+    <Content Include="Vendor\feather\svg\check.svg" />
+    <Content Include="Vendor\feather\svg\circle-add.svg" />
+    <Content Include="Vendor\feather\svg\circle-check.svg" />
+    <Content Include="Vendor\feather\svg\circle-cross.svg" />
+    <Content Include="Vendor\feather\svg\circle-minus.svg" />
+    <Content Include="Vendor\feather\svg\clipboard.svg" />
+    <Content Include="Vendor\feather\svg\clock.svg" />
+    <Content Include="Vendor\feather\svg\cloud-download.svg" />
+    <Content Include="Vendor\feather\svg\cloud-upload.svg" />
+    <Content Include="Vendor\feather\svg\cloud.svg" />
+    <Content Include="Vendor\feather\svg\cog.svg" />
+    <Content Include="Vendor\feather\svg\columns.svg" />
+    <Content Include="Vendor\feather\svg\command.svg" />
+    <Content Include="Vendor\feather\svg\content-left.svg" />
+    <Content Include="Vendor\feather\svg\content-right.svg" />
+    <Content Include="Vendor\feather\svg\contract.svg" />
+    <Content Include="Vendor\feather\svg\cross.svg" />
+    <Content Include="Vendor\feather\svg\delete.svg" />
+    <Content Include="Vendor\feather\svg\disc.svg" />
+    <Content Include="Vendor\feather\svg\download.svg" />
+    <Content Include="Vendor\feather\svg\drop.svg" />
+    <Content Include="Vendor\feather\svg\ellipsis.svg" />
+    <Content Include="Vendor\feather\svg\esc.svg" />
+    <Content Include="Vendor\feather\svg\expand.svg" />
+    <Content Include="Vendor\feather\svg\eye.svg" />
+    <Content Include="Vendor\feather\svg\fast-forward.svg" />
+    <Content Include="Vendor\feather\svg\file-add.svg" />
+    <Content Include="Vendor\feather\svg\file-subtract.svg" />
+    <Content Include="Vendor\feather\svg\file.svg" />
+    <Content Include="Vendor\feather\svg\flag.svg" />
+    <Content Include="Vendor\feather\svg\folder.svg" />
+    <Content Include="Vendor\feather\svg\globe.svg" />
+    <Content Include="Vendor\feather\svg\grid-2.svg" />
+    <Content Include="Vendor\feather\svg\grid.svg" />
+    <Content Include="Vendor\feather\svg\head.svg" />
+    <Content Include="Vendor\feather\svg\heart.svg" />
+    <Content Include="Vendor\feather\svg\help.svg" />
+    <Content Include="Vendor\feather\svg\image.svg" />
+    <Content Include="Vendor\feather\svg\inbox.svg" />
+    <Content Include="Vendor\feather\svg\layers.svg" />
+    <Content Include="Vendor\feather\svg\layout.svg" />
+    <Content Include="Vendor\feather\svg\link.svg" />
+    <Content Include="Vendor\feather\svg\loader.svg" />
+    <Content Include="Vendor\feather\svg\location-2.svg" />
+    <Content Include="Vendor\feather\svg\location.svg" />
+    <Content Include="Vendor\feather\svg\lock.svg" />
+    <Content Include="Vendor\feather\svg\mail.svg" />
+    <Content Include="Vendor\feather\svg\map.svg" />
+    <Content Include="Vendor\feather\svg\marquee-add.svg" />
+    <Content Include="Vendor\feather\svg\marquee-subtract.svg" />
+    <Content Include="Vendor\feather\svg\marquee.svg" />
+    <Content Include="Vendor\feather\svg\maximize.svg" />
+    <Content Include="Vendor\feather\svg\menu.svg" />
+    <Content Include="Vendor\feather\svg\microphone.svg" />
+    <Content Include="Vendor\feather\svg\minimize.svg" />
+    <Content Include="Vendor\feather\svg\minus.svg" />
+    <Content Include="Vendor\feather\svg\monitor.svg" />
+    <Content Include="Vendor\feather\svg\moon.svg" />
+    <Content Include="Vendor\feather\svg\move.svg" />
+    <Content Include="Vendor\feather\svg\mute.svg" />
+    <Content Include="Vendor\feather\svg\open.svg" />
+    <Content Include="Vendor\feather\svg\outbox.svg" />
+    <Content Include="Vendor\feather\svg\paper-clip.svg" />
+    <Content Include="Vendor\feather\svg\paper-stack.svg" />
+    <Content Include="Vendor\feather\svg\paper.svg" />
+    <Content Include="Vendor\feather\svg\paragraph.svg" />
+    <Content Include="Vendor\feather\svg\pause.svg" />
+    <Content Include="Vendor\feather\svg\pie-graph.svg" />
+    <Content Include="Vendor\feather\svg\play.svg" />
+    <Content Include="Vendor\feather\svg\plus.svg" />
+    <Content Include="Vendor\feather\svg\power.svg" />
+    <Content Include="Vendor\feather\svg\printer.svg" />
+    <Content Include="Vendor\feather\svg\record.svg" />
+    <Content Include="Vendor\feather\svg\reload.svg" />
+    <Content Include="Vendor\feather\svg\repeat.svg" />
+    <Content Include="Vendor\feather\svg\reply.svg" />
+    <Content Include="Vendor\feather\svg\rewind.svg" />
+    <Content Include="Vendor\feather\svg\ribbon.svg" />
+    <Content Include="Vendor\feather\svg\search.svg" />
+    <Content Include="Vendor\feather\svg\server.svg" />
+    <Content Include="Vendor\feather\svg\share.svg" />
+    <Content Include="Vendor\feather\svg\shuffle.svg" />
+    <Content Include="Vendor\feather\svg\signal.svg" />
+    <Content Include="Vendor\feather\svg\skip-back.svg" />
+    <Content Include="Vendor\feather\svg\skip-forward.svg" />
+    <Content Include="Vendor\feather\svg\speech-bubble.svg" />
+    <Content Include="Vendor\feather\svg\square-add.svg" />
+    <Content Include="Vendor\feather\svg\square-check.svg" />
+    <Content Include="Vendor\feather\svg\square-cross.svg" />
+    <Content Include="Vendor\feather\svg\square-minus.svg" />
+    <Content Include="Vendor\feather\svg\stack-2.svg" />
+    <Content Include="Vendor\feather\svg\stack.svg" />
+    <Content Include="Vendor\feather\svg\star.svg" />
+    <Content Include="Vendor\feather\svg\stop.svg" />
+    <Content Include="Vendor\feather\svg\sun.svg" />
+    <Content Include="Vendor\feather\svg\tag.svg" />
+    <Content Include="Vendor\feather\svg\target.svg" />
+    <Content Include="Vendor\feather\svg\thermometer.svg" />
+    <Content Include="Vendor\feather\svg\toggle.svg" />
+    <Content Include="Vendor\feather\svg\trash.svg" />
+    <Content Include="Vendor\feather\svg\umbrella.svg" />
+    <Content Include="Vendor\feather\svg\unlock.svg" />
+    <Content Include="Vendor\feather\svg\upload.svg" />
+    <Content Include="Vendor\feather\svg\video.svg" />
+    <Content Include="Vendor\feather\svg\volume.svg" />
+    <Content Include="Vendor\feather\svg\watch.svg" />
+    <Content Include="Vendor\feather\svg\zoom-in.svg" />
+    <Content Include="Vendor\feather\svg\zoom-out.svg" />
+    <Content Include="Vendor\feather\webfont\feather-webfont\feather.css" />
+    <Content Include="Vendor\feather\webfont\feather-webfont\fonts\feather-webfont.eot" />
+    <Content Include="Vendor\feather\webfont\feather-webfont\fonts\feather-webfont.svg" />
+    <Content Include="Vendor\feather\webfont\feather-webfont\fonts\feather-webfont.ttf" />
+    <Content Include="Vendor\feather\webfont\feather-webfont\fonts\feather-webfont.woff" />
+    <Content Include="Vendor\feather\webfont\README.md" />
+    <Content Include="Vendor\feather\webfont\reference.html" />
+    <Content Include="Vendor\feather\webfont\resources\style.css" />
+    <Content Include="Vendor\font-awesome\.bower.json" />
+    <Content Include="Vendor\font-awesome\.npmignore" />
+    <Content Include="Vendor\font-awesome\bower.json" />
+    <Content Include="Vendor\font-awesome\css\font-awesome.css" />
+    <Content Include="Vendor\font-awesome\css\font-awesome.css.map" />
+    <Content Include="Vendor\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Vendor\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Vendor\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Vendor\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Vendor\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Vendor\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Vendor\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Vendor\font-awesome\less\animated.less" />
+    <Content Include="Vendor\font-awesome\less\bordered-pulled.less" />
+    <Content Include="Vendor\font-awesome\less\core.less" />
+    <Content Include="Vendor\font-awesome\less\fixed-width.less" />
+    <Content Include="Vendor\font-awesome\less\font-awesome.less" />
+    <Content Include="Vendor\font-awesome\less\icons.less" />
+    <Content Include="Vendor\font-awesome\less\larger.less" />
+    <Content Include="Vendor\font-awesome\less\list.less" />
+    <Content Include="Vendor\font-awesome\less\mixins.less" />
+    <Content Include="Vendor\font-awesome\less\path.less" />
+    <Content Include="Vendor\font-awesome\less\rotated-flipped.less" />
+    <Content Include="Vendor\font-awesome\less\stacked.less" />
+    <Content Include="Vendor\font-awesome\less\variables.less" />
+    <Content Include="Vendor\font-awesome\scss\font-awesome.scss" />
+    <Content Include="Vendor\font-awesome\scss\_animated.scss" />
+    <Content Include="Vendor\font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="Vendor\font-awesome\scss\_core.scss" />
+    <Content Include="Vendor\font-awesome\scss\_fixed-width.scss" />
+    <Content Include="Vendor\font-awesome\scss\_icons.scss" />
+    <Content Include="Vendor\font-awesome\scss\_larger.scss" />
+    <Content Include="Vendor\font-awesome\scss\_list.scss" />
+    <Content Include="Vendor\font-awesome\scss\_mixins.scss" />
+    <Content Include="Vendor\font-awesome\scss\_path.scss" />
+    <Content Include="Vendor\font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="Vendor\font-awesome\scss\_stacked.scss" />
+    <Content Include="Vendor\font-awesome\scss\_variables.scss" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.af-ZA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery-formatCurrency-all.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.am-ET.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-AE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-BH.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-DZ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-EG.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-IQ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-JO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-KW.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-LB.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-LY.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-MA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-OM.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-QA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-SA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-SY.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-TN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ar-YE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.arn-CL.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.as-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.az-Cyrl-AZ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.az-Latn-AZ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ba-RU.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.be-BY.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.bg-BG.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.bn-BD.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.bn-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.bo-CN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.br-FR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.bs-Cyrl-BA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.bs-Latn-BA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ca-ES.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.co-FR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.cs-CZ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.cy-GB.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.da-DK.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.de-AT.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.de-CH.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.de-DE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.de-LI.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.de-LU.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.de.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.dsb-DE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.dv-MV.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.el-GR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-029.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-AU.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-BZ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-CA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-GB.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-IE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-JM.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-MY.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-NZ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-PH.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-SG.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-TT.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-US.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-ZA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.en-ZW.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-AR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-BO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-CL.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-CO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-CR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-DO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-EC.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-ES.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-GT.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-HN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-MX.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-NI.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-PA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-PE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-PR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-PY.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-SV.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-US.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-UY.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es-VE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.es.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.et-EE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.eu-ES.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.fa-IR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.fi-FI.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.fil-PH.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.fo-FO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.fr-BE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.fr-CA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.fr-CH.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.fr-FR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.fr-LU.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.fr-MC.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.fr.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.fy-NL.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ga-IE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.gl-ES.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.gsw-FR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.gu-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ha-Latn-NG.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.he-IL.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.hi-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.hr-BA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.hr-HR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.hsb-DE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.hu-HU.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.hy-AM.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.id-ID.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ig-NG.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ii-CN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.is-IS.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.it-CH.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.it-IT.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.it.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.iu-Cans-CA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.iu-Latn-CA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ja-JP.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ja.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ka-GE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.kk-KZ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.kl-GL.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.km-KH.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.kn-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ko-KR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.kok-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ky-KG.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.lb-LU.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.lo-LA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.lt-LT.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.lv-LV.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.mi-NZ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.mk-MK.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ml-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.mn-MN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.mn-Mong-CN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.moh-CA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.mr-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ms-BN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ms-MY.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.mt-MT.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.nb-NO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ne-NP.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.nl-BE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.nl-NL.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.nn-NO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.nso-ZA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.oc-FR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.or-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.pa-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.pl-PL.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.prs-AF.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ps-AF.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.pt-BR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.pt-PT.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.qut-GT.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.quz-BO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.quz-EC.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.quz-PE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.rm-CH.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ro-RO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ru-RU.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.rw-RW.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sa-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sah-RU.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.se-FI.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.se-NO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.se-SE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.si-LK.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sk-SK.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sl-SI.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sma-NO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sma-SE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.smj-NO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.smj-SE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.smn-FI.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sms-FI.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sq-AL.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sr-Cyrl-BA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sr-Cyrl-CS.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sr-Latn-BA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sr-Latn-CS.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sv-FI.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sv-SE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.sw-KE.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.syr-SY.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ta-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.te-IN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.tg-Cyrl-TJ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.th-TH.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.tk-TM.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.tn-ZA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.tr-TR.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.tt-RU.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.tzm-Latn-DZ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ug-CN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.uk-UA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.ur-PK.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.uz-Cyrl-UZ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.uz-Latn-UZ.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.vi-VN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.wo-SN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.xh-ZA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.yo-NG.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.zh-CN.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.zh-HK.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.zh-MO.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.zh-SG.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.zh-TW.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.zh.js" />
+    <Content Include="Vendor\jquery-formatCurrency\i18n\jquery.formatCurrency.zu-ZA.js" />
+    <Content Include="Vendor\jquery-formatCurrency\jquery-formatCurrency.js" />
+    <Content Include="Vendor\jquery-formatCurrency\jquery-formatCurrency-min.js" />
+    <Content Include="Vendor\jquery-formatCurrency\jquery.formatCurrency-1.4.0.pack.js" />
+    <Content Include="Vendor\jquery-number.js" />
+    <Content Include="Vendor\jquery\.bower.json" />
+    <Content Include="Vendor\jquery\bower.json" />
+    <Content Include="Vendor\jquery\dist\jquery.js" />
+    <Content Include="Vendor\jquery\dist\jquery.min.js" />
+    <Content Include="Vendor\jquery\dist\jquery.min.map" />
+    <Content Include="Vendor\jquery\MIT-LICENSE.txt" />
+    <Content Include="Vendor\jquery\src\ajax.js" />
+    <Content Include="Vendor\jquery\src\ajax\jsonp.js" />
+    <Content Include="Vendor\jquery\src\ajax\load.js" />
+    <Content Include="Vendor\jquery\src\ajax\parseJSON.js" />
+    <Content Include="Vendor\jquery\src\ajax\parseXML.js" />
+    <Content Include="Vendor\jquery\src\ajax\script.js" />
+    <Content Include="Vendor\jquery\src\ajax\var\nonce.js" />
+    <Content Include="Vendor\jquery\src\ajax\var\rquery.js" />
+    <Content Include="Vendor\jquery\src\ajax\xhr.js" />
+    <Content Include="Vendor\jquery\src\attributes.js" />
+    <Content Include="Vendor\jquery\src\attributes\attr.js" />
+    <Content Include="Vendor\jquery\src\attributes\classes.js" />
+    <Content Include="Vendor\jquery\src\attributes\prop.js" />
+    <Content Include="Vendor\jquery\src\attributes\support.js" />
+    <Content Include="Vendor\jquery\src\attributes\val.js" />
+    <Content Include="Vendor\jquery\src\callbacks.js" />
+    <Content Include="Vendor\jquery\src\core.js" />
+    <Content Include="Vendor\jquery\src\core\access.js" />
+    <Content Include="Vendor\jquery\src\core\init.js" />
+    <Content Include="Vendor\jquery\src\core\parseHTML.js" />
+    <Content Include="Vendor\jquery\src\core\ready.js" />
+    <Content Include="Vendor\jquery\src\core\var\rsingleTag.js" />
+    <Content Include="Vendor\jquery\src\css.js" />
+    <Content Include="Vendor\jquery\src\css\addGetHookIf.js" />
+    <Content Include="Vendor\jquery\src\css\curCSS.js" />
+    <Content Include="Vendor\jquery\src\css\defaultDisplay.js" />
+    <Content Include="Vendor\jquery\src\css\hiddenVisibleSelectors.js" />
+    <Content Include="Vendor\jquery\src\css\support.js" />
+    <Content Include="Vendor\jquery\src\css\swap.js" />
+    <Content Include="Vendor\jquery\src\css\var\cssExpand.js" />
+    <Content Include="Vendor\jquery\src\css\var\getStyles.js" />
+    <Content Include="Vendor\jquery\src\css\var\isHidden.js" />
+    <Content Include="Vendor\jquery\src\css\var\rmargin.js" />
+    <Content Include="Vendor\jquery\src\css\var\rnumnonpx.js" />
+    <Content Include="Vendor\jquery\src\data.js" />
+    <Content Include="Vendor\jquery\src\data\accepts.js" />
+    <Content Include="Vendor\jquery\src\data\Data.js" />
+    <Content Include="Vendor\jquery\src\data\var\data_priv.js" />
+    <Content Include="Vendor\jquery\src\data\var\data_user.js" />
+    <Content Include="Vendor\jquery\src\deferred.js" />
+    <Content Include="Vendor\jquery\src\deprecated.js" />
+    <Content Include="Vendor\jquery\src\dimensions.js" />
+    <Content Include="Vendor\jquery\src\effects.js" />
+    <Content Include="Vendor\jquery\src\effects\animatedSelector.js" />
+    <Content Include="Vendor\jquery\src\effects\Tween.js" />
+    <Content Include="Vendor\jquery\src\event.js" />
+    <Content Include="Vendor\jquery\src\event\ajax.js" />
+    <Content Include="Vendor\jquery\src\event\alias.js" />
+    <Content Include="Vendor\jquery\src\event\support.js" />
+    <Content Include="Vendor\jquery\src\exports\amd.js" />
+    <Content Include="Vendor\jquery\src\exports\global.js" />
+    <Content Include="Vendor\jquery\src\intro.js" />
+    <Content Include="Vendor\jquery\src\jquery.js" />
+    <Content Include="Vendor\jquery\src\manipulation.js" />
+    <Content Include="Vendor\jquery\src\manipulation\support.js" />
+    <Content Include="Vendor\jquery\src\manipulation\var\rcheckableType.js" />
+    <Content Include="Vendor\jquery\src\manipulation\_evalUrl.js" />
+    <Content Include="Vendor\jquery\src\offset.js" />
+    <Content Include="Vendor\jquery\src\outro.js" />
+    <Content Include="Vendor\jquery\src\queue.js" />
+    <Content Include="Vendor\jquery\src\queue\delay.js" />
+    <Content Include="Vendor\jquery\src\selector-native.js" />
+    <Content Include="Vendor\jquery\src\selector-sizzle.js" />
+    <Content Include="Vendor\jquery\src\selector.js" />
+    <Content Include="Vendor\jquery\src\serialize.js" />
+    <Content Include="Vendor\jquery\src\sizzle\dist\sizzle.js" />
+    <Content Include="Vendor\jquery\src\sizzle\dist\sizzle.min.js" />
+    <Content Include="Vendor\jquery\src\sizzle\dist\sizzle.min.map" />
+    <Content Include="Vendor\jquery\src\traversing.js" />
+    <Content Include="Vendor\jquery\src\traversing\findFilter.js" />
+    <Content Include="Vendor\jquery\src\traversing\var\rneedsContext.js" />
+    <Content Include="Vendor\jquery\src\var\arr.js" />
+    <Content Include="Vendor\jquery\src\var\class2type.js" />
+    <Content Include="Vendor\jquery\src\var\concat.js" />
+    <Content Include="Vendor\jquery\src\var\hasOwn.js" />
+    <Content Include="Vendor\jquery\src\var\indexOf.js" />
+    <Content Include="Vendor\jquery\src\var\pnum.js" />
+    <Content Include="Vendor\jquery\src\var\push.js" />
+    <Content Include="Vendor\jquery\src\var\rnotwhite.js" />
+    <Content Include="Vendor\jquery\src\var\slice.js" />
+    <Content Include="Vendor\jquery\src\var\strundefined.js" />
+    <Content Include="Vendor\jquery\src\var\support.js" />
+    <Content Include="Vendor\jquery\src\var\toString.js" />
+    <Content Include="Vendor\jquery\src\wrap.js" />
+    <Content Include="Vendor\JsBarcode\CODE128.js" />
+    <Content Include="Vendor\JsBarcode\CODE39.js" />
+    <Content Include="Vendor\JsBarcode\EAN_UPC.js" />
+    <Content Include="Vendor\JsBarcode\example\barcodeClock.html" />
+    <Content Include="Vendor\JsBarcode\example\index.html" />
+    <Content Include="Vendor\JsBarcode\ITF.js" />
+    <Content Include="Vendor\JsBarcode\ITF14.js" />
+    <Content Include="Vendor\JsBarcode\JsBarcode.js" />
+    <Content Include="Vendor\JsBarcode\MIT-LICENSE.txt" />
+    <Content Include="Vendor\JsBarcode\pharmacode.js" />
+    <Content Include="Vendor\loadingBar.js" />
+    <Content Include="Vendor\modernizr\.bower.json" />
+    <Content Include="Vendor\modernizr\.editorconfig" />
+    <Content Include="Vendor\modernizr\.travis.yml" />
+    <Content Include="Vendor\modernizr\feature-detects\a-download.js" />
+    <Content Include="Vendor\modernizr\feature-detects\audio-audiodata-api.js" />
+    <Content Include="Vendor\modernizr\feature-detects\audio-webaudio-api.js" />
+    <Content Include="Vendor\modernizr\feature-detects\battery-api.js" />
+    <Content Include="Vendor\modernizr\feature-detects\battery-level.js" />
+    <Content Include="Vendor\modernizr\feature-detects\blob-constructor.js" />
+    <Content Include="Vendor\modernizr\feature-detects\canvas-todataurl-type.js" />
+    <Content Include="Vendor\modernizr\feature-detects\contenteditable.js" />
+    <Content Include="Vendor\modernizr\feature-detects\contentsecuritypolicy.js" />
+    <Content Include="Vendor\modernizr\feature-detects\contextmenu.js" />
+    <Content Include="Vendor\modernizr\feature-detects\cookies.js" />
+    <Content Include="Vendor\modernizr\feature-detects\cors.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-backgroundposition-shorthand.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-backgroundposition-xy.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-backgroundrepeat.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-backgroundsizecover.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-boxsizing.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-calc.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-cubicbezierrange.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-displayrunin.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-displaytable.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-filters.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-hyphens.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-lastchild.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-mask.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-mediaqueries.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-objectfit.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-overflow-scrolling.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-pointerevents.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-positionsticky.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-regions.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-remunit.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-resize.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-scrollbars.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-shapes.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-subpixelfont.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-supports.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-userselect.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-vhunit.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-vmaxunit.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-vminunit.js" />
+    <Content Include="Vendor\modernizr\feature-detects\css-vwunit.js" />
+    <Content Include="Vendor\modernizr\feature-detects\custom-protocol-handler.js" />
+    <Content Include="Vendor\modernizr\feature-detects\dart.js" />
+    <Content Include="Vendor\modernizr\feature-detects\dataview-api.js" />
+    <Content Include="Vendor\modernizr\feature-detects\dom-classlist.js" />
+    <Content Include="Vendor\modernizr\feature-detects\dom-createElement-attrs.js" />
+    <Content Include="Vendor\modernizr\feature-detects\dom-dataset.js" />
+    <Content Include="Vendor\modernizr\feature-detects\dom-microdata.js" />
+    <Content Include="Vendor\modernizr\feature-detects\elem-datalist.js" />
+    <Content Include="Vendor\modernizr\feature-detects\elem-details.js" />
+    <Content Include="Vendor\modernizr\feature-detects\elem-output.js" />
+    <Content Include="Vendor\modernizr\feature-detects\elem-progress-meter.js" />
+    <Content Include="Vendor\modernizr\feature-detects\elem-ruby.js" />
+    <Content Include="Vendor\modernizr\feature-detects\elem-time.js" />
+    <Content Include="Vendor\modernizr\feature-detects\elem-track.js" />
+    <Content Include="Vendor\modernizr\feature-detects\emoji.js" />
+    <Content Include="Vendor\modernizr\feature-detects\es5-strictmode.js" />
+    <Content Include="Vendor\modernizr\feature-detects\event-deviceorientation-motion.js" />
+    <Content Include="Vendor\modernizr\feature-detects\exif-orientation.js" />
+    <Content Include="Vendor\modernizr\feature-detects\file-api.js" />
+    <Content Include="Vendor\modernizr\feature-detects\file-filesystem.js" />
+    <Content Include="Vendor\modernizr\feature-detects\forms-fileinput.js" />
+    <Content Include="Vendor\modernizr\feature-detects\forms-formattribute.js" />
+    <Content Include="Vendor\modernizr\feature-detects\forms-inputnumber-l10n.js" />
+    <Content Include="Vendor\modernizr\feature-detects\forms-placeholder.js" />
+    <Content Include="Vendor\modernizr\feature-detects\forms-speechinput.js" />
+    <Content Include="Vendor\modernizr\feature-detects\forms-validation.js" />
+    <Content Include="Vendor\modernizr\feature-detects\fullscreen-api.js" />
+    <Content Include="Vendor\modernizr\feature-detects\gamepad.js" />
+    <Content Include="Vendor\modernizr\feature-detects\getusermedia.js" />
+    <Content Include="Vendor\modernizr\feature-detects\ie8compat.js" />
+    <Content Include="Vendor\modernizr\feature-detects\iframe-sandbox.js" />
+    <Content Include="Vendor\modernizr\feature-detects\iframe-seamless.js" />
+    <Content Include="Vendor\modernizr\feature-detects\iframe-srcdoc.js" />
+    <Content Include="Vendor\modernizr\feature-detects\img-apng.js" />
+    <Content Include="Vendor\modernizr\feature-detects\img-webp.js" />
+    <Content Include="Vendor\modernizr\feature-detects\json.js" />
+    <Content Include="Vendor\modernizr\feature-detects\lists-reversed.js" />
+    <Content Include="Vendor\modernizr\feature-detects\mathml.js" />
+    <Content Include="Vendor\modernizr\feature-detects\network-connection.js" />
+    <Content Include="Vendor\modernizr\feature-detects\network-eventsource.js" />
+    <Content Include="Vendor\modernizr\feature-detects\network-xhr2.js" />
+    <Content Include="Vendor\modernizr\feature-detects\notification.js" />
+    <Content Include="Vendor\modernizr\feature-detects\performance.js" />
+    <Content Include="Vendor\modernizr\feature-detects\pointerlock-api.js" />
+    <Content Include="Vendor\modernizr\feature-detects\quota-management-api.js" />
+    <Content Include="Vendor\modernizr\feature-detects\requestanimationframe.js" />
+    <Content Include="Vendor\modernizr\feature-detects\script-async.js" />
+    <Content Include="Vendor\modernizr\feature-detects\script-defer.js" />
+    <Content Include="Vendor\modernizr\feature-detects\style-scoped.js" />
+    <Content Include="Vendor\modernizr\feature-detects\svg-filters.js" />
+    <Content Include="Vendor\modernizr\feature-detects\unicode.js" />
+    <Content Include="Vendor\modernizr\feature-detects\url-data-uri.js" />
+    <Content Include="Vendor\modernizr\feature-detects\userdata.js" />
+    <Content Include="Vendor\modernizr\feature-detects\vibration.js" />
+    <Content Include="Vendor\modernizr\feature-detects\web-intents.js" />
+    <Content Include="Vendor\modernizr\feature-detects\webgl-extensions.js" />
+    <Content Include="Vendor\modernizr\feature-detects\websockets-binary.js" />
+    <Content Include="Vendor\modernizr\feature-detects\window-framed.js" />
+    <Content Include="Vendor\modernizr\feature-detects\workers-blobworkers.js" />
+    <Content Include="Vendor\modernizr\feature-detects\workers-dataworkers.js" />
+    <Content Include="Vendor\modernizr\feature-detects\workers-sharedworkers.js" />
+    <Content Include="Vendor\modernizr\grunt.js" />
+    <Content Include="Vendor\modernizr\media\Modernizr 2 Logo.ai" />
+    <Content Include="Vendor\modernizr\media\Modernizr 2 Logo.eps" />
+    <Content Include="Vendor\modernizr\media\Modernizr 2 Logo.pdf" />
+    <Content Include="Vendor\modernizr\media\Modernizr 2 Logo.png" />
+    <Content Include="Vendor\modernizr\media\Modernizr 2 Logo.svg" />
+    <Content Include="Vendor\modernizr\modernizr.js" />
+    <Content Include="Vendor\modernizr\readme.md" />
+    <Content Include="Vendor\modernizr\test\basic.html" />
+    <Content Include="Vendor\modernizr\test\caniuse.html" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\alpha.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\apng_test.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\before-after.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\form_validation.html" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\ga.js" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\green5x5.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\hashchange.html" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\jquery.min.js" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\mathml.html" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\mathml_ref.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\modernizr-1.7.min.js" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\png_alpha_result.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\pushstate.html" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\red30x30.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\ruby.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\stroked-text.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\style.css" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\svg-html-blur.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\svg-img.svg" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\svg-img.svg.1" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\svg_blur.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\table.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\text-shadow1.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\text-shadow2.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\Windsong-webfont.eot" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\Windsong-webfont.otf" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\Windsong-webfont.svg" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\Windsong-webfont.ttf" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\Windsong-webfont.woff" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\windsong_font.png" />
+    <Content Include="Vendor\modernizr\test\caniuse_files\xhtml.html" />
+    <Content Include="Vendor\modernizr\test\index.html" />
+    <Content Include="Vendor\modernizr\test\js\basic.html" />
+    <Content Include="Vendor\modernizr\test\js\dumpdata.js" />
+    <Content Include="Vendor\modernizr\test\js\lib\detect-global.js" />
+    <Content Include="Vendor\modernizr\test\js\lib\jquery-1.7b2.js" />
+    <Content Include="Vendor\modernizr\test\js\lib\jsonselect.js" />
+    <Content Include="Vendor\modernizr\test\js\lib\polyfills.js" />
+    <Content Include="Vendor\modernizr\test\js\lib\uaparser.js" />
+    <Content Include="Vendor\modernizr\test\js\setup.js" />
+    <Content Include="Vendor\modernizr\test\js\unit-caniuse.js" />
+    <Content Include="Vendor\modernizr\test\js\unit.js" />
+    <Content Include="Vendor\modernizr\test\qunit\qunit.css" />
+    <Content Include="Vendor\modernizr\test\qunit\qunit.js" />
+    <Content Include="Vendor\modernizr\test\qunit\run-qunit.js" />
+    <Content Include="Vendor\ng-file-upload\dist\FileAPI.js" />
+    <Content Include="Vendor\ng-file-upload\dist\FileAPI.min.js" />
+    <Content Include="Vendor\ng-file-upload\dist\ng-file-upload-all.js" />
+    <Content Include="Vendor\ng-file-upload\dist\ng-file-upload-all.min.js" />
+    <Content Include="Vendor\ng-file-upload\dist\ng-file-upload-shim.js" />
+    <Content Include="Vendor\ng-file-upload\dist\ng-file-upload-shim.min.js" />
+    <Content Include="Vendor\ng-file-upload\dist\ng-file-upload.js" />
+    <Content Include="Vendor\ng-file-upload\dist\ng-file-upload.min.js" />
+    <Content Include="Vendor\ng-file-upload\src\data-url.js" />
+    <Content Include="Vendor\ng-file-upload\src\drop.js" />
+    <Content Include="Vendor\ng-file-upload\src\exif.js" />
+    <Content Include="Vendor\ng-file-upload\src\FileAPI.js" />
+    <Content Include="Vendor\ng-file-upload\src\model.js" />
+    <Content Include="Vendor\ng-file-upload\src\resize.js" />
+    <Content Include="Vendor\ng-file-upload\src\select.js" />
+    <Content Include="Vendor\ng-file-upload\src\shim-elem.js" />
+    <Content Include="Vendor\ng-file-upload\src\shim-filereader.js" />
+    <Content Include="Vendor\ng-file-upload\src\shim-upload.js" />
+    <Content Include="Vendor\ng-file-upload\src\upload.js" />
+    <Content Include="Vendor\ng-file-upload\src\validate.js" />
+    <Content Include="Vendor\ngstorage\.bower.json" />
+    <Content Include="Vendor\ngstorage\.bowerrc" />
+    <Content Include="Vendor\ngstorage\bower.json" />
+    <Content Include="Vendor\ngstorage\CHANGELOG.md" />
+    <Content Include="Vendor\ngstorage\Gruntfile.js" />
+    <Content Include="Vendor\ngstorage\LICENSE" />
+    <Content Include="Vendor\ngstorage\ngStorage.js" />
+    <Content Include="Vendor\ngstorage\ngStorage.min.js" />
+    <Content Include="Vendor\ngstorage\package.json" />
+    <Content Include="Vendor\ngstorage\README.md" />
+    <Content Include="Vendor\ngstorage\test\spec.js" />
+    <Content Include="Vendor\oclazyload\.bower.json" />
+    <Content Include="Vendor\oclazyload\bower.json" />
+    <Content Include="Vendor\oclazyload\CHANGELOG.md" />
+    <Content Include="Vendor\oclazyload\dist\ocLazyLoad.js" />
+    <Content Include="Vendor\oclazyload\dist\ocLazyLoad.min.js" />
+    <Content Include="Vendor\oclazyload\examples\complexExample\bower.json" />
+    <Content Include="Vendor\oclazyload\examples\complexExample\index.html" />
+    <Content Include="Vendor\oclazyload\examples\complexExample\js\app.js" />
+    <Content Include="Vendor\oclazyload\examples\complexExample\js\AppCtrl.js" />
+    <Content Include="Vendor\oclazyload\examples\complexExample\js\gridModule.js" />
+    <Content Include="Vendor\oclazyload\examples\complexExample\partials\main.html" />
+    <Content Include="Vendor\oclazyload\examples\complexExample\partials\modal.html" />
+    <Content Include="Vendor\oclazyload\examples\complexExample\README.md" />
+    <Content Include="Vendor\oclazyload\examples\requireJSExample\css\ng-grid.css" />
+    <Content Include="Vendor\oclazyload\examples\requireJSExample\index.html" />
+    <Content Include="Vendor\oclazyload\examples\requireJSExample\js\angular.min.js" />
+    <Content Include="Vendor\oclazyload\examples\requireJSExample\js\jquery.js" />
+    <Content Include="Vendor\oclazyload\examples\requireJSExample\js\lazymodule.js" />
+    <Content Include="Vendor\oclazyload\examples\requireJSExample\js\main.js" />
+    <Content Include="Vendor\oclazyload\examples\requireJSExample\js\ng-grid-2.0.11.debug.js" />
+    <Content Include="Vendor\oclazyload\examples\requireJSExample\js\require.js" />
+    <Content Include="Vendor\oclazyload\examples\requireJSExample\js\testmodule.js" />
+    <Content Include="Vendor\oclazyload\examples\requireJSExample\partials\grid.html" />
+    <Content Include="Vendor\oclazyload\examples\simpleExample\index.html" />
+    <Content Include="Vendor\oclazyload\examples\simpleExample\js\testApp.js" />
+    <Content Include="Vendor\oclazyload\LICENSE.md" />
+    <Content Include="Vendor\oclazyload\README.md" />
+    <Content Include="Vendor\select2\dist\css\select2.css" />
+    <Content Include="Vendor\select2\dist\css\select2-min.css" />
+    <Content Include="Vendor\select2\dist\js\i18n\az.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\bg.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\ca.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\cs.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\da.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\de.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\en.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\es.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\et.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\eu.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\fa.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\fi.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\fr.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\gl.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\he.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\hi.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\hr.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\hu.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\id.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\is.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\it.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\ko.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\lt.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\lv.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\mk.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\nb.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\nl.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\pl.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\pt-BR.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\pt.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\ro.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\ru.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\sk.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\sr.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\sv.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\th.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\tr.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\uk.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\vi.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\zh-CN.js" />
+    <Content Include="Vendor\select2\dist\js\i18n\zh-TW.js" />
+    <Content Include="Vendor\select2\dist\js\select2.full.js" />
+    <Content Include="Vendor\select2\dist\js\select2.full.min.js" />
+    <Content Include="Vendor\select2\dist\js\select2.js" />
+    <Content Include="Vendor\select2\dist\js\select2-min.js" />
+    <Content Include="Vendor\select2\docs\announcements-4.0.html" />
+    <Content Include="Vendor\select2\docs\community.html" />
+    <Content Include="Vendor\select2\docs\examples.html" />
+    <Content Include="Vendor\select2\docs\index.html" />
+    <Content Include="Vendor\select2\docs\options.html" />
+    <Content Include="Vendor\select2\docs\vendor\css\bootstrap.min.css" />
+    <Content Include="Vendor\select2\docs\vendor\css\font-awesome.min.css" />
+    <Content Include="Vendor\select2\docs\vendor\css\prettify.css" />
+    <Content Include="Vendor\select2\docs\vendor\fonts\fontawesome-webfont.svg" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ak.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\al.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ar.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\az.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ca.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\co.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ct.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\de.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\fl.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ga.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\hi.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ia.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\id.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\il.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\in.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ks.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ky.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\la.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ma.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\md.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\me.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\mi.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\mn.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\mo.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ms.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\mt.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\nc.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\nd.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ne.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\nh.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\nj.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\nm.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\nv.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ny.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\oh.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ok.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\or.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\pa.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ri.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\sc.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\sd.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\tn.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\tx.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\ut.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\va.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\vt.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\wa.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\wi.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\wv.png" />
+    <Content Include="Vendor\select2\docs\vendor\images\flags\wy.png" />
+    <Content Include="Vendor\select2\docs\vendor\js\bootstrap.min.js" />
+    <Content Include="Vendor\select2\docs\vendor\js\jquery.min.js" />
+    <Content Include="Vendor\select2\docs\vendor\js\placeholders.jquery.min.js" />
+    <Content Include="Vendor\select2\docs\vendor\js\prettify.min.js" />
+    <Content Include="Vendor\select2\docs\_includes\footer.html" />
+    <Content Include="Vendor\select2\docs\_includes\head.html" />
+    <Content Include="Vendor\select2\docs\_includes\navigation.html" />
+    <Content Include="Vendor\select2\docs\_layouts\default.html" />
+    <Content Include="Vendor\select2\docs\_layouts\home.html" />
+    <Content Include="Vendor\select2\Gruntfile.js" />
+    <Content Include="Vendor\select2\src\js\banner.end.js" />
+    <Content Include="Vendor\select2\src\js\banner.start.js" />
+    <Content Include="Vendor\select2\src\js\jquery.mousewheel.shim.js" />
+    <Content Include="Vendor\select2\src\js\jquery.select2.js" />
+    <Content Include="Vendor\select2\src\js\jquery.shim.js" />
+    <Content Include="Vendor\select2\src\js\select2\compat\containerCss.js" />
+    <Content Include="Vendor\select2\src\js\select2\compat\dropdownCss.js" />
+    <Content Include="Vendor\select2\src\js\select2\compat\initSelection.js" />
+    <Content Include="Vendor\select2\src\js\select2\compat\inputData.js" />
+    <Content Include="Vendor\select2\src\js\select2\compat\matcher.js" />
+    <Content Include="Vendor\select2\src\js\select2\compat\query.js" />
+    <Content Include="Vendor\select2\src\js\select2\compat\utils.js" />
+    <Content Include="Vendor\select2\src\js\select2\core.js" />
+    <Content Include="Vendor\select2\src\js\select2\data\ajax.js" />
+    <Content Include="Vendor\select2\src\js\select2\data\array.js" />
+    <Content Include="Vendor\select2\src\js\select2\data\base.js" />
+    <Content Include="Vendor\select2\src\js\select2\data\maximumInputLength.js" />
+    <Content Include="Vendor\select2\src\js\select2\data\maximumSelectionLength.js" />
+    <Content Include="Vendor\select2\src\js\select2\data\minimumInputLength.js" />
+    <Content Include="Vendor\select2\src\js\select2\data\select.js" />
+    <Content Include="Vendor\select2\src\js\select2\data\tags.js" />
+    <Content Include="Vendor\select2\src\js\select2\data\tokenizer.js" />
+    <Content Include="Vendor\select2\src\js\select2\defaults.js" />
+    <Content Include="Vendor\select2\src\js\select2\diacritics.js" />
+    <Content Include="Vendor\select2\src\js\select2\dropdown.js" />
+    <Content Include="Vendor\select2\src\js\select2\dropdown\attachBody.js" />
+    <Content Include="Vendor\select2\src\js\select2\dropdown\attachContainer.js" />
+    <Content Include="Vendor\select2\src\js\select2\dropdown\closeOnSelect.js" />
+    <Content Include="Vendor\select2\src\js\select2\dropdown\hidePlaceholder.js" />
+    <Content Include="Vendor\select2\src\js\select2\dropdown\infiniteScroll.js" />
+    <Content Include="Vendor\select2\src\js\select2\dropdown\minimumResultsForSearch.js" />
+    <Content Include="Vendor\select2\src\js\select2\dropdown\search.js" />
+    <Content Include="Vendor\select2\src\js\select2\dropdown\selectOnClose.js" />
+    <Content Include="Vendor\select2\src\js\select2\dropdown\stopPropagation.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\az.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\bg.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\ca.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\cs.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\da.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\de.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\en.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\es.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\et.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\eu.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\fa.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\fi.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\fr.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\gl.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\he.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\hi.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\hr.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\hu.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\id.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\is.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\it.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\ko.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\lt.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\lv.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\mk.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\nb.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\nl.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\pl.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\pt-BR.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\pt.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\ro.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\ru.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\sk.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\sr.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\sv.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\th.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\tr.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\uk.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\vi.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\zh-CN.js" />
+    <Content Include="Vendor\select2\src\js\select2\i18n\zh-TW.js" />
+    <Content Include="Vendor\select2\src\js\select2\keys.js" />
+    <Content Include="Vendor\select2\src\js\select2\options.js" />
+    <Content Include="Vendor\select2\src\js\select2\results.js" />
+    <Content Include="Vendor\select2\src\js\select2\selection\allowClear.js" />
+    <Content Include="Vendor\select2\src\js\select2\selection\base.js" />
+    <Content Include="Vendor\select2\src\js\select2\selection\clickMask.js" />
+    <Content Include="Vendor\select2\src\js\select2\selection\eventRelay.js" />
+    <Content Include="Vendor\select2\src\js\select2\selection\multiple.js" />
+    <Content Include="Vendor\select2\src\js\select2\selection\placeholder.js" />
+    <Content Include="Vendor\select2\src\js\select2\selection\search.js" />
+    <Content Include="Vendor\select2\src\js\select2\selection\single.js" />
+    <Content Include="Vendor\select2\src\js\select2\selection\stopPropagation.js" />
+    <Content Include="Vendor\select2\src\js\select2\translation.js" />
+    <Content Include="Vendor\select2\src\js\select2\utils.js" />
+    <Content Include="Vendor\select2\src\js\wrapper.end.js" />
+    <Content Include="Vendor\select2\src\js\wrapper.start.js" />
+    <Content Include="Vendor\select2\tests\a11y\selection-tests.js" />
+    <Content Include="Vendor\select2\tests\data\array-tests.js" />
+    <Content Include="Vendor\select2\tests\data\base-tests.js" />
+    <Content Include="Vendor\select2\tests\data\inputData-tests.js" />
+    <Content Include="Vendor\select2\tests\data\maximumInputLength-tests.js" />
+    <Content Include="Vendor\select2\tests\data\maximumSelectionLength-tests.js" />
+    <Content Include="Vendor\select2\tests\data\minimumInputLength-tests.js" />
+    <Content Include="Vendor\select2\tests\data\select-tests.js" />
+    <Content Include="Vendor\select2\tests\data\tags-tests.js" />
+    <Content Include="Vendor\select2\tests\dropdown\dropdownCss-tests.js" />
+    <Content Include="Vendor\select2\tests\dropdown\selectOnClose-tests.js" />
+    <Content Include="Vendor\select2\tests\dropdown\stopPropagation-tests.js" />
+    <Content Include="Vendor\select2\tests\helpers.js" />
+    <Content Include="Vendor\select2\tests\integration.html" />
+    <Content Include="Vendor\select2\tests\integration\select2-methods.js" />
+    <Content Include="Vendor\select2\tests\options\data-tests.js" />
+    <Content Include="Vendor\select2\tests\options\deprecated-tests.js" />
+    <Content Include="Vendor\select2\tests\options\translation-tests.js" />
+    <Content Include="Vendor\select2\tests\options\width-tests.js" />
+    <Content Include="Vendor\select2\tests\selection\allowClear-tests.js" />
+    <Content Include="Vendor\select2\tests\selection\containerCss-tests.js" />
+    <Content Include="Vendor\select2\tests\selection\multiple-tests.js" />
+    <Content Include="Vendor\select2\tests\selection\placeholder-tests.js" />
+    <Content Include="Vendor\select2\tests\selection\single-tests.js" />
+    <Content Include="Vendor\select2\tests\selection\stopPropagation-tests.js" />
+    <Content Include="Vendor\select2\tests\unit.html" />
+    <Content Include="Vendor\select2\tests\utils\decorator-tests.js" />
+    <Content Include="Vendor\select2\tests\utils\escapeMarkup-tests.js" />
+    <Content Include="Vendor\select2\tests\vendor\jquery-1.7.2.js" />
+    <Content Include="Vendor\select2\tests\vendor\qunit-1.14.0.css" />
+    <Content Include="Vendor\select2\tests\vendor\qunit-1.14.0.js" />
+    <Content Include="Vendor\select2\vendor\almond-0.2.9.js" />
+    <Content Include="Vendor\select2\vendor\jquery-2.1.0.js" />
+    <Content Include="Vendor\select2\vendor\jquery.mousewheel.js" />
+    <Content Include="Vendor\slimscroll\examples\allow-page-scroll.html" />
+    <Content Include="Vendor\slimscroll\examples\chaining.html" />
+    <Content Include="Vendor\slimscroll\examples\disable-fade-out.html" />
+    <Content Include="Vendor\slimscroll\examples\dynamic-content.html" />
+    <Content Include="Vendor\slimscroll\examples\height-width.html" />
+    <Content Include="Vendor\slimscroll\examples\index.html" />
+    <Content Include="Vendor\slimscroll\examples\libs\prettify\prettify.css" />
+    <Content Include="Vendor\slimscroll\examples\libs\prettify\prettify.js" />
+    <Content Include="Vendor\slimscroll\examples\mouse-wheel.html" />
+    <Content Include="Vendor\slimscroll\examples\multiple-elements.html" />
+    <Content Include="Vendor\slimscroll\examples\navigation.html" />
+    <Content Include="Vendor\slimscroll\examples\nested.html" />
+    <Content Include="Vendor\slimscroll\examples\programmatic-scrolling.html" />
+    <Content Include="Vendor\slimscroll\examples\rail.html" />
+    <Content Include="Vendor\slimscroll\examples\scroll-events.html" />
+    <Content Include="Vendor\slimscroll\examples\scrollbar.html" />
+    <Content Include="Vendor\slimscroll\examples\start-position.html" />
+    <Content Include="Vendor\slimscroll\examples\style.css" />
+    <Content Include="Vendor\slimscroll\jquery.slimscroll.js" />
+    <Content Include="Vendor\slimscroll\jquery-slimscroll-min.js" />
+    <Content Include="Vendor\weather-icons\.bower.json" />
+    <Content Include="Vendor\weather-icons\bower.json" />
+    <Content Include="Vendor\weather-icons\css\README.md" />
+    <Content Include="Vendor\weather-icons\css\weather-icons.css" />
+    <Content Include="Vendor\weather-icons\css\weather-icons.min.css" />
+    <Content Include="Vendor\weather-icons\font\weathericons-regular-webfont.eot" />
+    <Content Include="Vendor\weather-icons\font\weathericons-regular-webfont.svg" />
+    <Content Include="Vendor\weather-icons\font\weathericons-regular-webfont.ttf" />
+    <Content Include="Vendor\weather-icons\font\weathericons-regular-webfont.woff" />
+    <Content Include="Vendor\weather-icons\font\WeatherIcons-Regular.otf" />
+    <Content Include="Vendor\weather-icons\README.md" />
+    <Content Include="Vendor\weather-icons\weather-icons\icon-classes.less" />
+    <Content Include="Vendor\weather-icons\weather-icons\README.md" />
+    <Content Include="Vendor\weather-icons\weather-icons\variables.less" />
+    <Content Include="Vendor\weather-icons\weather-icons\weather-icons.less" />
+    <Content Include="Vendor\weather-icons\weather-icons\weather-icons.min.less" />
+    <Content Include="Langs\en.json" />
+    <Content Include="Langs\es.json" />
+    <Content Include="Langs\pt.json" />
+    <Content Include="Langs\zh-cn.json" />
+    <Content Include="bin\Tickets.dll.config" />
+    <EntityDeploy Include="Models\Tickets.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Tickets.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Tickets.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Tickets.edmx</DependentUpon>
+      <LastGenOutput>Tickets.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Tickets.edmx.diagram">
+      <DependentUpon>Tickets.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\Tickets.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Tickets.edmx</DependentUpon>
+      <LastGenOutput>Tickets.cs</LastGenOutput>
+    </Content>
+    <Content Include="Images\Sorting icons.psd" />
+    <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Tickets IIS Express.pubxml" />
+    <Content Include="Views\Agency\Create.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Agency\List.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\CashClose.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\CreditNote.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\CreditNoteList.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\Payment.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\Receivable.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\ReceivableList.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Client\ApprovedClientProcess.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Client\Create.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Client\List.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Client\WorkflowList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Config\CatalogCreate.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Config\CatalogList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Config\SystemConfig.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Config\WorkflowTypeCreate.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Config\WorkflowTypeList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Config\WorkflowTypeUserCreate.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Config\WorkflowTypeUserList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Dashboard\Index.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Employee\Create.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Employee\DepartmentCreate.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Employee\DepartmentList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Employee\List.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Layout\Index.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\ApprovedProcess.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\Create.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\Details.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\List.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\SuspendedList.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\WorkflowList.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Raffle\Create.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Raffle\GeneratedList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Raffle\List.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Raffle\RaffleAwardNumber.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Raffle\VirtualRaffle.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\GenerarRaffle.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ReturnedNumbersGroup.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\AccessDenied.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\Login.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\Logs.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\ModuleCreate.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\ModuleList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\ModuleListInRol.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\OfficeListInRol.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\RolCreate.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\RolList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\RolListInUser.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\UserCreate.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\UserList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\UserListInRol.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Shared\_Layout.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Shared\_ReportLayout.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Templates\Footer.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Templates\LayerSearch.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Templates\Settings.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Templates\Sidebar.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Templates\TopNavbar.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Templates\TopNavbarDock.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketInvoice\Invoice.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketInvoice\InvoiceList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketReturned\Returned.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketReturned\ReturnedAwardList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketReturned\ReturnedList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketAllocation\TicketAllocationCreate.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketAllocation\TicketAllocationList.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketSuscriber\TicketSuscriberCreate.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketSuscriber\TicketSuscriberList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TypesAward\AwardNumber.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TypesAward\Create.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TypesAward\List.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Vendor\datatables\.bower.json" />
+    <Content Include="Vendor\datatables\bower.json" />
+    <Content Include="Vendor\datatables\Contributing.md" />
+    <Content Include="Vendor\datatables\media\images\Sorting icons.psd" />
+    <Content Include="Vendor\datatables\Readme.md" />
+    <Content Include="Vendor\alertify\.gitignore" />
+    <Content Include="Vendor\alertify\.travis.yml" />
+    <Content Include="Vendor\alertify\bower.json" />
+    <Content Include="Vendor\alertify\Contributors.md" />
+    <Content Include="Vendor\alertify\example\assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="Vendor\alertify\example\assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Vendor\alertify\example\assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="Vendor\alertify\example\assets\fonts\FontAwesome.otf" />
+    <Content Include="Vendor\alertify\package.json" />
+    <Content Include="Vendor\alertify\README.md" />
+    <Content Include="Scripts\modules\security\security.logs.controller.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Properties\PublishProfiles\tickets.pubxml" />
+    <Content Include="Vendor\datepicker\less\datepicker.less" />
+    <Content Include="Vendor\select2\.editorconfig" />
+    <Content Include="Vendor\select2\.gitignore" />
+    <Content Include="Vendor\select2\.jshintignore" />
+    <Content Include="Vendor\select2\.jshintrc" />
+    <Content Include="Vendor\select2\.travis.yml" />
+    <Content Include="Vendor\select2\bower.json" />
+    <Content Include="Vendor\select2\component.json" />
+    <Content Include="Vendor\select2\composer.json" />
+    <Content Include="Vendor\select2\CONTRIBUTING.md" />
+    <Content Include="Vendor\select2\docs\.gitignore" />
+    <Content Include="Vendor\select2\docs\dist\.gitkeep" />
+    <Content Include="Vendor\select2\docs\README.md" />
+    <Content Include="Vendor\select2\docs\vendor\fonts\fontawesome-webfont.eot" />
+    <Content Include="Vendor\select2\docs\vendor\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Vendor\select2\docs\vendor\fonts\fontawesome-webfont.woff" />
+    <Content Include="Vendor\select2\docs\vendor\fonts\FontAwesome.otf" />
+    <Content Include="Vendor\select2\LICENSE.md" />
+    <Content Include="Vendor\select2\package.json" />
+    <Content Include="Vendor\select2\README.md" />
+    <Content Include="Vendor\select2\select2.jquery.json" />
+    <Content Include="Vendor\select2\src\scss\core.scss" />
+    <Content Include="Vendor\select2\src\scss\mixins\_gradients.scss" />
+    <Content Include="Vendor\select2\src\scss\theme\classic\layout.scss" />
+    <Content Include="Vendor\select2\src\scss\theme\classic\_defaults.scss" />
+    <Content Include="Vendor\select2\src\scss\theme\classic\_multiple.scss" />
+    <Content Include="Vendor\select2\src\scss\theme\classic\_single.scss" />
+    <Content Include="Vendor\select2\src\scss\theme\default\layout.scss" />
+    <Content Include="Vendor\select2\src\scss\theme\default\_multiple.scss" />
+    <Content Include="Vendor\select2\src\scss\theme\default\_single.scss" />
+    <Content Include="Vendor\select2\src\scss\_dropdown.scss" />
+    <Content Include="Vendor\select2\src\scss\_multiple.scss" />
+    <Content Include="Vendor\select2\src\scss\_single.scss" />
+    <Content Include="Vendor\slimscroll\.bower.json" />
+    <Content Include="Vendor\slimscroll\bower.json" />
+    <Content Include="Vendor\slimscroll\README.md" />
+    <Content Include="Vendor\slimscroll\slimScroll.jquery.json" />
+    <Content Include="Vendor\angular-xeditable\.bower.json" />
+    <Content Include="Vendor\angular-xeditable\bower.json" />
+    <Content Include="Vendor\angular-xeditable\readme.md" />
+    <Content Include="Vendor\AngularJS-Toaster\.gitignore" />
+    <Content Include="Vendor\AngularJS-Toaster\bower.json" />
+    <Content Include="Vendor\AngularJS-Toaster\LICENSE" />
+    <Content Include="Vendor\AngularJS-Toaster\package.json" />
+    <Content Include="Vendor\AngularJS-Toaster\README.md" />
+    <Content Include="Vendor\AngularJS-Toaster\toaster.scss" />
+    <Content Include="Views\Cash\OpenCash.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ProspectFormat.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\AllProspects.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TypesAward\PrintList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Raffle\PrintGeneratedList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\NoPrintedNumbesForRaffle.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\NoPrintedNumbesAward.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\NumbesAward.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketReturned\PrintReturnedList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ReturnedNumbers.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Client\ListPrint.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketPrint\AllocationListPrint.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\AllocatinosNumbers.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketInvoice\InvoiceListPrint.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\InvoicesByRaffle.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Shared\_LayoutClear.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\WorkFlowProccessMail.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketAllocation\AllocationDetails.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketAllocation\IdentifyAward.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketAllocation\IdentifyAwardList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketAllocation\IdentifyAwardDetail.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketAllocation\NumberDetail.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketPrint\TicketPrint.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketPrint\AllocationPrintList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Vendor\JsBarcode\bower.json" />
+    <Content Include="Vendor\JsBarcode\README.md" />
+    <Content Include="Views\Reports\Tickets.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\Error.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\InvoiceDetail.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ReturnedDeatils.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketAllocation\CopyAllocation.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\AllocatinosNumberList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketSuscriber\TicketSuscriberDetails.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Raffle\OpenReturned.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketPrint\TicketReprintList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketPrint\TicketReprintCreate.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketPrint\ReprintWorkflowList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketPrint\ApprovedReprintProcess.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ReprintTickets.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketPrint\TicketReprint.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Security\ChangePassword.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\RaffleGeneralOver.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketAllocation\TicketReassign.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketReturned\ReturnedListQuery.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketReturned\ReturnedGroupDetails.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Dashboard\AboutUs.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Raffle\ActiveRaffle.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ShowDocument.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketReturned\ReturnedValidation.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketReturned\ReturnedValidationGroupDetails.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\InvoicedNumbersAward.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Raffle\PrintGeneratedTypes.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\SpecialAwardInline.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\IntermAwardInline.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\MinorAwardInline.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\CashReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\CashReports.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\GetCashReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ReceivableReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\IndentifyReceivableReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\NumberCertification.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ReturnedNumbersAward.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\PreviousDebt.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\PreviousDebtPaymentReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\InvoicesByRaffleAllocation.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Vendor\chart-js\.travis.yml" />
+    <Content Include="Vendor\chart-js\bower.json" />
+    <Content Include="Vendor\chart-js\composer.json" />
+    <Content Include="Vendor\chart-js\CONTRIBUTING.md" />
+    <Content Include="Vendor\chart-js\docs\00-Getting-Started.md" />
+    <Content Include="Vendor\chart-js\docs\01-Line-Chart.md" />
+    <Content Include="Vendor\chart-js\docs\02-Bar-Chart.md" />
+    <Content Include="Vendor\chart-js\docs\03-Radar-Chart.md" />
+    <Content Include="Vendor\chart-js\docs\04-Polar-Area-Chart.md" />
+    <Content Include="Vendor\chart-js\docs\05-Pie-Doughnut-Chart.md" />
+    <Content Include="Vendor\chart-js\docs\06-Advanced.md" />
+    <Content Include="Vendor\chart-js\docs\07-Notes.md" />
+    <Content Include="Vendor\chart-js\LICENSE.md" />
+    <Content Include="Vendor\chart-js\package.json" />
+    <Content Include="Vendor\chart-js\README.md" />
+    <Content Include="Views\Reports\CXCReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TypesAward\ReturnedTraceability.cshtml" />
+    <Content Include="Views\Reports\TicketsChristmas.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ReprintTicketsChristmas.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\MajorAwardInline.cshtml" />
+    <Content Include="Views\Reports\PrintedNumbesForRaffle.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Reports\ReturnedNumbersClient.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\AllocationSummary.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ReportPaymenHistory.cshtml">
+      <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\DebtReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\InvoiceDetailCashReports.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\InvoiceDeatilCashReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\InvoiceDetailList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\AccountsPaymentsReports.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\AccountsReceivables.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketReturned\ReturnedAwardReports.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ReturnedGroupAwards.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketAllocation\AllocationSummaryReports.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\AllocationSummaryBy.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\TicketReprinted.cshtml" />
+    <Content Include="Views\Raffle\PrintReportList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Raffle\InspectorReports.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Raffle\CreditReportsByRaffle.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Client\CreditReports.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Integration\electronicTicketXml.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Raffle\DashboardRaffleReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\RaffleDashboardReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\AccountsPayments.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\AccountsReceivablesReports.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\ProspectCreateWizard.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\_CreationTypePartial.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\_ProspectVerifyPartial.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\_ProspectTypePartial.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\_ProspectDesingPartial.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\_ProspectPricePartial.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Prospect\_ProspectAwardPartial.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TicketPrint\TicketReviewList.cshtml" />
+    <Content Include="Views\TicketInvoice\InvoiceListForSuspend.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\PrintedNumbersNotInvoiced.cshtml" />
+    <Content Include="Views\Shared\_TicketsLayout.cshtml" />
+    <Content Include="Views\Reports\NumbesAwardExpired.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\RaffleGeneralOverR.cshtml" />
+    <Content Include="Views\Client\ClientGeneralReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ClientGeneralReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\IdentifyAwardsReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TypesAward\IdentifyAwardsReports.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Config\ConfigEmail.cshtml" />
+    <Content Include="Scripts\modules\config\config.email.controller.js" />
+    <Content Include="Views\TypesAward\AwardsCertifications.cshtml" />
+    <Content Include="Views\Reports\AwardCertification.cshtml" />
+    <Content Include="Views\Reports\ClientNumbersAward.cshtml" />
+    <Content Include="Views\Config\CostosProduccion.cshtml" />
+    <Content Include="Views\Reports\ProfitabilityReport.cshtml" />
+    <Content Include="Views\Raffle\ProfitabilityRaffle.cshtml" />
+    <Content Include="Views\TypesAward\AwardsCertWorkflowList.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\TypesAward\ApprovedAwardsCertProcess.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\ClientGeneral.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Cash\ClientGeneralBalance.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Reports\ClientBalanceGeneralReport.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Vendor\angular-ui-router\api\" />
+    <Folder Include="Views\Account\" />
+    <Folder Include="Views\Email\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Project_Readme.html" />
+    <Content Include="Scripts\custom\PUT-HERE-YOUR-OWN-JS" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>61913</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:49329/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

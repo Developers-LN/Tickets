@@ -1,0 +1,50 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Reportes de Devoluciones";
+}
+<div class="col-lg-12 no-padder" ng-controller="RafflePrintController" ng-init="app.title = '@(ViewBag.Title)'">
+    <input type="hidden" class="hide" value="0" id="noStatusRaffle" />
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!-- START panel-->
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th style="width:70px" class="text-center">ID</th>
+                                <th>Nombre de Sorteo</th>
+                                <th class="text-center">Devoluciones Por Numero</th>
+                                <th class="text-center">Resumen de Devoluciones</th>
+                                <th class="text-center">Devoluciones Por Cliente</th>
+                                <th class="text-center">Devoluciones Premiadas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="raffle in raffles">
+                                <td class="text-center">{{raffle.id}}</td>
+                                <td>{{raffle.name}}</td>
+                                <td class="text-center">
+                                    <a target="_blank" href="/Reports/ReturnedNumbers?raffleId={{raffle.id}}" title="Imprimir: Devoluciones por Numero"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a target="_blank" href="/Reports/ReturnedNumbersGroup?raffleId={{raffle.id}}" title="Imprimir: Resumen de Devoluciones"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a target="_blank" href="/Reports/ReturnedNumbersClient?raffleId={{raffle.id}}" title="Imprimir: Devoluciones por Grupo"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a target="_blank" href="/Reports/ReturnedNumbersAward?raffleId={{raffle.id}}" title="Imprimir: Devoluciones Premiadas"><i class="fa fa-print"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

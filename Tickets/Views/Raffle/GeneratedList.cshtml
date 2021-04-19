@@ -1,0 +1,48 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de Sorteos Generados";
+}
+<div class="col-lg-12 no-padder" ng-controller="RaffleGeneratedController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Codigo</th>
+                                <th>Nombre</th>
+                                <th>Prospecto de Billetes</th>
+                                <th>Fecha de Sorteo</th>
+                                <th>Inicio Devolución</th>
+                                <th>Fin Devolución</th>
+                                <th>Estatus</th>
+                                <th style="width:128px;">Detalle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="raffle in raffles">
+                                <td>{{raffle.id}}</td>
+                                <td>{{raffle.name}}</td>
+                                <td>{{raffle.ticketProspectDesc}}</td>
+                                <td>{{(raffle.dateSolteo| date:"dd/MM/yyyy")}}</td>
+                                <td>{{(raffle.startReturnDate| date:"dd/MM/yyyy")}}</td>
+                                <td>{{(raffle.endReturnDate| date:"dd/MM/yyyy")}}</td>
+                                <td>{{raffle.statuDesc}}</td>
+                                <td style="width:128px;">
+                                    <a href="#/raffle/virtual/{{raffle.id}}" title="Detalle de Sorteo" class="{{moduleCanEdit}}"><i class="fa fa-eye"></i></a>
+                                    <a href="/Reports/GenerarRaffle?raffleId={{raffle.id}}" target="_blank" title="Imprimir Sorteo Virtual"><i class="fa fa-print"></i></a>
+                                    <!--<a ng-click="downloadRaffleReport(raffle.id)" title="Descargar Reporte del Sorteo Virtual"><i class="fa fa-download"></i></a>-->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

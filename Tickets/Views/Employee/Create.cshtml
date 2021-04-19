@@ -1,0 +1,257 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Creación de Empleado";
+
+    var context = new Tickets.Models.TicketsEntities();
+}
+<div class="app-view-header">@ViewBag.Title</div>
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="EmployeeController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-4 no-padder">
+                    <input
+                        type="hidden"
+                        ng-model="employee.Id" />
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <input
+                                    type="text"
+                                    ng-model="employee.Name"
+                                    class="form-control input-sm"
+                                    ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Apellido: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <input
+                                    type="text"
+                                    ng-model="employee.LastName"
+                                    class="form-control input-sm"
+                                    ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Cédula: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <input
+                                    type="text"
+                                    ng-model="employee.DocumentNumber"
+                                    class="form-control input-sm"
+                                    ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Fecha de nacimiento: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <input
+                                    type="text"
+                                    ng-model="employee.Birthday"
+                                    class="form-control input-sm datatime-picker"
+                                    ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Estado civil: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="employee.MaritalStatus" >
+                                    <option selected="selected"  disabled="disabled" value="0">Seleccione un estado civil</option>
+                                    @foreach (var statu in context.Catalogs.Where(c => c.IdGroup == (int)Tickets.Models.Enums.CatalogGroupEnum.MaritalStatus))
+                                    {
+                                        <option value="@statu.Id">@statu.NameDetail</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sexo: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="employee.Gender" >
+                                    <option selected="selected"  disabled="disabled" value="0">Seleccione un sexo</option>
+                                    @foreach (var statu in context.Catalogs.Where(c => c.IdGroup == (int)Tickets.Models.Enums.CatalogGroupEnum.Gender))
+                                    {
+                                        <option value="@statu.Id">@statu.NameDetail</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-4 no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Provincia:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select class="form-control input-sm" ng-model="employee.Province" ng-change="updateTown()">
+                                    <option selected="selected"  disabled="disabled" value="0">Seleccione una provincia</option>
+                                     @foreach (var province in context.Provinces.ToList())
+                                     {
+                                        <option value="@province.Id">@province.Name</option>
+                                     }
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Municipio:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="employee.Town" ng-change="updateDistritalTown()">
+                                    <option selected="selected"  disabled="disabled" value="0">Seleccione una municipio</option>
+                                    <option ng-repeat="town in towns" value="{{town.Id}}">{{town.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sección: </label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="employee.Section">
+                                    <option selected="selected"  disabled="disabled" value="0">Seleccione una sección</option>
+                                    <option ng-repeat="distTown in distTowns" value="{{distTown.Id}}">{{distTown.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Dirección:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <input
+                                    type="text"
+                                    ng-model="employee.Addres"
+                                    class="form-control input-sm"
+                                    ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Teléfono:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <input
+                                    type="text"
+                                    ng-model="employee.Phone"
+                                    class="form-control input-sm"
+                                    ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">E-Mail:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <input
+                                    type="text"
+                                    ng-model="employee.Email"
+                                    class="form-control input-sm"
+                                    ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-4 no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Departamento:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="employee.Department" >
+                                    <option selected="selected"  disabled="disabled" value="0">Seleccione un departamento</option>
+                                    @foreach (var statu in context.Catalogs.Where(c => c.IdGroup == (int)Tickets.Models.Enums.CatalogGroupEnum.DepartmentNames))
+                                    {
+                                        <option value="@statu.Id">@statu.NameDetail</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Puesto:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="employee.Office" >
+                                    <option selected="selected"  disabled="disabled" value="0">Seleccione una cargo</option>
+                                    @foreach (var statu in context.Catalogs.Where(c => c.IdGroup == (int)Tickets.Models.Enums.CatalogGroupEnum.EmployeeOffice))
+                                    {
+                                        <option value="@statu.Id">@statu.NameDetail</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Grupo:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="employee.GroupId">
+                                    @foreach (var statu in context.Catalogs.Where(c => c.IdGroup == (int)Tickets.Models.Enums.CatalogGroupEnum.ClientGroup && c.Id == 40))
+                                    {
+                                        <option value="@statu.Id" selected="selected" >@statu.NameDetail</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Observación:</label>
+                            <div class="col-lg-12">
+                                <textarea
+                                    class="form-control input-sm"
+                                    ng-model="employee.Comment"
+                                    style="max-height: 109px; height: 31px;"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Agencia: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control input-sm" ng-model="employee.AgencyId">
+                                    <option selected="selected"  disabled="disabled" value="0">Seleccione una agencia</option>
+                                     @foreach (var agency in context.Agencies.ToList())
+                                     {
+                                        <option value="@agency.Id">@agency.Name</option>
+                                     }
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Estatus:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="employee.Statu" >
+                                    <option selected="selected"  disabled="disabled" value="0">Seleccione un estatus</option>
+                                    @foreach (var statu in context.Catalogs.Where(c => c.IdGroup == (int)Tickets.Models.Enums.CatalogGroupEnum.GeneralStatus))
+                                    {
+                                        <option value="@statu.Id">@statu.NameDetail</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg"> 
+        <a ui-sref="app.employeeList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
+        <a ng-click="saveEmployeeForm()" class="mr btn btn-square btn-primary {{employee.Id > 0? moduleCanEdit: moduleCanAdd }}"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

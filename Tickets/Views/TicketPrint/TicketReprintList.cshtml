@@ -1,0 +1,63 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de reimpresión de billetes";
+}
+<div class="col-lg-12 no-padder" ng-controller="ReprintListController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-6 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sorteo: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="RaffleId" ng-change="updateReprint()">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="col-lg-6 text-right m-b-xs no-padder">
+                    <a href="/#/ticket/reprintCreate/0/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Crear reimpresión</a>
+                </div>
+                <div class="col-lg-12 text-center" ng-if="RaffleId == 0">
+                    <div class="alert alert-warning">
+                        Seleccione un sorteo.
+                    </div>
+                </div>
+                <div class="row-border hover" ng-if="RaffleId > 0">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Sorteo</th>
+                                <th>Cantidad de Numero</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th class="editColumm">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="ticket in ticketReprints">
+                                <td>{{ticket.raffleDesc}}</td>
+                                <td>{{ticket.numberCount}}</td>
+                                <td>{{(ticket.createDate | date:"dd/MM/yyyy h:mm:ss a")}}</td>
+                                <td>{{ticket.statuDesc}}</td>
+                                <td>
+                                    <a ng-click="startWorkflowProspect(ticket)" ng-if="ticket.statu == @((int)Tickets.Models.Enums.TicketReprintStatuEnum.Created)" title="Enviar reimpresion a aprobación" class="{{moduleCanAdd}}"><i class="fa fa-external-link"></i></a>
+                                    <a ng-click="deleteTicket(ticket)" ng-if="ticket.statu == @((int)Tickets.Models.Enums.TicketReprintStatuEnum.Created)" title="Cancelar" class="{{moduleCanDelete}}"><i class="fa fa-times"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

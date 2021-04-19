@@ -1,0 +1,117 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Integración con Lotería Electrónica";
+}
+<div class="col-lg-12 no-padder" ng-controller="ElectronicTicketXmlController" ng-init="app.title = '@(ViewBag.Title)'">
+    <!--START MODALS-->
+    <div class="modal fade" id="showUploadXmlInvoice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-vertical-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Selección de documento - XML Vendidos</b></h4>
+                </div>
+                <div class="modal-body col-lg-12 no-padder">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">El archivo debe tener la extensión .xml</label>
+                                    <div class="col-lg-12">
+                                        <a id="invoiceFileButton" class="btn btn-sm btn-default" ng-show="invoice.xmlInvoice == ''"><i class="fa fa-cloud-upload"></i> Subir documento</a>
+                                        <span style="font-size:10pt;">{{invoice.sourceFileName}}</span>
+                                        <a class="btn btn-danger btn-sm" ng-click="clearXmlInvoiceLabel()" ng-show="invoice.xmlInvoice != ''"><i class="fa fa-times"></i></a>
+                                        <input type="file"
+                                               id="xmlInvoice"
+                                               class="form-control input-sm hide" />
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <a ng-click="createInvioceXml()" class="mb-sm btn btn-success pull-right"><i class="fa fa-floppy-o"></i> Crear Factura</a>
+                    <a data-dismiss="modal" class="mb-sm btn btn-warning pull-left">Cancelar <i class="fa fa-times"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="showUploadXmlPayed" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-vertical-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Selección de documento - XML Pagados</b></h4>
+                </div>
+                <div class="modal-body col-lg-12 no-padder">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">El archivo debe tener la extensión .xml</label>
+                                    <div class="col-lg-12">
+                                        <a id="payedFileButton" class="btn btn-sm btn-default" ng-show="Payed.xmlPayed == ''"><i class="fa fa-cloud-upload"></i> Subir documento</a>
+                                        <span style="font-size:10pt;">{{Payed.sourceFileName}}</span>
+                                        <a class="btn btn-danger btn-sm" ng-click="clearXmlPayedLabel()" ng-show="Payed.xmlPayed != ''"><i class="fa fa-times"></i></a>
+                                        <input type="file"
+                                               id="xmlPayed"
+                                               class="form-control input-sm hide" />
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <a ng-click="createBachXml()" class="mb-sm btn btn-success pull-right"><i class="fa fa-floppy-o"></i> Crear Lote</a>
+                    <a data-dismiss="modal" class="mb-sm btn btn-warning pull-left">Cancelar <i class="fa fa-times"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END MODALS-->
+
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!-- START panel-->
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Sorteo</th>
+                                <th class="text-center">XML Asignaciones</th>
+                                <th class="text-center">XML Vendidos</th>
+                                <th class="text-center">XML Premiados</th>
+                                <th class="text-center">XML Pagados</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="raffle in raffles">
+                                <td>{{raffle.value}} - {{raffle.text}}</td>
+                                <td class="text-center">
+                                    <a ng-click="xmlAllocationDownload(raffle.value)" target="_blank" title="Descargar XML de Asignaciones"><i class="fa fa-cloud-download"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a ng-click="showUploadXmlInvoice(raffle.value)" ng-if="raffle.statu != @((int)Tickets.Models.Enums.RaffleStatusEnum.Generated)" target="_blank" title="Subir XML de Vendidos"><i class="fa fa-external-link-square"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a ng-click="xmlAwardDownload(raffle.value)" target="_blank" title="Descargar XML de Premiados"><i class="fa fa-cloud-download"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a ng-click="showUploadXmlPayed(raffle.value)" target="_blank" title="Subir XML de Pagados"><i class="fa fa-external-link-square"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

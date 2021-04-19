@@ -1,0 +1,80 @@
+<!-- START Top Navbar-->
+<nav role="navigation" class="navbar topnavbar @ViewBag.clearTemplate">
+    <!-- START button offset-->
+    <div class="btn-offset">
+        <button type="button" btn-layer-morph="" target="#layer-search" ripple="" class="btn hide btn-info btn-circle btn-lg shadow-z1 search-button">
+            <em class="fa fa-search"></em>
+        </button>
+    </div>
+    <!-- START button offset-->
+    <!-- START navbar header-->
+    <div class="navbar-header">
+        <a ui-sref="app.dashboard" class="navbar-brand">
+            <img src="~/Images/logo.png" alt="App Logo" class="brand-logo" style="margin-right: 15px;" />
+        </a>
+        <!-- Mobile buttons-->
+        <div class="mobile-toggles">
+            <!-- Button to show/hide the sidebar on mobile. Visible on mobile only.-->
+            <a href="" ng-click="app.sidebar.isOffscreen = !app.sidebar.isOffscreen" class="sidebar-toggle">
+                <em class="fa fa-navicon"></em>
+            </a>
+            <!-- Button to show/hide the header menu on mobile. Visible on mobile only.-->
+            <a href="" ng-click="toggleHeaderMenu()" class="menu-toggle hidden-material">
+                <em class="fa fa-ellipsis-v fa-fw"></em>
+            </a>
+        </div>
+    </div>
+    <!-- END navbar header-->
+    <!-- START Nav wrapper-->
+    <div collapse="headerMenuCollapsed" class="nav-wrapper collapse navbar-collapse">
+        <!-- START Left navbar-->
+        <ul class="nav navbar-nav hidden-material">
+            <li>
+                <!-- Button used to collapse the left sidebar. Only visible on tablet and desktops-->
+                <a href="" ng-click="app.sidebar.isOffscreen = !app.sidebar.isOffscreen" class="hidden-xs">
+                    <em ng-class="app.sidebar.isOffscreen ? 'fa-caret-right':'fa-caret-left'" class="fa"></em>
+                </a>
+            </li>
+            <li style="font-size: 18pt;color: white;font-weight: bold;padding-top: 20px; padding-left: 5px;">
+                {{app.title}}
+            </li>
+        </ul>
+        <!-- END Left navbar-->
+        <span class="pull-right user-label">
+            <div class="dropdown">
+                <a class="dropdown-toggle text-white" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <img class="user-profile-image" src="~/Images/user/01.jpg" /> <span style="font-size: 9pt;">{{user.name}}</span> <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#/security/changepassword"><i class="fa fa-lock"></i> Cambiar Clave</a></li>
+                    <li><a href="~/Manual/Manual.html" target="_blank"><i class="fa fa-book"></i> Manual de Usuario</a></li>
+                    <li><a href="#/dashboard/aboutUs"><i class="fa fa-info-circle"></i> Acerca de</a></li>
+                    <li><a ng-click="logOff()"><i class="fa fa-sign-out "></i> Salir</a></li>
+                </ul>
+            </div>
+        </span>
+        <!-- END Left navbar-->
+        <span class="pull-right user-label" style="margin-top: 5px; padding-right: 30px;">
+            <div class="dropdown">
+                <a class="dropdown-toggle text-white" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <i class="fa fa-bullhorn"></i>
+                    <span class="badge notifications" ng-show="notifications.length !== 0">{{notifications.length}}</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="min-width: 256px;overflow-y: scroll;max-height: 600px;">
+                    <li ng-repeat="noti in notifications" style="padding-left: 5px; padding-right: 5px;">
+                        <p class="alert alert-warning" style="word-break: normal; text-align:justify;">
+                            <a href="{{noti.link}}">
+                                {{noti.title}} <i class="fa fa-external-link"></i>
+                            </a><br />
+                            {{noti.descripcion}}
+                        </p>
+                    </li>
+                    <li ng-show="notifications.length === 0"><a>No tiene notificaciones</a></li>
+                </ul>
+            </div>
+        </span>
+    </div>
+    <!-- END Nav wrapper-->
+
+</nav>
+<!-- END Top Navbar-->

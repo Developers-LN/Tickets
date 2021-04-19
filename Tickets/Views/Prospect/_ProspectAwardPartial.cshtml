@@ -1,0 +1,199 @@
+@{
+    Layout = null;
+}
+
+<div class="col-lg-12 no-padder" ng-controller="ProspectAwardController">
+    <h4>Asignación de Premios</h4>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Administración de premio</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <form name="awardCreateForm" novalidate>
+                            <input
+                                type="hidden"
+                                class="hide"
+                                ng-model="award.Id" />
+                            <div class="col-lg-4 no-padder">
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <input
+                                            type="text"
+                                            ng-model="award.name"
+                                            class="form-control input-sm"
+                                            ng-required="true" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Descripción: </label>
+                                    <div class="col-lg-12">
+                                        <textarea
+                                            class="form-control input-sm"
+                                            ng-model="award.description"
+                                            style="max-height: 109px; height: 37px;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Orden:  <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            ng-model="award.orderAward"
+                                            step="any"
+                                            class="form-control input-sm"
+                                            ng-required="true" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 no-padder">
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Tipo de premio: <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <select id="typesAwardIdDropdown" class="form-control input-sm" ng-model="award.typesAwardId" ng-change="updateAwardTypeValue()">
+                                            <option selected="selected" disabled="disabled" value="0">Seleccione un tipo premio</option>
+                                            <option ng-repeat="awardType in awardTypes" value="{{awardType.value}}" ng-selected="awardType.value == award.typesAwardId">{{awardType.text}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Premio origen: </label>
+                                    <div class="col-lg-12">
+                                        <select id="sourceAwardDropdown" class="form-control input-sm" ng-model="award.sourceAward">
+                                            <option selected="selected" value="Null"></option>
+                                            <option ng-repeat="a in awards" value="{{a.id}}" ng-selected="a.id == award.sourceAward" >{{a.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Por Fracción: <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <select ng-required="true" id="byFractionDropdown"
+                                            ng-disabled="disabledByFraction == false"
+                                            class="form-control input-sm" ng-model="award.byFraction">
+                                            <option selected="selected" disabled="disabled" value="0">Seleccione la fracción</option>
+                                            <option ng-repeat="byFraction in byFractions" value="{{byFraction.id}}" ng-selected="byFraction.id == award.byFraction">{{byFraction.nameDetail}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 no-padder">
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Cantidad: <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="{{(prospect.production/prospect.leafFraction-1)}}"
+                                            ng-max="(prospect.production/prospect.leafFraction-1)"
+                                            ng-model="award.quantity"
+                                            ng-disabled="disabledByQuantity == false"
+                                            step="any"
+                                            class="form-control input-sm"
+                                            ng-required="true" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label">Valor:  <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <input
+                                            step="any"
+                                            type="number"
+                                            min="0"
+                                            ng-model="award.value"
+                                            class="form-control input-sm"
+                                            ng-required="true" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Terminal: </label>
+                                    <div class="col-lg-12">
+                                        <input
+                                            type="number"
+                                            ng-disabled="disabledTerminal == false"
+                                            min="0"
+                                            ng-model="award.terminal"
+                                            step="any"
+                                            class="form-control input-sm" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button ng-click="saveAwardForm()" type="button" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <div class="col-lg-12 text-right m-b-xs no-padder">
+        <a class="btn btn-square btn-success" ng-click="editAward()">
+            <i class="fa fa-plus-square"></i>Agregar premios
+        </a>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <table id="awardDatatable" class="table dataTableGrid">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tipo de Premio</th>
+                    <th>Premio Origen</th>
+                    <th>Orden</th>
+                    <th>Cantidad</th>
+                    <th>Terminal</th>
+                    <th>Por Fracción</th>
+                    <th>Valor</th>
+                    <th class="editColumm">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="award in awards">
+                    <td>{{award.name}}</td>
+                    <td>{{award.typesAwardDesc}}</td>
+                    <td>{{award.sourceAwardDescription}}</td>
+                    <td>{{award.orderAward}}</td>
+                    <td>{{parseNumber(award.quantity)}}</td>
+                    <td>{{award.terminal}}</td>
+                    <td>{{award.byFractionDescription}}</td>
+                    <td>{{parseMoney(award.value)}}</td>
+                    <td>
+                        <a ng-click="editAward(award)" title="Moificar Premio"><i class="fa fa-pencil-square-o"></i></a>
+                        <a ng-click="deleteAward(award)" title="Borrar Premio"><i class="fa fa-times"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right">Total...:</td>
+                    <td class="text-right"><b>{{parseMoney(showTotal())}}</b></td>
+                    <td class="text-right"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="mt col-lg-12 no-padder">
+        <div class="col-lg-6 no-padder">
+            <a href="#/prospect/prospects" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Cancelar</a>
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <a ng-click="goToBackStep()" class="btn btn-default">Regresar <i class="fa fa-arrow-left"></i></a>
+            <a ng-click="goToNextStep()" class="btn btn-primary">Siguiente <i class="fa fa-arrow-right"></i></a>
+        </div>
+    </div>
+</div>

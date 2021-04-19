@@ -1,0 +1,160 @@
+@{
+    Layout = null;
+}
+
+<div class="col-lg-12 no-padder" ng-controller="ProspectDesingController">
+    <h4>Diseño de Prospecto</h4>
+    <div class="col-lg-6 no-padder">
+        <input
+            type="hidden"
+            ng-model="prospect.Id" />
+        <fieldset>
+            <div class="form-group">
+                <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
+                <div class="col-lg-12">
+                    <input
+                        type="text"
+                        ng-model="prospect.name"
+                        class="form-control input-sm"
+                        ng-required="true" />
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <label class="col-lg-12 control-label-left">Titulo: </label>
+                <div class="col-lg-12">
+                    <textarea
+                        class="form-control input-sm"
+                        ng-model="prospect.description"
+                        style="max-height: 109px; height: 37px;"></textarea>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <label class="col-lg-12 control-label-left">{{prospect.prospectType == @((int)Tickets.Models.Enums.ProspectTypeEnum.Tickets) ? 'Precio de venta por fracción':'Precio de venta por unidad'}}: <span class="color-red">*</span></label>
+                <div class="col-lg-12">
+                    <input
+                        type="number"
+                        min="0"
+                        ng-model="prospect.price"
+                        class="form-control input-sm"
+                        ng-required="true">
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="hide">
+            <div class="form-group">
+                <label class="col-lg-12 control-label-left">Grupo:  <span class="color-red">*</span></label>
+                <div class="col-lg-12">
+                    <select ng-required="true" id="groupDescription" class="form-control input-sm" ng-model="prospect.groupId">
+                        <option selected="selected" disabled="disabled" value="0">Seleccione un grupo</option>
+                        <option ng-repeat="group in groups" value="{{group.id}}" ng-selected="group.id == prospect.groupId">{{group.nameDetail}}</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <label class="col-lg-12 control-label-left">Producción:  <span class="color-red">*</span></label>
+                <div class="col-lg-12">
+                    <input
+                        type="number"
+                        min="0"
+                        ng-model="prospect.production"
+                        class="form-control input-sm"
+                        ng-required="true">
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <label class="col-lg-12 control-label-left">Porcentaje de devoluciones:  <span class="color-red">*</span></label>
+                <div class="col-lg-12">
+                    <input
+                        type="number"
+                        ng-min="0"
+                        ng-max="100"
+                        ng-model="prospect.maxReturnTickets"
+                        class="form-control input-sm"
+                        ng-required="true">
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-lg-6 no-padder">
+        <fieldset>
+            <div class="form-group">
+                <label class="col-lg-12 control-label-left">{{prospect.prospectType == @((int)Tickets.Models.Enums.ProspectTypeEnum.Tickets) ? 'Hojas por número':'Tiras'}}: <span class="color-red">*</span></label>
+                <div class="col-lg-12">
+                    <input
+                        type="number"
+                        min="0"
+                        ng-model="prospect.leafNumber"
+                        class="form-control input-sm"
+                        ng-required="true">
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <label class="col-lg-12 control-label">{{prospect.prospectType == @((int)Tickets.Models.Enums.ProspectTypeEnum.Tickets) ? 'Fracción por hojas':'Catidad'}}:  <span class="color-red">*</span></label>
+                <div class="col-lg-12">
+                    <input
+                        type="number"
+                        min="0"
+                        ng-model="prospect.leafFraction"
+                        class="form-control input-sm"
+                        ng-required="true">
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <label class="col-lg-12 control-label">Fecha de Expiración:  <span class="color-red">*</span></label>
+                <div class="col-lg-12">
+                    <input
+                        type="date"
+                        ng-model="prospect.expirateDate"
+                        class="form-control input-sm">
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <label class="col-lg-12 control-label">Formato de Impresión:  <span class="color-red">*</span></label>
+                <div class="col-lg-12">
+                    <select ng-required="true" id="impresionTypeDescription" class="form-control input-sm" ng-model="prospect.impresionType">
+                        <option selected="selected" disabled="disabled" value="0">Seleccione una forma de impresión</option>
+                        <option ng-repeat="print in prints" value="{{print.id}}" ng-selected="print.id == prospect.impresionType">{{print.nameDetail}}</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
+                <label class="col-lg-12 control-label-left">Estado:  <span class="color-red">*</span></label>
+                <div class="col-lg-12">
+                    <select ng-show="prospect.statu !== @((int)Tickets.Models.Enums.ProspectStatuEnum.Approving)" ng-required="true" id="statuDescription" class="form-control input-sm" ng-model="prospect.statu">
+                        <option selected="selected" disabled="disabled" value="0">Seleccione un estado</option>
+                        <option ng-repeat="statu in status" value="{{statu.id}}" ng-selected="statu.id == prospect.statu" >{{statu.nameDetail}}</option>
+                    </select>
+                    <label class="label label-info" ng-show="prospect.statu == @((int)Tickets.Models.Enums.ProspectStatuEnum.Approving)">
+                        {{prospect.statuDesc}}
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="mt col-lg-12 no-padder">
+        <div class="col-lg-6 no-padder">
+            <a href="#/prospect/prospects" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Cancelar</a>
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <a ng-if="prospect.id == 0" ng-click="goStep1()" class="btn btn-default">Regresar <i class="fa fa-arrow-left"></i></a>
+            <a ng-click="goToNextStep()" class="btn btn-primary">Siguiente <i class="fa fa-arrow-right"></i></a>
+        </div>
+    </div>
+</div>

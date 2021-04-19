@@ -1,0 +1,191 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Facturación de Billetes";
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="invoiceTicketController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 m-b-xs no-padder">
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12" ng-if="invoice.id == 0">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="invoice.raffleId" ng-change="updateAllocations()">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                        <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-12" ng-if="invoice.id > 0">
+                                    <h4><span class="label label-info">{{invoice.raffleDesc}}</span></h4>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Cliente:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12" ng-if="invoice.id == 0">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="invoice.clientId" ng-change="updateAllocations()">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un cliente</option>
+                                        <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-12" ng-if="invoice.id > 0">
+                                    <h4><span class="label label-info">{{invoice.clientDesc}}</span></h4>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Fecha de la factura:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12" ng-if="invoice.id == 0">
+                                    <input type="date"
+                                           ng-model="invoice.invoiceDate"
+                                           class="form-control input-sm datatime-picker"
+                                           ng-required="true" />
+                                </div>
+                                <div class="col-lg-12" ng-if="invoice.id > 0">
+                                    <h4><span class="label label-info">{{(invoice.invoiceDate | date:"dd/MM/yyyy")}}</span></h4>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Condición:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control" ng-model="invoice.condition">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione una condición</option>
+                                        <option ng-repeat="condition in conditions" value="{{condition.id}}" ng-selected="condition.id == @((int)Tickets.Models.Enums.InvoiceConditionEnum.Credit)">{{condition.nameDetail}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset ng-show="invoice.condition == @((int)Tickets.Models.Enums.InvoiceConditionEnum.Credit)">
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Dias de expiración:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control" ng-model="invoice.invoiceExpredDay">
+                                        <option ng-repeat="xpireInvoiceTime in xpireInvoiceTimes" value="{{xpireInvoiceTime.description}}" ng-selected="xpireInvoiceTime.description == invoice.invoiceExpredDay">{{xpireInvoiceTime.nameDetail}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="col-lg-12 well">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Asignación de billetes:  <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <div class="checkbox c-checkbox col-lg-4" style="margin-top:5px;" ng-repeat="allocation in ticketAllocations">
+                                            <label>
+                                                <input type="checkbox" id="allocation-{{allocation.id}}" ng-disabled="invoice.id > 0" ng-checked="invoice.id > 0" ng-click="updateAllocationNumbers()">
+                                                <span class="fa fa-check"></span>#{{allocation.id}}
+                                                <a target="_blank" href="/Reports/AllocatinosNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-eye"></i></a>
+                                            </label>
+                                        </div>
+                                        <span class="text-warning" style="font-size: 13pt;" ng-show="allocations.length === 0">
+                                            Este cliente no tiene asignaciones
+                                        </span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 hide">
+                        <div class="col-lg-12 well">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Asignación de quinielas:  <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <div class="checkbox c-checkbox col-lg-4" style="margin-top:5px;" ng-repeat="allocation in poolAllocations">
+                                            <label>
+                                                <input type="checkbox" id="allocation-{{allocation.id}}" ng-disabled="invoice.id > 0" ng-checked="invoice.id > 0" ng-click="updateAllocationNumbers()">
+                                                <span class="fa fa-check"></span>#{{allocation.id}}
+                                                <a target="_blank" href="/Reports/AllocatinosNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-eye"></i></a>
+                                            </label>
+                                        </div>
+                                        <span class="text-warning" style="font-size: 13pt;" ng-show="poolAllocations.length === 0">
+                                            Este cliente no tiene asignaciones
+                                        </span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 no-padder hide">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Tipo de Pago:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control" ng-model="invoice.paymentType">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione una Tipo de Pago</option>
+                                        <option ng-repeat="paymentType in paymentTypes" value="{{paymentType.id}}">{{paymentType.nameDetail}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 m-b-xs no-padder">
+                    <table id="dataTableGrid" class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Asignación</th>
+                                <th class="text-center">Cantidad de Billetes</th>
+                                <th class="text-center">Cantidad de Fracciones</th>
+                                <th class="text-right">Precio</th>
+                                <th class="text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="ticketNumber in invoice.ticketAllocations">
+                                <td class="text-center">#{{ticketNumber.id}}</td>
+                                <td class="text-center">{{ticketNumber.numberCount}}</td>
+                                <td class="text-center">{{ticketNumber.fractionCount}}</td>
+                                <td class="text-right">{{parseMoney(ticketNumber.price)}}</td>
+                                <td class="text-right" ng-bind="showSupTotalPrice(ticketNumber)"></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="text-center"><b>{{invoice.ticketAllocations.length}}</b></td>
+                                <td class="text-center"><b ng-bind="showTotalPrice().ticket"></b></td>
+                                <td class="text-center"><b>{{showTotalPrice().fraction}}</b></td>
+                                <td class="text-right">Sub Total:..</td>
+                                <td class="text-right"><b ng-bind="showTotalPrice().subTotal"></b></td>
+                            </tr>
+                            <tr>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-right">{{clientDiscount}}% Descuento de Cliente:..</td>
+                                <td class="text-right"><b ng-bind="showTotalPrice().totalDiscount"></b></td>
+                            </tr>
+                            <tr>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-right">Total:..</td>
+                                <td class="text-right"><b ng-bind="showTotalPrice().total"></b></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ui-sref="app.ticketInvoiceList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Salir</a>
+        <a ng-click="saveForm()" class="mr btn btn-square btn-primary {{moduleCanAdd}}"><i class="fa fa-floppy-o"></i> Facturar</a>
+    </div>
+</div>

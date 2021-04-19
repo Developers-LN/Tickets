@@ -1,0 +1,148 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Devolución de Billetes";
+}
+<div class="col-lg-12 no-padder" ng-controller="ReturnedController" ng-init="app.title = '@(ViewBag.Title)'">
+<!-- START panel-->
+    <div class="col-lg-12 no-padder" id="returnedCreateId">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 m-b-xs no-padder">
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="returned.raffleId" ng-change="changeRaffle()">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                        <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Grupo: <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input
+                                        type="text"
+                                        ng-model="returned.returnedGroup"
+                                        class="form-control input-sm"
+                                        ng-required="true">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 well">
+                        <form novalidate name="ticketreturn" ng-submit="addNumber()">
+                            <h4>Billetes</h4>
+                            <hr />
+                            <div class="col-lg-3 no-padder">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-lg-12 control-label-left">Cliente:  <span class="color-red">*</span></label>
+                                        <div class="col-lg-12">
+                                            <select ng-required="true" class="form-control dropdown-select2" id="cliientIdDropdown" ng-model="ticketNumber.clientId">
+                                                <option selected="selected" disabled="disabled" value="0">Seleccione un cliente</option>
+                                                <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-3 no-padder">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-lg-12 control-label-left">Billete: <span class="color-red">*</span></label>
+                                        <div class="col-lg-12">
+                                            <input type="text"
+                                                   id="ticketAllocationNumber"
+                                                   ng-min="0"
+                                                   ng-max="production - 1"
+                                                   ng-model="ticketNumber.numberId"
+                                                   class="form-control input-sm"
+                                                   ng-required="true">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-3 no-padder">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-lg-12 control-label-left">Fraccion Desde: <span class="color-red">*</span></label>
+                                        <div class="col-lg-12">
+                                            <input type="number"
+                                                   ng-min="1"
+                                                   ng-max="ticketNumber.fractionTo"
+                                                   ng-model="ticketNumber.fractionFrom"
+                                                   class="form-control input-sm"
+                                                   ng-required="true">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-3 no-padder">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-lg-12 control-label-left">Fraccion Hasta: <span class="color-red">*</span></label>
+                                        <div class="col-lg-12">
+                                            <input type="number"
+                                                   ng-min="1"
+                                                   ng-max="maxFraction"
+                                                   ng-model="ticketNumber.fractionTo"
+                                                   class="form-control input-sm"
+                                                   ng-required="true">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-12 no-padder text-right">
+                                <a ng-click="cancelNumber()" class="btn btn-warning btn-sm"><i class="fa fa-times"></i> Cancelar</a>
+                                <button type="submit" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-12 m-b-xs no-padder">
+                        <table  class="table">
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Billete</th>
+                                    <th>Fraccion Desde</th>
+                                    <th>Fraccion Hasta</th>
+                                    <th class="editColumm text-center"> Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="ticketNumber in returned.ticketReturnedNumbers">
+                                    <td>{{ticketNumber.clientDesc}}</td>
+                                    <td>{{addZeroToNumber((production - 1), ticketNumber.numberId)}}</td>
+                                    <td>{{ticketNumber.fractionFrom}}</td>
+                                    <td>{{ticketNumber.fractionTo}}</td>
+                                    <td> 
+                                        <a ng-click="editNumber(ticketNumber)" title="Moificar Premio"><i class="fa fa-pencil-square-o"></i></a>
+                                        <a ng-click="deleteNumber(ticketNumber)" title="Borrar Premio"><i class="fa fa-times"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="text-center"><strong>Cantidad de registros: {{returned.ticketReturnedNumbers.length}}</strong></td>
+                                    <td colspan="2" class="text-center"><strong>Cantidad de Facciones: {{fractionTotal()}}</strong></td>
+                                    <td colspan="3"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg"> 
+        <a ng-click="goBack()" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Salir</a>
+        <a ng-click="saveForm()" class="mr btn btn-square btn-primary {{moduleCanAdd}}"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

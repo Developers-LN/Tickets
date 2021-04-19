@@ -1,0 +1,99 @@
+﻿@model Tickets.Models.Raffle
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "No Impresos";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+
+    List<long> numbers = context.TicketAllocationNumbers.Where(p => 
+        p.TicketAllocation.RaffleId == Model.Id 
+        && (p.TicketAllocation.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Invoiced 
+        || p.TicketAllocation.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Printed))
+        .Select(n => n.Number).ToList();
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
+}
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png"/>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>REPUBLICA DOMINICANA</b><br />
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION LOTERIA NACIONAL</b><br />
+            fecha del sorteo: @Model.DateSolteo.ToLongDateString()
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>NUMEROS NO IMPRESOS EN EL SORTEO NO. @Model.Id</b><br />
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 no-padder col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th colspan="11" class="text-center">@Model.Name</th>
+                </tr>
+                <tr>
+                    <th class="text-left">FILA</th>
+                    <th class="text-center">COLUMNA 1</th>
+                    <th class="text-center">COLUMNA 2</th>
+                    <th class="text-center">COLUMNA 3</th>
+                    <th class="text-center">COLUMNA 4</th>
+                    <th class="text-center">COLUMNA 5</th>
+                    <th class="text-center">COLUMNA 6</th>
+                    <th class="text-center">COLUMNA 7</th>
+                    <th class="text-center">COLUMNA 8</th>
+                    <th class="text-center">COLUMNA 9</th>
+                    <th class="text-center">COLUMNA 10</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var numberCount = 0;
+                    var production = Model.Prospect.Production - 1;
+                    int line = 1;
+                    int noPrintNumber = 0;
+                }
+                @while (numberCount <= production)
+                {
+                    int countTen = 1;
+                    <tr>
+                        <td class="text-left" style="color:red; font-weight:bold; font-size:12pt;">@line</td>
+                        @while(countTen <= 10){
+                            numberCount++;
+                            if (!numbers.Where(n => n == numberCount).Any())
+                            {
+                                countTen++;
+                                string stringNumber = numberCount.ToString();
+                                while (stringNumber.Length < production.ToString().Length)
+                                {
+                                    stringNumber = "0" + stringNumber;
+                                }
+                                if (numberCount <= production)
+                                {
+                                    noPrintNumber++;
+                                    <td class="text-center">@stringNumber</td>
+                                }
+                            }
+                        }
+                    </tr>
+                    line += 1;
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>Total Numeros no Impresos: @noPrintNumber</b>
+    </div>
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

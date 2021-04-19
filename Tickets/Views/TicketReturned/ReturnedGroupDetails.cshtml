@@ -1,0 +1,107 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Detalle Grupo de Devolución";
+}
+<div class="col-lg-12 no-padder" ng-controller="ReturnedGroupDetailsController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="modal fade" id="showMoveGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-vertical-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Mover Devolución</b></h4>
+                </div>
+                <div class="modal-body col-lg-12 well no-padder">
+                    <p class="modal-title col-lg-7">Cliente: <b>{{currentReturned.clientDesc}}</b></p>
+                    <p class="modal-title col-lg-5" >Sorteo: <b>{{currentReturned.raffleDesc}}</b></p>
+                    <p class="modal-title col-lg-7">Grupo actual: <b>{{currentReturned.returnedGroup}}</b></p>
+                    <p class="modal-title col-lg-5" >Cant. de Fracción: <b>{{currentReturned.FractionTo - currentReturned.FractionFrom +1}}</b></p>
+                </div>
+                <div class="modal-body col-lg-12 no-padder">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Nuevo Grupo: </label>
+                                    <div class="col-lg-12">
+                                        <select ng-required="true" class="form-control" style="width:100%;" ng-model="Group">
+                                            <option ng-repeat="group in groups" value="{{group.value}}"  ng-selected="group.value== currentReturned.returnedGroup">{{group.text}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Nuevo Cliente:  </span></label>
+                                    <div class="col-lg-12">
+                                        <select ng-required="true" class="form-control" style="width:100%;" ng-model="ClientId">
+                                            <option ng-repeat="client in clientList" value="{{client.value}}"  ng-selected="client.value== currentReturned.clientId">{{client.text}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a ng-click="saveNewGroup()" class="mb-sm btn btn-success pull-right"><i class="fa fa-floppy-o"></i> Guardar</a>
+                    <a ng-click="" data-dismiss="modal" class="mb-sm btn btn-warning pull-left">Cancelar <i class="fa fa-times"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 well no-padder">
+                    <div class="col-lg-6">Sorteo: #<b>{{returns[0].raffleId}} - {{returns[0].raffleDesc}}</b></div>
+                    <div class="col-lg-6">Grupo: <b>{{returns[0].returnedGroup}}</b></div>
+                </div>
+                <div class="row-border hover">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th class="hide"></th>
+                                <th>Cliente</th>
+                                <th>Numeros</th>
+                                <th>Fracción inicio</th>
+                                <th>Fracción Fin</th>
+                                <th>Usuario</th>
+                                <th style="width:150px;">Fecha</th>
+                                <th class="editColumm text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="return in returns[0].ticketReturnedNumbers">
+                                <td class="hide">{{returned.id}}</td>
+                                <td ng-bind="return.clientDesc"></td>
+                                <td ng-bind="addZeroToNumber((return.production - 1), return.numberDesc)"></td>
+                                <td ng-bind="return.fractionFrom"></td>
+                                <td ng-bind="return.fractionTo"></td>
+                                <td ng-bind="return.userDesc"></td>
+                                <td>{{(return.createDate | date:"dd/MM/yyyy h:mm:ss a")}}</td>
+                                <td class="text-center">
+                                    <a ng-if="return.statuId != @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Invoiced)" ng-click="showMoveGroupModal(return)" title="Mover devoluciones" class="{{editMode == true? '': 'hide'}}"><i class="fa fa-external-link" class="{{moduleCanEdit}}"></i></a>
+                                    <a ng-if="return.statuId != @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Invoiced)" ng-click="deleteReturned(return)" title="Borrar devoluciones" class="{{moduleCanDelete}} {{editMode == true? '': 'hide'}}"><i class="fa fa-times"></i></a>
+                                    <p ng-if="return.statuId == @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Invoiced)">Validada</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2"><strong>Cantidad de Registros: {{parseNumber(returns.ticketReturnedNumbers[0].length)}}</strong></td>
+                                <td colspan="2" class="text-center"><strong>Cantidad de Facciones: {{parseNumber(fractionTotal)}}</strong></td>
+                                <td colspan="3"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ng-click="returnBack()" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>
+</div>

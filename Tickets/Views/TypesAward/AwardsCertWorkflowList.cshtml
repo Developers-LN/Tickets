@@ -1,0 +1,47 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de premios para certificar";
+}
+<div class="col-lg-12 no-padder" ng-controller="AwardsCertWorkflowListController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Proceso</th>
+                                
+                                <th>Sometido Por</th>
+                                <th>Fecha Sometido</th>
+                                <th class="text-center">Aprobaciones</th>
+                                <th>Aprobar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="workflow in workflowList">
+                                <td>#{{workflow.id}}</td>
+                                <td>{{workflow.userName}}</td>
+                                <td>{{(workflow.createDate | date:"dd/MM/yyyy hh:mm:ss a")}}</td>
+                                <td>
+                                    <div class="progress text-center progress-striped">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{workflow.approvedCount}}" aria-valuemin="0" aria-valuemax="{{workflow.totalAproved}}" style="width: {{100 * workflow.approvedCount / workflow.totalAproved}}%;">
+                                        </div>
+                                        <span style="color:black; margin-left: -{{100 * workflow.approvedCount / workflow.totalAproved}}%;">{{workflow.approvedCount}} de {{workflow.totalAproved}}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="#/ticket/award/approve/{{workflow.id}}" title="Aprobar Premio" class="{{moduleCanEdit}}"><i class="fa fa-check-circle"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg">
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i>Salir</a>
+</div>

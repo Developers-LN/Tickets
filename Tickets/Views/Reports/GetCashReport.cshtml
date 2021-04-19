@@ -1,0 +1,109 @@
+﻿@model List<Tickets.Models.IdentifyBach>
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Reporte Caja";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    decimal Total = 0.0m;
+    var user = Model.Count > 0 ? context.Users.AsEnumerable().FirstOrDefault(u => u.Id == Model.FirstOrDefault().IdentifyBachPayments.FirstOrDefault().CreateUser) : null;
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
+    var raffleId = Model.Count > 0 ? Model.FirstOrDefault().RaffleId: 0;
+}
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <h4>
+                <b>REPORTE DE CAJA PARA EL SORTEO NO. @raffleId</b>
+            </h4>
+        </div>
+    </div>
+    <div>
+        <div class="col-lg-12 no-padder" style="margin-top:50px">
+            Usuario: <strong>@(user != null ? (user.Id + " - " + user.Name) : "")</strong>
+        </div>
+        <div class="col-lg-12 no-padder">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>NO. DE RECIBO</th>
+                        <th>CLIENTE</th>
+                        <th>FECHA</th>
+                        <th>SORTEO</th>
+                        <th class="text-right" style="width:15%">VALOR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var identification in Model)
+                    {
+                        foreach (var payment in identification.IdentifyBachPayments)
+                        {
+                            Total += payment.Value;
+                            <tr>
+                                <td>
+                                    @payment.Id
+                                </td>
+                                <td>@payment.ClientId - @payment.Client.Name</td>
+                                <td>@payment.CreateDate.ToString()</td>
+                                <td>
+                                    @identification.RaffleId
+                                </td>
+                                <td class="text-right" style="width:15%">
+                                    @(payment.Value.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                </td>
+                            </tr>
+                        }
+                    }
+                    <tr class="total">
+                        <td colspan="5" class="text-right">Total: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

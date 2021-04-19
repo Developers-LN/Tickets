@@ -1,0 +1,130 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Validación de Devoluciones";
+}
+<div class="col-lg-12 no-padder" ng-controller="ReturnedValidationController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-lg-4 text-left m-b-xs no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="raffleId" ng-change="updateReturned()">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                        <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-4 text-left m-b-xs no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Cliente: </label>
+                                <div class="col-lg-12">
+                                    <select class="form-control dropdown-select2" ng-model="clientId" ng-change="updateReturned()">
+                                        <option selected="selected" value="0">Seleccione un cliente</option>
+                                        <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading col-lg-12" style="border-bottom:1px solid seagreen; margin-bottom:5px">
+                    <div class="col-lg-10"><h4 class="panel-default">Devoluciones validadas</h4></div>
+                    <div class="col-lg-2"><i class="fa fa-sort-desc fa-3x" ng-click="ShowHideContent()"></i></div>
+                </div>
+                <div class="panel-body" >
+                    <div class="row-border hover" ng-show="show == true">
+                        <table class="table dataTableGrid">
+                            <thead>
+                                <tr>
+                                    <th>Sorteo</th>
+                                    <th>Cliente</th>
+                                    <th>Grupos</th>
+                                    <th>Fracciónes</th>
+                                    <th>Registros</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th class="editColumm text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="returned in returnedValidates">
+                                    <td>{{returned.raffleDesc}}</td>
+                                    <td>{{returned.clientDesc}}</td>
+                                    <td style="text-align:justify">
+                                        <a class="group" ng-repeat="group in returned.groupList" target="_blank" href="#/ticket/returnedGroupDetails/{{group}}/{{returned.raffleId}}"> {{group}} </a>
+                                    </td>
+                                    <td>{{returned.fractionQuantity}}</td>
+                                    <td>{{returned.numberCount}}</td>
+                                    <td>{{(returned.returnedDate | date:"dd/MM/yyyy") }}</td>
+                                    <td>{{returned.statusId == @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Created)? 'Sin validar' : 'Validada'}}</td>
+                                    <td class="text-center">
+                                        <a target="_blank" href="~/Reports/ReturnedDeatils?raffleId={{returned.raffleId}}&clientId={{returned.clientId}}&statu={{returned.statusId}}" title="Imprimir detalle de Devolución" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
+                                        <a ng-show="returned.statusId == @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Created)" ng-click="creditNoteApply(returned)" title="Aplicar Nota de Credito" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading col-lg-12" style="border-bottom:1px solid seagreen;margin-bottom:5px">
+                    <div class="col-lg-10"><h4 class="panel-default">Devoluciones no validadas</h4></div>
+                    <div class="col-lg-2"><i class="fa fa-sort-desc fa-3x" ng-click="ShowHideContent2()"></i></div>
+                </div>
+                <div class="panel-body">
+                    <div class="row-border hover" ng-show="show2 == true">
+                        <table class="table dataTableGrid">
+                            <thead>
+                                <tr>
+                                    <th>Sorteo</th>
+                                    <th>Cliente</th>
+                                    <th>Grupos</th>
+                                    <th>Fracciónes</th>
+                                    <th>Registros</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th class="editColumm text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="returned in returnedNonValidates">
+                                    <td>{{returned.raffleDesc}}</td>
+                                    <td>{{returned.clientDesc}}</td>
+                                    <td style="text-align:justify">
+                                        <a class="group" ng-repeat="group in returned.groupList" target="_blank" href="#/ticket/returnedGroupDetails/{{group}}/{{returned.raffleId}}"> {{group}} </a>
+                                    </td>
+                                    <td>{{returned.fractionQuantity}}</td>
+                                    <td>{{returned.numberCount}}</td>
+                                    <td>{{(returned.returnedDate | date:"dd/MM/yyyy") }}</td>
+                                    <td>{{returned.statusId == @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Created)? 'Sin validar' : 'Validada'}}</td>
+                                    <td class="text-center">
+                                        <a target="_blank" href="~/Reports/ReturnedDeatils?raffleId={{returned.raffleId}}&clientId={{returned.clientId}}&statu={{returned.statusId}}" title="Imprimir detalle de Devolución" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
+                                        <a ng-show="returned.statusId == @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Created)" ng-click="creditNoteApply(returned)" title="Aplicar Nota de Credito" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END table-responsive-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

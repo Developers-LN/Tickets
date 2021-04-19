@@ -1,0 +1,139 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Sorteo Virtual";
+}
+<style>
+    .modal-vertical-centered {
+        transform: translate(0, 50%) !important;
+        -ms-transform: translate(0, 50%) !important; /* IE 9 */
+        -webkit-transform: translate(0, 50%) !important; /* Safari and Chrome */
+    }
+</style>
+<div class="col-lg-12 no-padder" ng-controller="RaffleVirtualController" ng-init="app.title = '@(ViewBag.Title)'">
+    <!-- Modal -->
+    <div class="modal fade" id="showNumberModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg  " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div ng-show="digitedAwardSuccess === false" class="col-lg-12">
+                                <div class="award-number-grid">
+                                    <span class="number-show" ng-repeat="showAwardNumber in ShowAwardNumberList"> {{showAwardNumber.number}}</span>
+                                </div>
+                                <div class="col-12" style="height:30px;"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <h4 class="modal-title text-center" id="myModalLabel" style="font-size: 20pt;">{{currentShowAwardTitle}}</h4>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="text-center" style="font-size: 15pt;font-weight: bold; margin-top:25px;">
+                                <i class="fa fa-arrow-left" style="margin-right:15px"></i>{{parseNumber(lastShowAwardNumber)}}
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="text-center" style="font-size: 35pt;font-weight: bold;">
+                                {{parseNumber(currentShowAwardNumber)}}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="text-center" style="font-size: 15pt;font-weight: bold; margin-top:25px;">
+                                {{parseNumber(nextShowAwardNumber)}}<i class="fa fa-arrow-right" style="margin-left:15px"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-4 no-padder">
+                        <a ng-click="getNextAwrad(-1)" class="mb-sm btn btn-success pull-left"><i class="fa fa-arrow-circle-left "></i> Mostrar Anterior</a>
+                    </div>
+                    <div class="col-lg-4 no-padder text-center">
+                        <a ng-click="showLastBall()" class="mb-sm btn btn-success btn-warning">Ultima Bola</a>
+                    </div>
+                    <div class="col-lg-4 no-padder">
+                        <a ng-click="getNextAwrad(1)" class="mb-sm btn btn-primary pull-right">Mostrar Siguiente <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 no-padder">
+                    <h1>{{raffleName}} - #{{raffleDetails.id}}</h1>
+                    <h3>Fecha: {{(raffleDetails.raffleDate | date:"dd/MM/yyyy")}}</h3>
+
+                    <hr />
+                </div>
+                <div class="col-lg-5 no-padder">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">Premios Mayores</div>
+                        <div class="panel-body">
+                            <div class="col-lg-12 no-padder m-b-xs" style="font-size: 9pt" data-ng-repeat="digitedAward in digitedAwards">
+                                <label class="col-lg-4 no-padder text-left">{{digitedAward.AwardName}}</label>
+                                <div class="col-lg-3">
+                                    <input ng-disabled="digitedAward.HasRaffleAward === true || digitedAward.SourceAward !== null"
+                                           type="text"
+                                           class="form-control"
+                                           style="max-width:75px;padding: 5px;max-height: 30px;"
+                                           ng-model="digitedAward.ControlNumber"
+                                           ng-keypress="isNumber($event)"
+                                           maxlength="{{maxLenthDigited}}"
+                                           ng-change="usePatentValue(digitedAward.Id, digitedAward.ChildAwardId)"
+                                           ng-blur="addZero(digitedAward.Id, digitedAward.ChildAwardId)"
+                                           id="raffleAwardNumber-{{digitedAward.Id}}" />
+                                </div>
+                                <div class="col-lg-1 no-padder" ng-show="digitedAward.ByFraction === true">
+                                    <input ng-disabled="digitedAward.HasRaffleAward === true"
+                                           type="number" class="form-control"
+                                           style="max-width:50px; width: 50px;padding: 5px;max-height: 30px;"
+                                           ng-model="digitedAward.Fraction"
+                                           ng-blur="addZero(digitedAward.Id, digitedAward.ChildAwardId)"
+                                           maxlength="2"
+                                           ng-min="1"
+                                           ng-max="maxFraction"
+                                           id="raffleAwardFraction-{{digitedAward.Id}}" />
+                                </div>
+                                <label class="{{digitedAward.ByFraction === true? 'col-lg-4': 'col-lg-5'}} text-right n-p-r">{{digitedAward.TotalValue}}</label>
+                            </div>
+                            <div ng-show="digitedAwardSuccess === true" class="col-lg-12 no-padder text-right m-b-lg">
+                                <a ng-click="saveRaffleAward()" class="mr mb-sm btn btn-success">Generar Sorteo <i class="fa fa-gear"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="digitedAwardSuccess === false" class="col-lg-7 n-p-r">
+                    <tabset>
+                        <tab ng-repeat="awardType in awardTypes" heading="{{awardType.name}}" ng-click="select(awardType.id)">
+                            <h3 style="margin-top: 0;">{{awardType.name}}</h3>
+                            <div id="number-grid-{{awardType.id}}" class="award-number-grid">
+                            </div>
+                            <div class="award-number-button">
+                                <span class="hide" style="font-size: 11pt;" id="awardName-{{awardType.id}}"></span> <br />
+                                <span class="hide" style="font-size: 35pt;" id="awardNumber-{{awardType.id}}"></span> <br />
+                                <div class="">
+                                    <a ng-click="shwoAwardModal()" class="mb-sm btn btn-success">Mostrar Premios <i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>
+                        </tab>
+                    </tabset>
+                </div>
+
+                <div ng-show="digitedAwardSuccess === true" class="col-lg-7 n-p-r">
+                    <div class="alert alert-info">
+                        Introduzca los numeros agraciados y presione Generar Sorteo para ver los premios del sorteo virtual.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a href="#/raffle/ActiveRaffle" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i>Salir</a>
+    </div>

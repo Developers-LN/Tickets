@@ -1,0 +1,39 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de Tipos de Premio";
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="TypesAwardController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row-border hover ">
+                <table class="table dataTableGrid">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Creación</th>
+                            <th>Grupo</th>
+                            <th class="editColumm"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="typesAward in typesAwardList">
+                            <td>{{typesAward.Name}}</td>
+                            <td>{{typesAward.Description}}</td>
+                            <td>{{typesAward.CreationDesc}}</td>
+                            <td>{{typesAward.GroupDesc}}</td>
+                            <td>
+                                <a href="/Reports/TypeAward?typesAwardId={{typesAward.Id}}" title="Imprimir" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- END table-responsive-->
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default">Salir</a>
+</div>

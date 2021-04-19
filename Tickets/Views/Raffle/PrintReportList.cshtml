@@ -1,0 +1,47 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Reportes de Impresión";
+}
+<div class="col-lg-12 no-padder" ng-controller="RafflePrintController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!-- START panel-->
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Sorteo</th>
+                                <th class="text-center">No Impresos</th>
+                                <th class="text-center">Impresos</th>
+                                <th class="text-center">Re-Impresos</th>
+                                <th class="text-center">Impresos - No Facturados</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="raffle in raffles">
+                                <td>{{raffle.id}} - {{raffle.name}}</td>
+                                <td class="text-center">
+                                    <a href="/Reports/NoPrintedNumbesForRaffle?raffleId={{raffle.id}}" target="_blank" title="Imprimir Numeros no impreso"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/PrintedNumbesForRaffle?raffleId={{raffle.id}}" target="_blank" title="Imprimir Numeros no impreso"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/TicketReprinted?raffleId={{raffle.id}}" target="_blank" title="Numeros premiados Facturados"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/PrintedNumbersNotInvoiced?raffleId={{raffle.id}}" target="_blank" title="Imprimir Numeros no impreso"><i class="fa fa-print"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

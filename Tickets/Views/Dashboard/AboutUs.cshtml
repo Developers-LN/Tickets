@@ -1,0 +1,25 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Acerca de";
+}
+<!-- START panel-->
+<div class="panel panel-default" ng-controller="AboutUsController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="panel-heading">
+        <h2 style="margin-bottom:20px; color:#081934"><b>Información de Aplicación</b></h2>
+        <p><span class="col-md-3"><b>Nombre: </b></span><span class="col-8">{{info.appName}}</span></p>
+        <p><span class="col-md-3"><b>Version: </b></span><span class="col-8">{{info.version}}</span></p>
+        <p><span class="col-md-3"><b>Fecha de Publicación: </b></span><span class="col-8">{{info.publicDate}}</span></p>
+    </div>
+    <div class="panel-heading">
+        <h2>Empresa</h2>
+        <p><span class="col-md-3"><b>Nombre: </b></span><span class="col-8">{{info.companyName}}</span></p>
+        <p><span class="col-md-3"><b>Equipo </b></span><span class="col-8"> <label class="label label-primary" style="margin-right:10px;" ng-repeat="team in info.team">{{team}}</label></span></p>
+    </div>
+    <div class="panel-heading">
+        <h2>Información de la Empresa</h2>
+        <p ng-bind-html="info.infoCompany" style="text-align:justify; max-width: 800px;">
+        </p>
+    </div>
+</div>
+
+    

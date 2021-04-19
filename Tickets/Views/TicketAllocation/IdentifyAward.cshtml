@@ -1,0 +1,166 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Identificación de Premios";
+}
+<div class="col-lg-12 no-padder" ng-controller="IdentifyAwardController" ng-init="app.title = '@(ViewBag.Title)'">
+    <!-- START panel-->
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4>Creación del Lote</h4>
+                <div class="col-lg-12">
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="identifyBach.RaffleId">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                        <option ng-repeat="raffle in raffles" value="{{raffle.Id}}" ng-selected="raffle.Id == identifyBach.RaffleId">{{raffle.Id}} - {{raffle.Name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Cliente:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="identifyBach.ClientId">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un cliente</option>
+                                        <option ng-repeat="client in clients" value="{{client.Id}}" ng-selected="identifyBach.ClientId == client.Id">{{client.Id}} - {{client.Name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="col-lg-12 well">
+                    <h4>Registro de Numeros</h4>
+                    <hr />
+                    <div class="col-lg-12 no-padder">
+                        <div class="col-lg-4 no-padder">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-lg-12 no-padder control-label-left">Número:  <span class="color-red">*</span></label>
+                                    <div class="col-lg-12 no-padder">
+                                        <input type="text"
+                                               ng-min="1"
+                                               ng-model="number.NumberId"
+                                               class="form-control input-sm"
+                                               ng-required="true" />
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-4 no-padder">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Fracción Desde:  <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <input type="number"
+                                               ng-min="1"
+                                               ng-model="number.FractionFrom"
+                                               class="form-control input-sm"
+                                               ng-required="true" />
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-4 no-padder">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Fracción Hasta:  <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <input type="number"
+                                               ng-min="number.FractionFrom"
+                                               ng-model="number.FractionTo"
+                                               class="form-control input-sm"
+                                               ng-required="true" />
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-12 m-b-xs no-padder text-right">
+                            <a ng-click="cancelNumber()" class="btn btn-warning btn-sm"><i class="fa fa-times"></i>Cancelar</a>
+                            <a ng-click="addNumber()" class="btn btn-success btn-sm"><i class="fa fa-plus"></i>Guardar</a>
+                        </div>
+                        <div class="col-lg-12 m-b-xs no-padder">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Número</th>
+                                        <th>Fracción Desde</th>
+                                        <th>Fracción Hasta</th>
+                                        <th class="editColumm">Accion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="identifyNumber in identifyBach.IdentifyNumbers">
+                                        <td ng-bind="identifyNumber.NumberDesc"></td>
+                                        <td ng-bind="identifyNumber.FractionFrom"></td>
+                                        <td ng-bind="identifyNumber.FractionTo"></td>
+                                        <td>
+                                            <a ng-click="editNumber(identifyNumber)" ng-if="identifyNumber.Id === 0" title="Modificar Numero"><i class="fa fa-pencil-square-o"></i></a>
+                                            <a ng-click="deleteNumber(identifyNumber, identifyNumber.NumberDesc)" ng-if="identifyNumber.Id === 0" title="Borrar Numero"><i class="fa fa-times"></i></a>
+                                            <a ng-click="deleteIdentifyNumber(identifyNumber)" ng-if="identifyNumber.Id !== 0" title="Borrar Numero"><i class="fa fa-times"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>Cantidad de Registros {{parseNumber(identifyBach.IdentifyNumbers.length)}}</td>
+                                        <td colspan="3"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="col-lg-12 m-b-xs no-padder">
+                            <table class="table dataTableGrid">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Número</th>
+                                        <th class="text-center">Frac. Desde</th>
+                                        <th class="text-center">Frac. Hasta</th>
+                                        <th class="text-center">Premio</th>
+                                        <th class="text-center">Cantidad Frac.</th>
+                                        <th class="text-right">Valor</th>
+                                        <th class="text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="identifyNumber in IdentityAwards">
+                                        <td class="text-center" ng-bind="addZeroToNumber((production - 1), identifyNumber.AwardNumber)"></td>
+                                        <td class="text-center" ng-bind="identifyNumber.FractionFrom"></td>
+                                        <td class="text-center" ng-bind="identifyNumber.FractionTo"></td>
+                                        <td class="text-center" ng-bind="identifyNumber.AwardName"></td>
+                                        <td class="text-center" ng-bind="identifyNumber.Fractions"></td>
+                                        <td class="text-right" ng-bind="parseMoney(identifyNumber.AwardValue)"></td>
+                                        <td class="text-right" ng-bind="parseMoney(identifyNumber.TotalValue)"></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="ngFooterTotalItems">
+                                        <td class="text-center"><b>{{totalNumber}}</b></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-center"><b>{{parseNumber(totalFraction)}}</b></td>
+                                        <td class="text-right"></td>
+                                        <td class="text-right"><b>{{parseMoney(totalTotalValue)}}</b></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="col-lg-12 no-padder">
+                            <a ui-sref="app.ticketIdentifyBachList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Salir</a>
+                            <a ng-click="saveForm()" class="btn btn-primary" ng-show="viewMode !== true">Finalizar <i class="fa fa-floppy-o"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

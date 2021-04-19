@@ -1,0 +1,39 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Reporte de Caja";
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="CashReportsController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 m-b-xs no-padder">
+                    <div class="col-lg-12 no-padder">
+                        <fieldset>
+                            <label class="col-lg-12 control-label-left">Sorteos: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="cash.raffleId">
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.Id}}">{{raffle.Id}} - {{raffle.Name}}</option>
+                                </select>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 no-padder">
+                        <fieldset>
+                            <label class="col-lg-12 control-label-left">Usuarios: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="cash.userId">
+                                    <option ng-repeat="user in users" value="{{user.Id}}">{{user.Id}} - {{user.Name}}</option>
+                                </select>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ui-sref="app.dashboard" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Salir</a>
+        <a ng-click="PrintReport()" class="mr btn btn-square btn-primary {{moduleCanAdd}}"><i class="fa fa-floppy-o"></i> Generar Reporte</a>
+    </div>
+</div>

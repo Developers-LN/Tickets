@@ -1,0 +1,91 @@
+﻿@model Tickets.Models.IdentifyBach
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
+}
+<style>
+    .col-lg-12{
+        width: 100%;
+        float: left;
+    }
+    .col-lg-4 {
+        width: 33.333%;
+         float: left;
+    }
+    .col-lg-6{
+        width: 50%;
+        float: left;
+    } 
+    
+    .text-center {
+        text-align: center;
+    }
+    .text-right {
+        text-align:right;
+    }
+    .text-left {
+        text-align:left;
+    }
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>FORMULARIO DE BILLETES PREMIADOS DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
+        </div>
+    </div>
+    <div>
+        <div class="col-lg-12 no-padder" style="margin-top:50px">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No. DE RECIBO</th>
+                        <th>Sorteo</th>
+                        <th class="text-right" style="width:15%">VALOR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var payment in Model.IdentifyBachPayments)
+                    {
+                        <tr>
+                            <td>
+                                @payment.Id
+                            </td>
+                            <td>
+                                @payment.IdentifyBach.RaffleId
+                            </td>
+                            <td class="text-right" style="width:15%">
+                                @(payment.Value.ToString("c",  new System.Globalization.CultureInfo("es-DO")))
+                            </td>
+                        </tr>
+                    }
+
+                    
+                   <tr class="total">
+                       <td></td>
+                       <td></td>
+                       <td>Total: <strong>@((Model.IdentifyBachPayments.Count > 0 ? Model.IdentifyBachPayments.Select(p => p.Value).Aggregate((i, a) => i + a) : 0).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                   </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,192 @@
+﻿@model List<Tickets.Models.Raffle>
+@{
+    ViewBag.Title = "IdentifyAwardsReportsResumen";
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+    int clientId = (int)ViewBag.clientId;
+}
+
+
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACIÓN DE LA LOTERÍA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>REPORTE IDENTIFICACIÓN DE PREMIOS</b>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <div class="col-lg-6 no-padder text-right">
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+        </div>
+    </div>
+    <div>
+        <div class="col-lg-12 no-padder">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="text-center">CANTIDAD TOTAL FRACCIONES</th>
+                        <th class="text-right" style="width:30%">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                      decimal  totalidad = 0;
+                      int totalidadfraccion = 0;
+                    }
+                    
+                    @foreach (var raffle in Model.Where(w => w.Statu == (int)Tickets.Models.Enums.RaffleStatusEnum.Generated))
+                    {
+                        
+                        var clients = context.Clients.Where(w => (w.Statu == (int)Tickets.Models.Enums.ClientStatuEnum.Approbed && w.IdentifyBaches.Count() > 0) && (clientId == 0 || w.Id == clientId)).ToList();
+                        var raffleName = raffle.Id + " - " + raffle.Name;
+                        <tr>
+                            <th colspan="8" class="text-left">@raffleName</th>
+                        </tr>
+                        foreach (var c in clients)
+                        {
+                            int totalFraction = 0;
+                            decimal totalGeneral = 0;
+
+                            var identifyNumbers = context.IdentifyNumbers.Where(w => w.IdentifyBach.RaffleId == raffle.Id && (w.IdentifyBach.ClientId == c.Id)).OrderBy(i => i.IdentifyBachId);
+                            var clientDesc = c.Id + " - " + c.Name;
+                            if (identifyNumbers.Count() != 0)
+                            {
+                                foreach (var number in identifyNumbers)
+                                {
+                                    var raffleAwardsList = raffle.RaffleAwards.Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number).ToList();
+                                    foreach (var raffleAward in raffleAwardsList)
+                                    {
+                                        decimal price = 0;
+                                        decimal total = 0;
+
+                                        if (raffleAward.Fraction != 0)
+                                        {
+                                            price = raffleAward.Award.Value;
+                                            total = price;
+                                        }
+                                        else
+                                        {
+                                            price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
+                                            total = (number.FractionTo - number.FractionFrom + 1) * price;
+                                        }
+
+
+                                        //var total = (number.FractionTo - number.FractionFrom + 1) * price;
+                                        totalFraction += (number.FractionTo - number.FractionFrom + 1);
+                                        totalGeneral += total;
+
+                                    }
+                                }
+
+                                <tr>
+                                    <th class="text-left">@clientDesc</th>
+                                    <td class="text-center"><strong>@totalFraction</strong></td>
+                                    <td class="text-right" colspan="2" > <strong>@((totalGeneral).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                                </tr>
+                                totalidadfraccion += totalFraction;
+                                totalidad += totalGeneral;
+                            }
+                        }
+                    }
+                    
+                    <tr>
+                        <th></th>
+                        <th class="text-center" >Total Fracción: <strong>@(totalidadfraccion)</strong></th>
+                        <th class="text-right" style="width:30%" >Total: <strong>@((totalidad).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong> </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-center">
+    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Facturado por Cliente
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Recibido por Btes. Pdos.
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Perforado
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-center" style="margin-top:15px;">
+    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Facturado
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Revisado por
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Autorizado por
+    </div>
+</div>

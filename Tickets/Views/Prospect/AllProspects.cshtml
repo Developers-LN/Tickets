@@ -1,0 +1,45 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de Prospectos";
+}
+<div class="col-lg-12 no-padder" ng-controller="AllProspectsController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row-border hover">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Nombre de Prospecto</th>
+                                <th>Descripción</th>
+                                <th>Grupo</th>
+                                <th>Precio</th>
+                                <th>Producción</th>
+                                <th>Impresion</th>
+                                <th>Estado</th>
+                                <th>Imprimir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="prospect in prospects">
+                                <td>{{prospect.name}}</td>
+                                <td>{{prospect.description}}</td>
+                                <td>{{prospect.groupDescription}}</td>
+                                <td>{{parseMoney(prospect.price)}}</td>
+                                <td>{{parseNumber(prospect.production)}}</td>
+                                <td>{{prospect.impresionTypeDesc}}</td>
+                                <td>{{prospect.statuDesc}}</td>
+                                <td>
+                                    <a href="/Reports/ProspectFormat?prospectId={{prospect.id}}" target="_blank" title="Imprimir" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

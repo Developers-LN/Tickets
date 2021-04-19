@@ -1,0 +1,261 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Trazabilidad de Billetes";
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="AwardNumberController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 m-b-xs no-padder">
+                    <div class="col-lg-6">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control" ng-model="awardNumber.RaffleId">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                        <option ng-repeat="raffle in raffles" value="{{raffle.Id}}">{{raffle.Id}} - {{raffle.Name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Billete:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           ng-model="awardNumber.Number"
+                                           ng-keyup="Keyup($event)"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="col-lg-12 m-b-xs no-padder text-right">
+                    <div class="col-lg-8 no-padder" ng-show="(numberFound == false && findedAward == true)">
+                        <div style="margin-left: 50%">
+                            <div class="progress progress-striped active">
+                                <div class="progress-bar progress-bar-info" role="" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only"></span>
+                                </div>
+                            </div>
+                            Buscando...
+                        </div>
+                    </div>
+                    <a ng-click="searchNumber()" class="mr btn btn-square btn-primary {{moduleCanAdd}}"><i class="fa fa-check-square-o"></i>Identificar</a>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-12 no-padder" ng-show="numberFound == true">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-lg-12 m-b-xs">
+                        <div class="col-lg-6 no-padder">
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label">Sorteo:</span><span class="col-lg-8">
+                                        <b>{{number.Allocation.RaffleId}} - {{number.Allocation.RaffleDesc}}</b>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label">Cliente:</span>
+                                    <span class="col-lg-8">
+                                        <b>{{number.Allocation.ClientDesc}}</b>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label">Billete:</span><span class="col-lg-8">
+                                        <b>{{addZeroToNumber((number.Production - 1), number.Number)}}</b>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label">Asignación:</span><span class="col-lg-8">
+                                        <b>{{number.Allocation.Id}} </b><a href="/#/ticket/allocationDetails/{{number.Allocation.Id}}" target="_blank" title="Detalle de Asignación"><i class="fa fa-eye"></i></a>
+                                    </span>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6 no-padder">
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label">Numero de Control:</span>
+                                    <span class="col-lg-8">
+                                        <b>{{number.ControlNumber}}</b>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label-left">Fracciones:</span>
+                                    <span class="col-lg-8">
+                                        <b>{{number.Allocation.FractionFrom}} - {{number.Allocation.FractionTo}}</b>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label-left">Facturado:</span>
+                                    <span class="col-lg-8">
+                                        <b>{{number.Invoiced === true? 'Si' : 'No'}}</b>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label-left">Impreso:</span>
+                                    <span class="col-lg-8">
+                                        <b>{{number.Printed === true? 'Si' : 'No'}}</b>
+                                    </span>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <h4>Movimientos del Billete: {{number.Number}}</h4>
+                    <hr />
+                    <div class="col-lg-12 m-b-xs no-padderrow-border hover">
+                        <table class="table dataTableGrid">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Transacción</th>
+                                    <th class="text-center">Grupo</th>
+                                    <th class="text-center">Cliente</th>
+                                    <th class="text-center">Fecha</th>
+                                    <th class="text-center">Fracción Desde</th>
+                                    <th class="text-center">Fracción Hasta</th>
+                                    <th class="text-center">Usuario</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="transaction in number.Transactions">
+                                    <td class="text-center">{{transaction.Description}}</td>
+                                    <td class="text-center">
+                                        <a ng-show="transaction.Group != 'No hay datos'"
+                                           class="btn btn-sm btn-primary"
+                                           target="_blank"
+                                           href="#/ticket/returnedGroupDetails/{{transaction.Group}}/{{number.Allocation.RaffleId}}">
+                                            {{transaction.Group}} <i class="fa fa-eye"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">{{transaction.ClientDesc}}</td>
+                                    <td class="text-center">{{(transaction.Date | date:"dd/MM/yyyy h:mm:ss a")}}</td>
+                                    <td class="text-center" ng-bind="transaction.FractionFrom"></td>
+                                    <td class="text-center" ng-bind="transaction.FractionTo"></td>
+                                    <td class="text-center" ng-bind="transaction.UserDesc"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4>Premios</h4>
+                    <hr />
+                    <div class="col-lg-12 m-b-xs no-padderrow-border hover">
+                        <table class="table dataTableGrid">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Premio</th>
+                                    <th class="text-center">Cantidad Frac.</th>
+                                    <th class="text-right">Valor</th>
+                                    <th class="text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="identifyNumber in number.awards">
+                                    <td class="text-center" ng-bind="identifyNumber.AwardName"></td>
+                                    <td class="text-center" ng-bind="(identifyNumber.FractionTo - identifyNumber.FractionFrom) + 1"></td>
+                                    <td class="text-right" ng-bind="parseMoney(identifyNumber.AwardValue / identifyNumber.MaxFraction)"></td>
+                                    <td class="text-right">{{ parseMoney(((identifyNumber.FractionTo - identifyNumber.FractionFrom) + 1) * (identifyNumber.AwardValue))}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td class="text-center" ng-bind="parseNumber(totalFraction)"></td>
+                                    <td class="text-right" ng-bind="parseMoney(totalValue)"></td>
+                                    <td class="text-right" ng-bind="parseMoney(totalGeneral)"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <h4>Identificación de Premios Menores</h4>
+                    <hr />
+                    <div class="col-lg-12 m-b-xs no-padderrow-border hover">
+                        <table class="table dataTableGrid">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Lote</th>
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-center">Premio</th>
+                                    <th class="text-center">Frac. Desde</th>
+                                    <th class="text-center">Frac. Hasta</th>
+                                    <th class="text-center">Cantidad Frac.</th>
+                                    <th class="text-right">Valor</th>
+                                    <th class="text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="identifyNumber in number.identifyNumbersMinor">
+                                    <td class="text-center" ng-bind="identifyNumber.IdentifyBachId"></td>
+                                    <td class="text-center">{{identifyNumber.IsPayed? 'Pagado' : 'No Pagado'}}</td>
+                                    <td class="text-center" ng-bind="identifyNumber.AwardName"></td>
+                                    <td class="text-center" ng-bind="identifyNumber.FractionFrom"></td>
+                                    <td class="text-center" ng-bind="identifyNumber.FractionTo"></td>
+                                    <td class="text-center" ng-bind="(identifyNumber.FractionTo - identifyNumber.FractionFrom) + 1"></td>
+                                    <td class="text-right" ng-bind="parseMoney(identifyNumber.AwardValue)"></td>
+                                    <td class="text-right">{{ parseMoney(((identifyNumber.FractionTo - identifyNumber.FractionFrom) + 1) * identifyNumber.AwardValue )}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-12 no-padder" ng-if="number.identifyNumbersMayor.length > 0">
+                        <h4>Identificación de Premios Mayores</h4>
+                        <hr />
+                        <div class="col-lg-12 m-b-xs no-padderrow-border hover">
+                            <table class="table dataTableGrid">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Lote</th>
+                                        <th class="text-center">Estado</th>
+                                        <th class="text-center">Premio</th>
+                                        <th class="text-center">Frac. Desde</th>
+                                        <th class="text-center">Frac. Hasta</th>
+                                        <th class="text-center">Cantidad Frac.</th>
+                                        <th class="text-right">Valor</th>
+                                        <th class="text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="identifyNumber in number.identifyNumbersMayor">
+                                        <td class="text-center" ng-bind="identifyNumber.IdentifyBachId"></td>
+                                        <td class="text-center">{{identifyNumber.IsPayed? 'Pagado' : 'No Pagado'}}</td>
+                                        <td class="text-center" ng-bind="identifyNumber.AwardName"></td>
+                                        <td class="text-center" ng-bind="identifyNumber.FractionFrom"></td>
+                                        <td class="text-center" ng-bind="identifyNumber.FractionTo"></td>
+                                        <td class="text-center" ng-bind="(identifyNumber.FractionTo - identifyNumber.FractionFrom) + 1"></td>
+                                        <td class="text-right" ng-bind="parseMoney(identifyNumber.AwardValue)"></td>
+                                        <td class="text-right">{{ parseMoney(((identifyNumber.FractionTo - identifyNumber.FractionFrom) + 1) * identifyNumber.AwardValue )}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg">
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Salir</a>
+</div>

@@ -1,0 +1,200 @@
+﻿@model Tickets.Models.AwardCertification
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    var identifyNumbers = context.IdentifyNumbers.Where(w => w.Id == Model.IdentifyNumberId).ToList();
+
+}
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <h4><b>MINISTERIO DE HACIENDA</b></h4>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <h4><b>ADMINISTRACIÓN DE LA LOTERÍA NACIONAL</b></h4>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <h2><b>CERTIFICACIÓN DE PREMIO</b></h2>
+        </div>
+    </div>
+    <div>
+        <div class="col-12" style="font-size:14px;">
+            <div class="col-lg-12">
+                <p>Certificación <b>NO. @Model.Id</b></p>
+            </div>
+            <div class="col-lg-6">
+                <p>Después de haber sometido el chequeo general el billete <span style="text-decoration:underline"><b>No. @Model.Number</b></span></p>
+            </div>
+            <div class="col-lg-6">
+                <p>
+                    Fecha de impresión <span style="text-decoration:underline">
+                        <b>
+                         @identifyNumbers.FirstOrDefault().TicketAllocationNumber.PrintedDate.ToString()
+                        </b>
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-12" style="margin-top:20px">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>PREMIO</th>
+                        <th>CONTROL</th>
+                        <th>DESDE</th>
+                        <th>HASTA</th>
+                        <th class="text-right" style="width:15%">VALOR</th>
+                        <th class="text-right" style="width:15%">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        decimal totalGeneral = 0.0m;
+                        var value = Model.RaffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? Model.RaffleAward.Award.Value : Model.RaffleAward.Award.Value / (Model.RaffleAward.Raffle.Prospect.LeafFraction * Model.RaffleAward.Raffle.Prospect.LeafNumber);
+                    }
+                    @foreach (var identiifyNumber in identifyNumbers)
+                    {
+
+                        var total = Model.RaffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? value : ((identiifyNumber.FractionTo - identiifyNumber.FractionFrom + 1) * value);
+                        <tr>
+                            <td>@Model.RaffleAward.Award.Name</td>
+                            <td>@identiifyNumber.TicketAllocationNumber.ControlNumber</td>
+                            <td>@(Model.RaffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? Model.RaffleAward.Fraction : identiifyNumber.FractionFrom)</td>
+                            <td>@(Model.RaffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? Model.RaffleAward.Fraction : identiifyNumber.FractionTo)</td>
+                            <td class="text-right" style="width:15%">@value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right" style="width:15%">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        </tr>
+                        totalGeneral += total;
+                    }
+                </tbody>
+
+            </table>
+        </div>
+        <div class="col-lg-12" style="font-size:14px;">
+            <p>
+                Correspondientes al sorteo <span style="text-decoration:underline"><b>NO. @Model.RaffleAward.RaffleId</b></span> de fecha <span style="text-decoration:underline"><b>@Model.RaffleAward.Raffle.DateSolteo.ToShortDateString()</b></span>
+                <br />
+                @{if (Model.RaffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S)
+                    {
+                    <p>Con un premio para la fracción ganadora <b>@(Model.RaffleAward.Fraction)</b> con un total de @value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</p>
+                    }
+                    else
+                    {
+                        <p>Con un premio ganador de @value.ToString("c", new System.Globalization.CultureInfo("es-DO")) cada fracción. Lo que hace un total de @totalGeneral.ToString("c", new System.Globalization.CultureInfo("es-DO")).</p>
+                    }
+                }
+            </p>
+            <p>
+                <b>Certificamos</b>
+                <br />
+                Dicha revisión fue hecha por el directo de Produccíon y Sorteos, Encargado de Imprenta, Inspector General,
+                <br />
+                Contador general y Director de Control de Premios, de esta institución, quienes Certificamos que está correcto.
+            </p>
+            <p>
+                El Billete Premiado por la Dirección de Producción y Sorteos fue Presentado por <span style="text-decoration:underline"><b>LOTERIA NACIONAL</b></span>.
+                <br />
+                Dado en Santo Domingo, Distrito Nacional, a los <span style="text-decoration:underline"><b>@DateTime.Now.Day</b></span> días del mes <span style="text-decoration:underline"><b>@DateTime.Now.Month</b></span> del año <span style="text-decoration:underline"><b>@DateTime.Now.Year</b></span>.
+            </p>
+
+        </div>
+
+
+    </div>
+</div>
+<div class="col-lg-12  no-padder text-center" style="padding-top:6%; margin:0 auto">
+    <div class="col-lg-12 text-center">
+        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+            <div class="col-lg-12 text-center">
+                ______________________________
+            </div>
+            DIR. PRODUCCIÓN Y SORTEOS
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+            <div class="col-lg-12 text-center">
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+            <div class="col-lg-12 text-center">
+                ______________________________
+            </div>
+            ENC. DE IMPRENTA
+        </div>
+    </div>
+    <div class="col-lg-12 text-center" style="margin-top: 50px;">
+        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+            <div class="col-lg-12 text-center">
+                ______________________________
+            </div>
+            INSPECTOR GENERAL
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+            <div class="col-lg-12 text-center">
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+            <div class="col-lg-12 text-center">
+                ______________________________
+            </div>
+            CONTADOR GENERAL
+        </div>
+    </div>
+    <div class="col-lg-12 text-center" style="margin-top: 50px;">
+        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+            <div class="col-lg-12 text-center">
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+            <div class="col-lg-12 text-center">
+                ______________________________
+            </div>
+            DIR. CONTROL DE PREMIOS
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+            <div class="col-lg-12 text-center">
+            </div>
+        </div>
+    </div>
+</div>

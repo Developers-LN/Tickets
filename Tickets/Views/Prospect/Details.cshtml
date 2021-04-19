@@ -1,0 +1,116 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Detalle del Prospecto";
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="ProspectController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-lg-12 m-b-xs">
+                <div class="col-lg-6 no-padder">
+                    <fieldset>
+                        <div class="form-group m-t-xs">
+                            <span class="col-lg-4 control-label-left">Nombre:</span><span class="col-lg-8"><b>{{prospect.Name}}</b></span>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group m-t-xs">
+                            <span class="col-lg-4 control-label-left">Descripción:</span><span class="col-lg-8"> <b>{{prospect.Description}}</b></span>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group m-t-xs">
+                            <span class="col-lg-4 control-label-left">Grupo:</span><span class="col-lg-8"> <b>{{prospect.GroupDescription}}</b></span>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group m-t-xs">
+                            <span class="col-lg-4 control-label-left">Producción:</span><span class="col-lg-8"> <b>{{parseMoney(prospect.Production).substring(3, parseMoney(prospect.Production).length - 3)}}</b></span>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-6 no-padder">
+                    <fieldset>
+                        <div class="form-group m-t-xs">
+                            <span class="col-lg-4 control-label-left">Hojas por número:</span><span class="col-lg-8"> <b>{{prospect.LeafNumber}}</b></span>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group m-t-xs">
+                            <span class="col-lg-4 control-label">Fracción por hojas:</span><span class="col-lg-8"> <b>{{prospect.LeafFraction}}</b></span>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group m-t-xs">
+                            <span class="col-lg-4 control-label">Días de vigencia:</span><span class="col-lg-8"> <b>{{prospect.EffectiveDays}}</b></span>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group m-t-xs">
+                            <span class="col-lg-4 control-label">Formato de Impresión:</span><span class="col-lg-8"> <b>{{prospect.ImpresionTypeDescription}}</b></span>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group m-t-xs">
+                            <span class="col-lg-4 control-label-left">Estado:</span><span class="col-lg-8"> <b>{{prospect.StatuDescription}}</b></span>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <h4>Precios</h4>
+            <hr />
+            <div class="col-lg-12 m-b-xs no-padder">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tipo de precio</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="price in prospect.Prospect_Price">
+                            <td>{{price.PriceDesc}}</td>
+                            <td>{{parseMoney(price.Value)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>Premios</h4>
+            <hr />
+            <div class="col-lg-12 m-b-xs no-padder">
+                <table class="table dataTableGrid">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Premio Origen</th>
+                            <th>Orden</th>
+                            <th>Cantidad</th>
+                            <th>Terminal</th>
+                            <th>Por Fracción</th>
+                            <th>Valor</th>
+                            <th>Monto Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="current in prospect.Awards">
+                            <td>{{current.Name}}</td>
+                            <td>{{current.Description}}</td>
+                            <td>{{current.SourceAwardDescription}}</td>
+                            <td>{{current.OrderAward}}</td>
+                            <td>{{current.Quantity}}</td>
+                            <td>{{current.Terminal}}</td>
+                            <td>{{current.ByFractionDescription}}</td>
+                            <td>{{current.Value}}</td>
+                            <td>{{current.TotalValue}}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ui-sref="app.prospectWorkflowList" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i>Regresar</a>
+    </div>
+</div>

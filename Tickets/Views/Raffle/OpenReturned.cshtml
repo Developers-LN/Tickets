@@ -1,0 +1,63 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Abrir devolución de Sorteo";
+
+    var context = new Tickets.Models.TicketsEntities();
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="OpenReturnedController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-6 no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="open.RaffleId">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.Id}}">{{raffle.Id}} - {{raffle.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Nueva Fecha fin devolución: <span class="color-red">*</span></label>
+                            <div class="col-lg-12 no-padder">
+                                <div class="col-lg-6">
+                                    <input type="date"
+                                           ng-model="open.Date"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="time"
+                                           ng-model="open.Time"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Observación: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <textarea class="form-control input-sm"
+                                          ng-model="open.Note"
+                                          style="max-height: 109px; height: 97px;"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-6 no-padder">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ui-sref="app.dashboard" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
+        <a ng-click="saveForm()" class="mr btn btn-square btn-primary moduleCanAdd"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Detalle de abonado";
+}
+<div class="col-lg-12 no-padder" ng-controller="SuscriberDetailsController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 well no-padder">
+                    <div class="col-lg-4">Abonado: #<b ng-bind="ticket.id"></b></div>
+                    <div class="col-lg-4">Cliente: <b ng-bind="ticket.clientDesc"></b></div>
+                    <div class="col-lg-4">Fecha: <b>{{(ticket.createDate | date:"dd/MM/yyyy h:mm:ss a")}}</b></div>
+                </div>
+                <div class="col-lg-12 no-padder text-right m-b-xs">
+                    <a href="/#/ticket/suscriber/{{ticket.id}}" class="btn btn-oval btn-success btn-sm"><i class="fa fa fa-plus"></i> Agregar</a>
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Numeros</th>
+                                <th class="editColumm">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="number in ticket.ticketSuscriberNumbers">
+                                <td ng-bind="number.number"></td>
+                                <td class="text-center">
+                                    <a ng-click="deleteNumber(number)" title="Borrar Billetes" class="{{moduleCanDelete}}"><i class="fa fa-times"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>{{parseNumber(ticket.ticketSuscriberNumbers.length)}}</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.ticketSuscriberList" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

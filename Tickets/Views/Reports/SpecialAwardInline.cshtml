@@ -1,0 +1,113 @@
+﻿@model Tickets.Models.Raffle
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Sorteo Virtual";
+    var context = new Tickets.Models.TicketsEntities();
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+}
+
+<style>
+
+.special-cash-award .cash ul {
+    height: auto;
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;   
+    padding: 5px;
+    margin: 0;
+    padding-top: 7px;
+    padding-bottom: 4px;
+    -webkit-column-gap: 5px; /* Chrome, Safari, Opera */
+    -moz-column-gap: 5px; /* Firefox */
+    column-gap: 5px;
+}
+
+    ul {
+            list-style-type: none;
+    }
+.special-cash-award .cash ul li { 
+    padding: 0;
+    margin: 0;
+    line-height: normal;
+    font-size: 10pt;
+    font-weight: bold;
+    padding-top: 2px;
+    padding-bottom: 3px;
+}  
+.col-lg-2 {
+        width: 16.66666667%;
+        float: left;
+    }
+    .col-lg-4 {
+        width: 32%;
+        float: left;
+    }
+    
+.col-lg-20 {
+    width: 19.60%;
+     float: left;
+}
+.col-lg-22 {
+    width: 21%;
+    float: left;
+}
+.col-lg-78 {
+    width: 78%;
+    float: left;
+}
+.col-lg-12{
+    width: 100%;
+    float: left;
+}
+.col-lg-3{
+    width: 24.6%;
+    float: left;
+}
+.col-lg-6{
+    width: 50%;
+    float: left;
+}
+
+.title {    
+    background-color: white;
+    font-weight: bold;
+    color: black;
+    text-align: left;
+    font-size: 20pt;
+    line-height: initial;
+}
+</style>
+
+
+<div class="col-lg-12" style="width: 1400px;">
+    <!-- PREMIOS MENORES DE 500.00 C/U-->
+    <div class="col-lg-12 text-center" style="text-align:center;">
+        MINISTERIO DE HACIENDA<br/>
+        ADMINSTRACION DE LA LOTERIA NACIONAL<br/>
+        LISTA DE PREMIOS ESPECIALES DEL SORTEO @Model.Id EN FECHA @Model.DateSolteo.ToLongDateString()<br/>
+        ORDENADOS EN ORDEN ASCENDENTE<br/>
+    </div>
+    <div class="col-lg-12 no-padder m-t-2-px special-cash-award">
+        @{
+            var specialAward = context.TypesAwards.FirstOrDefault(t => t.Id == (int)Tickets.Models.Enums.AwardTypeEnum.Specials);
+            int numberLengh = (Model.Prospect.Production - 1).ToString().Length;
+        }
+        <div class="col-lg-12 no-padder">
+            @foreach (var award in Model.RaffleAwards.Where(a => a.Award.TypesAwardId == specialAward.Id).OrderBy(r => r.ControlNumber).GroupBy(r => r.AwardId).Select(r => new { awardName = r.FirstOrDefault().Award.Description, numbers = r, value= r.FirstOrDefault().Award.Value }).OrderByDescending(r=>r.value))
+            {
+                <div class="col-lg-12 no-padder cash m-t-2-px">
+                    <div class="col-lg-12 no-padder title color">
+                        CON VALOR DE RD$@award.awardName CADA UNO
+                    </div>
+                    <div class="col-lg-4 no-padder" style="width: 125px !important;">
+                        <ul>
+                        @foreach( var number in award.numbers)
+                        {
+                            <li>@Tickets.Models.Utils.AddZeroToNumber(numberLengh, (int)number.ControlNumber)</li>
+                        }
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+</div>

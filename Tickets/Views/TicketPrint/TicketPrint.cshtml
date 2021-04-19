@@ -1,0 +1,68 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado para Imprimir Billetes";
+}
+<div class="col-lg-12 no-padder" ng-controller="TicketPrintController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-4 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sorteo: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="RaffleId" ng-change="updateAllocation()">
+                                    <option selected="selected" value="0">Todos los sorteo</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-4 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Cliente: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="ClientId" ng-change="updateAllocation()">
+                                    <option selected="selected" value="0">Todos los cliente</option>
+                                    <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-4 text-right m-b-xs no-padder">
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Numero</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th class="editColumm text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="allocation in allocations">
+                                <td>#{{allocation.id}}</td>
+                                <td>{{allocation.clientDesc}}</td>
+                                <td>{{(allocation.createDate | date:"dd/MM/yyyy")}}</td>
+                                <td class="text-center">
+                                    <a href="/#/ticket/allocationDetails/{{allocation.id}}" title="Ver Detalle de asignación" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
+                                    <a ng-click="printTickets(allocation)" ng-show="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.PendientPrint)  && allocation.canAllocate == true" title="Imprimiar Billetes" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
+                                    <a target="_blank" href="~/Reports/AllocatinosNumberList?allocationId={{allocation.id}}" title="Impresion de asignación por números"><i class="fa fa-file-o"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

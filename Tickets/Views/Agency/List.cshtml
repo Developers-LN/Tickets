@@ -1,0 +1,53 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de Agencia";
+}
+<div class="col-lg-12 no-padder" ng-controller="AgencyListController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!-- START panel-->
+                <div class="col-lg-12 text-right m-b-xs no-padder">
+                    <a href="#/agency/agency/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Agregar Agencia</a>
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <!--<th>Descripción</th>
+                                    <th>Empleado</th>-->
+                                <th>Provincia</th>
+                                <!--<th>Municipio</th>-->
+                                <th>Teléfono</th>
+                                <th>E-Mail</th>
+                                <th>Estatus</th>
+                                <th class="editColumm">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="agency in agencyList">
+                                <td>{{agency.Name}}</td>
+                                <!--<td>{{agency.Description}}</td>
+                                <td>{{agency.EmployeeDesc}}</td>-->
+                                <td>{{agency.ProvinceDesc}}</td>
+                                <!--<td>{{agency.TownDesc}}</td>-->
+                                <td>{{agency.Phone}}</td>
+                                <td>{{agency.Email}}</td>
+                                <td>{{agency.StatuDesc}}</td>
+                                <td>
+                                    <a href="#/agency/agency/{{agency.Id}}" title="Moificar Agencia" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
+                                    <a ng-click="deleteAgency(agency)" title="Suspender Agencia" class="{{moduleCanDelete}}"><i class="fa fa-ban"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d49e4111a4614913be63ec23524154c8" Name="Diagram1" ZoomLevel="81">
+        <EntityTypeShape EntityType="TicketsModel.Agency" Width="1.5" PointX="10.5" PointY="66.75" />
+        <EntityTypeShape EntityType="TicketsModel.Award" Width="1.5" PointX="11.25" PointY="53.125" />
+        <EntityTypeShape EntityType="TicketsModel.Cash" Width="1.5" PointX="12.75" PointY="66.625" />
+        <EntityTypeShape EntityType="TicketsModel.CashClose" Width="1.5" PointX="15" PointY="76.375" />
+        <EntityTypeShape EntityType="TicketsModel.Catalog" Width="1.5" PointX="0.75" PointY="53.625" />
+        <EntityTypeShape EntityType="TicketsModel.CertificationNumber" Width="1.5" PointX="18.75" PointY="54.375" />
+        <EntityTypeShape EntityType="TicketsModel.Client" Width="1.5" PointX="8.25" PointY="50.75" />
+        <EntityTypeShape EntityType="TicketsModel.DistTown" Width="1.5" PointX="6" PointY="48.5" />
+        <EntityTypeShape EntityType="TicketsModel.Employee" Width="1.5" PointX="8.25" PointY="80.875" />
+        <EntityTypeShape EntityType="TicketsModel.IdentifyBach" Width="1.5" PointX="16.5" PointY="59.875" />
+        <EntityTypeShape EntityType="TicketsModel.IdentifyBachPayment" Width="1.5" PointX="21.75" PointY="60.375" />
+        <EntityTypeShape EntityType="TicketsModel.IdentifyNumber" Width="1.5" PointX="24" PointY="54.875" />
+        <EntityTypeShape EntityType="TicketsModel.Invoice" Width="1.5" PointX="16.5" PointY="52.875" />
+        <EntityTypeShape EntityType="TicketsModel.InvoiceDetail" Width="1.5" PointX="16.5" PointY="49.125" />
+        <EntityTypeShape EntityType="TicketsModel.InvoiceTicket" Width="1.5" PointX="21" PointY="52.375" />
+        <EntityTypeShape EntityType="TicketsModel.Log" Width="1.5" PointX="3" PointY="84" />
+        <EntityTypeShape EntityType="TicketsModel.Module" Width="1.5" PointX="12.75" PointY="76.75" />
+        <EntityTypeShape EntityType="TicketsModel.NoteCredit" Width="1.5" PointX="21.75" PointY="47.5" />
+        <EntityTypeShape EntityType="TicketsModel.NoteCreditReceiptPayment" Width="1.5" PointX="27" PointY="52.5" />
+        <EntityTypeShape EntityType="TicketsModel.OverduelBill" Width="1.5" PointX="10.5" PointY="59.25" />
+        <EntityTypeShape EntityType="TicketsModel.PreviousDebtPayment" Width="1.5" PointX="13.5" PointY="58.375" />
+        <EntityTypeShape EntityType="TicketsModel.ProductionCost" Width="1.5" PointX="10.5" PointY="38.875" />
+        <EntityTypeShape EntityType="TicketsModel.Prospect" Width="1.5" PointX="9" PointY="29.5" />
+        <EntityTypeShape EntityType="TicketsModel.Prospect_Price" Width="1.5" PointX="3" PointY="54.375" />
+        <EntityTypeShape EntityType="TicketsModel.Province" Width="1.5" PointX="1.5" PointY="48.75" />
+        <EntityTypeShape EntityType="TicketsModel.Raffle" Width="1.5" PointX="8.25" PointY="43.5" />
+        <EntityTypeShape EntityType="TicketsModel.ReceiptPayment" Width="1.5" PointX="21.75" PointY="55.625" />
+        <EntityTypeShape EntityType="TicketsModel.ReceivablePayment" Width="1.5" PointX="18.75" PointY="58.5" />
+        <EntityTypeShape EntityType="TicketsModel.ReportByEmail" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TicketsModel.ReturnedOpen" Width="1.5" PointX="10.5" PointY="73" />
+        <EntityTypeShape EntityType="TicketsModel.Rol_Module" Width="1.5" PointX="15" PointY="72.75" />
+        <EntityTypeShape EntityType="TicketsModel.RRentabilidadSorteo" Width="1.5" PointX="10.5" PointY="42.125" />
+        <EntityTypeShape EntityType="TicketsModel.SystemConfig" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TicketsModel.TicketAllocation" Width="1.5" PointX="10.5" PointY="49" />
+        <EntityTypeShape EntityType="TicketsModel.TicketAllocationNumber" Width="1.5" PointX="18.75" PointY="48.75" />
+        <EntityTypeShape EntityType="TicketsModel.TicketRePrint" Width="1.5" PointX="10.5" PointY="34.75" />
+        <EntityTypeShape EntityType="TicketsModel.TicketRePrintNumber" Width="1.5" PointX="21" PointY="43" />
+        <EntityTypeShape EntityType="TicketsModel.TicketReturn" Width="1.5" PointX="24" PointY="49.875" />
+        <EntityTypeShape EntityType="TicketsModel.TicketSuscriber" Width="1.5" PointX="13.5" PointY="50.125" />
+        <EntityTypeShape EntityType="TicketsModel.TicketSuscriberNumber" Width="1.5" PointX="15.75" PointY="45.75" />
+        <EntityTypeShape EntityType="TicketsModel.Town" Width="1.5" PointX="3.75" PointY="48.5" />
+        <EntityTypeShape EntityType="TicketsModel.TypesAward" Width="1.5" PointX="8.25" PointY="77.125" />
+        <EntityTypeShape EntityType="TicketsModel.User" Width="1.5" PointX="6" PointY="52.375" />
+        <EntityTypeShape EntityType="TicketsModel.webpages_Membership" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="TicketsModel.webpages_OAuthMembership" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="TicketsModel.webpages_Roles" Width="1.5" PointX="12.75" PointY="73" />
+        <EntityTypeShape EntityType="TicketsModel.Workflow" Width="1.5" PointX="16.5" PointY="64.375" />
+        <EntityTypeShape EntityType="TicketsModel.WorkflowProccess" Width="1.5" PointX="18.75" PointY="62.375" />
+        <EntityTypeShape EntityType="TicketsModel.WorkflowType" Width="1.5" PointX="8.25" PointY="62.125" />
+        <EntityTypeShape EntityType="TicketsModel.WorkflowType_User" Width="1.5" PointX="13.5" PointY="62.125" />
+        <AssociationConnector Association="TicketsModel.FK__OverduelB__Agenc__26EFBBC6" />
+        <AssociationConnector Association="TicketsModel.FK__OverduelB__Agenc__316D4A39" />
+        <AssociationConnector Association="TicketsModel.FK_Agency_Employee" />
+        <AssociationConnector Association="TicketsModel.FK_Agency_User" />
+        <AssociationConnector Association="TicketsModel.FK_Cash_Agency" />
+        <AssociationConnector Association="TicketsModel.FK_Invoice_Agency" />
+        <AssociationConnector Association="TicketsModel.FK_Award_Award" />
+        <AssociationConnector Association="TicketsModel.FK_Award_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_Award_Prospect" />
+        <AssociationConnector Association="TicketsModel.FK_Award_TypesAward" />
+        <AssociationConnector Association="TicketsModel.FK_Award_User" />
+        <AssociationConnector Association="TicketsModel.FK_Cash_User" />
+        <AssociationConnector Association="TicketsModel.FK_CashClose_Cash" />
+        <AssociationConnector Association="TicketsModel.FK_RaffleAwardPayment_Cash" />
+        <AssociationConnector Association="TicketsModel.FK_ReceiptPayment_Cash" />
+        <AssociationConnector Association="TicketsModel.FK_Client_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_Logs_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_Prospect_Price_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_User_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_Workflow_User_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_WorkflowProccess_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_WorkflowType_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_CertificationNumber_User" />
+        <AssociationConnector Association="TicketsModel.FK__OverduelB__Clien__27E3DFFF" />
+        <AssociationConnector Association="TicketsModel.FK__OverduelB__Clien__32616E72" />
+        <AssociationConnector Association="TicketsModel.FK_Client_DistTown" />
+        <AssociationConnector Association="TicketsModel.FK_Client_Province" />
+        <AssociationConnector Association="TicketsModel.FK_Client_Town" />
+        <AssociationConnector Association="TicketsModel.FK_Client_User" />
+        <AssociationConnector Association="TicketsModel.FK_IdentifyBach_Client" />
+        <AssociationConnector Association="TicketsModel.FK_Invoice_Client" />
+        <AssociationConnector Association="TicketsModel.FK_InvoiceDetails_Client" />
+        <AssociationConnector Association="TicketsModel.FK_NoteCredit_Client" />
+        <AssociationConnector Association="TicketsModel.FK_PreviousDebtPayment_Client" />
+        <AssociationConnector Association="TicketsModel.FK_RaffleAwardPayment_Client" />
+        <AssociationConnector Association="TicketsModel.FK_ReceiptPayment_Client" />
+        <AssociationConnector Association="TicketsModel.FK_TicketAllocation_Client1" />
+        <AssociationConnector Association="TicketsModel.FK_TicketReturn_Client" />
+        <AssociationConnector Association="TicketsModel.FK_TicketSuscriber_Client" />
+        <AssociationConnector Association="TicketsModel.FK_DistTown_Town" />
+        <AssociationConnector Association="TicketsModel.FK_Employee_User" />
+        <AssociationConnector Association="TicketsModel.FK_User_Employee" />
+        <AssociationConnector Association="TicketsModel.FK_IdentifyBach_Raffle" />
+        <AssociationConnector Association="TicketsModel.FK_IdentifyBach_User" />
+        <AssociationConnector Association="TicketsModel.FK_IdentifyNumber_IdentifyBach" />
+        <AssociationConnector Association="TicketsModel.FK_RaffleAwardPayment_IdentifyBach" />
+        <AssociationConnector Association="TicketsModel.FK_IdentifyNumber_TicketAllocationNumber" />
+        <AssociationConnector Association="TicketsModel.FK__OverduelB__Invoi__28D80438" />
+        <AssociationConnector Association="TicketsModel.FK__OverduelB__Invoi__335592AB" />
+        <AssociationConnector Association="TicketsModel.FK_Invoice_Raffle" />
+        <AssociationConnector Association="TicketsModel.FK_Invoice_User" />
+        <AssociationConnector Association="TicketsModel.FK_InvoiceTicket_Invoice" />
+        <AssociationConnector Association="TicketsModel.FK_ReceiptPayment_Invoice" />
+        <AssociationConnector Association="TicketsModel.FK_ReceivablePayment_Invoice" />
+        <AssociationConnector Association="TicketsModel.FK_InvoiceDetails_Raffle" />
+        <AssociationConnector Association="TicketsModel.FK_InvoiceDetails_User" />
+        <AssociationConnector Association="TicketsModel.FK_InvoiceTicket_TicketAllocationNumber" />
+        <AssociationConnector Association="TicketsModel.FK_Rol_Module_Module" />
+        <AssociationConnector Association="TicketsModel.FK_NoteCredit_Raffle" />
+        <AssociationConnector Association="TicketsModel.FK_NoteCreditReceiptPayment_NoteCredit" />
+        <AssociationConnector Association="TicketsModel.FK_NoteCreditReceiptPayment_ReceiptPayment" />
+        <AssociationConnector Association="TicketsModel.FK__OverduelB__Raffl__29CC2871" />
+        <AssociationConnector Association="TicketsModel.FK__OverduelB__Raffl__3449B6E4" />
+        <AssociationConnector Association="TicketsModel.FK_PreviousDebtPayment_User" />
+        <AssociationConnector Association="TicketsModel.FK__Productio__Raffl__24134F1B" />
+        <AssociationConnector Association="TicketsModel.FK_Prospect_Price_Prospect" />
+        <AssociationConnector Association="TicketsModel.FK_Solteo_Prospect" />
+        <AssociationConnector Association="TicketsModel.FK_Town_Province" />
+        <AssociationConnector Association="TicketsModel.FK__RRentabil__Raffl__4297D63B" />
+        <AssociationConnector Association="TicketsModel.FK_ReturnedOpen_Raffle" />
+        <AssociationConnector Association="TicketsModel.FK_Solteo_User" />
+        <AssociationConnector Association="TicketsModel.FK_TicketAllocation_Raffle1" />
+        <AssociationConnector Association="TicketsModel.FK_TicketRePrint_Raffle" />
+        <AssociationConnector Association="TicketsModel.FK_TicketReturn_Raffle" />
+        <AssociationConnector Association="TicketsModel.FK_ReceivablePayment_User" />
+        <AssociationConnector Association="TicketsModel.FK_Rol_Module_webpages_Roles" />
+        <AssociationConnector Association="TicketsModel.FK_TicketAllocation_User1" />
+        <AssociationConnector Association="TicketsModel.FK_TicketAllocationNumber_TicketAllocation" />
+        <AssociationConnector Association="TicketsModel.FK_TicketAllocation_User" />
+        <AssociationConnector Association="TicketsModel.FK_TicketRePrintNumber_TicketAllocationNumber" />
+        <AssociationConnector Association="TicketsModel.FK_TicketReturn_TicketAllocationNumber" />
+        <AssociationConnector Association="TicketsModel.FK_TicketRePrintNumber_TicketRePrint" />
+        <AssociationConnector Association="TicketsModel.FK_TicketReturn_User" />
+        <AssociationConnector Association="TicketsModel.FK_TicketSuscriber_User" />
+        <AssociationConnector Association="TicketsModel.FK_TicketSuscriberNumber_TicketSuscriber" />
+        <AssociationConnector Association="TicketsModel.FK_TypesAward_User" />
+        <AssociationConnector Association="TicketsModel.FK_Workflow_User" />
+        <AssociationConnector Association="TicketsModel.FK_Workflow_User_User" />
+        <AssociationConnector Association="TicketsModel.FK_Workflow_User1" />
+        <AssociationConnector Association="TicketsModel.FK_WorkflowProccess_User" />
+        <AssociationConnector Association="TicketsModel.FK_Workflow_WorkflowType" />
+        <AssociationConnector Association="TicketsModel.FK_WorkflowProccess_Workflow" />
+        <AssociationConnector Association="TicketsModel.FK_Workflow_User_Workflow" />
+        <AssociationConnector Association="TicketsModel.IdentifyBach_CreditNote" />
+        <AssociationConnector Association="TicketsModel.Rol_Agency" />
+        <AssociationConnector Association="TicketsModel.webpages_UsersInRoles" />
+        <EntityTypeShape EntityType="TicketsModel.AwardCertification" Width="1.5" PointX="24.75" PointY="58.25" />
+        <AssociationConnector Association="TicketsModel.FK_AwardCertification_User" />
+        <AssociationConnector Association="TicketsModel.FK_AwardCertification_AwardCertification" />
+        <EntityTypeShape EntityType="TicketsModel.RaffleAward" Width="1.5" PointX="13.5" PointY="45" />
+        <AssociationConnector Association="TicketsModel.FK_RaffleAward_Award" />
+        <AssociationConnector Association="TicketsModel.FK_AwardCertification_RaffleAward" />
+        <AssociationConnector Association="TicketsModel.FK_CertificationNumber_RaffleAward" />
+        <AssociationConnector Association="TicketsModel.FK_RaffleAward_Raffle" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

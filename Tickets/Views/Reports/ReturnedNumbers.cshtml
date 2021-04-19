@@ -1,0 +1,96 @@
+﻿@model Tickets.Models.Raffle
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Devoluciones por Numero";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png"/>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
+            <b>DEVOLUCION DE BILLETES DEL SORTEO @Model.Id</b><br />
+            Desde @Model.StartReturnDate.ToShortDateString() hasta @Model.EndReturnDate.ToShortDateString()
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-right">NUMERO</th>
+                    <th class="text-right">FRACCIONES</th>
+                    <th class="text-right">PRECIO POR FRACCION</th>
+                    <th class="text-right">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var clients = Model.TicketReturns.Where(r => ViewBag.ClientId == 0 || r.ClientId == ViewBag.ClientId).GroupBy(t => t.ClientId).Select(c => new
+                    {
+                        Client = c.FirstOrDefault().Client,
+                        Returneds = c
+                    }).ToList();
+                    var totalValue = 0.0m;
+                    int totalFraction = 0;
+                    int totalNumber = 0;
+                }
+                @foreach (var client in clients)
+                {
+                    int subTotalNumber = 0, subTotalFraction = 0;
+                    decimal subTotalValue = 0.0m;
+                    <tr>
+                        <th colspan="4">@client.Client.Name</th>
+                    </tr>
+                    foreach (var returned in client.Returneds)
+                    {
+                        subTotalNumber += 1;
+                        subTotalFraction += (returned.FractionTo - returned.FractionFrom + 1);
+                        var priceFraction = returned.TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice;
+                        var stringNumber = returned.TicketAllocationNumber.Number.ToString();
+                        var subTotal = (returned.FractionTo - returned.FractionFrom + 1)  * priceFraction;
+                        <tr>
+                            <td class="text-right">@stringNumber</td>
+                            <td class="text-right">@(returned.FractionTo - returned.FractionFrom + 1)</td>
+                            <td class="text-right">@priceFraction.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right">@subTotal.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        </tr>
+                        subTotalValue += subTotal;
+                    }
+                    <tr class="sub-total">
+                        <td class="text-right">@subTotalNumber</td>
+                        <td class="text-right">@subTotalFraction</td>
+                        <td class="text-right"></td>
+                        <td class="text-right">@subTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                    totalNumber += subTotalNumber;
+                    totalFraction += subTotalFraction;
+                    totalValue += subTotalValue;
+                }
+            </tbody>
+            <tfoot>
+                <tr class="total">
+                    <td class="text-right">@totalNumber</td>
+                    <td class="text-right">@totalFraction</td>
+                    <td class="text-right"></td>
+                    <td class="text-right">@totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

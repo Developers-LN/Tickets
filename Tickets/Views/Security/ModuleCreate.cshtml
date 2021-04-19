@@ -1,0 +1,85 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Creación de Modulo";
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="SecurityController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <input type="hidden"
+                       ng-model="module.Id" />
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-lg-12 control-label-left">Nombre del modulo: <span class="color-red">*</span></label>
+                        <div class="col-lg-12">
+                            <input type="text"
+                                   ng-model="module.Name"
+                                   class="form-control"
+                                   ng-required="true">
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group">
+                        <div class="checkbox c-checkbox needsclick col-lg-12">
+                            <label class="needsclick m-r-xs">
+                                <input type="checkbox"
+                                       value=""
+                                       class="needsclick"
+                                       ng-model="module.CanView" />
+                                <span class="fa fa-check"></span>Visualizar
+                            </label>
+
+                            <label class="needsclick m-r-xs">
+                                <input type="checkbox"
+                                       value=""
+                                       class="needsclick"
+                                       ng-model="module.CanAdd" />
+                                <span class="fa fa-check"></span>Crear
+                            </label>
+
+                            <label class="needsclick m-r-xs">
+                                <input type="checkbox"
+                                       value=""
+                                       class="needsclick"
+                                       ng-model="module.CanEdit" />
+                                <span class="fa fa-check"></span>Modificar
+                            </label>
+
+                            <label class="needsclick m-r-xs">
+                                <input type="checkbox"
+                                       value=""
+                                       class="needsclick"
+                                       ng-model="module.CanSearch" />
+                                <span class="fa fa-check"></span>Buscar
+                            </label>
+
+                            <label class="needsclick m-r-xs">
+                                <input type="checkbox"
+                                       value=""
+                                       class="needsclick"
+                                       ng-model="module.CanDelete" />
+                                <span class="fa fa-check"></span>Borrar
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-lg-12 control-label-left">Descripción: </label>
+                        <div class="col-lg-12">
+                            <textarea class="form-control"
+                                      ng-model="module.Description"
+                                      style="max-height: 109px; height: 109px;"></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ui-sref="app.securityModuleList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
+        <a ng-click="saveModuleForm()" class="mr btn btn-square btn-primary {{moduleCanEdit}}"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

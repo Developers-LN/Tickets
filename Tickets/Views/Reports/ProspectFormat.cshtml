@@ -1,0 +1,148 @@
+﻿@model Tickets.Models.Prospect
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Formato de Prospecto";
+
+    var awards = Model.Awards.OrderByDescending(a=>a.Value).GroupBy(a => a.TypesAward.Name).Select( a=> new{
+        awardName = a.FirstOrDefault().TypesAward.Name,
+        award = a
+    });
+    var config = new Tickets.Models.TicketsEntities().SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png"/>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <h4><b>@Model.Name</b></h4><br />
+            <span>@Model.Production BILLETES DIVIDIDOS EN @Model.LeafFraction SERIES DE @Model.LeafNumber <br /> FRACCIONES CADA UNA, PARTICIPANDO DESDE EL 00000 AL @(Model.Production -1)</span>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() </br>
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th colspan="6" class="text-center" style="background-color:aliceblue;">ADMINISTRACIÓN DE PRECIOS</th>
+                </tr>
+                <tr>
+                    <th class="text-left">TIPO DE PRECIO</th>
+                    <th class="text-right">BILLETES</th>
+                    <th class="text-right">SERIES</th>
+                    <th class="text-right">FRACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var price in Model.Prospect_Price)
+                {
+                    <tr>
+                        <td>@price.Catalog.NameDetail</td>
+                        <td class="text-right">@price.TicketPrice.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@price.SeriePrice.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@price.FactionPrice.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
+        <table class="table">
+            @{
+                var typeAwardQuantity = 0;
+                var typeAwardValue = 0.0m;
+                var typeAwardTotalValue = 0.0m;
+            }
+
+            <thead>
+                <tr>
+                    <th class="text-right"></th>
+                    <th class="text-left">
+                    </th>
+                    <th class="text-right">
+                        MONTO POR BILLETE
+                    </th>
+                    <th class="text-right">
+                        MONTO TOTAL DE PREMIOS
+                    </th>
+                </tr>
+            </thead> 
+            @foreach (var awardType in awards)
+            {
+                <thead>
+                    <tr>
+                        <th class="text-right">CANTIDAD</th>
+                        <th class="text-left">
+                            @awardType.awardName
+                        </th>
+                        <th class="text-right">
+                        </th>
+                        <th class="text-right">
+                        </th>
+                    </tr>
+                </thead>
+                    <tbody>
+                    @{
+                var totalTypeAwardQuantity = 0;
+                    var totalTypeAwardValue = 0.0m;
+                    var totalTypeAwardTotalValue = 0.0m;
+                     }
+                    @foreach (var award in awardType.award.OrderBy(t=>t.OrderAward))
+                    {
+                        totalTypeAwardQuantity += award.Quantity;
+                        totalTypeAwardValue += award.TotalValue;
+                        totalTypeAwardTotalValue += award.Value;
+                     <tr>
+                         <td class="text-right">
+                             @award.Quantity
+                         </td>
+                         <td>
+                             @award.Name
+                         </td>
+                         <td class="text-right">
+                             @award.Value.ToString("c",  new System.Globalization.CultureInfo("es-DO"))
+                         </td>
+                         <td class="text-right">
+                             @award.TotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))
+                         </td>
+                     </tr>   
+                    }
+                    @{
+                        typeAwardQuantity += totalTypeAwardQuantity;
+                        typeAwardValue += totalTypeAwardTotalValue;
+                        typeAwardTotalValue += totalTypeAwardValue;
+                    }
+                    <tr class="sub-total">
+                        <td class="text-right">@totalTypeAwardQuantity</td>
+                        <td></td>
+                        <td class="text-right">@totalTypeAwardTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@totalTypeAwardValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>                       
+                </tbody>  
+            }
+            <tfoot>
+                <tr class="total">
+                    <td class="text-right">@typeAwardQuantity</td>
+                    <td></td>
+                    <td class="text-right">@typeAwardTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right">@typeAwardValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr> 
+            </tfoot>
+        </table>
+    </div>
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

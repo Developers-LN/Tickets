@@ -1,0 +1,80 @@
+﻿@model Tickets.Models.Raffle
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Numeros Re-Impresos";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png"/>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>REPUBLICA DOMINICANA</b><br />
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION LOTERIA NACIONAL</b><br />
+            <b>NUMEROS REIMPRESOS DEL SORTEO #@Model.Id EN FECHA @Model.DateSolteo.ToShortDateString() </b>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">Numero</th>
+                    <th class="text-center">Cantidad de Reimpreción</th>
+                    <th class="text-center">Frac. Desde</th>
+                    <th class="text-center">Frac. Hasta</th>
+                    <th class="text-center">Total Fracción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var reprinteds = new List<Tickets.Models.TicketRePrintNumber>();
+                    Model.TicketRePrints.ToList().ForEach(t => reprinteds.AddRange(t.TicketRePrintNumbers));
+                    int totalNumber = 0;
+                    int totalRePrint = 0;
+                    int totalFraction = 0;
+                }
+                @foreach (var reprinted in reprinteds.GroupBy( r=> r.TicketAllocationNumber.Number) )
+                {
+                    totalRePrint += reprinted.Count();
+                    totalNumber += 1;
+                    totalFraction += (reprinted.FirstOrDefault().TicketAllocationNumber.FractionTo - reprinted.FirstOrDefault().TicketAllocationNumber.FractionFrom + 1) * reprinted.Count();
+                    <tr>
+                        <td class="text-center">@Tickets.Models.Utils.AddZeroToNumber( (Model.Prospect.Production - 1).ToString().Length,  (int)reprinted.FirstOrDefault().TicketAllocationNumber.Number)</td>
+                        <td class="text-center">@reprinted.Count()</td>
+                        <td class="text-center">@reprinted.FirstOrDefault().TicketAllocationNumber.FractionFrom</td>
+                        <td class="text-center">@reprinted.FirstOrDefault().TicketAllocationNumber.FractionTo</td>
+                        <td class="text-center">@(( reprinted.FirstOrDefault().TicketAllocationNumber.FractionTo - reprinted.FirstOrDefault().TicketAllocationNumber.FractionFrom + 1) * reprinted.Count())</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="total">
+                    <td class="text-center">@totalNumber.ToString("N0",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-center">@totalRePrint.ToString("N0",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center">@totalFraction.ToString("N0",  new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center" style="margin-bottom: 20px">
+        <b>Total Numeros Impreso: @totalNumber.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</b>
+    </div>
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

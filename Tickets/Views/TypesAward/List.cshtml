@@ -1,0 +1,43 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de Tipo de Premio";
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="TypesAwardController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-lg-12 text-right m-b-xs no-padder">
+                <a ng-click="editTypesAward()" class="mr btn btn-square btn-success">Agregar Tipo de Premio</a>
+            </div>
+            <div class="row-border hover ">
+                <table class="table dataTableGrid">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Creación</th>
+                            <th>Grupo</th>
+                            <th class="editColumm"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="typesAward in typesAwardList">
+                            <td>{{typesAward.Name}}</td>
+                            <td>{{typesAward.Description}}</td>
+                            <td>{{typesAward.CreationDesc}}</td>
+                            <td>{{typesAward.GroupDesc}}</td>
+                            <td>
+                                <a ng-click="editTypesAward(typesAward)" title="Modificar" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
+                                <a ng-click="deleteTypesAward(typesAward)" title="Borrar tipo de premio" class=" {{moduleCanDelete}} " ><i class=" fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- END table-responsive-->
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default">Salir</a>
+</div>

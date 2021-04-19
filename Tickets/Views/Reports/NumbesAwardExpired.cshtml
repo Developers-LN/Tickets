@@ -1,0 +1,121 @@
+﻿@model Tickets.Models.Raffle
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Numeros premiados Caducados";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png"/>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>REPUBLICA DOMINICANA</b><br />
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>NUMEROS PREMIADOS CADUCADOS PARA EL SORTEO NO. @Model.Id</b><br />
+            Caducado en fecha: @Model.DateSolteo.AddMonths(18).ToLongDateString()
+         </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>NÚMERO</th>
+                    <th class="text-right" style="width:20%">Monto</th>
+                    <th class="text-right" style="width:15%">Pagado</th>
+                    <th class="text-right" style="width:15%">No pagado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int numberCount = 0;
+                    var awardslist = Model.RaffleAwards.ToList();
+                    var awards = awardslist.OrderByDescending(n=>n.Award.Value).GroupBy(n=>n.Award.TypesAwardId)
+                        .Select(n=> new{
+                            typeAwardName = n.FirstOrDefault().Award.TypesAward.Name,
+                            awards = n
+
+                        }).ToList();
+                    var totalvalue = 0.0m;
+                    var totalValuePay = 0.0m;
+                    var totalValueNoPay = 0.0m;
+                }
+                @foreach (var typeAward in awards){
+                    var subtotal = 0.0m;
+                    var subTotalPay = 0.0m;
+                    var subTotalNoPay = 0.0m;
+                    var payment = 0.0m;
+                    <tr>
+                        <th colspan="4">@typeAward.typeAwardName</th>
+                    </tr>
+                    foreach( var award in typeAward.awards){
+                        string stringNumber = award.ControlNumber.ToString();
+                        var identifyB = Model.IdentifyBaches
+                            .Where(w => w.IdentifyNumbers.Where(p => p.TicketAllocationNumber.Number.ToString() == stringNumber).Any()).FirstOrDefault();
+
+                        int production = Model.Prospect.Production - 1;
+                        while (stringNumber.Length < production.ToString().Length)
+                        {
+                            stringNumber = "0" + stringNumber;
+                        }
+                        numberCount++;
+                        if (identifyB != null)
+                        {
+                            if(identifyB.IdentifyBachPayments.Count() > 0)
+                            {
+                                payment = identifyB.IdentifyBachPayments.Where(w => w.IdentifyBach.Id == identifyB.Id).FirstOrDefault().Value;
+                                subTotalPay += award.Award.Value;
+                            }
+                        }
+                        var NoPay = award.Award.Value - payment;
+                        subTotalNoPay += NoPay;
+                        subtotal += award.Award.Value;
+                        <tr>
+                            <td>@stringNumber @(award.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S? award.Fraction.ToString() : "")</td>
+                            <td class="text-right">@award.Award.Value.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td> 
+                            <td class="text-right">@payment.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right">@NoPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        </tr>
+                    }
+                    <tr class="sub-total b">
+                        <td></td>
+                        <td class="text-right">@subtotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@subTotalPay.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@subTotalNoPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        
+                    </tr>
+                    totalValuePay += subTotalPay;
+                    totalValueNoPay += subTotalNoPay;
+                    totalvalue += subtotal;
+                }
+            </tbody>
+            <tfoot>
+
+                <tr class="total b">
+                    <td class="text-left">Total Numeros...: @numberCount</td>
+                    <td class="text-right">Total:@totalvalue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right">Pagados: @totalValuePay.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right">No pagado: @totalValueNoPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

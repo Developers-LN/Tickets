@@ -1,0 +1,263 @@
+﻿@model List<Tickets.Models.Raffle>
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+    int clientId = (int)ViewBag.clientId;
+}
+
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>REPORTE GENERAL DE CLIENTE</b>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <div class="col-lg-6 no-padder text-left">
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+        </div>
+    </div>
+    <div>
+        <div class="col-lg-12 no-padder">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">Mayorista</th>
+                        <th class="text-right">Valor asignado</th>
+                        <th class="text-right">Valor impreso</th>
+                        <th class="text-right">Valor facturado</th>
+                        <th class="text-right">Descuento</th>
+                        <th class="text-right">Devoluciones</th>
+                        <th class="text-right">Pagos por Premios</th>
+                        <th class="text-right">Ajustes</th>
+                        <th class="text-right">Pagos en Efectivo</th>
+                        <th class="text-right">Cantidad Restante</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{  decimal totalGeneralAllocated = 0.0m;
+                        decimal totalGeneralPrinted = 0.0m;
+                        decimal totalGeneralInvoice = 0.0m;
+                        decimal totalGeneralDiscount = 0.0m;
+                        decimal totalGeneralReturnedPayments = 0.0m;
+                        decimal totalGeneralPayment = 0.0m;
+                        decimal totalGeneralCredit = 0.0m;
+                        decimal totalGeneralOther = 0.0m;
+                        decimal totalGeneralRest = 0.0m;
+                    }
+                    @foreach (var raffle in Model)
+                    {
+                        decimal totalValuec = 0.0m;
+                        decimal totalValueP = 0.0m;
+
+                        decimal totalAllocated = 0.0m;
+                        decimal totalPrinted = 0.0m;
+                        decimal totalInvoice = 0.0m;
+                        decimal totalDiscount = 0.0m;
+                        decimal totalReturnedPayments = 0.0m;
+                        decimal totalGeneral = 0.0m;
+                        decimal totalRest = 0.0m;
+                        decimal totalPayment = 0.0m;
+                        decimal totalCredit = 0.0m;
+                        decimal totalOther = 0.0m;
+
+                        var raffleName = raffle.Name + " - " + raffle.Id;
+                        var invoices = raffle.Invoices.Where(i => i.ClientId == clientId || clientId == 0).AsEnumerable()
+                            .GroupBy(g => g.ClientId)
+                            .Select(i => new
+                            {
+                                clientId = i.FirstOrDefault().ClientId,
+                                clientName = i.FirstOrDefault().ClientId + " - " + i.FirstOrDefault().Client.Name,
+
+                                allocations = i.FirstOrDefault().Raffle.TicketAllocations.Where(w => w.ClientId == clientId || clientId == 0).Select(s => new
+                                {
+                                    id = s.Id,
+                                    createDate = s.CreateDate,
+                                    client = s.Client.Name,
+                                    clientId = s.ClientId,
+                                    fractions = s.TicketAllocationNumbers.FirstOrDefault().FractionTo - s.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1,
+                                    numbers = s.TicketAllocationNumbers.Count,
+                                    amount = s.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == s.Client.PriceId).FactionPrice,
+                                    sheets = s.Raffle.Prospect.LeafNumber
+                                }).ToList(),
+
+                                printedAllocations = i.FirstOrDefault().Raffle.TicketAllocations
+                                .Where(w => (w.ClientId == clientId || clientId == 0)
+                                && (w.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Printed || w.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Invoiced)).Select(s => new
+                                {
+                                    id = s.Id,
+                                    createDate = s.CreateDate,
+                                    client = s.Client.Name,
+                                    clientId = s.ClientId,
+                                    fractions = s.TicketAllocationNumbers.FirstOrDefault().FractionTo - s.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1,
+                                    numbers = s.TicketAllocationNumbers.Count,
+                                    amount = s.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == s.Client.PriceId).FactionPrice,
+                                    sheets = s.Raffle.Prospect.LeafNumber
+                                }).ToList(),
+
+                                invoiceValue = i.Select(iv => iv.InvoiceTickets.Select(it => it.Quantity * it.PricePerFraction).Aggregate((x, y) => x + y)).Aggregate((x, y) => x + y),
+
+                                discountValue = i.Select(iv => (iv.Discount * iv.InvoiceTickets.Select(it => it.Quantity * it.PricePerFraction).Aggregate((x, y) => x + y)) / 100).Aggregate((x, y) => x + y),
+
+                                paymentValue = i.Where(p => p.PaymentType != (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                                                .Select(p => p.ReceiptPayments.Select(rp => rp.TotalCash + rp.TotalCheck + rp.TotalCredit).Sum()).Sum(),
+
+                                returnedValue = i.Select(p => p.ReceiptPayments.Select(rp => rp.NoteCreditReceiptPayments.Where(nc => nc.NoteCredit.RaffleId.HasValue).Select(nc => nc.TotalCash).Sum()).Sum()).Sum(),
+
+                                paymentIdentify = i.Select(p => p.ReceiptPayments.Select(rp => rp.NoteCreditReceiptPayments.Select(nc => nc.NoteCredit.IdentifyBaches.Any() ? nc.TotalCash : 0).Sum()).Sum()).Sum(),
+
+                                otherPayment = i.Select(p => p.ReceiptPayments.Select(rp => rp.NoteCreditReceiptPayments.Select(nc => (nc.NoteCredit.IdentifyBaches.Any() == false && nc.NoteCredit.RaffleId.HasValue == false) ? nc.TotalCash : 0).Sum()).Sum()).Sum(),
+
+                            }).ToList();
+
+                        
+                        if (invoices.Count != 0)
+                        {
+                            <tr>
+                                <th colspan="10" class="text-left" style="background-color:#C4EECD">@raffleName</th>
+                            </tr>
+
+                        foreach (var client in invoices)
+                        {
+                            decimal allocatedValue = 0.0m;
+                            foreach (var allocation in client.allocations.Where(w => w.clientId == client.clientId))
+                            {
+                                int Fractions = allocation.fractions * allocation.numbers;
+                                var Value = allocation.amount * Fractions;
+                                allocatedValue += Value;
+                            };
+
+
+                            decimal printedValue = 0.0m;
+                            foreach (var printed in client.printedAllocations.Where(w => w.clientId == client.clientId))
+                            {
+                                int Fractions = printed.fractions * printed.numbers;
+                                var Value = printed.amount * Fractions;
+                                printedValue += Value;
+                            };
+
+                            totalValuec = allocatedValue;
+                            totalValueP = printedValue;
+
+                            var restant = client.invoiceValue - (client.discountValue + client.returnedValue + client.paymentValue + client.paymentIdentify + client.otherPayment);
+                            <tr>
+                                <td class="text-left">@client.clientName</td>
+                                <td class="text-right">@((totalValuec).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@((totalValueP).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@((client.invoiceValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@((client.discountValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@((client.returnedValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@((client.paymentIdentify).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@((client.otherPayment).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@((client.paymentValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@((restant).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            </tr>
+                            totalAllocated += totalValuec;
+                            totalPrinted += totalValueP;
+                            totalInvoice += client.invoiceValue;
+                            totalDiscount += client.discountValue;
+                            totalReturnedPayments += client.returnedValue;
+                            totalPayment += client.paymentValue;
+                            totalCredit += client.paymentIdentify;
+                            totalOther += client.otherPayment;
+                            totalRest += restant;
+                        }
+
+                        <tr class="sub-total" style="font-weight:bold">
+                            <td class="text-right">Total sorteo...:</td>
+                            <td class="text-right">@(totalAllocated.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            <td class="text-right">@(totalPrinted.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            <td class="text-right">@(totalInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            <td class="text-right">@(totalDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            <td class="text-right">@(totalReturnedPayments.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            <td class="text-right">@(totalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            <td class="text-right">@(totalOther.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            <td class="text-right">@(totalPayment.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            <td class="text-right">@(totalRest.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        </tr>
+                            totalGeneralAllocated += totalAllocated;
+                            totalGeneralPrinted += totalPrinted;
+                            totalGeneralInvoice += totalInvoice;
+                            totalGeneralDiscount += totalDiscount;
+                            totalGeneralReturnedPayments += totalReturnedPayments;
+                            totalGeneralPayment += totalPayment;
+                            totalGeneralCredit += totalCredit;
+                            totalGeneralOther += totalOther;
+                            totalGeneralRest += totalRest;
+                        }
+
+                    }
+                </tbody>
+                <tfoot>
+                    <tr class="total" style="font-weight:bold">
+                        <td class="text-right">Total General...:</td>
+                        <td class="text-right">@(totalGeneralAllocated.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-right">@(totalGeneralPrinted.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-right">@(totalGeneralInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-right">@(totalGeneralDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-right">@(totalGeneralReturnedPayments.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-right">@(totalGeneralCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-right">@(totalGeneralOther.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-right">@(totalGeneralPayment.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-right">@(totalGeneralRest.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                    </tr>
+                    
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

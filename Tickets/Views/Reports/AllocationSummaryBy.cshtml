@@ -1,0 +1,128 @@
+﻿@model List<Tickets.Models.TicketAllocation>
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Resumen de Asignaciones";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
+    string adminName = config != null ? config.LoteryAdmin : "";
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png"/>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
+            <h3>
+                <b>
+                    RESUMEN DE ASIGNACIONES DEL SORTEO No.@Model.FirstOrDefault().RaffleId <br />
+                    Fecha del Sorteo @Model.FirstOrDefault().Raffle.DateSolteo.ToShortDateString()
+                </b>
+            </h3>
+            
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-left"><h5><b>ASIGNACIONES</b></h5></th>
+                    <th class="text-left"><h5><b>FECHA</b></h5></th>
+                    <th class="text-right"><h5><b>FRACCIONES</b></h5></th>
+                    <th class="text-right"><h5><b>HOJAS</b></h5></th>
+                    <th class="text-right"><h5><b>NUMEROS</b></h5></th>
+                    <th class="text-right"><h5><b>MONTO</b></h5></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                var clients = Model.AsEnumerable().GroupBy(c=> c.ClientId).Select(c => new
+                    {
+                        client = c.FirstOrDefault().Client.Name,
+                        allocations = c.Select( s => new{
+                            id = s.Id,
+                            createDate = s.CreateDate,
+                            client = s.Client.Name,
+                            clientId = s.ClientId,
+                            fractions = s.TicketAllocationNumbers.FirstOrDefault().FractionTo - s.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1,
+                            numbers = s.TicketAllocationNumbers.Count,
+                            amount = s.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == s.Client.PriceId).FactionPrice,
+                            sheets = s.Raffle.Prospect.LeafNumber
+                    }).ToList()
+                }).ToList();
+
+                var totalValue = 0.0m;
+                int totalFraction = 0;
+                int totalNumber = 0;
+                int totalSheets = 0;
+                }
+                @foreach (var client in clients)
+                {
+                    var totalValuec = 0.0m;
+                    int totalFractionc = 0;
+                    int totalNumberc = 0;
+                    int totalSheetsc = 0;
+                    
+                    <tr class="text-left">
+                        <th class="text-left" colspan="6" style="background-color:aliceblue; padding-left: 70px">@client.client</th>
+                    </tr>
+                    foreach (var allocation in client.allocations)
+                    {
+                        int Fractions = allocation.fractions * allocation.numbers;
+                        var Value = allocation.amount * Fractions;
+                        int Sheets = allocation.numbers * allocation.sheets;
+
+                    <tr>
+                        <td class="text-left">@allocation.id</td>
+                        <td class="text-left">@allocation.createDate</td>
+                        <td class="text-right">@Fractions.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@Sheets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@allocation.numbers.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+
+                        totalNumberc += allocation.numbers;
+                        totalFractionc += Fractions;
+                        totalValuec += Value;
+                        totalSheetsc += Sheets;
+                    }
+                    if (clients.Count > 1) { 
+                        <tr class="total">
+                            <td class="text-left"></td>
+                            <td class="text-left"><b>Total Cliente...:</b></td>
+                            <td class="text-right"><b>@totalFractionc.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                            <td class="text-right"><b>@totalSheetsc.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                            <td class="text-right"><b>@totalNumberc.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                            <td class="text-right"><b>@totalValuec.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                        </tr>
+                    }
+                totalNumber += totalNumberc;
+                totalFraction += totalFractionc;
+                totalValue += totalValuec;
+                totalSheets += totalSheetsc;
+                }
+                <tr class="total">
+                    <td class="text-left"><h4></h4></td>
+                    <td class="text-left"><h4><b>Total...:</b></h4></td>
+                    <td class="text-right"><h4><b>@totalFraction.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></h4></td>
+                    <td class="text-right"><h4><b>@totalSheets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></h4></td>
+                    <td class="text-right"><h4><b>@totalNumber.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></h4></td>
+                    <td class="text-right"><h4><b>@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></h4></td>
+                </tr>
+            </tbody>
+            </table>
+    </div>
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

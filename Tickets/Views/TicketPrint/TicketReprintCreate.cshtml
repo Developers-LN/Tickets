@@ -1,0 +1,110 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Reimpresión de Billetes";
+    var context = new Tickets.Models.TicketsEntities();
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="ReprintCreateController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <input type="hidden"
+                       ng-model="ticket.Id" />
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
+                        <div class="col-lg-12">
+                            <select ng-required="true" class="form-control dropdown-select2" ng-model="reprint.raffleId" ng-change="updateAllocations()" ng-if="allocationId == 0">
+                                <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                            </select>
+                            <h4 ng-if="allocationId != 0"><label class="label label-lg label-info">{{allocation.raffleDesc}}</label></h4>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-lg-12 control-label-left">Cliente:  <span class="color-red">*</span></label>
+                        <div class="col-lg-12">
+                            <select ng-required="true" class="form-control dropdown-select2" ng-model="reprint.clientId" ng-change="updateAllocations()" ng-if="allocationId == 0">
+                                <option selected="selected" disabled="disabled" value="0">Seleccione un cliente</option>
+                                <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
+                            </select>
+                            <h4 ng-if="allocationId != 0"><label class="label label-info">{{allocation.clientDesc}}</label></h4>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-lg-12 control-label-left">Observación:</label>
+                        <div class="col-lg-12">
+                            <textarea class="form-control input-sm"
+                                      ng-model="reprint.note"
+                                      style="max-height: 109px; height: 97px;"></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-lg-12 control-label-left">Asignación:  <span class="color-red">*</span></label>
+                        <div class="col-lg-12" ng-if="allocationId == 0">
+                            <div class="checkbox c-checkbox col-lg-4" style="margin-top:5px;" ng-repeat="allocation in allocations">
+                                <label>
+                                    <input type="checkbox" id="allocation-{{allocation.id}}" ng-click="updateAllocationNumbers()">
+                                    <span class="fa fa-check"></span>#{{allocation.id}}
+                                    <a target="_blank" href="/Reports/AllocatinosNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-eye"></i></a>
+                                </label>
+                            </div>
+                            <span class="text-warning" style="font-size: 13pt;" ng-show="allocations.length === 0">
+                                Este cliente no tiene asignaciones
+                            </span>
+                        </div>
+                        <div class="col-lg-12" ng-if="allocationId != 0">
+                            <h4>
+                                <label class="label label-lg label-info">#{{allocation.id}}</label>
+                                <a target="_blank" href="/Reports/AllocatinosNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-eye"></i></a>
+                            </h4>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col-lg-12 m-b-xs no-padder m-t-xs">
+                <table class="table dataTableGrid">
+                    <thead>
+                        <tr>
+                            <th style="width: 32px;">
+                                <div class="checkbox c-checkbox needsclick">
+                                    <label class="needsclick m-r-xs">
+                                        <input type="checkbox" class="needsclick" ng-click="selectAllNumber($event)" />
+                                        <span class="fa fa-check"></span>
+                                    </label>
+                                </div>
+                            </th>
+                            <td>Codigo</td>
+                            <th>Numero</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="number in reprint.ticketReprintNumbers">
+                            <td>
+                                <div class="checkbox c-checkbox needsclick">
+                                    <label class="needsclick m-r-xs">
+                                        <input type="checkbox" ng-checked="number.selected" class="needsclick" ng-click="selectNumber($event, number)" />
+                                        <span class="fa fa-check"></span>
+                                    </label>
+                                </div>
+                            </td>
+                            <td>#{{number.id}}</td>
+                            <td ng-bind="number.number"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ng-click="returnTo()" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
+        <a ng-click="saveTicketForm()" class="mr btn btn-square btn-primary {{ticket.id > 0? moduleCanEdit: moduleCanAdd }}"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

@@ -1,0 +1,170 @@
+﻿@model Tickets.Models.Raffle
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+}
+
+<style>
+    .col-lg-12{
+        width: 100%;
+        float: left;
+    }
+    .col-lg-4 {
+        width: 33.333%;
+         float: left;
+    }
+    .col-lg-6{
+        width: 50%;
+        float: left;
+    } 
+    
+    .text-center {
+        text-align: center;
+    }
+    .text-right {
+        text-align:right;
+    }
+    .text-left {
+        text-align:left;
+    }
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png"/>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>DETALLE DE FACTURAS SORTEO NO.@Model.Id DE FECHA @Model.DateSolteo.ToShortDateString()</b>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br/>
+            <b>Numero del Sorteo: </b> @Model.Id 
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-left">FACTURA</th>
+                    <th class="text-right">NUMERO</th>
+                    <th class="text-right">FRACCIONES</th>
+                    <th class="text-right">CANDIDAD</th>
+                    <th class="text-right">PRECIO POR FRACCION</th>
+                    <th class="text-right">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var clientId = ViewBag.ClientId == null ? 0 : (int)ViewBag.ClientId;
+                    var invoiceId = ViewBag.invoiceId == null ? 0 : (int)ViewBag.invoiceId;
+                    var invoices = context.Invoices.Where(n => n.RaffleId == Model.Id && (clientId == 0 || n.ClientId == clientId) && (invoiceId == 0 || n.Id == invoiceId)).
+                        GroupBy(i=> i.ClientId).Select( i=>new{
+                            Invoices = i,
+                            Client = i.FirstOrDefault().Client
+                        });
+                    
+                    var totalValue = 0.0m;
+                    int totalFraction = 0;
+                    int totalNumber = 0;
+                    decimal totalClientDiscount = 0.00m;
+                }
+                @foreach (var client in invoices)
+                {
+                    int subTotalNumber = 0, subTotalFraction = 0;
+                    decimal subTotalValue = 0.0m, clientDiscount = 0.00m;
+                    <tr>
+                        <th colspan="6">@client.Client.Name</th>
+                    </tr>
+                    foreach( var invoice in client.Invoices){
+                        foreach (var number in invoice.InvoiceTickets)
+                        {
+                            subTotalNumber += 1;
+                            subTotalFraction += number.Quantity;
+                            var priceFraction = invoice.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == invoice.Client.PriceId).FactionPrice;
+                            var stringNumber = number.TicketAllocationNumber.Number.ToString();
+                            var subTotal = number.Quantity * priceFraction;
+                            <tr>
+                                <td class="text-left"><b>@invoice.Id</b></td>
+                                <td class="text-right">@stringNumber</td>
+                                <td class="text-right">@number.TicketAllocationNumber.FractionFrom - @number.TicketAllocationNumber.FractionTo</td>
+                                <td class="text-right">@number.Quantity</td>
+                                <td class="text-right">@priceFraction.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-right">@subTotal.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                            </tr>
+                            subTotalValue += subTotal;
+                        }
+                    }
+                    clientDiscount = (subTotalValue * client.Client.Discount) / 100;
+                    <tr class="" style="border-top: 2px solid black">
+                        <td class="text-right"></td>
+                        <td class="text-right">@subTotalNumber</td>
+                        <td class="text-right"></td>
+                        <td class="text-right">@subTotalFraction</td>
+                        <td class="text-right"></td>
+                        <td class="text-right"  style="font-weight:bold;">Sub Total: @subTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                    <tr class="">
+                        <td class="text-right"></td>
+                        <td class="text-right"></td>
+                        <td class="text-right"></td>
+                        <td class="text-right"></td>
+                        <td class="text-right"></td>
+                        <td class="text-right" style="font-weight:bold;">@(client.Client.Discount)% Descuento del Cliente: @clientDiscount.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                    <tr class="">
+                        <td class="text-right"></td>
+                        <td class="text-right"></td>
+                        <td class="text-right"></td>
+                        <td class="text-right"></td>
+                        <td class="text-right"></td>
+                        <td class="text-right" style="font-weight:bold;">Total: @((subTotalValue - clientDiscount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                    </tr>
+                    totalNumber += subTotalNumber;
+                    totalFraction += subTotalFraction;
+                    totalValue += subTotalValue;
+                    totalClientDiscount += clientDiscount;
+                }
+            </tbody>
+            <tfoot>
+                <tr class="" style="border-top: 4px double black">
+                    <td class="text-right"></td>
+                    <td class="text-right">@totalNumber</td>
+                    <td class="text-right"></td>
+                    <td class="text-right">@totalFraction</td>
+                    <td class="text-right"></td>
+                    <td class="text-right" style="font-weight:bold;"> Sub Total: @totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr class="">
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right" style="font-weight:bold;">Descuento: @totalClientDiscount.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr class="">
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right" style="font-weight:bold;">Total General: @((totalValue - totalClientDiscount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

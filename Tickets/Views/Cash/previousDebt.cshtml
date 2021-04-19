@@ -1,0 +1,71 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Deuda Anterior de Clientes";
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="PreviousDebtController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 m-b-xs no-padder">
+                    <div class="col-lg-12 no-padder" ng-show="identifyBachId <= 0">
+                    </div>
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <label class="col-lg-12 control-label-left">Clientes: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="cash.ClientId" ng-change="getDebt()">
+                                    <option ng-repeat="client in clients" value="{{client.Id}}">{{client.Id}} - {{client.Name}}</option>
+                                </select>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 well no-padder">
+                        <div class="col-lg-12 no-padder">
+                            <div class="col-lg-12" ng-if="PreviousDebt>0">Monto en Deuda Anterior: <b>{{parseMoney(PreviousDebt)}}</b></div>
+                            <div class="col-lg-12" ng-if="PreviousDebt>0">Monto en Pagos Anteriores: <b>{{parseMoney(PrevieusPayment)}}</b></div>
+                            <div class="col-lg-12">Monto en Deuda Restante: <b>{{parseMoney(PreviousDebt - PrevieusPayment)}}</b></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Monto a Pagar:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           ng-model="cash.PaimentValue"
+                                           class="form-control input-sm"
+                                           ng-max="(PreviousDebt - PrevieusPayment)"
+                                           ng-required="true"
+                                           ng-min="1" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Concepto:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <textarea class="form-control input-sm"
+                                              ng-model="cash.Note"
+                                              ng-required="true"
+                                              style="max-height: 109px; height: 97px;"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12">
+                        <fieldset>
+                            <div class="form-group">
+                                <a ui-sref="app.dashboard" class="mr btn btn btn-default" href="#/dashboard"><i class="fa fa-arrow-left "></i> Salir</a>
+                                <a ng-click="previousDebtPaymentSave()" class="mb-sm btn btn-success"><i class="fa fa-floppy-o"></i> Realizar Pago</a>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

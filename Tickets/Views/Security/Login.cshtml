@@ -1,0 +1,50 @@
+@{
+    Layout = "~/Views/Shared/_LayoutClear.cshtml";
+    ViewBag.Title = "Iniciar sesión";
+}
+<div class="container container-sm animated fadeInDown" ng-controller="SecurityController">
+    <div class="center-block mt-xl">
+        <!-- START panel-->
+        <img src="~/Images/logo.png" width="190" style="width:190px" alt="Image" class="center-block img-rounded" />
+        <div class="panel">
+            <div class="panel-body">
+                <p style="text-align:center; color:green" class="pv text-bold text-20-pt">Sistema de Billetes</p>
+                <p class="pv text-bold text-20-pt">@ViewBag.Title</p>
+                <form role="form" class="mb-lg">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group has-feedback mb">
+                                <input 
+                                    type="text" 
+                                     placeholder="Nombre de Usuario"
+                                     autocomplete="off" 
+                                    class="form-control"
+                                    id="UserName"
+                                    onkeypress="TextboxKeyPress(event)"/>
+                                <span class="fa fa-user form-control-feedback text-muted"></span>
+                            </div>
+                            <br />
+                            <div class="form-group has-feedback">
+                                <input
+                                     type="password"
+                                     placeholder="Contraseña"
+                                     class="form-control"
+                                     id="Password" 
+                                     required
+                                     onkeypress="TextboxKeyPress(event)"
+                                     />
+                                <span class="fa fa-lock form-control-feedback text-muted"></span>
+                            </div>
+                            <a onclick="loginFormSubmit()" class="btn btn-block btn-success mb">Iniciar</a>
+                        </div>
+                    </div>
+                </form>
+                <div style="text-align:center;">
+                    <!--<a href="http://45.229.148.103" style="color:green;">Ir al Menu</a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="~/Scripts/custom/login.js"></script>

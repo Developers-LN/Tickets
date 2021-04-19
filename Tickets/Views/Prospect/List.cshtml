@@ -1,0 +1,48 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de Prospectos";
+}
+<div class="col-lg-12 no-padder" ng-controller="ProspectListController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!-- START panel-->
+                <div class="col-lg-12 text-right m-b-xs no-padder">
+                    <a href="#/prospect/create/wizard/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Agregar Prospecto</a>
+                </div>
+                <div class="row-border hover">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th class="hidden-xs">Precio</th>
+                                <th class="hidden-xs">Producción</th>
+                                <th class="hidden-xs hidden-sm hidden-md">Impresion</th>
+                                <th>Estado</th>
+                                <th class="editColumm">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="prospect in prospects">
+                                <td>{{prospect.name}}</td>
+                                <td class="hidden-xs">{{parseMoney(prospect.price)}}</td>
+                                <td class="hidden-xs">{{parseNumber(prospect.production)}}</td>
+                                <td class="hidden-xs hidden-sm hidden-md">{{prospect.impresionTypeDesc}}</td>
+                                <td>{{prospect.statuDesc}}</td>
+                                <td>
+                                    <a ng-if="prospect.statu === 20" ng-click="startWorkflowProspect(prospect)" title="Enviar prospecto a aprobación" class="{{moduleCanAdd}}"><i class="fa fa-external-link"></i></a>
+                                    <a ng-if="prospect.statu !== 23" href="#/prospect/create/wizard/{{prospect.id}}" title="Modificar" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
+                                    <a ng-if="prospect.statu === 23" href="#/prospect/viewer/{{prospect.id}}" title="Visualizar" class="{{moduleCanEdit}}"><i class="fa fa-eye"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

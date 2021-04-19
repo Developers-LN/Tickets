@@ -1,0 +1,186 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Creacion de Asignacion de Billetes";
+    var context = new Tickets.Models.TicketsEntities();
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="AllocationCreateController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-7 no-padder">
+                    <div class="col-lg-12 no-padder" ng-show="ticket.id == 0">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="ticket.raffleId" ng-change="changeValues()">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                        <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Cliente:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="ticket.clientId" ng-change="changeValues()">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un cliente</option>
+                                        <option ng-repeat="client in clients" value="{{client.value}}">{{client.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">{{ticket.typeId == @((int)Tickets.Models.Enums.AllocationTypeEnum.Tickets)? 'Fraccion' : 'Cantidad'}} Desde:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           ng-min="1"
+                                           ng-change="updateTotal()"
+                                           ng-model="ticket.fractionFrom"
+                                           class="form-control input-sm"
+                                           ng-required="true"
+                                           disabled>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">{{ticket.typeId == @((int)Tickets.Models.Enums.AllocationTypeEnum.Tickets)? 'Fraccion' : 'Cantidad'}} Hasta:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           ng-min="ticket.fractionFrom + 1"
+                                           ng-max="maxFraction"
+                                           ng-change="updateTotal()"
+                                           ng-model="ticket.fractionTo"
+                                           class="form-control input-sm"
+                                           ng-required="true"
+                                           disabled>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="col-lg-5 no-padder" ng-show="ticket.id == 0">
+                    <div class="col-lg-12 no-padder well">
+                        <div class="col-lg-12">
+                            <h4><b>Datos del Prospecto</b></h4>
+                        </div>
+                        <div class="col-lg-12">
+                            Nombre: <b>{{prospect.name}}</b>
+                        </div>
+                        <div class="col-lg-12">
+                            Grupo: <b>{{prospect.groupDesc}}</b>
+                        </div>
+                        <div class="col-lg-12">
+                            Produccion: <b>{{parseMoney(production).substring(3, parseMoney(production).length - 3)}}</b>
+                        </div>
+                        <div class="col-lg-12">
+                            {{ticket.typeId == @((int)Tickets.Models.Enums.AllocationTypeEnum.Tickets)? 'Fracciones' : 'Cantiad'}}: <b>{{maxFraction}}</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 well">
+                    <h4>Numeros</h4>
+                    <div class="col-lg-12 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <div class="radio c-radio  m-l-xs">
+                                    <label>
+                                        <input type="radio" name="numbers" id="ticketAllocateNumber" value="number" checked="checked">
+                                        <span class="fa fa-circle"></span>Numero
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="numbers" value="range" id="ticketAllocateRangeNumber">
+                                        <span class="fa fa-circle"></span>Rango de Numero
+                                    </label>
+                                </div>
+                                <div class="col-lg-12" id="numberContainer">
+                                    <input type="number"
+                                           ng-min="0"
+                                           ng-max="production -1"
+                                           ng-keyup="verifyKeydown($event)"
+                                           ng-model="ticketNumber.number"
+                                           class="form-control input-sm"
+                                           ng-required="true">
+                                </div>
+                                <div class="col-lg-12 hide" id="rangeNumberContainer">
+                                    <label class="col-lg-1 no-padder">
+                                        Desde
+                                    </label>
+                                    <div class="col-lg-4">
+                                        <input type="number"
+                                               ng-max="production -1"
+                                               ng-min="0"
+                                               ng-model="ticketNumber.numberFrom"
+                                               class="form-control input-sm"
+                                               ng-required="true">
+                                    </div>
+                                    <label class="col-lg-1 no-padder text-right">
+                                        Hasta
+                                    </label>
+                                    <div class="col-lg-4">
+                                        <input type="number"
+                                               ng-max="production -1"
+                                               ng-min="ticketNumber.numberFrom + 1"
+                                               ng-model="ticketNumber.numberTo"
+                                               ng-keyup="verifyKeydown($event)"
+                                               class="form-control input-sm"
+                                               ng-required="true">
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="col-lg-12 m-b-xs no-padder text-right">
+                            <a ng-click="clearTicketNumber()" class="btn btn-oval btn-warning btn-sm"><i class="fa fa-times"></i>Cancelar</a>
+                            <a ng-click="addNumber()" class="btn btn-oval btn-success btn-sm"><i class="fa fa-plus"></i>Agregar</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 m-b-xs no-padder">
+                        <table class="table dataTableGrid">
+                            <thead>
+                                <tr>
+                                    <th>Numero</th>
+                                    <th>Fracciones</th>
+                                    <th>Precio</th>
+                                    <th>Total</th>
+                                    <th class="editColumm">Accion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="number in ticket.ticketAllocationNumbers">
+                                    <td>{{addZeroToNumber((production - 1), number.number)}}</td>
+                                    <td>{{number.fractionTo - number.fractionFrom + 1}}</td>
+                                    <td>{{parseMoney(fractionPrice)}}</td>
+                                    <td>{{parseMoney((number.fractionTo - number.fractionFrom + 1) * fractionPrice)}}</td>
+                                    <td>
+                                        <a ng-click="deleteNumber(number)" title="Borrar Numero" ng-if="number.id == 0"><i class="fa fa-times"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>{{ticket.ticketAllocationNumbers.length}}</td>
+                                    <td>{{parseNumber(total.fraction)}}</td>
+                                    <td></td>
+                                    <td>{{parseMoney(total.total)}}</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ng-click="returnTo()" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Cancelar</a>
+        <a ng-click="saveTicketForm()" class="mr btn btn-square btn-primary {{ticket.Id > 0? moduleCanEdit: moduleCanAdd }}"><i class="fa fa-floppy-o"></i>Guardar</a>
+    </div>
+</div>

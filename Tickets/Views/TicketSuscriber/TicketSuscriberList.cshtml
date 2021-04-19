@@ -1,0 +1,56 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de Billetes Abonado";
+}
+<div class="col-lg-12 no-padder" ng-controller="SuscriberListController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-6 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Cliente: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="ClientId" ng-change="updateSuscriber()">
+                                    <option selected="selected" value="0">Todo los cliente</option>
+                                    <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="col-lg-6 text-right m-b-xs no-padder">
+                    <a href="/#/ticket/suscriber/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Agregar Abonado de Billetes</a>
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Cantidad de Numero</th>
+                                <th>Fecha</th>
+                                <th class="editColumm">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="ticket in ticketList">
+                                <td>{{ticket.clientDesc}}</td>
+                                <td>{{ticket.numberCount}}</td>
+                                <td>{{(ticket.createDate | date:"dd/MM/yyyy h:mm:ss a")}}</td>
+                                <td>
+                                    <a href="/#/ticket/suscriberDetails/{{ticket.id}}" title="Ver Detalle del abonado" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
+                                    <a ng-click="deleteTicket(ticket)" title="Cancelar" class="{{moduleCanDelete}}"><i class="fa fa-times"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

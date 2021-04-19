@@ -1,0 +1,46 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de clientes para aprobar";
+}
+<div class="col-lg-12 no-padder" ng-controller="ClientController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Sometido Por</th>
+                                <th>Fecha Sometido</th>
+                                <th>Aprobaciones</th>
+                                <th>Aprobar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="workflow in workflowList">
+                                <td>{{workflow.Client.Name}}</td>
+                                <td>{{workflow.UserName}}</td>
+                                <td>{{workflow.CreateDate}}</td>
+                                <td>
+                                    <div class="progress text-center progress-striped">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{workflow.ApprovedCount}}" aria-valuemin="0" aria-valuemax="{{workflow.TotalAproved}}" style="width: {{100 * workflow.ApprovedCount / workflow.TotalAproved}}%;">
+                                        </div>
+                                        <span style="color:black; margin-left: -{{100 * workflow.ApprovedCount / workflow.TotalAproved}}%;">{{workflow.ApprovedCount}} de {{workflow.TotalAproved}}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a ng-click="approvedClientWorkflow(workflow)" title="Aprobar Cliente" class="{{moduleCanEdit}}"><i class="fa fa-check-circle"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg">
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i>Salir</a>
+</div>

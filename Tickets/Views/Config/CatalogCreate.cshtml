@@ -1,0 +1,79 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Creación de Catalogo";
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="ConfigController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <input type="hidden"
+                       ng-model="catalog.Id" />
+                <input type="hidden"
+                       ng-model="catalog.IdGroup" />
+                <input type="hidden"
+                       ng-model="catalog.IdDetail" />
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-lg-12 control-label-left">Nombre del grupo: <span class="color-red">*</span></label>
+                        <div class="col-lg-12">
+                            <input type="text"
+                                   ng-model="catalog.NameGroup"
+                                   class="form-control"
+                                   ng-required="true">
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-lg-12 control-label-left">Nombre del catalogo: </label>
+                        <div class="col-lg-12">
+                            <input type="text"
+                                   ng-model="catalog.NameDetail"
+                                   class="form-control"
+                                   ng-required="true">
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-lg-12 control-label-left">Descripción del catalogo: </label>
+                        <div class="col-lg-12">
+                            <textarea class="form-control"
+                                      ng-model="catalog.Description"
+                                      style="max-height: 109px; height: 109px;"></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-lg-12 control-label-left">Descripción 2 del catalogo: </label>
+                        <div class="col-lg-12">
+                            <textarea class="form-control"
+                                      ng-model="catalog.Description2"
+                                      style="max-height: 109px; height: 109px;"></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group">
+                        <div class="checkbox c-checkbox needsclick col-lg-12">
+                            <label class="needsclick m-r-xs">
+                                <input type="checkbox"
+                                       value=""
+                                       checked="checked"
+                                       class="needsclick"
+                                       ng-model="catalog.Statu" />
+                                <span class="fa fa-check"></span>Activo
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ui-sref="app.configCatalogList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
+        <a ng-click="saveCatalogForm()" class="mr btn btn-square btn-primary {{catalog.Id > 0? moduleCanEdit: moduleCanAdd }}"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

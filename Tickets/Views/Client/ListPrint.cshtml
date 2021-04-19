@@ -1,0 +1,69 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Reportes por Cliente";
+}
+<div class="col-lg-12 no-padder" ng-controller="ClientPrintController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-6 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control dropdown-select2" ng-model="RaffleId">
+                                    <option selected="selected" disabled="disabled" value="0">Todos los Sorteos</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.Id}}">{{raffle.Id}} - {{raffle.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Nombre</th>
+                                <th class="text-left">RNC</th>
+                                <th class="text-center">Devoluciones</th>
+                                <th class="text-center">Asignaciones</th>
+                                <th class="text-center">Facturas</th>
+                                <th class="text-center">Historial de Pago</th>
+                                <th class="text-center">Deuda Anterior</th>
+                                <th class="text-center">Asignaciones Premiadas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="client in clientList">
+                                <td class="text-left">{{client.Name}}</td>
+                                <td class="text-left">{{client.RNC}}</td>
+                                <td class="text-center">
+                                    <a href="/Reports/ReturnedNumbers?raffleId={{RaffleId}}&clientId={{client.Id}}" target="_blank" title="Imprimir Numeros Devueltos"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/AllocatinosNumbers?raffleId={{RaffleId}}&clientId={{client.Id}}" target="_blank" title="Imprimir Numeros Asignados"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/InvoicesByRaffle?raffleId={{RaffleId}}&clientId={{client.Id}}" target="_blank" title="Imprimir Facturación"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/ReportPaymenHistory?clientId={{client.Id}}" target="_blank" title="Historial de Pago"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/PreviousDebtPaymentReport?clientId={{client.Id}}" target="_blank" title="Deuda anterior"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/ClientNumbersAward?raffleId={{RaffleId}}&clientId={{client.Id}}" target="_blank" title="Numeros premiados"><i class="fa fa-print"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

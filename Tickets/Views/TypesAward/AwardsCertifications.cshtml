@@ -1,0 +1,64 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Certificación de números premiados";
+}
+<div class="col-lg-12 no-padder" ng-controller="AwardsCertificationsController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-6 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sorteo: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="RaffleId" ng-change="updateDelivered()">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.id}}">{{raffle.id}} - {{raffle.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-6 text-right m-b-xs no-padder">
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Billete</th>
+                                <th>Premio</th>
+                                <th>Desde - Hasta</th>
+                                <th>Fracciones</th>
+                                <th>Cliente</th>
+                                <th>Fecha Identificación</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="award in awards">
+                                <td>{{addZeroToNumber((award.Production - 1), award.Number)}}</td>
+                                <td>{{award.AwardName}}</td>
+                                <td>{{award.FractionFrom}}  - {{award.FractionTo}}</td>
+                                <td>{{award.Fractions}}</td>
+                                <td>{{award.ClientDesc}}</td>
+                                <td>{{award.IdentifyDate}}</td>
+                                <td>{{award.StatusDesc}}</td>
+                                <td>
+                                    <a ng-click="startWorkflowProspect(award)" ng-if="award.certificationId == 0 && (award.Status == @((int)Tickets.Models.Enums.AwardCertificationStatuEnum.Identified) || award.Status == @((int)Tickets.Models.Enums.AwardCertificationStatuEnum.Rejected))" title="Enviar premio a aprobación" class="{{moduleCanAdd}}"><i class="fa fa-external-link"></i></a>
+                                    <a ng-click="awardCertification(award)" ng-if="award.certificationId == 0 && award.Status == @((int)Tickets.Models.Enums.AwardCertificationStatuEnum.Approved)" title="Certificar Premio"><i class="fa fa-files-o"></i></a>
+                                    <a target="_blank" href="{{serverUrl}}/Reports/AwardCertification?CertificationNumberId={{award.certificationId}}" ng-if="award.certificationId > 0" title="Ver Certificación Premio"><i class="fa fa-file-pdf-o"></i></a>
+                                    <a href="#/ticket/identifybachdetail/{{award.IdentifyBachId}}" target="_blank" title="Ver detalle del número"><i class="fa fa-eye"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

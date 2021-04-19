@@ -1,0 +1,137 @@
+﻿@model Tickets.Models.PreviousDebtPayment
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+}
+<style>
+    .col-lg-12{
+        width: 100%;
+        float: left;
+    }
+    .col-lg-4 {
+        width: 33.333%;
+         float: left;
+    }
+    .col-lg-6{
+        width: 50%;
+        float: left;
+    } 
+    
+    .text-center {
+        text-align: center;
+    }
+    .text-right {
+        text-align:right;
+    }
+    .text-left {
+        text-align:left;
+    }
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>RECIBO DE PAGO POR DEUDA ANTERIOR</b>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <div class="col-lg-6 no-padder text-left">
+            <b>Cliente: </b> @Model.ClientId - @Model.Client.Name<br/>
+            <b>Limite de Credito: </b> @Model.Client.CreditLimit.ToString("c",  new System.Globalization.CultureInfo("es-DO"))<br/>
+            <b>Usuario: </b> @Model.CreateUser - @Model.User.Name
+
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <b>Fecha: </b> @Model.CreateDate.ToShortDateString() <br/>
+            <b>Hora: </b> @Model.CreateDate.ToShortTimeString() <br/>
+            <b>Recibo: </b> #@Model.Id
+        </div>
+    </div>
+    <div>
+        <div class="col-lg-12 no-padder">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">USUARIO</th>
+                        <th class="text-center">FECHA</th>
+                        <th class="text-center">NOTA</th>
+                        <th class="text-right" style="width:30%">MONTO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">@Model.CreateUser - @Model.User.Name</td>
+                        <td class="text-center">@Model.CreateDate.ToString()</td>
+                        <td class="text-center">@Model.Note</td>
+                        <td class="text-right" style="width:30%">@Model.PaimentValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                    @{
+                        decimal totalValue = 0;
+                        var previousPayments = Model.Client.PreviousDebtPayments.Where(p => p.Id != Model.Id).ToList();
+                    }
+                    @if( previousPayments.Count > 0){
+                        <tr>
+                            <td colspan="4" >PAGOS ANTERIORES</td>
+                        </tr>
+                        foreach (var payment in previousPayments){
+                            totalValue += payment.PaimentValue;
+                            <tr>
+                                <td class="text-center">@payment.CreateUser - @payment.User.Name</td>
+                                <td class="text-center">@payment.CreateDate.ToString()</td>
+                                <td class="text-center">@payment.Note</td>
+                                <td class="text-right" style="width:30%">@payment.PaimentValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                            </tr>
+                        }
+                        <tr class="sub-total">
+                            <td class="text-right" colspan="4" style="width:30%">Total pagos Anteriores: @totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        </tr>
+                    }
+                    
+                   <tr class="total">
+                       <td class="text-right" style="border-top: none;" colspan="7">Deuda Inicial: <strong> @Model.Client.PreviousDebt.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                   </tr>
+                   <tr>
+                       <td class="text-right" style="border-top: none;" colspan="7">Pagos Anteriores: <strong> @totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                   </tr>
+                   <tr>
+                       <td class="text-right" style="border-top: none;" colspan="7">Pago Actual: <strong> @Model.PaimentValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                   </tr>
+                   <tr>
+                       <td class="text-right" style="border-top: none;" colspan="7">Deuda Restante: <strong> @((Model.Client.PreviousDebt - totalValue - Model.PaimentValue).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                   </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-center">
+    <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Cliente
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Enc Verificación
+    </div>
+</div>

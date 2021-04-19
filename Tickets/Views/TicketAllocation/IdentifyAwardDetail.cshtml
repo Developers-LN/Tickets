@@ -1,0 +1,197 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Detalle de la Identificación de Premios";
+}
+<div class="col-lg-12 no-padder" ng-controller="IdentifyAwardDetailController" ng-init="app.title = '@(ViewBag.Title)'">
+    <!-- START panel-->
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 m-b-xs">
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Lote:</span>
+                                <span class="col-lg-8">
+                                    <b>#{{identifyBach.Id}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Sorteo:</span><span class="col-lg-8">
+                                    <b>{{identifyBach.RaffleId}} - {{identifyBach.RaffleDesc}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total en premios:</span><span class="col-lg-8">
+                                    <b>{{parseMoney(totalGeneral)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+
+                        <fieldset ng-if="identifyBach.percent > 0">
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Comision Mayorista ({{identifyBach.percent}}%):</span><span class="col-lg-8">
+                                    <b>{{parseMoney(totalGeneral * identifyBach.percent / 100)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset ng-if="identifyBach.percent > 0">
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total en premios:</span><span class="col-lg-8">
+                                    <b>{{parseMoney(totalGeneral + (totalGeneral * identifyBach.percent / 100))}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Cliente:</span>
+                                <span class="col-lg-8">
+                                    <b>{{identifyBach.ClientDesc}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label-left">Referencia:</span>
+                                <span class="col-lg-8">
+                                    <b>{{identifyBach.Reference}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total en pagado:</span><span class="col-lg-8">
+                                    <b>{{parseMoney(totalpayment)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total Restante:</span><span class="col-lg-8">
+                                    <b>{{parseMoney( ((totalGeneral + (totalGeneral * identifyBach.percent / 100)) - totalpayment))}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Estado del Lote:</span><span class="col-lg-8">
+                                    <b>{{identifyBach.isPayed == true? 'Pagado' : 'No Pagado'}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 no-padder {{moduleCanAdd}}">
+                    <h4>Pagos</h4>
+                    <hr />
+                    <div class="col-lg-12 m-b-xs no-padder text-right" ng-if="((totalGeneral + (totalGeneral * identifyBach.percent / 100)) - totalpayment) > 0">
+                        <a href="/#/cash/payment/{{identifyBach.Id}}" class="btn btn-sm btn-success"><i class="fa fa-money"></i> Pagar en Efectivo</a>
+                        <a href="/#/cash/noteCredit/0/{{identifyBach.Id}}" class="btn btn-sm btn-success"><i class="fa fa-credit-card"></i> Pagar con Nota de Credito</a>
+                    </div>
+                    <div class="col-lg-12 m-b-xs row-border hover" style="font-size: 11pt;" ng-show="totalpayment > 0">
+                        <table class="table dataTableGrid">
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Tipo de pago</th>
+                                    <th>Nota</th>
+                                    <th>Cantidad Pagada</th>
+                                    <th class="text-center" style="width: 100px;">Imprimir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="payment in identifyBach.IdentifyBachPayments">
+                                    <td>{{payment.ClientDesc}}</td>
+                                    <td>Pago en efectivo</td>
+                                    <td>{{payment.Note}}</td>
+                                    <td class="text-right">{{parseMoney(payment.Value)}}</td>
+                                    <td class="text-center">
+                                        <a target="_blank" href="~/Reports/IndentifyReceivableReport?paymentId={{payment.Id}}" title="Impresion pago en efectivo"><i class="fa fa-file-o"></i></a>
+                                    </td>
+                                </tr>
+                                <tr data-ng-repeat="noteCredit in identifyBach.NoteCredits">
+                                    <td>{{noteCredit.ClientDesc}}</td>
+                                    <td>Nota de credito</td>
+                                    <td>{{noteCredit.Note}}</td>
+                                    <td class="text-right">{{parseMoney(noteCredit.TotalCash)}}</td>
+                                    <td class="text-center">
+                                        <a target="_blank" href="~/Reports/IndentifyReceivableReport?creditNoteId={{noteCredit.Id}}" title="Impresion pago con nota de credito"><i class="fa fa-file-o"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5" class="text-right"><b>Total Pagado: {{parseMoney(totalpayment)}}</b></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <h4>Numeros</h4>
+                <hr />
+                <div class="col-lg-12 m-b-xs no-padderrow-border hover">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Numero</th>
+                                <th class="text-center">Frac. Desde</th>
+                                <th class="text-center">Frac. Hasta</th>
+                                <th class="text-center">Premio</th>
+                                <th class="text-center">Cantidad Frac.</th>
+                                <th class="text-right">Valor</th>
+                                <th class="text-right">Total</th>
+                                <th class="text-right">Desc. Ley</th>
+                                <th class="text-right">Valor Total</th>
+                                <th class="text-center" style="width: 100px;">Transacciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="identifyNumber in identifyBach.IdentifyNumbers">
+                                <td class="text-center" ng-bind="addZeroToNumber((production - 1), identifyNumber.NumberDesc)"></td>
+                                <td class="text-center" ng-bind="identifyNumber.FractionFrom"></td>
+                                <td class="text-center" ng-bind="identifyNumber.FractionTo"></td>
+                                <td class="text-center" ng-bind="identifyNumber.RaffleAward.AwardName"></td>
+                                <td class="text-center" ng-bind="(identifyNumber.FractionTo - identifyNumber.FractionFrom) + 1"></td>
+                                <td class="text-right"  ng-bind="parseMoney(identifyNumber.RaffleAward.AwardValue)"></td>
+                                <td class="text-right"  ng-bind="parseMoney(showSubTotal(identifyNumber))"></td>
+                                <td class="text-center">{{identifyNumber.RaffleAward.LawDiscount}} %</td>
+                                <td class="text-center">{{parseMoney(showSubTotal(identifyNumber) - (showSubTotal(identifyNumber) * (identifyNumber.RaffleAward.LawDiscount/100)))}}</td>
+                                <td class="text-center">
+                                    <a href="/#/ticket/numberdetail/{{identifyNumber.NumberId}}" title="Ver detalles del Número" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="text-center" ng-bind="totalNumber"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center" ng-bind="totalFraction"></td>
+                                <td class="text-right" ng-bind="parseMoney(totalValue)"></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right" ng-bind="parseMoney(totalGeneral)"></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="col-lg-12 no-padder">
+                    <div class="col-lg-6 no-padder">
+                        <a ui-sref="app.ticketIdentifyBachList" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left"></i> Regresar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

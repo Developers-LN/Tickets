@@ -1,0 +1,43 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de Departamentos";
+}
+<div class="col-lg-12 no-padder" ng-controller="EmployeeController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!-- START panel-->
+                <div class="col-lg-12 text-right m-b-xs no-padder">
+                    <a ng-click="editDepartment()" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Agregar Departamento</a>
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Estado</th>
+                                <th class="editColumm"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="department in departmentList">
+                                <td>{{department.NameDetail}}</td>
+                                <td>{{department.Description}}</td>
+                                <td>{{department.StatuDesc}}</td>
+                                <td>
+                                    <a ng-click="editDepartment(department)" title="Moificar Departamento" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
+                                    <a ng-click="deleteDepartment(department)" title="Suspender Departamento" class="{{moduleCanDelete}}"><i class="fa fa-ban"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

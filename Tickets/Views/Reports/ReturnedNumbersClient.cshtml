@@ -1,0 +1,157 @@
+﻿@model Tickets.Models.Raffle
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Devoluciones por Grupo";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+}
+
+<style>
+    .col-lg-12{
+        width: 100%;
+        float: left;
+    }
+    .col-lg-4 {
+        width: 33.333%;
+         float: left;
+    }
+    .col-lg-6{
+        width: 50%;
+        float: left;
+    } 
+    
+    .text-center {
+        text-align: center;
+    }
+    .text-right {
+        text-align:right;
+    }
+    .text-left {
+        text-align:left;
+    }
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png"/>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
+            <b>DEVOLUCION DE BILLETES DEL SORTEO @Model.Id</b><br />
+            Desde @Model.StartReturnDate.ToShortDateString() hasta @Model.EndReturnDate.ToShortDateString()
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    
+    @{
+        var clients = Model.TicketReturns.GroupBy(t => t.ClientId).Select(c => new
+        {
+            Client = c.FirstOrDefault().Client,
+            Returneds = c
+        }).ToList();
+        decimal totalValue = 0.0m, totalLeef = 0.0m;
+        int totalFraction = 0;
+        int totalNumber = 0;
+        int totalGroup = 0;
+    }
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">CLIENTE</th>
+                    <th class="text-center">NUMEROS</th>
+                    <th class="text-center">FRACCIONES</th>
+                    <th class="text-center">HOJAS</th>
+                    <th class="text-right">PRECIO FRACCIONES</th>
+                    <th class="text-right">DESCUENTO</th>
+                    <th class="text-right">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var client in clients)
+                {
+                    int subTotalNumber = 0, subTotalFraction = 0, subTotalGroup = 0;
+                    decimal subTotalValue = 0.0m, subTotalLeef = 0.0m;
+                    decimal fractionPrice = Model.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice;
+                    var returnedGroups = client.Returneds.GroupBy(r => r.ReturnedGroup).Select(r => new
+                    {
+                        Group = r.GroupBy( d=>d.TicketAllocationNumber.Number).Count(),
+                        Quantity = r.Count(),
+                        FractionQuantity = r.Select( e=> (e.FractionTo - e.FractionFrom + 1)).Aggregate((s,e)=> s+ e),
+                        ProspectFraction = r.FirstOrDefault().Raffle.Prospect.LeafFraction,
+                        Price = r.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice 
+                    });
+                    
+                    foreach (var returned in returnedGroups)
+                    {
+                        subTotalFraction += returned.FractionQuantity;
+                        var subTotal = returned.FractionQuantity * returned.Price;
+                        decimal leef = ((decimal)returned.FractionQuantity) / ((decimal)returned.ProspectFraction);
+
+                        subTotalValue += subTotal;
+                        subTotalNumber += returned.Quantity;
+                        subTotalGroup += returned.Group;
+                        subTotalLeef += leef;
+                    }
+                    subTotalValue = subTotalValue - ((subTotalValue * client.Client.Discount) / 100);
+                    <tr>
+                        <td>@client.Client.Name</td>
+                        <td class="text-center">@subTotalGroup</td>
+                        <td class="text-center">@subTotalFraction</td>
+                        <td class="text-center">@subTotalLeef </td>
+                        <td class="text-right">@fractionPrice.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@((int)client.Client.Discount)%</td>
+                        <td class="text-right">@subTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                    totalNumber += subTotalNumber;
+                    totalFraction += subTotalFraction;
+                    totalValue += subTotalValue;
+                    totalGroup += subTotalGroup;
+                    totalLeef += subTotalLeef;
+                }
+            </tbody>
+            <tfoot>
+                <tr class="total">
+                    <td class="text-center"></td>
+                    <td class="text-center">@totalGroup</td>
+                    <td class="text-center">@totalFraction</td>
+                    <td class="text-center">@totalLeef</td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right">@totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>    
+    <div class="col-lg-12 no-padder">
+        <b>** Cantidad Real Global De Números Devueltos y Valor real de devolución (utilizando valor real de números abonados)</b>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Inspección
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Supervisor General 
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

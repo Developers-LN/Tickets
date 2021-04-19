@@ -1,0 +1,98 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Cuentas por Cobrar";
+}
+<div class="col-lg-12 no-padder" ng-controller="ReceivableListController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div class="col-lg-4 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control dropdown-select2" ng-model="RaffleId" ng-change="updateReceivable()">
+                                    <option selected="selected" value="0">Todos los sorteo</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.Id}}">{{raffle.Id}} - {{raffle.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-4 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Cliente: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="ClientId" ng-change="updateReceivable()">
+                                    <option selected="selected" value="0">Todos los cliente</option>
+                                    <option ng-repeat="client in clients" value="{{client.Id}}">{{client.Id}} - {{client.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-4 text-right m-b-xs no-padder">
+
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Codigo</th>
+                                <th>Sorteo</th>
+                                <th>Cliente</th>
+                                <th>Cantidad</th>
+                                <th>Descuento</th>
+                                <th>Cantidad Total</th>
+                                <th>Cantidad Restante</th>
+                                <th>Fecha</th>
+                                <th>Fec. de Expiración</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="invoice in invoices">
+                                <td>#{{invoice.Id}}</td>
+                                <td>{{invoice.RaffleId}}</td>
+                                <td>{{invoice.ClientDesc}}</td>
+                                <td>{{parseMoney(invoice.Payment.totalInvoice)}}</td>
+                                <td>{{parseMoney(invoice.Payment.discount)}}</td>
+                                <td>{{parseMoney(invoice.Payment.totalInvoice - invoice.Payment.discount)}}</td>
+                                <td>{{parseMoney(invoice.Payment.totalRestant - invoice.Payment.discount)}}</td>
+                                <td>{{(invoice.InvoiceDate | date:"dd/MM/yyyy")}}</td>
+                                <td>{{(invoice.xpiredDate | date:"dd/MM/yyyy")}}</td>
+                                <td>{{invoice.xpiredDay == ''? invoice.PaymentStatuDesc : invoice.xpiredDay}}</td>
+                                <td>
+                                    <a ng-if="invoice.PaymentStatu == @((int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Pendient)" href="#/cash/receivable/{{invoice.Id}}" class="{{moduleCanEdit}}"><i class="fa fa-money"></i></a>
+                                    <a ng-click="saveReceivablePayment(invoice.Id)" class="{{moduleCanEdit}}"><i class="fa fa-file-o"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{parseMoney(totalBruton)}}</td>
+                                <td>{{parseMoney(totalDiscount)}}</td>
+                                <td>{{parseMoney(totalNeto)}}</td>
+                                <td>{{parseMoney(totalRest)}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

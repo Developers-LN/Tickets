@@ -1,0 +1,166 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Creación de Agencia";
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="AgencyCreateController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-4 no-padder">
+                    <input type="hidden"
+                           ng-model="agency.Id" />
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <input type="text"
+                                       ng-model="agency.Name"
+                                       class="form-control input-sm"
+                                       ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Empleado: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control input-sm dropdown-select2" ng-model="agency.EmployeeId">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione un empleado</option>
+                                    <option ng-repeat="employee in employees" value="{{employee.Id}}">{{employee.Id}} - {{employee.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Fax: </label>
+                            <div class="col-lg-12">
+                                <input type="text"
+                                       ng-model="agency.Fax"
+                                       class="form-control input-sm"
+                                       ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Teléfono:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <input type="text"
+                                       ng-model="agency.Phone"
+                                       class="form-control input-sm"
+                                       ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">E-Mail:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <input type="text"
+                                       ng-model="agency.Email"
+                                       class="form-control input-sm"
+                                       ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-4 no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Provincia:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select class="form-control input-sm dropdown-select2" id="province-dropdown" ng-model="agency.Province" ng-change="updateTown()">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione una provincia</option>
+                                    <option ng-repeat="province in provinces" value="{{province.Id}}">{{province.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Municipio:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm dropdown-select2" id="town-dropdown" ng-model="agency.Town" ng-change="updateDistritalTown()">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione una municipio</option>
+                                    <option ng-repeat="town in towns" value="{{town.Id}}">{{town.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sección: </label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm dropdown-select2" id="section-dropdown" ng-model="agency.Section">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione una sección</option>
+                                    <option ng-repeat="distTown in distTowns" value="{{distTown.Id}}">{{distTown.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Dirección: </label>
+                            <div class="col-lg-12">
+                                <textarea class="form-control input-sm"
+                                          ng-model="agency.Addres"
+                                          style="max-height: 109px; height: 97px;"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-4 no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Fecha de Entrada: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <input type="date"
+                                       ng-model="agency.IntDate"
+                                       class="form-control input-sm"
+                                       ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Grupo:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="agency.GroupId">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione un grupo</option>
+                                    <option ng-repeat="group in groups" value="{{group.Id}}">{{group.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Estatus:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="agency.Statu">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione un estatus</option>
+                                    <option ng-repeat="generalStatu in generalStatus" value="{{generalStatu.Id}}">{{generalStatu.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Descripción: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <textarea class="form-control input-sm"
+                                          ng-model="agency.Description"
+                                          style="max-height: 109px; height: 97px;"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ui-sref="app.agencyList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
+        <a ng-click="saveAgencyForm()" class="mr btn btn-square btn-primary {{agency.Id > 0? moduleCanEdit: moduleCanAdd }}"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

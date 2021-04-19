@@ -1,0 +1,23 @@
+﻿@model Tickets.Models.Workflow
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <h1>Aprobación de flujo de trabajo</h1>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        usted tiene una notificación de aprobación para un flujo de trabajo. 
+    </div>
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

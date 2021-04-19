@@ -1,0 +1,38 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Registro de Transacciones";
+}
+<div class="col-lg-12 no-padder" ng-controller="SystemLogsController" ng-init="app.title = '@(ViewBag.Title)'">
+    <!-- START panel-->
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!-- START table-responsive-->
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Acción</th>
+                                <th>Modulo</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="log in logs">
+                                <td>{{log.userName}}</td>
+                                <td>{{log.actionDesc}}</td>
+                                <td>{{log.moduleName}}</td>
+                                <td>{{log.createDate}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

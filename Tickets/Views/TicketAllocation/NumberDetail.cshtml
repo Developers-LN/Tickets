@@ -1,0 +1,107 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Detalle de Billete";
+}
+<div class="col-lg-12 no-padder" ng-controller="NumberDetailController" ng-init="app.title = '@(ViewBag.Title)'">
+    <!-- START panel-->
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 m-b-xs">
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Cliente:</span>
+                                <span class="col-lg-8">
+                                    <b>{{number.Allocation.ClientDesc}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Billete:</span><span class="col-lg-8">
+                                    <b>{{number.Number}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label-left">Fracciones:</span>
+                                <span class="col-lg-8">
+                                    <b>{{number.Allocation.FractionFrom}} - {{number.Allocation.FractionTo}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label-left">Facturado:</span>
+                                <span class="col-lg-8">
+                                    <b>{{number.Invoiced === true? 'Si' : 'No'}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Sorteo:</span><span class="col-lg-8">
+                                    <b>{{number.Allocation.RaffleId}} - {{number.Allocation.RaffleDesc}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Numero de Control:</span>
+                                <span class="col-lg-8">
+                                    <b>{{number.ControlNumber}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label-left">Impreso:</span>
+                                <span class="col-lg-8">
+                                    <b>{{number.Printed === true? 'Si' : 'No'}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <h4>Movimientos del Billete: {{number.Number}}</h4>
+                <hr />
+                <div class="col-lg-12 m-b-xs no-padderrow-border hover">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Transacción</th>
+                                <th class="text-center">Grupo</th>
+                                <th class="text-center">Cliente</th>
+                                <th class="text-center">Fecha</th>
+                                <th class="text-center">Fracción Desde</th>
+                                <th class="text-center">Fracción Hasta</th>
+                                <th class="text-center">Usuario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="transaction in number.Transactions">
+                                <td class="text-center" ng-bind="transaction.Description"></td>
+                                <td class="text-center" ng-bind="transaction.Group"></td>
+                                <td class="text-center">{{transaction.ClientDesc}}</td>
+                                <td class="text-center">{{(transaction.Date | date:"dd/MM/yyyy h:mm:ss a")}}</td>
+                                <td class="text-center" ng-bind="transaction.FractionFrom"></td>
+                                <td class="text-center" ng-bind="transaction.FractionTo"></td>
+                                <td class="text-center" ng-bind="transaction.UserDesc"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-12 no-padder">
+                    <div class="col-lg-6 no-padder">
+                        <a href="{{returnUrl}}" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left"></i> Regresar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

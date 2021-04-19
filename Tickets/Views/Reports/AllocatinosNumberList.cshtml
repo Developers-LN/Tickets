@@ -1,0 +1,135 @@
+﻿@model Tickets.Models.TicketAllocation
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+}
+
+<style>
+    .col-lg-12{
+        width: 100%;
+        float: left;
+    }
+    .col-lg-4{
+        width: 33.333%;
+        float: left;
+    }
+    .col-lg-3{
+        width: 25%;
+        float: left;
+    }
+    .col-lg-8{
+        width: 66.666%;
+        float: left;
+    }
+    .col-lg-6{
+        width: 50%;
+        float: left;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .text-right {
+        text-align:right;
+    }
+    .text-left {
+        text-align:left;
+    }
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+<div class="col-lg-12 ">
+    <div class="col-lg-3 no-padder text-left">
+        Fecha Impresión: <b>@(Model.TicketAllocationNumbers.FirstOrDefault().PrintedDate.HasValue? Model.TicketAllocationNumbers.FirstOrDefault().PrintedDate.Value: DateTime.Now)</b><br />
+        Facturado a: <b>@Model.Client.Name</b>
+    </div>
+    <div class="col-lg-6 no-padder text-center">
+        <div class="col-lg-12  no-padder text-center">
+            <img src="~/Images/logo.png" style="height: 38px;"/>
+        </div>
+        <div class="col-lg-12  no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
+            <b>Asignación de Billetes del sorteo @Model.Raffle.Name No.@Model.Raffle.Id</b>
+        </div>
+    </div>
+    <div class="col-lg-3  no-padder text-right">
+        <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+        <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+        <b>Fec. sorteo:</b> @Model.Raffle.DateSolteo.ToShortDateString() <br />
+        <b>Asignación: </b>#@Model.Id
+    </div>
+    <div class="col-lg-12 no-padder">
+        <table class="table">
+            <tbody>
+                <tr style="border: 2px solid;">
+                    <td colspan="2" style="padding:0;margin: 0;line-height: 1;">
+                        <div style="float:left;">
+                            @{var totalRows = (Model.TicketAllocationNumbers.Count / 29)+1; }
+                            @for (int i = 1; i <= totalRows; i++)
+                            {
+                                <div style="font-size: 8pt; font-weight:bold; padding-right: 10px; padding-top: 2px;padding-bottom: 2px;padding-left: 3px; border-bottom: 1px solid black; border-right: 1px solid black;">@i</div>
+                            }
+                        </div>
+                        @{
+                            
+                            var numbers = Tickets.Models.Utils.SplitList(Model.TicketAllocationNumbers.OrderBy(i => i.Number).Select(n => (int)n.Number).ToList(), totalRows);
+                            int length = (Model.Raffle.Prospect.Production - 1).ToString().Length;
+                            var totalNumbers = Model.TicketAllocationNumbers.Count;
+                            var totalLeaf = totalNumbers * ((Model.TicketAllocationNumbers.FirstOrDefault().FractionTo - Model.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1) / Model.Raffle.Prospect.LeafFraction);
+                            var total = totalNumbers * (Model.TicketAllocationNumbers.FirstOrDefault().FractionTo - Model.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1);
+                            var prospect = context.Prospects.FirstOrDefault(p => p.Id == Model.Raffle.ProspectId);
+                            var price = prospect.Prospect_Price.AsEnumerable().Where(pp => pp.PriceId == Model.Client.PriceId).FirstOrDefault().FactionPrice;
+                        }
+                        @foreach (var numberList in numbers)
+                        {
+                            <div style="float:left;">
+                                @foreach (var number in numberList)
+                                {
+                                    <div style="font-size: 8pt; font-weight:bold; padding-right: 7px; padding-left: 7px; padding-top: 2px;padding-bottom: 2px; border-bottom: 1px solid black;">@Tickets.Models.Utils.AddZeroToNumber( length, number)</div>
+                                }
+                            </div>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="">
+                    <td class="col-lg-6">
+                        <div class="col-lg-6 no-padder text-center">
+                            <div class="col-lg-12 no-padder text-center">
+                                <br />
+                                ______________________________
+                            </div>
+                            Enc. Facturación
+                        </div>
+                        <div class="col-lg-6 no-padder text-center">
+                            <div class="col-lg-12 no-padder text-center">
+                                <br />
+                                ______________________________
+                            </div>
+                            Clientes
+                        </div>
+                    </td>
+                    <td class="text-center col-lg-6">
+                        
+                        <div class="col-lg-6 no-padder text-right">
+                            Tot. de numeros: <b>@totalNumbers</b><br />
+                            Tot. de hojas: <b>@totalLeaf</b><br />
+                        </div>
+                        <div class="col-lg-6 no-padder text-right">
+                            <br />
+                            Total: <b>@((total * price).ToString("c",  new System.Globalization.CultureInfo("es-DO")) )</b>
+                        </div>
+                        
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

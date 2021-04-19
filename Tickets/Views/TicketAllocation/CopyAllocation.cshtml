@@ -1,0 +1,45 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Copiar asignaciones de un sorteo anterior";
+
+    var context = new Tickets.Models.TicketsEntities();
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="AllocationCopyController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-6 ">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sorteo de Billetes:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="copyAllocation.sourceTicketRaffleId">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.id}}">{{raffle.id}} - {{raffle.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-6 hide">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sorteo de Quinielas:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="copyAllocation.sourcePoolRaffleId">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.id}}">{{raffle.id}} - {{raffle.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ui-sref="app.solteoList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
+        <a ng-click="copyAllocation()" class="mr btn btn-square btn-primary {{ moduleCanAdd }}"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

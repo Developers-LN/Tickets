@@ -1,0 +1,207 @@
+﻿@model Tickets.Models.TicketAllocation
+@{
+    Layout = "~/Views/Shared/_TicketsLayout.cshtml";
+    ViewBag.Title = "Billetes";
+
+
+}
+<style>
+    .col-lg-6 {
+        width: 50%;
+    }
+
+    .ticket-content {
+        position: relative;
+        top: 15px;
+        left: 31px;
+        font-family: Verdana, Geneva, sans-serif;
+    }
+
+    .ticket-number {
+        font-size: 24pt;
+        font-weight: bold;
+        font-family: Verdana, Geneva, sans-serif;
+    }
+
+    .control-number {
+        font-family: Verdana, Geneva, sans-serif;
+        transform: rotate(270deg);
+        width: 4px;
+        height: 5px;
+        margin-left: 20px;
+        position: static;
+        font-size: 6pt;
+        font-weight: bold;
+    }
+
+    .ticket-fraction {
+        position: relative;
+        left: 5px;
+        top: 2px;
+        font-weight: bold;
+        font-size: 7pt;
+    }
+
+    .clear-both {
+        clear: both;
+    }
+
+    .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+        position: relative;
+    }
+
+    .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+        float: left;
+    }
+
+    .col-lg-12 {
+        width: 100%;
+    }
+
+    .col-lg-11 {
+        width: 91.66666667%;
+    }
+
+    .col-lg-10 {
+        width: 83.33333333%;
+    }
+
+    .col-lg-9 {
+        width: 75%;
+    }
+
+    .col-lg-8 {
+        width: 66.66666667%;
+    }
+
+    .col-lg-7 {
+        width: 58.33333333%;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+    }
+
+    .col-lg-5 {
+        width: 41.66666667%;
+    }
+
+    .col-lg-4 {
+        width: 33.33333333%;
+    }
+
+    .col-lg-3 {
+        width: 25%;
+    }
+
+    .col-lg-2 {
+        width: 16.66666667%;
+    }
+
+    .col-lg-1 {
+        width: 8.33333333%;
+    }
+
+    div.page {
+        page-break-after: always;
+    }
+
+    .number-container {
+        height: 180px;
+        margin-bottom: 9px;
+        width: 230px;
+        left: 50%;
+        margin-left: -115px;
+        position: relative;
+    }
+
+        .number-container .number {
+            padding-top: 50px;
+        }
+
+    .page .title {
+        text-align: center;
+        font-family: Verdana, Geneva, sans-serif;
+        font-weight: bold;
+        font-size: 12px;
+        height: 40px;
+        min-height: 40px;
+        position: relative;
+        padding-top: 20px;
+    }
+
+    body {
+        margin: 0 !important;
+    }
+</style>
+
+@foreach (var number in Model.TicketAllocationNumbers.ToList())
+{
+    string stringNumber = Tickets.Models.Utils.AddZeroToNumber((Model.Raffle.Prospect.Production - 1).ToString().Length, (int)number.Number);
+    int production = Model.Raffle.Prospect.Production - 1;
+
+    List<List<List<int>>> pageNumberList = new List<List<List<int>>>();
+    List<List<int>> midPageNumberList = new List<List<int>>();
+    List<int> numbers = new List<int>();
+    for (var fraction = number.FractionFrom; fraction <= number.FractionTo; fraction++)
+    {
+        numbers.Add(fraction);
+        if (numbers.Count % 5 == 0)
+        {
+            var ns = new List<int>().Concat(numbers).ToList();
+            midPageNumberList.Add(ns);
+            numbers.Clear();
+        }
+        if (midPageNumberList.Count % 2 == 0 && midPageNumberList.Count > 0)
+        {
+            var mpns = new List<List<int>>().Concat(midPageNumberList).ToList();
+            pageNumberList.Add(mpns);
+            midPageNumberList.Clear();
+        }
+    }
+    var page = 1;
+    foreach (var minFractionList in pageNumberList)
+    {
+        <div class="page">
+            <div class="col-lg-12 title">
+                <span>
+                    Serie @page
+                </span>
+            </div>
+            <div class="col-lg-12">
+                @foreach (var fractions in minFractionList)
+                {
+                    <div class="col-lg-6">
+                        @foreach (int fraction in fractions)
+                        {
+                            <div class="number-container">
+                                <div class="col-lg-12 number">
+                                    <div class="ticket-content">
+                                        <span class="ticket-fraction">Fracc. no.@Tickets.Models.Utils.AddZeroToNumber(number.FractionTo.ToString().Length, fraction)</span><br />
+                                        <span class="ticket-number">@stringNumber</span>
+                                    </div>
+                                    <div class="control-number">@number.ControlNumber</div>
+                                    <input type="hidden" class="hide number-fracction-barcode" value="@(number.TicketAllocation.RaffleId + "-" + stringNumber + "-" + Tickets.Models.Utils.AddZeroToNumber(number.FractionTo.ToString().Length, fraction) + "-" + Tickets.Models.Utils.AddZeroToNumber(number.FractionTo.ToString().Length, fraction))" />
+                                    <img style="margin-top: 10px;" />
+                                </div>
+                            </div>
+                        }
+                        <div class="col-lg-12 number-container" style="height:10px; min-height: 10px; max-height: 10px; margin-top: -20px;">
+                            <input type="hidden" class="hide number-fracction-barcode" value="@(number.TicketAllocation.RaffleId + "-" + stringNumber + "-" + Tickets.Models.Utils.AddZeroToNumber(number.FractionTo.ToString().Length, fractions[0]) + "-" + Tickets.Models.Utils.AddZeroToNumber(number.FractionTo.ToString().Length, fractions[fractions.Count-1]))" />
+                            <img />
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="clear-both"></div>
+            @{int start = minFractionList[0][0];}
+            <div class="col-12" style="text-align:center; height: 20px;margin-top: 10px;">
+                <input type="hidden" class="hide number-fracction-barcode" value="@(number.TicketAllocation.RaffleId + "-" + stringNumber + "-" + Tickets.Models.Utils.AddZeroToNumber(number.FractionTo.ToString().Length, start)
++ "-" + Tickets.Models.Utils.AddZeroToNumber(number.FractionTo.ToString().Length, minFractionList[minFractionList.Count - 1][minFractionList[minFractionList.Count - 1].Count - 1]))" />
+                <img />
+            </div>
+            @{ page = page + 1; }
+        </div>
+                    }
+                }
+@Scripts.Render("~/bundles/TicketPrint")

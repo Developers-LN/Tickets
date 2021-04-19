@@ -1,0 +1,55 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado para Reimprimir Billetes";
+}
+<div class="col-lg-12 no-padder" ng-controller="TicketReprintController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-4 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sorteo: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="RaffleId" ng-change="updateAllocation()">
+                                    <option selected="selected" value="0">Todos los sorteo</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-8 text-right m-b-xs no-padder">
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Numero</th>
+                                <th>Sorteo</th>
+                                <th>Cantidad de numeros</th>
+                                <th>Fecha</th>
+                                <th class="editColumm text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="reprint in reprints">
+                                <td>#{{reprint.id}}</td>
+                                <td>{{reprint.raffleDesc}}</td>
+                                <td>{{reprint.numberCount}}</td>
+                                <td>{{(reprint.createDate | date:"dd/MM/yyyy h:mm:ss a")}}</td>
+                                <td class="text-center">
+                                    <a ng-click="reprintTicket(reprint)" title="Reimpresion de Billete"><i class="fa fa-file-o"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

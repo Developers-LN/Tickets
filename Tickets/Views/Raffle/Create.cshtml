@@ -1,0 +1,159 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Creación de Sorteo";
+
+    var context = new Tickets.Models.TicketsEntities();
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="RaffleCreateController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-6 no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <input type="text"
+                                       ng-model="raffle.name"
+                                       class="form-control input-sm"
+                                       ng-required="true" />
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Prospecto de Billetes:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="raffle.ticketProspectId" ng-change="prospectChange()">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione un prospecto</option>
+                                    <option ng-repeat="prospect in ticketProspects" value="{{prospect.value}}" ng-selected="prospect.value == raffle.ticketProspectId">{{prospect.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <form name="test">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Fecha del sorteo: <span class="color-red">*</span></label>
+                                <div class="{{test.raffleDate.$error.max ? 'col-lg-6' : 'col-lg-12'}}">
+                                    <input type="date"
+                                           ng-change="changeRaffleDate()"
+                                           ng-model="raffle.raffleDate"
+                                           ng-max="expirateDate"
+                                           ng-required="true"
+                                           class="form-control input-sm"
+                                           name="raffleDate" />
+                                </div>
+                                <div class="col-lg-6 alert alert-warning" ng-if='test.raffleDate.$error.max'>
+                                    La fecha del sorteo no puede ser mayor a la fecha de expiración del prospecto ( {{(expirateDate | date:"dd/MM/yyyy")}} )
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Fecha de inicio de devolución: <span class="color-red">*</span></label>
+                            <div class="col-lg-12 no-padder">
+                                <div class="col-lg-6">
+                                    <input type="date"
+                                           ng-model="raffle.startDate"
+                                           ng-max="raffle.endDate"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="time"
+                                           ng-model="raffle.startTime"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Fecha fin de devolución: <span class="color-red">*</span></label>
+                            <div class="col-lg-12 no-padder">
+                                <div class="col-lg-6">
+                                    <input type="date"
+                                           ng-model="raffle.endDate"
+                                           class="form-control input-sm"
+                                           ng-required="true"
+                                           ng-min="raffle.startDate"
+                                           ng-max="maxReturnedDate" />
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="time"
+                                           ng-model="raffle.endTime"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-6 no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Estatus:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="raffle.statu">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione un estatus</option>
+                                    <option ng-repeat="raffleStatu in raffleStatus" ng-if="raffleStatu.id != @((int)Tickets.Models.Enums.RaffleStatusEnum.Generated) && raffleStatu.id != @((int)Tickets.Models.Enums.RaffleStatusEnum.Active)" value="{{raffleStatu.id}}" ng-selected="raffleStatu.id == raffle.statu">{{raffleStatu.nameDetail}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Fecha fin de asignación: <span class="color-red">*</span></label>
+                            <div class="col-lg-12 no-padder">
+                                <div class="col-lg-6">
+                                    <input type="date"
+                                           ng-model="raffle.endAllocationDateOnly"
+                                           class="form-control input-sm"
+                                           ng-required="true"
+                                           ng-max="maxReturnedDate" />
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="time"
+                                           ng-model="raffle.endAllocationTime"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Mercancía: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control input-sm" ng-model="raffle.commodityId">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione un mercancia</option>
+                                    <option ng-repeat="commodity in commoditys" value="{{commodity.id}}" ng-selected="commodity.id == raffle.poolsProspectId">{{commodity.nameDetail}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Observación:</label>
+                            <div class="col-lg-12">
+                                <textarea class="form-control input-sm"
+                                          ng-model="raffle.note"
+                                          style="max-height: 160px;height: 160px;"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ui-sref="app.solteoList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
+        <a ng-click="saveRaffleForm()" class="mr btn btn-square btn-primary {{raffle.Id > 0? moduleCanEdit: moduleCanAdd }}"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

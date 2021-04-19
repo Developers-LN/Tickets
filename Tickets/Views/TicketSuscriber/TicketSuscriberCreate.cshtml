@@ -1,0 +1,111 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Creación de Billete Abonados";
+    var context = new Tickets.Models.TicketsEntities();
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="SuscriberCreateController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <fieldset >
+                    <div class="form-group">
+                        <label class="col-lg-12 control-label-left">Cliente:  <span class="color-red">*</span></label>
+                        <div class="col-lg-12" ng-if="suscriber.id == 0">
+                            <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="suscriber.clientId">
+                                <option selected="selected" disabled="disabled" value="0">Seleccione un cliente</option>
+                                <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-12" ng-if="suscriber.id > 0">
+                            <h4><span class="label label-info">{{suscriber.clientDesc}}</span></h4>
+                        </div>
+                    </div>
+            </div>
+            </fieldset>
+        </div>
+        <div class="col-lg-12 well">
+            <h4>Numeros</h4>
+            <div class="col-lg-12 no-padder">
+                <fieldset>
+                    <div class="form-group">
+                        <div class="radio c-radio  m-l-xs">
+                            <label>
+                                <input type="radio" name="numbers" id="ticketAllocateNumber" value="number" checked="checked">
+                                <span class="fa fa-circle"></span>Numero
+                            </label>
+                            <label>
+                                <input type="radio" name="numbers" value="range" id="ticketAllocateRangeNumber">
+                                <span class="fa fa-circle"></span>Rango de Numero
+                            </label>
+                        </div>
+                        <div class="col-lg-12" id="numberContainer">
+                            <input type="number"
+                                   ng-min="0"
+                                   ng-model="ticketNumber.number"
+                                   ng-keyup="verifyKeydown($event)"
+                                   class="form-control input-sm"
+                                   ng-required="true">
+                        </div>
+                        <div class="col-lg-12 hide" id="rangeNumberContainer">
+                            <label class="col-lg-1 no-padder">
+                                Desde
+                            </label>
+                            <div class="col-lg-4">
+                                <input type="number"
+                                       ng-min="0"
+                                       ng-model="ticketNumber.numberFrom"
+                                       class="form-control input-sm"
+                                       ng-required="true">
+                            </div>
+                            <label class="col-lg-1 no-padder text-right">
+                                Hasta
+                            </label>
+                            <div class="col-lg-4">
+                                <input type="number"
+                                       ng-min="ticketNumber.numberFrom + 1"
+                                       ng-model="ticketNumber.numberTo"
+                                       ng-keyup="verifyKeydown($event)"
+                                       class="form-control input-sm"
+                                       ng-required="true">
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="col-lg-12 m-b-xs no-padder text-right">
+                    <a ng-click="clearTicketNumber()" class="btn btn-oval btn-warning btn-sm"><i class="fa fa-times"></i> Cancelar</a>
+                    <a ng-click="addNumber()" class="btn btn-oval btn-success btn-sm"><i class="fa fa-plus"></i> Agregar</a>
+                </div>
+            </div>
+            <div class="col-lg-12 m-b-xs no-padder">
+                <table class="table dataTableGrid">
+                    <thead>
+                        <tr>
+                            <th>Numero</th>
+                            <th class="editColumm">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="number in suscriber.ticketSuscriberNumbers">
+                            <td ng-bind="number.number"></td>
+                            <td>
+                                <a ng-if="number.id == 0" ng-click="deleteNumber(number)" title="Borrar Numero"><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td> Cantidad: {{suscriber.ticketSuscriberNumbers.length}}</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 no-padder text-left m-b-lg"> 
+        <a ng-click="returnTo()" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
+        <a ng-click="saveTicketForm()" class="mr btn btn-square btn-primary {{suscriber.id > 0? moduleCanEdit: moduleCanAdd }}"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

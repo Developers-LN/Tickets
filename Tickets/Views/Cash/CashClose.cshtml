@@ -1,0 +1,102 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Cuadre de Caja";
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="CashCloseController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-6 no-padder">
+                    <div class="col-lg-12 m-b-xs no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Total en Efectivo:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           ng-model="cashClose.ToktalCashRegistered"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 m-b-xs no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Total en Cheques:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           ng-model="cashClose.TotalCheckRegistered"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 m-b-xs no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Total en Credito:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           ng-model="cashClose.TotalCardRegistered"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="col-lg-6 no-padder">
+                    <div class="col-lg-12 m-b-xs no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Total en Efectivo Calculado:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input ng-disabled="true"
+                                           type="number"
+                                           ng-model="cashClose.ToktalCashCalculated"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 m-b-xs no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Total en Cheques Calculado:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input ng-disabled="true"
+                                           type="number"
+                                           ng-model="cashClose.TotalCheckCalculated"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 m-b-xs no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Total en Credito Calculado:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input ng-disabled="true"
+                                           type="number"
+                                           ng-model="cashClose.TotalCardCalculated"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ng-click="goBack()" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Salir</a>
+        <a ng-click="saveForm()" class="mr btn btn-square btn-primary {{moduleCanAdd}}"><i class="fa fa-floppy-o"></i> Facturar</a>
+    </div>
+</div>

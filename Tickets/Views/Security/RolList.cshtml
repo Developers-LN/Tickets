@@ -1,0 +1,52 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de Roles";
+}
+<div class="col-lg-12 no-padder" ng-controller="SecurityController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!-- START panel-->
+                <div class="col-lg-12 text-right m-b-xs no-padder">
+                    <a ng-click="editRol()" class="btn btn-square btn-success {{moduleCanEdit}}"><i class="fa fa-plus-square"></i> Agregar Rol</a>
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th class="editColumm">Usuarios</th>
+                                <th class="editColumm">Modulos</th>
+                                <th class="editColumm hide">Sucursales</th>
+                                <th class="editColumm"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="rol in rolList">
+                                <td>{{rol.RoleName}}</td>
+                                <td>{{rol.Description}}</td>
+                                <td>
+                                    <a ng-click="manageUsers(rol)" title="Administrar usuario"><i class="fa fa-users"></i></a>
+                                </td>
+                                <td>
+                                    <a ng-click="manageModule(rol)" title="Administrar Modulos"><i class="fa fa-th"></i></a>
+                                </td>
+                                <td class="hide">
+                                    <a ng-click="manageOffice(rol)" title="Administrar Sucursales"><i class="fa fa-briefcase"></i></a>
+                                </td>
+                                <td>
+                                    <a ng-click="editRol(rol)" title="Moificar" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

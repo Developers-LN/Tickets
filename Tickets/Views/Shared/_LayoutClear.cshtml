@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" >
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="{{app.description}}">
+    <title >Tickets</title>
+
+    @Styles.Render("~/bundles/BootstrapStyles")
+    @Styles.Render("~/bundles/ApplicationStyles")
+
+</head>
+
+<body>
+    <div class="app-container">@RenderBody()</div>
+
+
+    @Scripts.Render("~/bundles/VendorScripts")
+    
+    
+    @RenderSection("scripts", required: false)
+</body>
+
+</html>

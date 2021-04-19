@@ -1,0 +1,109 @@
+﻿@model Tickets.Models.Raffle
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Reporte Premiados Facturados";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
+            <b>LISTADO DE NÚMEROS PREMIADOS DEVUELTOS PARA EL SORTEO: @Model.Id</b><br />
+            fecha del sorteo: @Model.DateSolteo.ToLongDateString()
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>NUMERO</th>
+                    <th class="text-center bold">GRUPO DE DEVOLUCIÓN</th>
+                    <th class="text-center bold">CANTIDAD DE FRACCIONES</th>
+                    <th class="text-right bold">VALOR POR FRACCION</th>
+                    <th class="text-right bold" style="width:15%">Monto</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var returnedNumbers = Model.TicketReturns.GroupBy(i => i.TicketAllocationNumber.Number).Select(i => new
+                    {
+                        returnedFractions = i.Select(s => s.FractionTo - s.FractionFrom + 1).Aggregate((a, e) => a + e),
+                        number = i.FirstOrDefault().TicketAllocationNumber.Number,
+                        award = Model.RaffleAwards.FirstOrDefault(a => a.RaffleId == Model.Id && a.ControlNumber == i.FirstOrDefault().TicketAllocationNumber.Number),
+                        returnedGroup = i.FirstOrDefault().ReturnedGroup
+                    });
+
+
+
+                    var awards = returnedNumbers.Where(i =>
+                        i.award != null).OrderByDescending(r => r.award.Award.Value).GroupBy(n => n.award.Award.TypesAwardId)
+                        .Select(n => new
+                        {
+                            typeAwardName = n.FirstOrDefault().award.Award.TypesAward.Name,
+                            awards = n
+                        }).ToList();
+                    var totalValue = 0.0m;
+                }
+
+                @foreach (var typeAward in awards)
+                {
+                    var subTotal = 0.0m;
+                    <tr>
+                        <th colspan="4">@typeAward.typeAwardName</th>
+                    </tr>
+                    foreach (var award in typeAward.awards)
+                    {
+
+                        string stringNumber = award.number.ToString();
+                        int production = Model.Prospect.Production - 1;
+                        while (stringNumber.Length < production.ToString().Length)
+                        {
+                            stringNumber = "0" + stringNumber;
+                        }
+                        var returnedFraction = award.returnedFractions;
+                        var fractionValue = award.award.Award.Value / (Model.Prospect.LeafNumber * Model.Prospect.LeafFraction);
+                        var value = returnedFraction * fractionValue;
+                        <tr>
+                            <td>@stringNumber</td>
+                            <td class="text-center">@award.returnedGroup</td>
+                            <td class="text-center">@returnedFraction</td>
+                            <td class="text-right">@fractionValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right">@value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        </tr>
+
+                        subTotal += value;
+                    }
+                    <tr class="sub-total">
+                        <td colspan="4" class="text-right">SubTotal...:</td>
+                        <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+
+                    totalValue += subTotal;
+                }
+            </tbody>
+            <tfoot>
+                <tr class="total">
+                    <td colspan="4" class="text-right">Total...:</td>
+                    <td class="text-right">@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>Administrador General</span>
+    </div>
+</div>

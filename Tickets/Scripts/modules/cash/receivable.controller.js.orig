@@ -1,0 +1,214 @@
+/**=========================================================
+ * Module: ReceivableController.js
+ =========================================================*/
+
+(function () {
+    'use strict';
+
+    angular
+        .module('naut')
+        .controller('ReceivableController', ReceivableController);
+
+    ReceivableController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
+    function ReceivableController($scope, $state, $rootScope, $stateParams) {
+
+        function validateData(receivable) {
+            var error = '', isReq = ' es un campo requerido. <br>';
+            if (receivable.ReceiptDate === undefined) {
+                error += 'La Fecha del Recibo' + isReq;
+            }
+            if (receivable.ReceiptType === undefined) {
+                error += 'El Tipo de Pago' + isReq;
+            }
+            if (receivable.TotalCash === undefined ) {
+                error += 'Verifique el monto a pagar' + isReq;
+            }
+            if ($scope.receivable.TotalCash > ($scope.payment.totalRestant - $scope.payment.discount)) {
+                error += 'No se puede pagar mas de lo que debe' + isReq;
+            }
+
+            if (error !== '') {
+                alertify.showError('Alerta', error);
+            }
+            return error === '';
+        }
+
+        $scope.receivable = {
+            Id: 0,
+            InvoiceId: undefined,
+            ReceiptDate: new Date(),
+            ReceiptType: undefined,
+            NoteCreditReceiptPayments: [],
+            TotalCash: undefined
+        };
+        $scope.totalCreditNoteValue = 0;
+
+        this.getReceivableData = function () {
+            window.loading.show();
+            $.ajax({
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                url: 'Cash/VerifyCashOpen',
+                success: function (data) {
+                    if (data.result !== true) {
+                        window.location.href = '#/ticket/identifybachdetail/' + $stateParams.identifyBachId;
+                        alertify.confirm(data.message, function (ok) {
+                            window.loading.hide();
+                            if (ok === true) {
+                                if (data.result === 1) {
+                                    $state.go('app.cashOpen');
+                                } else if (data.result === 2) {
+                                }
+                            }
+                        }, function () { });
+                    } else {
+                        $.ajax({
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            url: 'Cash/GetReceivableData?invoiceId=' + $stateParams.invoiceId,
+                            success: function (data) {
+                                window.loading.hide();
+                                $scope.clientName = data.clientName;
+                                $scope.clientId = data.clientId;
+                                $scope.paymentTypes = data.paymentTypes.filter(function (p) {
+                                    if (p.Id == 2075 && $rootScope.moduleCanDelete == '') {
+                                        return p;
+                                    }
+                                    if (p.Id != 2075 && $rootScope.moduleCanSearch == '')
+                                    {
+                                        return p;
+                                    }
+                                });
+                                $scope.creditNotes = data.creditNotes;
+                                $scope.payment = data.payment;
+                                $scope.returneds = data.returneds;
+                                $scope.$apply();
+                                $rootScope.dataTable();
+                                $scope.invoiceId = $stateParams.invoiceId;
+                                $scope.raffleId = data.raffleId;
+                            }
+                        });
+                    }
+                }
+            });
+        }
+<<<<<<< working copy
+
+        $scope.selectAllCreditNotes = function (r) {
+            $scope.creditNotes.forEach(function (n, i) {
+                $scope.creditNotes[i].selected = r.target.checked;
+                $scope.selectCreditNote = function (e, creditNote) {
+                    if (e.target.checked == true) {
+                        if ($scope.payment.totalRestant >= $scope.totalCreditNoteValue) {
+                            $scope.totalCreditNoteValue += creditNote.TotalRest;
+                            $scope.receivable.NoteCreditReceiptPayments.push({ NoteCreditId: creditNote.Id });
+                        } else {
+                            e.target.checked = false;
+                        }
+
+                    } else {
+                        var index = 0;
+                        $scope.receivable.NoteCreditReceiptPayments.findIndex(function (e, i, a) {
+                            if (e.NoteCreditId == creditNote.Id) {
+                                index = i;
+                                return i;
+                            }
+                        });
+
+                        if (index > -1) {
+                            $scope.receivable.NoteCreditReceiptPayments.splice(index, 1);
+                        }
+
+                        $scope.totalCreditNoteValue -= creditNote.TotalRest;
+                        $scope.receivable.NoteCreditReceiptPayments.filter(function (r) {
+                            return r.NoteCreditId != creditNote.Id;
+                        });
+                    }
+                    $scope.receivable.TotalCash = $scope.totalCreditNoteValue;
+                    if ($scope.receivable.TotalCash >= ($scope.payment.totalRestant - $scope.payment.discount)) {
+                        $scope.receivable.TotalCash = ($scope.payment.totalRestant - $scope.payment.discount);
+                    }
+                    window.setTimeout(function () {
+                        $scope.$apply();
+                    }, 0);
+                }
+            });
+        }
+   
+=======
+        $scope.fullCredit = false;
+>>>>>>> destination
+        $scope.selectCreditNote = function (e, creditNote) {
+            if (e.target.checked == true) {
+                if (/*$scope.totalCreditNoteValue < creditNote.TotalRest && */$scope.totalCreditNoteValue <= $scope.payment.totalRestant && $scope.fullCredit == false) {
+                //if ($scope.payment.totalRestant > $scope.totalCreditNoteValue || $scope.payment.totalRestant == $scope.totalCreditNoteValue) {
+                    $scope.totalCreditNoteValue += creditNote.TotalRest;
+                    if ($scope.totalCreditNoteValue >= $scope.payment.totalRestant) { $scope.fullCredit = true;}
+                     $scope.receivable.NoteCreditReceiptPayments.push({ NoteCreditId: creditNote.Id });
+                    // console.log($scope.totalCreditNoteValue);
+                } else {
+                    e.target.checked = false;
+                   // console.log("from here is false");
+                    //console.log($scope.totalCreditNoteValue);
+                    if ($scope.totalCreditNoteValue < $scope.payment.totalRestant) { $scope.fullCredit = false; }
+                }
+                   
+            } else {
+               
+                var index = 0;
+                $scope.receivable.NoteCreditReceiptPayments.findIndex(function (e,i,a)
+                {
+                    if(e.NoteCreditId == creditNote.Id)
+                    {
+                        index = i;
+                        return i;
+                    }
+                });
+
+                if (index > -1)
+                {
+                    $scope.receivable.NoteCreditReceiptPayments.splice(index, 1);
+                }
+
+                $scope.totalCreditNoteValue -= creditNote.TotalRest;
+                $scope.receivable.NoteCreditReceiptPayments.filter(function (r) {
+                    return r.NoteCreditId != creditNote.Id;
+                });
+                //console.log($scope.totalCreditNoteValue);
+                if ($scope.totalCreditNoteValue < $scope.payment.totalRestant) { $scope.fullCredit = false; }
+            }
+            $scope.receivable.TotalCash = $scope.totalCreditNoteValue;
+            if ($scope.receivable.TotalCash >= ($scope.payment.totalRestant - $scope.payment.discount) ) {
+                $scope.receivable.TotalCash = ($scope.payment.totalRestant- $scope.payment.discount);
+            }
+            window.setTimeout(function () {
+                $scope.$apply();
+            },0);
+        }
+
+        $scope.saveForm = function () {
+            try {
+                $scope.receivable.ReceiptDate = $rootScope.parseDate($scope.receivable.ReceiptDate, $scope.receivable.ReceiptDate).toJSON();
+                $scope.receivable.InvoiceId = $stateParams.invoiceId;
+            } catch (e) { }
+            if (validateData($scope.receivable) === false) {
+                return;
+            }
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: 'Cash/Receivable',
+                data: $scope.receivable,
+                success: function (data) {
+                    if (data.result === true) {
+                        alertify.success(data.message);
+                        $state.go('app.cashReceivableList');
+                    } else {
+                        alertify.alert(data.message);
+                    }
+                }
+            });
+        }
+        this.getReceivableData();
+    }
+})();

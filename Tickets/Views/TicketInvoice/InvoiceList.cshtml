@@ -1,0 +1,95 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@{
+    Layout = null;
+    ViewBag.Title = "Listado de Billetes Facturados";
+}
+<div class="col-lg-12 no-padder" ng-controller="InvoiceListController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-4 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control dropdown-select2" ng-model="RaffleId" ng-change="updateInvoices()">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-4 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Cliente: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="ClientId" ng-change="updateInvoices()">
+                                    <option selected="selected" value="0">Seleccione un cliente</option>
+                                    <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-4 text-right m-b-xs no-padder">
+                    <a href="#/ticket/invoice/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Facturación de Billetes</a>
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Cliente</th>
+                                <th>Asignaciones</th>
+                                <th>Fecha</th>
+                                <th>Fecha de Expiración</th>
+                                <th>Estado</th>
+                                <th class="editColumm">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="invoice in invoices">
+                                <td>#{{invoice.id}}</td>
+                                <td>{{invoice.clientDesc}}</td>
+                                <td>
+                                    <span ng-if="invoice.ticketAllocations.length > 0">{{invoice.ticketAllocations}}</span>
+                                    <a ng-click="showInvoiceDetails(invoice)" ng-if="invoice.ticketAllocations.length == 0" title="Mostrar asegnaciones"><i class="fa fa-eye"></i></a>
+                                </td>
+                                <td>{{(invoice.invoiceDate | date:"dd/MM/yyyy")}}</td>
+                                <td>{{(invoice.invoiceExpredDate | date:"dd/MM/yyyy")}}</td>
+                                <td>{{invoice.paymentStatuDesc}}</td>
+                                <th class="editColumm">
+                                    <a target="_blank" href="~/Reports/InvoicesByRaffle?raffleId={{invoice.raffleId}}&clientId={{invoice.clientId}}&invoiceId={{invoice.id}}" title="Imprimir Detalle de asignación Factura" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
+                                    <a target="_blank" href="~/Reports/InvoiceDetail?invoiceId={{invoice.id}}" title="Imprimir Detalle de Factura" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
+                                    <a ng-if="invoice.paymentStatu == @((int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Pendient)" href="#/ticket/invoice/{{invoice.id}}" title="Moificar factura" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg"> 
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>
