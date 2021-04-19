@@ -288,8 +288,6 @@ namespace Tickets.Models.Ticket
                 };
             }
             
-        
-
             using (var context = new TicketsEntities())
             {
                 using (var tx = context.Database.BeginTransaction())
@@ -346,7 +344,6 @@ namespace Tickets.Models.Ticket
 
                         model.TicketReturnedNumbers.ForEach(a => returnTickets += (a.FractionTo - a.FractionFrom + 1));
 
-
                         if (returnTickets >= (totalTickets * (raffleData.MaxReturnTickets / 100)))
                         {
                             return new RequestResponseModel(){ 
@@ -380,7 +377,10 @@ namespace Tickets.Models.Ticket
                                     Statu = (int)TicketReturnedStatuEnum.Created,
                                     Discount = clientDiscount
                                 };
-                                var exists = returneds.Where(t => t.TicketAllocationNimberId == allocationNumber.Id && t.FractionFrom == ticketReturn.FractionFrom && t.FractionTo == t.FractionTo).FirstOrDefault();
+
+                                var exists = returneds.Where(t => t.TicketAllocationNimberId == allocationNumber.Id &&
+                                                             t.FractionFrom >= ticketReturn.FractionFrom && t.FractionFrom >= ticketReturn.FractionTo &&
+                                                             t.FractionTo >= ticketReturn.FractionFrom && t.FractionTo <= ticketReturn.FractionTo).FirstOrDefault();
                                 if (exists == null)
                                 {
                                     ticketNumberList.Add(returnedTicket);
