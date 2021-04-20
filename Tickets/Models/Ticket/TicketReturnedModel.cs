@@ -2,12 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
-using System.Text;
-using Tickets.Models.Raffles;
 
 namespace Tickets.Models.Ticket
 {
@@ -51,7 +49,7 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
             //string group = Regex.Match(ticketReturneds.FirstOrDefault().ReturnedGroup, @"\d+").Value.ToString();
             var subGroups = "";
-            ticketReturneds.GroupBy(r => r.ReturnedGroup).AsEnumerable().Select(r => Regex.Replace(r.FirstOrDefault().ReturnedGroup, @"[\d-]", string.Empty).ToString()).ToList().ForEach( r=> subGroups += r + ", ");
+            ticketReturneds.GroupBy(r => r.ReturnedGroup).AsEnumerable().Select(r => Regex.Replace(r.FirstOrDefault().ReturnedGroup, @"[\d-]", string.Empty).ToString()).ToList().ForEach(r => subGroups += r + ", ");
             var model = new TicketReturnedModel()
             {
                 RaffleId = ticketReturneds.FirstOrDefault().RaffleId,
@@ -61,7 +59,7 @@ namespace Tickets.Models.Ticket
                 ReturnedDate = ticketReturneds.FirstOrDefault().ReturnedDate,
                 ClientId = ticketReturneds.FirstOrDefault().ClientId,
                 ClientDesc = ticketReturneds.FirstOrDefault().Client.Name,
-                FractionQuantity = ticketReturneds.Select( t=> t.FractionTo - t.FractionFrom + 1).Sum(),
+                FractionQuantity = ticketReturneds.Select(t => t.FractionTo - t.FractionFrom + 1).Sum(),
                 StatusId = ticketReturneds.FirstOrDefault().Statu,
                 NumberCount = ticketReturneds.Count
             };
@@ -83,9 +81,10 @@ namespace Tickets.Models.Ticket
                     && (d.Statu == status || status == 0)
                 ).ToList()
                 .GroupBy(d => d.ReturnedGroup)
-                .Select( r => this.ToObject(r.ToList()) )
+                .Select(r => this.ToObject(r.ToList()))
                 .ToList();
-            return new RequestResponseModel (){
+            return new RequestResponseModel()
+            {
                 Result = true,
                 Object = returneds
             };
@@ -125,7 +124,7 @@ namespace Tickets.Models.Ticket
             bool state = false;
             using (var context = new TicketsEntities())
             {
-                
+
                 StringBuilder sb = new StringBuilder();
                 sb.Append("Los boletos: ");
                 var ticketAllocationNumbers = context.TicketAllocationNumbers.Where(t => t.TicketAllocation.RaffleId == model.RaffleId).Select(a => new
@@ -139,19 +138,19 @@ namespace Tickets.Models.Ticket
                 }).ToList();
                 foreach (var item in model.TicketReturnedNumbers)
                 {
-                    var tan = ticketAllocationNumbers.FirstOrDefault( t => t.Number == item.NumberId);
-                    if(tan != null)
+                    var tan = ticketAllocationNumbers.FirstOrDefault(t => t.Number == item.NumberId);
+                    if (tan != null)
                     {
-                    
-                            if(tan.ClientId != item.ClientId)
-                            {
-                                sb.Append(item.NumberId);
-                                sb.Append(",");
-                                state = true;
-                            }
+
+                        if (tan.ClientId != item.ClientId)
+                        {
+                            sb.Append(item.NumberId);
+                            sb.Append(",");
+                            state = true;
+                        }
                     }
                 }
-                if(state)
+                if (state)
                 {
                     sb.Append(" no pertenecen al cliente ");
                     var client = context.Clients.Where(a => a.Id == model.ClientId).FirstOrDefault();
@@ -169,7 +168,7 @@ namespace Tickets.Models.Ticket
                     };
 
                 }
-            
+
 
                 using (var tx = context.Database.BeginTransaction())
                 {
@@ -186,9 +185,10 @@ namespace Tickets.Models.Ticket
 
                             if (allocationNumbers.Any() == false)
                             {
-                                return new RequestResponseModel (){ 
-                                    Result = false, 
-                                    Message = "El billete " + ticketReturn.NumberId + " no se ha asignado." 
+                                return new RequestResponseModel()
+                                {
+                                    Result = false,
+                                    Message = "El billete " + ticketReturn.NumberId + " no se ha asignado."
                                 };
                             }
 
@@ -203,6 +203,20 @@ namespace Tickets.Models.Ticket
                                 {
                                     messageList.Add("La fracción " + fraction + " del billete " + ticketReturn.NumberId + " no fue asignada.");
                                 }
+
+
+
+                                //TESTEAR ESTE BLOQUE DE CODIGO
+                                var FractionTotal = context.TicketAllocationNumbers.Where(n => n.Number == ticketReturn.NumberId).Sum(f => f.FractionFrom + f.FractionTo);
+                                if (FractionTotal > context.Prospects.Where(p => p.Id == raffle.ProspectId).Select(s => s.LeafFraction * s.LeafNumber).FirstOrDefault()) 
+                                {
+                                    messageList.Add("El billete " + ticketReturn.NumberId + " ha superado la cantidad de fracciones devueltas.");
+                                }
+
+
+
+
+
                             }
                             if (messageList.Count == 0)
                             {
@@ -246,27 +260,31 @@ namespace Tickets.Models.Ticket
                             }
                             if (messageList.Count > 0)
                             {
-                                return new RequestResponseModel (){ 
-                                    Result = false, 
+                                return new RequestResponseModel()
+                                {
+                                    Result = false,
                                     Message = "",
-                                    Object = messageList 
+                                    Object = messageList
                                 };
                             }
                         }
-                        return new RequestResponseModel(){ 
+                        return new RequestResponseModel()
+                        {
                             Result = true,
-                            Object = new { 
-                                clientId, 
+                            Object = new
+                            {
+                                clientId,
                                 clientName,
                             },
-                            Message = "billete agregado correctamente!" 
+                            Message = "billete agregado correctamente!"
                         };
                     }
                     else
                     {
-                        return new RequestResponseModel (){ 
-                            Result = false, 
-                            Message = "La fecha de devolucion ya expiro." 
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "La fecha de devolucion ya expiro."
                         };
                     }
                 }
@@ -282,12 +300,13 @@ namespace Tickets.Models.Ticket
 
             if (model.ReturnedGroup.Length > 10)
             {
-                return new RequestResponseModel (){ 
-                    Result = false, 
-                    Message = "El campo Grupo contiene muchos caracteres." 
+                return new RequestResponseModel()
+                {
+                    Result = false,
+                    Message = "El campo Grupo contiene muchos caracteres."
                 };
             }
-            
+
             using (var context = new TicketsEntities())
             {
                 using (var tx = context.Database.BeginTransaction())
@@ -297,35 +316,36 @@ namespace Tickets.Models.Ticket
 
                         var clientId = model.TicketReturnedNumbers.Select(r => r.ClientId).FirstOrDefault();
                         var raffleData = (from r in context.Raffles
-                            join p in context.Prospects on r.ProspectId equals p.Id
-                            where r.Id == model.RaffleId
-                            select new
-                            {
-                                MaxReturnTickets = p.MaxReturnTickets,
-                                Statu = r.Statu,
-                                EndReturnDate = r.EndReturnDate
-                            }).FirstOrDefault();
+                                          join p in context.Prospects on r.ProspectId equals p.Id
+                                          where r.Id == model.RaffleId
+                                          select new
+                                          {
+                                              MaxReturnTickets = p.MaxReturnTickets,
+                                              Statu = r.Statu,
+                                              EndReturnDate = r.EndReturnDate
+                                          }).FirstOrDefault();
 
-                        var returnedOpens = context.ReturnedOpens.Where(r => 
+                        var returnedOpens = context.ReturnedOpens.Where(r =>
                             r.RaffleId == model.RaffleId &&
                             r.EndReturnedDate >= DateTime.Now).Select(ro => new
-                        {
-                            ro.EndReturnedDate
-                        }).ToList();
+                            {
+                                ro.EndReturnedDate
+                            }).ToList();
 
                         var ticketAllocationNumbers = (from tn in context.TicketAllocationNumbers
-                                                      join a in context.TicketAllocations on tn.TicketAllocationId equals a.Id
-                                                      where a.RaffleId == model.RaffleId
-                                                        && a.ClientId == clientId
-                                                        && a.Statu == (int)AllocationStatuEnum.Invoiced
-                                                      select new{
-                                                          tn.FractionTo,
-                                                          tn.FractionFrom,
-                                                          tn.Number,
-                                                          tn.Id
-                                                      }).ToList();
+                                                       join a in context.TicketAllocations on tn.TicketAllocationId equals a.Id
+                                                       where a.RaffleId == model.RaffleId
+                                                         && a.ClientId == clientId
+                                                         && a.Statu == (int)AllocationStatuEnum.Invoiced
+                                                       select new
+                                                       {
+                                                           tn.FractionTo,
+                                                           tn.FractionFrom,
+                                                           tn.Number,
+                                                           tn.Id
+                                                       }).ToList();
 
-                        var clientDiscount = context.Clients.Where(c => c.Id == clientId).Select( a => a.Discount).FirstOrDefault();
+                        var clientDiscount = context.Clients.Where(c => c.Id == clientId).Select(a => a.Discount).FirstOrDefault();
 
                         var totalTickets = 0;
                         ticketAllocationNumbers.ForEach(t => totalTickets += (t.FractionTo - t.FractionFrom + 1));
@@ -340,15 +360,16 @@ namespace Tickets.Models.Ticket
                                              r.ClientId,
                                              r.TicketAllocationNimberId
                                          }).ToList();
-                        returneds.Where( r => r.ClientId == clientId).ToList().ForEach(a => returnTickets += (a.FractionTo - a.FractionFrom + 1));
+                        returneds.Where(r => r.ClientId == clientId).ToList().ForEach(a => returnTickets += (a.FractionTo - a.FractionFrom + 1));
 
                         model.TicketReturnedNumbers.ForEach(a => returnTickets += (a.FractionTo - a.FractionFrom + 1));
 
                         if (returnTickets >= (totalTickets * (raffleData.MaxReturnTickets / 100)))
                         {
-                            return new RequestResponseModel(){ 
-                                Result = false, 
-                                Message = "No puedes devolver mas del " + raffleData.MaxReturnTickets + " % de los billetes asignados." 
+                            return new RequestResponseModel()
+                            {
+                                Result = false,
+                                Message = "No puedes devolver mas del " + raffleData.MaxReturnTickets + " % de los billetes asignados."
                             };
                         }
 
@@ -361,7 +382,7 @@ namespace Tickets.Models.Ticket
 
                             foreach (var ticketReturn in model.TicketReturnedNumbers)
                             {
-                                var allocationNumber = ticketAllocationNumbers.FirstOrDefault(t => t.Number == ticketReturn.NumberId );
+                                var allocationNumber = ticketAllocationNumbers.FirstOrDefault(t => t.Number == ticketReturn.NumberId);
 
                                 var returnedTicket = new TicketReturn()
                                 {
@@ -379,23 +400,24 @@ namespace Tickets.Models.Ticket
                                 };
 
                                 var exists = returneds.Where(t => t.TicketAllocationNimberId == allocationNumber.Id &&
-                                             ((t.FractionFrom >= ticketReturn.FractionFrom && t.FractionFrom <= ticketReturn.FractionTo)
-                                                                ||
-                                                                (t.FractionTo >= ticketReturn.FractionFrom && t.FractionTo <= ticketReturn.FractionTo))).FirstOrDefault();
+                                    ((t.FractionFrom >= ticketReturn.FractionFrom && t.FractionFrom <= ticketReturn.FractionTo) ||
+                                    (t.FractionTo >= ticketReturn.FractionFrom && t.FractionTo <= ticketReturn.FractionTo))).FirstOrDefault();
+
                                 if (exists == null)
                                 {
                                     ticketNumberList.Add(returnedTicket);
-                                }else
+                                }
+                                else
                                 {
-                                    sb.Append("desde "+returnedTicket.FractionFrom);
+                                    sb.Append("desde " + returnedTicket.FractionFrom);
                                     sb.Append("hasta " + returnedTicket.FractionTo);
-                                //    sb.Append("del billete " + returnedTicket.);
+                                    //sb.Append("del billete " + returnedTicket.);
                                     sb.Append(",");
                                     notAllReturnet = true;
                                 }
-                                
+
                             }
-                            if(ticketNumberList.Count> 0)
+                            if (ticketNumberList.Count > 0)
                             {
                                 context.TicketReturns.AddRange(ticketNumberList);
                                 context.SaveChanges();
@@ -404,8 +426,9 @@ namespace Tickets.Models.Ticket
                         }
                         else
                         {
-                            return new RequestResponseModel(){ 
-                                Result = false, 
+                            return new RequestResponseModel()
+                            {
+                                Result = false,
                                 Message = "La fecha de devolucion ya expiro."
                             };
                         }
@@ -413,17 +436,19 @@ namespace Tickets.Models.Ticket
                     catch (Exception e)
                     {
                         tx.Rollback();
-                        return new RequestResponseModel(){ 
+                        return new RequestResponseModel()
+                        {
                             Result = false,
-                            Message = e.Message 
+                            Message = e.Message
                         };
                     }
                 }
             }
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Devolución de Billetes", model);
             string message = notAllReturnet ? sb.ToString() : "Devolución de Billetes Completada.";
-            return new RequestResponseModel(){ 
-                Result = true, 
+            return new RequestResponseModel()
+            {
+                Result = true,
                 Message = message
             };
         }
@@ -434,7 +459,7 @@ namespace Tickets.Models.Ticket
 
             var returneds = context.TicketReturns.Where(d =>
                     (d.RaffleId == raffleId)
-                    && (d.ReturnedGroup == group )
+                    && (d.ReturnedGroup == group)
                 ).ToList()
                 .GroupBy(d => d.ReturnedGroup)
                 .Select(r => this.ToObject(r.ToList(), true))
@@ -464,9 +489,10 @@ namespace Tickets.Models.Ticket
                     catch
                     {
                         tm.Rollback();
-                        return new RequestResponseModel(){ 
-                            Result = false, 
-                            Message = "No es posible borrar esta debolución!" 
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "No es posible borrar esta debolución!"
                         };
                     }
                 }
@@ -475,9 +501,9 @@ namespace Tickets.Models.Ticket
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Delete, "Borando Grupo de devoluciones", model);
 
             return new RequestResponseModel()
-            { 
-                Result = true, 
-                Message = "Grupo de devolucion borrado correctamente!" 
+            {
+                Result = true,
+                Message = "Grupo de devolucion borrado correctamente!"
             };
         }
 
@@ -485,7 +511,7 @@ namespace Tickets.Models.Ticket
         {
             var context = new TicketsEntities();
 
-            var returneds = context.TicketReturns.Where(d =>(d.RaffleId == raffleId)).ToList()
+            var returneds = context.TicketReturns.Where(d => (d.RaffleId == raffleId)).ToList()
                 .GroupBy(d => d.ReturnedGroup)
                 .Select(r => new
                 {
@@ -520,7 +546,7 @@ namespace Tickets.Models.Ticket
         }
 
         //Arreglo para validación de devoluciones.
-        
+
         internal RequestResponseModel GetListtByValidation(int raffleId, int clientId = 0, bool propertys = true)
         {
             var context = new TicketsEntities();
@@ -549,7 +575,7 @@ namespace Tickets.Models.Ticket
             return new RequestResponseModel()
             {
                 Result = true,
-                Object =  returneds
+                Object = returneds
             };
         }
 
