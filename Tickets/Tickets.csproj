@@ -2647,7 +2647,6 @@
     <Content Include="Scripts\modules\security\security.logs.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Properties\PublishProfiles\tickets.pubxml" />
     <Content Include="Vendor\datepicker\less\datepicker.less" />
     <Content Include="Vendor\select2\.editorconfig" />
     <Content Include="Vendor\select2\.gitignore" />

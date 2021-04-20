@@ -379,8 +379,9 @@ namespace Tickets.Models.Ticket
                                 };
 
                                 var exists = returneds.Where(t => t.TicketAllocationNimberId == allocationNumber.Id &&
-                                                             t.FractionFrom >= ticketReturn.FractionFrom && t.FractionFrom >= ticketReturn.FractionTo &&
-                                                             t.FractionTo >= ticketReturn.FractionFrom && t.FractionTo <= ticketReturn.FractionTo).FirstOrDefault();
+                                             ((t.FractionFrom >= ticketReturn.FractionFrom && t.FractionFrom <= ticketReturn.FractionTo)
+                                                                ||
+                                                                (t.FractionTo >= ticketReturn.FractionFrom && t.FractionTo <= ticketReturn.FractionTo))).FirstOrDefault();
                                 if (exists == null)
                                 {
                                     ticketNumberList.Add(returnedTicket);
