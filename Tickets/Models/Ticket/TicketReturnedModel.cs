@@ -204,19 +204,6 @@ namespace Tickets.Models.Ticket
                                     messageList.Add("La fracción " + fraction + " del billete " + ticketReturn.NumberId + " no fue asignada.");
                                 }
 
-
-
-                                //TESTEAR ESTE BLOQUE DE CODIGO
-                                var FractionTotal = context.TicketAllocationNumbers.Where(n => n.Number == ticketReturn.NumberId).Sum(f => f.FractionFrom + f.FractionTo);
-                                if (FractionTotal > context.Prospects.Where(p => p.Id == raffle.ProspectId).Select(s => s.LeafFraction * s.LeafNumber).FirstOrDefault()) 
-                                {
-                                    messageList.Add("El billete " + ticketReturn.NumberId + " ha superado la cantidad de fracciones devueltas.");
-                                }
-
-
-
-
-
                             }
                             if (messageList.Count == 0)
                             {
