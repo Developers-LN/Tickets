@@ -80,6 +80,7 @@
             <tbody>
                 @foreach (var client in clients)
                 {
+                    var DescuentoCliente = 0.0m;
                     int subTotalNumber = 0, subTotalFraction = 0, subTotalGroup = 0;
                     decimal subTotalValue = 0.0m, subTotalLeef = 0.0m;
                     decimal fractionPrice = Model.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice;
@@ -89,7 +90,8 @@
                         Quantity = r.Count(),
                         FractionQuantity = r.Select( e=> (e.FractionTo - e.FractionFrom + 1)).Aggregate((s,e)=> s+ e),
                         ProspectFraction = r.FirstOrDefault().Raffle.Prospect.LeafFraction,
-                        Price = r.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice 
+                        Price = r.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice, 
+                        Descuento = r.FirstOrDefault().Discount
                     });
                     
                     foreach (var returned in returnedGroups)
@@ -102,15 +104,16 @@
                         subTotalNumber += returned.Quantity;
                         subTotalGroup += returned.Group;
                         subTotalLeef += leef;
+                        DescuentoCliente = returned.Descuento;
                     }
-                    subTotalValue = subTotalValue - ((subTotalValue * client.Client.Discount) / 100);
+                    subTotalValue = subTotalValue - ((subTotalValue * DescuentoCliente) / 100);
                     <tr>
                         <td>@client.Client.Name</td>
                         <td class="text-center">@subTotalGroup</td>
                         <td class="text-center">@subTotalFraction</td>
                         <td class="text-center">@subTotalLeef </td>
                         <td class="text-right">@fractionPrice.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td class="text-right">@((int)client.Client.Discount)%</td>
+                        <td class="text-right">@((int)DescuentoCliente)%</td>
                         <td class="text-right">@subTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     totalNumber += subTotalNumber;
