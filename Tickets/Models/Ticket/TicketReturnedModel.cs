@@ -351,7 +351,7 @@ namespace Tickets.Models.Ticket
 
                         model.TicketReturnedNumbers.ForEach(a => returnTickets += (a.FractionTo - a.FractionFrom + 1));
 
-                        if (returnTickets >= (totalTickets * (raffleData.MaxReturnTickets / 100)))
+                        if (returnTickets > (totalTickets * (raffleData.MaxReturnTickets / 100)))
                         {
                             return new RequestResponseModel()
                             {
@@ -397,7 +397,7 @@ namespace Tickets.Models.Ticket
                                 else
                                 {
                                     sb.Append("desde " + returnedTicket.FractionFrom);
-                                    sb.Append("hasta " + returnedTicket.FractionTo);
+                                    sb.Append(" hasta " + returnedTicket.FractionTo);
                                     //sb.Append("del billete " + returnedTicket.);
                                     sb.Append(",");
                                     notAllReturnet = true;
