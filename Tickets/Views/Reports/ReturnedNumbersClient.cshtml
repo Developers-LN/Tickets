@@ -113,7 +113,7 @@
                         <td class="text-center">@subTotalFraction</td>
                         <td class="text-center">@subTotalLeef </td>
                         <td class="text-right">@fractionPrice.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td class="text-right">@((int)client.Client.Discount)%</td>
+                        <td class="text-right">@((int)DescuentoCliente)%</td>
                         <td class="text-right">@subTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     totalNumber += subTotalNumber;
