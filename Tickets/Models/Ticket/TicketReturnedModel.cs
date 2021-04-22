@@ -63,6 +63,7 @@ namespace Tickets.Models.Ticket
                 StatusId = ticketReturneds.FirstOrDefault().Statu,
                 NumberCount = ticketReturneds.Count
             };
+
             if (hasNumber == true)
             {
                 var ticketReturnedNumberModel = new TicketReturnedNumberModel();
@@ -300,7 +301,8 @@ namespace Tickets.Models.Ticket
                 {
                     try
                     {
-
+                        var fraccionMinima = 1;
+                        var fraccionMaxima = 0;
                         var clientId = model.TicketReturnedNumbers.Select(r => r.ClientId).FirstOrDefault();
                         var raffleData = (from r in context.Raffles
                                           join p in context.Prospects on r.ProspectId equals p.Id
@@ -309,8 +311,12 @@ namespace Tickets.Models.Ticket
                                           {
                                               MaxReturnTickets = p.MaxReturnTickets,
                                               Statu = r.Statu,
-                                              EndReturnDate = r.EndReturnDate
+                                              EndReturnDate = r.EndReturnDate,
+                                              MaxFraction = p.LeafNumber * p.LeafFraction
                                           }).FirstOrDefault();
+
+                        //Validacion de Fraccion Minima y Maxima
+                        fraccionMaxima = raffleData.MaxFraction;
 
                         var returnedOpens = context.ReturnedOpens.Where(r =>
                             r.RaffleId == model.RaffleId &&
@@ -358,7 +364,7 @@ namespace Tickets.Models.Ticket
                                 Result = false,
                                 Message = "No puedes devolver mas del " + raffleData.MaxReturnTickets + " % de los billetes asignados."
                             };
-                        }
+                        }                        
 
                         if (((raffleData.Statu == (int)RaffleStatusEnum.Active
                             || raffleData.Statu == (int)RaffleStatusEnum.Planned)
@@ -386,6 +392,27 @@ namespace Tickets.Models.Ticket
                                     Discount = clientDiscount
                                 };
 
+                                //Validacion fraccion minima
+                                if (ticketReturn.FractionFrom < fraccionMinima || ticketReturn.FractionFrom > fraccionMaxima)
+                                {
+                                    return new RequestResponseModel()
+                                    {
+                                        Result = false,
+                                        Message = "La fracción " + ticketReturn.FractionFrom + " no es valida."
+                                    };
+                                }
+
+                                //Validacion fraccion maxima
+                                if (ticketReturn.FractionTo < fraccionMinima || ticketReturn.FractionTo > fraccionMaxima)
+                                {
+                                    return new RequestResponseModel()
+                                    {
+                                        Result = false,
+                                        Message = "La fracción " + ticketReturn.FractionFrom + " no es valida."
+                                    };
+                                }
+
+                                //Validacion si existe una fraccion ya devuelta
                                 var exists = returneds.Where(t => t.TicketAllocationNimberId == allocationNumber.Id &&
                                     ((t.FractionFrom >= ticketReturn.FractionFrom && t.FractionFrom <= ticketReturn.FractionTo) ||
                                     (t.FractionTo >= ticketReturn.FractionFrom && t.FractionTo <= ticketReturn.FractionTo))).FirstOrDefault();
