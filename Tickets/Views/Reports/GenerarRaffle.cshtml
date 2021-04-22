@@ -6,406 +6,460 @@
 }
 
 <style>
-    .color {
-        background-color: black !important;
-    }
+        .color {
+            background-color: black !important;
+        }
 
-    .text-center {
-        text-align: center;
-    }
-    .text-right {
-        text-align:right;
-    }
-    .text-left {
-        text-align:left;
-    }
-    .no-padder {
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-    body {
-        background-color: white;
-        color: black;
-    }
-    
-.p-title {    
-    background-color: black;
-    border-radius: 10px;
-    font-weight: bold;
-    color: white;
-    text-align: center;
-    font-size: 15pt;
-    line-height: initial;
-}
+        .text-center {
+            text-align: center;
+        }
 
-.title {    
-    background-color: black;
-    border-radius: 10px;
-    font-weight: bold;
-    color: white;
-    text-align: center;
-    font-size: 20pt;
-    line-height: initial;
-}
-.no-padder {
-    padding-left: 0px;
-    padding-right: 0px;
-}
-.m-t-2-px {
-    margin-top: 2px;
-}
-.p-l-5-px {
-    padding-left: 5px;
-}
+        .text-right {
+            text-align: right;
+        }
 
-/*  //
+        .text-left {
+            text-align: left;
+        }
+
+        .no-padder {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        body {
+            background-color: white;
+            color: black;
+        }
+
+        .p-title {
+            background-color: black;
+            border-radius: 10px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            font-size: 15pt;
+            line-height: initial;
+        }
+
+        .title {
+            background-color: black;
+            border-radius: 10px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            font-size: 20pt;
+            line-height: initial;
+        }
+
+        .no-padder {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        .m-t-2-px {
+            margin-top: 2px;
+        }
+
+        .p-l-5-px {
+            padding-left: 5px;
+        }
+
+        /*  //
+        //
+        SPECIAL-BOX START
+        //
+        //*/
+
+        .special-box {
+            border: solid 3px black;
+            border-radius: 5px;
+            height: 111px;
+            max-height: 111px;
+        }
+
+            .special-box .title {
+                border-radius: 0px;
+                font-size: 6pt;
+            }
+
+            .special-box .award {
+                font-weight: bold;
+                font-size: 28pt;
+                line-height: normal;
+                color: black;
+            }
+
+            .special-box .number-container {
+                background-color: black;
+                color: white;
+                line-height: 38px;
+            }
+
+                .special-box .number-container .number {
+                    font-size: 18pt;
+                    font-weight: bold;
+                    margin-left: 5px;
+                    margin-right: 5px;
+                }
+
+                .special-box .number-container .text {
+                    font-size: 10pt;
+                    font-weight: bold;
+                }
+
+            .special-box .sale-in-container {
+                font-size: 7pt;
+                color: white;
+                font-weight: bold;
+                line-height: normal;
+                margin-top: -15px;
+            }
+
+                .special-box .sale-in-container .sale-in {
+                    background-color: black;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
+
+        /*//
     //
-    SPECIAL-BOX START
+    SPECIAL-BOX END
     //
     //*/
-.special-box {    
-    border: solid 3px black;
-    border-radius: 5px;
-    height: 111px;
-    max-height: 111px;
-}
-.special-box .title {    
-    border-radius: 0px;
-    font-size:6pt;
-}
-.special-box .award {
-    font-weight: bold;
-    font-size: 28pt;
-    line-height: normal;
-    color: black;
-}
-.special-box .number-container {
-    background-color: black;
-    color: white;        
-    line-height: 38px;
-}
-.special-box .number-container .number {
-    font-size: 18pt;
-    font-weight: bold;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-.special-box .number-container .text {
-    font-size: 10pt;
-    font-weight: bold;
-}
-.special-box .sale-in-container{
-    font-size: 7pt;
-    color: white;
-    font-weight: bold;
-    line-height: normal;
-    margin-top: -15px;
-}
-.special-box .sale-in-container .sale-in {
-    background-color:black;
-    padding-left: 5px;
-    padding-right: 5px;
-}
-/*//
-//
-SPECIAL-BOX END
-//
-//*/
 
-/*//
-//
-MAYOR-BOX START
-//
-//*/
-.mayor-box {    
-    border: solid 3px black;
-    border-radius: 5px;
-    height: 111px;
-    max-height: 111px;
-}
-.mayor-box .title {    
-    -webkit-transform: rotate(270deg);
-    -moz-transform: rotate(270deg);
-    -o-transform: rotate(270deg);
-    -ms-transform: rotate(270deg);
-    transform: rotate(270deg);
-    
-    width: 114px;
-    height: 43px;
-    position: static;
-    margin-left: -37px;
-    margin-top: 35px;
+        /*//
+    //
+    MAYOR-BOX START
+    //
+    //*/
 
-    border-radius: 0px;
-    font-size: 18pt;
-}
-.mayor-box .award {
-    font-weight: bold;
-    font-size: 20pt;
-    line-height: normal;
-    color: black;
-}
-.mayor-box .m-t-min-65 {
-    margin-top: -65px;
-}
+        .mayor-box {
+            border: solid 3px black;
+            border-radius: 5px;
+            height: 111px;
+            max-height: 111px;
+        }
 
-.mayor-box .m-t-min-40 {
-    margin-top: -40px;
-}
+            .mayor-box .title {
+                -webkit-transform: rotate(270deg);
+                -moz-transform: rotate(270deg);
+                -o-transform: rotate(270deg);
+                -ms-transform: rotate(270deg);
+                transform: rotate(270deg);
+                width: 114px;
+                height: 43px;
+                position: static;
+                margin-left: -37px;
+                margin-top: 35px;
+                border-radius: 0px;
+                font-size: 18pt;
+            }
 
-.mayor-box .number {
-    font-weight: bold;
-    font-size: 28pt;
-    line-height: normal;
-    color: black;
-}
-.mayor-box .number-container {
-    line-height: normal;
-    margin-bottom: 5px;
-    padding-left: 30px;
-}
-.mayor-box .number-container .number {
-    font-size: 9pt;
-    font-weight: bold;
-    margin-left: 15px;
-    margin-right: 5px;
-}
-.mayor-box .number-container .award {
-    font-size: 6pt;
-    font-weight: bold;
-}
-.mayor-box .sale-in-container{
-    font-size: 7pt;
-    color: white;
-    font-weight: bold;
-    line-height: normal;
-    margin-top: -5px;
-}
-.mayor-box .sale-in-container .sale-in {
-    background-color:black;
-    padding-left: 5px;
-    padding-right: 5px;
-}
-/*//
-//
-MAYOR-BOX END
-//
-//*/
+            .mayor-box .award {
+                font-weight: bold;
+                font-size: 20pt;
+                line-height: normal;
+                color: black;
+            }
 
-/*PREMIOS MENORES*/
-.min-award {
-    margin-top: 5px;
-    border: solid 5px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
-.min-award .title {    
-    font-size: 13pt;
-    border-radius: 0px;
-}
-    ul {
+            .mayor-box .m-t-min-65 {
+                margin-top: -65px;
+            }
+
+            .mayor-box .m-t-min-40 {
+                margin-top: -40px;
+            }
+
+            .mayor-box .number {
+                font-weight: bold;
+                font-size: 28pt;
+                line-height: normal;
+                color: black;
+            }
+
+            .mayor-box .number-container {
+                line-height: normal;
+                margin-bottom: 5px;
+                padding-left: 30px;
+            }
+
+                .mayor-box .number-container .number {
+                    font-size: 9pt;
+                    font-weight: bold;
+                    margin-left: 15px;
+                    margin-right: 5px;
+                }
+
+                .mayor-box .number-container .award {
+                    font-size: 6pt;
+                    font-weight: bold;
+                }
+
+            .mayor-box .sale-in-container {
+                font-size: 7pt;
+                color: white;
+                font-weight: bold;
+                line-height: normal;
+                margin-top: -5px;
+            }
+
+                .mayor-box .sale-in-container .sale-in {
+                    background-color: black;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
+
+        /*//
+    //
+    MAYOR-BOX END
+    //
+    //*/
+
+        /*PREMIOS MENORES*/
+
+        .min-award {
+            margin-top: 5px;
+            border: solid 5px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+            .min-award .title {
+                font-size: 13pt;
+                border-radius: 0px;
+            }
+
+        ul {
             list-style-type: none;
-    }
-.min-award ul.column {
-    height: auto;
-    -webkit-column-count: 32;
-    -moz-column-count: 32;
-    column-count: 32;   
-    padding-left: 5px;   
-    padding-right: 5px;
-    margin-top: 5px;
-    list-style-type: none;
-}
-.min-award ul.column li {
-    padding: 0;
-    margin: 0;
-    line-height: normal;
-    font-size: 8pt;
-    font-weight: bold;
-}
-/*PREMIOS MENORES*/
-/*PREMIOS ESPECIALES EN EFECTIVO*/
-.special-cash-award {
-}
-.special-cash-award .title {
-    font-size: 8pt;
-    line-height: 15px;
-}
-.special-cash-award .cash {
-    border: solid 3px;
-    border-right: 0;
-}
-div.special-cash-award div.cash:last-of-type{
-    border-right: solid 3px;
-}
-.special-cash-award .cash .title {
-    font-size: 7pt;
-    line-height: normal;
-    border-radius: 0px;
-}
-.special-cash-award .cash ul {
-    height: auto;
-    -webkit-column-count: 2;
-    -moz-column-count: 2;
-    column-count: 2;   
-    padding: 5px;
-    margin: 0;
-    padding-top: 7px;
-    padding-bottom: 4px;
-    -webkit-column-gap: 5px; /* Chrome, Safari, Opera */
-    -moz-column-gap: 5px; /* Firefox */
-    column-gap: 5px;
-}
-.special-cash-award .cash ul li { 
-    padding: 0;
-    margin: 0;
-    line-height: normal;
-    font-size: 10pt;
-    font-weight: bold;
-    padding-top: 2px;
-    padding-bottom: 2px;
-}
-/*PREMIOS ESPECIALES EN EFECTIVO*/
-/*PREMIOS INTERMEDIOS*/
-.inter-award {
-    padding-left: 10px;
-}
-.inter-award .title {    
-    font-size: 14pt;
-    line-height: 15px;
-}
-.inter-award .cash {
-    border: solid 3px;
-    border-right: 0;
-}
-div.inter-award div.cash:last-of-type{
-    border-right: solid 3px;
-}
-.inter-award .cash .title {
-    font-size: 7pt;
-    line-height: 10px;
-    border-radius: 0px;
-}
-.inter-award .cash ul {
-    height: auto;
-    -webkit-column-count: 5;
-    -moz-column-count: 5;
-    column-count: 5;   
-    padding: 5px;
-    margin: 0;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    -webkit-column-gap: 5px; /* Chrome, Safari, Opera */
-    -moz-column-gap: 5px; /* Firefox */
-    column-gap: 5px;
-}
-.inter-award .cash ul li { 
-    padding: 0;
-    margin: 0;
-    line-height: normal;
-    font-size: 7pt;
-    font-weight: bold;
-}
-/*PREMIOS INTERMEDIOS*/
+        }
 
+        .min-award ul.column {
+            height: auto;
+            -webkit-column-count: 32;
+            -moz-column-count: 32;
+            column-count: 32;
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-top: 5px;
+            list-style-type: none;
+        }
 
+            .min-award ul.column li {
+                padding: 0;
+                margin: 0;
+                line-height: normal;
+                font-size: 8pt;
+                font-weight: bold;
+            }
 
+        /*PREMIOS MENORES*/
 
-table.table tr th {    
-    height: auto;
-    line-height: normal;
-    font-size: 9pt;
-    padding: 5px;
-}
-table.table tr td {    
-    height: auto;
-    line-height: normal;
-    padding: 2px;
-    font-size: 7pt;
-}
+        /*PREMIOS ESPECIALES EN EFECTIVO*/
 
-table.table tr.total {
-    border-top: double 4px gray;
-    font-weight: bold;
-}
+        .special-cash-award {
+        }
 
-table.table tr.sub-total {
-    border-top: solid 2px gray;
-    font-weight: bold;
-    height: 32px;
-}
+            .special-cash-award .title {
+                font-size: 8pt;
+                line-height: 15px;
+            }
 
-table.table thead {
-    border-top: solid 4px gray;
-}
+            .special-cash-award .cash {
+                border: solid 3px;
+                border-right: 0;
+            }
 
-    .col-lg-2 {
-        width: 16.66666667%;
-        float: left;
-    }
-    .col-lg-4 {
-        width: 32%;
-        float: left;
-    }
-    
-.col-lg-20 {
-    width: 19.60%;
-     float: left;
-}
-.col-lg-22 {
-    width: 21%;
-    float: left;
-}
-.col-lg-78 {
-    width: 78%;
-    float: left;
+        div.special-cash-award div.cash:last-of-type {
+            border-right: solid 3px;
+        }
 
-}
-.col-lg-200 {
-    width: 150%;
-    float: left;
+        .special-cash-award .cash .title {
+            font-size: 7pt;
+            line-height: normal;
+            border-radius: 0px;
+        }
 
-    
-}
-.col-lg-12{
-    width: 100%;
-    float: left;
-}
-.col-lg-3{
-    width: 24.6%;
-    float: left;
-}
-.col-lg-6{
-    width: 50%;
-    float: left;
-}
+        .special-cash-award .cash ul {
+            height: auto;
+            -webkit-column-count: 2;
+            -moz-column-count: 2;
+            column-count: 2;
+            padding: 5px;
+            margin: 0;
+            padding-top: 7px;
+            padding-bottom: 4px;
+            -webkit-column-gap: 5px;
+            /* Chrome, Safari, Opera */
+            -moz-column-gap: 5px;
+            /* Firefox */
+            column-gap: 5px;
+        }
 
+            .special-cash-award .cash ul li {
+                padding: 0;
+                margin: 0;
+                line-height: normal;
+                font-size: 10pt;
+                font-weight: bold;
+                padding-top: 2px;
+                padding-bottom: 2px;
+            }
 
+        /*PREMIOS ESPECIALES EN EFECTIVO*/
 
-.hundred {
-    border-radius: 10px;
-    border: solid 1px black;
-}
+        /*PREMIOS INTERMEDIOS*/
 
-.hundred .title {    
-    background-color: transparent;
-    border-bottom: solid 1px black;  
-    font-size: 5pt;
-    font-weight: bold;
-    color: black;
-    text-align: center;
-    line-height: initial;
-}
-    .last-ball-number {background-color: black;
-    color: white;
-    border-radius: 50%;
-    height: 40px;
-    font-size: 19pt;
-    font-weight: bold;
-    padding-top: 1px;
-    margin-left: 5px;
-    margin-right: 5px;
-    }
+        .inter-award {
+            padding-left: 10px;
+        }
+
+            .inter-award .title {
+                font-size: 14pt;
+                line-height: 15px;
+            }
+
+            .inter-award .cash {
+                border: solid 3px;
+                border-right: 0;
+            }
+
+        div.inter-award div.cash:last-of-type {
+            border-right: solid 3px;
+        }
+
+        .inter-award .cash .title {
+            font-size: 7pt;
+            line-height: 10px;
+            border-radius: 0px;
+        }
+
+        .inter-award .cash ul {
+            height: auto;
+            -webkit-column-count: 20;
+            -moz-column-count: 20;
+            column-count: 20;
+            padding: 5px;
+            margin: 0;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            -webkit-column-gap: 5px;
+            /* Chrome, Safari, Opera */
+            -moz-column-gap: 5px;
+            /* Firefox */
+            column-gap: 5px;
+        }
+
+            .inter-award .cash ul li {
+                padding: 0;
+                margin: 0;
+                line-height: normal;
+                font-size: 10pt;
+                font-weight: bold;
+            }
+
+        /*PREMIOS INTERMEDIOS*/
+
+        table.table tr th {
+            height: auto;
+            line-height: normal;
+            font-size: 9pt;
+            padding: 5px;
+        }
+
+        table.table tr td {
+            height: auto;
+            line-height: normal;
+            padding: 2px;
+            font-size: 7pt;
+        }
+
+        table.table tr.total {
+            border-top: double 4px gray;
+            font-weight: bold;
+        }
+
+        table.table tr.sub-total {
+            border-top: solid 2px gray;
+            font-weight: bold;
+            height: 32px;
+        }
+
+        table.table thead {
+            border-top: solid 4px gray;
+        }
+
+        .col-lg-2 {
+            width: 16.66666667%;
+            float: left;
+        }
+
+        .col-lg-4 {
+            width: 32%;
+            float: left;
+        }
+
+        .col-lg-20 {
+            width: 19.60%;
+            float: left;
+        }
+
+        .col-lg-22 {
+            width: 21%;
+            float: left;
+        }
+
+        .col-lg-78 {
+            width: 78%;
+            float: left;
+        }
+
+        .col-lg-200 {
+            width: 400%;
+            float: left;
+        }
+
+        .col-lg-12 {
+            width: 100%;
+            float: left;
+        }
+
+        .col-lg-3 {
+            width: 24.6%;
+            float: left;
+        }
+
+        .col-lg-6 {
+            width: 50%;
+            float: left;
+        }
+
+        .hundred {
+            border-radius: 10px;
+            border: solid 1px black;
+        }
+
+            .hundred .title {
+                background-color: transparent;
+                border-bottom: solid 1px black;
+                font-size: 5pt;
+                font-weight: bold;
+                color: black;
+                text-align: center;
+                line-height: initial;
+            }
+
+        .last-ball-number {
+            background-color: black;
+            color: white;
+            border-radius: 50%;
+            height: 40px;
+            font-size: 19pt;
+            font-weight: bold;
+            padding-top: 1px;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
 </style>
 
 
@@ -414,7 +468,7 @@ table.table thead {
         <div class="col-lg-12 no-padder title color">
             PREMIOS MAYORES
         </div>
-        <div class="col-lg-12 no-padder m-t-2-px" >
+        <div class="col-lg-12 no-padder m-t-2-px">
             @{
                 var heightAward = context.TypesAwards.FirstOrDefault(t => t.Id == 1);
                 var heightAwards = Model.RaffleAwards
@@ -424,19 +478,23 @@ table.table thead {
                 //var specialHeightAward = context.TypesAwards.FirstOrDefault(t => t.Id == 6);
                 //var heightRaffleAward = Model.RaffleAwards.FirstOrDefault(r => r.Award.TypesAwardId == specialHeightAward.Id);
             }
-                <!--
-                <div class="col-lg-12 no-padder text-center sale-in-container" style="margin-top:-11px">
-                    <span class="sale-in">VENDIDO EN: SANTO DOMINGO</span>
-                </div>-->
-            </div>
-            @foreach (var award in heightAwards) {
-                <div class="col-lg-3 no-padder" style="padding-left:10px; width: 32%;">
+            <!--
+            <div class="col-lg-12 no-padder text-center sale-in-container" style="margin-top:-11px">
+                <span class="sale-in">VENDIDO EN: SANTO DOMINGO</span>
+            </div>-->
+        </div>
+        @foreach (var award in heightAwards)
+        {
+            <div class="col-lg-3 no-padder" style="padding-left:10px; width: 32%;">
                 <div class="col-lg-12 no-padder mayor-box">
                     <div class="col-lg-12 no-padder title color">
                         @award.Award.Description
                     </div>
                     <div class="col-lg-12 no-padder text-center m-t-min-65">
-                        <span class="award">@award.Award.Value.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("es-DO"))</span>
+                        <span class="award">
+                            @award.Award.Value.ToString("C",
+        System.Globalization.CultureInfo.CreateSpecificCulture("es-DO"))
+                        </span>
                     </div>
 
                     <div class="col-lg-12 no-padder text-center m-t-min-40">
@@ -444,161 +502,188 @@ table.table thead {
                     </div>
                     <div class="col-lg-12 no-padder number-container">
                         @{
-                            var aproxs = Model.RaffleAwards.Where(e => e.Award.SourceAward == award.AwardId && e.Award.TypesAward.Creation == (int)Tickets.Models.Enums.TypesAwardCreationEnum.Aproximeted).OrderBy(d => d.ControlNumber);
-                         }
-                        @foreach (var aprox in aproxs) {
-                            <span class="number">@aprox.ControlNumber</span> <span class="award">@aprox.Award.Value.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("es-DO")) APROX</span>
+                            var aproxs = Model.RaffleAwards.Where(e => e.Award.SourceAward == award.AwardId &&
+                            e.Award.TypesAward.Creation ==
+                            (int)Tickets.Models.Enums.TypesAwardCreationEnum.Aproximeted).OrderBy(d => d.ControlNumber);
+                        }
+                        @foreach (var aprox in aproxs)
+                        {
+                            <span class="number">@aprox.ControlNumber</span>
+                            <span class="award">
+                                @aprox.Award.Value.ToString("C",
+            System.Globalization.CultureInfo.CreateSpecificCulture("es-DO")) APROX
+                            </span>
                         }
                     </div>
                     <div class="col-lg-12 no-padder text-center sale-in-container color">
                         <span class="sale-in">VENDIDO EN: SANTO DOMINGO</span>
                     </div>
-          
+
                 </div>
             </div>
+        }
+
+    </div>
+</div>
+
+<!-- PREMIOS DE CENTENAS-->
+
+@{ if (Model.Prospect.Awards.Where(p => p.TypesAwardId == 8).ToList().Count() > 0)
+    {
+        <div class="col-lg-200 no-padder inter-award">
+            @{
+                var interMin = context.TypesAwards.FirstOrDefault(t => t.Id == 8);
+            }
+            <br>
+            <div class="col-lg-20 no-padder title color">
+                <br>
+                @interMin.Name
+                <br>
+                <br>
+            </div>
+            <br>
+            <br>
+            <br>
+            @foreach (var award in Model.RaffleAwards.OrderBy(r => r.Award.OrderAward).Where(a => a.Award.TypesAwardId ==
+            interMin.Id).OrderBy(r => r.ControlNumber).GroupBy(r => r.AwardId).Select(r => new
+            {
+                awardName =
+            r.FirstOrDefault().Award.Description,
+                numbers = r,
+                value = r.FirstOrDefault().Award.Value
+            }).OrderByDescending(r => r.value))
+            {
+                <div class="col-lg-20 no-padder cash m-t-2-px">
+                    <div class="col-lg-12 no-padder title color">
+                        @award.awardName
+                    </div>
+                    <div class="col-lg-12 no-padder">
+                        <ul>
+                            @foreach (var number in award.numbers)
+                            {
+                                <li>@number.ControlNumber</li>
                             }
-          
+                        </ul>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+            }
         </div>
-    </div>
-
-    <!-- PREMIOS DE CENTENAS-->    
-   
-    @{ if (Model.Prospect.Awards.Where(p => p.TypesAwardId == 8).ToList().Count() > 0)
-            {
-                <div class="col-lg-200 no-padder inter-award">
-                    @{
-                        var interMin = context.TypesAwards.FirstOrDefault(t => t.Id == 8);
-                    }
-                    <br>
-                    <div class="col-lg-20 no-padder title color">
-                        <br>
-                        @interMin.Name
-                        <br>                        
-                        <br>          
-                    </div>
-                    <br>          
-                    <br>
-                    <br>
-                    @foreach (var award in Model.RaffleAwards.OrderBy(r => r.Award.OrderAward).Where(a => a.Award.TypesAwardId == interMin.Id).OrderBy(r => r.ControlNumber).GroupBy(r => r.AwardId).Select(r => new { awardName = r.FirstOrDefault().Award.Description, numbers = r, value = r.FirstOrDefault().Award.Value }).OrderByDescending(r => r.value))
-                    {
-                        <div class="col-lg-20 no-padder cash m-t-2-px">
-                            <div class="col-lg-12 no-padder title color">
-                                @award.awardName
-                            </div>
-                            <div class="col-lg-12 no-padder">
-                                <ul>
-                                    @foreach (var number in award.numbers)
-                                    {
-                                        <li>@number.ControlNumber</li>
-                                    }
-                                </ul>
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-        }
-    </div>
-    <!-- PREMIOS DE CENTENAS-->
+    }
+}
+<!-- PREMIOS DE CENTENAS-->
+<!-- PREMIOS MENORES DE 500.00 C/U-->
+<div class="col-lg-12 no-padder m-t-2-px">
 
 
-
-
-    <!-- PREMIOS MENORES DE 500.00 C/U-->
-    <div class="col-lg-12 no-padder m-t-2-px">
-
-
-        @{ if (Model.Prospect.Awards.Where(p => p.TypesAwardId == 3).ToList().Count() > 0)
-            {
-                var specialAward = context.TypesAwards.FirstOrDefault(t => t.Id == 3);
-                <div class="col-lg-22 no-padder special-cash-award">
-                    <div class="col-lg-12 no-padder title color">
-                        @specialAward.Name
-                    </div>
-                    @foreach (var award in Model.RaffleAwards.Where(a => a.Award.TypesAwardId == specialAward.Id).OrderBy(r => r.ControlNumber).GroupBy(r => r.AwardId).Select(r => new { awardName = r.FirstOrDefault().Award.Description, numbers = r, value = r.FirstOrDefault().Award.Value }).OrderByDescending(r => r.value))
-                    {
-                        <div class="col-lg-4 no-padder cash m-t-2-px">
-                            <div class="col-lg-12 no-padder title color">
-                                @award.awardName
-                            </div>
-                            <div class="col-lg-12 no-padder">
-                                <ul>
-                                    @foreach (var number in award.numbers)
-                                    {
-                                        <li>@number.ControlNumber</li>
-                                    }
-                                </ul>
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-        }
-
-        @{ if (Model.Prospect.Awards.Where(p => p.TypesAwardId == 4).ToList().Count() > 0)
-            {
-                <div class="col-lg-78 no-padder inter-award">
-                    @{
-                        var interMin = context.TypesAwards.FirstOrDefault(t => t.Id == 4);
-                    }
-                    <div class="col-lg-12 no-padder title color">
-                        @interMin.Name
-                    </div>
-                    @foreach (var award in Model.RaffleAwards.OrderBy(r => r.Award.OrderAward).Where(a => a.Award.TypesAwardId == interMin.Id).OrderBy(r => r.ControlNumber).GroupBy(r => r.AwardId).Select(r => new { awardName = r.FirstOrDefault().Award.Description, numbers = r, value = r.FirstOrDefault().Award.Value }).OrderByDescending(r => r.value))
-                    {
-                        <div class="col-lg-20 no-padder cash m-t-2-px">
-                            <div class="col-lg-12 no-padder title color">
-                                @award.awardName
-                            </div>
-                            <div class="col-lg-12 no-padder">
-                                <ul>
-                                    @foreach (var number in award.numbers)
-                                    {
-                                        <li>@number.ControlNumber</li>
-                                    }
-                                </ul>
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-        }
-    </div>
-
-    @{ if (Model.Prospect.Awards.Where(p => p.TypesAwardId == 2).ToList().Count() > 0)
+    @{ if (Model.Prospect.Awards.Where(p => p.TypesAwardId == 3).ToList().Count() > 0)
         {
-            <!-- PREMIOS MENORES DE 500.00 C/U-->
-            <div class="col-lg-12 no-padder min-award" style="width:99%;">
+            var specialAward = context.TypesAwards.FirstOrDefault(t => t.Id == 3);
+            <div class="col-lg-22 no-padder special-cash-award">
+                <div class="col-lg-12 no-padder title color">
+                    @specialAward.Name
+                </div>
+                @foreach (var award in Model.RaffleAwards.Where(a => a.Award.TypesAwardId == specialAward.Id).OrderBy(r =>
+                r.ControlNumber).GroupBy(r => r.AwardId).Select(r => new
+                {
+                    awardName = r.FirstOrDefault().Award.Description,
+                    numbers = r,
+                    value = r.FirstOrDefault().Award.Value
+                }).OrderByDescending(r => r.value))
+                {
+                    <div class="col-lg-4 no-padder cash m-t-2-px">
+                        <div class="col-lg-12 no-padder title color">
+                            @award.awardName
+                        </div>
+                        <div class="col-lg-12 no-padder">
+                            <ul>
+                                @foreach (var number in award.numbers)
+                                {
+                                    <li>@number.ControlNumber</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+
+    @{ if (Model.Prospect.Awards.Where(p => p.TypesAwardId == 4).ToList().Count() > 0)
+        {
+            <div class="col-lg-78 no-padder inter-award">
                 @{
-                    var minAward = context.TypesAwards.FirstOrDefault(t => t.Id == 2);
-                    var lastUnit = "";
-                    var lastBall = context.RaffleAwards.FirstOrDefault(r => r.RaffleId == Model.Id && r.Award.TypesAwardId == (int)Tickets.Models.Enums.AwardTypeEnum.LastBall);
+                    var interMin = context.TypesAwards.FirstOrDefault(t => t.Id == 4);
                 }
                 <div class="col-lg-12 no-padder title color">
-                    @minAward.Name DE @Model.Prospect.Awards.Where(p => p.TypesAwardId == 2).FirstOrDefault().Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))
+                    @interMin.Name
                 </div>
-                <div class="col-lg-12 no-padder">
-                    <ul class="column">
-                        @foreach (var award in Model.RaffleAwards.Where(a => a.Award.TypesAward.Id == minAward.Id && a.ControlNumber != lastBall.ControlNumber).OrderBy(a => a.ControlNumber))
+                @foreach (var award in Model.RaffleAwards.OrderBy(r => r.Award.OrderAward)
+                    .Where(a => a.Award.TypesAwardId == interMin.Id).OrderBy(r => r.ControlNumber).GroupBy(r => r.AwardId).Select(r => new
+                    {
+                        awardName = r.FirstOrDefault().Award.Description,
+                        numbers = r,
+                        value = r.FirstOrDefault().Award.Value
+                    }).OrderByDescending(r => r.value))
+                {
+                    <div class="col-lg-20 no-padder cash m-t-2-px">
+                        <div class="col-lg-12 no-padder title color">
+                            @award.awardName
+                        </div>
+                        <div class="col-lg-12 no-padder">
+                            <ul>
+                                @foreach (var number in award.numbers)
+                                {
+                                    <li>@number.ControlNumber</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+@{ if (Model.Prospect.Awards.Where(p => p.TypesAwardId == 2).ToList().Count() > 0)
+    {
+        <!-- PREMIOS MENORES DE 500.00 C/U-->
+        <div class="col-lg-12 no-padder min-award" style="width:99%;">
+            @{
+                var minAward = context.TypesAwards.FirstOrDefault(t => t.Id == 2);
+                var lastUnit = "";
+                var lastBall = context.RaffleAwards.FirstOrDefault(r => r.RaffleId == Model.Id && r.Award.TypesAwardId ==
+                (int)Tickets.Models.Enums.AwardTypeEnum.LastBall);
+            }
+            <div class="col-lg-12 no-padder title color">
+                @minAward.Name DE @Model.Prospect.Awards.Where(p => p.TypesAwardId == 2).FirstOrDefault().Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))
+            </div>
+            <div class="col-lg-12 no-padder">
+                <ul class="column">
+                    @foreach (var award in Model.RaffleAwards.Where(a => a.Award.TypesAward.Id == minAward.Id && a.ControlNumber
+                    != lastBall.ControlNumber).OrderBy(a => a.ControlNumber))
+                    {
+                        var currentUnit = Tickets.Models.Utils.GetNumberUnit(award.ControlNumber);
+                        if (currentUnit != lastUnit && currentUnit != "")
                         {
-                            var currentUnit = Tickets.Models.Utils.GetNumberUnit(award.ControlNumber);
-                            if (currentUnit != lastUnit && currentUnit != "")
-                            {
-                                lastUnit = currentUnit;
-                                <li style="border-top: black 2px dotted;
-                    border-bottom: black 2px dotted;
-                    padding-top: 5px;
-                    padding-bottom: 5px;
-                    font-size: 8pt;
-                    font-weight: bold;">@currentUnit</li>
+                            lastUnit = currentUnit;
+                            <li style="border-top: black 2px dotted;
+                                border-bottom: black 2px dotted;
+                                padding-top: 5px;
+                                padding-bottom: 5px;
+                                font-size: 8pt;
+                                font-weight: bold;">@currentUnit</li>
                             }
                             <li>@award.ControlNumber</li>
                         }
-                    </ul>
-                </div>
+                </ul>
             </div>
+        </div>
 
-        }
     }
-    
-</div>
+}
