@@ -698,6 +698,7 @@
     <Content Include="Manual\js\jquery-1.6.1.min.js" />
     <Content Include="Manual\js\jquery.prettyPhoto.js" />
     <Content Include="Manual\Manual.html" />
+    <Content Include="Scripts\angular-ui-router.min.js" />
     <Content Include="Scripts\app.module.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
