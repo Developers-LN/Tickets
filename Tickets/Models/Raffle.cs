@@ -43,6 +43,8 @@ namespace Tickets.Models
         public System.DateTime StartReturnDate { get; set; }
         public System.DateTime EndReturnDate { get; set; }
         public Nullable<System.DateTime> EndAllocationDate { get; set; }
+        public string Symbol { get; set; }
+        public string Separator { get; set; }
     
         public virtual ICollection<IdentifyBach> IdentifyBaches { get; set; }
         public virtual ICollection<Invoice> Invoices { get; set; }

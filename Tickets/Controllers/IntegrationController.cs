@@ -47,7 +47,7 @@ namespace Tickets.Controllers
                             {
                                 RaffleDate = allocation.Raffle.DateSolteo.ToShortDateString(),
                                 RaffleId = allocation.RaffleId,
-/*                                User = WebSecurity.CurrentUserName,*/
+                                /*User = WebSecurity.CurrentUserName,*/
                                 CreateDate = DateTime.Now.ToString(),
                                 Allocation = id,
                                 TicketAllocationNumbers = new List<Models.XML.TicketAllocationNumber>()
@@ -68,7 +68,7 @@ namespace Tickets.Controllers
                             {
                                 RaffleDate = allocation.Raffle.DateSolteo.ToShortDateString(),
                                 RaffleId = allocation.RaffleId,
-/*                                User = WebSecurity.CurrentUserName,*/
+                                /*User = WebSecurity.CurrentUserName,*/
                                 CreateDate = DateTime.Now.ToString(),
                                 Allocation = id,
                                 ticketAllocationNumberExtraordinarios = new List<Models.XML.TicketAllocationNumberExtraordinario>()
@@ -77,7 +77,7 @@ namespace Tickets.Controllers
                             raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id).ToList().ForEach(t =>
                                 allocationXML.ticketAllocationNumberExtraordinarios.Add(new Models.XML.TicketAllocationNumberExtraordinario()
                                 {
-                                    TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number) + " M" 
+                                    TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number) + raffle.Separator + raffle.Symbol
                                 })
                             ));
                         }

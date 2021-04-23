@@ -34,6 +34,7 @@ namespace Tickets.Models
         public int TicketAllocationId { get; set; }
         public int FractionFrom { get; set; }
         public int FractionTo { get; set; }
+        public Nullable<int> RaffleId { get; set; }
     
         public virtual ICollection<IdentifyNumber> IdentifyNumbers { get; set; }
         public virtual ICollection<InvoiceTicket> InvoiceTickets { get; set; }

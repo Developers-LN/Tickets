@@ -420,6 +420,8 @@
           <Property Name="StartReturnDate" Type="datetime" Nullable="false" />
           <Property Name="EndReturnDate" Type="datetime" Nullable="false" />
           <Property Name="EndAllocationDate" Type="datetime" />
+          <Property Name="Symbol" Type="varchar" MaxLength="50" />
+          <Property Name="Separator" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="RaffleAward">
           <Key>
@@ -572,6 +574,7 @@
           <Property Name="TicketAllocationId" Type="int" Nullable="false" />
           <Property Name="FractionFrom" Type="int" Nullable="false" />
           <Property Name="FractionTo" Type="int" Nullable="false" />
+          <Property Name="RaffleId" Type="int" />
         </EntityType>
         <EntityType Name="TicketRePrint">
           <Key>
@@ -659,6 +662,7 @@
           <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Statu" Type="int" Nullable="false" />
           <Property Name="EmpleadoId" Type="int" />
+          <Property Name="Connected" Type="int" />
         </EntityType>
         <EntityType Name="webpages_Membership">
           <Key>
@@ -747,7 +751,7 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="CreateUser" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__OverduelB__Agenc__26EFBBC6">
+        <Association Name="FK__OverduelB__Agenc__6CC31A31">
           <End Role="Agency" Type="Self.Agency" Multiplicity="1" />
           <End Role="OverduelBill" Type="Self.OverduelBill" Multiplicity="*" />
           <ReferentialConstraint>
@@ -759,7 +763,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OverduelB__Agenc__316D4A39">
+        <Association Name="FK__OverduelB__Agenc__6DB73E6A">
           <End Role="Agency" Type="Self.Agency" Multiplicity="1" />
           <End Role="OverduelBill" Type="Self.OverduelBill" Multiplicity="*" />
           <ReferentialConstraint>
@@ -771,7 +775,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OverduelB__Clien__27E3DFFF">
+        <Association Name="FK__OverduelB__Clien__6EAB62A3">
           <End Role="Client" Type="Self.Client" Multiplicity="1" />
           <End Role="OverduelBill" Type="Self.OverduelBill" Multiplicity="*" />
           <ReferentialConstraint>
@@ -783,7 +787,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OverduelB__Clien__32616E72">
+        <Association Name="FK__OverduelB__Clien__6F9F86DC">
           <End Role="Client" Type="Self.Client" Multiplicity="1" />
           <End Role="OverduelBill" Type="Self.OverduelBill" Multiplicity="*" />
           <ReferentialConstraint>
@@ -795,7 +799,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OverduelB__Invoi__28D80438">
+        <Association Name="FK__OverduelB__Invoi__7093AB15">
           <End Role="Invoice" Type="Self.Invoice" Multiplicity="1" />
           <End Role="OverduelBill" Type="Self.OverduelBill" Multiplicity="*" />
           <ReferentialConstraint>
@@ -807,7 +811,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OverduelB__Invoi__335592AB">
+        <Association Name="FK__OverduelB__Invoi__7187CF4E">
           <End Role="Invoice" Type="Self.Invoice" Multiplicity="1" />
           <End Role="OverduelBill" Type="Self.OverduelBill" Multiplicity="*" />
           <ReferentialConstraint>
@@ -819,7 +823,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OverduelB__Raffl__29CC2871">
+        <Association Name="FK__OverduelB__Raffl__727BF387">
           <End Role="Raffle" Type="Self.Raffle" Multiplicity="1" />
           <End Role="OverduelBill" Type="Self.OverduelBill" Multiplicity="*" />
           <ReferentialConstraint>
@@ -831,7 +835,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OverduelB__Raffl__3449B6E4">
+        <Association Name="FK__OverduelB__Raffl__737017C0">
           <End Role="Raffle" Type="Self.Raffle" Multiplicity="1" />
           <End Role="OverduelBill" Type="Self.OverduelBill" Multiplicity="*" />
           <ReferentialConstraint>
@@ -843,7 +847,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Productio__Raffl__24134F1B">
+        <Association Name="FK__Productio__Raffl__764C846B">
           <End Role="Raffle" Type="Self.Raffle" Multiplicity="1" />
           <End Role="ProductionCost" Type="Self.ProductionCost" Multiplicity="*" />
           <ReferentialConstraint>
@@ -855,7 +859,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__RRentabil__Raffl__4297D63B">
+        <Association Name="FK__RRentabil__Raffl__7928F116">
           <End Role="Raffle" Type="Self.Raffle" Multiplicity="1" />
           <End Role="RRentabilidadSorteo" Type="Self.RRentabilidadSorteo" Multiplicity="*" />
           <ReferentialConstraint>
@@ -948,18 +952,6 @@
             </Principal>
             <Dependent Role="Award">
               <PropertyRef Name="CreateUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AwardCertification_AwardCertification">
-          <End Role="AwardCertification" Type="Self.AwardCertification" Multiplicity="1" />
-          <End Role="AwardCertification1" Type="Self.AwardCertification" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="AwardCertification">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AwardCertification1">
-              <PropertyRef Name="Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1559,18 +1551,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ReturnedOpen_Raffle">
-          <End Role="Raffle" Type="Self.Raffle" Multiplicity="1" />
-          <End Role="ReturnedOpen" Type="Self.ReturnedOpen" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Raffle">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ReturnedOpen">
-              <PropertyRef Name="RaffleId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Rol_Agency_Agency">
           <End Role="Agency" Type="Self.Agency" Multiplicity="1" />
           <End Role="Rol_Agency" Type="Self.Rol_Agency" Multiplicity="*" />
@@ -1679,18 +1659,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TicketAllocation_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="TicketAllocationNumber" Type="Self.TicketAllocationNumber" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TicketAllocationNumber">
-              <PropertyRef Name="CreateUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_TicketAllocation_User1">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="TicketAllocation" Type="Self.TicketAllocation" Multiplicity="*" />
@@ -1700,30 +1668,6 @@
             </Principal>
             <Dependent Role="TicketAllocation">
               <PropertyRef Name="CreateUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TicketAllocationNumber_TicketAllocation">
-          <End Role="TicketAllocation" Type="Self.TicketAllocation" Multiplicity="1" />
-          <End Role="TicketAllocationNumber" Type="Self.TicketAllocationNumber" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TicketAllocation">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TicketAllocationNumber">
-              <PropertyRef Name="TicketAllocationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TicketRePrint_Raffle">
-          <End Role="Raffle" Type="Self.Raffle" Multiplicity="1" />
-          <End Role="TicketRePrint" Type="Self.TicketRePrint" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Raffle">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TicketRePrint">
-              <PropertyRef Name="RaffleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1760,18 +1704,6 @@
             </Principal>
             <Dependent Role="TicketReturn">
               <PropertyRef Name="ClientId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TicketReturn_Raffle">
-          <End Role="Raffle" Type="Self.Raffle" Multiplicity="1" />
-          <End Role="TicketReturn" Type="Self.TicketReturn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Raffle">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TicketReturn">
-              <PropertyRef Name="RaffleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2083,43 +2015,43 @@
           <EntitySet Name="WorkflowProccess" EntityType="Self.WorkflowProccess" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WorkflowType" EntityType="Self.WorkflowType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WorkflowType_User" EntityType="Self.WorkflowType_User" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__OverduelB__Agenc__26EFBBC6" Association="Self.FK__OverduelB__Agenc__26EFBBC6">
+          <AssociationSet Name="FK__OverduelB__Agenc__6CC31A31" Association="Self.FK__OverduelB__Agenc__6CC31A31">
             <End Role="Agency" EntitySet="Agency" />
             <End Role="OverduelBill" EntitySet="OverduelBill" />
           </AssociationSet>
-          <AssociationSet Name="FK__OverduelB__Agenc__316D4A39" Association="Self.FK__OverduelB__Agenc__316D4A39">
+          <AssociationSet Name="FK__OverduelB__Agenc__6DB73E6A" Association="Self.FK__OverduelB__Agenc__6DB73E6A">
             <End Role="Agency" EntitySet="Agency" />
             <End Role="OverduelBill" EntitySet="OverduelBill" />
           </AssociationSet>
-          <AssociationSet Name="FK__OverduelB__Clien__27E3DFFF" Association="Self.FK__OverduelB__Clien__27E3DFFF">
+          <AssociationSet Name="FK__OverduelB__Clien__6EAB62A3" Association="Self.FK__OverduelB__Clien__6EAB62A3">
             <End Role="Client" EntitySet="Client" />
             <End Role="OverduelBill" EntitySet="OverduelBill" />
           </AssociationSet>
-          <AssociationSet Name="FK__OverduelB__Clien__32616E72" Association="Self.FK__OverduelB__Clien__32616E72">
+          <AssociationSet Name="FK__OverduelB__Clien__6F9F86DC" Association="Self.FK__OverduelB__Clien__6F9F86DC">
             <End Role="Client" EntitySet="Client" />
             <End Role="OverduelBill" EntitySet="OverduelBill" />
           </AssociationSet>
-          <AssociationSet Name="FK__OverduelB__Invoi__28D80438" Association="Self.FK__OverduelB__Invoi__28D80438">
+          <AssociationSet Name="FK__OverduelB__Invoi__7093AB15" Association="Self.FK__OverduelB__Invoi__7093AB15">
             <End Role="Invoice" EntitySet="Invoice" />
             <End Role="OverduelBill" EntitySet="OverduelBill" />
           </AssociationSet>
-          <AssociationSet Name="FK__OverduelB__Invoi__335592AB" Association="Self.FK__OverduelB__Invoi__335592AB">
+          <AssociationSet Name="FK__OverduelB__Invoi__7187CF4E" Association="Self.FK__OverduelB__Invoi__7187CF4E">
             <End Role="Invoice" EntitySet="Invoice" />
             <End Role="OverduelBill" EntitySet="OverduelBill" />
           </AssociationSet>
-          <AssociationSet Name="FK__OverduelB__Raffl__29CC2871" Association="Self.FK__OverduelB__Raffl__29CC2871">
+          <AssociationSet Name="FK__OverduelB__Raffl__727BF387" Association="Self.FK__OverduelB__Raffl__727BF387">
             <End Role="Raffle" EntitySet="Raffle" />
             <End Role="OverduelBill" EntitySet="OverduelBill" />
           </AssociationSet>
-          <AssociationSet Name="FK__OverduelB__Raffl__3449B6E4" Association="Self.FK__OverduelB__Raffl__3449B6E4">
+          <AssociationSet Name="FK__OverduelB__Raffl__737017C0" Association="Self.FK__OverduelB__Raffl__737017C0">
             <End Role="Raffle" EntitySet="Raffle" />
             <End Role="OverduelBill" EntitySet="OverduelBill" />
           </AssociationSet>
-          <AssociationSet Name="FK__Productio__Raffl__24134F1B" Association="Self.FK__Productio__Raffl__24134F1B">
+          <AssociationSet Name="FK__Productio__Raffl__764C846B" Association="Self.FK__Productio__Raffl__764C846B">
             <End Role="Raffle" EntitySet="Raffle" />
             <End Role="ProductionCost" EntitySet="ProductionCost" />
           </AssociationSet>
-          <AssociationSet Name="FK__RRentabil__Raffl__4297D63B" Association="Self.FK__RRentabil__Raffl__4297D63B">
+          <AssociationSet Name="FK__RRentabil__Raffl__7928F116" Association="Self.FK__RRentabil__Raffl__7928F116">
             <End Role="Raffle" EntitySet="Raffle" />
             <End Role="RRentabilidadSorteo" EntitySet="RRentabilidadSorteo" />
           </AssociationSet>
@@ -2150,10 +2082,6 @@
           <AssociationSet Name="FK_Award_User" Association="Self.FK_Award_User">
             <End Role="User" EntitySet="User" />
             <End Role="Award" EntitySet="Award" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AwardCertification_AwardCertification" Association="Self.FK_AwardCertification_AwardCertification">
-            <End Role="AwardCertification" EntitySet="AwardCertification" />
-            <End Role="AwardCertification1" EntitySet="AwardCertification" />
           </AssociationSet>
           <AssociationSet Name="FK_AwardCertification_RaffleAward" Association="Self.FK_AwardCertification_RaffleAward">
             <End Role="RaffleAward" EntitySet="RaffleAward" />
@@ -2351,10 +2279,6 @@
             <End Role="User" EntitySet="User" />
             <End Role="ReceivablePayment" EntitySet="ReceivablePayment" />
           </AssociationSet>
-          <AssociationSet Name="FK_ReturnedOpen_Raffle" Association="Self.FK_ReturnedOpen_Raffle">
-            <End Role="Raffle" EntitySet="Raffle" />
-            <End Role="ReturnedOpen" EntitySet="ReturnedOpen" />
-          </AssociationSet>
           <AssociationSet Name="FK_Rol_Agency_Agency" Association="Self.FK_Rol_Agency_Agency">
             <End Role="Agency" EntitySet="Agency" />
             <End Role="Rol_Agency" EntitySet="Rol_Agency" />
@@ -2391,21 +2315,9 @@
             <End Role="Raffle" EntitySet="Raffle" />
             <End Role="TicketAllocation" EntitySet="TicketAllocation" />
           </AssociationSet>
-          <AssociationSet Name="FK_TicketAllocation_User" Association="Self.FK_TicketAllocation_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="TicketAllocationNumber" EntitySet="TicketAllocationNumber" />
-          </AssociationSet>
           <AssociationSet Name="FK_TicketAllocation_User1" Association="Self.FK_TicketAllocation_User1">
             <End Role="User" EntitySet="User" />
             <End Role="TicketAllocation" EntitySet="TicketAllocation" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TicketAllocationNumber_TicketAllocation" Association="Self.FK_TicketAllocationNumber_TicketAllocation">
-            <End Role="TicketAllocation" EntitySet="TicketAllocation" />
-            <End Role="TicketAllocationNumber" EntitySet="TicketAllocationNumber" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TicketRePrint_Raffle" Association="Self.FK_TicketRePrint_Raffle">
-            <End Role="Raffle" EntitySet="Raffle" />
-            <End Role="TicketRePrint" EntitySet="TicketRePrint" />
           </AssociationSet>
           <AssociationSet Name="FK_TicketRePrintNumber_TicketAllocationNumber" Association="Self.FK_TicketRePrintNumber_TicketAllocationNumber">
             <End Role="TicketAllocationNumber" EntitySet="TicketAllocationNumber" />
@@ -2417,10 +2329,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_TicketReturn_Client" Association="Self.FK_TicketReturn_Client">
             <End Role="Client" EntitySet="Client" />
-            <End Role="TicketReturn" EntitySet="TicketReturn" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TicketReturn_Raffle" Association="Self.FK_TicketReturn_Raffle">
-            <End Role="Raffle" EntitySet="Raffle" />
             <End Role="TicketReturn" EntitySet="TicketReturn" />
           </AssociationSet>
           <AssociationSet Name="FK_TicketReturn_TicketAllocationNumber" Association="Self.FK_TicketReturn_TicketAllocationNumber">
@@ -3483,6 +3391,8 @@
           <NavigationProperty Name="TicketRePrints" Relationship="TicketsModel.FK_TicketRePrint_Raffle" FromRole="Raffle" ToRole="TicketRePrint" />
           <NavigationProperty Name="TicketReturns" Relationship="TicketsModel.FK_TicketReturn_Raffle" FromRole="Raffle" ToRole="TicketReturn" />
           <NavigationProperty Name="RaffleAwards" Relationship="TicketsModel.FK_RaffleAward_Raffle" FromRole="Raffle" ToRole="RaffleAward" />
+          <Property Name="Symbol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Separator" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="ReceiptPayment">
           <Key>
@@ -3632,6 +3542,7 @@
           <NavigationProperty Name="User" Relationship="TicketsModel.FK_TicketAllocation_User" FromRole="TicketAllocationNumber" ToRole="User" />
           <NavigationProperty Name="TicketRePrintNumbers" Relationship="TicketsModel.FK_TicketRePrintNumber_TicketAllocationNumber" FromRole="TicketAllocationNumber" ToRole="TicketRePrintNumber" />
           <NavigationProperty Name="TicketReturns" Relationship="TicketsModel.FK_TicketReturn_TicketAllocationNumber" FromRole="TicketAllocationNumber" ToRole="TicketReturn" />
+          <Property Name="RaffleId" Type="Int32" />
         </EntityType>
         <EntityType Name="TicketRePrint">
           <Key>
@@ -3761,6 +3672,7 @@
           <NavigationProperty Name="WorkflowProccesses" Relationship="TicketsModel.FK_WorkflowProccess_User" FromRole="User" ToRole="WorkflowProccess" />
           <NavigationProperty Name="webpages_Roles" Relationship="TicketsModel.webpages_UsersInRoles" FromRole="User" ToRole="webpages_Roles" />
           <NavigationProperty Name="AwardCertification" Relationship="TicketsModel.FK_AwardCertification_User" FromRole="User" ToRole="AwardCertification" />
+          <Property Name="Connected" Type="Int32" />
         </EntityType>
         <EntityType Name="webpages_Membership">
           <Key>
@@ -5505,6 +5417,8 @@
           <EntitySetMapping Name="Raffles">
             <EntityTypeMapping TypeName="TicketsModel.Raffle">
               <MappingFragment StoreEntitySet="Raffle">
+                <ScalarProperty Name="Separator" ColumnName="Separator" />
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
                 <ScalarProperty Name="EndAllocationDate" ColumnName="EndAllocationDate" />
                 <ScalarProperty Name="EndReturnDate" ColumnName="EndReturnDate" />
                 <ScalarProperty Name="StartReturnDate" ColumnName="StartReturnDate" />
@@ -5642,6 +5556,7 @@
           <EntitySetMapping Name="TicketAllocationNumbers">
             <EntityTypeMapping TypeName="TicketsModel.TicketAllocationNumber">
               <MappingFragment StoreEntitySet="TicketAllocationNumber">
+                <ScalarProperty Name="RaffleId" ColumnName="RaffleId" />
                 <ScalarProperty Name="FractionTo" ColumnName="FractionTo" />
                 <ScalarProperty Name="FractionFrom" ColumnName="FractionFrom" />
                 <ScalarProperty Name="TicketAllocationId" ColumnName="TicketAllocationId" />
@@ -5744,6 +5659,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="TicketsModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Connected" ColumnName="Connected" />
                 <ScalarProperty Name="EmpleadoId" ColumnName="EmpleadoId" />
                 <ScalarProperty Name="Statu" ColumnName="Statu" />
                 <ScalarProperty Name="Name" ColumnName="Name" />

@@ -18,7 +18,6 @@ namespace Tickets.Models
         {
             this.Agencies = new HashSet<Agency>();
             this.Awards = new HashSet<Award>();
-            this.AwardCertifications = new HashSet<AwardCertification>();
             this.Cashes = new HashSet<Cash>();
             this.CertificationNumbers = new HashSet<CertificationNumber>();
             this.Clients = new HashSet<Client>();
@@ -46,10 +45,10 @@ namespace Tickets.Models
         public string Name { get; set; }
         public int Statu { get; set; }
         public Nullable<int> EmpleadoId { get; set; }
+        public Nullable<int> Connected { get; set; }
     
         public virtual ICollection<Agency> Agencies { get; set; }
         public virtual ICollection<Award> Awards { get; set; }
-        public virtual ICollection<AwardCertification> AwardCertifications { get; set; }
         public virtual ICollection<Cash> Cashes { get; set; }
         public virtual Catalog Catalog { get; set; }
         public virtual ICollection<CertificationNumber> CertificationNumbers { get; set; }
