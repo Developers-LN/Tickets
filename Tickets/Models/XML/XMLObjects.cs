@@ -14,12 +14,19 @@ namespace Tickets.Models.XML
         public int FractionTo { get; set; }
     }
 
+    public class TicketAllocationNumberExtraordinario
+    {
+        public string TiketNumber { get; set; }
+    }
+
     public class TicketAllocateXML
     {
         public int RaffleId { get; set; }
         public string RaffleDate { get; set; }
         public string CreateDate { get; set; }
         public string User { get; set; }
+        public int Allocation { get; set; }
+        public List<TicketAllocationNumberExtraordinario> ticketAllocationNumberExtraordinarios { get; set; }
         public List<TicketAllocationNumber> TicketAllocationNumbers { get; set; }
     }
 
