@@ -225,8 +225,8 @@ namespace Tickets.Models.Ticket
                 CreateDate = model.CreateDate,
                 CreateDateLong = model.CreateDate.ToUnixTime(),
                 CanAllocate = DateTime.Now <= raffle.EndAllocationDate,
-                //NumberCount = model.TicketAllocationNumbers.Count,
-                //FractionCount = model.TicketAllocationNumbers.Select( a=> a.FractionTo - a.FractionFrom + 1).Sum()
+                NumberCount = model.TicketAllocationNumbers.Count,
+                FractionCount = model.TicketAllocationNumbers.Select( a=> a.FractionTo - a.FractionFrom + 1).Sum()
             };
             if (hasNumber)
             {
