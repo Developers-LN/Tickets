@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Web;
 using Tickets.Models.Enums;
 using Tickets.Models.Ticket;
 using WebMatrix.WebData;
@@ -117,12 +115,12 @@ namespace Tickets.Models.Raffles
                 Id = reprint.Id,
                 Note = reprint.Note,
                 RaffleId = reprint.RaffleId,
-                RaffleDesc = context.Raffles.FirstOrDefault( r=> r.Id == reprint.RaffleId).Name,
+                RaffleDesc = context.Raffles.FirstOrDefault(r => r.Id == reprint.RaffleId).Name,
                 IsPrint = false,
                 CreateDate = reprint.CreateDate,
                 CreateDateLong = reprint.CreateDate.ToUnixTime(),
                 CreateUser = reprint.CreateUser,
-                CreateUserDesc = context.Users.FirstOrDefault( u=>u.Id == reprint.CreateUser).Name,
+                CreateUserDesc = context.Users.FirstOrDefault(u => u.Id == reprint.CreateUser).Name,
                 Statu = reprint.Statu,
                 StatuDesc = context.Catalogs.FirstOrDefault(u => u.Id == reprint.Statu).NameDetail,
                 NumberCount = reprint.TicketRePrintNumbers.Count()
@@ -138,7 +136,7 @@ namespace Tickets.Models.Raffles
         internal RequestResponseModel GetReprint(int id)
         {
             var context = new TicketsEntities();
-            var ticketReprint = context.TicketRePrints.Where(t => t.Id == id ).AsEnumerable()
+            var ticketReprint = context.TicketRePrints.Where(t => t.Id == id).AsEnumerable()
                 .Select(t => this.ToObject(t)).FirstOrDefault();
             if (ticketReprint == null)
             {
@@ -149,9 +147,10 @@ namespace Tickets.Models.Raffles
                     TicketReprintNumbers = new List<TicketReprintNumberModel>()
                 };
             }
-            return new RequestResponseModel (){ 
+            return new RequestResponseModel()
+            {
                 Result = true,
-                Object = ticketReprint 
+                Object = ticketReprint
             };
         }
 
@@ -163,7 +162,7 @@ namespace Tickets.Models.Raffles
                     && (status == t.Statu || status == 0))
                 .Select(t => this.ToObject(t)).ToList();
 
-            return new RequestResponseModel ()
+            return new RequestResponseModel()
             {
                 Result = true,
                 Object = reprints
@@ -235,17 +234,17 @@ namespace Tickets.Models.Raffles
                     catch (Exception e)
                     {
                         dbContextTransaction.Rollback();
-                        return new RequestResponseModel ()
-                        { 
-                            Result = false, 
-                            Message = e.Message 
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = e.Message
                         };
                     }
                 }
             }
-            
+
             Utils.SaveLog(WebSecurity.CurrentUserName, model.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Reimpresión de Billetes", model);
-            
+
             return new RequestResponseModel()
             {
                 Result = true,
@@ -281,17 +280,17 @@ namespace Tickets.Models.Raffles
                     {
                         number = number.Substring(0, number.Length - 2);
                         return new RequestResponseModel()
-                        { 
-                            Result = false, 
-                            Message = "Los numeros ( " + number + " ) no fueron impreso." 
+                        {
+                            Result = false,
+                            Message = "Los numeros ( " + number + " ) no fueron impreso."
                         };
                     }
                     else
                     {
-                        return new RequestResponseModel ()
-                        { 
-                            Result = true, 
-                            Message = "Nummero agregado correctamente" 
+                        return new RequestResponseModel()
+                        {
+                            Result = true,
+                            Message = "Nummero agregado correctamente"
                         };
                     }
                 }
@@ -328,16 +327,18 @@ namespace Tickets.Models.Raffles
                     catch (Exception e)
                     {
                         tm.Rollback();
-                        return new RequestResponseModel (){ 
-                            Result = false, 
-                            Message = e.Message 
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = e.Message
                         };
                     }
                 }
             }
 
-            return new RequestResponseModel (){ 
-                Result = true ,
+            return new RequestResponseModel()
+            {
+                Result = true,
                 Message = "Reimpresion borrada correctamente."
             };
         }

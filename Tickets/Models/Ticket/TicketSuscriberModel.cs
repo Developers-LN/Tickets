@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Tickets.Models.Enums;
-using Tickets.Models.Raffles;
 using WebMatrix.WebData;
 
 namespace Tickets.Models.Ticket
@@ -52,8 +50,9 @@ namespace Tickets.Models.Ticket
 
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Asignación de Billetes");
 
-            return new RequestResponseModel(){ 
-                Result = true, 
+            return new RequestResponseModel()
+            {
+                Result = true,
                 Object = tickets
             };
         }
@@ -77,15 +76,17 @@ namespace Tickets.Models.Ticket
                     {
                         number = number.Substring(0, number.Length - 2);
 
-                        return new RequestResponseModel() { 
-                            Result = false, 
-                            Message = "Los numeros ( " + number + " ) ya fueron abonado." 
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "Los numeros ( " + number + " ) ya fueron abonado."
                         };
                     }
                     else
                     {
-                        return new RequestResponseModel() { 
-                            Result = true, 
+                        return new RequestResponseModel()
+                        {
+                            Result = true,
                             Message = "Nummero agregado correctamente"
                         };
                     }
@@ -147,7 +148,7 @@ namespace Tickets.Models.Ticket
                         }
                         dbContextTransaction.Commit();
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         dbContextTransaction.Rollback();
 
@@ -174,9 +175,10 @@ namespace Tickets.Models.Ticket
             var ticket = context.TicketSuscribers.FirstOrDefault(m => m.Id == model.Id);
             if (ticket == null)
             {
-                return new RequestResponseModel() { 
-                    Result = false, 
-                    Message = "error al borrar abonado!" 
+                return new RequestResponseModel()
+                {
+                    Result = false,
+                    Message = "error al borrar abonado!"
                 };
             }
 
@@ -191,9 +193,11 @@ namespace Tickets.Models.Ticket
 
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Delete, "Billete Abonado", model);
 
-            return new RequestResponseModel() { 
-                Result = true, 
-                Message = "Abonado borrado correctamente!" };
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Message = "Abonado borrado correctamente!"
+            };
         }
 
         internal RequestResponseModel GetSuscriber(int id)
@@ -202,7 +206,7 @@ namespace Tickets.Models.Ticket
 
             var ticket = context.TicketSuscribers.Where(t => t.Id == id).AsEnumerable()
                 .Select(t => this.ToObject(t, true)).FirstOrDefault();
-            if(ticket == null)
+            if (ticket == null)
             {
                 ticket = new TicketSuscriberModel()
                 {
@@ -211,19 +215,20 @@ namespace Tickets.Models.Ticket
                 };
             }
 
-            return new RequestResponseModel() { 
-                Result = true, 
-                Object = ticket 
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Object = ticket
             };
         }
 
         internal TicketSuscriberModel ToObject(TicketSuscriber ticket, bool hasNumbers = false)
         {
             var context = new TicketsEntities();
-            var model =  new TicketSuscriberModel()
+            var model = new TicketSuscriberModel()
             {
-                
-                
+
+
                 Id = ticket.Id,
                 ClientId = ticket.ClientId,
                 ClientDesc = context.Clients.FirstOrDefault(c => c.Id == ticket.ClientId).Name,
@@ -239,7 +244,7 @@ namespace Tickets.Models.Ticket
             if (hasNumbers == true)
             {
                 var ticketSuscriberNumber = new TicketSuscriberNumberModel();
-                model.TicketSuscriberNumbers =  context.TicketSuscriberNumbers
+                model.TicketSuscriberNumbers = context.TicketSuscriberNumbers
                     .Where(ts => ts.TicketSuscriberId == ticket.Id).AsEnumerable().Select(t => ticketSuscriberNumber.ToObject(t)).ToList();
             }
             return model;

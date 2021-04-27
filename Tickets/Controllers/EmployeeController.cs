@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
@@ -55,7 +53,7 @@ namespace Tickets.Controllers
             }
             catch (Exception e)
             {
-                return new JsonResult() { Data = new { result = false, message= e.Message }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                return new JsonResult() { Data = new { result = false, message = e.Message }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
         }
 
@@ -78,37 +76,37 @@ namespace Tickets.Controllers
                 try
                 {
 
-            
-                if (employee.Id <= 0)
-                {
-                    employee.CreateDate = DateTime.Now;
-                    employee.CreateUser = WebSecurity.CurrentUserId;
-                    context.Employees.Add(employee);
-                }
-                else
-                {
-                    var mEmployee = context.Employees.FirstOrDefault(c => c.Id == employee.Id);
 
-                    mEmployee.Name = employee.Name;
-                    mEmployee.LastName = employee.LastName;
-                    mEmployee.DocumentNumber = employee.DocumentNumber;
-                    mEmployee.MaritalStatus = employee.MaritalStatus;
-                    mEmployee.Gender = employee.Gender;
-                    mEmployee.Birthday = employee.Birthday;
-                    mEmployee.Province = employee.Province;
-                    mEmployee.Section = employee.Section;
-                    mEmployee.Town = employee.Town;
-                    mEmployee.Addres = employee.Addres;
-                    mEmployee.Phone = employee.Phone;
-                    mEmployee.Email = employee.Email;
-                    mEmployee.Department = employee.Department;
-                    mEmployee.Office = employee.Office;
-                    mEmployee.GroupId = employee.GroupId;
-                    mEmployee.Statu = employee.Statu;
-                    mEmployee.Comment = employee.Comment;
-                    mEmployee.AgencyId = employee.AgencyId;
-                }
-                context.SaveChanges();
+                    if (employee.Id <= 0)
+                    {
+                        employee.CreateDate = DateTime.Now;
+                        employee.CreateUser = WebSecurity.CurrentUserId;
+                        context.Employees.Add(employee);
+                    }
+                    else
+                    {
+                        var mEmployee = context.Employees.FirstOrDefault(c => c.Id == employee.Id);
+
+                        mEmployee.Name = employee.Name;
+                        mEmployee.LastName = employee.LastName;
+                        mEmployee.DocumentNumber = employee.DocumentNumber;
+                        mEmployee.MaritalStatus = employee.MaritalStatus;
+                        mEmployee.Gender = employee.Gender;
+                        mEmployee.Birthday = employee.Birthday;
+                        mEmployee.Province = employee.Province;
+                        mEmployee.Section = employee.Section;
+                        mEmployee.Town = employee.Town;
+                        mEmployee.Addres = employee.Addres;
+                        mEmployee.Phone = employee.Phone;
+                        mEmployee.Email = employee.Email;
+                        mEmployee.Department = employee.Department;
+                        mEmployee.Office = employee.Office;
+                        mEmployee.GroupId = employee.GroupId;
+                        mEmployee.Statu = employee.Statu;
+                        mEmployee.Comment = employee.Comment;
+                        mEmployee.AgencyId = employee.AgencyId;
+                    }
+                    context.SaveChanges();
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -122,7 +120,7 @@ namespace Tickets.Controllers
                                 e.PropertyName, e.ErrorMessage);
                         }
                     }
-                  
+
                 }
 
             }
@@ -163,20 +161,20 @@ namespace Tickets.Controllers
                 MaritalStatusDesc = catalogs.FirstOrDefault(ct => ct.Id == employee.MaritalStatus).NameDetail,
                 employee.Gender,
                 employee.AgencyId,
-                AgencyDesc = agency == null? "" : agency.Name,
+                AgencyDesc = agency == null ? "" : agency.Name,
                 GenderDesc = catalogs.FirstOrDefault(ct => ct.Id == employee.Gender).NameDetail,
                 Birthday = employee.Birthday.ToShortDateString(),
                 employee.Province,
                 ProvinceDesc = context.Provinces.FirstOrDefault(p => p.Id == employee.Province).Name,
                 employee.Section,
-                SectionDesc = section == null? "" : section.Name,
+                SectionDesc = section == null ? "" : section.Name,
                 employee.Town,
                 TownDesc = context.Towns.FirstOrDefault(t => t.Id == employee.Town).Name,
                 employee.Addres,
                 employee.Phone,
                 employee.Email,
                 employee.Department,
-                DepartmentDesc = departament == null? "": departament.NameDetail,
+                DepartmentDesc = departament == null ? "" : departament.NameDetail,
                 employee.Office,
                 OfficeDesc = catalogs.FirstOrDefault(ct => ct.Id == employee.Office).NameDetail,
                 employee.GroupId,
@@ -293,10 +291,10 @@ namespace Tickets.Controllers
                 departament.NameDetail,
                 departament.Description,
                 departament.Statu,
-                StatuDesc = departament.Statu? "Activo": "In activo" 
+                StatuDesc = departament.Statu ? "Activo" : "In activo"
             };
             return obj;
         }
         #endregion
-	}
+    }
 }

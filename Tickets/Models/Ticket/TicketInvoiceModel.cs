@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
 
@@ -54,7 +53,7 @@ namespace Tickets.Models.Ticket
 
         [JsonProperty(PropertyName = "invoiceExpredDate")]
         public DateTime InvoiceExpredDate { get; set; }
-                
+
         [JsonProperty(PropertyName = "craeteDate")]
         public DateTime CraeteDate { get; set; }
 
@@ -78,7 +77,7 @@ namespace Tickets.Models.Ticket
 
         [JsonProperty(PropertyName = "createUserDesc")]
         public string CreateUserDesc { get; set; }
-        
+
         [JsonProperty(PropertyName = "ticketInvoiceNumbers")]
         public List<TicketInvoiceNumberModel> TicketInvoiceNumbers { get; set; }
 
@@ -145,7 +144,7 @@ namespace Tickets.Models.Ticket
                     i.RaffleId == raffleId
                     && (i.ClientId == clientId || clientId == 0)
                     && (i.PaymentStatu == statu || statu == 0)
-                ).Select(dt => this.ToObject(dt) ).ToList();
+                ).Select(dt => this.ToObject(dt)).ToList();
 
             return new RequestResponseModel()
             {
@@ -208,7 +207,8 @@ namespace Tickets.Models.Ticket
                                                        i.InvoiceExpredDay,
                                                        it.Quantity,
                                                        it.PricePerFraction
-                                                   }).AsEnumerable().GroupBy( i => i.Id).Select( ig => new {
+                                                   }).AsEnumerable().GroupBy(i => i.Id).Select(ig => new
+                                                   {
                                                        ClientId = ig.FirstOrDefault().ClientId,
                                                        Condition = ig.FirstOrDefault().Condition,
                                                        Id = ig.FirstOrDefault().Id,
@@ -236,27 +236,29 @@ namespace Tickets.Models.Ticket
                             decimal totalInvoiceData = 0;
                             var invoice_ids = expiredInvoices.Select(i => i.Id).ToArray();
                             var payments = (from rp in context.ReceiptPayments
-                                                 join nc in context.NoteCreditReceiptPayments on rp.Id equals nc.ReceiptPaymentId into ncj
-                                                 from nc in ncj.DefaultIfEmpty()
+                                            join nc in context.NoteCreditReceiptPayments on rp.Id equals nc.ReceiptPaymentId into ncj
+                                            from nc in ncj.DefaultIfEmpty()
                                             where invoice_ids.Contains(rp.InvoiceId)
-                                            select new {
+                                            select new
+                                            {
                                                 rp.Id,
-                                               rp.InvoiceId,
-                                               rp.TotalCash,
-                                               rp.TotalCheck,
-                                               rp.TotalCredit,
-                                               nc_totalCash = nc == null? 0 : nc.TotalCash
-                                           }).AsEnumerable().GroupBy( rp=> rp.Id ).Select( rpg => new
-                                           {
-                                               Id = rpg.FirstOrDefault().Id,
-                                               InvoiceId = rpg.FirstOrDefault().InvoiceId,
-                                               TotalCash = rpg.FirstOrDefault().TotalCash,
-                                               TotalCheck = rpg.FirstOrDefault().TotalCheck,
-                                               TotalCredit = rpg.FirstOrDefault().TotalCredit,
-                                               NoteCreditReceiptPayments = rpg.Select( nc => new{
+                                                rp.InvoiceId,
+                                                rp.TotalCash,
+                                                rp.TotalCheck,
+                                                rp.TotalCredit,
+                                                nc_totalCash = nc == null ? 0 : nc.TotalCash
+                                            }).AsEnumerable().GroupBy(rp => rp.Id).Select(rpg => new
+                                            {
+                                                Id = rpg.FirstOrDefault().Id,
+                                                InvoiceId = rpg.FirstOrDefault().InvoiceId,
+                                                TotalCash = rpg.FirstOrDefault().TotalCash,
+                                                TotalCheck = rpg.FirstOrDefault().TotalCheck,
+                                                TotalCredit = rpg.FirstOrDefault().TotalCredit,
+                                                NoteCreditReceiptPayments = rpg.Select(nc => new
+                                                {
                                                     TotalCash = nc.TotalCash
-                                               }).ToList()
-                                           }).ToList();
+                                                }).ToList()
+                                            }).ToList();
                             foreach (var expiredInvoice in expiredInvoices)
                             {
                                 foreach (var invoiceTicket in expiredInvoice.InvoiceTickets)
@@ -283,7 +285,7 @@ namespace Tickets.Models.Ticket
 
                             var allocation_ids = model.TicketAllocations.Select(a => a.Id).ToArray(); ;
 
-                            var allocatList = context.TicketAllocations.Where(a => allocation_ids.Contains(a.Id) ).ToList();
+                            var allocatList = context.TicketAllocations.Where(a => allocation_ids.Contains(a.Id)).ToList();
 
                             allocatList.ForEach(a => a.TicketAllocationNumbers.ToList().ForEach(n => totalInvoiceData += (n.FractionTo - n.FractionFrom + 1) * model.TicketPrice));
 
@@ -298,7 +300,7 @@ namespace Tickets.Models.Ticket
                             }
                             var user = context.Users.Where(u => u.Id == WebSecurity.CurrentUserId).FirstOrDefault();
 
-                             invoice = new Invoice()
+                            invoice = new Invoice()
                             {
                                 PaymentType = model.PaymentType,
                                 InvoiceDate = model.InvoiceDate,
@@ -367,8 +369,9 @@ namespace Tickets.Models.Ticket
                     catch (Exception e)
                     {
                         tx.Rollback();
-                        return new RequestResponseModel (){ 
-                            Result = false, 
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
                             Message = e.Message
                         };
                     }

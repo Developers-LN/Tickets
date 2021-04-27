@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
 
@@ -34,11 +32,12 @@ namespace Tickets.Models.Ticket
             allowcation.ClientId = model.ClientId;
             context.SaveChanges();
 
-            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Reasignación de Billetes", new {
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Reasignación de Billetes", new
+            {
                 oldClientId = oldClientId,
                 newClientId = allowcation.ClientId,
                 allocationId = allowcation.Id,
-                date = DateTime.Now.ToString() 
+                date = DateTime.Now.ToString()
             });
 
             return new RequestResponseModel()

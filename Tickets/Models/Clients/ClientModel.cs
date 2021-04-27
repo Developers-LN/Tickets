@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using Tickets.Models.Enums;
 
 namespace Tickets.Models.Clients
@@ -20,7 +17,7 @@ namespace Tickets.Models.Clients
         {
             var context = new TicketsEntities();
             var clients = context.Clients.AsEnumerable()
-                .Where(r => r.Statu == statu ||( statu == 0 && r.Statu != (int)ClientStatuEnum.Suspended))
+                .Where(r => r.Statu == statu || (statu == 0 && r.Statu != (int)ClientStatuEnum.Suspended))
                 .OrderByDescending(r => r.CreateDate)
                 .Select(c => new
                 {

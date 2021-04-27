@@ -1,8 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Tickets.Models.Prospects;
 
 namespace Tickets.Models.Raffles

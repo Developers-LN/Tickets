@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
 
@@ -62,9 +61,9 @@ namespace Tickets.Models.Ticket
 
             if (number == null)
             {
-                return new RequestResponseModel ()
-                { 
-                    Result = false, 
+                return new RequestResponseModel()
+                {
+                    Result = false,
                     Message = "El numero no fue encontrado!"
                 };
             }
@@ -75,16 +74,16 @@ namespace Tickets.Models.Ticket
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Delete, "Borando Asignación de Billetes", model);
 
             return new RequestResponseModel()
-            { 
+            {
                 Result = true,
-                Message = "El Numero fue borrado correctamente!" 
+                Message = "El Numero fue borrado correctamente!"
             };
         }
 
-        internal RequestResponseModel awardNumberDetails(int number,int raffleId, int fractionFrom, int fractionTo)
+        internal RequestResponseModel awardNumberDetails(int number, int raffleId, int fractionFrom, int fractionTo)
         {
             var context = new TicketsEntities();
-            var n = context.TicketAllocationNumbers.Where(tn => tn.TicketAllocation.RaffleId == raffleId && tn.Number == number ).FirstOrDefault();
+            var n = context.TicketAllocationNumbers.Where(tn => tn.TicketAllocation.RaffleId == raffleId && tn.Number == number).FirstOrDefault();
             if (n == null)
             {
                 return new RequestResponseModel()
@@ -102,7 +101,7 @@ namespace Tickets.Models.Ticket
             {
                 for (int i = fFrom; i < fTo; i++)
                 {
-                    if(i == a.Fraction)
+                    if (i == a.Fraction)
                     {
                         wfrac = true;
                         break;
@@ -113,7 +112,7 @@ namespace Tickets.Models.Ticket
                     }
                 }
             }
-            if(wfrac == false)
+            if (wfrac == false)
             {
                 awards.RemoveAll(w => w.Award.ByFraction == (int)ByFractionEnum.S);
             }
@@ -154,7 +153,7 @@ namespace Tickets.Models.Ticket
             }
 
             var awards = context.RaffleAwards.Where(r => r.RaffleId == n.TicketAllocation.RaffleId && r.ControlNumber == n.Number).ToList();
-            var numberDetails =  new
+            var numberDetails = new
             {
                 n.Id,
                 n.TicketAllocationId,

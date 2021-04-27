@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
@@ -44,7 +43,7 @@ namespace Tickets.Controllers
         // GET: /Cash/CashReports
         [Authorize]
         [HttpGet]
-        public ActionResult CashReports() 
+        public ActionResult CashReports()
         {
             return View();
         }
@@ -88,7 +87,7 @@ namespace Tickets.Controllers
             List<object> invoiceDetails = new List<object>();
             if (clientId == 0 && raffleId == 0)
             {
-                clients = context.Clients.Where( c=> c.Statu == (int)ClientStatuEnum.Approbed).Select(r => new
+                clients = context.Clients.Where(c => c.Statu == (int)ClientStatuEnum.Approbed).Select(r => new
                 {
                     r.Id,
                     r.Name
@@ -103,9 +102,9 @@ namespace Tickets.Controllers
             }
             else
             {
-                invoiceDetails = context.InvoiceDetails.Where( i=>
-                    (i.RaffleId == raffleId || raffleId == 0)
-                    && ( i.ClientId == clientId || clientId == 0)
+                invoiceDetails = context.InvoiceDetails.Where(i =>
+                   (i.RaffleId == raffleId || raffleId == 0)
+                   && (i.ClientId == clientId || clientId == 0)
                 ).AsEnumerable().Select(invoiceDetail => InvoiceDetailToObject(invoiceDetail)).ToList();
             }
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de detalle de facturas", null);
@@ -192,7 +191,7 @@ namespace Tickets.Controllers
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Generando reporte de detailles de facturas", invoiceDetailsObject);
             return new JsonResult() { Data = new { result = true, invoiceDetailsObject, message = "Detaille de factura creada Corractamente." } };
         }
-        
+
         //
         //  GET: Cash/CashReportData
         [Authorize]
@@ -201,13 +200,13 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
 
-            var clients = context.Clients.Where( c=> c.Statu == (int)ClientStatuEnum.Approbed).Select(r => new
+            var clients = context.Clients.Where(c => c.Statu == (int)ClientStatuEnum.Approbed).Select(r => new
             {
                 value = r.Id,
                 text = r.Name
-                
+
             }).ToList();
-            
+
             var raffles = context.Raffles.Select(r => new
             {
                 value = r.Id,
@@ -239,17 +238,23 @@ namespace Tickets.Controllers
             var totalCash = 0.00m;
             var totalCheck = 0.00m;
             var totalCard = 0.00m;
-            foreach( var recipient in context.ReceiptPayments.Where( r=>r.CashId == cash.Id)){
+            foreach (var recipient in context.ReceiptPayments.Where(r => r.CashId == cash.Id))
+            {
                 totalCash += recipient.TotalCash;
                 totalCheck += recipient.TotalCheck;
                 totalCard += recipient.TotalCredit;
             }
-            return new JsonResult() { Data = new{ 
-                result = true,
-                totalCash,
-                totalCheck,
-                totalCard
-            }, JsonRequestBehavior=JsonRequestBehavior.AllowGet};
+            return new JsonResult()
+            {
+                Data = new
+                {
+                    result = true,
+                    totalCash,
+                    totalCheck,
+                    totalCard
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
         }
 
         //
@@ -370,9 +375,9 @@ namespace Tickets.Controllers
                 cash.Name,
                 cash.OpenValue,
                 cash.Statu,
-                StatuDesc = context.Catalogs.Where( c=>c.Id == cash.Statu).FirstOrDefault().NameDetail,
+                StatuDesc = context.Catalogs.Where(c => c.Id == cash.Statu).FirstOrDefault().NameDetail,
                 cash.AgencyId,
-                AgencyDesc = context.Agencies.FirstOrDefault( a=>a.Id == cash.AgencyId).Name,
+                AgencyDesc = context.Agencies.FirstOrDefault(a => a.Id == cash.AgencyId).Name,
                 cash.CreateUser,
                 CraeteDate = cash.CraeteDate.ToString()
             };
@@ -522,8 +527,8 @@ namespace Tickets.Controllers
                         {
                             receiptPayment.TotalCheck = totalCash;
                         }
-                           context.ReceiptPayments.Add(receiptPayment);
-                           context.SaveChanges();
+                        context.ReceiptPayments.Add(receiptPayment);
+                        context.SaveChanges();
 
                         if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.CreditNote)
                         {
@@ -591,18 +596,23 @@ namespace Tickets.Controllers
             var invoice = context.Invoices.Where(i => i.Id == invoiceId).FirstOrDefault();
             ///    var ticketController = new TicketAllocationController();  // esta instancia de clase no presenta ninguna funcionalidad
             if (invoice == null) { return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { } }; }
-            return new JsonResult() { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { 
-                paymentTypes, 
-                clientName = invoice.Client.Name,
-                clientId = invoice.ClientId,
-                creditNotes = invoice.Client.NoteCredits.AsEnumerable().Where( c=>
-                    c.Statu == (int)GeneralStatusEnum.Active
-                    && (c.RaffleId.HasValue == false || c.RaffleId.Value == invoice.RaffleId)
-                    && c.TotalRest > 0
-                    ).Select( c=> CreditNoteToObject(c)).ToList(),
-                payment = GetPaymentCash(invoice),
-                raffleId = invoice.RaffleId,
-            } };
+            return new JsonResult()
+            {
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                Data = new
+                {
+                    paymentTypes,
+                    clientName = invoice.Client.Name,
+                    clientId = invoice.ClientId,
+                    creditNotes = invoice.Client.NoteCredits.AsEnumerable().Where(c =>
+                       c.Statu == (int)GeneralStatusEnum.Active
+                       && (c.RaffleId.HasValue == false || c.RaffleId.Value == invoice.RaffleId)
+                       && c.TotalRest > 0
+                    ).Select(c => CreditNoteToObject(c)).ToList(),
+                    payment = GetPaymentCash(invoice),
+                    raffleId = invoice.RaffleId,
+                }
+            };
         }
 
         //
@@ -660,7 +670,7 @@ namespace Tickets.Controllers
             foreach (var ticketPrice in invoice.InvoiceTickets.Select(i => i.Quantity * i.PricePerFraction))
             {
                 totalInvoiceTicketPrice += ticketPrice;
-            } 
+            }
             var totalRequestCash = 0.0M;
             foreach (var requestCash in invoice.ReceiptPayments.Select(r => r.TotalCash + r.TotalCheck + r.TotalCredit))
             {
@@ -675,16 +685,16 @@ namespace Tickets.Controllers
             var clientDiscount = invoice.Discount;
             var totalInvoiceTicketPrice = 0.0M;
             var totalReturned = 0.0M;
-            
-            foreach( var invoiceTickets in invoice.InvoiceTickets)
+
+            foreach (var invoiceTickets in invoice.InvoiceTickets)
             {
                 totalInvoiceTicketPrice += (invoiceTickets.Quantity * invoiceTickets.PricePerFraction);
             }
-      
+
             var totalCreditNote = 0.0M;
             var totalRequestCash = 0.0M;
 
-            invoice.ReceiptPayments.ToList().ForEach(r => r.NoteCreditReceiptPayments.ToList().ForEach( rn=> totalCreditNote += rn.TotalCash));
+            invoice.ReceiptPayments.ToList().ForEach(r => r.NoteCreditReceiptPayments.ToList().ForEach(rn => totalCreditNote += rn.TotalCash));
 
             invoice.ReceiptPayments.Select(r => r.TotalCash + r.TotalCheck + r.TotalCredit).ToList().ForEach(t => totalRequestCash += t);
             var discount = (totalInvoiceTicketPrice * clientDiscount) / 100;
@@ -693,7 +703,7 @@ namespace Tickets.Controllers
                 totalInvoice = totalInvoiceTicketPrice,
                 totalPayment = totalRequestCash,
                 totalReturned = totalReturned,
-                totalCreditNote =totalCreditNote,
+                totalCreditNote = totalCreditNote,
                 totalRestant = totalInvoiceTicketPrice - (totalRequestCash + totalReturned + totalCreditNote),
                 discount = discount
             };
@@ -765,7 +775,7 @@ namespace Tickets.Controllers
                 invoice.PaymentStatu,
                 xpiredDate = xpiredDate.ToUnixTime(),
                 xpiredDay = (xpiredDate.Date < DateTime.Now.Date && invoice.PaymentStatu == 2082) ? "Caducada" : "",
-                PaymentStatuDesc = context.Catalogs.FirstOrDefault(c=>c.Id == invoice.PaymentStatu).NameDetail,
+                PaymentStatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == invoice.PaymentStatu).NameDetail,
                 Payment = GetPaymentCash(invoice)
             };
         }
@@ -875,7 +885,7 @@ namespace Tickets.Controllers
                 noteCredit.TotalCash,
                 noteCredit.TotalRest,
                 Concepts = noteCredit.IdentifyBaches.Count > 0 ? noteCredit.Concepts + " Lote #" + noteCredit.IdentifyBaches.FirstOrDefault().Id :
-                noteCredit.RaffleId.HasValue? noteCredit.Concepts + " del Sorteo #" + noteCredit.RaffleId.Value : noteCredit.Concepts
+                noteCredit.RaffleId.HasValue ? noteCredit.Concepts + " del Sorteo #" + noteCredit.RaffleId.Value : noteCredit.Concepts
             };
         }
         //
@@ -897,7 +907,7 @@ namespace Tickets.Controllers
                             if (creditNote.IdentifyBaches.Where(r => r.Id > 0).Any())
                             {
                                 identifyBachId = creditNote.IdentifyBaches.FirstOrDefault().Id;
-                                client = context.IdentifyBaches.FirstOrDefault( i=>i.Id == identifyBachId).Client;
+                                client = context.IdentifyBaches.FirstOrDefault(i => i.Id == identifyBachId).Client;
                                 creditNote.IdentifyBaches = new List<IdentifyBach>();
                                 creditNote.DiscountPercent = client.GroupId == (int)ClientGroupEnum.Mayorista ? 2 : 0;
                             }
@@ -911,7 +921,7 @@ namespace Tickets.Controllers
                             creditNote.CreateDate = DateTime.Now;
                             creditNote.CreateUser = WebSecurity.CurrentUserId;
                             creditNote.Statu = (int)GeneralStatusEnum.Active;
-                            context.NoteCredits.Add(creditNote); 
+                            context.NoteCredits.Add(creditNote);
                             context.SaveChanges();
                             if (identifyBachId > 0)
                             {
@@ -942,7 +952,7 @@ namespace Tickets.Controllers
                 }
             }
         }
-        
+
         //
         // GET: /Cash/CreditNoteList
         [Authorize]
@@ -981,7 +991,7 @@ namespace Tickets.Controllers
             }
             else
             {
-                creditNotes = context.NoteCredits.AsEnumerable().OrderByDescending(n => n.Id).Where(c=> c.ClientId == clientId).Select(c => new
+                creditNotes = context.NoteCredits.AsEnumerable().OrderByDescending(n => n.Id).Where(c => c.ClientId == clientId).Select(c => new
                 {
                     c.Id,
                     ClientId = c.ClientId,
@@ -991,7 +1001,7 @@ namespace Tickets.Controllers
                     c.TotalRest
                 }).ToList<object>();
             }
-                
+
             return new JsonResult() { Data = new { clients, creditNotes }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -999,7 +1009,7 @@ namespace Tickets.Controllers
         // POST: /Cash/CreditNoteGroupApply
         [Authorize]
         [HttpPost]
-        public JsonResult CreditNoteGroupApply (string group, int raffleId, int clientId)
+        public JsonResult CreditNoteGroupApply(string group, int raffleId, int clientId)
         {
             var groups = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(group);
             object note;
@@ -1019,13 +1029,14 @@ namespace Tickets.Controllers
 
                         var price = clientReturneds.Where(r => groups.Where(g => g == r.ReturnedGroup).Any())
                             .FirstOrDefault().TicketAllocationNumber.InvoiceTickets.FirstOrDefault().PricePerFraction;
-                        
+
                         var returnesToChanged = clientReturneds
                             .Where(r =>
                             groups.Where(g => g == r.ReturnedGroup).Any()
                             ).ToList();
 
-                        foreach( var ret in returnesToChanged) { 
+                        foreach (var ret in returnesToChanged)
+                        {
                             totalPrice += (ret.FractionTo - ret.FractionFrom + 1) * price;
                             ret.Statu = (int)TicketReturnedStatuEnum.Invoiced;
                         }
@@ -1042,11 +1053,11 @@ namespace Tickets.Controllers
                             Statu = (int)GeneralStatusEnum.Active,
                             TotalCash = (totalPrice - discountTotal),
                             TotalRest = (totalPrice - discountTotal),
-                            RaffleId = raffleId 
+                            RaffleId = raffleId
                         };
                         context.NoteCredits.Add(creditNote);
                         context.SaveChanges();
-                        note = CreditNoteToObject( context.NoteCredits.FirstOrDefault(n => n.Id == creditNote.Id) );
+                        note = CreditNoteToObject(context.NoteCredits.FirstOrDefault(n => n.Id == creditNote.Id));
                         tx.Commit();
                     }
                     catch (Exception e)
@@ -1067,11 +1078,13 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var hasRole = false;
-            var user = context.Users.FirstOrDefault( u=>u.Id == WebSecurity.CurrentUserId);
-            user.webpages_Roles.ToList().ForEach( r=> r.Rol_Module.ToList().ForEach( m=> {
-               if(m.Module.Name == "app.cashReceivableCreate" && m.CanDelete ){
-                hasRole = true;
-               }
+            var user = context.Users.FirstOrDefault(u => u.Id == WebSecurity.CurrentUserId);
+            user.webpages_Roles.ToList().ForEach(r => r.Rol_Module.ToList().ForEach(m =>
+            {
+                if (m.Module.Name == "app.cashReceivableCreate" && m.CanDelete)
+                {
+                    hasRole = true;
+                }
             }));
             var creditNotes = context.NoteCredits.Where(n => n.TotalRest > 0 && n.RaffleId.HasValue && hasRole).Select(n => new
             {
@@ -1081,7 +1094,7 @@ namespace Tickets.Controllers
             return new JsonResult()
             {
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data =  creditNotes
+                Data = creditNotes
             };
         }
         #endregion
@@ -1092,7 +1105,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult PreviousDebt()
         {
-            return View(); 
+            return View();
         }
 
         //
@@ -1104,20 +1117,20 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
 
             var clients = context.Clients.AsEnumerable().Where(c =>
-                c.Statu == (int)ClientStatuEnum.Approbed 
-                && c.GroupId == (int)ClientGroupEnum.Mayorista 
+                c.Statu == (int)ClientStatuEnum.Approbed
+                && c.GroupId == (int)ClientGroupEnum.Mayorista
                 && c.PreviousDebt > 0)
                 .Select(r => new
-            {
-                r.Id,
-                r.Name,
-                r.PreviousDebt,
-                PrevieusPayment = r.PreviousDebtPayments.Count > 0?r.PreviousDebtPayments.Select( p=> p.PaimentValue).Aggregate( (i,s)=> i+s) : 0
+                {
+                    r.Id,
+                    r.Name,
+                    r.PreviousDebt,
+                    PrevieusPayment = r.PreviousDebtPayments.Count > 0 ? r.PreviousDebtPayments.Select(p => p.PaimentValue).Aggregate((i, s) => i + s) : 0
 
-            }).ToList();
+                }).ToList();
 
             return new JsonResult() { Data = clients, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }        
+        }
 
         #endregion
         #region Payment

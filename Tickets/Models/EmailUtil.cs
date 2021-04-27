@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Timers;
 using System.Web;
-using Tickets.Models.Enums;
-using System.Data.Entity;
-using System.Configuration;
-using System.Net;
-using System.IO;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Tickets.Controllers;
+using Tickets.Models.Enums;
 
 
 namespace Tickets.Models
@@ -21,9 +20,9 @@ namespace Tickets.Models
     public class EmailUtil
     {
 
-      public EmailUtil()
+        public EmailUtil()
         {
-          ///  SendReports();
+            ///  SendReports();
         }
 
         private static Timer emailTimer = new Timer();
@@ -52,23 +51,23 @@ namespace Tickets.Models
             int currentHour = ((DateTime.Now.Hour + 11) % 12) + 1;
             string division = DateTime.Now.Hour > 12 ? "PM" : "AM";
             int startIn = 0;
-            
+
             if (currentHour != 7)
             {
                 // if (currentHour > 7 && currentHour < 12 && division == "AM") { startIn = (12 - currentHour) + (12 - 5); }
                 if (currentHour == 12 && division == "AM") { startIn = (12 - 5); }
-                if (currentHour < 12 && division == "AM") { startIn = ( 7 - currentHour); }
-                if (currentHour == 12  && division == "PM") { startIn = (12) + (12 - 5); }
+                if (currentHour < 12 && division == "AM") { startIn = (7 - currentHour); }
+                if (currentHour == 12 && division == "PM") { startIn = (12) + (12 - 5); }
                 if (currentHour < 12 && division == "PM") { startIn = (12 - currentHour) + (12 - 5); }
-                if(startIn < 0) { startIn *= -1; }
-                var thread = new  System.Threading.Thread(() =>
-                {
-                    System.Threading.Thread.Sleep(1000 * 60 * 60 * startIn);
-                });
+                if (startIn < 0) { startIn *= -1; }
+                var thread = new System.Threading.Thread(() =>
+               {
+                   System.Threading.Thread.Sleep(1000 * 60 * 60 * startIn);
+               });
                 thread.Start();
             }
             else
-            { SendOverdueBillEmail();}
+            { SendOverdueBillEmail(); }
 
         }
 
@@ -199,8 +198,8 @@ namespace Tickets.Models
             {
                 ClientStatuEnum clientStatus = (ClientStatuEnum)client.Statu;
                 string status = "";
-                if (clientStatus == ClientStatuEnum.Created  ) { status = "Creado";     }
-                if (clientStatus == ClientStatuEnum.Approbed ) { status = "Aprobado";   }
+                if (clientStatus == ClientStatuEnum.Created) { status = "Creado"; }
+                if (clientStatus == ClientStatuEnum.Approbed) { status = "Aprobado"; }
                 if (clientStatus == ClientStatuEnum.InProcess) { status = "En proceso"; }
                 if (clientStatus == ClientStatuEnum.Suspended) { status = "Suspendido"; }
 
@@ -294,63 +293,63 @@ namespace Tickets.Models
         {
             try
             {
-            string currentUrl = request.Url.Scheme + "://" + request.Url.Authority + request.ApplicationPath.TrimEnd('/') + "/";
-            string MajorAwardInline = string.Format("<a href='{2}Reports/MajorAwardInline?raffleId={0}'>{1}</a>", raffleId, string.Format("PREMIOS MAYORES PARA EL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
-            string SpecialAwardInline = string.Format("<a href='{2}Reports/SpecialAwardInline?raffleId={0}'>{1}</a>", raffleId, string.Format("LISTA DE PREMIOS ESPECIALES DEL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
-            string IntermAwardInline = string.Format("<a href='{2}/Reports/IntermAwardInline?raffleId={0}'>{1}</a>", raffleId, string.Format("LISTA DE PREMIOS INTERMEDIOS PARA EL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
-            string MinorAwardInline = string.Format("<a href='{2}/Reports/MinorAwardInline?raffleId={0}'>{1}</a>", raffleId, string.Format("LISTA DE PREMIOS MENORES PARA EL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
-            //more
-            
-            string Rafflevirtual = string.Format("<a href='{2}#/raffle/virtual/{0}'>{1}</a>", raffleId, string.Format("SORTEO VIRTUAL NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
-            string ReturnedNumbers = string.Format("<a href='{2}Reports/ReturnedNumbers?raffleId={0}'>{1}</a>", raffleId, string.Format("LISTADO DE NÚMEROS PREMIADOS DEVUELTOS PARA EL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
-            string ReturnedNumbersGroup = string.Format("<a href='{2}Reports/ReturnedNumbersGroup?raffleId={0}'>{1}</a>", raffleId, string.Format("DEVOLUCION DE BILLETES DE GRUPO DEL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
-            string ReturnedNumbersClient = string.Format("<a href='{2}Reports/ReturnedNumbersClient?raffleId={0}'>{1}</a>", raffleId, string.Format("DEVOLUCION DE BILLETES POR CLIENTES DEL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
+                string currentUrl = request.Url.Scheme + "://" + request.Url.Authority + request.ApplicationPath.TrimEnd('/') + "/";
+                string MajorAwardInline = string.Format("<a href='{2}Reports/MajorAwardInline?raffleId={0}'>{1}</a>", raffleId, string.Format("PREMIOS MAYORES PARA EL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
+                string SpecialAwardInline = string.Format("<a href='{2}Reports/SpecialAwardInline?raffleId={0}'>{1}</a>", raffleId, string.Format("LISTA DE PREMIOS ESPECIALES DEL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
+                string IntermAwardInline = string.Format("<a href='{2}/Reports/IntermAwardInline?raffleId={0}'>{1}</a>", raffleId, string.Format("LISTA DE PREMIOS INTERMEDIOS PARA EL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
+                string MinorAwardInline = string.Format("<a href='{2}/Reports/MinorAwardInline?raffleId={0}'>{1}</a>", raffleId, string.Format("LISTA DE PREMIOS MENORES PARA EL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
+                //more
 
-            string ReturnedNumbersAward = string.Format("<a href='{2}Reports/ReturnedNumbersAward?raffleId={0}'>{1}</a>", raffleId, string.Format("LISTADO DE NÚMEROS PREMIADOS DEVUELTOS PARA EL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
-            string RaffleGeneralOver = string.Format("<a href='{2}Reports/RaffleGeneralOver?raffleId={0}'>{1}</a>", raffleId, string.Format("DETALLE DE FACTURAS PARA EL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
-           
-            ReportByEmail newClientReport = null;
-            var employeesRecipientList = new List<Employee>();
-            StringBuilder strBuilderErrors = new StringBuilder();
+                string Rafflevirtual = string.Format("<a href='{2}#/raffle/virtual/{0}'>{1}</a>", raffleId, string.Format("SORTEO VIRTUAL NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
+                string ReturnedNumbers = string.Format("<a href='{2}Reports/ReturnedNumbers?raffleId={0}'>{1}</a>", raffleId, string.Format("LISTADO DE NÚMEROS PREMIADOS DEVUELTOS PARA EL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
+                string ReturnedNumbersGroup = string.Format("<a href='{2}Reports/ReturnedNumbersGroup?raffleId={0}'>{1}</a>", raffleId, string.Format("DEVOLUCION DE BILLETES DE GRUPO DEL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
+                string ReturnedNumbersClient = string.Format("<a href='{2}Reports/ReturnedNumbersClient?raffleId={0}'>{1}</a>", raffleId, string.Format("DEVOLUCION DE BILLETES POR CLIENTES DEL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
 
-    
+                string ReturnedNumbersAward = string.Format("<a href='{2}Reports/ReturnedNumbersAward?raffleId={0}'>{1}</a>", raffleId, string.Format("LISTADO DE NÚMEROS PREMIADOS DEVUELTOS PARA EL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
+                string RaffleGeneralOver = string.Format("<a href='{2}Reports/RaffleGeneralOver?raffleId={0}'>{1}</a>", raffleId, string.Format("DETALLE DE FACTURAS PARA EL SORTEO NO. {0} EN FECHA {1}", raffleId, DateTime.Now.ToLongDateString().ToUpper()), currentUrl);
 
-            using (var context = new TicketsEntities())
-            {
-                newClientReport = context.ReportByEmails.Where(r => r.ModuleName == (int)byEmail).FirstOrDefault();
-                if (newClientReport != null)
+                ReportByEmail newClientReport = null;
+                var employeesRecipientList = new List<Employee>();
+                StringBuilder strBuilderErrors = new StringBuilder();
+
+
+
+                using (var context = new TicketsEntities())
                 {
-                    if (newClientReport.Recipients != null)
+                    newClientReport = context.ReportByEmails.Where(r => r.ModuleName == (int)byEmail).FirstOrDefault();
+                    if (newClientReport != null)
                     {
-                        int[] recipientsIds = Array.ConvertAll(newClientReport.Recipients.Split(','), s => int.Parse(s));
-                        employeesRecipientList = context.Employees.Where(e => recipientsIds.Contains(e.Id)).ToList();
+                        if (newClientReport.Recipients != null)
+                        {
+                            int[] recipientsIds = Array.ConvertAll(newClientReport.Recipients.Split(','), s => int.Parse(s));
+                            employeesRecipientList = context.Employees.Where(e => recipientsIds.Contains(e.Id)).ToList();
+                        }
                     }
                 }
-            }
 
-            var sentTo = employeesRecipientList.Select(o => new
-            {
-                Name = o.Name + " " + o.LastName,
-                EmailAddress = o.Email
-            });
-
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress(emailWhoSend, displayNameFrom);
-            foreach (var to in sentTo)
-            {
-                try
+                var sentTo = employeesRecipientList.Select(o => new
                 {
-                    MailAddress e = new MailAddress(to.EmailAddress, to.Name);
-                    mail.To.Add(e);
-                }
-                catch
+                    Name = o.Name + " " + o.LastName,
+                    EmailAddress = o.Email
+                });
+
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress(emailWhoSend, displayNameFrom);
+                foreach (var to in sentTo)
                 {
-                    strBuilderErrors.AppendFormat("Los siguientes destinatarios no pudieron ser enviados {0}, {1}", to.EmailAddress, to.Name);
+                    try
+                    {
+                        MailAddress e = new MailAddress(to.EmailAddress, to.Name);
+                        mail.To.Add(e);
+                    }
+                    catch
+                    {
+                        strBuilderErrors.AppendFormat("Los siguientes destinatarios no pudieron ser enviados {0}, {1}", to.EmailAddress, to.Name);
+                    }
                 }
-            }
 
 
-            
+
                 StringBuilder destinatariosbuilder = new StringBuilder();
                 HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
 
@@ -441,12 +440,12 @@ namespace Tickets.Models
             }
         }
 
-    
+
         public static void SendReports()
         {
             //using(var context = new TicketsEntities())
             //{
-                
+
             //    var entity = context.Raffles.Where(r => r.Id == 3742).FirstOrDefault();
             //  //  RenderReportToPdf(entity, "\\Views\\Reports\\MajorAwardInline.cshtml", "MajorAwardInline",ReportByEmailEnum.MODIFIED_CLIENT);
             //    //RenderReportToPdf(entity, "\\Views\\Reports\\MinorAwardInline.cshtml", "MinorAwardInline");
@@ -455,7 +454,7 @@ namespace Tickets.Models
             //}
         }
 
-        public static void RenderReportToPdf(dynamic model, string viewPath,string awardName, ReportByEmailEnum reportEnum)
+        public static void RenderReportToPdf(dynamic model, string viewPath, string awardName, ReportByEmailEnum reportEnum)
         {
             try
             {
@@ -558,7 +557,7 @@ namespace Tickets.Models
             {
 
             }
-           
+
             //RenderRazorViewToString(new Controller() viewName,  model);
         }
         public static string RenderPartialToString(object model, string filePath)
@@ -585,46 +584,46 @@ namespace Tickets.Models
         //    }
         //}
 
-    //    public static void createPdf(string render ="")
-    //    {
-    //        LoadSettings settings = new LoadSettings();
-         
-    //        var document = new HtmlToPdfDocument
-    //        {
-    //            GlobalSettings =
-    //        {
-    //            ProduceOutline = true,
-    //            DocumentTitle = "Pretty Websites",
-    //            //PaperSize = PaperKind.A4, // Implicit conversion to PechkinPaperSize
-    //            Margins =
-    //            {
-    //                All = 1.375,
-    //                Unit = Unit.Centimeters
-    //            }
-    //        },
-    //            Objects = {
-    //          //  new ObjectSettings { HtmlText = render },
-    //            new ObjectSettings { PageUrl = "http://localhost:61913/Reports/IntermAwardInline?raffleId=3742", LoadSettings = settings  },
-    //            //new ObjectSettings { PageUrl = "www.microsoft.com" },
-    //            //new ObjectSettings { PageUrl = "www.github.com" }
-    //        }
-    //        };
+        //    public static void createPdf(string render ="")
+        //    {
+        //        LoadSettings settings = new LoadSettings();
 
-    //        IConverter converter =
-    //new StandardConverter(
-    //    new PdfToolset(
-    //        new Win32EmbeddedDeployment(
-    //            new TempFolderDeployment())));
+        //        var document = new HtmlToPdfDocument
+        //        {
+        //            GlobalSettings =
+        //        {
+        //            ProduceOutline = true,
+        //            DocumentTitle = "Pretty Websites",
+        //            //PaperSize = PaperKind.A4, // Implicit conversion to PechkinPaperSize
+        //            Margins =
+        //            {
+        //                All = 1.375,
+        //                Unit = Unit.Centimeters
+        //            }
+        //        },
+        //            Objects = {
+        //          //  new ObjectSettings { HtmlText = render },
+        //            new ObjectSettings { PageUrl = "http://localhost:61913/Reports/IntermAwardInline?raffleId=3742", LoadSettings = settings  },
+        //            //new ObjectSettings { PageUrl = "www.microsoft.com" },
+        //            //new ObjectSettings { PageUrl = "www.github.com" }
+        //        }
+        //        };
 
-    //        byte[] result = converter.Convert(document);
-    //        FileStream fs = new FileStream(@"e:\prueba.pdf", FileMode.Create);
-    //        fs.Write(result, 0, result.Length);
-    //        fs.Close();
+        //        IConverter converter =
+        //new StandardConverter(
+        //    new PdfToolset(
+        //        new Win32EmbeddedDeployment(
+        //            new TempFolderDeployment())));
 
-    //    }
+        //        byte[] result = converter.Convert(document);
+        //        FileStream fs = new FileStream(@"e:\prueba.pdf", FileMode.Create);
+        //        fs.Write(result, 0, result.Length);
+        //        fs.Close();
+
+        //    }
 
 
-      
+
         //public static void ToPdfFile(string actionName, ControllerContext context,int rafleId)
         //{
 
@@ -640,7 +639,7 @@ namespace Tickets.Models
         //    File.WriteAllBytes(HostingEnvironment.MapPath("\\email\\pdf\\" +string.Format("{0}_{1}",actionName,rafleId)), applicationPDFData);
         //}
 
-   
+
         //internal class Win32EmbeddedDeployment : IDeployment
         //{
         //    private TempFolderDeployment tempFolderDeployment;

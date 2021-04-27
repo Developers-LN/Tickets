@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Xml.Serialization;
 
 namespace Tickets.Models.XML
@@ -38,7 +36,7 @@ namespace Tickets.Models.XML
         public List<Award> Awards { get; set; }
     }
 
-	[Serializable()]
+    [Serializable()]
     [System.Xml.Serialization.XmlRoot("TicketNumber")]
     public class TicketNumber
     {
@@ -87,10 +85,10 @@ namespace Tickets.Models.XML
         [System.Xml.Serialization.XmlElement("RaffleDate")]
         public string RaffleDate { get; set; }
 
-        
+
         [XmlArray("InvoiceTicketNumbers")]
         [XmlArrayItem("InvoiceTicketNumber", typeof(InvoiceTicketNumber))]
-       
+
         public InvoiceTicketNumber[] InvoiceTicketNumbers { get; set; }
     }
 

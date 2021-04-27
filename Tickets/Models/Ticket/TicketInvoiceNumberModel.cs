@@ -1,11 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Tickets.Models.Enums;
-using Tickets.Models;
-using WebMatrix.WebData;
 
 namespace Tickets.Models.Ticket
 {

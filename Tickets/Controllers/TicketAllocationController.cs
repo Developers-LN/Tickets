@@ -1,14 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
 using Tickets.Models.Ticket;
-using WebMatrix.WebData;
 
 namespace Tickets.Controllers
 {
@@ -61,7 +55,7 @@ namespace Tickets.Controllers
         {
             return View();
         }
-        
+
         //
         //  GET: /TicketAllocation/TicketReassignt
         [Authorize]
@@ -106,7 +100,8 @@ namespace Tickets.Controllers
         public JsonResult GetIdentifyList(int raffleId = 0, int clientId = 0)
         {
             var respnse = new TicketIdentifyModel().GetIdentifyList(raffleId, clientId);
-            return new JsonResult() { 
+            return new JsonResult()
+            {
                 Data = respnse,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
@@ -229,7 +224,7 @@ namespace Tickets.Controllers
         [HttpPost]
         public JsonResult CertificationAwardData(int number, int raffleAwardId, int fractions)
         {
-            var respnse = new TicketIdentifyModel().CertificationAwardData(number,raffleAwardId, fractions);
+            var respnse = new TicketIdentifyModel().CertificationAwardData(number, raffleAwardId, fractions);
             return new JsonResult()
             {
                 Data = respnse,
@@ -249,7 +244,7 @@ namespace Tickets.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-        
+
         //
         // GET: /Ticket/IdentifyAward
         [Authorize]

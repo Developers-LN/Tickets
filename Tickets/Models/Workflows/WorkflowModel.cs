@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Web;
 using Tickets.Models.Clients;
 using Tickets.Models.Enums;
 using Tickets.Models.Prospects;
@@ -39,14 +38,14 @@ namespace Tickets.Models.Workflows
         public ProspectModel Prospect { get; set; }
 
         [JsonProperty(PropertyName = "client")]
-        public  ClientModel Client { get; set; }
+        public ClientModel Client { get; set; }
 
         [JsonProperty(PropertyName = "reprint")]
         public TicketReprintModel Reprint { get; set; }
 
         [JsonProperty(PropertyName = "award")]
         public IdentifyNumberModel Award { get; set; }
-        
+
 
         public class IdentifyNumberModel
         {
@@ -76,7 +75,7 @@ namespace Tickets.Models.Workflows
 
             [JsonProperty(PropertyName = "awards")]
             public List<AwardCertModel> Awards { get; set; }
-            
+
 
             internal IdentifyNumberModel ToObject(IdentifyNumber number)
             {
@@ -84,11 +83,12 @@ namespace Tickets.Models.Workflows
                 var awards = context.RaffleAwards.Where(w => w.RaffleId == number.IdentifyBach.RaffleId && w.ControlNumber == number.TicketAllocationNumber.Number)
                     .Select(s => new AwardCertModel
                     {
-                        Award = new AwardModel {
+                        Award = new AwardModel
+                        {
                             ByFraction = s.Award.ByFraction,
                             Name = s.Award.Name,
                             SourceAward = s.Award.SourceAward,
-                            Value = s.Award.ByFraction == (int)ByFractionEnum.S ? s.Award.Value : ((s.Award.Value / (s.Raffle.Prospect.LeafFraction * s.Raffle.Prospect.LeafNumber))*(number.FractionTo - number.FractionFrom +1)) ,
+                            Value = s.Award.ByFraction == (int)ByFractionEnum.S ? s.Award.Value : ((s.Award.Value / (s.Raffle.Prospect.LeafFraction * s.Raffle.Prospect.LeafNumber)) * (number.FractionTo - number.FractionFrom + 1)),
                             TypesAwardDesc = s.Award.TypesAward.Name
                         },
                         AwardId = s.AwardId,
@@ -126,14 +126,14 @@ namespace Tickets.Models.Workflows
                 }
                 var model = new IdentifyNumberModel()
                 {
-                    NumberId =  number.NumberId,
+                    NumberId = number.NumberId,
                     FractionFrom = number.FractionFrom,
                     FractionTo = number.FractionTo,
                     Fractions = number.FractionTo - number.FractionFrom + 1,
                     IdentifyBachId = number.IdentifyBach.Id,
                     ClientName = number.IdentifyBach.Client.Name,
                     RaffleDesc = (number.IdentifyBach.RaffleId + " - " + number.IdentifyBach.Raffle.Name).ToString(),
-                    Number =  number.TicketAllocationNumber.Number,
+                    Number = number.TicketAllocationNumber.Number,
                     Awards = awards
                 };
                 return model;
@@ -153,14 +153,14 @@ namespace Tickets.Models.Workflows
                 ApprovedCount = model.WorkflowProccesses.Where(wf => wf.Statu == (int)WorkflowProccessStatuEnum.Approved).Count()
                 - model.WorkflowProccesses.Where(wf => wf.Statu == (int)WorkflowProccessStatuEnum.Rejected).Count(),
                 TotalAproved = model.WorkflowType.WorkflowType_User.Where(wu => wu.Statu != (int)GeneralStatusEnum.Delete).Count(),
-                Proccess = model.WorkflowProccesses.Select(p => new ProccessModel().ToObject(p)).OrderByDescending( p=> p.CreateDate).ToList()
+                Proccess = model.WorkflowProccesses.Select(p => new ProccessModel().ToObject(p)).OrderByDescending(p => p.CreateDate).ToList()
             };
 
             int prospectType = int.Parse(ConfigurationManager.AppSettings["ProspectApprovedWorkflowTypeId"].ToString());
             int clientType = int.Parse(ConfigurationManager.AppSettings["ClientApprovedWorkflowTypeId"].ToString());
             int reprintType = int.Parse(ConfigurationManager.AppSettings["ReprintApprovedWorkflowTypeId"].ToString());
             int awardCertType = 6;
-           
+
             if (type == prospectType)
             {
                 var prospectObject = new ProspectModel();
@@ -213,7 +213,7 @@ namespace Tickets.Models.Workflows
         internal RequestResponseModel GetWorkflow(int id)
         {
             var context = new TicketsEntities();
-            var workflow = context.Workflows.AsEnumerable().Where(w =>w.Id == id)
+            var workflow = context.Workflows.AsEnumerable().Where(w => w.Id == id)
                 .Select(w => new WorkflowModel().ToObject(w, w.WorkflowTypeId)).FirstOrDefault();
             if (workflow == null)
             {
@@ -262,8 +262,8 @@ namespace Tickets.Models.Workflows
                         {
                             workFlow.Statu = (int)WorkflowStatusEnum.Approved;
                             context.SaveChanges();
-                            if( workFlow.WorkflowTypeId == prospectTypeId)
-                            { 
+                            if (workFlow.WorkflowTypeId == prospectTypeId)
+                            {
                                 var prospect = context.Prospects.FirstOrDefault(p => p.Id == workFlow.ProcessId);
                                 prospect.Statu = (int)ProspectStatuEnum.Approved;
                                 context.SaveChanges();
@@ -317,7 +317,7 @@ namespace Tickets.Models.Workflows
                         dbContextTransaction.Commit();
 
 
-                        Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Aprobación de flujo", new ProccessModel().ToObject(proccess) );
+                        Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Aprobación de flujo", new ProccessModel().ToObject(proccess));
 
                         return new RequestResponseModel()
                         {
@@ -499,7 +499,7 @@ namespace Tickets.Models.Workflows
                         {
                             CreateDate = DateTime.Now,
                             CreateUser = WebSecurity.CurrentUserId,
-                            ProcessId = model.Id+(model.FractionTo-model.FractionFrom+1),
+                            ProcessId = model.Id + (model.FractionTo - model.FractionFrom + 1),
                             WorkflowTypeId = workFlowTypeId,
                             Statu = (int)WorkflowStatusEnum.Active
                         };
@@ -547,5 +547,5 @@ namespace Tickets.Models.Workflows
         }
     }
 
-   
+
 }

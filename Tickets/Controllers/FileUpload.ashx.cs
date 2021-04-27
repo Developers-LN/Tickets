@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 
 namespace Tickets.Controllers
@@ -38,7 +36,7 @@ namespace Tickets.Controllers
 
             context.Response.ContentType = "text/plain";
             var result = new { result = true, fileUrl = fileUrl, sourceFileName = sourceFileName };
-            context.Response.Write( Newtonsoft.Json.JsonConvert.SerializeObject( result));
+            context.Response.Write(Newtonsoft.Json.JsonConvert.SerializeObject(result));
         }
 
         public bool IsReusable

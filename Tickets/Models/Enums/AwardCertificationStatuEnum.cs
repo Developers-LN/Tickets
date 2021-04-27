@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Tickets.Models.Enums
+﻿namespace Tickets.Models.Enums
 {
     public enum AwardCertificationStatuEnum
     {
@@ -12,6 +7,6 @@ namespace Tickets.Models.Enums
         Approved = 5836,
         Improcess = 5837,
         Certified = 5838,
-        
+
     }
 }

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using Tickets.Models.Enums;
-using WebMatrix.WebData;
 
 namespace Tickets.Models
 {
     public class SystemConfigModel
     {
         #region System Config
-       
-       internal object GetSystemConfigData()
+
+        internal object GetSystemConfigData()
         {
             var context = new TicketsEntities();
             var config = context.SystemConfigs.FirstOrDefault();
@@ -37,14 +33,14 @@ namespace Tickets.Models
                 name = c.NameDetail
             });
 
-            return new 
+            return new
             {
-                 config, 
-                 ticketDesings, 
-                 xpiredTimes,
+                config,
+                ticketDesings,
+                xpiredTimes,
             };
         }
-        
+
         internal object SystemConfig(SystemConfig systemConfig)
         {
             using (var context = new TicketsEntities())
@@ -70,7 +66,7 @@ namespace Tickets.Models
             }
             return new
             {
-                result = true, 
+                result = true,
                 message = "configuración guardada correctamente."
             };
         }

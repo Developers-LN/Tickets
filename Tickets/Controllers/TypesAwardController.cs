@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
@@ -21,7 +19,7 @@ namespace Tickets.Controllers
         [Authorize]
         public ActionResult List()
         {
-            return View( );
+            return View();
         }
 
         // GET: TypesAward/PrintList
@@ -39,7 +37,7 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var typesAwards = context.TypesAwards.AsEnumerable().Where(p => p.Status != (int)GeneralStatusEnum.Delete).Select(e => TypesAwardToObjec(e)).ToList();
-            
+
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de tipo de premio");
 
             return new JsonResult() { Data = new { typesAwards = typesAwards }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -57,7 +55,7 @@ namespace Tickets.Controllers
                 typesAward.CreateUser,
                 CreateDate = typesAward.CreateDate.ToString(),
                 typesAward.Creation,
-                CreationDesc = catalog.FirstOrDefault( c=>c.Id == typesAward.Creation).NameDetail,
+                CreationDesc = catalog.FirstOrDefault(c => c.Id == typesAward.Creation).NameDetail,
                 typesAward.GroupId,
                 GroupDesc = catalog.FirstOrDefault(c => c.Id == typesAward.GroupId).NameDetail,
                 typesAward.Status
@@ -66,7 +64,7 @@ namespace Tickets.Controllers
         // GET: TypesAward/Create
         [HttpGet]
         [Authorize]
-        public ActionResult Create( )
+        public ActionResult Create()
         {
             return View();
         }
@@ -90,7 +88,7 @@ namespace Tickets.Controllers
                 var mTypesAward = context.TypesAwards.FirstOrDefault(c => c.Id == typesAward.Id);
 
                 mTypesAward.Name = typesAward.Name;
-                mTypesAward.Description = typesAward.Description == null? "": typesAward.Description;
+                mTypesAward.Description = typesAward.Description == null ? "" : typesAward.Description;
                 mTypesAward.GroupId = typesAward.GroupId;
                 mTypesAward.Creation = typesAward.Creation;
             }
@@ -135,7 +133,7 @@ namespace Tickets.Controllers
                 r.Id,
                 r.Name,
             });
-            return new JsonResult() { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { raffles} };
+            return new JsonResult() { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { raffles } };
         }
 
         // GET: TypesAward/AwardNumber
@@ -247,7 +245,7 @@ namespace Tickets.Controllers
                 Data = response,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
-        }       
+        }
 
     }
 }

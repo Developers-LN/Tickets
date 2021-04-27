@@ -1,9 +1,4 @@
 ﻿//using AttributeRouting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using Tickets.Models;
 using Tickets.Models.Enums;
@@ -77,7 +72,7 @@ namespace Tickets.Controllers
         [ActionName("verify")]
         public RequestResponseModel Verify(TicketReturnedModel model)
         {
-           return new TicketReturnedModel().ValidateTicketReturned(model);
+            return new TicketReturnedModel().ValidateTicketReturned(model);
         }
 
         //

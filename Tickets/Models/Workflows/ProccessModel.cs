@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace Tickets.Models.Workflows
 {
@@ -42,8 +40,8 @@ namespace Tickets.Models.Workflows
                 Comment = model.Comment,
                 CreateDate = model.CreateDate,
                 CreateDateLong = model.CreateDate.ToUnixTime(),
-                StatuDesc = context.Catalogs.FirstOrDefault( f=> f.Id == model.Statu).NameDetail,
-                UserName = context.Users.FirstOrDefault( u=> u.Id == model.CreateUser).Name,
+                StatuDesc = context.Catalogs.FirstOrDefault(f => f.Id == model.Statu).NameDetail,
+                UserName = context.Users.FirstOrDefault(u => u.Id == model.CreateUser).Name,
                 WorkflowId = model.WorkFlowId
             };
             return process;

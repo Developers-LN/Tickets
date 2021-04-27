@@ -1,11 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
-using System.Web;
 using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
@@ -36,32 +31,33 @@ namespace Tickets.Controllers
         public JsonResult GetOpenReturned()
         {
             var context = new TicketsEntities();
-            
+
             var config = context.SystemConfigs.FirstOrDefault();
             int xpiredMount = 6;
             if (config != null)
             {
-                var xpired = context.Catalogs.FirstOrDefault( c=> c.Id == config.RaffleXpiredTime);
-                if( xpired != null){
-                    xpiredMount = int.Parse( xpired.Description);
+                var xpired = context.Catalogs.FirstOrDefault(c => c.Id == config.RaffleXpiredTime);
+                if (xpired != null)
+                {
+                    xpiredMount = int.Parse(xpired.Description);
                 }
             }
             var date = DateTime.Now.AddMonths(-xpiredMount);
-            var raffles = context.Raffles.AsEnumerable().Where(r => 
+            var raffles = context.Raffles.AsEnumerable().Where(r =>
                 ((r.Statu != (int)RaffleStatusEnum.Suspended
                 && r.EndReturnDate < DateTime.Now)
                 || r.Statu == (int)RaffleStatusEnum.Generated)
                 && date <= r.DateSolteo
                 ).Select(r => new
-            {
-                r.Name,
-                r.Id,
-                DateSolteo = r.DateSolteo.ToUnixTime()
-            }).ToList();
+                {
+                    r.Name,
+                    r.Id,
+                    DateSolteo = r.DateSolteo.ToUnixTime()
+                }).ToList();
             return new JsonResult()
             {
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data = new {raffles}
+                Data = new { raffles }
             };
         }
 
@@ -94,7 +90,8 @@ namespace Tickets.Controllers
                         raffle.EndReturnDate = open.EndReturnedDate;
                         context.SaveChanges();
                         tm.Commit();
-                        obj = new{
+                        obj = new
+                        {
                             CreateDate = DateTime.Now,
                             CreateUser = WebSecurity.CurrentUserId,
                             Note = open.Note,
@@ -131,7 +128,7 @@ namespace Tickets.Controllers
             };
         }
         #endregion
-        
+
         #region Print Report Viewes
         //
         // GET: /RafflePrintGeneratedList
@@ -148,7 +145,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult PrintReportList()
         {
-            return View(); 
+            return View();
         }
 
         //
@@ -173,7 +170,7 @@ namespace Tickets.Controllers
         // GET: /RafflePrintGeneratedTypes
         [Authorize]
         [HttpGet]
-        public ActionResult PrintGeneratedTypes() 
+        public ActionResult PrintGeneratedTypes()
         {
             return View();
         }
@@ -215,7 +212,7 @@ namespace Tickets.Controllers
         {
             return View();
         }
-        
+
         //
         // GET: /Raffle/Create
         [HttpGet]
@@ -282,16 +279,16 @@ namespace Tickets.Controllers
                 using (var context = new TicketsEntities())
                 {
                     var raffle = context.Raffles.OrderByDescending(r => r.Id).FirstOrDefault();
-                    if(raffle != null)
+                    if (raffle != null)
                     {
                         EmailUtil.SendReportsEmail(ReportByEmailEnum.SEND_REPORTS_EMAIL, raffle.Id, Request);
                     }
                 }
             }
-                return new JsonResult()
-                {
-                    Data = response
-                };
+            return new JsonResult()
+            {
+                Data = response
+            };
         }
 
         //GET: Raffle/VirtualRaffle

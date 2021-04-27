@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Web;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
 
@@ -40,7 +39,7 @@ namespace Tickets.Models.Raffles
                                 CreateDate = DateTime.Now,
                                 CreateUser = WebSecurity.CurrentUserId
                             };
-                            
+
                             raffleDigitedAwardList.Add(raffleAward);
                         }
                         context.RaffleAwards.AddRange(raffleDigitedAwardList);
@@ -49,7 +48,7 @@ namespace Tickets.Models.Raffles
 
                         var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
                         var prospect = context.Prospects.FirstOrDefault(p => p.Id == raffle.ProspectId);
-                        
+
                         var awardList = prospect.Awards
                             .Where(a => a.TypesAward.Creation != (int)TypesAwardCreationEnum.Digited)
                             .OrderBy(a => a.OrderAward);
@@ -155,9 +154,10 @@ namespace Tickets.Models.Raffles
                     catch (Exception e)
                     {
                         transManager.Rollback();
-                        return new RequestResponseModel(){ 
-                            Result = false, 
-                            Message = e.Message 
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = e.Message
                         };
                     }
                 }
@@ -227,9 +227,11 @@ namespace Tickets.Models.Raffles
                     name = a.TypesAward.Name
                 }).FirstOrDefault());
 
-            return new RequestResponseModel(){
+            return new RequestResponseModel()
+            {
                 Result = true,
-                Object = new {
+                Object = new
+                {
                     raffleDetails,
                     digitedAwards,
                     awardTypes,

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
 
@@ -10,7 +8,7 @@ namespace Tickets.Models
     public class WorkflowTypeUserModel
     {
         #region WorkflowTypeUser
-        
+
         internal object GetWorkflowTypeUserList(int workflowTypeId)
         {
             var context = new TicketsEntities();
@@ -30,7 +28,7 @@ namespace Tickets.Models
         }
 
 
-        internal object  WorkflowTypeUserCreate(WorkflowType_User workflowTypeUser)
+        internal object WorkflowTypeUserCreate(WorkflowType_User workflowTypeUser)
         {
             var context = new TicketsEntities();
             if (workflowTypeUser.Id <= 0)

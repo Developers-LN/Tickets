@@ -1,14 +1,8 @@
-﻿using System.Data.Entity;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Linq;
-using Tickets.Filters;
-using System.Net.Mail;
+﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
+using System.Linq;
+using System.Net.Mail;
+using Tickets.Filters;
 using Tickets.Models.Enums;
 
 namespace Tickets.Models
@@ -32,7 +26,7 @@ namespace Tickets.Models
         }
 
         private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 20, 00, 00);
-        
+
         public static string GetNumberUnit(long number)
         {
             var numberString = number.ToString();
@@ -69,15 +63,15 @@ namespace Tickets.Models
             decimal totalAwardValue = 0;
             decimal totalPaymentValue = 0;
             int percentMayorista = identifyBach.Client.GroupId == (int)ClientGroupEnum.Mayorista ? 2 : 0;
-            identifyBach.IdentifyNumbers.AsEnumerable().Join(awards.Where( a=> 
-                a.Award.TypesAwardId  != (int)AwardTypeEnum.Mayors
-                && a.Award.TypesAwardId != (int)AwardTypeEnum.WinFraction).AsEnumerable(), i => i.TicketAllocationNumber.Number, a => a.ControlNumber, (i, a) => new
-                {
-                    FractionTo = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionTo,
-                    FractionFrom = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionFrom,
-                    AwardValue = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Award.Value : a.Award.Value / (a.Raffle.Prospect.LeafNumber * a.Raffle.Prospect.LeafFraction)
-            }).ToList().ForEach(n =>
-                totalAwardValue += ((n.FractionTo - n.FractionFrom + 1) + n.AwardValue));
+            identifyBach.IdentifyNumbers.AsEnumerable().Join(awards.Where(a =>
+               a.Award.TypesAwardId != (int)AwardTypeEnum.Mayors
+               && a.Award.TypesAwardId != (int)AwardTypeEnum.WinFraction).AsEnumerable(), i => i.TicketAllocationNumber.Number, a => a.ControlNumber, (i, a) => new
+               {
+                   FractionTo = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionTo,
+                   FractionFrom = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionFrom,
+                   AwardValue = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Award.Value : a.Award.Value / (a.Raffle.Prospect.LeafNumber * a.Raffle.Prospect.LeafFraction)
+               }).ToList().ForEach(n =>
+                    totalAwardValue += ((n.FractionTo - n.FractionFrom + 1) + n.AwardValue));
             identifyBach.IdentifyBachPayments.AsEnumerable().ToList().ForEach(p => totalPaymentValue += p.Value);
             identifyBach.NoteCredits.AsEnumerable().ToList().ForEach(n => totalPaymentValue += n.TotalCash);
             return totalPaymentValue >= (totalAwardValue + (totalAwardValue * percentMayorista / 100)) && totalPaymentValue > 0;
@@ -93,7 +87,7 @@ namespace Tickets.Models
                 || a.Award.TypesAwardId == (int)AwardTypeEnum.WinFraction).AsEnumerable(),
                 i => i.TicketAllocationNumber.Number, a => a.ControlNumber, (i, a) => new
                 {
-                    FractionTo = a.Award.ByFraction == (int)ByFractionEnum.S? a.Fraction : i.FractionTo ,
+                    FractionTo = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionTo,
                     FractionFrom = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionFrom,
                     AwardValue = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Award.Value : a.Award.Value / (a.Raffle.Prospect.LeafNumber * a.Raffle.Prospect.LeafFraction)
                 }).ToList().ForEach(n =>
@@ -127,15 +121,18 @@ namespace Tickets.Models
             string error = "";
             foreach (string sentTo in to)
             {
-                try {
+                try
+                {
                     MailAddress e = new MailAddress(sentTo);
                     mail.To.Add(sentTo);
-                    }
-                catch{
+                }
+                catch
+                {
                     error += sentTo + ", ";
                 };
             }
-            if (error != "") {
+            if (error != "")
+            {
                 return error;
             }
             try
@@ -147,7 +144,8 @@ namespace Tickets.Models
                 smtp.Send(mail);
                 return error;
             }
-            catch(Exception e){
+            catch (Exception e)
+            {
                 return e.Message;
             }
         }

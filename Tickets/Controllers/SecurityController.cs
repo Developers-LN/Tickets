@@ -1,19 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Tickets.Models;
-using Newtonsoft.Json;
-using System.Text;
-using System.Security.Cryptography;
-using WebMatrix.WebData;
-using Tickets.Filters;
 using System.DirectoryServices;
-using Tickets.Models.Enums;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web.Configuration;
-using System.Web.Routing;
-using System.Web.Script.Serialization;
+using System.Web.Mvc;
+using Tickets.Filters;
+using Tickets.Models;
+using Tickets.Models.Enums;
+using WebMatrix.WebData;
 
 namespace Tickets.Controllers
 {
@@ -30,7 +27,7 @@ namespace Tickets.Controllers
         {
             return View();
         }
-        
+
         //
         // Post: Security/ChangePassword
         [HttpPost]
@@ -43,7 +40,8 @@ namespace Tickets.Controllers
             return new JsonResult()
             {
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data = new { 
+                Data = new
+                {
                     result = true
                 }
             };
@@ -58,7 +56,7 @@ namespace Tickets.Controllers
         {
 
             string query = Request.QueryString["ReturnUrl"];
-            if(!string.IsNullOrWhiteSpace(query))
+            if (!string.IsNullOrWhiteSpace(query))
             {
                 Session["__RETURN_URL__"] = query;
             }
@@ -131,8 +129,8 @@ namespace Tickets.Controllers
                     Url = query
                 }
             };
-       
-           
+
+
         }
         //
         // Post: /Users/Login
@@ -218,14 +216,14 @@ namespace Tickets.Controllers
                 return new JsonResult() { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { result = result, message = "Esta no es la contraseña del usuario " + WebSecurity.CurrentUserName } };
             }
         }
-        
+
         //
         // GET: /Users/VerifyUserLogin
         [HttpGet]
         [AllowAnonymous]
-        public JsonResult VerifyUserLogin( )
+        public JsonResult VerifyUserLogin()
         {
-            var result = new JsonResult(){ Data = false, JsonRequestBehavior= JsonRequestBehavior.AllowGet };
+            var result = new JsonResult() { Data = false, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             if (WebSecurity.IsAuthenticated)
             {
                 result.Data = GetModuleForLoginUser(WebSecurity.CurrentUserName);
@@ -238,16 +236,17 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var rol_modules = new List<Rol_Module>();
             context.webpages_Roles.Where(r => r.Users.Any(u => u.Name == userName)).ToList()
-                .ForEach( r=> rol_modules.AddRange(r.Rol_Module));
-            var modules = rol_modules.AsEnumerable().GroupBy( m=>m.Module.Name).Select( m=> new{
+                .ForEach(r => rol_modules.AddRange(r.Rol_Module));
+            var modules = rol_modules.AsEnumerable().GroupBy(m => m.Module.Name).Select(m => new
+            {
                 name = m.FirstOrDefault().Module.Name,
-                view = m.Where( s=>s.CanView).Any(),
-                edit = m.Where( s=>s.CanEdit).Any(),
+                view = m.Where(s => s.CanView).Any(),
+                edit = m.Where(s => s.CanEdit).Any(),
                 delete = m.Where(s => s.CanDelete).Any(),
                 add = m.Where(s => s.CanAdd).Any(),
                 search = m.Where(s => s.CanSearch).Any()
             });
-            return JsonConvert.SerializeObject( new{ name = userName, result = true, modules = modules});
+            return JsonConvert.SerializeObject(new { name = userName, result = true, modules = modules });
         }
 
 
@@ -300,12 +299,13 @@ namespace Tickets.Controllers
                 StatuDesc = u.Catalog.NameDetail,
                 Statu = u.Statu,
                 u.EmpleadoId,
-                EmpleadoDesc = u.EmpleadoId.HasValue? context.Employees.Where( e=>e.Id == u.EmpleadoId).Select( e=> e.Name + " " + e.LastName).FirstOrDefault() : "",
+                EmpleadoDesc = u.EmpleadoId.HasValue ? context.Employees.Where(e => e.Id == u.EmpleadoId).Select(e => e.Name + " " + e.LastName).FirstOrDefault() : "",
                 Password = "",
                 PasswordRepeat = "",
                 Id = u.Id
             }).ToList();
-            var employes = context.Employees.Select(e => new { 
+            var employes = context.Employees.Select(e => new
+            {
                 e.Id,
                 Name = e.Name + " " + e.LastName
             });
@@ -392,8 +392,8 @@ namespace Tickets.Controllers
                 modifyUser.EmpleadoId = user.EmpleadoId;
             }
             context.SaveChanges();
-            
-            Utils.SaveLog(WebSecurity.CurrentUserName, user.Id ==  0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Usuarios");
+
+            Utils.SaveLog(WebSecurity.CurrentUserName, user.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Usuarios");
             return new JsonResult() { Data = true };
         }
 
@@ -417,7 +417,7 @@ namespace Tickets.Controllers
             var users = context.webpages_Roles.Select(u => new
             {
                 RoleName = u.RoleName,
-                Description =u.Description,
+                Description = u.Description,
                 RoleId = u.RoleId
             }).ToList();
             context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Roles");
@@ -510,7 +510,7 @@ namespace Tickets.Controllers
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Accesos para un rol");
             return new JsonResult() { Data = modules, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
-        
+
         //POST: Security/SaveModuleForRol
         [HttpPost]
         [Authorize]
@@ -535,7 +535,8 @@ namespace Tickets.Controllers
             }
             context.SaveChanges();
 
-            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Accessos de un rol", models.Select( m=>new {
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Accessos de un rol", models.Select(m => new
+            {
                 m.ModuleId,
                 m.RolId,
                 m.CanAdd,
@@ -543,7 +544,7 @@ namespace Tickets.Controllers
                 m.CanEdit,
                 m.CanSearch,
                 m.CanView
-            }) );
+            }));
             return new JsonResult() { Data = true };
         }
 
@@ -608,10 +609,10 @@ namespace Tickets.Controllers
         [Authorize]
         public JsonResult GetLogs()
         {
-          
+
 
             var context = new TicketsEntities();
-            var catalogs = context.Catalogs.Where( c=> c.IdGroup == (int)CatalogGroupEnum.LogActions).ToList();
+            var catalogs = context.Catalogs.Where(c => c.IdGroup == (int)CatalogGroupEnum.LogActions).ToList();
             var logs = context.Logs.OrderByDescending(l => l.CreateDate).Take(1000).ToList().AsEnumerable()
                 .Select(l => new
                 {
@@ -620,7 +621,7 @@ namespace Tickets.Controllers
                     userName = l.UserName,
                     createDate = l.CreateDate.ToString(),
                 }).ToList();
-            
+
             return new JsonResult()
             {
                 Data = new
@@ -629,7 +630,7 @@ namespace Tickets.Controllers
                     logs
                 },
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
-               
+
             };
         }
 
@@ -696,7 +697,7 @@ namespace Tickets.Controllers
                 modifyModule.CanView = module.CanView;
             }
             context.SaveChanges();
-            context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, module.Id == 0? LogActionsEnum.Insert : LogActionsEnum.Update, "Modulo");
+            context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, module.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Modulo");
             return new JsonResult() { Data = true };
         }
 

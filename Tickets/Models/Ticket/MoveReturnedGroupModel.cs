@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
 
@@ -87,9 +86,10 @@ namespace Tickets.Models.Ticket
                     {
                         tm.Rollback();
 
-                        return new RequestResponseModel(){ 
-                            Result = false, 
-                            Message = e.Message 
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = e.Message
                         };
                     }
                 }
@@ -97,9 +97,10 @@ namespace Tickets.Models.Ticket
 
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Movimiento de Grupo", returnedsObject);
 
-            return new RequestResponseModel(){ 
-                Result = true, 
-                Message = "Grupo movido correctamente" 
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Message = "Grupo movido correctamente"
             };
         }
 

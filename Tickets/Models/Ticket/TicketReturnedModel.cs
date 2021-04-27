@@ -364,7 +364,7 @@ namespace Tickets.Models.Ticket
                                 Result = false,
                                 Message = "No puedes devolver mas del " + raffleData.MaxReturnTickets + " % de los billetes asignados."
                             };
-                        }                        
+                        }
 
                         if (((raffleData.Statu == (int)RaffleStatusEnum.Active
                             || raffleData.Statu == (int)RaffleStatusEnum.Planned)

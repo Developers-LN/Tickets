@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Tickets.Models.Raffles;
-using Tickets.Models.Enums;
+﻿using System.Web.Http;
 using Tickets.Models;
+using Tickets.Models.Enums;
+using Tickets.Models.Raffles;
 //using AttributeRouting;
 
 namespace Tickets.Controllers
@@ -143,7 +138,7 @@ namespace Tickets.Controllers
         [ActionName("getActive")]
         public RequestResponseModel GetActive(RaffleModel model)
         {
-            var response = new RaffleModel().GetActive( );
+            var response = new RaffleModel().GetActive();
             return response;
         }
 

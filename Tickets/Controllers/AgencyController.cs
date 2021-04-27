@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
@@ -32,7 +30,7 @@ namespace Tickets.Controllers
             var agencys = context.Agencies.AsEnumerable().Where(p => p.Statu != (int)GeneralStatusEnum.Delete).Select(e => AgencyToObject(e)).ToList();
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Agencias");
 
-            return new JsonResult() { Data = new { agencys = agencys}, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new JsonResult() { Data = new { agencys = agencys }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         // GET: /Agency/GetAgencyData
@@ -118,7 +116,7 @@ namespace Tickets.Controllers
                 mAgency.IntDate = agency.IntDate;
                 mAgency.Statu = agency.Statu;
             }
-            context.SaveChanges(); 
+            context.SaveChanges();
             Utils.SaveLog(WebSecurity.CurrentUserName, agency.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Agencia", AgencyToObject(agency));
             return new JsonResult() { Data = true };
         }
@@ -170,5 +168,5 @@ namespace Tickets.Controllers
             };
         }
 
-	}
+    }
 }

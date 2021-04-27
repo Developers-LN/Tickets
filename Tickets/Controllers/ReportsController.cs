@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Web;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
-using WebMatrix.WebData;
 using Tickets.Models.Enums;
-using Tickets.Models.Raffles;
 using Tickets.Models.Prospects;
-using System.Text.RegularExpressions;
-using System.Data.Entity;
+using Tickets.Models.Raffles;
 
 namespace Tickets.Controllers
 {
@@ -26,14 +24,29 @@ namespace Tickets.Controllers
         //  GET: Reports/ReportPaymenHistory
         [HttpGet]
         [Authorize]
-        public ActionResult ReportPaymenHistory(int raffleId = 0, int clientId = 0)
+        public ActionResult ReportPaymenHistory(int raffleId = 0, string fecha = null, int clientId = 0)
         {
-            var context = new TicketsEntities();
-            var invoices = context.Invoices.Where( i=>
-                (i.RaffleId == raffleId || raffleId == 0)
-                && (i.ClientId == clientId || clientId == 0)
-                && i.ReceiptPayments.Count > 0).ToList();
-            return View(invoices);
+            if (!String.IsNullOrEmpty(fecha))
+            {
+                DateTime FechaConvert = DateTime.ParseExact(fecha, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                var context = new TicketsEntities();
+                var invoices = context.Invoices.Where(i =>
+                   (i.RaffleId == raffleId || raffleId == 0)
+                   && (i.ClientId == clientId || clientId == 0)
+                   && (i.InvoiceDate == FechaConvert)
+                   && i.ReceiptPayments.Count > 0).ToList();
+                return View(invoices);
+            }
+            else
+            {
+                var context = new TicketsEntities();
+                var invoices = context.Invoices.Where(i =>
+                   (i.RaffleId == raffleId || raffleId == 0)
+                   && (i.ClientId == clientId || clientId == 0)
+                   && i.ReceiptPayments.Count > 0).ToList();
+                return View(invoices);
+            }
         }
 
         //
@@ -53,7 +66,7 @@ namespace Tickets.Controllers
         //  GET: Reports/IndentifyReceivableReport
         [HttpGet]
         [Authorize]
-        public ActionResult IndentifyReceivableReport(int creditNoteId = 0, int paymentId = 0 )
+        public ActionResult IndentifyReceivableReport(int creditNoteId = 0, int paymentId = 0)
         {
             var context = new TicketsEntities();
             PaymentReceivableReportModel payment;
@@ -91,7 +104,7 @@ namespace Tickets.Controllers
             }
             return View(payment);
         }
-        
+
         // 
         //  GET: Reports/GenerarRaffle
         [HttpGet]
@@ -121,12 +134,12 @@ namespace Tickets.Controllers
             }
             if (previousDebtPayment == null)
             {
-                return RedirectToAction("Error", new { message = "Este cliente no tiene pagos por deudas anterior."});
+                return RedirectToAction("Error", new { message = "Este cliente no tiene pagos por deudas anterior." });
             }
             return View(previousDebtPayment);
         }
 
-        
+
         //
         //  GET: Reports/CXCReport
         [Authorize]
@@ -134,9 +147,9 @@ namespace Tickets.Controllers
         public ActionResult CXCReport(int clientId, DateTime startDate, DateTime endDate)
         {
             var context = new TicketsEntities();
-            var invoices = context.Invoices.AsEnumerable().Where(i => 
+            var invoices = context.Invoices.AsEnumerable().Where(i =>
                     clientId == i.ClientId
-                    && i.CreateDate.Date>= startDate.Date && i.CreateDate.Date <= endDate.Date
+                    && i.CreateDate.Date >= startDate.Date && i.CreateDate.Date <= endDate.Date
                 ).ToList();
             return View(invoices);
         }
@@ -207,7 +220,7 @@ namespace Tickets.Controllers
             byte[] byteArray = Convert.FromBase64String(base64String[1]);
             return File(byteArray, System.Net.Mime.MediaTypeNames.Application.Pdf, fileName + ".pdf");
         }
-        
+
         private string RenderRazorViewToString(string viewName, object model)
         {
             ViewData.Model = model;
@@ -220,7 +233,7 @@ namespace Tickets.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
-        
+
         // 
         //  GET: Reports/PrintImage
         [HttpGet]
@@ -232,12 +245,13 @@ namespace Tickets.Controllers
             {
                 Directory.CreateDirectory(path);
             }
-            path = Path.Combine( path, raffleId + ".jpeg");
+            path = Path.Combine(path, raffleId + ".jpeg");
             if (System.IO.File.Exists(path))
             {
                 return new JsonResult()
                 {
-                    Data = new { 
+                    Data = new
+                    {
                         result = true,
                         fileName = raffleId + ".jpeg"
                     },
@@ -297,7 +311,7 @@ namespace Tickets.Controllers
 
             return newImage;
         }
-        
+
         //
         //  GET: Reports/ProspectFormat
         [Authorize]
@@ -386,7 +400,7 @@ namespace Tickets.Controllers
                 i.RaffleId == raffleId).ToList();
             if (groupId != "")
             {
-                var returned = returnedList.Where(i =>(int.Parse(Regex.Match(i.ReturnedGroup, @"\d+").Value) == int.Parse(groupId))
+                var returned = returnedList.Where(i => (int.Parse(Regex.Match(i.ReturnedGroup, @"\d+").Value) == int.Parse(groupId))
             ).ToList();
                 if (returned.Count == 0)
                 {
@@ -407,7 +421,7 @@ namespace Tickets.Controllers
                 }
                 return View(returned);
             }
-            
+
         }
 
         //
@@ -447,14 +461,14 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/MajorAwardInline
-       // [Authorize]
-       [AllowAnonymous]
+        // [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult MajorAwardInline(int raffleId)
         {
             var context = new TicketsEntities();
             Raffle raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
-            return View(raffle);   
+            return View(raffle);
         }
 
         //
@@ -475,7 +489,7 @@ namespace Tickets.Controllers
                     LeafNumber = r.Prospect.LeafNumber
                 }
             }).FirstOrDefault();
-            
+
             return View(raffle);
         }
 
@@ -569,12 +583,12 @@ namespace Tickets.Controllers
             var ticketAllocation = context.TicketAllocations.FirstOrDefault(r => r.Id == allocationId);
             return View(ticketAllocation);
         }
-        
+
         //
         //  GET: Reports/InvoiceListPrint
         [Authorize]
         [HttpGet]
-        public ActionResult InvoicesByRaffle(int raffleId = 0, int clientId = 0, int invoiceId =0)
+        public ActionResult InvoicesByRaffle(int raffleId = 0, int clientId = 0, int invoiceId = 0)
         {
             var context = new TicketsEntities();
             ViewBag.ClientId = clientId;
@@ -603,7 +617,7 @@ namespace Tickets.Controllers
             ViewBag.errorMessage = message;
             return View();
         }
-        
+
         //
         //  GET: Reports/InvoiceDetail
         [Authorize]
@@ -619,10 +633,10 @@ namespace Tickets.Controllers
         //  GET: Reports/ReturnedDeatils
         [Authorize]
         [HttpGet]
-        public ActionResult ReturnedDeatils( int raffleId, string group = "", int clientId = 0, int statu = (int)TicketReturnedStatuEnum.Created)
+        public ActionResult ReturnedDeatils(int raffleId, string group = "", int clientId = 0, int statu = (int)TicketReturnedStatuEnum.Created)
         {
             var context = new TicketsEntities();
-            var returneds = context.TicketReturns.Where(r => 
+            var returneds = context.TicketReturns.Where(r =>
                 r.RaffleId == raffleId
                 && (r.ReturnedGroup == group || group == "")
                 && r.Statu == statu
@@ -640,7 +654,7 @@ namespace Tickets.Controllers
             var ticketAllocation = context.TicketAllocations.FirstOrDefault(r => r.Id == allocationId);
             if (ticketAllocation.Statu == (int)AllocationStatuEnum.Printed)
             {
-                return RedirectToAction("Error", new { message  = "Los Billetes de la asignación " + allocationId + " fueron impreso."});
+                return RedirectToAction("Error", new { message = "Los Billetes de la asignación " + allocationId + " fueron impreso." });
             }
 
             var allocation = context.TicketAllocations.Where(a => a.Id == allocationId).FirstOrDefault();
@@ -689,7 +703,7 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var certification = context.CertificationNumbers.FirstOrDefault(i => i.Id == CertificationNumberId);
-            return View(certification); 
+            return View(certification);
         }
 
         //
@@ -707,17 +721,17 @@ namespace Tickets.Controllers
         //  GET: Reports/GetCashReport
         [Authorize]
         [HttpGet]
-        public ActionResult GetCashReport (int userId, int raffleId)
+        public ActionResult GetCashReport(int userId, int raffleId)
         {
             var context = new TicketsEntities();
-            var identifyBatchs = context.IdentifyBaches.AsEnumerable().Where(i => 
-                i.IdentifyBachPayments.Where( p=>
-                    userId == p.CreateUser && raffleId == p.IdentifyBach.RaffleId
+            var identifyBatchs = context.IdentifyBaches.AsEnumerable().Where(i =>
+                i.IdentifyBachPayments.Where(p =>
+                   userId == p.CreateUser && raffleId == p.IdentifyBach.RaffleId
                     ).Any()
                 ).ToList();
             if (identifyBatchs.Count <= 0)
             {
-                return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo #" + raffleId+"." });
+                return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo #" + raffleId + "." });
             }
             return View(identifyBatchs);
         }
@@ -738,7 +752,7 @@ namespace Tickets.Controllers
                 i.ClientId == invoiceDetail.ClientId &&
                 (i.IdentifyBachPayments.Any(p => p.CreateDate.Date >= invoiceDetail.StartDate.Date && p.CreateDate.Date <= invoiceDetail.EndDate.Date) == true)
                 && (Utils.IdentifyBachIsPayedMinor(i, awards) || Utils.IdentifyBachIsPayedMayor(i, awards))
-            ).ToList().ForEach( i=> identifyNumbers.AddRange( i.IdentifyNumbers));
+            ).ToList().ForEach(i => identifyNumbers.AddRange(i.IdentifyNumbers));
 
             if (identifyNumbers.Count <= 0)
             {
@@ -790,10 +804,10 @@ namespace Tickets.Controllers
         //GET: Reports/AccountsReceivables
         [Authorize]
         [HttpGet]
-        public ActionResult AccountsReceivables( string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
+        public ActionResult AccountsReceivables(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
         {
             var context = new TicketsEntities();
-            if(startDate == "undefined" || endDate == "undefined")
+            if (startDate == "undefined" || endDate == "undefined")
             {
                 var invoiceslist = context.Invoices.ToList();
                 var invoices = invoiceslist.Where(i =>
@@ -925,7 +939,7 @@ namespace Tickets.Controllers
                 ViewBag.clientId = clientId;
                 var raffles = context.Raffles.Where(i =>
                 (i.Id == raffleId || raffleId == 0)
-                && ( DbFunctions.TruncateTime( i.DateSolteo )>= DbFunctions.TruncateTime(startD)
+                && (DbFunctions.TruncateTime(i.DateSolteo) >= DbFunctions.TruncateTime(startD)
                 && DbFunctions.TruncateTime(i.DateSolteo) <= DbFunctions.TruncateTime(endD))
             ).ToList();
 
@@ -1069,7 +1083,7 @@ namespace Tickets.Controllers
             }
             return View(invoiceList);
         }
-    
+
         //
         //GET: Reports/RaffleDashboardReport
         [Authorize]
@@ -1142,10 +1156,10 @@ namespace Tickets.Controllers
                 ViewBag.Costos = costos;
                 ViewBag.CostoTotal = context.sp_GETCostos(raffleId).FirstOrDefault();
             }
-            
+
             var raffle = context.Raffles.Where(r => r.Id == raffleId).FirstOrDefault();
             Prospect current_p = null;
-            if(raffle != null)
+            if (raffle != null)
             {
                 current_p = context.Prospects.Where(p => p.Id == raffle.ProspectId).FirstOrDefault();
                 ViewBag.Prospecto = current_p;
@@ -1153,10 +1167,10 @@ namespace Tickets.Controllers
             var prospectMoney = context.sp_GetRentabilidadProspecto(raffleId).FirstOrDefault();
             ViewBag.ProspectMoney = prospectMoney;
             RRentabilidadSorteo report = context.RRentabilidadSorteos.Where(p => p.RaffleId == raffleId).FirstOrDefault();
-           
+
 
             return View(report);
         }
-   
+
     }
 }

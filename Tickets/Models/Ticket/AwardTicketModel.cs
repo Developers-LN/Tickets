@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using Tickets.Models.Enums;
 
 namespace Tickets.Models.Ticket
@@ -23,32 +20,32 @@ namespace Tickets.Models.Ticket
             var identifyNumbers = context.IdentifyNumbers.Where(w => w.IdentifyBach.RaffleId == raffleId);
 
             var awards = (from r in identifyNumbers.AsEnumerable()
-                        join a in raffleAwards.AsEnumerable() on r.TicketAllocationNumber.Number equals a.ControlNumber
-                        select new
-                        { 
-                            RaffleAwardId = a.Id,
-                            certificationId = r.Status == (int)AwardCertificationStatuEnum.Certified ? context.AwardCertification.FirstOrDefault(w=>w.IdentifyNumberId == r.Id).Id : 0,
-                            INumberId = r.Id,
-                            NumberId = r.TicketAllocationNumber.Id,
-                            Number = r.TicketAllocationNumber.Number,
-                            ClientDesc = r.IdentifyBach.Client.Name,
-                            AwardName = a.Award.Name,
-                            AwardId = a.AwardId,
-                            Frac = a.Fraction,
-                            Byfrac = a.Award.ByFraction,
-                            ff = r.FractionFrom,
-                            ft = r.FractionTo,
-                            FractionFrom = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : r.FractionFrom,
-                            FractionTo = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : r.FractionTo,
-                            Fractions = a.Award.ByFraction == (int)ByFractionEnum.S ? 1 : r.FractionTo - r.FractionFrom + 1,
-                            Production = r.IdentifyBach.Raffle.Prospect.Production,
-                            RaffleId = r.IdentifyBach.Raffle.Id,
-                            RaffleDesc = a.Raffle.Name,
-                            IdentifyBachId = r.IdentifyBachId,
-                            IdentifyDate = r.IdentifyBach.CreateDate.ToString(),
-                            Status = r.Status,
-                            StatusDesc = context.Catalogs.FirstOrDefault(u => u.Id == r.Status).NameDetail,
-                        }).ToList();
+                          join a in raffleAwards.AsEnumerable() on r.TicketAllocationNumber.Number equals a.ControlNumber
+                          select new
+                          {
+                              RaffleAwardId = a.Id,
+                              certificationId = r.Status == (int)AwardCertificationStatuEnum.Certified ? context.AwardCertification.FirstOrDefault(w => w.IdentifyNumberId == r.Id).Id : 0,
+                              INumberId = r.Id,
+                              NumberId = r.TicketAllocationNumber.Id,
+                              Number = r.TicketAllocationNumber.Number,
+                              ClientDesc = r.IdentifyBach.Client.Name,
+                              AwardName = a.Award.Name,
+                              AwardId = a.AwardId,
+                              Frac = a.Fraction,
+                              Byfrac = a.Award.ByFraction,
+                              ff = r.FractionFrom,
+                              ft = r.FractionTo,
+                              FractionFrom = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : r.FractionFrom,
+                              FractionTo = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : r.FractionTo,
+                              Fractions = a.Award.ByFraction == (int)ByFractionEnum.S ? 1 : r.FractionTo - r.FractionFrom + 1,
+                              Production = r.IdentifyBach.Raffle.Prospect.Production,
+                              RaffleId = r.IdentifyBach.Raffle.Id,
+                              RaffleDesc = a.Raffle.Name,
+                              IdentifyBachId = r.IdentifyBachId,
+                              IdentifyDate = r.IdentifyBach.CreateDate.ToString(),
+                              Status = r.Status,
+                              StatusDesc = context.Catalogs.FirstOrDefault(u => u.Id == r.Status).NameDetail,
+                          }).ToList();
 
             foreach (var number in identifyNumbers)
             {

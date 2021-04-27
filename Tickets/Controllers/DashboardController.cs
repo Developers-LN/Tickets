@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Tickets.Models;
 using Tickets.Models.Enums;
-using WebMatrix.WebData;
 
 namespace Tickets.Controllers
 {
@@ -28,20 +26,21 @@ namespace Tickets.Controllers
         {
             return View();
         }
-        
+
         //
         //  GET: /Dashboard/infoAboutUs
         [Authorize]
         [HttpGet]
         public JsonResult infoAboutUs()
         {
-            var json = new { 
+            var json = new
+            {
                 appName = "Comercialización de Billetes",
                 version = "1.3",
                 companyName = "Concentra SRL",
                 publicDate = "15/02/2015",
                 infoCompany = "Somos una empresa Consultora conformada por expertos de alto prestigio, calificación y capacidad para interactuar de manera interdisciplinaria en las distintas misiones que ejecuta. <br/>Concentra, cuenta con un equipo de especialistas con sólidos conocimientos y amplia experiencia en las más modernas tecnologías y técnicas de gestión, lo que nos permite ofrecer una amplia gama de servicios de consultoría en Tecnología de información.",
-                team = new string[]{ "Wilson A. Hamilton", "Billy J. Taylor", "Juan O. Acosta", "Saul Coronado", "Luis Cedeño", "Jose Fermín"}
+                team = new string[] { "Wilson A. Hamilton", "Billy J. Taylor", "Juan O. Acosta", "Saul Coronado", "Luis Cedeño", "Jose Fermín" }
             };
 
             return new JsonResult()
@@ -76,13 +75,13 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var raffle = context.Raffles.AsEnumerable().FirstOrDefault(r => r.Id == raffleId);
             var productions = raffle.TicketAllocations.AsEnumerable()
-                .GroupBy(t=> t.Statu).Select(t => new
-            {
-                value = GetTiketAllocationCount(t.ToList()),
-                color= GetColor(t.FirstOrDefault().Statu),
-                highlight = "#48AB6C",
-                label= context.Catalogs.AsEnumerable().FirstOrDefault( c => c.Id == t.FirstOrDefault().Statu).NameDetail
-            }).ToList<object>();
+                .GroupBy(t => t.Statu).Select(t => new
+                {
+                    value = GetTiketAllocationCount(t.ToList()),
+                    color = GetColor(t.FirstOrDefault().Statu),
+                    highlight = "#48AB6C",
+                    label = context.Catalogs.AsEnumerable().FirstOrDefault(c => c.Id == t.FirstOrDefault().Statu).NameDetail
+                }).ToList<object>();
             if (raffle.TicketReturns.Count > 0)
             {
                 productions.Add(new

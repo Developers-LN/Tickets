@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Tickets.Models.Enums;
 using Tickets.Models.Prospects;
 using WebMatrix.WebData;
@@ -44,13 +43,13 @@ namespace Tickets.Models.Raffles
 
         [JsonProperty(PropertyName = "note")]
         public string Note { get; set; }
-        
+
         [JsonProperty(PropertyName = "startReturnDate")]
         public DateTime StartReturnDate { get; set; }
 
         [JsonProperty(PropertyName = "startReturnDateLong")]
         public long StartReturnDateLong { get; set; }
-        
+
         [JsonProperty(PropertyName = "endReturnDate")]
         public DateTime EndReturnDate { get; set; }
 
@@ -85,7 +84,7 @@ namespace Tickets.Models.Raffles
             {
                 Id = raffle.Id,
                 CommodityId = raffle.Commodity,
-                CommodityDesc = raffle.Commodity > 0? context.Catalogs.FirstOrDefault(c => c.Id == raffle.Commodity).NameDetail : "",
+                CommodityDesc = raffle.Commodity > 0 ? context.Catalogs.FirstOrDefault(c => c.Id == raffle.Commodity).NameDetail : "",
                 EndAllocationDate = raffle.EndAllocationDate.Value,
                 EndAllocationDateLong = raffle.EndAllocationDate.Value.ToUnixTime(),
                 EndReturnDate = raffle.EndReturnDate,
@@ -101,12 +100,12 @@ namespace Tickets.Models.Raffles
                 Statu = raffle.Statu,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == raffle.Statu).NameDetail,
                 TicketProspectId = raffle.ProspectId,
-                TicketProspectDesc = context.Prospects.FirstOrDefault( p=> p.Id == raffle.ProspectId).Name
+                TicketProspectDesc = context.Prospects.FirstOrDefault(p => p.Id == raffle.ProspectId).Name
             };
             var prospectModel = new ProspectModel();
             if (hasTicketProspect == true)
             {
-                raffleModel.TicketProspect = prospectModel.ToObject(context.Prospects.FirstOrDefault(p=>p.Id == raffle.ProspectId), true, true);
+                raffleModel.TicketProspect = prospectModel.ToObject(context.Prospects.FirstOrDefault(p => p.Id == raffle.ProspectId), true, true);
             }
             if (hasPoolProspect == true)
             {
@@ -202,14 +201,15 @@ namespace Tickets.Models.Raffles
                 Message = "Sorteos suspendido correctamente!"
             };
         }
-        
+
         internal object RaffleAwardDetails(TypesAwardCreationEnum? typesAwardCreation, RaffleAwardTypeEnum? raffleAwardType)
         {
             var context = new TicketsEntities();
             var raffle = context.Raffles.Where(r => r.Statu == (int)RaffleStatusEnum.Active).FirstOrDefault();
             if (raffle == null)
             {
-                return new{
+                return new
+                {
                     result = false,
                     message = "No existe sorteo activo para ingresar los premios."
                 };
@@ -255,7 +255,9 @@ namespace Tickets.Models.Raffles
                             raffle = new Raffle();
                             raffle.CreateDate = DateTime.Now;
                             raffle.CreateUser = WebSecurity.CurrentUserId;
-                        }else{
+                        }
+                        else
+                        {
                             raffle = context.Raffles.FirstOrDefault(c => c.Id == model.Id);
                         }
                         raffle.Note = string.IsNullOrEmpty(model.Note) ? "" : model.Note;
@@ -270,7 +272,8 @@ namespace Tickets.Models.Raffles
                         raffle.Note = string.IsNullOrEmpty(model.Note) ? "" : model.Note;
                         raffle.DateSolteo = model.RaffleDate;
 
-                        if( model.Id == 0){
+                        if (model.Id == 0)
+                        {
                             context.Raffles.Add(raffle);
                         }
                         context.SaveChanges();
@@ -351,7 +354,7 @@ namespace Tickets.Models.Raffles
                 }
             }
             Utils.SaveLog(WebSecurity.CurrentUserName, raffle.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Solteo", this.ToObject(raffle));
-            
+
             return new RequestResponseModel()
             {
                 Result = true,
@@ -388,7 +391,7 @@ namespace Tickets.Models.Raffles
             var context = new TicketsEntities();
             var prospectModel = new ProspectModel();
             var raffles = context.Raffles.AsEnumerable()
-                .Where(s => 
+                .Where(s =>
                     ((s.Statu == (int)RaffleStatusEnum.Active
                     || s.Statu == (int)RaffleStatusEnum.Planned)
                     && s.EndReturnDate >= DateTime.Now)
@@ -455,13 +458,14 @@ namespace Tickets.Models.Raffles
 
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Delete, "Sorteo", model);
 
-            return new RequestResponseModel (){ 
-                Result = true, 
-                Message = "Sorteo borrado correctamente." 
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Message = "Sorteo borrado correctamente."
             };
         }
 
-        internal RequestResponseModel GetActive( )
+        internal RequestResponseModel GetActive()
         {
             var context = new TicketsEntities();
 
@@ -473,9 +477,9 @@ namespace Tickets.Models.Raffles
             if (activeRaffles.Count() == 0)
             {
                 return new RequestResponseModel()
-                { 
-                    Result = false, 
-                    Message = "No hay sorteos para esta fecha" 
+                {
+                    Result = false,
+                    Message = "No hay sorteos para esta fecha"
                 };
             }
 

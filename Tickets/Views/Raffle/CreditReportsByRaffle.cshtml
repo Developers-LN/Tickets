@@ -2,6 +2,7 @@
     Layout = null;
     ViewBag.Title = "REPORTE HISTÓRICO DE PAGO POR SORTEO";
 }
+
 <div class="col-lg-12 no-padder" ng-controller="RaffleGeneratedController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
@@ -19,7 +20,12 @@
                             <tr data-ng-repeat="raffle in raffles">
                                 <td>{{raffle.id}} - {{raffle.name}}</td>
                                 <td class="text-center">
-                                    <a href="/Reports/ReportPaymenHistory?raffleId={{raffle.id}}" target="_blank" title="Historial de Pago"><i class="fa fa-print"></i></a>
+
+                                    @*<a href="/Reports/ReportPaymenHistory?raffleId={{raffle.id}}" target="_blank" title="Historial de Pago"><i class="fa fa-print"></i></a>*@
+
+                                    <input type="hidden" id="raffle" value="{{raffle.id}}" />
+                                    <input type="date" style="height:25px;" id="fecha" />
+                                    <a href="" id="btnrafflereport" title="Historial de Pago"><i class="fa fa-print"></i></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -33,3 +39,14 @@
 <div class="col-lg-12 no-padder text-left m-b-lg"> 
     <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
 </div>
+
+<script type="text/javascript">
+    $(document).on('click', '[id*=btnrafflereport]', function () {
+
+        var fecha = $('#fecha').val();
+        var sorteo = $('#raffle').val();
+
+        var url = '/Reports/ReportPaymenHistory?raffleId=' + sorteo + '&fecha=' + fecha;
+        window.open(url,'_blank')
+    });
+</script>

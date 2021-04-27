@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
 
@@ -85,13 +84,13 @@ namespace Tickets.Models.Ticket
                 FractionTo = ticketReturned.FractionTo,
                 FractionFrom = ticketReturned.FractionFrom,
                 Status = ticketReturned.Statu,
-                StatusDesc = context.Catalogs.FirstOrDefault( c=> c.Id == ticketReturned.Statu).NameDetail,
+                StatusDesc = context.Catalogs.FirstOrDefault(c => c.Id == ticketReturned.Statu).NameDetail,
                 NumberId = ticketReturned.TicketAllocationNumber.Id,
                 NumberDesc = ticketReturned.TicketAllocationNumber.Number
             };
             return model;
         }
-        
+
         internal object GetReturnedDetail(int numberId)
         {
             var context = new TicketsEntities();
@@ -119,32 +118,32 @@ namespace Tickets.Models.Ticket
 
             return new { groups, clients };
         }
-        
+
         internal object GetReturnedAwardList(int raffleId)
         {
             var context = new TicketsEntities();
             var returneds = new List<object>();
-            
+
             var raffle = context.Raffles.FirstOrDefault(d => d.Id == raffleId);
             if (raffle != null)
             {
                 returneds = (from r in raffle.TicketReturns
-                                join a in raffle.RaffleAwards on r.TicketAllocationNumber.Number equals a.ControlNumber
-                                select new
-                                {
-                                    RaffleAwardId = a.Id,
-                                    certificationId = a.CertificationNumbers.Any() ? a.CertificationNumbers.FirstOrDefault().Id : 0,
-                                    NumberId = r.TicketAllocationNimberId,
-                                    Number = r.TicketAllocationNumber.Number,
-                                    ClientDesc = r.Client.Name,
-                                    AwardName = a.Award.Name,
-                                    FractionFrom = r.FractionFrom,
-                                    FractionTo = r.FractionTo,
-                                    Production = r.Raffle.Prospect.Production,
-                                    RaffleId = r.Raffle.Id,
-                                    RaffleDesc = a.Raffle.Name,
-                                    ReturnedDate = r.ReturnedDate.ToString()
-                                }).GroupBy(r => r.Number)
+                             join a in raffle.RaffleAwards on r.TicketAllocationNumber.Number equals a.ControlNumber
+                             select new
+                             {
+                                 RaffleAwardId = a.Id,
+                                 certificationId = a.CertificationNumbers.Any() ? a.CertificationNumbers.FirstOrDefault().Id : 0,
+                                 NumberId = r.TicketAllocationNimberId,
+                                 Number = r.TicketAllocationNumber.Number,
+                                 ClientDesc = r.Client.Name,
+                                 AwardName = a.Award.Name,
+                                 FractionFrom = r.FractionFrom,
+                                 FractionTo = r.FractionTo,
+                                 Production = r.Raffle.Prospect.Production,
+                                 RaffleId = r.Raffle.Id,
+                                 RaffleDesc = a.Raffle.Name,
+                                 ReturnedDate = r.ReturnedDate.ToString()
+                             }).GroupBy(r => r.Number)
                                 .Select(n => new
                                 {
                                     NumberId = n.FirstOrDefault().NumberId,
@@ -217,7 +216,7 @@ namespace Tickets.Models.Ticket
                 ).Select(tr => this.ToObject(tr));
             return returns;
         }
-        
+
         internal object ReturnedAwardReportData(int raffleId = 0)
         {
             var context = new TicketsEntities();
@@ -229,15 +228,16 @@ namespace Tickets.Models.Ticket
             }).ToList();
 
             var groups = context.TicketReturns.Where(w => w.RaffleId == raffleId).AsEnumerable().Select(o => int.Parse(Regex.Match(o.ReturnedGroup, @"\d+").Value))
-                .OrderBy(o => o ).GroupBy(g => g).Select(g => new
+                .OrderBy(o => o).GroupBy(g => g).Select(g => new
+                {
+                    text = Utils.AddZeroToNumber(3, g.FirstOrDefault()),
+                    value = g.FirstOrDefault(),
+
+                }).ToList();
+
+            return new
             {
-                text = Utils.AddZeroToNumber( 3, g.FirstOrDefault()),
-                value = g.FirstOrDefault(),
-
-            }).ToList();
-
-            return new { 
-                raffles, 
+                raffles,
                 groups
             };
         }
@@ -292,10 +292,11 @@ namespace Tickets.Models.Ticket
                     {
                         tm.Rollback();
                         return new RequestResponseModel()
-                        { 
-                            Result = false, 
+                        {
+                            Result = false,
                             Message = "No es posible borrar esta debolución!",
-                            Object = new {
+                            Object = new
+                            {
                                 e.StackTrace
                             }
                         };
@@ -304,9 +305,10 @@ namespace Tickets.Models.Ticket
             }
 
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Delete, "Borando  devoluciones", model);
-            return new RequestResponseModel(){ 
-                Result = true, 
-                Message = "Devolucion borrado correctamente!" 
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Message = "Devolucion borrado correctamente!"
             };
         }
     }

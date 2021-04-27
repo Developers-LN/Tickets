@@ -2,10 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using Tickets.Models.Enums;
-using Tickets.Models.Prospects;
 using WebMatrix.WebData;
 
 namespace Tickets.Models.Ticket
@@ -41,7 +38,7 @@ namespace Tickets.Models.Ticket
 
         [JsonProperty(PropertyName = "createDateLong")]
         public long CreateDateLong { get; set; }
-                
+
         [JsonProperty(PropertyName = "createDate")]
         public DateTime CreateDate { get; set; }
 
@@ -72,7 +69,7 @@ namespace Tickets.Models.Ticket
             int maxFraction = target.Prospect.LeafFraction * target.Prospect.LeafNumber;
             var targentNumbers = new List<long>();
             target.TicketAllocations.Where(a => a.Type == type).ToList()
-                .ForEach(a => targentNumbers.AddRange(a.TicketAllocationNumbers.Select(n=>n.Number).ToList()) );
+                .ForEach(a => targentNumbers.AddRange(a.TicketAllocationNumbers.Select(n => n.Number).ToList()));
 
             List<TicketAllocation> allocations = new List<TicketAllocation>();
             foreach (var a in source.TicketAllocations.Where(a => a.Type == type).ToList())
@@ -226,7 +223,7 @@ namespace Tickets.Models.Ticket
                 CreateDateLong = model.CreateDate.ToUnixTime(),
                 CanAllocate = DateTime.Now <= raffle.EndAllocationDate,
                 NumberCount = model.TicketAllocationNumbers.Count,
-                FractionCount = model.TicketAllocationNumbers.Select( a=> a.FractionTo - a.FractionFrom + 1).Sum()
+                FractionCount = model.TicketAllocationNumbers.Select(a => a.FractionTo - a.FractionFrom + 1).Sum()
             };
             if (hasNumber)
             {
@@ -262,7 +259,7 @@ namespace Tickets.Models.Ticket
                 .Where(a =>
                     (a.Statu == statu || statu == 0)
                     && a.RaffleId == raffleId
-                    &&(a.ClientId == clientId || clientId == 0)).AsEnumerable()
+                    && (a.ClientId == clientId || clientId == 0)).AsEnumerable()
                 .Select(a => this.ToObject(a, hasNumber)).ToList();
 
             return new RequestResponseModel()
@@ -313,7 +310,7 @@ namespace Tickets.Models.Ticket
             try
             {
                 List<TicketAllocation> allocations = new List<TicketAllocation>();
-                if (model.SourceTicketRaffleId> 0)
+                if (model.SourceTicketRaffleId > 0)
                 {
                     allocations.AddRange(CopyTicketAllocation(context, model.SourceTicketRaffleId, model.TargetRaffleId, (int)AllocationTypeEnum.Tickets));
                 }
@@ -321,7 +318,7 @@ namespace Tickets.Models.Ticket
                 {
                     allocations.AddRange(CopyTicketAllocation(context, model.SourcePoolRaffleId, model.TargetRaffleId, (int)AllocationTypeEnum.Pools));
                 }
-                
+
                 context.TicketAllocations.AddRange(allocations);
                 allocations.ForEach(a =>
                 {
@@ -385,14 +382,14 @@ namespace Tickets.Models.Ticket
                     if (model.Id > 0)
                     {
                         var allocation = context.TicketAllocations.Where(a => a.Id == model.Id)
-                            .AsEnumerable().Select( m => this.ToObject(m)).FirstOrDefault();
+                            .AsEnumerable().Select(m => this.ToObject(m)).FirstOrDefault();
                         model.RaffleId = allocation.RaffleId;
                     }
-                    var numbers = model.TicketAllocationNumbers.Select( t=> (int)t.Number);
+                    var numbers = model.TicketAllocationNumbers.Select(t => (int)t.Number);
 
                     var raffleNumbers = new List<TicketAllocationNumber>();
                     context.Raffles.FirstOrDefault(r => r.Id == model.RaffleId)
-                        .TicketAllocations.Where( a=> a.Type == model.TypeId).ToList().ForEach(a =>
+                        .TicketAllocations.Where(a => a.Type == model.TypeId).ToList().ForEach(a =>
                         raffleNumbers.AddRange(a.TicketAllocationNumbers));
 
                     var duplicateNumbers = raffleNumbers.Where(t =>
@@ -408,7 +405,7 @@ namespace Tickets.Models.Ticket
                             if (fractionFrom >= duplicateNumber.FractionFrom
                                 && fractionTo <= duplicateNumber.FractionTo)
                             {
-                                number += duplicateNumber.Number + " fracciones( "+ fractionFrom + " a " + fractionTo+ " ), ";
+                                number += duplicateNumber.Number + " fracciones( " + fractionFrom + " a " + fractionTo + " ), ";
                             }
                         }
                     }
@@ -416,16 +413,18 @@ namespace Tickets.Models.Ticket
                     if (number != "")
                     {
                         number = number.Substring(0, number.Length - 2);
-                        return new RequestResponseModel() { 
+                        return new RequestResponseModel()
+                        {
                             Result = false,
-                            Message = "Los numeros ( " + number + " ) ya fueron asignado." 
+                            Message = "Los numeros ( " + number + " ) ya fueron asignado."
                         };
                     }
                     else
                     {
-                        return new RequestResponseModel() { 
-                            Result = true, 
-                            Message = "Nummero agregado correctamente" 
+                        return new RequestResponseModel()
+                        {
+                            Result = true,
+                            Message = "Nummero agregado correctamente"
                         };
                     }
                 }
@@ -478,7 +477,7 @@ namespace Tickets.Models.Ticket
                         else
                         {
                             List<TicketAllocationNumber> ticketAllocations = new List<TicketAllocationNumber>();
-                            foreach (var number in model.TicketAllocationNumbers.Where( a=> a.Id == 0) )
+                            foreach (var number in model.TicketAllocationNumbers.Where(a => a.Id == 0))
                             {
                                 var ticket = new TicketAllocationNumber()
                                 {
@@ -498,14 +497,15 @@ namespace Tickets.Models.Ticket
                         }
                         dbContextTransaction.Commit();
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         dbContextTransaction.Rollback();
                         return new RequestResponseModel()
                         {
                             Result = false,
                             Message = e.Message,
-                            Object = new { 
+                            Object = new
+                            {
                                 e.InnerException,
                                 e.StackTrace
                             }
@@ -534,23 +534,26 @@ namespace Tickets.Models.Ticket
                         var allocation = context.TicketAllocations.Where(a => a.Id == model.Id).FirstOrDefault();
                         if (allocation == null)
                         {
-                            return new RequestResponseModel(){ 
+                            return new RequestResponseModel()
+                            {
                                 Result = false,
-                                Message = "La asignación de billetes no existe." 
+                                Message = "La asignación de billetes no existe."
                             };
                         }
                         if (allocation.TicketAllocationNumbers.Where(n => n.Printed == true).Any())
                         {
-                            return new RequestResponseModel (){ 
-                                Result = false, 
-                                Message = "La asignación de billetes ya fue impresa." 
+                            return new RequestResponseModel()
+                            {
+                                Result = false,
+                                Message = "La asignación de billetes ya fue impresa."
                             };
                         }
                         if (allocation.Raffle.Statu == (int)RaffleStatusEnum.Generated)
                         {
-                            return new RequestResponseModel (){ 
-                                Result = false, 
-                                Message = "El sorteo de esta asignación de billetes fue generado." 
+                            return new RequestResponseModel()
+                            {
+                                Result = false,
+                                Message = "El sorteo de esta asignación de billetes fue generado."
                             };
                         }
 
@@ -561,14 +564,15 @@ namespace Tickets.Models.Ticket
                         context.SaveChanges();
                         dbContextTransaction.Commit();
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         dbContextTransaction.Rollback();
                         return new RequestResponseModel()
                         {
                             Result = false,
                             Message = e.Message,
-                            Object = new {
+                            Object = new
+                            {
                                 e.Message,
                                 e.InnerException,
                                 e.StackTrace
@@ -580,9 +584,10 @@ namespace Tickets.Models.Ticket
 
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Delete, "Borando Asignación de Billetes", model);
 
-            return new RequestResponseModel(){ 
-                Result = true, 
-                Message = "Asignación de billetes borrada correctamente!" 
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Message = "Asignación de billetes borrada correctamente!"
             };
         }
 
@@ -601,7 +606,7 @@ namespace Tickets.Models.Ticket
                         allocationObject = TicketAllocationToObject(allocation);
                         dbContextTransaction.Commit();
                     }
-                    catch(Exception e )
+                    catch (Exception e)
                     {
                         dbContextTransaction.Rollback();
                         return new RequestResponseModel()
@@ -639,12 +644,12 @@ namespace Tickets.Models.Ticket
                         var allocation = context.TicketAllocations.Where(a => a.Id == model.Id).FirstOrDefault();
                         if (allocation == null)
                         {
-                            return new RequestResponseModel(){ Result = true, Message = "La asignación de billetes no existe." };
+                            return new RequestResponseModel() { Result = true, Message = "La asignación de billetes no existe." };
                         }
 
                         if (allocation.Raffle.Statu == (int)RaffleStatusEnum.Generated)
                         {
-                            return new RequestResponseModel (){ Result = true, Message = "El sorteo de esta asignación de billetes fue generado." };
+                            return new RequestResponseModel() { Result = true, Message = "El sorteo de esta asignación de billetes fue generado." };
                         }
 
                         allocation.Statu = (int)AllocationStatuEnum.Review;
@@ -659,7 +664,7 @@ namespace Tickets.Models.Ticket
             }
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Revision de Asignación de Billetes", model);
 
-            return new RequestResponseModel (){ Result = true, Message = "Asignación de billetes revisada correctamente!" };
+            return new RequestResponseModel() { Result = true, Message = "Asignación de billetes revisada correctamente!" };
         }
 
 
@@ -702,7 +707,7 @@ namespace Tickets.Models.Ticket
                         var config = context.SystemConfigs.FirstOrDefault();
                         ticketDesing = context.Catalogs.FirstOrDefault(c => c.Id == config.TicketDesign).Description;
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         dbContextTransaction.Rollback();
                         return new RequestResponseModel()
@@ -716,7 +721,8 @@ namespace Tickets.Models.Ticket
 
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Impreción de Billetes", allocationObject);
 
-            return new RequestResponseModel() { 
+            return new RequestResponseModel()
+            {
                 Result = true,
                 Object = ticketDesing,
                 Message = "Impresion de Billete realizada correctamente!"

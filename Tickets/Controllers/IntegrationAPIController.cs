@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using Tickets.Models;
 using Tickets.Models.Enums;
@@ -118,7 +116,7 @@ namespace Tickets.Controllers
                                 allocationJSON.RaffleDate = raffle.DateSolteo.ToShortDateString();
                                 allocationJSON.RaffleId = raffle.Id;
 
-                                raffle.TicketAllocations.Where( t=> t.ClientId == clientId).ToList().ForEach(a => a.TicketAllocationNumbers.ToList().ForEach(t =>
+                                raffle.TicketAllocations.Where(t => t.ClientId == clientId).ToList().ForEach(a => a.TicketAllocationNumbers.ToList().ForEach(t =>
                                     allocationJSON.TicketNumbers.Add(new Models.JSON.TicketNumber()
                                     {
                                         TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
@@ -233,12 +231,12 @@ namespace Tickets.Controllers
                 {
                     try
                     {
-                        if (WebSecurity.Login( invoice.UserName, invoice.Password, false) == false)
+                        if (WebSecurity.Login(invoice.UserName, invoice.Password, false) == false)
                         {
                             return new
                             {
                                 result = false,
-                                message =  "Error en el usuario o la contraseña."
+                                message = "Error en el usuario o la contraseña."
                             };
                         }
                         else
@@ -325,7 +323,7 @@ namespace Tickets.Controllers
                             }
                         }
                     }
-                    catch 
+                    catch
                     {
                         return new
                         {

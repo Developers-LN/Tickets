@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Web;
-using Tickets.Models;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
 
@@ -65,7 +62,7 @@ namespace Tickets.Models.Prospects
 
         [JsonProperty(PropertyName = "price")]
         public decimal Price { get; set; }
-        
+
         [JsonProperty(PropertyName = "awards")]
         public List<AwardModel> Awards { get; set; }
 
@@ -135,12 +132,12 @@ namespace Tickets.Models.Prospects
         {
             using (var context = new TicketsEntities())
             {
-                using(var tx = context.Database.BeginTransaction())
+                using (var tx = context.Database.BeginTransaction())
                 {
                     try
                     {
                         var expiredProspects = context.Prospects.AsEnumerable()
-                            .Where(p => p.Statu != (int)ProspectStatuEnum.Suspended 
+                            .Where(p => p.Statu != (int)ProspectStatuEnum.Suspended
                                 && p.ExpirateDate.Date < DateTime.Now.Date).ToList();
                         foreach (var p in expiredProspects)
                         {
@@ -148,7 +145,7 @@ namespace Tickets.Models.Prospects
                             context.SaveChanges();
                         }
                         tx.Commit();
-                        
+
                         if (statu == 0)
                         {
                             var prospects = context.Prospects.AsEnumerable().Where(p => p.Statu != 2074)
@@ -246,9 +243,9 @@ namespace Tickets.Models.Prospects
                         }
                         context.SaveChanges();
                         #endregion
-                        
+
                         #region Saving prices
-                        model.ProspectPrices = model.ProspectPrices == null ? new List<ProspectPriceModel>() : model.ProspectPrices; 
+                        model.ProspectPrices = model.ProspectPrices == null ? new List<ProspectPriceModel>() : model.ProspectPrices;
                         var prospectPrices = new List<Prospect_Price>();
                         foreach (var price in model.ProspectPrices)
                         {
@@ -353,13 +350,14 @@ namespace Tickets.Models.Prospects
             };
         }
 
-        internal RequestResponseModel GetProspectSelect( int statu = 0)
+        internal RequestResponseModel GetProspectSelect(int statu = 0)
         {
             var context = new TicketsEntities();
             var prospects = context.Prospects
                 .AsEnumerable()
                 .Where(p => (p.Statu == statu || (statu == 0 && p.Statu != (int)ProspectStatuEnum.Suspended)))
-                .Select(p =>  new {
+                .Select(p => new
+                {
                     text = p.Name,
                     value = p.Id,
                     expirateDate = p.ExpirateDate.ToUnixTime()
@@ -373,7 +371,7 @@ namespace Tickets.Models.Prospects
             };
         }
 
-        internal RequestResponseModel GetTypeAwardSelect( )
+        internal RequestResponseModel GetTypeAwardSelect()
         {
             var context = new TicketsEntities();
             var awardTypes = context.TypesAwards

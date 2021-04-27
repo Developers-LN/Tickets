@@ -1,9 +1,4 @@
 ﻿//using AttributeRouting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using Tickets.Models;
 using Tickets.Models.Ticket;
@@ -58,8 +53,8 @@ namespace Tickets.Controllers
         {
             var response = new TicketSuscriberModel().Verify(model);
             return response;
-            
-        } 
+
+        }
 
         //
         //  POST: ticket/ticketSuscriberApi/delete

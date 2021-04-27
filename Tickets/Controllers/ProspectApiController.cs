@@ -1,14 +1,7 @@
 ﻿//using AttributeRouting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using Tickets.Models;
-using Tickets.Models.Enums;
 using Tickets.Models.Prospects;
-using Tickets.Models.Workflows;
 
 namespace Tickets.Controllers
 {
@@ -76,9 +69,9 @@ namespace Tickets.Controllers
         [HttpGet]
         [ActionName("getPoolsProspectSelect")]
         [Authorize]
-        public RequestResponseModel GetPoolsProspectSelect(int statu = 0 )
+        public RequestResponseModel GetPoolsProspectSelect(int statu = 0)
         {
-            var response = new ProspectModel().GetProspectSelect( statu);
+            var response = new ProspectModel().GetProspectSelect(statu);
             return response;
         }
 
@@ -89,7 +82,7 @@ namespace Tickets.Controllers
         [Authorize]
         public RequestResponseModel GetTicketProspectSelect(int statu = 0)
         {
-            var response = new ProspectModel().GetProspectSelect( statu);
+            var response = new ProspectModel().GetProspectSelect(statu);
             return response;
         }
 

@@ -1,17 +1,8 @@
 ﻿//using AttributeRouting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Xml;
-using System.Xml.Serialization;
 using Tickets.Models;
 using Tickets.Models.Enums;
 using Tickets.Models.Ticket;
-using WebMatrix.WebData;
 
 namespace Tickets.Controllers
 {
@@ -178,7 +169,7 @@ namespace Tickets.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("getTicketNumberDetails")]
-        public RequestResponseModel GetTicketNumberDetails(int numberId) 
+        public RequestResponseModel GetTicketNumberDetails(int numberId)
         {
             var response = new TicketAllocationNumberModel().GetTicketNumberDetails(numberId);
             return response;

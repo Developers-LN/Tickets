@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Tickets.Models;
-using Tickets.Models.Raffles;
-using Tickets.Models.Ticket;
+﻿using System.Web.Mvc;
 
 namespace Tickets.Controllers
 {
@@ -87,7 +80,7 @@ namespace Tickets.Controllers
         {
             return View();
         }
-        
+
         //
         // GET: TicketPrint/ApprovedReprintProcess
         [HttpGet]
@@ -98,5 +91,5 @@ namespace Tickets.Controllers
 
         #endregion
 
-	}
+    }
 }

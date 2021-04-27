@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
 
@@ -113,7 +112,7 @@ namespace Tickets.Models.Ticket
 
             return new { result = true, identifyBach, raffles, clients };
         }
-        
+
         internal object CertificationAwardData(int iNumberId, int number, int fractionFrom, int fractionTo, int raffleAwardId, int fractions)
         {
             object certificateObject;
@@ -213,7 +212,7 @@ namespace Tickets.Models.Ticket
             var allocationModel = new TicketAllocationNumberModel();
             var numbers = context.TicketAllocationNumbers.AsEnumerable()
                 .Where(t => t.TicketAllocation.RaffleId == raffleId && t.TicketAllocation.ClientId == clientId)
-                .Select(t => allocationModel.ToObject( t)).ToList();
+                .Select(t => allocationModel.ToObject(t)).ToList();
             return numbers;
         }
 
@@ -261,7 +260,7 @@ namespace Tickets.Models.Ticket
                                 {
                                     var Currentnumber = context.TicketAllocationNumbers.FirstOrDefault(n =>
                                         n.TicketAllocation.RaffleId == newIdentifyBach.RaffleId
-                                            //&& n.TicketAllocation.ClientId == newIdentifyBach.ClientId
+                                    //&& n.TicketAllocation.ClientId == newIdentifyBach.ClientId
                                     && n.Number == number.NumberId);
                                     if (Currentnumber != null)
                                     {
@@ -428,17 +427,17 @@ namespace Tickets.Models.Ticket
                             if (raffleAwards.Where(r =>
                             r.ControlNumber == awardTicket.NumberId
                             && (r.Award.TypesAwardId == 1 || r.Award.TypesAwardId == 6)
-                            &&  clientGroup == 36
+                            && clientGroup == 36
                             ).Any() == true)
                             {
                                 messageList.Add("Los clientes mayoristas no pueden pagar premios mayores." + awardTicket.NumberId);
                             }
                         }
                     }
-                    
+
                 }
             }
-            
+
             if (message != "")
             {
                 messageList.Add(message);
@@ -605,9 +604,9 @@ namespace Tickets.Models.Ticket
                     FractionFrom = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionFrom,
                     FractionTo = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionTo,
                     Id = ra.Id,
-                    LawDiscount = ra.Award.ByFraction ==(int)ByFractionEnum.S || ra.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor : 0,
-                    
-                    Total = ra.Award.ByFraction == (int)ByFractionEnum.S || ra.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor/100) : (ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber) * (n.FractionTo - n.FractionFrom +1)) * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100)) : (ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber)),
+                    LawDiscount = ra.Award.ByFraction == (int)ByFractionEnum.S || ra.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor : 0,
+
+                    Total = ra.Award.ByFraction == (int)ByFractionEnum.S || ra.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100) : (ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber) * (n.FractionTo - n.FractionFrom + 1)) * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100)) : (ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber)),
 
                 }).ToList()
             };

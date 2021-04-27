@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
-using WebMatrix.WebData;
 
 namespace Tickets.Controllers
 {
@@ -13,7 +10,7 @@ namespace Tickets.Controllers
     [InitializeSimpleMembership]
     public class ConfigController : Controller
     {
-        
+
         #region Catalog
         //
         // GET: /Config/CatalogList
@@ -89,7 +86,7 @@ namespace Tickets.Controllers
                     else
                     {
                         var modified = context.ProductionCosts.Where(p => p.Id == item.Id).FirstOrDefault();
-                        if(modified != null && item.Status == false)
+                        if (modified != null && item.Status == false)
                         {
                             modified.Status = false;
                             context.Entry(modified).State = System.Data.Entity.EntityState.Modified;
@@ -113,22 +110,22 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
 
-                var result = context.ProductionCosts.Where(p => p.RaffleId == raffleId && p.Status == true).Select(p=>new
-                {
-                    Id = p.Id,
-                    RaffleId = p.RaffleId,
-                    Detalle = p.Detalle,
-                    Cantidad = p.Cantidad,
-                    Monto = p.Monto,
-                    Status = p.Status,
-                    Created = p.Created
+            var result = context.ProductionCosts.Where(p => p.RaffleId == raffleId && p.Status == true).Select(p => new
+            {
+                Id = p.Id,
+                RaffleId = p.RaffleId,
+                Detalle = p.Detalle,
+                Cantidad = p.Cantidad,
+                Monto = p.Monto,
+                Status = p.Status,
+                Created = p.Created
 
-                }).ToList();
-                return new JsonResult()
-                {
-                    Data = result,
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
-                };
+            }).ToList();
+            return new JsonResult()
+            {
+                Data = result,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
         }
 
         // GET: /Config/GetCatalogList
@@ -137,7 +134,7 @@ namespace Tickets.Controllers
         public JsonResult GetCatalogList()
         {
             var response = new CatalogModel().GetCatalogList();
-            return new JsonResult() { Data = response, JsonRequestBehavior = JsonRequestBehavior.AllowGet  }; 
+            return new JsonResult() { Data = response, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         //
@@ -187,7 +184,7 @@ namespace Tickets.Controllers
                 var RaffleList = context.Raffles.Select(r => new
                 {
                     id = r.Id,
-                    text = r.Id + " - "+ r.Name
+                    text = r.Id + " - " + r.Name
                 }).ToList();
                 return new JsonResult
                 {
@@ -330,7 +327,8 @@ namespace Tickets.Controllers
             var response = new SystemConfigModel().GetSystemConfigData();
             return new JsonResult()
             {
-                Data = response,JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                Data = response,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
         //
@@ -340,7 +338,7 @@ namespace Tickets.Controllers
         public JsonResult SystemConfig(SystemConfig systemConfig)
         {
             var response = new SystemConfigModel().SystemConfig(systemConfig);
-            return new JsonResult(){ Data = response};
+            return new JsonResult() { Data = response };
         }
         #endregion
     }

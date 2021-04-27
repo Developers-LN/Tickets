@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
@@ -57,7 +55,7 @@ namespace Tickets.Controllers
         public JsonResult GetList()
         {
             var context = new TicketsEntities();
-            var clients = context.Clients.AsEnumerable().Where( c=>c.Statu != (int)GeneralStatusEnum.Suspended).Select(c => ClientToObject(c)).ToList();
+            var clients = context.Clients.AsEnumerable().Where(c => c.Statu != (int)GeneralStatusEnum.Suspended).Select(c => ClientToObject(c)).ToList();
 
             var raffles = context.Raffles.Select(r => new
             {
@@ -161,7 +159,7 @@ namespace Tickets.Controllers
                 c.DepositDocument,
                 c.PreviousDebt,
                 c.ClientType,
-                ClientTypeDesc = catalogs.FirstOrDefault( ct=>ct.Id == c.ClientType).NameDetail,
+                ClientTypeDesc = catalogs.FirstOrDefault(ct => ct.Id == c.ClientType).NameDetail,
                 c.Comment,
                 c.CreateDate,
                 c.CreateUser,
@@ -184,11 +182,11 @@ namespace Tickets.Controllers
                 ProvinceDesc = context.Provinces.FirstOrDefault(p => p.Id == c.Province).Name,
                 c.RNC,
                 c.Section,
-                SectionDesc = context.DistTowns.FirstOrDefault( dt=>dt.Id == c.Section).Name,
+                SectionDesc = context.DistTowns.FirstOrDefault(dt => dt.Id == c.Section).Name,
                 c.Statu,
-                StatuDesc = catalogs.FirstOrDefault( ct=>ct.Id == c.Statu).NameDetail,
+                StatuDesc = catalogs.FirstOrDefault(ct => ct.Id == c.Statu).NameDetail,
                 c.Town,
-                TownDesc = context.Towns.FirstOrDefault(t=>t.Id == c.Town).Name,
+                TownDesc = context.Towns.FirstOrDefault(t => t.Id == c.Town).Name,
                 c.Tradename
             };
         }
@@ -207,8 +205,8 @@ namespace Tickets.Controllers
         [Authorize]
         public JsonResult Create(Client client)
         {
-            
-            
+
+
             if (client.Id <= 0)
             {
                 try
@@ -231,7 +229,7 @@ namespace Tickets.Controllers
 
                     Utils.SaveLog(WebSecurity.CurrentUserName, client.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Cliente", ClientToObject(client));
                 }
-            
+
             }
             else
             {
@@ -261,7 +259,7 @@ namespace Tickets.Controllers
                         mClient.Province = client.Province;
                         mClient.RNC = string.IsNullOrEmpty(client.RNC) ? "" : client.RNC;
                         mClient.Section = client.Section;
-                       // mClient.Statu = client.Statu;
+                        // mClient.Statu = client.Statu;
                         mClient.Town = client.Town;
                         mClient.Discount = client.Discount;
                         mClient.Tradename = string.IsNullOrEmpty(client.Tradename) ? "" : client.Tradename;
@@ -270,12 +268,12 @@ namespace Tickets.Controllers
                         context.SaveChanges();
                         EmailUtil.SendClientEmail(ReportByEmailEnum.MODIFIED_CLIENT, client);
                     }
-                    
+
                 }
                 catch (Exception ex)
                 { }
                 Utils.SaveLog(WebSecurity.CurrentUserName, client.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Cliente", ClientToObject(client));
-                
+
             }
             return new JsonResult() { Data = true };
         }
@@ -344,7 +342,7 @@ namespace Tickets.Controllers
         {
             return View();
         }
-        
+
         // GET: Client/GetWorkflowList
         [HttpGet]
         [Authorize]
@@ -353,7 +351,7 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             int userId = WebSecurity.CurrentUserId;
             int workFlowTypeId = int.Parse(ConfigurationManager.AppSettings["ClientApprovedWorkflowTypeId"].ToString());
-            var usersApproveWorkflow = context.WorkflowTypes.FirstOrDefault(w => w.Id == workFlowTypeId).WorkflowType_User.Where( wu=>wu.Statu != (int)GeneralStatusEnum.Delete);
+            var usersApproveWorkflow = context.WorkflowTypes.FirstOrDefault(w => w.Id == workFlowTypeId).WorkflowType_User.Where(wu => wu.Statu != (int)GeneralStatusEnum.Delete);
 
             var workflowList = context.Workflows.AsEnumerable().Where(w =>
                 w.WorkflowTypeId == workFlowTypeId &&
@@ -368,7 +366,8 @@ namespace Tickets.Controllers
                     Client = ClientToObject(context.Clients.FirstOrDefault(p => p.Id == w.ProcessId)),
                     UserName = w.User.Name,
                     CreateDate = w.CreateDate.ToString(),
-                    proccess= w.WorkflowProccesses.Select( p=> new{
+                    proccess = w.WorkflowProccesses.Select(p => new
+                    {
                         UserName = p.User.Name,
                         p.Comment,
                         p.Statu,
@@ -462,7 +461,8 @@ namespace Tickets.Controllers
         public JsonResult PreviousDebtPaymentSave(PreviousDebtPayment model)
         {
             object payment;
-            using(var context = new TicketsEntities()){
+            using (var context = new TicketsEntities())
+            {
                 using (var tx = context.Database.BeginTransaction())
                 {
                     try
@@ -485,10 +485,14 @@ namespace Tickets.Controllers
                     catch (Exception e)
                     {
                         tx.Rollback();
-                        return new JsonResult() { Data = new { 
-                            result = false,
-                            message = e.Message
-                        } };
+                        return new JsonResult()
+                        {
+                            Data = new
+                            {
+                                result = false,
+                                message = e.Message
+                            }
+                        };
                     }
                 }
             }
@@ -504,5 +508,5 @@ namespace Tickets.Controllers
                 }
             };
         }
-	}
+    }
 }

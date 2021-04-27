@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
 
@@ -116,7 +113,7 @@ namespace Tickets.Models
             };
             return obj;
         }
-        
+
         private CatalogModel CatalogToObject(Catalog catalog)
         {
             CatalogModel catalogModel = new CatalogModel()

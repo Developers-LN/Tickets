@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Tickets.Models;
-using Newtonsoft.Json;
+﻿using System.Web.Mvc;
 using Tickets.Filters;
-using WebMatrix.WebData;
-using System.Configuration;
-using System.IO;
-using Tickets.Models.Enums;
 
 namespace Tickets.Controllers
 {
@@ -33,7 +23,7 @@ namespace Tickets.Controllers
         {
             return View();
         }
-        
+
         // GET: Prospect/_ProspectType
         [HttpGet]
         [Authorize]
@@ -90,7 +80,7 @@ namespace Tickets.Controllers
         {
             return View();
         }
-        
+
         //
         //  GET: Prospect/AllProspects
         [Authorize]
@@ -99,7 +89,7 @@ namespace Tickets.Controllers
         {
             return View();
         }
-        
+
         // GET: Prospect/WorkflowList
         [HttpGet]
         [Authorize]
@@ -107,7 +97,7 @@ namespace Tickets.Controllers
         {
             return View();
         }
-        
+
         // GET: Prospect/ApprovedProspectProcess
         [HttpGet]
         public ActionResult ApprovedProcess()
