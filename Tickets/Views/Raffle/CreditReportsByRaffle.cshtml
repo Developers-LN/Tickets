@@ -8,6 +8,10 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <!-- START panel-->
+                <div style="float:right; margin-bottom:15px;">
+                    <label>Fecha: </label>
+                    <input type="date" style="height:25px;" id="fecha" />
+                </div>
                 <div class="row-border hover ">
                     <table class="table dataTableGrid">
                         <thead>
@@ -24,7 +28,6 @@
                                     @*<a href="/Reports/ReportPaymenHistory?raffleId={{raffle.id}}" target="_blank" title="Historial de Pago"><i class="fa fa-print"></i></a>*@
 
                                     <input type="hidden" id="raffle" value="{{raffle.id}}" />
-                                    <input type="date" style="height:25px;" id="fecha" />
                                     <a href="" id="btnrafflereport" title="Historial de Pago"><i class="fa fa-print"></i></a>
                                 </td>
                             </tr>
