@@ -205,8 +205,6 @@ namespace Tickets.Controllers
         [Authorize]
         public JsonResult Create(Client client)
         {
-
-
             if (client.Id <= 0)
             {
                 try
@@ -214,22 +212,22 @@ namespace Tickets.Controllers
                     using (var context = new TicketsEntities())
                     {
                         client.Statu = (int)ClientStatuEnum.Created;
-                        client.Fax = string.IsNullOrEmpty(client.Fax) ? "" : client.Fax;
-                        client.RNC = string.IsNullOrEmpty(client.RNC) ? "" : client.RNC;
-                        client.Tradename = string.IsNullOrEmpty(client.Tradename) ? "" : client.Tradename;
+                        client.Fax = string.IsNullOrEmpty(client.Fax) ? "NA" : client.Fax;
+                        client.RNC = string.IsNullOrEmpty(client.RNC) ? "NA" : client.RNC;
+                        client.Tradename = string.IsNullOrEmpty(client.Tradename) ? "NA" : client.Tradename;
                         client.Comment = string.IsNullOrEmpty(client.Comment) ? "NA" : client.Comment;
                         client.CreateDate = DateTime.Now;
                         client.CreateUser = WebSecurity.CurrentUserId;
                         context.Clients.Add(client);
+                        context.SaveChanges();
                         EmailUtil.SendClientEmail(ReportByEmailEnum.NEW_CLIENT, client);
                     }
                 }
-                catch (Exception)
+                catch (Exception error)
                 {
-
+                    var Test = error.Source;
                     Utils.SaveLog(WebSecurity.CurrentUserName, client.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Cliente", ClientToObject(client));
                 }
-
             }
             else
             {
@@ -273,7 +271,6 @@ namespace Tickets.Controllers
                 catch (Exception ex)
                 { }
                 Utils.SaveLog(WebSecurity.CurrentUserName, client.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Cliente", ClientToObject(client));
-
             }
             return new JsonResult() { Data = true };
         }
