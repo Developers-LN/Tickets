@@ -6,35 +6,42 @@
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
-    var lastReceivable = Model.ReceivablePayments.Count > 0?Model.ReceivablePayments.ToList().Last() : null;
+    var lastReceivable = Model.ReceivablePayments.Count > 0 ? Model.ReceivablePayments.ToList().Last() : null;
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
-	//Datos Detalle Factura
-	var allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select( a=> new{
-                        AllocationId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocationId});
+    //Datos Detalle Factura
+    var allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select(a => new
+    {
+        AllocationId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocationId
+    });
 }
 <style>
-    .col-lg-12{
+    .col-lg-12 {
         width: 100%;
         float: left;
     }
+
     .col-lg-4 {
         width: 33.333%;
-         float: left;
+        float: left;
     }
-    .col-lg-6{
+
+    .col-lg-6 {
         width: 50%;
         float: left;
-    } 
-    
+    }
+
     .text-center {
         text-align: center;
     }
+
     .text-right {
-        text-align:right;
+        text-align: right;
     }
+
     .text-left {
-        text-align:left;
+        text-align: left;
     }
+
     .no-padder {
         padding-left: 0px;
         padding-right: 0px;
@@ -44,7 +51,7 @@
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b>
@@ -59,13 +66,14 @@
             <div class="col-lg-12 no-padder text-left">
                 <b>Cliente: </b> #@Model.Client.Name
             </div>
-            @if( lastReceivable != null){
-            <div class="col-lg-12 no-padder text-left">
-                <b>Estado: </b> @context.Catalogs.FirstOrDefault(c=>c.Id == lastReceivable.Invoice.PaymentStatu).NameDetail
-            </div>
-            <div class="col-lg-12 no-padder text-left">
-                <b>Recibo: </b>#@lastReceivable.Id
-            </div>
+            @if (lastReceivable != null)
+            {
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Estado: </b> @context.Catalogs.FirstOrDefault(c => c.Id == lastReceivable.Invoice.PaymentStatu).NameDetail
+                </div>
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Recibo: </b>#@lastReceivable.Id
+                </div>
             }
         </div>
         <div class="col-lg-6 no-padder text-right">
@@ -98,73 +106,73 @@
                     totalInvoice = totals.totalInvoice;
 
                 }
-                    @foreach (var payment in Model.ReceiptPayments)
+                @foreach (var payment in Model.ReceiptPayments)
+                {
+                    var totalCash = payment.TotalCash > 0 ? payment.TotalCash : payment.TotalCheck > 0 ? payment.TotalCheck : payment.TotalCredit;
+                    if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
                     {
-                        var totalCash = payment.TotalCash > 0 ? payment.TotalCash : payment.TotalCheck > 0 ? payment.TotalCheck : payment.TotalCredit;
-                        if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                        foreach (var creditNote in payment.NoteCreditReceiptPayments)
                         {
-                            foreach (var creditNote in payment.NoteCreditReceiptPayments)
-                            {
-                                totalPayment += creditNote.TotalCash;
-                                <tr>
-                                    <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
-                                    <td class="text-center">@creditNote.NoteCredit.Concepts</td>
-                                    <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
-                                    <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            totalPayment += totalCash;
+                            totalPayment += creditNote.TotalCash;
                             <tr>
-                                <td class="text-center">@context.Catalogs.FirstOrDefault(c=>c.Id == payment.ReceiptType).NameDetail</td>
-                                <td>Pago en efectivo</td>
+                                <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
+                                <td class="text-center">@creditNote.NoteCredit.Concepts</td>
                                 <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
-                                <td class="text-right">@(((decimal)totalCash).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                             </tr>
                         }
                     }
+                    else
+                    {
+                        totalPayment += totalCash;
+                        <tr>
+                            <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
+                            <td>Pago en efectivo</td>
+                            <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
+                            <td class="text-right">@(((decimal)totalCash).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                        </tr>
+                    }
+                }
                 @{
                     //var discount = totalInvoice * Model.Client.Discount / 100;
-					var discount = totalInvoice * Model.Discount / 100;
-					}
-                </tbody>
-                <tfoot>
-                    <tr class="total">
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right">Total Pagado..: @totalPayment.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>
-                    <tr >
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right" style="font-weight: bold;">Facturado..: @totalInvoice.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>
-                    <tr>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right" style="font-weight: bold;">Total Descuento..: @discount.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>
-                    <tr >
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right" style="font-weight: bold;">Total Facturado..: @((totalInvoice - discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                    </tr>
-                    <tr >
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right" style="font-weight: bold;">Total Restante..: @((totalRestant- discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                    </tr>
-                </tfoot>
+                    var discount = totalInvoice * Model.Discount / 100;
+                }
+            </tbody>
+            <tfoot>
+                <tr class="total">
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right">Total Pagado..: @totalPayment.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right" style="font-weight: bold;">Facturado..: @totalInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right" style="font-weight: bold;">Total Descuento..: @discount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right" style="font-weight: bold;">Total Facturado..: @((totalInvoice - discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right" style="font-weight: bold;">Total Restante..: @((totalRestant- discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
-    
+
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-4 col-md-6 col-sm-6 text-center">
             <div class="col-lg-12 no-padder text-center">
@@ -196,7 +204,7 @@
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b>
@@ -211,13 +219,14 @@
             <div class="col-lg-12 no-padder text-left">
                 <b>Cliente: </b> #@Model.Client.Name
             </div>
-            @if( lastReceivable != null){
-            <div class="col-lg-12 no-padder text-left">
-                <b>Estado: </b> @context.Catalogs.FirstOrDefault(c=>c.Id == lastReceivable.Invoice.PaymentStatu).NameDetail
-            </div>
-            <div class="col-lg-12 no-padder text-left">
-                <b>Recibo: </b>#@lastReceivable.Id
-            </div>
+            @if (lastReceivable != null)
+            {
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Estado: </b> @context.Catalogs.FirstOrDefault(c => c.Id == lastReceivable.Invoice.PaymentStatu).NameDetail
+                </div>
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Recibo: </b>#@lastReceivable.Id
+                </div>
             }
         </div>
         <div class="col-lg-6 no-padder text-right">
@@ -233,8 +242,8 @@
         </div>
     </div>
 
-	
-	<div class="col-lg-12 no-padder">
+
+    <div class="col-lg-12 no-padder">
         <table class="table">
             <thead>
                 <tr>
@@ -252,73 +261,73 @@
                     totalInvoice = totals.totalInvoice;
 
                 }
-                    @foreach (var payment in Model.ReceiptPayments)
+                @foreach (var payment in Model.ReceiptPayments)
+                {
+                    var totalCash = payment.TotalCash > 0 ? payment.TotalCash : payment.TotalCheck > 0 ? payment.TotalCheck : payment.TotalCredit;
+                    if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
                     {
-                        var totalCash = payment.TotalCash > 0 ? payment.TotalCash : payment.TotalCheck > 0 ? payment.TotalCheck : payment.TotalCredit;
-                        if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                        foreach (var creditNote in payment.NoteCreditReceiptPayments)
                         {
-                            foreach (var creditNote in payment.NoteCreditReceiptPayments)
-                            {
-                                totalPayment += creditNote.TotalCash;
-                                <tr>
-                                    <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
-                                    <td class="text-center">@creditNote.NoteCredit.Concepts</td>
-                                    <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
-                                    <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            totalPayment += totalCash;
+                            totalPayment += creditNote.TotalCash;
                             <tr>
-                                <td class="text-center">@context.Catalogs.FirstOrDefault(c=>c.Id == payment.ReceiptType).NameDetail</td>
-                                <td>Pago en efectivo</td>
+                                <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
+                                <td class="text-center">@creditNote.NoteCredit.Concepts</td>
                                 <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
-                                <td class="text-right">@(((decimal)totalCash).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                             </tr>
                         }
                     }
+                    else
+                    {
+                        totalPayment += totalCash;
+                        <tr>
+                            <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
+                            <td>Pago en efectivo</td>
+                            <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
+                            <td class="text-right">@(((decimal)totalCash).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                        </tr>
+                    }
+                }
                 @{
                     //var discount = totalInvoice * Model.Client.Discount / 100;
-					}
-                </tbody>
-                <tfoot>
-                    <tr class="total">
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right">Total Pagado..: @totalPayment.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>
-                    <tr >
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right" style="font-weight: bold;">Facturado..: @totalInvoice.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>
-                    <tr>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right" style="font-weight: bold;">Total Descuento..: @discount.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>
-                    <tr >
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right" style="font-weight: bold;">Total Facturado..: @((totalInvoice - discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                    </tr>
-                    <tr >
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right" style="font-weight: bold;">Total Restante..: @((totalRestant- discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                    </tr>
-                </tfoot>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="total">
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right">Total Pagado..: @totalPayment.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right" style="font-weight: bold;">Facturado..: @totalInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right" style="font-weight: bold;">Total Descuento..: @discount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right" style="font-weight: bold;">Total Facturado..: @((totalInvoice - discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right" style="font-weight: bold;">Total Restante..: @((totalRestant- discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
-	
-	<div class="col-lg-12 no-padder text-center">
+
+    <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-4 col-md-6 col-sm-6 text-center">
             <div class="col-lg-12 no-padder text-center">
                 ______________________________

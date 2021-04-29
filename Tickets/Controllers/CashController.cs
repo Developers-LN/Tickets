@@ -527,6 +527,10 @@ namespace Tickets.Controllers
                         {
                             receiptPayment.TotalCheck = totalCash;
                         }
+                        else if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.TransDepDirect)
+                        {
+                            receiptPayment.TotalCheck = totalCash;
+                        }
                         context.ReceiptPayments.Add(receiptPayment);
                         context.SaveChanges();
 
@@ -635,7 +639,7 @@ namespace Tickets.Controllers
             var raffles = new List<object>();
             if (raffleId == 0)
             {
-                raffles = context.Raffles.Where(s => s.Statu != (int)RaffleStatusEnum.Suspended).Select(r => new
+                raffles = context.Raffles.OrderByDescending(s => s.Id).Where(s => s.Statu != (int)RaffleStatusEnum.Suspended).Select(r => new
                 {
                     r.Id,
                     r.Name

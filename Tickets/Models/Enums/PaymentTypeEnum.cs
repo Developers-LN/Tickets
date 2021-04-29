@@ -6,7 +6,8 @@
         Checks = 2070,
         Cash = 2068,
         CreditNote = 2075,
-        Ninguno = 0
+        Ninguno = 0,
+        TransDepDirect = 5857
     }
 
 }
