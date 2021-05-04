@@ -377,6 +377,10 @@ namespace Tickets.Models.Ticket
                             {
                                 var allocationNumber = ticketAllocationNumbers.FirstOrDefault(t => t.Number == ticketReturn.NumberId);
 
+                                var AllocationNumber = ticketAllocationNumbers.Select(i => i.Id).FirstOrDefault();
+                                var InvoiceTicket = context.InvoiceTickets.Where(t => t.TicketNumberAllocationId == AllocationNumber).Select(t => t.InvoiceId).FirstOrDefault();
+                                var InvoiceDiscount = context.Invoices.Where(i => i.Id == InvoiceTicket).Select(i => i.Discount).FirstOrDefault();
+
                                 var returnedTicket = new TicketReturn()
                                 {
                                     RaffleId = model.RaffleId,
@@ -389,7 +393,7 @@ namespace Tickets.Models.Ticket
                                     ReturnedGroup = model.ReturnedGroup,
                                     TicketAllocationNimberId = allocationNumber.Id,
                                     Statu = (int)TicketReturnedStatuEnum.Created,
-                                    Discount = clientDiscount
+                                    Discount = InvoiceDiscount
                                 };
 
                                 //Validacion fraccion minima

@@ -454,6 +454,7 @@ namespace Tickets.Models.Ticket
                             context.SaveChanges();
 
                             List<TicketAllocationNumber> ticketAllocations = new List<TicketAllocationNumber>();
+                            
                             foreach (var number in model.TicketAllocationNumbers)
                             {
                                 var ticket = new TicketAllocationNumber()
@@ -461,13 +462,14 @@ namespace Tickets.Models.Ticket
                                     Number = number.Number,
                                     Invoiced = false,
                                     Printed = false,
-                                    ControlNumber = "",
+                                    ControlNumber = "NA",
                                     FractionFrom = number.FractionFrom,
                                     FractionTo = number.FractionTo,
                                     TicketAllocationId = ticketAllocation.Id,
                                     CreateUser = WebSecurity.CurrentUserId,
                                     CreateDate = DateTime.Now,
-                                    Statu = (int)TicketStatusEnum.Alloated
+                                    Statu = (int)TicketStatusEnum.Alloated,
+                                    RaffleId = ticketAllocation.RaffleId
                                 };
                                 ticketAllocations.Add(ticket);
                             }

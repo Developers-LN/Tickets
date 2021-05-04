@@ -11,7 +11,7 @@ namespace Tickets.Models
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class TicketAllocationNumber
     {
         public TicketAllocationNumber()
@@ -21,7 +21,7 @@ namespace Tickets.Models
             this.TicketRePrintNumbers = new HashSet<TicketRePrintNumber>();
             this.TicketReturns = new HashSet<TicketReturn>();
         }
-    
+
         public int Id { get; set; }
         public long Number { get; set; }
         public bool Invoiced { get; set; }

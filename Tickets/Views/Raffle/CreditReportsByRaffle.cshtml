@@ -50,6 +50,9 @@
         var sorteo = $('#raffle').val();
 
         var url = '/Reports/ReportPaymenHistory?raffleId=' + sorteo + '&fecha=' + fecha;
-        window.open(url,'_blank')
+
+        $('#fecha').val("");
+
+        window.open(url, '_blank');
     });
 </script>
