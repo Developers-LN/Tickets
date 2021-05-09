@@ -53,7 +53,7 @@ namespace Tickets.Controllers
                     r.Name,
                     r.Id,
                     DateSolteo = r.DateSolteo.ToUnixTime()
-                }).ToList();
+                }).OrderByDescending(r => r.Id).ToList();
             return new JsonResult()
             {
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,

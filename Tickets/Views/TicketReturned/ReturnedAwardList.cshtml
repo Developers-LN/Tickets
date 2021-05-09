@@ -11,7 +11,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Sorteo: </label>
                             <div class="col-lg-12">
-                                <select class="form-control" ng-model="RaffleId" ng-change="updateDelivered()">
+                                <select class="form-control dropdown-select2" ng-model="RaffleId" ng-change="updateDelivered()">
                                     <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
                                     <option ng-repeat="raffle in raffles" value="{{raffle.id}}">{{raffle.id}} - {{raffle.name}}</option>
                                 </select>

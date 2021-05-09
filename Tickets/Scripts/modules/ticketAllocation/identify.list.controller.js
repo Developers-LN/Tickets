@@ -11,8 +11,6 @@
 
     IdentifyAwardListController.$inject = ['$scope', '$state', '$rootScope'];
 
-
-
     function IdentifyAwardListController($scope, $state, $rootScope) {
         var self = this;
 

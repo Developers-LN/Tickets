@@ -132,7 +132,8 @@ namespace Tickets.Controllers
             {
                 r.Id,
                 r.Name,
-            });
+            }).OrderByDescending(r => r.Id);
+
             return new JsonResult() { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { raffles } };
         }
 

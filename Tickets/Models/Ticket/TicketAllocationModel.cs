@@ -462,7 +462,7 @@ namespace Tickets.Models.Ticket
                                     Number = number.Number,
                                     Invoiced = false,
                                     Printed = false,
-                                    ControlNumber = "NA",
+                                    ControlNumber = "N/A",
                                     FractionFrom = number.FractionFrom,
                                     FractionTo = number.FractionTo,
                                     TicketAllocationId = ticketAllocation.Id,

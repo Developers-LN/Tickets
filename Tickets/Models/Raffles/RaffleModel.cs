@@ -143,7 +143,7 @@ namespace Tickets.Models.Raffles
             var context = new TicketsEntities();
             var raffles = context.Raffles.AsEnumerable()
                 .Where(r => r.Statu == statu || (statu == 0 && r.Statu != (int)RaffleStatusEnum.Suspended))
-                .Select(r => this.ToObject(r)).ToList();
+                .Select(r => this.ToObject(r)).OrderByDescending(r => r.Id).ToList();
             return new RequestResponseModel()
             {
                 Object = raffles,
