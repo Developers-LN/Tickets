@@ -388,7 +388,6 @@ namespace Tickets.Models.Ticket
             };
         }
 
-
         internal RequestResponseModel Suspend(TicketInvoiceModel model)
         {
             using (var context = new TicketsEntities())
@@ -403,9 +402,54 @@ namespace Tickets.Models.Ticket
                             return new RequestResponseModel()
                             {
                                 Result = false,
-                                Message = "no se encontro esta factura."
+                                Message = "No se encontró esta factura."
                             };
                         }
+                        if (invoice.PaymentStatu == (int)InvoicePaymentStatuEnum.Payed)
+                        {
+                            return new RequestResponseModel()
+                            {
+                                Result = false,
+                                Message = "Esta factura ya fue pagada."
+                            };
+                        }
+                        if (invoice.PaymentStatu == (int)GeneralStatusEnum.Delete)
+                        {
+                            return new RequestResponseModel()
+                            {
+                                Result = false,
+                                Message = "Esta factura ya fue eliminada."
+                            };
+                        }
+
+                        var receiptPayment = context.ReceiptPayments.Where(i => i.InvoiceId == invoice.Id).FirstOrDefault();
+                        if (receiptPayment != null)
+                        {
+                            return new RequestResponseModel()
+                            {
+                                Result = false,
+                                Message = "Esta factura ya tiene pagos realizados"
+                            };
+                        }
+
+                        var invoiceTicket = context.InvoiceTickets.Where(i => i.InvoiceId == invoice.Id).FirstOrDefault();
+                        var ticketNumberAllocationId = 0;
+                        if (invoiceTicket != null)
+                        {
+                            ticketNumberAllocationId = invoiceTicket.TicketNumberAllocationId;
+                            var p = 0;
+                            context.InvoiceTickets.RemoveRange(invoice.InvoiceTickets);
+                            context.SaveChanges();
+                        }
+
+                        var ticketAllocationNumber = context.TicketAllocationNumbers.Where(a => a.Id == ticketNumberAllocationId).FirstOrDefault();
+                        if(ticketAllocationNumber != null)
+                        {
+                            var ticketAllocation = context.TicketAllocations.Where(a => a.Id == ticketAllocationNumber.TicketAllocationId).FirstOrDefault();
+                            ticketAllocation.Statu = (int)AllocationStatuEnum.Created;
+                            context.SaveChanges();
+                        }
+
                         invoice.Statu = (int)GeneralStatusEnum.Delete;
                         invoice.PaymentStatu = (int)InvoicePaymentStatuEnum.Suspended;
 
@@ -428,7 +472,6 @@ namespace Tickets.Models.Ticket
                 Result = true,
                 Message = "Factura suspendida correctamente."
             };
-
         }
     }
 }

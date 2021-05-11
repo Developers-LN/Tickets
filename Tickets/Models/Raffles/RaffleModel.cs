@@ -144,6 +144,7 @@ namespace Tickets.Models.Raffles
             var raffles = context.Raffles.AsEnumerable()
                 .Where(r => r.Statu == statu || (statu == 0 && r.Statu != (int)RaffleStatusEnum.Suspended))
                 .Select(r => this.ToObject(r)).OrderByDescending(r => r.Id).ToList();
+
             return new RequestResponseModel()
             {
                 Object = raffles,
@@ -157,6 +158,7 @@ namespace Tickets.Models.Raffles
             var raffles = context.Raffles.AsEnumerable()
                 .Where(r => r.Statu != (int)RaffleStatusEnum.Generated)
                 .Select(r => this.ToObject(r)).ToList();
+
             return new RequestResponseModel()
             {
                 Object = raffles,

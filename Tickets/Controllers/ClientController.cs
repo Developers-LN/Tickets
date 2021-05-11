@@ -212,10 +212,10 @@ namespace Tickets.Controllers
                     using (var context = new TicketsEntities())
                     {
                         client.Statu = (int)ClientStatuEnum.Created;
-                        client.Fax = string.IsNullOrEmpty(client.Fax) ? "NA" : client.Fax;
-                        client.RNC = string.IsNullOrEmpty(client.RNC) ? "NA" : client.RNC;
-                        client.Tradename = string.IsNullOrEmpty(client.Tradename) ? "NA" : client.Tradename;
-                        client.Comment = string.IsNullOrEmpty(client.Comment) ? "NA" : client.Comment;
+                        client.Fax = string.IsNullOrEmpty(client.Fax) ? "N/A" : client.Fax;
+                        client.RNC = string.IsNullOrEmpty(client.RNC) ? "N/A" : client.RNC;
+                        client.Tradename = string.IsNullOrEmpty(client.Tradename) ? "N/A" : client.Tradename;
+                        client.Comment = string.IsNullOrEmpty(client.Comment) ? "N/A" : client.Comment;
                         client.CreateDate = DateTime.Now;
                         client.CreateUser = WebSecurity.CurrentUserId;
                         context.Clients.Add(client);

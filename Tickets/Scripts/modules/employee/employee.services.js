@@ -28,7 +28,6 @@
 	        if (!employee.Gender || employee.Gender == '') {
 	            error += 'Sexo' + isReq;
 	        }
-	       
 	        if (!employee.Province || employee.Province == '') {
 	            error += 'Provincia' + isReq;
 	        }
@@ -44,7 +43,6 @@
 	        if (employee.Email == '') {
 	            error += 'E-Mail' + isReq;
 	        }
-
 	        if (!employee.Department || employee.Department == '') {
 	            error += 'Departamento' + isReq;
 	        }
@@ -56,7 +54,10 @@
 	        }
 	        if (!employee.Statu || employee.Statu == '') {
 	            error += 'Estatus' + isReq;
-	        }
+			}
+			if (!employee.AgencyId || employee.AgencyId == '') {
+				error += 'Agencia' + isReq;
+            }
 	        if (error !== '') {
 	            alertify.showError('Alerta', error);
 	        }

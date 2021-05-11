@@ -75,8 +75,6 @@ namespace Tickets.Controllers
             {
                 try
                 {
-
-
                     if (employee.Id <= 0)
                     {
                         employee.CreateDate = DateTime.Now;
