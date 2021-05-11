@@ -112,7 +112,7 @@
                         decimal totalOther = 0.0m;
 
                         var raffleName = raffle.Name + " - " + raffle.Id;
-                        var invoices = raffle.Invoices.Where(i => i.ClientId == clientId || clientId == 0).AsEnumerable()
+                        var invoices = raffle.Invoices.Where(i => (i.ClientId == clientId || clientId == 0) && i.PaymentStatu != (int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Suspended).AsEnumerable()
                             .GroupBy(g => g.ClientId)
                             .Select(i => new
                             {
