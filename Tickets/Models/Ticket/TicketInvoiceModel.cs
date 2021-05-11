@@ -450,6 +450,7 @@ namespace Tickets.Models.Ticket
                             context.SaveChanges();
                         }
 
+                        invoice.DeleteUser = WebSecurity.CurrentUserId;
                         invoice.Statu = (int)GeneralStatusEnum.Delete;
                         invoice.PaymentStatu = (int)InvoicePaymentStatuEnum.Suspended;
 

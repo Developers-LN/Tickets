@@ -37,6 +37,7 @@ namespace Tickets.Models
         public int PaymentType { get; set; }
         public Nullable<int> InvoiceExpredDay { get; set; }
         public decimal Discount { get; set; }
+        public Nullable<int> DeleteUser { get; set; }
     
         public virtual Agency Agency { get; set; }
         public virtual Client Client { get; set; }

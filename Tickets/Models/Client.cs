@@ -58,6 +58,7 @@ namespace Tickets.Models
         public string AdminDocument { get; set; }
         public decimal Discount { get; set; }
         public decimal PreviousDebt { get; set; }
+        public string ControlNumber { get; set; }
     
         public virtual Catalog Catalog { get; set; }
         public virtual ICollection<OverduelBill> OverduelBills { get; set; }

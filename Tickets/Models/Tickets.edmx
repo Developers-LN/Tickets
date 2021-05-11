@@ -146,6 +146,7 @@
           <Property Name="AdminDocument" Type="text" />
           <Property Name="Discount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="PreviousDebt" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ControlNumber" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Costos">
           <Key>
@@ -256,6 +257,7 @@
           <Property Name="PaymentType" Type="int" Nullable="false" />
           <Property Name="InvoiceExpredDay" Type="int" />
           <Property Name="Discount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="DeleteUser" Type="int" />
         </EntityType>
         <EntityType Name="InvoiceDetails">
           <Key>
@@ -3063,6 +3065,7 @@
           <NavigationProperty Name="TicketAllocations" Relationship="TicketsModel.FK_TicketAllocation_Client1" FromRole="Client" ToRole="TicketAllocation" />
           <NavigationProperty Name="TicketReturns" Relationship="TicketsModel.FK_TicketReturn_Client" FromRole="Client" ToRole="TicketReturn" />
           <NavigationProperty Name="TicketSuscribers" Relationship="TicketsModel.FK_TicketSuscriber_Client" FromRole="Client" ToRole="TicketSuscriber" />
+          <Property Name="ControlNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="DistTown">
           <Key>
@@ -3181,6 +3184,7 @@
           <NavigationProperty Name="InvoiceTickets" Relationship="TicketsModel.FK_InvoiceTicket_Invoice" FromRole="Invoice" ToRole="InvoiceTicket" />
           <NavigationProperty Name="ReceiptPayments" Relationship="TicketsModel.FK_ReceiptPayment_Invoice" FromRole="Invoice" ToRole="ReceiptPayment" />
           <NavigationProperty Name="ReceivablePayments" Relationship="TicketsModel.FK_ReceivablePayment_Invoice" FromRole="Invoice" ToRole="ReceivablePayment" />
+          <Property Name="DeleteUser" Type="Int32" />
         </EntityType>
         <EntityType Name="InvoiceDetail">
           <Key>
@@ -5128,6 +5132,7 @@
           <EntitySetMapping Name="Clients">
             <EntityTypeMapping TypeName="TicketsModel.Client">
               <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="ControlNumber" ColumnName="ControlNumber" />
                 <ScalarProperty Name="PreviousDebt" ColumnName="PreviousDebt" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />
                 <ScalarProperty Name="AdminDocument" ColumnName="AdminDocument" />
@@ -5239,6 +5244,7 @@
           <EntitySetMapping Name="Invoices">
             <EntityTypeMapping TypeName="TicketsModel.Invoice">
               <MappingFragment StoreEntitySet="Invoice">
+                <ScalarProperty Name="DeleteUser" ColumnName="DeleteUser" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />
                 <ScalarProperty Name="InvoiceExpredDay" ColumnName="InvoiceExpredDay" />
                 <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />

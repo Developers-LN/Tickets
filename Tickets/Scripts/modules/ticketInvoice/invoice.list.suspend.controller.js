@@ -94,7 +94,7 @@
 
         $scope.suspendInvoice = function (invoice) {
             // confirm dialog
-            alertify.confirm("&iquest;Desea borrar esta factura?", function (e) {
+            alertify.confirm("&iquest;Desea anular esta factura?", function (e) {
                 if (e) {
                     window.loading.show();
                     $.ajax({
