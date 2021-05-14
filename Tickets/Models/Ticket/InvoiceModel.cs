@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Tickets.Models.Ticket
 {
-
     public class InvoiceModel
     {
         public int RaffleId { get; set; }

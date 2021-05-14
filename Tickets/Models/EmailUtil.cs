@@ -25,7 +25,7 @@ namespace Tickets.Models
             ///  SendReports();
         }
 
-        private static Timer emailTimer = new Timer();
+        private static readonly Timer emailTimer = new Timer();
         //intervalo de tiempo en el cual se ejecutara la tarea
         // private static readonly double executeTime = 1000 * 60 * 60 * 12;
         private static readonly double executeTime = 1000 * 60 * 60 * 12;
@@ -37,15 +37,15 @@ namespace Tickets.Models
         private static readonly string emailHost = System.Web.Configuration.WebConfigurationManager.AppSettings["CurrentEmailConfiguredHost"];
         private static readonly bool emailSsl = Convert.ToBoolean(System.Web.Configuration.WebConfigurationManager.AppSettings["CurrentEmailConfiguredSsl"]);
         private static readonly int emailTimeOut = Convert.ToInt32(System.Web.Configuration.WebConfigurationManager.AppSettings["CurrentEmailConfiguredTimeOut"]);
-        public static void startTimers()
+        public static void StartTimers()
         {
-            emailTimer.Elapsed += new ElapsedEventHandler(programatedTimer);
+            emailTimer.Elapsed += new ElapsedEventHandler(ProgramatedTimer);
             emailTimer.Enabled = true;
             emailTimer.Interval = executeTime;
             emailTimer.Start();
         }
 
-        public static void programatedTimer(Object obj, ElapsedEventArgs e)
+        public static void ProgramatedTimer(Object obj, ElapsedEventArgs e)
         {
             emailTimer.AutoReset = true;
             int currentHour = ((DateTime.Now.Hour + 11) % 12) + 1;
@@ -101,8 +101,10 @@ namespace Tickets.Models
                     EmailAddress = o.Email
                 });
 
-                MailMessage mail = new MailMessage();
-                mail.From = new MailAddress(emailWhoSend, displayNameFrom);
+                MailMessage mail = new MailMessage
+                {
+                    From = new MailAddress(emailWhoSend, displayNameFrom)
+                };
                 foreach (var to in sentTo)
                 {
                     try
@@ -168,7 +170,7 @@ namespace Tickets.Models
 
 
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
 
                 }
@@ -209,8 +211,10 @@ namespace Tickets.Models
                     EmailAddress = o.Email
                 });
 
-                MailMessage mail = new MailMessage();
-                mail.From = new MailAddress(emailWhoSend, displayNameFrom);
+                MailMessage mail = new MailMessage
+                {
+                    From = new MailAddress(emailWhoSend, displayNameFrom)
+                };
                 foreach (var to in sentTo)
                 {
                     try
@@ -282,7 +286,7 @@ namespace Tickets.Models
 
 
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
 
                 }
@@ -333,8 +337,10 @@ namespace Tickets.Models
                     EmailAddress = o.Email
                 });
 
-                MailMessage mail = new MailMessage();
-                mail.From = new MailAddress(emailWhoSend, displayNameFrom);
+                MailMessage mail = new MailMessage
+                {
+                    From = new MailAddress(emailWhoSend, displayNameFrom)
+                };
                 foreach (var to in sentTo)
                 {
                     try
@@ -434,7 +440,7 @@ namespace Tickets.Models
 
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
@@ -456,10 +462,23 @@ namespace Tickets.Models
 
         public static void RenderReportToPdf(dynamic model, string viewPath, string awardName, ReportByEmailEnum reportEnum)
         {
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (viewPath is null)
+            {
+                throw new ArgumentNullException(nameof(viewPath));
+            }
+
+            if (awardName is null)
+            {
+                throw new ArgumentNullException(nameof(awardName));
+            }
+
             try
             {
-
-
                 //string reportName = string.Format("{0}{1}{2}", awardName, DateTime.Now.Date.ToString("ddMMyyyy"), model.Id + ".pdf");
                 //var st = new StringWriter();
                 //var contextWrapper = new HttpContextWrapper(HttpContext.Current);
@@ -553,7 +572,7 @@ namespace Tickets.Models
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

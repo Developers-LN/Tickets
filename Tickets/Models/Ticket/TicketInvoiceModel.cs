@@ -93,9 +93,9 @@ namespace Tickets.Models.Ticket
         internal TicketInvoiceModel ToObject(Invoice model, bool hasAllocaation = false, bool hasNumber = false)
         {
             var context = new TicketsEntities();
-            int expiredDay = model.InvoiceExpredDay.HasValue ? model.InvoiceExpredDay.Value : 14;
+            int expiredDay = model.InvoiceExpredDay ?? 14;
             var expiredDate = model.InvoiceDate.AddDays(expiredDay);
-            int productType = 5821; // model.InvoiceTickets.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Type;
+            //int productType = 5821; // model.InvoiceTickets.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Type;
             var invoice = new TicketInvoiceModel()
             {
                 Id = model.Id,
@@ -209,21 +209,21 @@ namespace Tickets.Models.Ticket
                                                        it.PricePerFraction
                                                    }).AsEnumerable().GroupBy(i => i.Id).Select(ig => new
                                                    {
-                                                       ClientId = ig.FirstOrDefault().ClientId,
-                                                       Condition = ig.FirstOrDefault().Condition,
-                                                       Id = ig.FirstOrDefault().Id,
-                                                       PaymentStatu = ig.FirstOrDefault().PaymentStatu,
-                                                       InvoiceDate = ig.FirstOrDefault().InvoiceDate,
-                                                       InvoiceExpredDay = ig.FirstOrDefault().InvoiceExpredDay,
+                                                       ig.FirstOrDefault().ClientId,
+                                                       ig.FirstOrDefault().Condition,
+                                                       ig.FirstOrDefault().Id,
+                                                       ig.FirstOrDefault().PaymentStatu,
+                                                       ig.FirstOrDefault().InvoiceDate,
+                                                       ig.FirstOrDefault().InvoiceExpredDay,
                                                        InvoiceTickets = ig.Select(it => new
                                                        {
-                                                           Quantity = it.Quantity,
-                                                           PricePerFraction = it.PricePerFraction
+                                                           it.Quantity,
+                                                           it.PricePerFraction
                                                        }).ToList()
                                                    }).ToList();
 
 
-                            if (expiredInvoices.Where(i => DateTime.Now > i.InvoiceDate.AddDays(i.InvoiceExpredDay.HasValue ? i.InvoiceExpredDay.Value : 45)).ToList().Count > 0)
+                            if (expiredInvoices.Where(i => DateTime.Now > i.InvoiceDate.AddDays(i.InvoiceExpredDay ?? 45)).ToList().Count > 0)
                             {
                                 tx.Rollback();
                                 return new RequestResponseModel()
@@ -249,14 +249,14 @@ namespace Tickets.Models.Ticket
                                                 nc_totalCash = nc == null ? 0 : nc.TotalCash
                                             }).AsEnumerable().GroupBy(rp => rp.Id).Select(rpg => new
                                             {
-                                                Id = rpg.FirstOrDefault().Id,
-                                                InvoiceId = rpg.FirstOrDefault().InvoiceId,
-                                                TotalCash = rpg.FirstOrDefault().TotalCash,
-                                                TotalCheck = rpg.FirstOrDefault().TotalCheck,
-                                                TotalCredit = rpg.FirstOrDefault().TotalCredit,
+                                                rpg.FirstOrDefault().Id,
+                                                rpg.FirstOrDefault().InvoiceId,
+                                                rpg.FirstOrDefault().TotalCash,
+                                                rpg.FirstOrDefault().TotalCheck,
+                                                rpg.FirstOrDefault().TotalCredit,
                                                 NoteCreditReceiptPayments = rpg.Select(nc => new
                                                 {
-                                                    TotalCash = nc.TotalCash
+                                                    nc.TotalCash
                                                 }).ToList()
                                             }).ToList();
                             foreach (var expiredInvoice in expiredInvoices)
@@ -274,13 +274,13 @@ namespace Tickets.Models.Ticket
                                     rp.TotalCash,
                                     rp.TotalCheck,
                                     rp.TotalCredit,
-                                    NoteCreditReceiptPayments = rp.NoteCreditReceiptPayments
+                                    rp.NoteCreditReceiptPayments
                                 }).Where(r => r.InvoiceId == expiredInvoice.Id).ToList();
 
                                 receiptPayments.ForEach(r => r.NoteCreditReceiptPayments.ToList().ForEach(rn => totalCreditNote += rn.TotalCash));
 
                                 receiptPayments.Select(r => r.TotalCash + r.TotalCheck + r.TotalCredit).ToList().ForEach(t => totalRequestCash += t);
-                                totalInvoiceData = totalInvoiceData - (totalCreditNote + totalRequestCash);
+                                totalInvoiceData -= (totalCreditNote + totalRequestCash);
                             }
 
                             var allocation_ids = model.TicketAllocations.Select(a => a.Id).ToArray(); ;
@@ -437,16 +437,15 @@ namespace Tickets.Models.Ticket
                         if (invoiceTicket != null)
                         {
                             ticketNumberAllocationId = invoiceTicket.TicketNumberAllocationId;
-                            var p = 0;
                             context.InvoiceTickets.RemoveRange(invoice.InvoiceTickets);
                             context.SaveChanges();
                         }
 
                         var ticketAllocationNumber = context.TicketAllocationNumbers.Where(a => a.Id == ticketNumberAllocationId).FirstOrDefault();
-                        if(ticketAllocationNumber != null)
+                        if (ticketAllocationNumber != null)
                         {
                             var ticketAllocation = context.TicketAllocations.Where(a => a.Id == ticketAllocationNumber.TicketAllocationId).FirstOrDefault();
-                            ticketAllocation.Statu = (int)AllocationStatuEnum.Created;
+                            ticketAllocation.Statu = (int)AllocationStatuEnum.Review;
                             context.SaveChanges();
                         }
 

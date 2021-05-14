@@ -170,13 +170,13 @@ namespace Tickets.Controllers
 
                         invoiceDetailsObject = new
                         {
-                            Id = invoiceDetail.Id,
+                            invoiceDetail.Id,
                             CreateDate = DateTime.Now,
                             CreateUser = WebSecurity.CurrentUserId,
-                            EndDate = model.EndDate,
-                            RaffleId = model.RaffleId,
-                            ClientId = model.ClientId,
-                            StartDate = model.StartDate
+                            model.EndDate,
+                            model.RaffleId,
+                            model.ClientId,
+                            model.StartDate
                         };
 
                         tx.Commit();
@@ -551,7 +551,7 @@ namespace Tickets.Controllers
                                 else
                                 {
                                     noteCreditTotalCash = totalCash;
-                                    noteCredit.TotalRest = noteCredit.TotalRest - totalCash;
+                                    noteCredit.TotalRest -= totalCash;
                                     totalCash = 0;
                                 }
                                 var cp = new NoteCreditReceiptPayment()
@@ -668,7 +668,7 @@ namespace Tickets.Controllers
             return new JsonResult() { Data = new { invoices, clients, raffles }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        private bool VerifyReceivable(Invoice invoice)
+/*        private bool VerifyReceivable(Invoice invoice)
         {
             var totalInvoiceTicketPrice = 0.0M;
             foreach (var ticketPrice in invoice.InvoiceTickets.Select(i => i.Quantity * i.PricePerFraction))
@@ -681,7 +681,7 @@ namespace Tickets.Controllers
                 totalRequestCash += requestCash;
             }
             return totalInvoiceTicketPrice > totalRequestCash;
-        }
+        }*/
 
         public InvoicePaymentModel GetPaymentCash(Invoice invoice)
         {
@@ -784,7 +784,7 @@ namespace Tickets.Controllers
             };
         }
 
-        private object InvoiceTicketsToObject(Invoice invoice)
+/*        private object InvoiceTicketsToObject(Invoice invoice)
         {
             var context = new TicketsEntities();
             return new
@@ -816,8 +816,7 @@ namespace Tickets.Controllers
                     TicketAllocationNumber = i.TicketAllocationNumber.Number
                 })
             };
-        }
-
+        }*/
 
         #region Credit Note
         //
@@ -859,7 +858,7 @@ namespace Tickets.Controllers
                     creditNote = new
                     {
                         Id = 0,
-                        ClientId = identifyBach.ClientId,
+                        identifyBach.ClientId,
                         TotalCash = ""
                     };
                 }
@@ -985,10 +984,10 @@ namespace Tickets.Controllers
                 creditNotes = context.NoteCredits.AsEnumerable().OrderByDescending(n => n.Id).Select(c => new
                 {
                     c.Id,
-                    ClientId = c.ClientId,
+                    c.ClientId,
                     ClientDesc = c.Client.Name,
                     NoteDate = c.NoteDate.ToShortDateString(),
-                    Concepts = c.Concepts,
+                    c.Concepts,
                     c.TotalCash,
                     c.TotalRest
                 }).ToList<object>();
@@ -998,7 +997,7 @@ namespace Tickets.Controllers
                 creditNotes = context.NoteCredits.AsEnumerable().OrderByDescending(n => n.Id).Where(c => c.ClientId == clientId).Select(c => new
                 {
                     c.Id,
-                    ClientId = c.ClientId,
+                    c.ClientId,
                     ClientDesc = c.Client.Name,
                     NoteDate = c.NoteDate.ToShortDateString(),
                     c.TotalCash,

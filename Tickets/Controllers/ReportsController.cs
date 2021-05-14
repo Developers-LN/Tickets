@@ -1114,10 +1114,12 @@ namespace Tickets.Controllers
                 i.RaffleId == raffleId
                 && (i.ClientId == clientId || clientId == 0)
             ).ToList();
+
             if (allocations.Count == 0)
             {
                 return RedirectToAction("Error", new { message = "No se encontraron asignaciones para los criterios seleccionados." });
             }
+
             return View(allocations);
         }
 

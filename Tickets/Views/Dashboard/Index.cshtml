@@ -3,4 +3,71 @@
     ViewBag.Title = "Inicio";
 }
 
-<div> Bienvenidos al Sistema de Billetes, escoja una opción del Menú </div>
+<div class="col-lg-12 no-padder" ng-controller="DashboardController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="col-lg-6 col-sm-12">
+            <div class="panel panel-success">
+                <div class="panel-heading col-lg-12">
+                    <div class="col-lg-6 text-left no-padder"><h4>Producción de Billetes por Sorteo</h4></div>
+                    <div class="col-lg-6 text-right no-padder">
+                        <select class="form-control" ng-model="RaffleId" ng-change="updateProduction()">
+                            <option ng-repeat="raffle in raffles" value="{{raffle.value}}" ng-selected="raffle.value == RaffleId">{{raffle.value}} - {{raffle.text}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="col-lg-12 no-padder" style="margin-top: 15px;">
+                        <div class="text-center" ng-show="productionIsLoaing == true">
+                            <span>Cargando los datos...</span><br />
+                            <img style="width: 32px; height: 32px;" src="~/Images/loader.gif" />
+                        </div>
+                        <div class="col-lg-12 no-padder">
+                            <div class="col-lg-7">
+                                <div id="canvas-holder">
+                                    <canvas id="chart-area" style="width: 100%; height: 100%" />
+                                </div>
+                            </div>
+                            <div class="col-lg-5 no-padder">
+                                <div class="col-lg-12 no-padder" ng-repeat="production in productions">
+                                    <span style="width: 16px; height: 16px; display: inline-block; background-color:{{production.color}}"></span> {{production.label}} {{parseNumber(production.value)}}<br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+            <div class="panel panel-success">
+                <div class="panel-heading col-lg-12">
+                    <div class="col-lg-6 text-left no-padder"><h4>Asignaciones por Sorteo</h4></div>
+                    <div class="col-lg-6 text-right no-padder">
+                        <select class="form-control " ng-model="AllocateRaffleId" ng-change="updateAllocate()">
+                            <option ng-repeat="raffle in raffles" value="{{raffle.value}}" ng-selected="raffle.value == AllocateRaffleId">{{raffle.value}} - {{raffle.text}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="col-lg-12 no-padder" style="margin-top: 15px;">
+                        <div class="text-center" ng-show="allocationsIsLoaing == true">
+                            <span>Cargando los datos...</span><br />
+                            <img style="width: 32px; height: 32px;" src="~/Images/loader.gif" />
+                        </div>
+                        <div class="col-lg-12 no-padder">
+                            <div class="col-lg-7">
+                                <div id="canvas-holder">
+                                    <canvas id="chart-area-allocations" style="width: 100%; height: 100%" />
+                                </div>
+                            </div>
+                            <div class="col-lg-5 no-padder">
+                                <div class="col-lg-12 no-padder" ng-repeat="allocation in allocations">
+                                    <span style="width: 16px; height: 16px; display: inline-block; background-color:{{allocation.color}}"></span> {{allocation.label}} {{parseNumber(allocation.value)}}<br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

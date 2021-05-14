@@ -116,25 +116,25 @@ namespace Tickets.Models.Ticket
             return allocations;
         }
 
-        private object TicketAllocationMainToObject(TicketAllocation ticket)
-        {
-            var context = new TicketsEntities();
-            return new
-            {
-                ticket.Id,
-                ticket.RaffleId,
-                RaffleDesc = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).Name,
-                RaffleDate = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).DateSolteo.ToUnixTime(),
-                ticket.ClientId,
-                ClientDesc = context.Clients.FirstOrDefault(c => c.Id == ticket.ClientId).Name,
-                FractionFrom = ticket.TicketAllocationNumbers.Count > 0 ? ticket.TicketAllocationNumbers.FirstOrDefault().FractionFrom : 0,
-                FractionTo = ticket.TicketAllocationNumbers.Count > 0 ? ticket.TicketAllocationNumbers.FirstOrDefault().FractionTo : 0,
-                CreateDate = ticket.CreateDate.ToUnixTime(),
-                ticket.CreateUser,
-                ticket.Statu,
-                CraeteuserDesc = context.Users.FirstOrDefault(u => u.Id == ticket.CreateUser).Name
-            };
-        }
+        /*        private object TicketAllocationMainToObject(TicketAllocation ticket)
+                {
+                    var context = new TicketsEntities();
+                    return new
+                    {
+                        ticket.Id,
+                        ticket.RaffleId,
+                        RaffleDesc = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).Name,
+                        RaffleDate = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).DateSolteo.ToUnixTime(),
+                        ticket.ClientId,
+                        ClientDesc = context.Clients.FirstOrDefault(c => c.Id == ticket.ClientId).Name,
+                        FractionFrom = ticket.TicketAllocationNumbers.Count > 0 ? ticket.TicketAllocationNumbers.FirstOrDefault().FractionFrom : 0,
+                        FractionTo = ticket.TicketAllocationNumbers.Count > 0 ? ticket.TicketAllocationNumbers.FirstOrDefault().FractionTo : 0,
+                        CreateDate = ticket.CreateDate.ToUnixTime(),
+                        ticket.CreateUser,
+                        ticket.Statu,
+                        CraeteuserDesc = context.Users.FirstOrDefault(u => u.Id == ticket.CreateUser).Name
+                    };
+                }*/
 
         public object TicketAllocationForInvoiceToObject(TicketAllocation ticket)
         {
@@ -192,11 +192,11 @@ namespace Tickets.Models.Ticket
                     t.CreateUser,
                     CraeteuserDesc = context.Users.FirstOrDefault(u => u.Id == t.CreateUser).Name,
                     t.Invoiced,
-                    FractionFrom = t.FractionFrom,
-                    FractionTo = t.FractionTo,
+                    t.FractionFrom,
+                    t.FractionTo,
                     t.Printed,
                     t.ControlNumber,
-                    TicketAllocationId = t.TicketAllocationId
+                    t.TicketAllocationId
                 })
             };
         }
@@ -454,7 +454,7 @@ namespace Tickets.Models.Ticket
                             context.SaveChanges();
 
                             List<TicketAllocationNumber> ticketAllocations = new List<TicketAllocationNumber>();
-                            
+
                             foreach (var number in model.TicketAllocationNumbers)
                             {
                                 var ticket = new TicketAllocationNumber()

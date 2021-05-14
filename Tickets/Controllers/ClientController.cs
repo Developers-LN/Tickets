@@ -268,7 +268,7 @@ namespace Tickets.Controllers
                     }
 
                 }
-                catch (Exception ex)
+                catch (Exception)
                 { }
                 Utils.SaveLog(WebSecurity.CurrentUserName, client.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Cliente", ClientToObject(client));
             }

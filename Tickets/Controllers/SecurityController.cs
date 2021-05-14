@@ -18,7 +18,7 @@ namespace Tickets.Controllers
     [Authorize]
     public class SecurityController : Controller
     {
-        private static string __RETURN_URL__ = "__RETURN_URL__";
+        //private static string __RETURN_URL__ = "__RETURN_URL__";
 
         // GET: Security/ChangePassword
         [HttpGet]
@@ -125,7 +125,7 @@ namespace Tickets.Controllers
             {
                 Data = new
                 {
-                    Data = result.Data,
+                    result.Data,
                     Url = query
                 }
             };
@@ -208,12 +208,12 @@ namespace Tickets.Controllers
             var result = System.Web.Security.Membership.ValidateUser(user.Name, password);
             if (result == true)
             {
-                return new JsonResult() { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { result = result, message = "" } };
+                return new JsonResult() { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { result, message = "" } };
             }
             else
             {
 
-                return new JsonResult() { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { result = result, message = "Esta no es la contraseña del usuario " + WebSecurity.CurrentUserName } };
+                return new JsonResult() { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { result, message = "Esta no es la contraseña del usuario " + WebSecurity.CurrentUserName } };
             }
         }
 
@@ -246,7 +246,7 @@ namespace Tickets.Controllers
                 add = m.Where(s => s.CanAdd).Any(),
                 search = m.Where(s => s.CanSearch).Any()
             });
-            return JsonConvert.SerializeObject(new { name = userName, result = true, modules = modules });
+            return JsonConvert.SerializeObject(new { name = userName, result = true, modules });
         }
 
 
@@ -256,6 +256,11 @@ namespace Tickets.Controllers
         [Authorize]
         public JsonResult LogOff(LoginModel model)
         {
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             WebSecurity.Logout();
             return new JsonResult() { Data = true };
         }
@@ -295,14 +300,14 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var users = context.Users.Select(u => new
             {
-                Name = u.Name,
+                u.Name,
                 StatuDesc = u.Catalog.NameDetail,
-                Statu = u.Statu,
+                u.Statu,
                 u.EmpleadoId,
                 EmpleadoDesc = u.EmpleadoId.HasValue ? context.Employees.Where(e => e.Id == u.EmpleadoId).Select(e => e.Name + " " + e.LastName).FirstOrDefault() : "",
                 Password = "",
                 PasswordRepeat = "",
-                Id = u.Id
+                u.Id
             }).ToList();
             var employes = context.Employees.Select(e => new
             {
@@ -330,7 +335,7 @@ namespace Tickets.Controllers
             var rols = context.webpages_Roles.Select(r => new
             {
                 Name = r.RoleName,
-                Description = r.Description,
+                r.Description,
                 Statu = r.Users.Any(u => u.Id == userId) ? "Asignado" : "No asignado",
                 Id = r.RoleId
             }).ToList();
@@ -416,9 +421,9 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var users = context.webpages_Roles.Select(u => new
             {
-                RoleName = u.RoleName,
-                Description = u.Description,
-                RoleId = u.RoleId
+                u.RoleName,
+                u.Description,
+                u.RoleId
             }).ToList();
             context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Roles");
             return new JsonResult() { Data = users, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -469,9 +474,9 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var users = context.Users.Select(u => new
             {
-                Name = u.Name,
+                u.Name,
                 Statu = u.webpages_Roles.Any(r => r.RoleId == rolId) ? "Asignado" : "No asignado",
-                Id = u.Id
+                u.Id
             }).ToList();
             context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de usuario para un rol");
             return new JsonResult() { Data = users, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -493,8 +498,8 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var modules = context.Modules.Select(u => new
             {
-                Name = u.Name,
-                Description = u.Description,
+                u.Name,
+                u.Description,
                 CanView = u.Rol_Module.Any(r => r.RolId == rolId && r.CanView),
                 CanEdit = u.Rol_Module.Any(r => r.RolId == rolId && r.CanEdit),
                 CanDelete = u.Rol_Module.Any(r => r.RolId == rolId && r.CanDelete),
@@ -505,7 +510,7 @@ namespace Tickets.Controllers
                 Delete = u.CanDelete,
                 Add = u.CanAdd,
                 Search = u.CanSearch,
-                Id = u.Id
+                u.Id
             }).ToList();
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Accesos para un rol");
             return new JsonResult() { Data = modules, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -564,9 +569,9 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var offices = context.Agencies.Select(o => new
             {
-                Id = o.Id,
-                Name = o.Name,
-                Description = o.Description,
+                o.Id,
+                o.Name,
+                o.Description,
                 Statu = o.webpages_Roles.Any(r => r.RoleId == rolId) ? "Asignada" : "No asignada"
             }).ToList();
             context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de sucursales para un rol");
@@ -653,14 +658,14 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var modules = context.Modules.Select(u => new
             {
-                Name = u.Name,
-                Description = u.Description,
-                CanEdit = u.CanEdit,
-                CanDelete = u.CanDelete,
-                CanAdd = u.CanAdd,
-                CanView = u.CanView,
-                CanSearch = u.CanSearch,
-                Id = u.Id
+                u.Name,
+                u.Description,
+                u.CanEdit,
+                u.CanDelete,
+                u.CanAdd,
+                u.CanView,
+                u.CanSearch,
+                u.Id
             }).ToList();
             context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de modulo");
 

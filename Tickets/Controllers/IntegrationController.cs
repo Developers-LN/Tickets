@@ -347,7 +347,7 @@ namespace Tickets.Controllers
                          {
                              Number = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)a.ControlNumber),
                              FractionFrom = 1,
-                             FractionTo = FractionTo,
+                             FractionTo,
                              Award = new
                              {
                                  AwardId = a.Id,

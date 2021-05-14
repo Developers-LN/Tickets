@@ -115,8 +115,8 @@ namespace Tickets.Controllers
             {
                 var identifyBachs = context.IdentifyBaches.Where(b => b.Id == batchNumber).Select(b => new
                 {
-                    Id = b.Id,
-                    RaffleId = b.RaffleId,
+                    b.Id,
+                    b.RaffleId,
                     RaffleDesc = b.Raffle.Name,
                     ClientId = b.RaffleId,
                     ClientDesc = b.Client.Name,
