@@ -167,7 +167,7 @@
                                 <span>Anular Factura</span>
                                 <span class="ripple"></span></a>
                         </li>
-                        <li ui-sref-active="active" style="display:none !important;" ng-show="verifyCanView('app.cashOpen')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.cashOpen')">
                             <a ui-sref="app.cashOpen" title="Full Height">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Abrir Caja</span>
@@ -461,6 +461,13 @@
                                 <span class="ripple"></span>
                             </a>
                         </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.cashReports')">
+                            <a ui-sref="app.cashReports" title="Reportes de caja">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Reporte de caja</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.dashboardRaffleReport')">
                             <a ui-sref="app.dashboardRaffleReport" title="Reporte de Sorteo Dashboard">
                                 <em class="sidebar-item-icon"></em>
@@ -475,7 +482,7 @@
                                 <span class="ripple"></span>
                             </a>
                         </li>
-                        
+
                         <li ui-sref-active="active" ng-show="verifyCanView('app.prospectAllProspect')">
                             <a ui-sref="app.prospectAllProspect" title="Prospectos">
                                 <em class="sidebar-item-icon"></em>

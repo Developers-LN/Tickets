@@ -175,7 +175,7 @@ namespace Tickets.Models.Raffles
             {
                 r.Id,
                 r.Name,
-                Production = r.Prospect.Production,
+                r.Prospect.Production,
                 ProspectName = r.Prospect.Name,
                 FractionCount = r.Prospect.LeafFraction * r.Prospect.LeafNumber
             }).ToList();
@@ -228,8 +228,8 @@ namespace Tickets.Models.Raffles
                     r.Id,
                     r.AwardId,
                     AwardName = r.Award.Name,
-                    ControlNumber = r.ControlNumber,
-                    Fraction = r.Fraction
+                    r.ControlNumber,
+                    r.Fraction
                 })
             };
             return raffleData;
@@ -254,9 +254,11 @@ namespace Tickets.Models.Raffles
                         }
                         if (model.Id <= 0)
                         {
-                            raffle = new Raffle();
-                            raffle.CreateDate = DateTime.Now;
-                            raffle.CreateUser = WebSecurity.CurrentUserId;
+                            raffle = new Raffle
+                            {
+                                CreateDate = DateTime.Now,
+                                CreateUser = WebSecurity.CurrentUserId
+                            };
                         }
                         else
                         {
@@ -285,9 +287,9 @@ namespace Tickets.Models.Raffles
 
                             var suscribers = context.TicketSuscribers.Where(s => s.Statu == (int)GeneralStatusEnum.Active).Select(a => new
                             {
-                                ClientId = a.ClientId,
-                                FractionFrom = a.FractionFrom,
-                                FractionTo = a.FractionTo,
+                                a.ClientId,
+                                a.FractionFrom,
+                                a.FractionTo,
                                 Numbers = a.TicketSuscriberNumbers
                             }).ToList();
 

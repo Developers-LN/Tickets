@@ -7,6 +7,11 @@ namespace Tickets.Models.Clients
     {
         internal ClientModel ToObject(Client client)
         {
+            if (client is null)
+            {
+                throw new System.ArgumentNullException(nameof(client));
+            }
+
             var model = new ClientModel()
             {
             };

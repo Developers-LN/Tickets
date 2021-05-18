@@ -15,6 +15,7 @@
             userId: undefined,
             raffleId: undefined
         };
+
         $scope.userList = function (userId, raffleId) {
             window.loading.show();
             $.ajax({
@@ -43,6 +44,5 @@
         $scope.PrintReport = function () {
             window.open("Reports/GetCashReport?userId=" + $scope.cash.userId + "&raffleId=" + $scope.cash.raffleId);
         }
-
     }
 })();

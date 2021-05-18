@@ -264,8 +264,10 @@ namespace Tickets.Controllers
                 Raffle raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
                 var stringHtml = RenderRazorViewToString("GenerarRaffle", raffle);
 
-                var htmlToImageConv = new NReco.ImageGenerator.HtmlToImageConverter();
-                htmlToImageConv.Zoom = 5.0f;
+                var htmlToImageConv = new NReco.ImageGenerator.HtmlToImageConverter
+                {
+                    Zoom = 5.0f
+                };
                 var bytes = htmlToImageConv.GenerateImage(stringHtml, ImageFormat.Jpeg.ToString());
 
                 Image img = System.Drawing.Image.FromStream(new MemoryStream(bytes));
@@ -729,6 +731,7 @@ namespace Tickets.Controllers
                    userId == p.CreateUser && raffleId == p.IdentifyBach.RaffleId
                     ).Any()
                 ).ToList();
+
             if (identifyBatchs.Count <= 0)
             {
                 return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo #" + raffleId + "." });

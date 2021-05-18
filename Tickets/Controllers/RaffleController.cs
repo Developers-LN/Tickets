@@ -94,8 +94,8 @@ namespace Tickets.Controllers
                         {
                             CreateDate = DateTime.Now,
                             CreateUser = WebSecurity.CurrentUserId,
-                            Note = open.Note,
-                            RaffleId = open.RaffleId,
+                            open.Note,
+                            open.RaffleId,
                             NewReturnedDate = open.EndReturnedDate,
                             ReturnedDate = endDate
                         };

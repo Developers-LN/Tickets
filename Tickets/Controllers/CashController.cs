@@ -200,11 +200,10 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
 
-            var clients = context.Clients.Where(c => c.Statu == (int)ClientStatuEnum.Approbed).Select(r => new
+            var users = context.Users.Where(u => u.Statu == (int)UserStatusEnum.Active).Select(r => new
             {
                 value = r.Id,
-                text = r.Name
-
+                text = r.Employee.Name + " " + r.Employee.LastName
             }).ToList();
 
             var raffles = context.Raffles.Select(r => new
@@ -213,7 +212,7 @@ namespace Tickets.Controllers
                 text = r.Name
             }).ToList();
 
-            return new JsonResult() { Data = new { clients, raffles }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new JsonResult() { Data = new { users, raffles }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
 

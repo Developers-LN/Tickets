@@ -26,7 +26,7 @@ namespace Tickets.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("getRaffleListSP")]
-        public RequestResponseModel getRaffleListSP()
+        public RequestResponseModel GetRaffleListSP()
         {
             var response = new RaffleModel().GetRaffleListSP();
             return response;
@@ -138,6 +138,11 @@ namespace Tickets.Controllers
         [ActionName("getActive")]
         public RequestResponseModel GetActive(RaffleModel model)
         {
+            if (model is null)
+            {
+                throw new System.ArgumentNullException(nameof(model));
+            }
+
             var response = new RaffleModel().GetActive();
             return response;
         }

@@ -432,21 +432,28 @@ namespace Tickets.Models.Ticket
                             };
                         }
 
-                        var invoiceTicket = context.InvoiceTickets.Where(i => i.InvoiceId == invoice.Id).FirstOrDefault();
-                        var ticketNumberAllocationId = 0;
+                        var AllocationList = (from it in context.InvoiceTickets
+                                              join tan in context.TicketAllocationNumbers on it.TicketNumberAllocationId equals tan.Id
+                                              join ta in context.TicketAllocations on tan.TicketAllocationId equals ta.Id
+                                              where it.InvoiceId == invoice.Id
+                                              group ta by ta.Id into tal
+                                              select new { id = tal.Key }).ToList();
+
+                        var invoiceTicket = context.InvoiceTickets.Where(i => i.InvoiceId == invoice.Id).ToList();
                         if (invoiceTicket != null)
                         {
-                            ticketNumberAllocationId = invoiceTicket.TicketNumberAllocationId;
                             context.InvoiceTickets.RemoveRange(invoice.InvoiceTickets);
                             context.SaveChanges();
                         }
 
-                        var ticketAllocationNumber = context.TicketAllocationNumbers.Where(a => a.Id == ticketNumberAllocationId).FirstOrDefault();
-                        if (ticketAllocationNumber != null)
+                        if (AllocationList != null)
                         {
-                            var ticketAllocation = context.TicketAllocations.Where(a => a.Id == ticketAllocationNumber.TicketAllocationId).FirstOrDefault();
-                            ticketAllocation.Statu = (int)AllocationStatuEnum.Review;
-                            context.SaveChanges();
+                            foreach (var allocationList in AllocationList)
+                            {
+                                var Allocation = context.TicketAllocations.Where(a => a.Id == allocationList.id).FirstOrDefault();
+                                Allocation.Statu = (int)AllocationStatuEnum.Review;
+                                context.SaveChanges();
+                            }
                         }
 
                         invoice.DeleteUser = WebSecurity.CurrentUserId;
