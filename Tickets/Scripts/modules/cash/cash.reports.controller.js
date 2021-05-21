@@ -13,20 +13,21 @@
     function CashReportsController($scope, $state, $rootScope, $stateParams) {
         $scope.cash = {
             userId: undefined,
-            raffleId: undefined
+/*            raffleId: undefined,*/
+            fechaPago: undefined
         };
 
-        $scope.userList = function (userId, raffleId) {
+        $scope.userList = function (userId/*, raffleId*/) {
             window.loading.show();
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                url: 'Cash/CashReportData?userId=' + userId + "&raffleId=" + raffleId,
+                url: 'Cash/CashReportData',
                 success: function (data) {
                     window.loading.hide();
-                    if (userId <= 0 || raffleId <= 0) {
+                    if (userId <= 0 /*|| raffleId <= 0*/) {
                         $scope.users = data.users;
-                        $scope.raffles = data.raffles;
+/*                        $scope.raffles = data.raffles;*/
                     }
                     $rootScope.createSelect2();
                     $rootScope.destroyDataTable();
@@ -42,7 +43,12 @@
         $scope.userList(0);
 
         $scope.PrintReport = function () {
-            window.open("Reports/GetCashReport?userId=" + $scope.cash.userId + "&raffleId=" + $scope.cash.raffleId);
+            function zero(n) {
+                return (n > 9 ? '' : '0') + n;
+            }
+            var FechaSelect = $scope.cash.fechaPago;
+            var FechaConvert = FechaSelect.getFullYear() + "-" + zero(FechaSelect.getMonth() + 1) + "-" + zero(FechaSelect.getDate());
+            window.open("Reports/GetCashReport?userId=" + $scope.cash.userId + "&Fecha=" + FechaConvert);
         }
     }
 })();

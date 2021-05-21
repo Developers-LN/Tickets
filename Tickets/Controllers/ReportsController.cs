@@ -723,20 +723,23 @@ namespace Tickets.Controllers
         //  GET: Reports/GetCashReport
         [Authorize]
         [HttpGet]
-        public ActionResult GetCashReport(int userId, int raffleId)
+        public ActionResult GetCashReport(int userId, string Fecha)
         {
             var context = new TicketsEntities();
-            var identifyBatchs = context.IdentifyBaches.AsEnumerable().Where(i =>
-                i.IdentifyBachPayments.Where(p =>
-                   userId == p.CreateUser && raffleId == p.IdentifyBach.RaffleId
-                    ).Any()
-                ).ToList();
 
-            if (identifyBatchs.Count <= 0)
+            DateTime FechaConvert = DateTime.Parse(Fecha);
+
+            var receiptPayment = context.ReceiptPayments.Include(i => i.Invoice)
+                .Include(c => c.Client).AsEnumerable()
+                .Where(i => i.CreateUser == userId && i.CreateDate.Date == FechaConvert.Date)
+                .ToList();
+
+            if (receiptPayment.Count <= 0)
             {
-                return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo #" + raffleId + "." });
+                return RedirectToAction("Error", new { message = "No se encontraron pagos de este usuario." });
             }
-            return View(identifyBatchs);
+
+            return View(receiptPayment);
         }
 
         //

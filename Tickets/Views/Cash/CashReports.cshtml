@@ -11,6 +11,16 @@
                 <div class="col-lg-12 m-b-xs no-padder">
                     <div class="col-lg-6 no-padder">
                         <fieldset>
+                            <label class="col-lg-12 control-label-left">Usuarios: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="cash.userId">
+                                    <option ng-repeat="user in users" value="{{user.value}}">{{user.value}} - {{user.text}}</option>
+                                </select>
+                            </div>
+                        </fieldset>
+                    </div>
+@*                    <div class="col-lg-6 no-padder">
+                        <fieldset>
                             <label class="col-lg-12 control-label-left">Sorteos: <span class="color-red">*</span></label>
                             <div class="col-lg-12">
                                 <select class="form-control dropdown-select2" ng-model="cash.raffleId">
@@ -19,14 +29,17 @@
                                 </select>
                             </div>
                         </fieldset>
-                    </div>
+                    </div>*@
                     <div class="col-lg-6 no-padder">
                         <fieldset>
-                            <label class="col-lg-12 control-label-left">Usuarios: <span class="color-red">*</span></label>
-                            <div class="col-lg-12">
-                                <select class="form-control dropdown-select2" ng-model="cash.userId">
-                                    <option ng-repeat="user in users" value="{{user.value}}">{{user.value}} - {{user.text}}</option>
-                                </select>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Fecha: <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="date"
+                                           ng-model="cash.fechaPago"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
                             </div>
                         </fieldset>
                     </div>

@@ -206,15 +206,14 @@ namespace Tickets.Controllers
                 text = r.Employee.Name + " " + r.Employee.LastName
             }).ToList();
 
-            var raffles = context.Raffles.Select(r => new
+/*            var raffles = context.Raffles.Select(r => new
             {
                 value = r.Id,
                 text = r.Name
-            }).ToList();
+            }).ToList();*/
 
-            return new JsonResult() { Data = new { users, raffles }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new JsonResult() { Data = new { users/*, raffles*/ }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
-
 
         //
         // GET: /Cash/CashClose

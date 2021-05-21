@@ -1,4 +1,5 @@
-﻿@model List<Tickets.Models.IdentifyBach>
+﻿@model List<Tickets.Models.ReceiptPayment>
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     ViewBag.Title = "Reporte Caja";
@@ -7,10 +8,10 @@
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
     decimal Total = 0.0m;
-    var user = Model.Count > 0 ? context.Users.AsEnumerable().FirstOrDefault(u => u.Id == Model.FirstOrDefault().IdentifyBachPayments.FirstOrDefault().CreateUser) : null;
+    var user = Model.Count > 0 ? context.Users.AsEnumerable().FirstOrDefault(u => u.Id == Model.FirstOrDefault().CreateUser) : null;
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
-    var raffleId = Model.Count > 0 ? Model.FirstOrDefault().RaffleId: 0;
 }
+
 <style>
     .col-lg-12 {
         width: 100%;
@@ -58,7 +59,7 @@
         </div>
         <div class="col-lg-12 no-padder text-center">
             <h4>
-                <b>REPORTE DE CAJA PARA EL SORTEO NO. @raffleId</b>
+                @*<b>REPORTE DE CAJA PARA EL SORTEO NO. @raffleId</b>*@
             </h4>
         </div>
     </div>
@@ -70,7 +71,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>NO. DE RECIBO</th>
+                        <th>NO. DE FACTURA</th>
                         <th>CLIENTE</th>
                         <th>FECHA</th>
                         <th>SORTEO</th>
@@ -78,25 +79,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var identification in Model)
+                    @foreach (var receiptPayment in Model)
                     {
-                        foreach (var payment in identification.IdentifyBachPayments)
-                        {
-                            Total += payment.Value;
-                            <tr>
-                                <td>
-                                    @payment.Id
-                                </td>
-                                <td>@payment.ClientId - @payment.Client.Name</td>
-                                <td>@payment.CreateDate.ToString()</td>
-                                <td>
-                                    @identification.RaffleId
-                                </td>
-                                <td class="text-right" style="width:15%">
-                                    @(payment.Value.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                </td>
-                            </tr>
-                        }
+                        Total += receiptPayment.TotalCash;
+                        <tr>
+                            <td>
+                                @receiptPayment.Invoice.Id
+                            </td>
+                            <td>@receiptPayment.Client.Id - @receiptPayment.Client.Name</td>
+                            <td>@receiptPayment.CreateDate.ToString()</td>
+                            <td>
+                                @receiptPayment.Invoice.Raffle.Id
+                            </td>
+                            <td class="text-right" style="width:15%">
+                                @if (receiptPayment.TotalCash > 0)
+                                {
+                                    @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                }
+                                else
+                                {
+                                    @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                }
+                            </td>
+                        </tr>
                     }
                     <tr class="total">
                         <td colspan="5" class="text-right">Total: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
