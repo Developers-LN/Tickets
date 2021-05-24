@@ -1,0 +1,1 @@
+DBCC CHECKIDENT ( 'InvoiceDetails',RESEED, 7564)
