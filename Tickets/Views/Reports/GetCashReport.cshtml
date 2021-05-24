@@ -10,6 +10,12 @@
     decimal Total = 0.0m;
     var user = Model.Count > 0 ? context.Users.AsEnumerable().FirstOrDefault(u => u.Id == Model.FirstOrDefault().CreateUser) : null;
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
+
+    var Efectivo = Tickets.Models.Enums.PaymentTypeTextEnum.Efectivo;
+    var Cheque = Tickets.Models.Enums.PaymentTypeTextEnum.Cheques;
+    var TargetaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.TarjetaDeCredito;
+    var NotaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.NotaDeCredito;
+    var DepTransf = Tickets.Models.Enums.PaymentTypeTextEnum.DepTransf;
 }
 
 <style>
@@ -75,6 +81,7 @@
                         <th>CLIENTE</th>
                         <th>FECHA</th>
                         <th>SORTEO</th>
+                        <th>Forma de pago</th>
                         <th class="text-right" style="width:15%">VALOR</th>
                     </tr>
                 </thead>
@@ -88,23 +95,47 @@
                             </td>
                             <td>@receiptPayment.Client.Id - @receiptPayment.Client.Name</td>
                             <td>@receiptPayment.CreateDate.ToString()</td>
+                            <td>@receiptPayment.Invoice.Raffle.Id</td>
                             <td>
-                                @receiptPayment.Invoice.Raffle.Id
+                                @if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
+                                {
+                                    @Efectivo;
+                                }
+                                else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
+                                {
+                                    @Cheque;
+                                }
+                                else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
+                                {
+                                    @TargetaCredito;
+                                }
+                                else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                                {
+                                    @NotaCredito;
+                                }
+                                else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                                {
+                                    @DepTransf;
+                                }
                             </td>
                             <td class="text-right" style="width:15%">
                                 @if (receiptPayment.TotalCash > 0)
                                 {
                                     @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                                 }
-                                else
+                                else if (receiptPayment.TotalCredit > 0)
                                 {
                                     @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                }
+                                else
+                                {
+                                    @(receiptPayment.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                                 }
                             </td>
                         </tr>
                     }
                     <tr class="total">
-                        <td colspan="5" class="text-right">Total: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                        <td colspan="6" class="text-right">Total: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
                     </tr>
                 </tbody>
             </table>

@@ -326,9 +326,11 @@
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Enums\AllocationTypeEnum.cs" />
+    <Compile Include="Models\Enums\PaymentTypeTextEnum.cs" />
     <Compile Include="Models\Enums\PrintTypeProspect.cs" />
     <Compile Include="Models\Enums\ReportByEmailEnum.cs" />
     <Compile Include="Models\Enums\AwardCertificationStatuEnum.cs" />
+    <Compile Include="Models\Enums\UserRolEnum.cs" />
     <Compile Include="Models\GenericErrorResponse.cs" />
     <Compile Include="Models\IdentifyBach.cs">
       <DependentUpon>Tickets.tt</DependentUpon>

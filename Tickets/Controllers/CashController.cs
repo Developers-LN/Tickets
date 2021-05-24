@@ -200,19 +200,28 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
 
-            var users = context.Users.Where(u => u.Statu == (int)UserStatusEnum.Active).Select(r => new
+            var users = context.Users.Where(c => c.Statu == (int)UserStatusEnum.Active &&
+            c.webpages_Roles.Any(r => r.RoleName == UserRolEnum.Caja)).Select(r => new
             {
                 value = r.Id,
                 text = r.Employee.Name + " " + r.Employee.LastName
+
             }).ToList();
 
-/*            var raffles = context.Raffles.Select(r => new
+            var clients = context.Clients.Where(c => c.Statu == (int)ClientStatuEnum.Approbed).Select(r => new
             {
                 value = r.Id,
                 text = r.Name
-            }).ToList();*/
 
-            return new JsonResult() { Data = new { users/*, raffles*/ }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }).ToList();
+
+            var raffles = context.Raffles.Select(r => new
+            {
+                value = r.Id,
+                text = r.Name
+            }).ToList();
+
+            return new JsonResult() { Data = new { clients, raffles, users }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         //
@@ -666,20 +675,20 @@ namespace Tickets.Controllers
             return new JsonResult() { Data = new { invoices, clients, raffles }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-/*        private bool VerifyReceivable(Invoice invoice)
-        {
-            var totalInvoiceTicketPrice = 0.0M;
-            foreach (var ticketPrice in invoice.InvoiceTickets.Select(i => i.Quantity * i.PricePerFraction))
-            {
-                totalInvoiceTicketPrice += ticketPrice;
-            }
-            var totalRequestCash = 0.0M;
-            foreach (var requestCash in invoice.ReceiptPayments.Select(r => r.TotalCash + r.TotalCheck + r.TotalCredit))
-            {
-                totalRequestCash += requestCash;
-            }
-            return totalInvoiceTicketPrice > totalRequestCash;
-        }*/
+        /*        private bool VerifyReceivable(Invoice invoice)
+                {
+                    var totalInvoiceTicketPrice = 0.0M;
+                    foreach (var ticketPrice in invoice.InvoiceTickets.Select(i => i.Quantity * i.PricePerFraction))
+                    {
+                        totalInvoiceTicketPrice += ticketPrice;
+                    }
+                    var totalRequestCash = 0.0M;
+                    foreach (var requestCash in invoice.ReceiptPayments.Select(r => r.TotalCash + r.TotalCheck + r.TotalCredit))
+                    {
+                        totalRequestCash += requestCash;
+                    }
+                    return totalInvoiceTicketPrice > totalRequestCash;
+                }*/
 
         public InvoicePaymentModel GetPaymentCash(Invoice invoice)
         {
@@ -782,39 +791,39 @@ namespace Tickets.Controllers
             };
         }
 
-/*        private object InvoiceTicketsToObject(Invoice invoice)
-        {
-            var context = new TicketsEntities();
-            return new
-            {
-                invoice.Id,
-                invoice.RaffleId,
-                RaffleDesc = context.Raffles.Where(r => r.Id == invoice.RaffleId).Select(c => c.Name).FirstOrDefault(),
-                invoice.AgencyId,
-                AgencyDesc = context.Agencies.Where(r => r.Id == invoice.AgencyId).Select(c => c.Name).FirstOrDefault(),
-                invoice.ClientId,
-                ClientDesc = context.Clients.Where(r => r.Id == invoice.ClientId).Select(c => c.Name).FirstOrDefault(),
-                CraeteDate = invoice.CreateDate.ToString(),
-                InvoiceDate = invoice.InvoiceDate.ToUnixTime(),
-                invoice.Condition,
-                ConditionDesc = context.Catalogs.Where(r => r.Id == invoice.Condition).Select(c => c.NameDetail).FirstOrDefault(),
-                invoice.PaymentStatu,
-                PaymentStatuDesc = context.Catalogs.Where(r => r.Id == invoice.PaymentStatu).Select(c => c.NameDetail).FirstOrDefault(),
-                invoice.Statu,
-                StatuDesc = context.Catalogs.Where(r => r.Id == invoice.Statu).Select(c => c.NameDetail).FirstOrDefault(),
-                invoice.CreateUser,
-                Payment = GetPaymentCash(invoice),
-                InvoiceTickets = invoice.InvoiceTickets.Select(i => new
+        /*        private object InvoiceTicketsToObject(Invoice invoice)
                 {
-                    i.Id,
-                    i.InvoiceId,
-                    i.PricePerFraction,
-                    i.Quantity,
-                    i.TicketNumberAllocationId,
-                    TicketAllocationNumber = i.TicketAllocationNumber.Number
-                })
-            };
-        }*/
+                    var context = new TicketsEntities();
+                    return new
+                    {
+                        invoice.Id,
+                        invoice.RaffleId,
+                        RaffleDesc = context.Raffles.Where(r => r.Id == invoice.RaffleId).Select(c => c.Name).FirstOrDefault(),
+                        invoice.AgencyId,
+                        AgencyDesc = context.Agencies.Where(r => r.Id == invoice.AgencyId).Select(c => c.Name).FirstOrDefault(),
+                        invoice.ClientId,
+                        ClientDesc = context.Clients.Where(r => r.Id == invoice.ClientId).Select(c => c.Name).FirstOrDefault(),
+                        CraeteDate = invoice.CreateDate.ToString(),
+                        InvoiceDate = invoice.InvoiceDate.ToUnixTime(),
+                        invoice.Condition,
+                        ConditionDesc = context.Catalogs.Where(r => r.Id == invoice.Condition).Select(c => c.NameDetail).FirstOrDefault(),
+                        invoice.PaymentStatu,
+                        PaymentStatuDesc = context.Catalogs.Where(r => r.Id == invoice.PaymentStatu).Select(c => c.NameDetail).FirstOrDefault(),
+                        invoice.Statu,
+                        StatuDesc = context.Catalogs.Where(r => r.Id == invoice.Statu).Select(c => c.NameDetail).FirstOrDefault(),
+                        invoice.CreateUser,
+                        Payment = GetPaymentCash(invoice),
+                        InvoiceTickets = invoice.InvoiceTickets.Select(i => new
+                        {
+                            i.Id,
+                            i.InvoiceId,
+                            i.PricePerFraction,
+                            i.Quantity,
+                            i.TicketNumberAllocationId,
+                            TicketAllocationNumber = i.TicketAllocationNumber.Number
+                        })
+                    };
+                }*/
 
         #region Credit Note
         //
