@@ -309,9 +309,9 @@ namespace Tickets.Models.Ticket
                                           where r.Id == model.RaffleId
                                           select new
                                           {
-                                              MaxReturnTickets = p.MaxReturnTickets,
-                                              Statu = r.Statu,
-                                              EndReturnDate = r.EndReturnDate,
+                                              p.MaxReturnTickets,
+                                              r.Statu,
+                                              r.EndReturnDate,
                                               MaxFraction = p.LeafNumber * p.LeafFraction
                                           }).FirstOrDefault();
 

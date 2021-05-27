@@ -40,7 +40,7 @@ namespace Tickets.Controllers
 
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de tipo de premio");
 
-            return new JsonResult() { Data = new { typesAwards = typesAwards }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new JsonResult() { Data = new { typesAwards }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         private object TypesAwardToObjec(TypesAward typesAward)
@@ -88,7 +88,7 @@ namespace Tickets.Controllers
                 var mTypesAward = context.TypesAwards.FirstOrDefault(c => c.Id == typesAward.Id);
 
                 mTypesAward.Name = typesAward.Name;
-                mTypesAward.Description = typesAward.Description == null ? "" : typesAward.Description;
+                mTypesAward.Description = typesAward.Description ?? "";
                 mTypesAward.GroupId = typesAward.GroupId;
                 mTypesAward.Creation = typesAward.Creation;
             }

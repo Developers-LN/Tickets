@@ -182,7 +182,7 @@ namespace Tickets.Controllers
         [ActionName("awardNumberDetails")]
         public RequestResponseModel AwardNumberDetails(int number, int raffleId, int fractionFrom, int fractionTo)
         {
-            var response = new TicketAllocationNumberModel().awardNumberDetails(number, raffleId, fractionFrom, fractionTo);
+            var response = new TicketAllocationNumberModel().AwardNumberDetails(number, raffleId, fractionFrom, fractionTo);
             return response;
         }
     }

@@ -59,7 +59,7 @@ namespace Tickets.Controllers
         [HttpGet]
         [Authorize]
         [ActionName("details")]
-        public RequestResponseModel details(string group, int raffleId)
+        public RequestResponseModel Details(string group, int raffleId)
         {
             var response = new TicketReturnedModel().GetList(raffleId, group);
             return response;

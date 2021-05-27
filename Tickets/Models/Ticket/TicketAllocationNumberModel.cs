@@ -80,7 +80,7 @@ namespace Tickets.Models.Ticket
             };
         }
 
-        internal RequestResponseModel awardNumberDetails(int number, int raffleId, int fractionFrom, int fractionTo)
+        internal RequestResponseModel AwardNumberDetails(int number, int raffleId, int fractionFrom, int fractionTo)
         {
             var context = new TicketsEntities();
             var n = context.TicketAllocationNumbers.Where(tn => tn.TicketAllocation.RaffleId == raffleId && tn.Number == number).FirstOrDefault();
@@ -126,7 +126,7 @@ namespace Tickets.Models.Ticket
                 AwardName = s.Award.ByFraction == (int)ByFractionEnum.S ? s.Award.Name + "- NO." + s.Fraction : s.Award.Name,
                 AwardValue = s.Award.ByFraction == (int)ByFractionEnum.S ? s.Award.Value : s.Award.Value / (n.TicketAllocation.Raffle.Prospect.LeafNumber * n.TicketAllocation.Raffle.Prospect.LeafFraction),
                 TotalValue = s.Award.ByFraction == (int)ByFractionEnum.S ? 1 * s.Award.Value : (fTo - fFrom + 1) * (s.Award.Value / (n.TicketAllocation.Raffle.Prospect.LeafNumber * n.TicketAllocation.Raffle.Prospect.LeafFraction)),
-                Id = s.Id
+                s.Id
 
             }).ToList();
 
@@ -161,7 +161,7 @@ namespace Tickets.Models.Ticket
                 n.Invoiced,
                 MaxFaction = n.TicketAllocation.Raffle.Prospect.LeafFraction * n.TicketAllocation.Raffle.Prospect.LeafNumber,
                 n.Number,
-                Production = n.TicketAllocation.Raffle.Prospect.Production,
+                n.TicketAllocation.Raffle.Prospect.Production,
                 n.Printed,
                 n.Statu,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == n.Statu).NameDetail,
@@ -187,15 +187,15 @@ namespace Tickets.Models.Ticket
                     FractionTo = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionTo,
                     AwardName = ra.Award.Name,
                     AwardValue = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Award.Value : ra.Award.Value / (n.TicketAllocation.Raffle.Prospect.LeafNumber * n.TicketAllocation.Raffle.Prospect.LeafFraction),
-                    Id = ra.Id
+                    ra.Id
                 }).ToList(),
                 identifyNumbersMinor = context.IdentifyNumbers
                 .Where(i => i.IdentifyBach.RaffleId == n.TicketAllocation.RaffleId && i.IdentifyBach.Type == (int)IdentifyBachTypeEnum.Menor)
                 .AsEnumerable().Join(awards.Where(a => a.Award.TypesAwardId != (int)AwardTypeEnum.Mayors && a.Award.TypesAwardId != (int)AwardTypeEnum.WinFraction).AsEnumerable(), i => i.TicketAllocationNumber.Number, a => a.ControlNumber, (i, a) => new
                 {
-                    IdentifyBachId = i.IdentifyBachId,
-                    FractionTo = i.FractionTo,
-                    FractionFrom = i.FractionFrom,
+                    i.IdentifyBachId,
+                    i.FractionTo,
+                    i.FractionFrom,
                     AwardName = a.Award.Name,
                     AwardValue = a.Award.Value / (a.Raffle.Prospect.LeafNumber * a.Raffle.Prospect.LeafFraction),
                     IsPayed = Utils.IdentifyBachIsPayedMinor(i.IdentifyBach, awards)
@@ -205,7 +205,7 @@ namespace Tickets.Models.Ticket
                 .AsEnumerable().Join(awards
                 .Where(a => a.Award.TypesAwardId == (int)AwardTypeEnum.Mayors || a.Award.TypesAwardId == (int)AwardTypeEnum.WinFraction).AsEnumerable(), i => i.TicketAllocationNumber.Number, a => a.ControlNumber, (i, a) => new
                 {
-                    IdentifyBachId = i.IdentifyBachId,
+                    i.IdentifyBachId,
                     FractionTo = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionTo,
                     FractionFrom = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionFrom,
                     AwardName = a.Award.Name,
