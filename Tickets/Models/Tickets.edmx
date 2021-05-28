@@ -455,6 +455,7 @@
           <Property Name="ReceiptType" Type="int" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="CreateUser" Type="int" Nullable="false" />
+          <Property Name="Recibo" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ReceivablePayment">
           <Key>
@@ -3417,6 +3418,7 @@
           <NavigationProperty Name="Client" Relationship="TicketsModel.FK_ReceiptPayment_Client" FromRole="ReceiptPayment" ToRole="Client" />
           <NavigationProperty Name="Invoice" Relationship="TicketsModel.FK_ReceiptPayment_Invoice" FromRole="ReceiptPayment" ToRole="Invoice" />
           <NavigationProperty Name="NoteCreditReceiptPayments" Relationship="TicketsModel.FK_NoteCreditReceiptPayment_ReceiptPayment" FromRole="ReceiptPayment" ToRole="NoteCreditReceiptPayment" />
+          <Property Name="Recibo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ReceivablePayment">
           <Key>
@@ -5443,6 +5445,7 @@
           <EntitySetMapping Name="ReceiptPayments">
             <EntityTypeMapping TypeName="TicketsModel.ReceiptPayment">
               <MappingFragment StoreEntitySet="ReceiptPayment">
+                <ScalarProperty Name="Recibo" ColumnName="Recibo" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="ReceiptType" ColumnName="ReceiptType" />

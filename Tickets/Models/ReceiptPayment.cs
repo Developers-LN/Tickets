@@ -30,6 +30,7 @@ namespace Tickets.Models
         public int ReceiptType { get; set; }
         public System.DateTime CreateDate { get; set; }
         public int CreateUser { get; set; }
+        public string Recibo { get; set; }
     
         public virtual Cash Cash { get; set; }
         public virtual Client Client { get; set; }

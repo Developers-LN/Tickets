@@ -137,8 +137,6 @@ namespace Tickets.Models.Ticket
             };
         }
 
-
-
         internal RequestResponseModel GetTicketNumberDetails(int numberId)
         {
             var context = new TicketsEntities();

@@ -20,18 +20,21 @@
             if (receivable.ReceiptType === undefined) {
                 error += 'El Tipo de Pago' + isReq;
             }
+            if (receivable.ReceiptType == 5857 && receivable.Recibo === undefined) {
+                error += 'El Numero de recibo' + isReq;
+            }
             if (receivable.TotalCash === undefined ) {
                 error += 'Verifique el monto a pagar' + isReq;
             }
             if ($scope.receivable.TotalCash > ($scope.payment.totalRestant - $scope.payment.discount)) {
                 error += 'No se puede pagar mas de lo que debe' + isReq;
             }
-
             if (error !== '') {
                 alertify.showError('Alerta', error);
             }
             return error === '';
         }
+
         var self = this;
 
         $scope.receivable = {
@@ -40,8 +43,10 @@
             ReceiptDate: new Date(),
             ReceiptType: undefined,
             NoteCreditReceiptPayments: [],
-            TotalCash: undefined
+            TotalCash: undefined,
+            Recibo: undefined
         };
+
         $scope.totalCreditNoteValue = 0;
         this.getReceivableData = function () {
             window.loading.show();
@@ -99,7 +104,6 @@
         $scope.isreturn = function (cn) {
             if (cn.Concepts.includes("Nota de credito por devoluci\u00F3n de billetes del Sorteo")) {
                 return true;
-
             } else {
                 return false;
             }
@@ -113,11 +117,9 @@
                 } else {
 
                     event.target.checked = null;
-                }
-                
+                }              
             });
         }
-        
 
         $scope.selectCreditNote = function (e, creditNote) {
             if (e.target.checked == true) {
@@ -133,7 +135,6 @@
                 }
                    
             } else {
-               
                 var index = 0;
                 $scope.receivable.NoteCreditReceiptPayments.findIndex(function (e,i,a)
                 {

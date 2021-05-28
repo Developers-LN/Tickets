@@ -506,12 +506,23 @@ namespace Tickets.Controllers
                 {
                     try
                     {
+                        if(receiptPayment.Recibo == null)
+                        {
+                            return new JsonResult() { Data = new { result = false, message = "No ha ingresado el número de recibo." } };
+                        }
+
                         var cash = context.Cashes.FirstOrDefault(c => c.Statu == (int)CashStatusEnum.Open && c.CreateUser == WebSecurity.CurrentUserId);
 
                         var invoice = context.Invoices.FirstOrDefault(i => i.Id == receiptPayment.InvoiceId);
 
+                        if (context.ReceiptPayments.FirstOrDefault(r => r.ClientId == invoice.ClientId && r.Recibo == receiptPayment.Recibo) != null)
+                        {
+                            return new JsonResult() { Data = new { result = false, message = "Este pago fue efectuado anteriormente." } };
+                        }
+
                         var noteCreditReceiptPayments = receiptPayment.NoteCreditReceiptPayments;
                         var totalCash = receiptPayment.TotalCash;
+                        var Recibo = receiptPayment.Recibo;
                         receiptPayment.CashId = cash.Id;
                         receiptPayment.ClientId = invoice.ClientId;
                         receiptPayment.CreateDate = DateTime.Now;
@@ -519,6 +530,7 @@ namespace Tickets.Controllers
                         receiptPayment.TotalCheck = 0;
                         receiptPayment.TotalCredit = 0;
                         receiptPayment.TotalCash = 0;
+                        receiptPayment.Recibo = "";
 
                         receiptPayment.NoteCreditReceiptPayments = new List<NoteCreditReceiptPayment>();
 
@@ -537,6 +549,7 @@ namespace Tickets.Controllers
                         else if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.TransDepDirect)
                         {
                             receiptPayment.TotalCheck = totalCash;
+                            receiptPayment.Recibo = Recibo;
                         }
                         context.ReceiptPayments.Add(receiptPayment);
                         context.SaveChanges();
