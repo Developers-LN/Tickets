@@ -506,7 +506,7 @@ namespace Tickets.Controllers
                 {
                     try
                     {
-                        if(receiptPayment.Recibo == null)
+                        if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.TransDepDirect && receiptPayment.Recibo == null)
                         {
                             return new JsonResult() { Data = new { result = false, message = "No ha ingresado el número de recibo." } };
                         }

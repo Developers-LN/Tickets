@@ -138,11 +138,6 @@ namespace Tickets.Controllers
         [ActionName("getActive")]
         public RequestResponseModel GetActive(RaffleModel model)
         {
-            if (model is null)
-            {
-                throw new System.ArgumentNullException(nameof(model));
-            }
-
             var response = new RaffleModel().GetActive();
             return response;
         }

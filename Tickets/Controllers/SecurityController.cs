@@ -18,7 +18,7 @@ namespace Tickets.Controllers
     [Authorize]
     public class SecurityController : Controller
     {
-        //private static string __RETURN_URL__ = "__RETURN_URL__";
+        private static string __RETURN_URL__ = "__RETURN_URL__";
 
         // GET: Security/ChangePassword
         [HttpGet]
@@ -129,9 +129,8 @@ namespace Tickets.Controllers
                     Url = query
                 }
             };
-
-
         }
+
         //
         // Post: /Users/Login
         //[HttpPost]
@@ -249,18 +248,12 @@ namespace Tickets.Controllers
             return JsonConvert.SerializeObject(new { name = userName, result = true, modules });
         }
 
-
         //
         // Post: /Users/LogOff
         [HttpPost]
         [Authorize]
         public JsonResult LogOff(LoginModel model)
         {
-            if (model is null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
             WebSecurity.Logout();
             return new JsonResult() { Data = true };
         }

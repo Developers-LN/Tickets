@@ -462,21 +462,6 @@ namespace Tickets.Models
 
         public static void RenderReportToPdf(dynamic model, string viewPath, string awardName, ReportByEmailEnum reportEnum)
         {
-            if (model is null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
-            if (viewPath is null)
-            {
-                throw new ArgumentNullException(nameof(viewPath));
-            }
-
-            if (awardName is null)
-            {
-                throw new ArgumentNullException(nameof(awardName));
-            }
-
             try
             {
                 //string reportName = string.Format("{0}{1}{2}", awardName, DateTime.Now.Date.ToString("ddMMyyyy"), model.Id + ".pdf");
