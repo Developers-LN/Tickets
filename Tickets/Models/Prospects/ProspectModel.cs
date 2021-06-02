@@ -69,6 +69,32 @@ namespace Tickets.Models.Prospects
         [JsonProperty(PropertyName = "prospectPrices")]
         public List<ProspectPriceModel> ProspectPrices { get; set; }
 
+        internal ProspectModel ListadoProspecto(Prospect prospect)
+        {
+            var context = new TicketsEntities();
+            var prospectModel = new ProspectModel()
+            {
+                Id = prospect.Id,
+                Name = prospect.Name,
+                Description = prospect.Description,
+                GroupId = prospect.GroupId,
+                GroupDesc = context.Catalogs.FirstOrDefault(c => c.Id == prospect.GroupId).NameDetail,
+                Production = prospect.Production,
+                LeafNumber = prospect.LeafNumber,
+                LeafFraction = prospect.LeafFraction,
+                ExpirateDateLong = prospect.ExpirateDate.ToUnixTime(),
+                ExpirateDate = prospect.ExpirateDate,
+                MaxReturnTickets = prospect.MaxReturnTickets,
+                ImpresionType = prospect.ImpresionType,
+                ImpresionTypeDescription = context.Catalogs.FirstOrDefault(c => c.Id == prospect.ImpresionType).NameDetail,
+                Statu = prospect.Statu,
+                Price = prospect.Price,
+                StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == prospect.Statu).NameDetail
+            };
+
+            return prospectModel;
+        }
+
         internal ProspectModel ToObject(Prospect prospect, bool hasAwards = true, bool hasPrices = true)
         {
             var context = new TicketsEntities();
@@ -149,7 +175,7 @@ namespace Tickets.Models.Prospects
                         if (statu == 0)
                         {
                             var prospects = context.Prospects.AsEnumerable().Where(p => p.Statu != 2074)
-                                .Select(p => this.ToObject(p)).ToList();
+                                .Select(p => this.ListadoProspecto(p)).ToList();
 
                             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Prospectos");
                             return new RequestResponseModel()
@@ -162,7 +188,7 @@ namespace Tickets.Models.Prospects
                         else
                         {
                             var prospects = context.Prospects.AsEnumerable().Where(p => p.Statu == statu)
-                                .Select(p => this.ToObject(p)).ToList();
+                                .Select(p => this.ListadoProspecto(p)).ToList();
 
                             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Prospectos");
                             return new RequestResponseModel()
