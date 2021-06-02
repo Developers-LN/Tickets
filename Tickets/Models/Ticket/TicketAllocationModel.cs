@@ -203,6 +203,20 @@ namespace Tickets.Models.Ticket
 
         #endregion
 
+        internal TicketAllocationModel ListadoAsignaciones(TicketAllocation model)
+        {
+            var context = new TicketsEntities();
+            var allocation = new TicketAllocationModel()
+            {
+                Id = model.Id,
+                ClientDesc = model.Client.Name,
+                StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
+                CreateDate = model.CreateDate,
+            };
+
+            return allocation;
+        }
+
         internal TicketAllocationModel ToObject(TicketAllocation model, bool hasNumber = true, bool hasProspectProperty = true)
         {
             var context = new TicketsEntities();
@@ -260,7 +274,7 @@ namespace Tickets.Models.Ticket
                     (a.Statu == statu || statu == 0)
                     && a.RaffleId == raffleId
                     && (a.ClientId == clientId || clientId == 0)).AsEnumerable()
-                .Select(a => this.ToObject(a, hasNumber)).ToList();
+                .Select(a => this.ListadoAsignaciones(a)).ToList();
 
             return new RequestResponseModel()
             {
