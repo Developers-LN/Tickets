@@ -2,7 +2,7 @@
  * Module: ReturnedController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -19,8 +19,8 @@
             $scope.editingTicketNumber = ticketNumber ? ticketNumber : null;
             $scope.ticketNumber = {
                 clientId: ticketNumber ? ticketNumber.clientId : undefined,
-                fractionFrom: ticketNumber ? ticketNumber.fractionFrom :undefined,
-                fractionTo: ticketNumber ? ticketNumber.fractionTo :undefined,
+                fractionFrom: ticketNumber ? ticketNumber.fractionFrom : undefined,
+                fractionTo: ticketNumber ? ticketNumber.fractionTo : undefined,
                 numberId: ticketNumber ? ticketNumber.numberId : undefined,
                 $$hashKey: ticketNumber ? ticketNumber.$$hashKey : undefined
             };
@@ -30,7 +30,7 @@
             var fraction = 0;
             $scope.returned.ticketReturnedNumbers.forEach(function (t) {
                 fraction += t.fractionTo - t.fractionFrom + 1;
-               
+
             });
             return fraction;
         }
@@ -80,7 +80,7 @@
             var message = '';
             $scope.returned.ticketReturnedNumbers = $scope.returned.ticketReturnedNumbers || [];
 
-            for (var fraction = number.fractionFrom; fraction <= number.fractionTo; fraction++){
+            for (var fraction = number.fractionFrom; fraction <= number.fractionTo; fraction++) {
                 if ($scope.returned.ticketReturnedNumbers.some(function (n) {
                     return fraction >= n.fractionFrom && fraction <= n.fractionTo && n.numberId == number.numberId && n.$$hashKey != number.$$hashKey;
                 }) === true) {
@@ -185,27 +185,25 @@
         this.ticketReaderString = '';
 
         this.barcodeReader = function (e) {
-         
+
             if (e.which == 17 || e.which == 74) {
                 e.stopPropagation();
                 e.preventDefault();
                 e.returnValue = false;
                 e.cancelBubble = true;
                 return false;
-            
+
             } else {
                 $scope.verifyTicketNumber(e);
             }
         }
 
-        try{
+        try {
             window.document.body.removeEventListener('keydown', self.barcodeReader, false);
         } catch (e) { }
 
         $rootScope.barcodeReader = self.barcodeReader;
         window.document.body.addEventListener('keydown', self.barcodeReader, false);
-
-
 
         $scope.verifyTicketNumber = function (event) {
             if (event.keyCode === 13 && self.ticketReaderString !== '') {
@@ -232,7 +230,7 @@
 
                     var currentTicketNumber = {
                         clientId: $scope.ticketNumber.clientId,
-                        fractionFrom: Number(codeReadSplit[2].replace(/[^0-9\.]+/g,'')),
+                        fractionFrom: Number(codeReadSplit[2].replace(/[^0-9\.]+/g, '')),
                         fractionTo: Number(codeReadSplit[3].replace(/[^0-9\.]+/g, '')),
                         numberId: Number(codeReadSplit[1].replace(/[^0-9\.]+/g, ''))
                     };
@@ -243,7 +241,7 @@
                         returnedGroup: $scope.returned.returnedGroup,
                         ticketReturnedNumbers: [currentTicketNumber]
                     };
-                    
+
                     var error = '';
                     error += self.validateNumberInList(currentTicketNumber);
 
@@ -253,8 +251,7 @@
                         alertify.showError('Alerta', error);
                         return;
                     }
-                    if (verify(returnedTicket))
-                    {
+                    if (verify(returnedTicket)) {
                         return;
                     }
 
@@ -341,7 +338,7 @@
                 }
             });
         }
-        
+
         $scope.returned = {
             raffleId: undefined,
             returnedGroup: undefined,
@@ -352,8 +349,7 @@
         this.clearTicket();
     }
 
-   function verify(c)
-    {
+    function verify(c) {
         var state = false;
         $.ajax({
             type: 'POST',

@@ -120,29 +120,38 @@ namespace Tickets.Models.Ticket
 
         internal RequestResponseModel ValidateTicketReturned(TicketReturnedModel model)
         {
-            int clientId = 0;
-            string clientName = "";
+            //int clientId = 0;
+            //string clientName = "";
             bool state = false;
             using (var context = new TicketsEntities())
             {
-
                 StringBuilder sb = new StringBuilder();
                 sb.Append("Los boletos: ");
-                var ticketAllocationNumbers = context.TicketAllocationNumbers.Where(t => t.TicketAllocation.RaffleId == model.RaffleId).Select(a => new
-                {
-                    a.TicketAllocation.ClientId,
-                    a.Number,
-                    a.FractionFrom,
-                    a.FractionTo,
-                    a.Statu,
-                    a.Id
-                }).ToList();
+
+                var TicketNumber = model.TicketReturnedNumbers.Select(n => n.NumberId).FirstOrDefault();
+
+                var allocationId = context.TicketAllocationNumbers
+                    .Where(r => r.RaffleId == model.RaffleId && r.Number == TicketNumber)
+                    .Select(t => t.TicketAllocationId).FirstOrDefault();
+
+                var Client = context.Clients.Where(c => c.Id == model.ClientId).Select(c => new { clientId = c.Id, clientName = c.Name }).FirstOrDefault();
+
+                var ticketAllocationNumbers = context.TicketAllocationNumbers
+                    .Where(t => t.TicketAllocation.RaffleId == model.RaffleId && t.TicketAllocationId == allocationId).Select(a => new
+                    {
+                        a.Id,
+                        a.TicketAllocation.ClientId,
+                        a.Number,
+                        a.FractionFrom,
+                        a.FractionTo,
+                        a.Statu
+                    }).ToList();
+
                 foreach (var item in model.TicketReturnedNumbers)
                 {
                     var tan = ticketAllocationNumbers.FirstOrDefault(t => t.Number == item.NumberId);
                     if (tan != null)
                     {
-
                         if (tan.ClientId != item.ClientId)
                         {
                             sb.Append(item.NumberId);
@@ -162,21 +171,18 @@ namespace Tickets.Models.Ticket
                         Result = false,
                         Object = new
                         {
-                            clientId,
-                            clientName,
+                            Client.clientId,
+                            Client.clientName,
                         },
                         Message = sb.ToString()
                     };
-
                 }
-
 
                 using (var tx = context.Database.BeginTransaction())
                 {
                     var raffle = context.Raffles.Where(p => p.Id == model.RaffleId).FirstOrDefault();
 
-                    if (((raffle.Statu == (int)RaffleStatusEnum.Active
-                        || raffle.Statu == (int)RaffleStatusEnum.Planned)
+                    if (((raffle.Statu == (int)RaffleStatusEnum.Active || raffle.Statu == (int)RaffleStatusEnum.Planned)
                         && raffle.EndReturnDate >= DateTime.Now)
                         || raffle.ReturnedOpens.Any(r => r.EndReturnedDate >= DateTime.Now))
                     {
@@ -193,8 +199,8 @@ namespace Tickets.Models.Ticket
                                 };
                             }
 
-                            clientId = ticketReturn.ClientId;
-                            clientName = context.Clients.FirstOrDefault(r => r.Id == clientId).Name;
+                            //clientId = ticketReturn.ClientId;
+                            //clientName = context.Clients.FirstOrDefault(r => r.Id == clientId).Name;
 
                             var messageList = new List<string>();
 
@@ -204,7 +210,6 @@ namespace Tickets.Models.Ticket
                                 {
                                     messageList.Add("La fracción " + fraction + " del billete " + ticketReturn.NumberId + " no fue asignada.");
                                 }
-
                             }
                             if (messageList.Count == 0)
                             {
@@ -256,13 +261,14 @@ namespace Tickets.Models.Ticket
                                 };
                             }
                         }
+
                         return new RequestResponseModel()
                         {
                             Result = true,
                             Object = new
                             {
-                                clientId,
-                                clientName,
+                                Client.clientId,
+                                Client.clientName,
                             },
                             Message = "billete agregado correctamente!"
                         };
@@ -304,28 +310,50 @@ namespace Tickets.Models.Ticket
                         var fraccionMinima = 1;
                         var fraccionMaxima = 0;
                         var clientId = model.TicketReturnedNumbers.Select(r => r.ClientId).FirstOrDefault();
-                        var raffleData = (from r in context.Raffles
-                                          join p in context.Prospects on r.ProspectId equals p.Id
-                                          where r.Id == model.RaffleId
-                                          select new
-                                          {
-                                              p.MaxReturnTickets,
-                                              r.Statu,
-                                              r.EndReturnDate,
-                                              MaxFraction = p.LeafNumber * p.LeafFraction
-                                          }).FirstOrDefault();
+
+                        /*var raffleData = (from r in context.Raffles
+                                           join p in context.Prospects on r.ProspectId equals p.Id
+                                           where r.Id == model.RaffleId
+                                           select new
+                                           {
+                                               p.MaxReturnTickets,
+                                               r.Statu,
+                                               r.EndReturnDate,
+                                               MaxFraction = p.LeafNumber * p.LeafFraction
+                                           }).FirstOrDefault();*/
+
+                        var raffleData = context.Raffles.Where(r => r.Id == model.RaffleId).Select(s => new
+                        {
+                            s.Prospect.MaxReturnTickets,
+                            s.Statu,
+                            s.EndReturnDate,
+                            MaxFraction = s.Prospect.LeafNumber * s.Prospect.LeafFraction,
+                            returnedOpens = s.ReturnedOpens.Select(r => r.EndReturnedDate)
+                        }).FirstOrDefault();
 
                         //Validacion de Fraccion Minima y Maxima
                         fraccionMaxima = raffleData.MaxFraction;
 
-                        var returnedOpens = context.ReturnedOpens.Where(r =>
+                        /*var returnedOpens = context.ReturnedOpens.Where(r =>
                             r.RaffleId == model.RaffleId &&
                             r.EndReturnedDate >= DateTime.Now).Select(ro => new
                             {
                                 ro.EndReturnedDate
-                            }).ToList();
+                            }).ToList();*/
 
-                        var ticketAllocationNumbers = (from tn in context.TicketAllocationNumbers
+                        var ticketAllocationNumbers = context.TicketAllocationNumbers
+                            .Where(t => t.RaffleId == model.RaffleId &&
+                                   t.TicketAllocation.Statu == (int)AllocationStatuEnum.Invoiced &&
+                                   t.TicketAllocation.ClientId == clientId).Select(t => new
+                                   {
+                                       t.Id,
+                                       t.FractionTo,
+                                       t.FractionFrom,
+                                       t.Number,
+                                       clientDiscount = t.InvoiceTickets.Select(s => s.Invoice.Discount).FirstOrDefault()
+                                   }).ToList();
+
+                        /*var ticketAllocationNumbers = (from tn in context.TicketAllocationNumbers
                                                        join a in context.TicketAllocations on tn.TicketAllocationId equals a.Id
                                                        where a.RaffleId == model.RaffleId
                                                          && a.ClientId == clientId
@@ -336,15 +364,19 @@ namespace Tickets.Models.Ticket
                                                            tn.FractionFrom,
                                                            tn.Number,
                                                            tn.Id
-                                                       }).ToList();
+                                                       }).ToList();*/
 
-                        var clientDiscount = context.Clients.Where(c => c.Id == clientId).Select(a => a.Discount).FirstOrDefault();
+                        //var clientDiscount = context.Clients.Where(c => c.Id == clientId).Select(a => a.Discount).FirstOrDefault();
 
                         var totalTickets = 0;
                         ticketAllocationNumbers.ForEach(t => totalTickets += (t.FractionTo - t.FractionFrom + 1));
 
                         var returnTickets = 0;
-                        var returneds = (from r in context.TicketReturns
+
+                        var returneds = context.TicketReturns.Where(r => r.RaffleId == model.RaffleId && r.ClientId == clientId)
+                            .Select(r => new { r.FractionTo, r.FractionFrom, r.ClientId, r.TicketAllocationNimberId }).ToList();
+
+                        /*var returneds = (from r in context.TicketReturns
                                          where r.RaffleId == model.RaffleId
                                          select new
                                          {
@@ -352,7 +384,8 @@ namespace Tickets.Models.Ticket
                                              r.FractionFrom,
                                              r.ClientId,
                                              r.TicketAllocationNimberId
-                                         }).ToList();
+                                         }).ToList();*/
+
                         returneds.Where(r => r.ClientId == clientId).ToList().ForEach(a => returnTickets += (a.FractionTo - a.FractionFrom + 1));
 
                         model.TicketReturnedNumbers.ForEach(a => returnTickets += (a.FractionTo - a.FractionFrom + 1));
@@ -369,7 +402,8 @@ namespace Tickets.Models.Ticket
                         if (((raffleData.Statu == (int)RaffleStatusEnum.Active
                             || raffleData.Statu == (int)RaffleStatusEnum.Planned)
                             && raffleData.EndReturnDate >= DateTime.Now)
-                            || returnedOpens.Any())
+                            || raffleData.returnedOpens.Any()
+                            /*|| returnedOpens.Any()*/)
                         {
                             sb.Append("Las siguientes fracciones se encuentran devueltas\n ");
 
@@ -377,9 +411,9 @@ namespace Tickets.Models.Ticket
                             {
                                 var allocationNumber = ticketAllocationNumbers.FirstOrDefault(t => t.Number == ticketReturn.NumberId);
 
-                                var AllocationNumber = ticketAllocationNumbers.Select(i => i.Id).FirstOrDefault();
-                                var InvoiceTicket = context.InvoiceTickets.Where(t => t.TicketNumberAllocationId == AllocationNumber).Select(t => t.InvoiceId).FirstOrDefault();
-                                var InvoiceDiscount = context.Invoices.Where(i => i.Id == InvoiceTicket).Select(i => i.Discount).FirstOrDefault();
+                                //var AllocationNumber = ticketAllocationNumbers.Select(i => i.Id).FirstOrDefault();
+                                //var InvoiceTicket = context.InvoiceTickets.Where(t => t.TicketNumberAllocationId == AllocationNumber).Select(t => t.InvoiceId).FirstOrDefault();
+                                //var InvoiceDiscount = context.Invoices.Where(i => i.Id == InvoiceTicket).Select(i => i.Discount).FirstOrDefault();
 
                                 var returnedTicket = new TicketReturn()
                                 {
@@ -393,7 +427,7 @@ namespace Tickets.Models.Ticket
                                     ReturnedGroup = model.ReturnedGroup,
                                     TicketAllocationNimberId = allocationNumber.Id,
                                     Statu = (int)TicketReturnedStatuEnum.Created,
-                                    Discount = InvoiceDiscount
+                                    Discount = ticketAllocationNumbers[0].clientDiscount
                                 };
 
                                 //Validacion fraccion minima
@@ -433,7 +467,6 @@ namespace Tickets.Models.Ticket
                                     sb.Append(",");
                                     notAllReturnet = true;
                                 }
-
                             }
                             if (ticketNumberList.Count > 0)
                             {
@@ -462,6 +495,7 @@ namespace Tickets.Models.Ticket
                     }
                 }
             }
+
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Devolución de Billetes", model);
             string message = notAllReturnet ? sb.ToString() : "Devolución de Billetes Completada.";
             return new RequestResponseModel()
@@ -537,6 +571,7 @@ namespace Tickets.Models.Ticket
                     text = r.FirstOrDefault().ReturnedGroup
                 })
                 .ToList();
+
             return new RequestResponseModel()
             {
                 Result = true,
@@ -596,6 +631,5 @@ namespace Tickets.Models.Ticket
                 Object = returneds
             };
         }
-
     }
 }
