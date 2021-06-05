@@ -38,6 +38,7 @@ namespace Tickets.Controllers
                     {
                         var allocation = context.TicketAllocations.FirstOrDefault(i => i.Id == id);
                         var raffle = context.Raffles.Where(r => r.Id == allocation.RaffleId).FirstOrDefault();
+                        var ClientControlNumber = context.Clients.Where(c => c.Id == allocation.ClientId).Select(c => c.ControlNumber).FirstOrDefault();
 
                         var allocationXML = new Models.XML.TicketAllocateXML();
 
@@ -50,6 +51,7 @@ namespace Tickets.Controllers
                                 /*User = WebSecurity.CurrentUserName,*/
                                 CreateDate = DateTime.Now.ToString(),
                                 Allocation = id,
+                                ControlNumber = ClientControlNumber,
                                 TicketAllocationNumbers = new List<Models.XML.TicketAllocationNumber>()
                             };
 
@@ -71,6 +73,7 @@ namespace Tickets.Controllers
                                 /*User = WebSecurity.CurrentUserName,*/
                                 CreateDate = DateTime.Now.ToString(),
                                 Allocation = id,
+                                ControlNumber = ClientControlNumber,
                                 ticketAllocationNumberExtraordinarios = new List<Models.XML.TicketAllocationNumberExtraordinario>()
                             };
 

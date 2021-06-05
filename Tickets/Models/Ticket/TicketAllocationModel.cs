@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
@@ -10,6 +11,7 @@ namespace Tickets.Models.Ticket
     public class TicketAllocationModel
     {
         [JsonProperty(PropertyName = "id")]
+        [ConcurrencyCheck]
         public int Id { get; set; }
 
         [JsonProperty(PropertyName = "clientId")]
@@ -59,6 +61,9 @@ namespace Tickets.Models.Ticket
 
         [JsonProperty(PropertyName = "fractionCount")]
         public int FractionCount { get; set; }
+
+        [JsonProperty(PropertyName = "Agente")]
+        public string Agente { get; set; }
 
         #region Private Method
         private static List<TicketAllocation> CopyTicketAllocation(TicketsEntities context, int sourceId, int targetId, int type)
@@ -209,11 +214,54 @@ namespace Tickets.Models.Ticket
             var allocation = new TicketAllocationModel()
             {
                 Id = model.Id,
+                ClientId = model.ClientId,
                 ClientDesc = model.Client.Name,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
                 CreateDate = model.CreateDate,
+                StatuId = model.Statu,
+                Agente = model.Agente
             };
 
+            return allocation;
+        }
+
+        internal TicketAllocationModel InvoiceDetails(TicketAllocation model, bool hasNumber = true, bool hasProspectProperty = true)
+        {
+            var context = new TicketsEntities();
+            var allocation = new TicketAllocationModel()
+            {
+                Id = model.Id,
+                ClientId = model.ClientId,
+                RaffleId = model.RaffleId,
+                StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
+                StatuId = model.Statu,
+                TypeId = model.Type,
+                Agente = model.Agente,
+                CreateDate = model.CreateDate,
+                CreateDateLong = model.CreateDate.ToUnixTime(),
+                NumberCount = model.TicketAllocationNumbers.Count,
+                FractionCount = model.TicketAllocationNumbers.Select(a => a.FractionTo - a.FractionFrom + 1).Sum()
+            };
+            if (hasNumber)
+            {
+                var numberModel = new TicketAllocationNumberModel();
+                allocation.TicketAllocationNumbers = model.TicketAllocationNumbers.Select(n => numberModel.ToObject(n)).ToList();
+            }
+            if (hasProspectProperty)
+            {
+                Prospect prospect = context.Prospects.FirstOrDefault(p => p.Id == model.Raffle.ProspectId);
+
+                var price = prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == model.Client.PriceId);
+                if (price == null)
+                {
+                    allocation.FractionPrice = 16;
+                }
+                else
+                {
+                    allocation.FractionPrice = price.FactionPrice;
+                }
+                allocation.Production = prospect.Production;
+            }
             return allocation;
         }
 
@@ -264,6 +312,23 @@ namespace Tickets.Models.Ticket
                 allocation.Production = prospect.Production;
             }
             return allocation;
+        }
+
+        internal RequestResponseModel GetTicketAllocationListForInvoice(int raffleId, int clientId = 0, int statu = 0, bool hasNumber = false)
+        {
+            var context = new TicketsEntities();
+            var allocation = context.TicketAllocations
+                .Where(a =>
+                    (a.Statu == statu || statu == 0)
+                    && a.RaffleId == raffleId
+                    && (a.ClientId == clientId || clientId == 0)).AsEnumerable()
+                .Select(a => this.InvoiceDetails(a)).ToList();
+
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Object = allocation
+            };
         }
 
         internal RequestResponseModel GetTicketAllocationList(int raffleId, int clientId = 0, int statu = 0, bool hasNumber = false)
@@ -462,7 +527,8 @@ namespace Tickets.Models.Ticket
                                 CreateUser = WebSecurity.CurrentUserId,
                                 CreateDate = DateTime.Now,
                                 Type = model.TypeId,
-                                Statu = (int)AllocationStatuEnum.Created
+                                Statu = (int)AllocationStatuEnum.Created,
+                                Agente = model.Agente
                             };
                             context.TicketAllocations.Add(ticketAllocation);
                             context.SaveChanges();
@@ -511,6 +577,7 @@ namespace Tickets.Models.Ticket
                             context.TicketAllocationNumbers.AddRange(ticketAllocations);
                             context.SaveChanges();
                         }
+
                         dbContextTransaction.Commit();
                     }
                     catch (Exception e)

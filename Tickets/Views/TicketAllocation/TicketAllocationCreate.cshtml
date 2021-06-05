@@ -85,6 +85,17 @@
                             {{ticket.typeId == @((int)Tickets.Models.Enums.AllocationTypeEnum.Tickets)? 'Fracciones' : 'Cantiad'}}: <b>{{maxFraction}}</b>
                         </div>
                     </div>
+                    <div ng-show="ticket.clientId == 1712">
+                        <label class="col-lg-3 no-padder">
+                            Agente de ventas
+                        </label>
+                        <div class="col-lg-6">
+                            <input type="text"
+                                   ng-model="ticket.Agente"
+                                   class="form-control input-sm"
+                                   ng-required="true">
+                        </div>
+                    </div>
                 </div>
                 <div class="col-lg-12 well">
                     <h4>Numeros</h4>

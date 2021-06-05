@@ -28,7 +28,7 @@ namespace Tickets.Controllers
         [ActionName("getReviewAllocations")]
         public RequestResponseModel GetReviewAllocations(int raffleId, int clientId = 0)
         {
-            var response = new TicketAllocationModel().GetTicketAllocationList(raffleId, clientId, (int)AllocationStatuEnum.Review);
+            var response = new TicketAllocationModel().GetTicketAllocationListForInvoice(raffleId, clientId, (int)AllocationStatuEnum.Review);
             return response;
         }
 

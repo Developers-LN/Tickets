@@ -560,6 +560,7 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="CreateUser" Type="int" Nullable="false" />
           <Property Name="Statu" Type="int" Nullable="false" />
+          <Property Name="Agente" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="TicketAllocationNumber">
           <Key>
@@ -3525,6 +3526,7 @@
           <NavigationProperty Name="Raffle" Relationship="TicketsModel.FK_TicketAllocation_Raffle1" FromRole="TicketAllocation" ToRole="Raffle" />
           <NavigationProperty Name="User" Relationship="TicketsModel.FK_TicketAllocation_User1" FromRole="TicketAllocation" ToRole="User" />
           <NavigationProperty Name="TicketAllocationNumbers" Relationship="TicketsModel.FK_TicketAllocationNumber_TicketAllocation" FromRole="TicketAllocation" ToRole="TicketAllocationNumber" />
+          <Property Name="Agente" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="TicketAllocationNumber">
           <Key>
@@ -5552,6 +5554,7 @@
           <EntitySetMapping Name="TicketAllocations">
             <EntityTypeMapping TypeName="TicketsModel.TicketAllocation">
               <MappingFragment StoreEntitySet="TicketAllocation">
+                <ScalarProperty Name="Agente" ColumnName="Agente" />
                 <ScalarProperty Name="Statu" ColumnName="Statu" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />

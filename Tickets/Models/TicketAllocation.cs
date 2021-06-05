@@ -26,6 +26,7 @@ namespace Tickets.Models
         public System.DateTime CreateDate { get; set; }
         public int CreateUser { get; set; }
         public int Statu { get; set; }
+        public string Agente { get; set; }
     
         public virtual Client Client { get; set; }
         public virtual Raffle Raffle { get; set; }

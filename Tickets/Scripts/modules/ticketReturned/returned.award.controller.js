@@ -2,7 +2,7 @@
  * Module: ReturnedAwardController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -14,9 +14,14 @@
         $rootScope.returnUrl = "/#/ticket/Returned/awards";
 
         this.getData = function () {
-            $http.get($rootScope.serverUrl + 'ticket/raffleApi/getGeneratedRaffles')
-            .then(function (response) {
-                $scope.raffles = response.data.object;
+            $http.get($rootScope.serverUrl + 'ticket/raffleApi/getGeneratedRaffles').then(function (response) {
+                if (response !== null) {
+                    $scope.raffles = response.data.object;
+                }
+                window.setTimeout(function () {
+                    $scope.$apply();
+                    $rootScope.createSelect2();
+                }, 0);
             });
         }
 
@@ -67,8 +72,7 @@
                                 alertify.success(data.message);
                                 window.open('/Reports/NumberCertification?CertificationNumberId=' + data.certificateObject.Id);
                             }
-                            else
-                            {
+                            else {
                                 alertify.alert(data.message);
                             }
                         }

@@ -53,7 +53,6 @@
                     $rootScope.dataTable();
                 }
             });
-
         }
         
         this.loadData();

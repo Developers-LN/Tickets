@@ -2,7 +2,7 @@
  * Module: ReturnedTraceabilityController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -18,7 +18,7 @@
         };
         $scope.numberFound = false;
         var self = this;
-        
+
         function validateData(awardNumber) {
             var error = '', isReq = ' es un campo requerido. <br>';
 
@@ -66,13 +66,19 @@
                 }
             });
         }
-        
+
         $.ajax({
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             url: 'TypesAward/GetAwardNumberData',
             success: function (data) {
-                $scope.raffles = data.raffles;
+                if (data !== null) {
+                    $scope.raffles = data.raffles;
+                }
+                window.setTimeout(function () {
+                    $scope.$apply();
+                    $rootScope.createSelect2();
+                }, 0);
             }
         });
 
@@ -84,12 +90,14 @@
 
         $scope.paymentCount = 0;
         $scope.searchNumber = function () {
-            $scope.findedAward = true;
-            $scope.numberFound = false;
+            //$scope.findedAward = true;
+            //$scope.numberFound = false;
             if (validateData($scope.awardNumber) === false) {
                 return;
             }
             window.loading.show();
+            $scope.findedAward = true;
+            $scope.numberFound = false;
             $.ajax({
                 type: 'POST',
                 dataType: 'json',

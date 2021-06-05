@@ -108,6 +108,9 @@
             if (ticket.clientId === undefined) {
                 error += 'El cliente' + isReq;
             }
+            if (ticket.clientId == 1712 && ticket.Agente === undefined) {
+                error += 'El agente de ventas' + isReq;
+            }
             if (ticket.fractionFrom === undefined) {
                 error += 'El fracci&#243;n desde' + isReq;
             }
@@ -270,7 +273,8 @@
                 id: $scope.ticket.id,
                 raffleId: $scope.ticket.raffleId,
                 ticketAllocationNumbers: numbers,
-                typeId: $scope.ticket.typeId
+                typeId: $scope.ticket.typeId,
+                Agente: undefined
             };
 
             window.loading.show();

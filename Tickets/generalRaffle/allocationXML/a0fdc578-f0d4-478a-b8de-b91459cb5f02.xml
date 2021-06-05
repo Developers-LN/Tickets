@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<TicketAllocateXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <RaffleId>4225</RaffleId>
+  <RaffleDate>6/6/2021</RaffleDate>
+  <CreateDate>5/6/2021 2:44:02 p. m.</CreateDate>
+  <Allocation>20559</Allocation>
+  <ControlNumber>LN-1713</ControlNumber>
+  <TicketAllocationNumbers>
+    <TicketAllocationNumber>
+      <TiketNumber>00005</TiketNumber>
+      <FractionFrom>1</FractionFrom>
+      <FractionTo>20</FractionTo>
+    </TicketAllocationNumber>
+    <TicketAllocationNumber>
+      <TiketNumber>00006</TiketNumber>
+      <FractionFrom>1</FractionFrom>
+      <FractionTo>20</FractionTo>
+    </TicketAllocationNumber>
+  </TicketAllocationNumbers>
+</TicketAllocateXML>

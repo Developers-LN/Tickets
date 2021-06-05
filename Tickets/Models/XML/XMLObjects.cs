@@ -24,6 +24,7 @@ namespace Tickets.Models.XML
         public string CreateDate { get; set; }
         public string User { get; set; }
         public int Allocation { get; set; }
+        public string ControlNumber { get; set; }
         public List<TicketAllocationNumberExtraordinario> ticketAllocationNumberExtraordinarios { get; set; }
         public List<TicketAllocationNumber> TicketAllocationNumbers { get; set; }
     }

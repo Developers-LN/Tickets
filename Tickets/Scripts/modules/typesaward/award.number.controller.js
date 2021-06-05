@@ -2,7 +2,7 @@
  * Module: AwardNumberController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -18,7 +18,7 @@
         };
         $scope.numberFound = false;
         var self = this;
-        
+
         function validateData(awardNumber) {
             var error = '', isReq = ' es un campo requerido. <br>';
 
@@ -33,9 +33,10 @@
             }
             return error === '';
         }
+
         function validateNumenber(number) {
             if (Number(number) < 0 || number === '') {
-                return false
+                return false;
             }
             return true;
         }
@@ -63,13 +64,20 @@
                 }
             });
         }
-        
+
         $.ajax({
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             url: 'TypesAward/GetAwardNumberData',
             success: function (data) {
-                $scope.raffles = data.raffles;
+                window.loading.hide();
+                if (data !== null) {
+                    $scope.raffles = data.raffles;
+                }
+                window.setTimeout(function () {
+                    $scope.$apply();
+                    $rootScope.createSelect2();
+                }, 0);
             }
         });
 
@@ -78,6 +86,7 @@
                 $scope.searchNumber();
             }
         }
+
         $scope.totalFraction = 0;
         $scope.totalValue = 0;
         $scope.totalGeneral = 0;
@@ -96,12 +105,14 @@
 
         $scope.paymentCount = 0;
         $scope.searchNumber = function () {
-            $scope.findedAward = true;
-            $scope.numberFound = false;
+            //$scope.findedAward = true;
+            //$scope.numberFound = false;
             if (validateData($scope.awardNumber) === false) {
                 return;
             }
             window.loading.show();
+            $scope.findedAward = true;
+            $scope.numberFound = false;
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -114,7 +125,6 @@
                     } else {
                         alertify.alert(data.message);
                         $scope.findedAward = false;
-
                     }
                     $scope.$apply();
                 }

@@ -44,6 +44,33 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "numberCount")]
         public int NumberCount { get; set; }
 
+        internal TicketReturnedModel ListaDevoluciones(List<TicketReturn> ticketReturneds, bool hasNumber = false)
+        {
+            var context = new TicketsEntities();
+            var subGroups = "";
+            ticketReturneds.GroupBy(r => r.ReturnedGroup).AsEnumerable().Select(r => Regex.Replace(r.FirstOrDefault().ReturnedGroup, @"[\d-]", string.Empty).ToString()).ToList().ForEach(r => subGroups += r + ", ");
+            var model = new TicketReturnedModel()
+            {
+                RaffleId = ticketReturneds.FirstOrDefault().RaffleId,
+                RaffleDesc = ticketReturneds.FirstOrDefault().Raffle.Name,
+                ReturnedGroup = ticketReturneds.FirstOrDefault().ReturnedGroup,
+                ReturnedSubGroup = ticketReturneds.Count() == 1 ? ticketReturneds.FirstOrDefault().ReturnedGroup : ticketReturneds.Select(e => e.ReturnedGroup).Distinct().Aggregate((s, e) => s + ", " + e),
+                ReturnedDate = ticketReturneds.FirstOrDefault().ReturnedDate,
+                ClientId = ticketReturneds.FirstOrDefault().ClientId,
+                ClientDesc = ticketReturneds.FirstOrDefault().Client.Name,
+                FractionQuantity = ticketReturneds.Select(t => t.FractionTo - t.FractionFrom + 1).Sum(),
+                StatusId = ticketReturneds.FirstOrDefault().Statu,
+                NumberCount = ticketReturneds.Count
+            };
+
+            if (hasNumber == true)
+            {
+                var ticketReturnedNumberModel = new TicketReturnedNumberModel();
+                model.TicketReturnedNumbers = ticketReturneds.Select(t => ticketReturnedNumberModel.ToObject(t)).ToList();
+            }
+            return model;
+        }
+
         internal TicketReturnedModel ToObject(List<TicketReturn> ticketReturneds, bool hasNumber = false)
         {
             var context = new TicketsEntities();
@@ -427,7 +454,7 @@ namespace Tickets.Models.Ticket
                                     ReturnedGroup = model.ReturnedGroup,
                                     TicketAllocationNimberId = allocationNumber.Id,
                                     Statu = (int)TicketReturnedStatuEnum.Created,
-                                    Discount = ticketAllocationNumbers[0].clientDiscount
+                                    Discount = ticketAllocationNumbers.Where(n => n.Number == ticketReturn.NumberId).Select(t => t.clientDiscount).FirstOrDefault()
                                 };
 
                                 //Validacion fraccion minima
@@ -582,6 +609,8 @@ namespace Tickets.Models.Ticket
         internal RequestResponseModel GeListtByClient(int raffleId, int clientId = 0, bool propertys = true)
         {
             var context = new TicketsEntities();
+
+            //var t = context.TicketReturns.Where(r => r.RaffleId == raffleId && (r.ClientId == clientId || clientId == 0)).ToList().GroupBy(r => r.ClientId);
 
             var returneds = context.TicketReturns.Where(d =>
                     (d.RaffleId == raffleId)

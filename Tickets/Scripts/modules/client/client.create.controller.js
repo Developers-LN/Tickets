@@ -12,6 +12,7 @@
     ClientCreateController.$inject = ['$scope', '$rootScope', '$state', '$stateParams'];
     function ClientCreateController($scope, $rootScope, $state, $stateParams) {
         var self = this;
+
         this.validateClientData = function (client) {
             var error = '', isReq = ' es un campo requerido. <br>';
             if (client.Name === undefined) {

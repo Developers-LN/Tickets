@@ -217,6 +217,7 @@ namespace Tickets.Controllers
                         client.Tradename = string.IsNullOrEmpty(client.Tradename) ? "N/A" : client.Tradename;
                         client.Comment = string.IsNullOrEmpty(client.Comment) ? "N/A" : client.Comment;
                         client.CreateDate = DateTime.Now;
+                        client.ControlNumber = ("LN-" + (context.Clients.Max(c => c.Id) + 1)).ToString();
                         client.CreateUser = WebSecurity.CurrentUserId;
                         context.Clients.Add(client);
                         context.SaveChanges();
