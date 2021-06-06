@@ -24,6 +24,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "clientDesc")]
         public string ClientDesc { get; set; }
 
+        [JsonProperty(PropertyName = "agente")]
+        public string Agente { get; set; }
+
         [JsonProperty(PropertyName = "raffleId")]
         public int RaffleId { get; set; }
 
@@ -103,6 +106,7 @@ namespace Tickets.Models.Ticket
                 AgencyDesc = context.Agencies.Where(r => r.Id == model.AgencyId).Select(c => c.Name).FirstOrDefault(),
                 ClientId = model.ClientId,
                 ClientDesc = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.Name).FirstOrDefault(),
+                Agente = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.TicketAllocations.Select(a => a.Agente).FirstOrDefault()).FirstOrDefault(),
                 RaffleId = model.RaffleId,
                 RaffleDesc = context.Raffles.Where(r => r.Id == model.RaffleId).Select(c => c.Name).FirstOrDefault(),
                 PaymentType = model.PaymentType,

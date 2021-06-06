@@ -279,12 +279,13 @@ namespace Tickets.Models.Ticket
                 RaffleId = model.RaffleId,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
                 StatuId = model.Statu,
-                //TypeDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Type).NameDetail,
+                TypeDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Type).NameDetail,
                 TypeId = model.Type,
                 CreateDate = model.CreateDate,
                 CreateDateLong = model.CreateDate.ToUnixTime(),
                 CanAllocate = DateTime.Now <= raffle.EndAllocationDate,
                 NumberCount = model.TicketAllocationNumbers.Count,
+                Agente = model.Agente,
                 FractionCount = model.TicketAllocationNumbers.Select(a => a.FractionTo - a.FractionFrom + 1).Sum()
             };
             if (hasNumber)

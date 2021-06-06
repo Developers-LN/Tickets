@@ -1,24 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @{
     Layout = null;
     ViewBag.Title = "Listado de Billetes Facturados";
 }
+
 <div class="col-lg-12 no-padder" ng-controller="InvoiceListController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
@@ -68,7 +52,7 @@
                         <tbody>
                             <tr data-ng-repeat="invoice in invoices">
                                 <td>#{{invoice.id}}</td>
-                                <td>{{invoice.clientDesc}}</td>
+                                <td>{{invoice.clientDesc}} {{invoice.agente}}</td>
                                 <td>
                                     <span ng-if="invoice.ticketAllocations.length > 0">{{invoice.ticketAllocations}}</span>
                                     <a ng-click="showInvoiceDetails(invoice)" ng-if="invoice.ticketAllocations.length == 0" title="Mostrar asegnaciones"><i class="fa fa-eye"></i></a>

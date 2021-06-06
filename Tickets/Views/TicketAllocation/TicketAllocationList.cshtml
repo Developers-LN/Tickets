@@ -50,7 +50,7 @@
                         <tbody>
                             <tr data-ng-repeat="allocation in allocations">
                                 <td>#{{allocation.id}}</td>
-                                <td>{{allocation.clientId}} - {{allocation.clientDesc}}</td>
+                                <td>{{allocation.clientId}} - {{allocation.clientDesc}} {{allocation.Agente}}</td>
                                 <td>{{(allocation.createDate | date:"dd/MM/yyyy hh:mm:ss a")}}</td>
                                 <td>{{allocation.statuDesc}}</td>
                                 <td class="text-center">
