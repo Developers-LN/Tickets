@@ -6,16 +6,17 @@
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
-    List<long> numbers = context.TicketAllocationNumbers.Where(p => 
-        p.TicketAllocation.RaffleId == Model.Id 
-        && p.TicketAllocation.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Printed)
-        .Select(n => n.Number).ToList();
+    string adminCargo = config != null ? config.Cargo : "";
+    List<long> numbers = context.TicketAllocationNumbers.Where(p =>
+    p.TicketAllocation.RaffleId == Model.Id
+    && p.TicketAllocation.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Printed)
+    .Select(n => n.Number).ToList();
 }
 
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>REPUBLICA DOMINICANA</b><br />
@@ -24,7 +25,7 @@
             <b>NÚMEROS IMPRESOS NO FACTURADOS DEL SORTEO #@Model.Id</b>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
             <b>Hora: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
@@ -59,7 +60,7 @@
                     int countTen = 1;
                     <tr>
                         <td class="text-left" style="color:red; font-weight:bold; font-size:12pt;">@line</td>
-                        @while (countTen <= 10 )
+                        @while (countTen <= 10)
                         {
                             numberCount++;
                             if (numbers.Where(n => n == numberCount).Any())
@@ -70,7 +71,8 @@
                                 {
                                     stringNumber = "0" + stringNumber;
                                 }
-                                if(numberCount <= production){
+                                if (numberCount <= production)
+                                {
                                     <td class="text-center">@stringNumber</td>
                                 }
                             }
@@ -88,9 +90,9 @@
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>Total Numeros Impreso: @numbers.Count</b>
     </div>
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>@adminName</b><br />
-        <span>Administrador General</span>
+        <span>@adminCargo</span>
     </div>
 </div>

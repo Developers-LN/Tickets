@@ -20,5 +20,6 @@ namespace Tickets.Models
         public int TicketDesign { get; set; }
         public int RaffleXpiredTime { get; set; }
         public Nullable<int> LawDiscountPercentMayor { get; set; }
+        public string Cargo { get; set; }
     }
 }

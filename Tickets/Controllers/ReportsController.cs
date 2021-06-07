@@ -828,7 +828,6 @@ namespace Tickets.Controllers
             }
             else
             {
-
                 var startD = DateTime.Parse(startDate);
                 var endD = DateTime.Parse(endDate);
                 var invoices = context.Invoices.AsEnumerable().Where(i =>
@@ -843,7 +842,6 @@ namespace Tickets.Controllers
                 }
                 return View(invoices);
             }
-
         }
 
         //
@@ -866,7 +864,6 @@ namespace Tickets.Controllers
             }
             else
             {
-
                 var startD = DateTime.Parse(startDate);
                 var endD = DateTime.Parse(endDate);
                 ViewBag.clientId = clientId;
@@ -881,7 +878,6 @@ namespace Tickets.Controllers
                 }
                 return View(raffles);
             }
-
         }
 
         //
@@ -903,7 +899,6 @@ namespace Tickets.Controllers
             }
             else
             {
-
                 var startD = DateTime.Parse(startDate);
                 var endD = DateTime.Parse(endDate);
                 ViewBag.clientId = clientId;
@@ -918,7 +913,6 @@ namespace Tickets.Controllers
                 }
                 return View(raffles);
             }
-
         }
 
         //
@@ -955,7 +949,6 @@ namespace Tickets.Controllers
                 }
                 return View(raffles);
             }
-
         }
 
         //
@@ -978,7 +971,6 @@ namespace Tickets.Controllers
             }
             else
             {
-
                 var startD = DateTime.Parse(startDate);
                 var endD = DateTime.Parse(endDate);
                 ViewBag.clientId = clientId;
@@ -993,7 +985,6 @@ namespace Tickets.Controllers
                 }
                 return View(raffles);
             }
-
         }
 
         //
@@ -1016,7 +1007,6 @@ namespace Tickets.Controllers
             }
             else
             {
-
                 var startD = DateTime.Parse(startDate);
                 var endD = DateTime.Parse(endDate);
                 ViewBag.clientId = clientId;
@@ -1032,8 +1022,6 @@ namespace Tickets.Controllers
                 return View(raffles);
             }
         }
-
-
 
         //
         //GET: Reports/IdentifyAwardReport
@@ -1055,7 +1043,6 @@ namespace Tickets.Controllers
             }
             else
             {
-
                 var startD = DateTime.Parse(startDate);
                 var endD = DateTime.Parse(endDate);
                 ViewBag.clientId = clientId;
@@ -1070,7 +1057,6 @@ namespace Tickets.Controllers
                 }
                 return View(raffles);
             }
-
         }
 
         //GET: Reports/VentaLoteria365
@@ -1176,9 +1162,7 @@ namespace Tickets.Controllers
             ViewBag.ProspectMoney = prospectMoney;
             RRentabilidadSorteo report = context.RRentabilidadSorteos.Where(p => p.RaffleId == raffleId).FirstOrDefault();
 
-
             return View(report);
         }
-
     }
 }

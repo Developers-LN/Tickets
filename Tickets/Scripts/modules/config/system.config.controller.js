@@ -2,7 +2,7 @@
  * Module: SystemConfigController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -23,6 +23,9 @@
             if (config.RaffleXpiredTime === undefined) {
                 error += 'Tiempo de caducidad del sorteo' + isReq;
             }
+            if (config.Cargo === undefined) {
+                error += 'Cargo del administrador' + isReq;
+            }
             if (config.LawDiscountPercentMayor === undefined) {
                 error += 'Tiempo de caducidad del sorteo' + isReq;
             }
@@ -31,14 +34,17 @@
             }
             return error === '';
         };
+
         $scope.config = {
             id: 0,
             MaxReturnTickets: undefined,
             LoteryAdmin: undefined,
             TicketDesign: undefined,
             RaffleXpiredTime: undefined,
-            LawDiscountPercentMayor: undefined
+            LawDiscountPercentMayor: undefined,
+            Cargo: undefined
         };
+
         $scope.saveConfig = function () {
             if (self.validate($scope.config) === true) {
                 window.loading.show()
@@ -56,7 +62,8 @@
                 });
             }
         };
-        this.getSystemConfigData= function () {
+
+        this.getSystemConfigData = function () {
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',

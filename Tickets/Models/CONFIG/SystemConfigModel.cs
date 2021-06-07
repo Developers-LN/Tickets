@@ -59,6 +59,7 @@ namespace Tickets.Models
                         config.TicketDesign = systemConfig.TicketDesign;
                         config.RaffleXpiredTime = systemConfig.RaffleXpiredTime;
                         config.LawDiscountPercentMayor = systemConfig.LawDiscountPercentMayor;
+                        config.Cargo = systemConfig.Cargo;
                     }
                     context.SaveChanges();
                     tm.Commit();

@@ -70,7 +70,7 @@
                 <p>
                     Fecha de impresión <span style="text-decoration:underline">
                         <b>
-                         @identifyNumbers.FirstOrDefault().TicketAllocationNumber.PrintedDate.ToString()
+                            @identifyNumbers.FirstOrDefault().TicketAllocationNumber.PrintedDate.ToString()
                         </b>
                     </span>
                 </p>
@@ -119,82 +119,82 @@
                 @{if (Model.RaffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S)
                     {
                     <p>Con un premio para la fracción ganadora <b>@(Model.RaffleAward.Fraction)</b> con un total de @value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</p>
-                    }
-                    else
-                    {
-                        <p>Con un premio ganador de @value.ToString("c", new System.Globalization.CultureInfo("es-DO")) cada fracción. Lo que hace un total de @totalGeneral.ToString("c", new System.Globalization.CultureInfo("es-DO")).</p>
-                    }
                 }
-            </p>
-            <p>
-                <b>Certificamos</b>
-                <br />
-                Dicha revisión fue hecha por el directo de Produccíon y Sorteos, Encargado de Imprenta, Inspector General,
-                <br />
-                Contador general y Director de Control de Premios, de esta institución, quienes Certificamos que está correcto.
-            </p>
-            <p>
-                El Billete Premiado por la Dirección de Producción y Sorteos fue Presentado por <span style="text-decoration:underline"><b>LOTERIA NACIONAL</b></span>.
-                <br />
-                Dado en Santo Domingo, Distrito Nacional, a los <span style="text-decoration:underline"><b>@DateTime.Now.Day</b></span> días del mes <span style="text-decoration:underline"><b>@DateTime.Now.Month</b></span> del año <span style="text-decoration:underline"><b>@DateTime.Now.Year</b></span>.
-            </p>
+                else
+                {
+                    <p>Con un premio ganador de @value.ToString("c", new System.Globalization.CultureInfo("es-DO")) cada fracción. Lo que hace un total de @totalGeneral.ToString("c", new System.Globalization.CultureInfo("es-DO")).</p>
+                }
+                }
+                </p>
+                <p>
+                    <b>Certificamos</b>
+                    <br />
+                    Dicha revisión fue hecha por el directo de Produccíon y Sorteos, Encargado de Imprenta, Inspector General,
+                    <br />
+                    Contador general y Director de Control de Premios, de esta institución, quienes Certificamos que está correcto.
+                </p>
+                <p>
+                    El Billete Premiado por la Dirección de Producción y Sorteos fue Presentado por <span style="text-decoration:underline"><b>LOTERIA NACIONAL</b></span>.
+                    <br />
+                    Dado en Santo Domingo, Distrito Nacional, a los <span style="text-decoration:underline"><b>@DateTime.Now.Day</b></span> días del mes <span style="text-decoration:underline"><b>@DateTime.Now.Month</b></span> del año <span style="text-decoration:underline"><b>@DateTime.Now.Year</b></span>.
+                </p>
+
+            </div>
+
 
         </div>
-
-
     </div>
-</div>
-<div class="col-lg-12  no-padder text-center" style="padding-top:6%; margin:0 auto">
-    <div class="col-lg-12 text-center">
-        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-            <div class="col-lg-12 text-center">
-                ______________________________
+    <div class="col-lg-12  no-padder text-center" style="padding-top:6%; margin:0 auto">
+        <div class="col-lg-12 text-center">
+            <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+                <div class="col-lg-12 text-center">
+                    ______________________________
+                </div>
+                DIR. PRODUCCIÓN Y SORTEOS
             </div>
-            DIR. PRODUCCIÓN Y SORTEOS
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-            <div class="col-lg-12 text-center">
+            <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+                <div class="col-lg-12 text-center">
+                </div>
             </div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-            <div class="col-lg-12 text-center">
-                ______________________________
-            </div>
-            ENC. DE IMPRENTA
-        </div>
-    </div>
-    <div class="col-lg-12 text-center" style="margin-top: 50px;">
-        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-            <div class="col-lg-12 text-center">
-                ______________________________
-            </div>
-            INSPECTOR GENERAL
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-            <div class="col-lg-12 text-center">
+            <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+                <div class="col-lg-12 text-center">
+                    ______________________________
+                </div>
+                ENC. DE IMPRENTA
             </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-            <div class="col-lg-12 text-center">
-                ______________________________
+        <div class="col-lg-12 text-center" style="margin-top: 50px;">
+            <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+                <div class="col-lg-12 text-center">
+                    ______________________________
+                </div>
+                INSPECTOR GENERAL
             </div>
-            CONTADOR GENERAL
-        </div>
-    </div>
-    <div class="col-lg-12 text-center" style="margin-top: 50px;">
-        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-            <div class="col-lg-12 text-center">
+            <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+                <div class="col-lg-12 text-center">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+                <div class="col-lg-12 text-center">
+                    ______________________________
+                </div>
+                CONTADOR GENERAL
             </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-            <div class="col-lg-12 text-center">
-                ______________________________
+        <div class="col-lg-12 text-center" style="margin-top: 50px;">
+            <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+                <div class="col-lg-12 text-center">
+                </div>
             </div>
-            DIR. CONTROL DE PREMIOS
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-            <div class="col-lg-12 text-center">
+            <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+                <div class="col-lg-12 text-center">
+                    ______________________________
+                </div>
+                DIR. CONTROL DE PREMIOS
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+                <div class="col-lg-12 text-center">
+                </div>
             </div>
         </div>
     </div>
-</div>

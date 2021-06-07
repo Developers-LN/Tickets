@@ -6,11 +6,12 @@
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
+    string adminCargo = config != null ? config.Cargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 
     var xpiredDate = Model.InvoiceDate.AddDays(Model.InvoiceExpredDay.Value);
-	
-	var InvoiceDiscount2 = 0.0m;
+
+    var InvoiceDiscount2 = 0.0m;
 }
 <style>
     .col-lg-12{
@@ -168,7 +169,7 @@
         <b>@adminName</b>
     </div>
     <div class="col-lg-12 no-padder text-center">
-        <span>Administrador General</span>
+        <span>@adminCargo</span>
     </div>
 </div>
 
@@ -299,7 +300,7 @@
         <b>@adminName</b>
     </div>
     <div class="col-lg-12 no-padder text-center">
-        <span>Administrador General</span>
+        <span>@adminCargo</span>
     </div>
 </div>
 

@@ -548,6 +548,7 @@
           <Property Name="TicketDesign" Type="int" Nullable="false" />
           <Property Name="RaffleXpiredTime" Type="int" Nullable="false" />
           <Property Name="LawDiscountPercentMayor" Type="int" />
+          <Property Name="Cargo" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="TicketAllocation">
           <Key>
@@ -3510,6 +3511,7 @@
           <Property Name="TicketDesign" Type="Int32" Nullable="false" />
           <Property Name="RaffleXpiredTime" Type="Int32" Nullable="false" />
           <Property Name="LawDiscountPercentMayor" Type="Int32" />
+          <Property Name="Cargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="TicketAllocation">
           <Key>
@@ -5542,6 +5544,7 @@
           <EntitySetMapping Name="SystemConfigs">
             <EntityTypeMapping TypeName="TicketsModel.SystemConfig">
               <MappingFragment StoreEntitySet="SystemConfig">
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
                 <ScalarProperty Name="LawDiscountPercentMayor" ColumnName="LawDiscountPercentMayor" />
                 <ScalarProperty Name="RaffleXpiredTime" ColumnName="RaffleXpiredTime" />
                 <ScalarProperty Name="TicketDesign" ColumnName="TicketDesign" />

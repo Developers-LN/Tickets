@@ -9,28 +9,33 @@
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
 <style>
-    .col-lg-12{
+    .col-lg-12 {
         width: 100%;
         float: left;
     }
+
     .col-lg-4 {
         width: 33.333%;
-         float: left;
+        float: left;
     }
-    .col-lg-6{
+
+    .col-lg-6 {
         width: 50%;
         float: left;
-    } 
-    
+    }
+
     .text-center {
         text-align: center;
     }
+
     .text-right {
-        text-align:right;
+        text-align: right;
     }
+
     .text-left {
-        text-align:left;
+        text-align: left;
     }
+
     .no-padder {
         padding-left: 0px;
         padding-right: 0px;
@@ -78,12 +83,11 @@
                         </tr>
                     }
 
-                    
-                   <tr class="total">
-                       <td></td>
-                       <td></td>
-                       <td>Total: <strong>@((Model.IdentifyBachPayments.Count > 0 ? Model.IdentifyBachPayments.Select(p => p.Value).Aggregate((i, a) => i + a) : 0).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
-                   </tr>
+                    <tr class="total">
+                        <td></td>
+                        <td></td>
+                        <td>Total: <strong>@((Model.IdentifyBachPayments.Count > 0 ? Model.IdentifyBachPayments.Select(p => p.Value).Aggregate((i, a) => i + a) : 0).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

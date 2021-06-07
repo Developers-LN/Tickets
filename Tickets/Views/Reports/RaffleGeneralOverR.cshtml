@@ -6,6 +6,7 @@
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
+    string adminCargo = config != null ? config.Cargo : "";
 }
 <style>
     .col-lg-12 {
@@ -381,6 +382,6 @@
 
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>@adminName</b><br />
-        <span>Administrador General</span>
+        <span>@adminCargo</span>
     </div>
 </div>
