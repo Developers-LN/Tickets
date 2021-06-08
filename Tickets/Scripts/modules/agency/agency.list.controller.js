@@ -2,7 +2,7 @@
  * Module: AgencyListController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular

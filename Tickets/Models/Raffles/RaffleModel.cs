@@ -77,6 +77,25 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "raffleAwards")]
         public List<RaffleAwardModel> RaffleAwards { get; set; }
 
+        internal RaffleModel ListaSorteosGenerados(Raffle raffle, bool hasTicketProspect = false, bool hasPoolProspect = false, bool hasAwards = false)
+        {
+            var context = new TicketsEntities();
+            var raffleModel = new RaffleModel()
+            {
+                Id = raffle.Id,
+                EndAllocationDate = raffle.EndAllocationDate.Value,
+                EndReturnDate = raffle.EndReturnDate,
+                Name = raffle.Name,
+                RaffleDate = raffle.DateSolteo,
+                StartReturnDate = raffle.StartReturnDate,
+                Statu = raffle.Statu,
+                StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == raffle.Statu).NameDetail,
+                TicketProspectDesc = context.Prospects.FirstOrDefault(p => p.Id == raffle.ProspectId).Name
+            };
+
+            return raffleModel;
+        }
+
         internal RaffleModel ToObject(Raffle raffle, bool hasTicketProspect = false, bool hasPoolProspect = false, bool hasAwards = false)
         {
             var context = new TicketsEntities();
@@ -143,7 +162,7 @@ namespace Tickets.Models.Raffles
             var context = new TicketsEntities();
             var raffles = context.Raffles.AsEnumerable()
                 .Where(r => r.Statu == statu || (statu == 0 && r.Statu != (int)RaffleStatusEnum.Suspended))
-                .Select(r => this.ToObject(r)).OrderByDescending(r => r.Id).ToList();
+                .Select(r => this.ListaSorteosGenerados(r)).ToList();
 
             return new RequestResponseModel()
             {

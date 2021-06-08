@@ -2,7 +2,7 @@
  * Module: AccountsReceivablesReportsController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -54,6 +54,7 @@
 
                     $scope.$apply();
                     $rootScope.dataTable();
+                    $rootScope.createSelect2();
                 }
             });
         }

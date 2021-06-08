@@ -155,7 +155,6 @@ namespace Tickets.Controllers
                             return new JsonResult() { Data = new { result = false, message = "No se encontro pago para este rango de fecha" } };
                         }
 
-
                         var invoiceDetail = new InvoiceDetail()
                         {
                             CreateDate = DateTime.Now,
@@ -239,18 +238,19 @@ namespace Tickets.Controllers
         [Authorize]
         public JsonResult GetCashCloseData()
         {
-
             var context = new TicketsEntities();
             var cash = context.Cashes.FirstOrDefault(c => c.Statu == (int)CashStatusEnum.Open && c.CreateUser == WebSecurity.CurrentUserId);
             var totalCash = 0.00m;
             var totalCheck = 0.00m;
             var totalCard = 0.00m;
+
             foreach (var recipient in context.ReceiptPayments.Where(r => r.CashId == cash.Id))
             {
                 totalCash += recipient.TotalCash;
                 totalCheck += recipient.TotalCheck;
                 totalCard += recipient.TotalCredit;
             }
+            
             return new JsonResult()
             {
                 Data = new
@@ -291,6 +291,7 @@ namespace Tickets.Controllers
                         cash.Statu = (int)CashStatusEnum.Close;
                         context.SaveChanges();
                         tx.Commit();
+
                         return new JsonResult() { Data = new { result = true, message = "Caja cerrada correctamente." } };
                     }
                     catch (Exception e)
@@ -365,6 +366,7 @@ namespace Tickets.Controllers
 
                 context.SaveChanges();
                 Utils.SaveLog(WebSecurity.CurrentUserName, cash.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Cliente", CashToObject(cash));
+
                 return new JsonResult() { Data = new { result = true, message = "Caja Abierta correctamente!" } };
             }
             catch
@@ -785,6 +787,7 @@ namespace Tickets.Controllers
                 }
             }
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Recibo de cuenta po cobrar", receibableObject);
+
             return new JsonResult() { Data = new { result = true, receibableId = receivableId, message = "Recibo de Efectivo Guardado." } };
         }
 
@@ -971,6 +974,7 @@ namespace Tickets.Controllers
                         }
                         tx.Commit();
                         Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Nota de Credito Editada", creditNote);
+
                         return new JsonResult() { Data = new { result = true, message = "Nota de Credito Completada." } };
                     }
                     catch (Exception e)

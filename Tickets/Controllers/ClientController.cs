@@ -55,13 +55,14 @@ namespace Tickets.Controllers
         public JsonResult GetList()
         {
             var context = new TicketsEntities();
-            var clients = context.Clients.AsEnumerable().Where(c => c.Statu != (int)GeneralStatusEnum.Suspended).Select(c => ClientToObject(c)).ToList();
+            var clients = context.Clients.AsEnumerable().Where(c => c.Statu != (int)GeneralStatusEnum.Suspended).Select(c => ListaClientes(c)).ToList();
 
             var raffles = context.Raffles.Select(r => new
             {
                 r.Id,
                 r.Name
             }).ToList();
+
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Clientes");
 
             return new JsonResult() { Data = new { clients, raffles }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -127,7 +128,6 @@ namespace Tickets.Controllers
             return new JsonResult() { Data = new { clientGroups, invoiceStatus, client, provinces, matritalStates, prices, genders, clientTypes }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-
         // GET: /Client/GetClientList
         [HttpGet]
         [Authorize]
@@ -143,6 +143,25 @@ namespace Tickets.Controllers
             }).ToList();
 
             return new JsonResult() { Data = new { clients }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        private object ListaClientes(Client c)
+        {
+            var context = new TicketsEntities();
+            var catalogs = context.Catalogs.ToList();
+            return new
+            {
+                c.Id,
+                c.AmountDeposit,
+                c.CreditLimit,
+                c.DocumentNumber,
+                c.Name,
+                c.Phone,
+                c.RNC,
+                c.Statu,
+                StatuDesc = catalogs.FirstOrDefault(ct => ct.Id == c.Statu).NameDetail,
+                c.Tradename
+            };
         }
 
         private object ClientToObject(Client c)
@@ -267,7 +286,6 @@ namespace Tickets.Controllers
                         context.SaveChanges();
                         EmailUtil.SendClientEmail(ReportByEmailEnum.MODIFIED_CLIENT, client);
                     }
-
                 }
                 catch (Exception)
                 { }

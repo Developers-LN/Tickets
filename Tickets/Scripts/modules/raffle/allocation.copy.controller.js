@@ -2,7 +2,7 @@
  * Module: AllocationCopyController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular

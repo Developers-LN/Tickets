@@ -27,7 +27,8 @@ namespace Tickets.Controllers
         public JsonResult GetList()
         {
             var context = new TicketsEntities();
-            var agencys = context.Agencies.AsEnumerable().Where(p => p.Statu != (int)GeneralStatusEnum.Delete).Select(e => AgencyToObject(e)).ToList();
+            var agencys = context.Agencies.AsEnumerable().Where(p => p.Statu != (int)GeneralStatusEnum.Delete).Select(e => ListaAgencias(e)).ToList();
+
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Agencias");
 
             return new JsonResult() { Data = new { agencys = agencys }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -137,6 +138,37 @@ namespace Tickets.Controllers
             return new JsonResult() { Data = true };
         }
 
+        public object ListaAgencias(Agency agency)
+        {
+            var context = new TicketsEntities();
+            var catalogs = context.Catalogs.ToList();
+            return new
+            {
+                agency.Id,
+                agency.Name,
+                //agency.Description,
+                //agency.EmployeeId,
+                //EmployeeDesc = context.Employees.FirstOrDefault(ct => ct.Id == agency.EmployeeId).Name + " " + context.Employees.FirstOrDefault(ct => ct.Id == agency.EmployeeId).LastName,
+                //agency.GroupId,
+                //GroupDesc = catalogs.FirstOrDefault(ct => ct.Id == agency.GroupId).NameDetail,
+                agency.Province,
+                ProvinceDesc = context.Provinces.FirstOrDefault(p => p.Id == agency.Province).Name,
+                agency.Section,
+                //SectionDesc = context.DistTowns.FirstOrDefault(dt => dt.Id == agency.Section).Name,
+                //agency.Town,
+                //TownDesc = context.Towns.FirstOrDefault(t => t.Id == agency.Town).Name,
+                //agency.Addres,
+                agency.Phone,
+                agency.Email,
+                //agency.Fax,
+                //IntDate = agency.IntDate.ToUnixTime(),
+                agency.Statu,
+                StatuDesc = catalogs.FirstOrDefault(ct => ct.Id == agency.Statu).NameDetail,
+                //CreateDate = agency.CreateDate.ToString(),
+                //agency.CreateUser
+            };
+        }
+
         public object AgencyToObject(Agency agency)
         {
             var context = new TicketsEntities();
@@ -167,6 +199,5 @@ namespace Tickets.Controllers
                 agency.CreateUser
             };
         }
-
     }
 }

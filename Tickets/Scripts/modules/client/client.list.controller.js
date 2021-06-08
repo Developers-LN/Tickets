@@ -2,7 +2,7 @@
  * Module: ClientListController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -21,7 +21,7 @@
                 success: function (data) {
                     window.loading.hide();
                     $scope.clientList = data.clients;
-                    
+
                     $rootScope.destroyDataTable();
                     $scope.$apply();
                     $rootScope.dataTable();

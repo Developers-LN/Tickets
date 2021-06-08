@@ -82,6 +82,7 @@
                         <th>FECHA</th>
                         <th>SORTEO</th>
                         <th>Forma de pago</th>
+                        <th>Referencia</th>
                         <th class="text-right" style="width:15%">VALOR</th>
                     </tr>
                 </thead>
@@ -118,6 +119,9 @@
                                     @DepTransf;
                                 }
                             </td>
+                            <td>
+                                @receiptPayment.Recibo
+                            </td>
                             <td class="text-right" style="width:15%">
                                 @if (receiptPayment.TotalCash > 0)
                                 {
@@ -135,7 +139,7 @@
                         </tr>
                     }
                     <tr class="total">
-                        <td colspan="6" class="text-right">Total: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                        <td colspan="7" class="text-right">Total: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
                     </tr>
                 </tbody>
             </table>

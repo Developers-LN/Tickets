@@ -11,16 +11,19 @@
 
     RaffleGeneratedController.$inject = ['$scope', '$rootScope', '$state'];
     function RaffleGeneratedController($scope, $rootScope, $state) {
+
         this.getSolteoList = function () {
+            window.loading.show();
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 url: $rootScope.serverUrl + 'ticket/raffleApi/getGeneratedRaffles',
                 success: function (response) {
+                    window.loading.hide();
                     $scope.raffles = response.object.map(function (raffle) {
-                        raffle.raffleDate = new Date(raffle.raffleDateLong);
-                        raffle.startReturnDate = new Date(raffle.startReturnDateLong);
-                        raffle.endReturnDate = new Date(raffle.endReturnDateLong);
+                        raffle.raffleDate = new Date(raffle.raffleDate);
+                        raffle.startReturnDate = new Date(raffle.startReturnDate);
+                        raffle.endReturnDate = new Date(raffle.endReturnDate);
                         return raffle;
                     });
                     $scope.$apply();

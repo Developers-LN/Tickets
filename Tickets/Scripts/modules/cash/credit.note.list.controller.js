@@ -2,7 +2,7 @@
  * Module: DeliveryListController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -24,8 +24,8 @@
                     if ($scope.ClientId === 0) {
                         $scope.clients = data.clients;
                     }
-                    $rootScope.destroyDataTable();
                     $scope.$apply();
+                    $rootScope.createSelect2();
                     $rootScope.dataTable();
                 }
             });
