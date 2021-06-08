@@ -2,7 +2,7 @@
  * Module: ReceivableListController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular

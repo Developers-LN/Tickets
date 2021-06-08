@@ -43,6 +43,7 @@
         padding-right: 0px;
     }
 </style>
+
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
@@ -112,7 +113,7 @@
                                     var value = (receipt.TotalCash + receipt.TotalCheck + receipt.TotalCredit);
                                     totalClient += value;
                                     <tr>
-                                        <td class="text-center">@invoice.Client.Name</td>
+                                        <td class="text-center">@invoice.Client.Name @invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()</td>
                                         <td class="text-center">@invoice.Id</td>
                                         <td class="text-center">@invoice.InvoiceDate.ToString()</td>
                                         <td class="text-center">Pago en Efectivo</td>
@@ -126,7 +127,7 @@
                                     var value = receipt.NoteCreditReceiptPayments.Count > 0 ? receipt.NoteCreditReceiptPayments.FirstOrDefault().TotalCash : 0;
                                     totalClient += value;
                                     <tr>
-                                        <td class="text-center">@invoice.Client.Name</td>
+                                        <td class="text-center">@invoice.Client.Name @invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()</td>
                                         <td class="text-center">@invoice.Id</td>
                                         <td class="text-center">@invoice.InvoiceDate.ToString()</td>
                                         <td class="text-center">Nota de Credito No. @(receipt.NoteCreditReceiptPayments.Count == 0 ? 0 : receipt.NoteCreditReceiptPayments.FirstOrDefault().NoteCredit.Id)</td>

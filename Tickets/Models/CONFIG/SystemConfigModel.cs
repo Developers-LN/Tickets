@@ -19,6 +19,7 @@ namespace Tickets.Models
                     LoteryAdmin = "",
                     MaxReturnTickets = 0,
                     TicketDesign = 0,
+                    Cargo = ""
                 };
             }
             var ticketDesings = context.Catalogs.Where(c => c.IdGroup == (int)CatalogGroupEnum.TicketsDesing).Select(c => new

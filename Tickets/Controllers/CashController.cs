@@ -515,9 +515,12 @@ namespace Tickets.Controllers
 
                         var invoice = context.Invoices.FirstOrDefault(i => i.Id == receiptPayment.InvoiceId);
 
-                        if (context.ReceiptPayments.FirstOrDefault(r => r.ClientId == invoice.ClientId && r.Recibo == receiptPayment.Recibo) != null)
+                        if(receiptPayment.ReceiptType == (int)PaymentTypeEnum.TransDepDirect)
                         {
-                            return new JsonResult() { Data = new { result = false, message = "Este pago fue efectuado anteriormente." } };
+                            if (context.ReceiptPayments.FirstOrDefault(r => r.ClientId == invoice.ClientId && r.Recibo == receiptPayment.Recibo) != null)
+                            {
+                                return new JsonResult() { Data = new { result = false, message = "Este pago fue efectuado anteriormente." } };
+                            }
                         }
 
                         var noteCreditReceiptPayments = receiptPayment.NoteCreditReceiptPayments;
@@ -628,6 +631,7 @@ namespace Tickets.Controllers
                     paymentTypes,
                     clientName = invoice.Client.Name,
                     clientId = invoice.ClientId,
+                    Agente = invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault(),
                     creditNotes = invoice.Client.NoteCredits.AsEnumerable().Where(c =>
                        c.Statu == (int)GeneralStatusEnum.Active
                        && (c.RaffleId.HasValue == false || c.RaffleId.Value == invoice.RaffleId)
@@ -797,6 +801,7 @@ namespace Tickets.Controllers
                 ClientDesc = context.Clients.Where(r => r.Id == invoice.ClientId).Select(c => c.Name).FirstOrDefault(),
                 InvoiceDate = invoice.InvoiceDate.ToUnixTime(),
                 invoice.PaymentStatu,
+                Agente = invoice.InvoiceTickets.Where(i => i.InvoiceId == invoice.Id).Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault(),
                 xpiredDate = xpiredDate.ToUnixTime(),
                 xpiredDay = (xpiredDate.Date < DateTime.Now.Date && invoice.PaymentStatu == 2082) ? "Caducada" : "",
                 PaymentStatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == invoice.PaymentStatu).NameDetail,
@@ -911,6 +916,7 @@ namespace Tickets.Controllers
                 noteCredit.RaffleId.HasValue ? noteCredit.Concepts + " del Sorteo #" + noteCredit.RaffleId.Value : noteCredit.Concepts
             };
         }
+
         //
         // GET: /Cash/CreditNote
         [Authorize]
