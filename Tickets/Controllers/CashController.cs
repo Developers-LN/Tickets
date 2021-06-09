@@ -250,7 +250,7 @@ namespace Tickets.Controllers
                 totalCheck += recipient.TotalCheck;
                 totalCard += recipient.TotalCredit;
             }
-            
+
             return new JsonResult()
             {
                 Data = new
@@ -517,9 +517,10 @@ namespace Tickets.Controllers
 
                         var invoice = context.Invoices.FirstOrDefault(i => i.Id == receiptPayment.InvoiceId);
 
-                        if(receiptPayment.ReceiptType == (int)PaymentTypeEnum.TransDepDirect)
+                        if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.TransDepDirect)
                         {
-                            if (context.ReceiptPayments.FirstOrDefault(r => r.ClientId == invoice.ClientId && r.Recibo == receiptPayment.Recibo) != null)
+                            if (context.ReceiptPayments.FirstOrDefault(r => r.ClientId == invoice.ClientId && r.Recibo == receiptPayment.Recibo
+                            && r.InvoiceId == invoice.Id) != null)
                             {
                                 return new JsonResult() { Data = new { result = false, message = "Este pago fue efectuado anteriormente." } };
                             }
