@@ -510,7 +510,7 @@ namespace Tickets.Controllers
                     {
                         if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.TransDepDirect && receiptPayment.Recibo == null)
                         {
-                            return new JsonResult() { Data = new { result = false, message = "No ha ingresado el número de recibo." } };
+                            return new JsonResult() { Data = new { result = false, message = "No ha ingresado el número de referencia." } };
                         }
 
                         var cash = context.Cashes.FirstOrDefault(c => c.Statu == (int)CashStatusEnum.Open && c.CreateUser == WebSecurity.CurrentUserId);

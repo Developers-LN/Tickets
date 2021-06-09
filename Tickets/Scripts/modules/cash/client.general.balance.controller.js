@@ -49,12 +49,15 @@
                 url: 'Cash/CashReportData',
                 success: function (data) {
                     window.loading.hide();
-                    $scope.clients = data.clients;
-                    $scope.raffles = data.raffles;
+                    if (data !== null) {
+                        $scope.clients = data.clients;
+                        $scope.raffles = data.raffles;
+                    }
 
-                    $scope.$apply();
-                    $rootScope.dataTable();
-                    $rootScope.createSelect2();
+                    window.setTimeout(function () {
+                        $scope.$apply();
+                        $rootScope.createSelect2();
+                    }, 0);
                 }
             });
         }

@@ -50,8 +50,11 @@
                     window.loading.hide();
                     $scope.clients = data.clients;
                     $scope.raffles = data.raffles;
-                    $scope.$apply();
-                    $rootScope.dataTable();
+
+                    window.setTimeout(function () {
+                        $scope.$apply();
+                        $rootScope.createSelect2();
+                    }, 0);
                 }
             });
         }

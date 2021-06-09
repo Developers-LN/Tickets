@@ -139,7 +139,6 @@ namespace Tickets.Controllers
             return View(previousDebtPayment);
         }
 
-
         //
         //  GET: Reports/CXCReport
         [Authorize]
@@ -197,6 +196,7 @@ namespace Tickets.Controllers
             Raffle raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
             return View(raffle);
         }
+
         // 
         //  GET: Reports/ShowDocument
         [HttpGet]
@@ -409,7 +409,6 @@ namespace Tickets.Controllers
                     return RedirectToAction("Error", new { message = "No se encontraron datos para los criterios seleccionados." });
                 }
                 return View(returned);
-
             }
             else
             {
@@ -459,7 +458,6 @@ namespace Tickets.Controllers
             var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
             return View(raffle);
         }
-
 
         //
         //  GET: Reports/MajorAwardInline
