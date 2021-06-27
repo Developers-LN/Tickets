@@ -148,6 +148,20 @@ namespace Tickets.Controllers
             return View();
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult PrintTicketReport()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult PrintRaffleReport()
+        {
+            return View();
+        }
+
         //
         // GET: /InspectorReports
         [Authorize]

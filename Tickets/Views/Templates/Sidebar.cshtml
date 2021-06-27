@@ -400,8 +400,6 @@
                     </ul>
                 </li>
 
-
-
                 <li>
                     <a href="" title="Reportes y Estadisticas" ripple="">
                         <em class="sidebar-item-icon icon-file"></em>
@@ -412,6 +410,20 @@
                         </span>
                     </a>
                     <ul class="nav sidebar-subnav">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.printTicketReport')">
+                            <a ui-sref="app.printTicketReport" title="Reporte billetes de sorteo">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Reporte billetes de sorteo</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.printRaffleReport')">
+                            <a ui-sref="app.printRaffleReport" title="Reporte de sorteo">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Reporte de sorteo</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.printReportList')">
                             <a ui-sref="app.printReportList" title="Reportes de Impresión">
                                 <em class="sidebar-item-icon"></em>

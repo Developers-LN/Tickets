@@ -19,14 +19,16 @@
                         </fieldset>
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Sorteo:</span><span class="col-lg-8">
+                                <span class="col-lg-4 control-label">Sorteo:</span>
+                                <span class="col-lg-8">
                                     <b>{{identifyBach.RaffleDesc}}</b>
                                 </span>
                             </div>
                         </fieldset>
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Total en premios:</span><span class="col-lg-8">
+                                <span class="col-lg-4 control-label">Total en premios:</span>
+                                <span class="col-lg-8">
                                     <b>{{parseMoney(totalAwards)}}</b>
                                 </span>
                             </div>
@@ -34,14 +36,16 @@
 
                         <fieldset ng-if="identifyBach.percent > 0">
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Comision Mayorista ({{identifyBach.percent}}%):</span><span class="col-lg-8">
+                                <span class="col-lg-4 control-label">Comision Mayorista ({{identifyBach.percent}}%):</span>
+                                <span class="col-lg-8">
                                     <b>{{parseMoney(totalAwards * identifyBach.percent / 100)}}</b>
                                 </span>
                             </div>
                         </fieldset>
                         <fieldset ng-if="identifyBach.percent > 0">
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Total en premios:</span><span class="col-lg-8">
+                                <span class="col-lg-4 control-label">Total en premios:</span>
+                                <span class="col-lg-8">
                                     <b>{{parseMoney(totalGeneral)}}</b>
                                 </span>
                             </div>
@@ -67,14 +71,16 @@
                         </fieldset>
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Total en pagado:</span><span class="col-lg-8">
+                                <span class="col-lg-4 control-label">Total en pagado:</span>
+                                <span class="col-lg-8">
                                     <b>{{parseMoney(totalpayment)}}</b>
                                 </span>
                             </div>
                         </fieldset>
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Total restante:</span><span class="col-lg-8">
+                                <span class="col-lg-4 control-label">Total restante:</span>
+                                <span class="col-lg-8">
                                     <b>{{parseMoney(totalRestant)}}</b>
                                 </span>
                             </div>

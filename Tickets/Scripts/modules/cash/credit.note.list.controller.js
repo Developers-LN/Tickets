@@ -24,6 +24,7 @@
                     if ($scope.ClientId === 0) {
                         $scope.clients = data.clients;
                     }
+
                     $scope.$apply();
                     $rootScope.createSelect2();
                     $rootScope.dataTable();

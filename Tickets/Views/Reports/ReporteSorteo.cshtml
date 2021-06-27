@@ -8,7 +8,7 @@
     string adminName = config != null ? config.LoteryAdmin : "";
     string adminCargo = config != null ? config.Cargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
-    int clientId = (int)ViewBag.clientId;
+    //int clientId = (int)ViewBag.clientId;
 }
 
 <style>
@@ -106,10 +106,14 @@
                         decimal totalOther = 0.0m;
 
                         var raffleName = raffle.Id + " - " + raffle.Name;
-                        var invoices = raffle.Invoices.Where(i => (i.ClientId == clientId || clientId == 0) && i.PaymentStatu != (int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Suspended).AsEnumerable()
-                            .GroupBy(g => g.ClientId)
+                        var invoices = raffle.Invoices.Where(i => i.PaymentStatu != (int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Suspended).AsEnumerable()
+                            .GroupBy(g => g.RaffleId)
                             .Select(i => new
                             {
+                                raffleName = i.FirstOrDefault().Raffle.Name,
+
+
+
                                 clientId = i.FirstOrDefault().ClientId,
                                 clientName = i.FirstOrDefault().ClientId + " - " + i.FirstOrDefault().Client.Name,
 
@@ -136,7 +140,7 @@
                         {
                             var restant = client.invoiceValue - (client.discountValue + client.returnedValue + client.paymentValue + client.paymentIdentify + client.otherPayment);
                             <tr>
-                                <td class="text-left">@client.clientName</td>
+                                <td class="text-left">@client.raffleName</td>
                                 <td class="text-right">@((client.invoiceValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                                 <td class="text-right">@((client.discountValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                                 <td class="text-right">@((client.returnedValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>

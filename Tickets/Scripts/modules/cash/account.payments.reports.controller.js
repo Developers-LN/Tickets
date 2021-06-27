@@ -2,7 +2,7 @@
  * Module: AccountPaymentsReportsController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -78,7 +78,6 @@
             return error === '';
         }
 
-
         $scope.printPaymentsReport = function () {
             if (validateData($scope.cash) === false) {
                 return;
@@ -90,6 +89,17 @@
             }
             window.open('Reports/AccountsPayments?startDate=' + $scope.cash.StartDate + '&endDate=' + $scope.cash.EndDate + '&clientId=' + $scope.cash.ClientId + '&raffleId=' + $scope.cash.RaffleId);
         }
+
+        $scope.printReporteSorteo = function () {
+            if (validateData($scope.cash) === false) {
+                return;
+            }
+            try {
+                $scope.cash.EndDate = $rootScope.parseDate($scope.cash.EndDate, $scope.cash.EndDate).toJSON();
+                $scope.cash.StartDate = $rootScope.parseDate($scope.cash.StartDate, $scope.cash.StartDate).toJSON();
+            } catch (e) {
+            }
+            window.open('Reports/ReporteSorteo?startDate=' + $scope.cash.StartDate + '&endDate=' + $scope.cash.EndDate);
+        }
     }
-    
 })();

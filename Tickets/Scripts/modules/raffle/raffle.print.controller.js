@@ -2,7 +2,7 @@
  * Module: RafflePrintController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -14,12 +14,13 @@
         this.getSolteoList = function (statu) {
             $rootScope.systemLoading = true;
             var url = $rootScope.serverUrl + 'ticket/raffleApi/getRaffleList?statu=0'
-            
+            window.loading.show();
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 url: url,
                 success: function (response) {
+                    window.loading.hide();
                     $rootScope.systemLoading = false;
                     $scope.raffles = response.object;
                     $scope.$apply();
@@ -29,6 +30,5 @@
         }
 
         this.getSolteoList();
-        
     }
 })();

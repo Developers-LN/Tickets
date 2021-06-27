@@ -4,67 +4,64 @@
     Layout = null;
 }
 
-<div class="col-md-12 col-lg-12" ng-controller="SystemProductionCost" ng-init="app.title = '@(ViewBag.Title)'">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="container">
+<div class="col-lg-12 no-padder" ng-controller="SystemProductionCost" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
 
-                <div class="form-group col-xs-12 col-sm-12 col-md-10 col-lg-10">
+                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <label class=""><span>Seleccione el sorteo del cual detallara el costo</span></label>
 
-                    <select class="form-control " ng-model="StaticProductionCostObject.RaffleId"  id="raffleS" ng-change="UpdateData()">
+                    <select class="form-control " ng-model="StaticProductionCostObject.RaffleId" id="raffleS" ng-change="UpdateData()">
                         @*<option ng-repeat="r in RaffleNames" value="{{r.Id}}">{{r.Id}} - {{r.RaffleName}}</option>*@
                     </select>
                 </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-10 col-lg-10">
+                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <label for="subject" class="label-control">Detalle:</label>
                     <input type="text" name="detalle" id="detalle" class="form-control" placeholder="Introdusca el detalle" required=""
                            ng-model="StaticProductionCostObject.Detalle" />
                 </div>
-                <div class="form-group col-xs-12 col-sm-12 col md-12 col-lg-10">
-                  <label  for="cantidad" class=""><span>Cantidad:</span></label>
-                   <input type="number" name="cantidad" id="cantidad" class="form-control" placeholder="Introdusca una cantidad" required="" ng-model="StaticProductionCostObject.Cantidad"/>
+                <div class="form-group col-xs-12 col-sm-12 col md-12 col-lg-12">
+                    <label for="cantidad" class=""><span>Cantidad:</span></label>
+                    <input type="number" name="cantidad" id="cantidad" class="form-control" placeholder="Introdusca una cantidad" required="" ng-model="StaticProductionCostObject.Cantidad" />
                 </div>
-                <div class="form-group col-xs-12 col-sm-12 col md-12 col-lg-10">
+                <div class="form-group col-xs-12 col-sm-12 col md-12 col-lg-12">
                     <label for="monto">Monto:</label>
-                   <input type="number" id="monto" name="monto" class="form-control" placeholder="Introdusca el monto" required="" ng-model="StaticProductionCostObject.Monto"/>
+                    <input type="number" id="monto" name="monto" class="form-control" placeholder="Introdusca el monto" required="" ng-model="StaticProductionCostObject.Monto" />
                 </div>
-                
-                <div class="form-group col-xs-12 col-sm-12 col md-12 col-lg-10">
+
+                <div class="form-group col-xs-12 col-sm-12 col md-12 col-lg-12">
                     <button class="pull-right btn btn-success" ng-click="agregarToList()">Agregar</button>
                 </div>
-            
 
             </div>
         </div>
-    </div>
 
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="container">
-                 <h5>Detalle del costo:</h5>
-                <table class="table-condensed table-striped col-md-8 table-bg-lotery" >
-                   <tr style="background-color:#49AE6E; ">
-                       <th class="text-center">No. Sorteo</th>
-                       <th class="text-center">Detalle</th>
-                       <th class="text-center">Cantidad</th>
-                       <th class="text-center">Monto</th>
-                       <th class="text-center">Total</th>
-                       <td class="text-center">Borrar</td>
-                   </tr>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h5>Detalle del costo:</h5>
+                <table class="table-condensed table-striped col-xs-10 col-sm-10 col-md-10 col-lg-10 table-bg-lotery">
+                    <tr style="background-color:#49AE6E; ">
+                        <th class="text-center">No. Sorteo</th>
+                        <th class="text-center">Detalle</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Monto</th>
+                        <th class="text-center">Total</th>
+                        <td class="text-center">Borrar</td>
+                    </tr>
                     <tr ng-repeat="row in ProductionCost">
                         <td class="text-center">{{row.RaffleId}}</td>
                         <td class="text-center">{{row.Detalle}}</td>
                         <td class="text-center">{{row.Cantidad}}</td>
                         <td class="text-center">{{row.Monto}}</td>
                         <td class="text-center">{{row.Cantidad * row.Monto}}</td>
-                        <td class="text-center" ng-click="deleteNumber(row)"><a  class="fa fa-trash"></a></td>
+                        <td class="text-center" ng-click="deleteNumber(row)"><a class="fa fa-trash"></a></td>
                     </tr>
 
                 </table>
-                <div class="form-group col-xs-4 col-sm-4 col md-4 col-lg-4">
-                   
-                   <button class="btn btn-success" ng-click="guardar()">Guardar</button>
+                <div class="form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+
+                    <button class="btn btn-success" ng-click="guardar()">Guardar</button>
                 </div>
             </div>
         </div>

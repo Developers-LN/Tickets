@@ -358,6 +358,33 @@ namespace Tickets.Controllers
             return View(raffle);
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult BilletesVendidos(int raffleId)
+        {
+            var context = new TicketsEntities();
+            var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
+            return View(raffle);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult BilletesDevueltos(int raffleId)
+        {
+            var context = new TicketsEntities();
+            var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
+            return View(raffle);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult BilletesCirculacion(int raffleId)
+        {
+            var context = new TicketsEntities();
+            var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
+            return View(raffle);
+        }
+
         //
         //  GET: Reports/NoPrintedNumbesAward
         [Authorize]
@@ -874,6 +901,33 @@ namespace Tickets.Controllers
                 {
                     return RedirectToAction("Error", new { message = "No se encontraron cuentas por cobrar para los criterios seleccionados." });
                 }
+                return View(raffles);
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult ReporteSorteo(string startDate = "undefined", string endDate = "undefined")
+        {
+            var context = new TicketsEntities();
+
+            if (startDate == "undefined" && endDate == "undefined")
+            {
+                return RedirectToAction("Error", new { message = "La fecha de inicio y la fecha de fin son requeridas." });
+            }
+            else
+            {
+                var startD = DateTime.Parse(startDate);
+                var endD = DateTime.Parse(endDate);
+
+                var raffles = context.Raffles.AsEnumerable()
+                                     .Where(r => r.DateSolteo.Date >= startD && r.DateSolteo.Date <= endD.Date).ToList();
+
+                if (raffles.Count == 0)
+                {
+                    return RedirectToAction("Error", new { message = "No se encontraron datos para las fechas seleccionadas." });
+                }
+
                 return View(raffles);
             }
         }

@@ -1,0 +1,137 @@
+﻿@model Tickets.Models.Raffle
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Billetes devueltos";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    string adminCargo = config != null ? config.Cargo : "";
+
+    var TicketReturnList = context.TicketReturns.Where(r => r.RaffleId == Model.Id).Select(r => r.TicketAllocationNimberId);
+
+    var numbers = context.InvoiceTickets
+                         .Join(context.TicketAllocationNumbers,
+                               Invoiced => Invoiced.TicketNumberAllocationId,
+                               Ticket => Ticket.Id,
+                               (Invoiced, Ticket) => new
+                               {
+                                   Ticket.Number,
+                                   Invoiced.TicketNumberAllocationId,
+                                   Ticket.RaffleId,
+                                   Ticket.TicketAllocation.Statu,
+                                   FractionsReturned = Ticket.TicketReturns
+                                   .Where(n => n.RaffleId == Model.Id && n.TicketAllocationNimberId == Invoiced.TicketNumberAllocationId)
+                                   .Sum(n => (n.FractionTo - n.FractionFrom) + 1)
+                               })
+                         .Where(r => TicketReturnList.Contains(r.TicketNumberAllocationId) && r.RaffleId == Model.Id &&
+                         (r.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Printed ||
+                         r.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Invoiced)).ToList();
+
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>REPUBLICA DOMINICANA</b><br />
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION LOTERIA NACIONAL</b><br />
+            fecha del sorteo: @Model.DateSolteo.ToLongDateString()
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>NUMEROS DEVUELTOS EN EL SORTEO NO. @Model.Id</b><br />
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 no-padder col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th colspan="11" class="text-center">@Model.Name</th>
+                </tr>
+                <tr>
+                    <th class="text-left">FILA</th>
+                    <th class="text-center">COLUMNA 1</th>
+                    <th class="text-center">COLUMNA 2</th>
+                    <th class="text-center">COLUMNA 3</th>
+                    <th class="text-center">COLUMNA 4</th>
+                    <th class="text-center">COLUMNA 5</th>
+                    <th class="text-center">COLUMNA 6</th>
+                    <th class="text-center">COLUMNA 7</th>
+                    <th class="text-center">COLUMNA 8</th>
+                    <th class="text-center">COLUMNA 9</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var RaffleId = Model.Id;
+                    var numberCount = numbers.Min(n => n.Number) - 1;
+                    var production = Model.Prospect.Production - 1;
+                    var Fractions = Model.Prospect.LeafFraction * Model.Prospect.LeafNumber;
+                    int line = 1;
+                    int TicketsCount = numbers.Count;
+                    var MaxNumber = numbers.Max(n => n.Number);
+                    int inicio = 0, fin = 0, CantidadFraccion = 0, LastFaction = 0;
+                    string stringNumber, newStringNumber, stringNumberI, stringNumberF, newStringNumberS;
+                }
+
+                @while (numberCount <= MaxNumber)
+                {
+                    int countTen = 1;
+                    <tr>
+                        <td class="text-left" style="color:red; font-weight:bold; font-size:12pt;">@line</td>
+                        @while (countTen <= 9 && numberCount <= MaxNumber)
+                        {
+                            numberCount++;
+                            if (numbers.Where(n => n.Number == numberCount).Any())
+                            {
+                                countTen++;
+                                stringNumber = numberCount.ToString();
+                                newStringNumber = stringNumber.PadLeft(production.ToString().Length, '0');
+                                LastFaction = numbers.Where(n => n.Number == numberCount).Select(f => f.FractionsReturned).FirstOrDefault();
+
+                                if (numbers.Where(n => n.Number == (numberCount + 1)).Any() && numbers.Where(n => n.Number == (numberCount + 1)).Select(f => f.FractionsReturned).FirstOrDefault() == LastFaction)
+                                {
+                                    inicio = (int)numberCount;
+                                    numberCount++;
+                                    while (numbers.Where(n => n.Number == numberCount).Any() && numbers.Where(n => n.Number == numberCount).Select(f => f.FractionsReturned).FirstOrDefault() == LastFaction)
+                                    {
+                                        LastFaction = numbers.Where(n => n.Number == numberCount).Select(f => f.FractionsReturned).FirstOrDefault();
+                                        fin = (int)numberCount++;
+                                    }
+                                    stringNumberI = inicio.ToString();
+                                    stringNumberF = fin.ToString();
+                                    newStringNumberS = (stringNumberI.PadLeft(production.ToString().Length, '0') + " - " + stringNumberF.PadLeft(production.ToString().Length, '0') + "." + LastFaction);
+
+                                    <td class="text-center">@newStringNumberS</td>
+                                }
+                                else
+                                {
+                                    CantidadFraccion = numbers.Where(n => n.Number == numberCount).Select(f => f.FractionsReturned).FirstOrDefault();
+                                    <td class="text-center">@newStringNumber.@CantidadFraccion</td>
+                                }
+                            }
+                        }
+                    </tr>
+                    line += 1;
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>Total Numeros Devueltos: @TicketsCount</b>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>@adminCargo</span><br />
+        <p>NOTA: Este reporte contiene los números que han sido devueltos en el sorteo @RaffleId, encontrándose posicionado a la izquierda del punto el número de billete y a la derecha la cantidad de fracciones devueltas</p>
+    </div>
+</div>

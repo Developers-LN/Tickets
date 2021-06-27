@@ -3051,6 +3051,12 @@
     <Content Include="Views\Reports\ClientBalanceGeneralReport.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\Raffle\PrintTicketReport.cshtml" />
+    <Content Include="Views\Reports\BilletesVendidos.cshtml" />
+    <Content Include="Views\Reports\BilletesDevueltos.cshtml" />
+    <Content Include="Views\Reports\BilletesCirculacion.cshtml" />
+    <Content Include="Views\Raffle\PrintRaffleReport.cshtml" />
+    <Content Include="Views\Reports\ReporteSorteo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
