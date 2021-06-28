@@ -856,6 +856,7 @@ namespace Tickets.Controllers
         {
             return View();
         }
+
         //
         //GET: /Cash/CreditNote
         [Authorize]

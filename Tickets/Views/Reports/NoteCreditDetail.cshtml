@@ -1,0 +1,225 @@
+﻿@model Tickets.Models.NoteCredit
+
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    string adminCargo = config != null ? config.Cargo : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+}
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>DETALLE DE LA NOTA DE CREDITO NO. 000-@Model.Id</b>
+        </div>
+        <div class="col-lg-6 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <b>Cliente: </b> #@Model.Client.Name
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Cajero: </b> #@Model.CreateUser
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Fecha de Creación: </b> @Model.NoteDate.ToShortDateString()
+            </div>
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <div class="col-lg-12 no-padder text-right">
+                <b>Nota de crédito: </b> #@Model.Id
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">MONTO TOTAL</th>
+                    <th class="text-center">MONTO RESTANTE</th>
+                    <th class="text-center">CONCEPTO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">@Model.TotalCash</td>
+                    <td class="text-center">@Model.TotalRest </td>
+                    <td class="text-center">@Model.Concepts</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-12 no-padder text-center">
+
+        <br>
+        <br>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma del Cliente
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma Encargada de Facturacion
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="col-lg-12 no-padder text-center">
+
+        <br>
+        <br>
+
+        <b>@adminName</b>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <span>@adminCargo</span>
+    </div>
+</div>
+
+<br>
+<br>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>DETALLE DE LA NOTA DE CREDITO NO. 000-@Model.Id</b>
+        </div>
+        <div class="col-lg-6 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <b>Cliente: </b> #@Model.Client.Name
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Cajero: </b> #@Model.CreateUser
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Fecha de Creación: </b> @Model.NoteDate.ToShortDateString()
+            </div>
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <div class="col-lg-12 no-padder text-right">
+                <b>Nota de crédito: </b> #@Model.Id
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">MONTO TOTAL</th>
+                    <th class="text-center">MONTO RESTANTE</th>
+                    <th class="text-center">CONCEPTO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">@Model.TotalCash</td>
+                    <td class="text-center">@Model.TotalRest </td>
+                    <td class="text-center">@Model.Concepts</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="col-lg-12 no-padder text-center">
+
+        <br>
+        <br>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma del Cliente
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma Encargada de Facturacion
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+
+        <br>
+        <br>
+
+        <b>@adminName</b>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <span>@adminCargo</span>
+    </div>
+</div>

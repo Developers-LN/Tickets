@@ -656,6 +656,15 @@ namespace Tickets.Controllers
             return View(invoice);
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult NoteCreditDetail(int noteCreditId)
+        {
+            var context = new TicketsEntities();
+            var notecredit = context.NoteCredits.FirstOrDefault(r => r.Id == noteCreditId);
+            return View(notecredit);
+        }
+
         //
         //  GET: Reports/ReturnedDeatils
         [Authorize]
