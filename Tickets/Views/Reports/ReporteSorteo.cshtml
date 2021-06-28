@@ -1,14 +1,16 @@
-﻿@model List<Tickets.Models.Raffle>
+﻿@model IEnumerable<Tickets.Models.Raffle>
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     ViewBag.Title = "";
+
+    var t = Model.ToList();
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
     string adminCargo = config != null ? config.Cargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
-    //int clientId = (int)ViewBag.clientId;
 }
 
 <style>
@@ -57,7 +59,7 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
-            <b>REPORTE DE CUENTAS POR COBRAR</b>
+            <b>REPORTE DE SORTEO</b>
         </div>
     </div>
     <div class="col-lg-12 no-padder">
@@ -73,14 +75,16 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th class="text-center">Mayorista</th>
-                        <th class="text-right">Valor facturado</th>
-                        <th class="text-right">Descuento</th>
-                        <th class="text-right">Devoluciones</th>
-                        <th class="text-right">Pagos por Premios</th>
-                        <th class="text-right">Ajustes</th>
-                        <th class="text-right">Pagos en Efectivo</th>
-                        <th class="text-right">Cantidad Restante</th>
+                        <th colspan="3"></th>
+                        <th colspan="3" class="text-center">Ganadores</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Sorteo</th>
+                        <th class="text-center">Fecha del sorteo</th>
+                        <th class="text-right">Ventas efectivas</th>
+                        <th class="text-center">1<sup>ro</sup></th>
+                        <th class="text-center">2<sup>do</sup></th>
+                        <th class="text-center">3<sup>ro</sup></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,76 +103,61 @@
                         decimal totalInvoice = 0.0m;
                         decimal totalDiscount = 0.0m;
                         decimal totalReturnedPayments = 0.0m;
-                        //decimal totalGeneral = 0.0m;
                         decimal totalRest = 0.0m;
                         decimal totalPayment = 0.0m;
                         decimal totalCredit = 0.0m;
                         decimal totalOther = 0.0m;
 
                         var raffleName = raffle.Id + " - " + raffle.Name;
+                        var raffleDate = raffle.DateSolteo.ToShortDateString();
+
+                        var Numbers = raffle.TicketReturns.Where(r => r.RaffleId == raffle.Id).Select(s => s.TicketAllocationNumber.Number);
+
+                        var raffleAwards = raffle.RaffleAwards.Where(a => a.RaffleId == raffle.Id).OrderBy(o => o.Award.Id).Take(3).ToList();
+
+                        var raffleAwardsReturned = raffle.RaffleAwards.Where(a => a.RaffleId == raffle.Id).OrderBy(o => o.Award.Id).Take(3).ToList();
+
                         var invoices = raffle.Invoices.Where(i => i.PaymentStatu != (int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Suspended).AsEnumerable()
                             .GroupBy(g => g.RaffleId)
                             .Select(i => new
                             {
-                                raffleName = i.FirstOrDefault().Raffle.Name,
-
-
-
-                                clientId = i.FirstOrDefault().ClientId,
-                                clientName = i.FirstOrDefault().ClientId + " - " + i.FirstOrDefault().Client.Name,
+                                raffleName = (i.FirstOrDefault().Raffle.Id + " - " + i.FirstOrDefault().Raffle.Name),
+                                raffleDate = i.FirstOrDefault().Raffle.DateSolteo.ToShortDateString(),
 
                                 invoiceValue = i.Select(iv => iv.InvoiceTickets.Select(it => it.Quantity * it.PricePerFraction).Aggregate((x, y) => x + y)).Aggregate((x, y) => x + y),
 
-                                discountValue = i.Select(iv => (iv.Discount * iv.InvoiceTickets.Select(it => it.Quantity * it.PricePerFraction).Aggregate((x, y) => x + y)) / 100).Aggregate((x, y) => x + y),
-
-                                paymentValue = i.Where(p => p.PaymentType != (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
-                                                .Select(p => p.ReceiptPayments.Select(rp => rp.TotalCash + rp.TotalCheck + rp.TotalCredit).Sum()).Sum(),
-
-                                returnedValue = i.Select(p => p.ReceiptPayments.Select(rp => rp.NoteCreditReceiptPayments.Where(nc => nc.NoteCredit.RaffleId.HasValue)
-                                                 .Select(nc => nc.TotalCash).Sum()).Sum()).Sum(),
-
                                 paymentIdentify = i.Select(p => p.ReceiptPayments.Select(rp => rp.NoteCreditReceiptPayments.Select(nc => nc.NoteCredit.IdentifyBaches.Any() ? nc.TotalCash : 0).Sum()).Sum()).Sum(),
-
-                                otherPayment = i.Select(p => p.ReceiptPayments.Select(rp => rp.NoteCreditReceiptPayments.Select(nc => (nc.NoteCredit.IdentifyBaches.Any() == false && nc.NoteCredit.RaffleId.HasValue == false) ? nc.TotalCash : 0).Sum()).Sum()).Sum(),
 
                             }).ToList();
 
-                        <tr>
-                            <th colspan="7" class="text-left">@raffleName</th>
-                        </tr>
-                        foreach (var client in invoices)
+                        if (invoices.Count != 0)
                         {
-                            var restant = client.invoiceValue - (client.discountValue + client.returnedValue + client.paymentValue + client.paymentIdentify + client.otherPayment);
-                            <tr>
-                                <td class="text-left">@client.raffleName</td>
-                                <td class="text-right">@((client.invoiceValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((client.discountValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((client.returnedValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((client.paymentIdentify).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((client.otherPayment).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((client.paymentValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((restant).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            </tr>
+                            foreach (var client in invoices)
+                            {
+                                <tr>
+                                    <td class="text-left">@client.raffleName</td>
+                                    <td class="text-center">@client.raffleDate</td>
+                                    <td class="text-right">@((client.invoiceValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-center">@((string)(raffleAwards.Count > 0 ? Convert.ToInt32(raffleAwards[0].ControlNumber).ToString() : "N/A"))</td>
+                                    <td class="text-center">@((string)(raffleAwards.Count > 0 ? Convert.ToInt32(raffleAwards[1].ControlNumber).ToString() : "N/A"))</td>
+                                    <td class="text-center">@((string)(raffleAwards.Count > 0 ? Convert.ToInt32(raffleAwards[2].ControlNumber).ToString() : "N/A"))</td>
+                                </tr>
 
-                            totalInvoice += client.invoiceValue;
-                            totalDiscount += client.discountValue;
-                            totalReturnedPayments += client.returnedValue;
-                            totalPayment += client.paymentValue;
-                            totalCredit += client.paymentIdentify;
-                            totalOther += client.otherPayment;
-                            totalRest += restant;
+                                totalInvoice += client.invoiceValue;
+                                totalCredit += client.paymentIdentify;
+                            }
                         }
-
-                        <tr class="sub-total" style="font-weight:bold">
-                            <td class="text-right">Total sorteo...:</td>
-                            <td class="text-right">@(totalInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalReturnedPayments.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalOther.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalPayment.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalRest.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                        </tr>
+                        else
+                        {
+                            <tr>
+                                <td class="text-left">@raffleName</td>
+                                <td class="text-center">@raffleDate</td>
+                                <td class="text-right">0</td>
+                                <td class="text-center">@((string)(raffleAwards.Count > 0 ? Convert.ToInt32(raffleAwards[0].ControlNumber).ToString() : "N/A"))</td>
+                                <td class="text-center">@((string)(raffleAwards.Count > 0 ? Convert.ToInt32(raffleAwards[1].ControlNumber).ToString() : "N/A"))</td>
+                                <td class="text-center">@((string)(raffleAwards.Count > 0 ? Convert.ToInt32(raffleAwards[2].ControlNumber).ToString() : "N/A"))</td>
+                            </tr>
+                        }
 
                         totalGeneralInvoice += totalInvoice;
                         totalGeneralDiscount += totalDiscount;
@@ -181,16 +170,12 @@
                 </tbody>
                 <tfoot>
                     <tr class="total" style="font-weight:bold">
-                        <td class="text-right">Total General...:</td>
+                        <td colspan="2" class="text-right">Total General...:</td>
                         <td class="text-right">@(totalGeneralInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                        <td class="text-right">@(totalGeneralDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                        <td class="text-right">@(totalGeneralReturnedPayments.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                        <td class="text-right">@(totalGeneralCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                        <td class="text-right">@(totalGeneralOther.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                        <td class="text-right">@(totalGeneralPayment.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                        <td class="text-right">@(totalGeneralRest.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
                     </tr>
-
                 </tfoot>
             </table>
         </div>

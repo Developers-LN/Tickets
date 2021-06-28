@@ -921,7 +921,7 @@ namespace Tickets.Controllers
                 var endD = DateTime.Parse(endDate);
 
                 var raffles = context.Raffles.AsEnumerable()
-                                     .Where(r => r.DateSolteo.Date >= startD && r.DateSolteo.Date <= endD.Date).ToList();
+                                     .Where(r => r.DateSolteo.Date >= startD.Date && r.DateSolteo.Date <= endD.Date).ToList();
 
                 if (raffles.Count == 0)
                 {
