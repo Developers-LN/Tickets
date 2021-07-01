@@ -89,7 +89,7 @@
             $rootScope.destroyDataTable();
             window.setTimeout(function () {
                 $scope.$apply();
-                $rootScope.dataTable(false);
+                $rootScope.dataTable();
             }, 0);
         }
 
@@ -171,7 +171,7 @@
                         $scope.changeRaffle();
                     }
                     $rootScope.createSelect2();
-                    $rootScope.dataTable(false);
+                    $rootScope.dataTable();
                     $scope.$apply();
                 }
                 window.setTimeout(function () {
@@ -207,10 +207,10 @@
                         $scope.reprint.ticketReprintNumbers.push(number);
                     });
 
-                    $rootScope.destroyDataTable();
+                    //$rootScope.destroyDataTable();
                     window.setTimeout(function () {
                         $scope.$apply();
-                        $rootScope.dataTable(false);
+                        $rootScope.dataTable();
                     }, 0);
                 }
             });

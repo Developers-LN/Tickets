@@ -328,6 +328,7 @@
     <Compile Include="Models\Enums\AllocationTypeEnum.cs" />
     <Compile Include="Models\Enums\PaymentTypeTextEnum.cs" />
     <Compile Include="Models\Enums\PrintTypeProspect.cs" />
+    <Compile Include="Models\Enums\ProspectImpresionTypeEnum.cs" />
     <Compile Include="Models\Enums\ReportByEmailEnum.cs" />
     <Compile Include="Models\Enums\AwardCertificationStatuEnum.cs" />
     <Compile Include="Models\Enums\UserRolEnum.cs" />

@@ -4,12 +4,32 @@
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     ViewBag.Title = "";
 
-    var t = Model.ToList();
-
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
     string adminCargo = config != null ? config.Cargo : "";
+
+    var menor = Model.Min(m => m.Id);
+    var mayor = Model.Max(m => m.Id);
+
+    var ticketReturn = context.TicketReturns
+                    .Join(context.TicketAllocationNumbers,
+                    tr => tr.TicketAllocationNimberId,
+                    ta => ta.Id,
+                    (tr, ta) => new
+                    {
+                        ta.RaffleId,
+                        ta.Number
+                    })
+                    .Where(r => r.RaffleId >= menor && r.RaffleId <= mayor);
+
+    var ticketAllocationNumbers = context.TicketAllocationNumbers.Where(r => r.RaffleId >= menor && r.RaffleId <= mayor)
+                     .Select(s => new
+                     {
+                         s.Number,
+                         s.RaffleId
+                     });
+
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 }
 
@@ -59,7 +79,7 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
-            <b>REPORTE DE SORTEO</b>
+            <b>REPORTE DE LOS SORTEOS ENTRE @ViewBag.StartDate Y @ViewBag.EndDate</b>
         </div>
     </div>
     <div class="col-lg-12 no-padder">
@@ -75,13 +95,14 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th colspan="3"></th>
+                        <th colspan="4"></th>
                         <th colspan="3" class="text-center">Ganadores</th>
                     </tr>
                     <tr>
                         <th class="text-center">Sorteo</th>
                         <th class="text-center">Fecha del sorteo</th>
-                        <th class="text-right">Ventas efectivas</th>
+                        <th class="text-right">Venta bruta</th>
+                        <th class="text-right">Venta efectiva</th>
                         <th class="text-center">1<sup>ro</sup></th>
                         <th class="text-center">2<sup>do</sup></th>
                         <th class="text-center">3<sup>ro</sup></th>
@@ -108,25 +129,31 @@
                         decimal totalCredit = 0.0m;
                         decimal totalOther = 0.0m;
 
-                        var raffleName = raffle.Id + " - " + raffle.Name;
+                        var raffleName = raffle.Name;
                         var raffleDate = raffle.DateSolteo.ToShortDateString();
 
-                        var Numbers = raffle.TicketReturns.Where(r => r.RaffleId == raffle.Id).Select(s => s.TicketAllocationNumber.Number);
-
-                        var raffleAwards = raffle.RaffleAwards.Where(a => a.RaffleId == raffle.Id).OrderBy(o => o.Award.Id).Take(3).ToList();
-
-                        var raffleAwardsReturned = raffle.RaffleAwards.Where(a => a.RaffleId == raffle.Id).OrderBy(o => o.Award.Id).Take(3).ToList();
+                        var raffleAwards = raffle.RaffleAwards.Where(a => a.RaffleId == raffle.Id).OrderBy(o => o.Award.Id)
+                                                 .Select(s => new
+                                                 {
+                                                     controlNumber = s.ControlNumber,
+                                                     status = (ticketReturn.Where(w => w.RaffleId == raffle.Id).Select(sr => sr.Number).Contains(s.ControlNumber) ? "D" :
+                                                               !ticketAllocationNumbers.Where(w => w.RaffleId == raffle.Id).Select(stan => stan.Number).Contains(s.ControlNumber) ? "NA" :
+                                                               "C")
+                                                 }).Take(3).ToList();
 
                         var invoices = raffle.Invoices.Where(i => i.PaymentStatu != (int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Suspended).AsEnumerable()
                             .GroupBy(g => g.RaffleId)
                             .Select(i => new
                             {
-                                raffleName = (i.FirstOrDefault().Raffle.Id + " - " + i.FirstOrDefault().Raffle.Name),
+                                raffleName = i.FirstOrDefault().Raffle.Name,
                                 raffleDate = i.FirstOrDefault().Raffle.DateSolteo.ToShortDateString(),
 
                                 invoiceValue = i.Select(iv => iv.InvoiceTickets.Select(it => it.Quantity * it.PricePerFraction).Aggregate((x, y) => x + y)).Aggregate((x, y) => x + y),
 
-                                paymentIdentify = i.Select(p => p.ReceiptPayments.Select(rp => rp.NoteCreditReceiptPayments.Select(nc => nc.NoteCredit.IdentifyBaches.Any() ? nc.TotalCash : 0).Sum()).Sum()).Sum(),
+                                discountValue = i.Select(iv => (iv.Discount * iv.InvoiceTickets.Select(it => it.Quantity * it.PricePerFraction).Aggregate((x, y) => x + y)) / 100).Aggregate((x, y) => x + y),
+
+                                returnedValue = i.Select(p => p.ReceiptPayments.Select(rp => rp.NoteCreditReceiptPayments.Where(nc => nc.NoteCredit.RaffleId.HasValue)
+                                                 .Select(nc => nc.TotalCash).Sum()).Sum()).Sum(),
 
                             }).ToList();
 
@@ -134,17 +161,21 @@
                         {
                             foreach (var client in invoices)
                             {
+                                var restant = client.invoiceValue - (client.returnedValue + client.discountValue /*+ client.paymentValue + client.paymentIdentify + client.otherPayment*/);
+
                                 <tr>
                                     <td class="text-left">@client.raffleName</td>
                                     <td class="text-center">@client.raffleDate</td>
                                     <td class="text-right">@((client.invoiceValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                    <td class="text-center">@((string)(raffleAwards.Count > 0 ? Convert.ToInt32(raffleAwards[0].ControlNumber).ToString() : "N/A"))</td>
-                                    <td class="text-center">@((string)(raffleAwards.Count > 0 ? Convert.ToInt32(raffleAwards[1].ControlNumber).ToString() : "N/A"))</td>
-                                    <td class="text-center">@((string)(raffleAwards.Count > 0 ? Convert.ToInt32(raffleAwards[2].ControlNumber).ToString() : "N/A"))</td>
+                                    <td class="text-right">@((restant).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-center">@((string)(raffleAwards.Count > 0 ? raffleAwards[0].controlNumber+"-"+raffleAwards[0].status : "N/A"))</td>
+                                    <td class="text-center">@((string)(raffleAwards.Count > 0 ? raffleAwards[1].controlNumber+"-"+raffleAwards[1].status : "N/A"))</td>
+                                    <td class="text-center">@((string)(raffleAwards.Count > 0 ? raffleAwards[2].controlNumber+"-"+raffleAwards[2].status : "N/A"))</td>
                                 </tr>
 
                                 totalInvoice += client.invoiceValue;
-                                totalCredit += client.paymentIdentify;
+                                totalReturnedPayments += client.returnedValue;
+                                totalRest += restant;
                             }
                         }
                         else
@@ -153,9 +184,10 @@
                                 <td class="text-left">@raffleName</td>
                                 <td class="text-center">@raffleDate</td>
                                 <td class="text-right">0</td>
-                                <td class="text-center">@((string)(raffleAwards.Count > 0 ? Convert.ToInt32(raffleAwards[0].ControlNumber).ToString() : "N/A"))</td>
-                                <td class="text-center">@((string)(raffleAwards.Count > 0 ? Convert.ToInt32(raffleAwards[1].ControlNumber).ToString() : "N/A"))</td>
-                                <td class="text-center">@((string)(raffleAwards.Count > 0 ? Convert.ToInt32(raffleAwards[2].ControlNumber).ToString() : "N/A"))</td>
+                                <td class="text-right">0</td>
+                                <td class="text-center">@((string)(raffleAwards.Count > 0 ? raffleAwards[0].controlNumber+"-"+raffleAwards[0].status : "N/A"))</td>
+                                <td class="text-center">@((string)(raffleAwards.Count > 0 ? raffleAwards[1].controlNumber+"-"+raffleAwards[1].status : "N/A"))</td>
+                                <td class="text-center">@((string)(raffleAwards.Count > 0 ? raffleAwards[2].controlNumber+"-"+raffleAwards[2].status : "N/A"))</td>
                             </tr>
                         }
 
@@ -172,6 +204,7 @@
                     <tr class="total" style="font-weight:bold">
                         <td colspan="2" class="text-right">Total General...:</td>
                         <td class="text-right">@(totalGeneralInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-right">@(totalGeneralRest.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                         <td class="text-center"></td>
                         <td class="text-center"></td>
                         <td class="text-center"></td>
@@ -181,6 +214,7 @@
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <p>NOTA: Los numeros ganadores terminados en "C" son aquellos que estan en la calle, mientras que los que terminan en "D" son los ganadores que fueron devueltos y los que terminan en "NA" son los que no estan asignados</p>
         <b>@adminName</b><br />
         <span>@adminCargo</span>
     </div>

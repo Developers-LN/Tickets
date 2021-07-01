@@ -2,7 +2,7 @@
  * Module: invoiceTicketController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -14,7 +14,7 @@
         var self = this;
         $scope.allocationList = [];
 
-        this.validateData = function(invoice) {
+        this.validateData = function (invoice) {
             var error = '', isReq = ' es un campo requerido. <br>';
             if (invoice.raffleId == undefined) {
                 error += 'El Sorteo' + isReq;
@@ -44,7 +44,7 @@
             $.when(
                 $.ajax($rootScope.serverUrl + 'ticket/ticketInvoiceApi/getInvoice?id=' + $stateParams.id),
                 $.ajax($rootScope.serverUrl + 'ticket/clientApi/getClientSelect?statu=2089'),/*Clientes aprobados*/
-                $.ajax($rootScope.serverUrl + 'ticket/raffleApi/getRaffleSelect?statu=68'),//Sorteos en planificacion
+                $.ajax($rootScope.serverUrl + 'ticket/raffleApi/getRaffleSelect?statu=0'),//Sorteos en planificacion
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getInvoiceConditionSelect'),
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getXpriedInvoiceTimeSelect'),
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getPaymentTypeSelect'),
@@ -81,7 +81,7 @@
             if ($scope.invoice.raffleId === 0 || $scope.invoice.clientId === 0) {
                 return;
             }
-            
+
             window.loading.show();
             $.when(
                 $.ajax($rootScope.serverUrl + 'ticket/ticketAllocationApi/getReviewAllocations?raffleId=' + $scope.invoice.raffleId + '&clientId=' + $scope.invoice.clientId),
@@ -90,8 +90,9 @@
             ).then(function (allocationResponse, ticketPriceResponse/*, poolPriceResponse*/) {
                 window.loading.hide();
                 if (ticketPriceResponse[1] == 'success') {
-                    $scope.invoice.ticketPrice = ticketPriceResponse[0].object.factionPrice;
-
+                    if (ticketPriceResponse[0].result != false) {
+                        $scope.invoice.ticketPrice = ticketPriceResponse[0].object.factionPrice;
+                    }
                 }
 
                 /*if (poolPriceResponse[1] == 'success') {

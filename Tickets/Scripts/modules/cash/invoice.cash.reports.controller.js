@@ -31,6 +31,7 @@
                     $scope.raffles = data.raffles;
 
                     $scope.$apply();
+                    $rootScope.createSelect2();
                     $rootScope.dataTable();
                 }
             });

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
@@ -93,11 +94,16 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "poolPrice")]
         public decimal PoolPrice { get; set; }
 
+        [NotMapped]
+        [JsonProperty(PropertyName = "invoiceStatusProv")]
+        public string InvoiceStatusProv { get; set; }
+
         internal TicketInvoiceModel ToObject(Invoice model, bool hasAllocaation = false, bool hasNumber = false)
         {
             var context = new TicketsEntities();
             int expiredDay = model.InvoiceExpredDay ?? 14;
             var expiredDate = model.InvoiceDate.AddDays(expiredDay);
+            var xpiredDate = model.InvoiceDate.AddDays(model.InvoiceExpredDay.Value);
             //int productType = 5821; // model.InvoiceTickets.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Type;
             var invoice = new TicketInvoiceModel()
             {
@@ -118,6 +124,7 @@ namespace Tickets.Models.Ticket
                 InvoiceDate = model.InvoiceDate,
                 InvoiceDateLong = model.InvoiceDate.ToUnixTime(),
                 Condition = model.Condition,
+                InvoiceStatusProv = (xpiredDate.Date < DateTime.Now.Date && model.PaymentStatu == 2082) ? "Caducada" : "",
                 ConditionDesc = context.Catalogs.Where(r => r.Id == model.Condition).Select(c => c.NameDetail).FirstOrDefault(),
                 PaymentStatu = model.PaymentStatu,
                 PaymentStatuDesc = context.Catalogs.Where(r => r.Id == model.PaymentStatu).Select(c => c.NameDetail).FirstOrDefault(),
@@ -287,7 +294,7 @@ namespace Tickets.Models.Ticket
                                 totalInvoiceData -= (totalCreditNote + totalRequestCash);
                             }
 
-                            var allocation_ids = model.TicketAllocations.Select(a => a.Id).ToArray(); ;
+                            var allocation_ids = model.TicketAllocations.Select(a => a.Id).ToArray(); 
 
                             var allocatList = context.TicketAllocations.Where(a => allocation_ids.Contains(a.Id)).ToList();
 

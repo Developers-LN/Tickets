@@ -186,6 +186,7 @@
     </div>
     <div class="col-lg-12 no-padder text-left m-b-lg">
         <a ui-sref="app.ticketInvoiceList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Salir</a>
-        <a ng-click="saveForm()" class="mr btn btn-square btn-primary {{moduleCanAdd}}"><i class="fa fa-floppy-o"></i> Facturar</a>
+        <a ng-if="invoice.id == 0" ng-click="saveForm()" class="mr btn btn-square btn-primary {{moduleCanAdd}}"><i class="fa fa-floppy-o"></i> Facturar</a>
+        <a ng-if="invoice.id > 0" ng-click="saveForm()" class="mr btn btn-square btn-primary"><i class="fa fa-floppy-o"></i> Guardar</a>
     </div>
 </div>

@@ -2,7 +2,7 @@
  * Module: RaffleVirtualController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -15,7 +15,7 @@
         var self = this;
         $scope.ShowAwardNumberList = [];
 
-        this.validateDigitedAward = function(awards) {
+        this.validateDigitedAward = function (awards) {
             var error = '', isReq = ' es un campo requerido. <br>';
             $(awards).each(function (i, award) {
                 if (Number(award.ControlNumber) > $scope.raffleDetails.ticketProspect.production) {
@@ -45,7 +45,7 @@
         $scope.usePatentValue = function (sourceId, currentId) {
             if (currentId !== null) {
                 var number = $('#raffleAwardNumber-' + sourceId).val();
-                $('#raffleAwardNumber-' + currentId).val (number);
+                $('#raffleAwardNumber-' + currentId).val(number);
             }
         }
 
@@ -55,7 +55,7 @@
                 $('#raffleAwardNumber-' + sourceId).val(number);
             }
         }
-       
+
         $('#showNumberModal').keydown(function (e) {
             if (e.which == 13) {
                 $scope.getNextAwrad(1);
@@ -127,17 +127,15 @@
                 return;
             }
             $scope.currentAwardType = awardTypes[0];
-            
-             $scope.currentAwardType.awardList.forEach(function (awardList) {
+
+            $scope.currentAwardType.awardList.forEach(function (awardList) {
                 var htmlNumberGrd = '<span class="col-lg-3"><span class="number-title">' + awardList.awardName + '</span><br/>';
                 awardList.awardList.forEach(function (citem) {
                     htmlNumberGrd += '<span class="number-container">' + citem.number + '</span><br/>'
-            });
+                });
                 htmlNumberGrd += '</span>';
                 $(htmlNumberGrd).appendTo('#number-grid-' + typeAwardId);
             });
-            
-           
         }
 
         this.currentAwardShow = {
@@ -184,7 +182,7 @@
             }
         }
 
-       
+
         $scope.showLastBall = function () {
             $scope.select(10);
             $scope.getNextAwrad(1);
@@ -203,7 +201,7 @@
                         alertify.alert('Estas en el primer numero');
                     } else if ($scope.currentAwardType.typeAwardId == 4) {
                         $scope.select(3);
-                        
+
                         self.currentAwardShow.typeIndex = $scope.currentAwardType.awardList.length - 1;
                         self.currentAwardShow.numberIndex = $scope.currentAwardType.awardList[self.currentAwardShow.typeIndex].awardList.length;
                         $scope.getNextAwrad(-1);
@@ -240,7 +238,7 @@
                     $scope.select(10);
                     $scope.getNextAwrad(1);
                     return;
-                }else if($scope.currentAwardType.typeAwardId == 10) {
+                } else if ($scope.currentAwardType.typeAwardId == 10) {
                     alertify.alert('Se han mostrado todo los numeros');
                     self.currentAwardShow.typeIndex += -1;
                     self.currentAwardShow.numberIndex = awardList[self.currentAwardShow.typeIndex].awardList.length - 1;
@@ -261,11 +259,11 @@
             if (self.currentAwardShow.numberIndex > 0) {
                 $scope.lastShowAwardNumber = awardList[self.currentAwardShow.typeIndex].awardList[self.currentAwardShow.numberIndex - 1].number;
             }
-            if ((self.currentAwardShow.numberIndex +1) < awardList[self.currentAwardShow.typeIndex].awardList.length ) {
+            if ((self.currentAwardShow.numberIndex + 1) < awardList[self.currentAwardShow.typeIndex].awardList.length) {
                 $scope.nextShowAwardNumber = awardList[self.currentAwardShow.typeIndex].awardList[self.currentAwardShow.numberIndex + 1].number;
 
             }
-            
+
             if (direction > 0) {
                 $scope.ShowAwardNumberList.push({
                     typeIndex: self.currentAwardShow.typeIndex,
@@ -309,6 +307,6 @@
         $scope.currentShowAwardNumber = '';
         $scope.lastShowAwardNumber = '';
         $scope.nextShowAwardNumber = '';
-        
+
     }
 })();

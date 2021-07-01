@@ -112,6 +112,7 @@
                             window.loading.hide();
                             window.setTimeout(function () {
                                 $scope.$apply();
+                                $rootScope.createSelect2();
                             }, 0);
                             $rootScope.dataTable();
                         }

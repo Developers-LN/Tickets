@@ -8,6 +8,12 @@
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
     string adminCargo = config != null ? config.Cargo : "";
+
+    var Efectivo = Tickets.Models.Enums.PaymentTypeTextEnum.Efectivo;
+    var Cheque = Tickets.Models.Enums.PaymentTypeTextEnum.Cheques;
+    var TargetaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.TarjetaDeCredito;
+    var NotaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.NotaDeCredito;
+    var DepTransf = Tickets.Models.Enums.PaymentTypeTextEnum.DepTransf;
 }
 
 <style>
@@ -70,6 +76,7 @@
                     <th class="text-center">CLIENTE</th>
                     <th class="text-center">FACTURA</th>
                     <th class="text-center">FECHA</th>
+                    <th class="text-center">REFERENCIA</th>
                     <th class="text-center">TIPO DE PAGO</th>
                     <th class="text-center">RECIBO</th>
                     <th class="text-center">CONCEPTO</th>
@@ -94,14 +101,14 @@
                 {
                     decimal totalRaffle = 0;
                     <tr>
-                        <th class="text-left" colspan="7">@raffle.raffelName</th>
+                        <th class="text-left" colspan="8">@raffle.raffelName</th>
                     </tr>
 
                     foreach (var client in raffle.clients.Where(i => i.invoices.Count() > 0))
                     {
                         decimal totalClient = 0;
                         <tr>
-                            <th class="text-left" colspan="7" style="padding-left: 50px">@client.clientName</th>
+                            <th class="text-left" colspan="8" style="padding-left: 50px">@client.clientName</th>
                         </tr>
 
                         foreach (var invoice in client.invoices)
@@ -115,8 +122,26 @@
                                     <tr>
                                         <td class="text-center">@invoice.Client.Name @invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()</td>
                                         <td class="text-center">@invoice.Id</td>
-                                        <td class="text-center">@invoice.InvoiceDate.ToString()</td>
-                                        <td class="text-center">Pago en Efectivo</td>
+                                        <td class="text-center">@receipt.ReceiptDate.ToString()</td>
+                                        <td class="text-center">@receipt.Recibo</td>
+                                        <td class="text-center">
+                                            @if (receipt.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
+                                            {
+                                                @Efectivo;
+                                            }
+                                            else if (receipt.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
+                                            {
+                                                @Cheque;
+                                            }
+                                            else if (receipt.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
+                                            {
+                                                @TargetaCredito;
+                                            }
+                                            else if (receipt.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                                            {
+                                                @DepTransf;
+                                            }
+                                        </td>
                                         <td class="text-center">@receipt.Id</td>
                                         <td class="text-center"></td>
                                         <td class="text-right" style="font-weight:bold;">@(value.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
@@ -129,7 +154,8 @@
                                     <tr>
                                         <td class="text-center">@invoice.Client.Name @invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()</td>
                                         <td class="text-center">@invoice.Id</td>
-                                        <td class="text-center">@invoice.InvoiceDate.ToString()</td>
+                                        <td class="text-center">@receipt.ReceiptDate.ToString()</td>
+                                        <td class="text-center">@receipt.Recibo</td>
                                         <td class="text-center">Nota de Credito No. @(receipt.NoteCreditReceiptPayments.Count == 0 ? 0 : receipt.NoteCreditReceiptPayments.FirstOrDefault().NoteCredit.Id)</td>
                                         <td class="text-center">@receipt.Id</td>
                                         <td class="text-center">@(receipt.NoteCreditReceiptPayments.Count == 0? "": receipt.NoteCreditReceiptPayments.FirstOrDefault().NoteCredit.Concepts)</td>
@@ -139,19 +165,19 @@
                             }
                         }
                         <tr class="total">
-                            <td class="text-right" colspan="7" style="font-weight:bold;">Total Cliente: @totalClient.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right" colspan="8" style="font-weight:bold;">Total Cliente: @totalClient.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
                         totalRaffle += totalClient;
                     }
                     <tr class="total">
-                        <td class="text-right" colspan="7" style="font-weight:bold;">Total Sorteo: @totalRaffle.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right" colspan="8" style="font-weight:bold;">Total Sorteo: @totalRaffle.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     totalPayment += totalRaffle;
                 }
             </tbody>
             <tfoot>
                 <tr class="total">
-                    <td class="text-right" colspan="7" style="font-weight:bold;">Total General: @totalPayment.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right" colspan="8" style="font-weight:bold;">Total General: @totalPayment.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
             </tfoot>
         </table>

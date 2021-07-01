@@ -59,7 +59,7 @@
                                 </td>
                                 <td>{{(invoice.invoiceDate | date:"dd/MM/yyyy")}}</td>
                                 <td>{{(invoice.invoiceExpredDate | date:"dd/MM/yyyy")}}</td>
-                                <td>{{invoice.paymentStatuDesc}}</td>
+                                <td>{{invoice.invoiceStatusProv == '' ? invoice.paymentStatuDesc : invoice.invoiceStatusProv}}</td>
                                 <th class="editColumm">
                                     <a target="_blank" href="~/Reports/InvoicesByRaffle?raffleId={{invoice.raffleId}}&clientId={{invoice.clientId}}&invoiceId={{invoice.id}}" title="Imprimir Detalle de asignación Factura" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
                                     <a target="_blank" href="~/Reports/InvoiceDetail?invoiceId={{invoice.id}}" title="Imprimir Detalle de Factura" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>

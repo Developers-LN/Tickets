@@ -69,37 +69,39 @@
                     </div>
                 </fieldset>
             </div>
-            <div class="col-lg-12 m-b-xs no-padder m-t-xs">
-                <table class="table dataTableGrid">
-                    <thead>
-                        <tr>
-                            <th style="width: 32px;">
-                                <div class="checkbox c-checkbox needsclick">
-                                    <label class="needsclick m-r-xs">
-                                        <input type="checkbox" class="needsclick" ng-click="selectAllNumber($event)" />
-                                        <span class="fa fa-check"></span>
-                                    </label>
-                                </div>
-                            </th>
-                            <td>Codigo</td>
-                            <th>Numero</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-ng-repeat="number in reprint.ticketReprintNumbers">
-                            <td>
-                                <div class="checkbox c-checkbox needsclick">
-                                    <label class="needsclick m-r-xs">
-                                        <input type="checkbox" ng-checked="number.selected" class="needsclick" ng-click="selectNumber($event, number)" />
-                                        <span class="fa fa-check"></span>
-                                    </label>
-                                </div>
-                            </td>
-                            <td>#{{number.id}}</td>
-                            <td ng-bind="number.number"></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="panel-body">
+                <div class="col-lg-12 m-b-xs no-padder m-t-xs">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th style="width: 32px;">
+                                    <div class="checkbox c-checkbox needsclick">
+                                        <label class="needsclick m-r-xs">
+                                            <input type="checkbox" class="needsclick" ng-click="selectAllNumber($event)" />
+                                            <span class="fa fa-check"></span>
+                                        </label>
+                                    </div>
+                                </th>
+                                <th>Codigo</th>
+                                <th>Numero</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="number in reprint.ticketReprintNumbers">
+                                <td>
+                                    <div class="checkbox c-checkbox needsclick">
+                                        <label class="needsclick m-r-xs">
+                                            <input type="checkbox" ng-checked="number.selected" class="needsclick" ng-click="selectNumber($event, number)" />
+                                            <span class="fa fa-check"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>#{{number.id}}</td>
+                                <td ng-bind="number.number"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

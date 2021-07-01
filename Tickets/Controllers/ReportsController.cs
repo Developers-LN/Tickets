@@ -930,12 +930,16 @@ namespace Tickets.Controllers
                 var endD = DateTime.Parse(endDate);
 
                 var raffles = context.Raffles.AsEnumerable()
-                                     .Where(r => r.DateSolteo.Date >= startD.Date && r.DateSolteo.Date <= endD.Date).ToList();
+                                     .Where(r => r.DateSolteo.Date >= startD.Date && r.DateSolteo.Date <= endD.Date && 
+                                     r.Prospect.ImpresionType != (int)ProspectImpresionTypeEnum.Extraordinario).ToList();
 
                 if (raffles.Count == 0)
                 {
                     return RedirectToAction("Error", new { message = "No se encontraron datos para las fechas seleccionadas." });
                 }
+
+                ViewBag.StartDate = startD.ToShortDateString();
+                ViewBag.EndDate = endD.ToShortDateString();
 
                 return View(raffles);
             }

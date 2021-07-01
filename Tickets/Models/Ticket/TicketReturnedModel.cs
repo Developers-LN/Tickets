@@ -338,17 +338,6 @@ namespace Tickets.Models.Ticket
                         var fraccionMaxima = 0;
                         var clientId = model.TicketReturnedNumbers.Select(r => r.ClientId).FirstOrDefault();
 
-                        /*var raffleData = (from r in context.Raffles
-                                           join p in context.Prospects on r.ProspectId equals p.Id
-                                           where r.Id == model.RaffleId
-                                           select new
-                                           {
-                                               p.MaxReturnTickets,
-                                               r.Statu,
-                                               r.EndReturnDate,
-                                               MaxFraction = p.LeafNumber * p.LeafFraction
-                                           }).FirstOrDefault();*/
-
                         var raffleData = context.Raffles.Where(r => r.Id == model.RaffleId).Select(s => new
                         {
                             s.Prospect.MaxReturnTickets,
@@ -360,13 +349,6 @@ namespace Tickets.Models.Ticket
 
                         //Validacion de Fraccion Minima y Maxima
                         fraccionMaxima = raffleData.MaxFraction;
-
-                        /*var returnedOpens = context.ReturnedOpens.Where(r =>
-                            r.RaffleId == model.RaffleId &&
-                            r.EndReturnedDate >= DateTime.Now).Select(ro => new
-                            {
-                                ro.EndReturnedDate
-                            }).ToList();*/
 
                         var ticketAllocationNumbers = context.TicketAllocationNumbers
                             .Where(t => t.RaffleId == model.RaffleId &&
@@ -380,38 +362,13 @@ namespace Tickets.Models.Ticket
                                        clientDiscount = t.InvoiceTickets.Select(s => s.Invoice.Discount).FirstOrDefault()
                                    }).ToList();
 
-                        /*var ticketAllocationNumbers = (from tn in context.TicketAllocationNumbers
-                                                       join a in context.TicketAllocations on tn.TicketAllocationId equals a.Id
-                                                       where a.RaffleId == model.RaffleId
-                                                         && a.ClientId == clientId
-                                                         && a.Statu == (int)AllocationStatuEnum.Invoiced
-                                                       select new
-                                                       {
-                                                           tn.FractionTo,
-                                                           tn.FractionFrom,
-                                                           tn.Number,
-                                                           tn.Id
-                                                       }).ToList();*/
-
-                        //var clientDiscount = context.Clients.Where(c => c.Id == clientId).Select(a => a.Discount).FirstOrDefault();
-
                         var totalTickets = 0;
                         ticketAllocationNumbers.ForEach(t => totalTickets += (t.FractionTo - t.FractionFrom + 1));
 
                         var returnTickets = 0;
 
                         var returneds = context.TicketReturns.Where(r => r.RaffleId == model.RaffleId && r.ClientId == clientId)
-                            .Select(r => new { r.FractionTo, r.FractionFrom, r.ClientId, r.TicketAllocationNimberId }).ToList();
-
-                        /*var returneds = (from r in context.TicketReturns
-                                         where r.RaffleId == model.RaffleId
-                                         select new
-                                         {
-                                             r.FractionTo,
-                                             r.FractionFrom,
-                                             r.ClientId,
-                                             r.TicketAllocationNimberId
-                                         }).ToList();*/
+                                               .Select(r => new { r.FractionTo, r.FractionFrom, r.ClientId, r.TicketAllocationNimberId }).ToList();
 
                         returneds.Where(r => r.ClientId == clientId).ToList().ForEach(a => returnTickets += (a.FractionTo - a.FractionFrom + 1));
 
@@ -437,10 +394,6 @@ namespace Tickets.Models.Ticket
                             foreach (var ticketReturn in model.TicketReturnedNumbers)
                             {
                                 var allocationNumber = ticketAllocationNumbers.FirstOrDefault(t => t.Number == ticketReturn.NumberId);
-
-                                //var AllocationNumber = ticketAllocationNumbers.Select(i => i.Id).FirstOrDefault();
-                                //var InvoiceTicket = context.InvoiceTickets.Where(t => t.TicketNumberAllocationId == AllocationNumber).Select(t => t.InvoiceId).FirstOrDefault();
-                                //var InvoiceDiscount = context.Invoices.Where(i => i.Id == InvoiceTicket).Select(i => i.Discount).FirstOrDefault();
 
                                 var returnedTicket = new TicketReturn()
                                 {
