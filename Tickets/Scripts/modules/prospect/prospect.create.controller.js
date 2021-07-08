@@ -46,6 +46,9 @@
             if (self.validateNumenber(prospect.MaxReturnTickets) === false) {
                 error += 'Porcentaje de devoluciones' + isReq;
             }
+            if (self.validateNumenber(prospect.PercentageWinners) === false) {
+                error += 'Porcentage de n&uacut;meros ganadores' + isReq;
+            }
             if (self.validateNumenber(prospect.ImpresionType) === false) {
                 error += 'Formato de Impresi&oacute;n' + isReq;
             }
@@ -204,6 +207,7 @@
                 LeafFraction: prospect.LeafFraction || '',
                 ExpirateDate: prospect.ExpirateDate || '',
                 MaxReturnTickets: prospect.MaxReturnTickets || '',
+                PercentageWinners: prospect.PercentageWinners || '',
                 ImpresionType: prospect.ImpresionType || '',
                 groupDescription: prospect.groupDescription || '',
                 impresionTypeDescription: prospect.impresionTypeDescription || '',

@@ -18,6 +18,7 @@
                                 <th class="hidden-xs">Precio</th>
                                 <th class="hidden-xs">Producción</th>
                                 <th class="hidden-xs hidden-sm hidden-md">Impresion</th>
+                                <th class="hidden-xs hidden-sm hidden-md">Ganadores</th>
                                 <th>Estado</th>
                                 <th class="editColumm">Acción</th>
                             </tr>
@@ -28,6 +29,7 @@
                                 <td class="hidden-xs">{{parseMoney(prospect.price)}}</td>
                                 <td class="hidden-xs">{{parseNumber(prospect.production)}}</td>
                                 <td class="hidden-xs hidden-sm hidden-md">{{prospect.impresionTypeDesc}}</td>
+                                <td class="hidden-xs text-center">{{prospect.percentageWinners > 0 ? prospect.percentageWinners : 0}}%</td>
                                 <td>{{prospect.statuDesc}}</td>
                                 <td>
                                     <a ng-if="prospect.statu === 20" ng-click="startWorkflowProspect(prospect)" title="Enviar prospecto a aprobación" class="{{moduleCanAdd}}"><i class="fa fa-external-link"></i></a>
@@ -43,6 +45,6 @@
         </div>
     </div>
 </div>
-<div class="col-lg-12 no-padder text-left m-b-lg"> 
+<div class="col-lg-12 no-padder text-left m-b-lg">
     <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
 </div>

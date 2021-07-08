@@ -14,7 +14,8 @@
                         <div class="col-lg-6 no-padder">
                             <fieldset>
                                 <div class="form-group m-t-xs">
-                                    <span class="col-lg-3 control-label-left"><b>Nombre:</b></span><span class="col-lg-8">
+                                    <span class="col-lg-5 control-label-left"><b>Nombre:</b></span>
+                                    <span class="col-lg-7">
                                         <a ng-if="viewMode == false" href="" editable-text="prospect.name">{{ prospect.name || &apos;No hay datos&apos; }}</a>
                                         <span ng-if="viewMode == true">{{prospect.name}}</span>
                                     </span>
@@ -22,7 +23,8 @@
                             </fieldset>
                             <fieldset>
                                 <div class="form-group m-t-xs">
-                                    <span class="col-lg-3 control-label-left"><b>Descripción:</b></span><span class="col-lg-8">
+                                    <span class="col-lg-5 control-label-left"><b>Descripción:</b></span>
+                                    <span class="col-lg-7">
                                         <a ng-if="viewMode == false" href="" editable-textarea="prospect.description" e-rows="3" e-cols="30">{{ prospect.description || &apos;No hay datos&apos; }}</a>
                                         <span ng-if="viewMode == true">{{prospect.description}}</span>
                                     </span>
@@ -30,7 +32,8 @@
                             </fieldset>
                             <fieldset>
                                 <div class="form-group m-t-xs">
-                                    <span class="col-lg-3 control-label-left"><b>{{prospect.prospectType == @((int)Tickets.Models.Enums.ProspectTypeEnum.Tickets) ? 'Precio de venta por fracción':'Precio de venta por unidad'}}:</b></span><span class="col-lg-8">
+                                    <span class="col-lg-5 control-label-left"><b>{{prospect.prospectType == @((int)Tickets.Models.Enums.ProspectTypeEnum.Tickets) ? 'Precio de venta por fracción':'Precio de venta por unidad'}}:</b></span>
+                                    <span class="col-lg-7">
                                         <a ng-if="viewMode == false" href="" editable-number="prospect.price" e-min="0">{{ parseMoney(prospect.price)  || &apos;No hay datos&apos; }}</a>
                                         <span ng-if="viewMode == true">{{parseMoney(prospect.price)}}</span>
                                     </span>
@@ -38,7 +41,8 @@
                             </fieldset>
                             <fieldset class="hide">
                                 <div class="form-group m-t-xs">
-                                    <span class="col-lg-3 control-label-left"><b>Grupo:</b></span><span class="col-lg-8">
+                                    <span class="col-lg-5 control-label-left"><b>Grupo:</b></span>
+                                    <span class="col-lg-7">
                                         <a ng-if="viewMode == false" href="" editable-select="prospect.groupId" e-ng-options="s.id as s.nameDetail for s in groups">{{showGroupDescription()}}</a>
                                         <span ng-if="viewMode == true">{{showGroupDescription()}}</span>
                                     </span>
@@ -46,7 +50,8 @@
                             </fieldset>
                             <fieldset>
                                 <div class="form-group m-t-xs">
-                                    <span class="col-lg-4 control-label"><b>Porcentaje de devoluciones:</b></span><span class="col-lg-8">
+                                    <span class="col-lg-5 control-label"><b>Porcentaje de devoluciones:</b></span>
+                                    <span class="col-lg-7">
                                         <a ng-if="viewMode == false" href="" editable-number="prospect.maxReturnTickets" e-min="0">{{ prospect.maxReturnTickets || &apos;No hay datos&apos;  }}</a>
                                         <span ng-if="viewMode == true">{{prospect.maxReturnTickets}}</span>
                                     </span>
@@ -54,9 +59,19 @@
                             </fieldset>
                             <fieldset>
                                 <div class="form-group m-t-xs">
-                                    <span class="col-lg-3 control-label-left"><b>Producción:</b></span><span class="col-lg-8">
+                                    <span class="col-lg-5 control-label-left"><b>Producción:</b></span>
+                                    <span class="col-lg-7">
                                         <a ng-if="viewMode == false" href="" editable-number="prospect.production" e-min="0">{{parseMoney(prospect.production).substring(3, parseMoney(prospect.production).length - 3) || &apos;No hay datos&apos; }}</a>
                                         <span ng-if="viewMode == true">{{parseMoney(prospect.production).substring(3, parseMoney(prospect.production).length - 3)}}</span>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-5 control-label-left"><b>Porcentaje de números ganadores:</b></span>
+                                    <span class="col-lg-7">
+                                        <a ng-if="viewMode == false" href="" editable-number="prospect.percentageWinners" e-min="0">{{prospect.percentageWinners || &apos;No hay datos&apos; }}</a>
+                                        <span ng-if="viewMode == true">{{prospect.percentageWinners}}</span>
                                     </span>
                                 </div>
                             </fieldset>
@@ -64,7 +79,8 @@
                         <div class="col-lg-6 no-padder">
                             <fieldset>
                                 <div class="form-group m-t-xs">
-                                    <span class="col-lg-4 control-label-left"><b>{{prospect.prospectType == @((int)Tickets.Models.Enums.ProspectTypeEnum.Tickets) ? 'Hojas por número':'Tiras'}}:</b></span><span class="col-lg-8">
+                                    <span class="col-lg-4 control-label-left"><b>{{prospect.prospectType == @((int)Tickets.Models.Enums.ProspectTypeEnum.Tickets) ? 'Hojas por número':'Hojas por número'}}:</b></span>
+                                    <span class="col-lg-8">
                                         <a ng-if="viewMode == false" href="" editable-number="prospect.leafNumber" e-min="0">{{ prospect.leafNumber || &apos;No hay datos&apos;  }}</a>
                                         <span ng-if="viewMode == true">{{prospect.leafNumber}}</span>
                                     </span>
@@ -72,7 +88,8 @@
                             </fieldset>
                             <fieldset>
                                 <div class="form-group m-t-xs">
-                                    <span class="col-lg-4 control-label"><b>{{prospect.prospectType == @((int)Tickets.Models.Enums.ProspectTypeEnum.Tickets) ? 'Fracción por hojas':'Cantidad'}}:</b></span><span class="col-lg-8">
+                                    <span class="col-lg-4 control-label"><b>{{prospect.prospectType == @((int)Tickets.Models.Enums.ProspectTypeEnum.Tickets) ? 'Fracción por hojas':'Fracción por hojas'}}:</b></span>
+                                    <span class="col-lg-8">
                                         <a ng-if="viewMode == false" href="" editable-number="prospect.leafFraction" e-min="0">{{ prospect.leafFraction || &apos;No hay datos&apos;  }}</a>
                                         <span ng-if="viewMode == true">{{prospect.leafFraction}}</span>
                                     </span>
@@ -80,7 +97,8 @@
                             </fieldset>
                             <fieldset>
                                 <div class="form-group m-t-xs">
-                                    <span class="col-lg-4 control-label"><b>Fecha de Expiración:</b></span><span class="col-lg-8">
+                                    <span class="col-lg-4 control-label"><b>Fecha de Expiración:</b></span>
+                                    <span class="col-lg-8">
                                         <a ng-if="viewMode == false" href="" editable-date="prospect.expirateDate">{{ (prospect.expirateDate | date:"dd/MM/yyyy") || 'No hay datos' }}</a>
                                         <span ng-if="viewMode == true">{{(prospect.expirateDate | date:"dd/MM/yyyy")}}</span>
                                     </span>
@@ -88,7 +106,8 @@
                             </fieldset>
                             <fieldset>
                                 <div class="form-group m-t-xs">
-                                    <span class="col-lg-4 control-label"><b>Formato de Impresión:</b></span><span class="col-lg-8">
+                                    <span class="col-lg-4 control-label"><b>Formato de Impresión:</b></span>
+                                    <span class="col-lg-8">
                                         <a ng-if="viewMode == false" href="" editable-select="prospect.impresionType" e-ng-options="s.id as s.nameDetail for s in prints">{{showPrintTechniquesDescription()}}</a>
                                         <span ng-if="viewMode == true">{{showPrintTechniquesDescription()}}</span>
                                     </span>
@@ -96,7 +115,8 @@
                             </fieldset>
                             <fieldset>
                                 <div class="form-group m-t-xs">
-                                    <span class="col-lg-4 control-label-left"><b>Estado:</b></span><span class="col-lg-8">
+                                    <span class="col-lg-4 control-label-left"><b>Estado:</b></span>
+                                    <span class="col-lg-8">
                                         <a ng-if="viewMode == false" href="" editable-select="prospect.statu" e-ng-options="s.id as s.nameDetail for s in status">{{showStatuDescription()}}</a>
                                         <span ng-if="viewMode == true">{{showStatuDescription()}}</span>
                                     </span>

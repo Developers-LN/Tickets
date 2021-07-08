@@ -19,6 +19,7 @@ namespace Tickets.Controllers
             var response = new CatalogModel().GetByGroupIdSelect((int)CatalogGroupEnum.ProspectGroup);
             return response;
         }
+
         //
         //  GET: ticket/catalogApi/getProspectStatuSelect
         [HttpGet]
@@ -117,6 +118,7 @@ namespace Tickets.Controllers
             var response = new CatalogModel().GetByGroupIdSelect((int)CatalogGroupEnum.InvoiceCondition);
             return response;
         }
+
         //
         //  GET: ticket/catalogApi/getXpriedInvoiceTimeSelect
         [HttpGet]

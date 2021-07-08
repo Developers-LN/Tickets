@@ -2,7 +2,7 @@
  * Module: ProspectCreateWizardController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -95,22 +95,25 @@
             /*if (prospect.groupId == undefined || prospect.groupId <= 0) {
                 error += 'Grupo' + isReq;
             }*/
-            if (prospect.production == undefined || prospect.production  <= 0) {
+            if (prospect.production == undefined || prospect.production <= 0) {
                 error += 'Producci&oacute;n' + isReq;
             }
-            if (prospect.leafNumber == undefined || prospect.leafNumber  <= 0) {
-                error += 'Hojas por número' + isReq;
+            if (prospect.leafNumber == undefined || prospect.leafNumber <= 0) {
+                error += 'Hojas por n&uacute;mero' + isReq;
             }
             if (prospect.leafFraction == undefined || prospect.leafFraction <= 0) {
                 error += 'Fracci&oacute;n por hojas' + isReq;
             }
-            if (prospect.maxReturnTickets == undefined) {
+            if (prospect.maxReturnTickets == undefined || prospect.maxReturnTickets == 0) {
                 error += 'Porcentaje de devoluciones' + isReq;
+            }
+            if (prospect.percentageWinners == undefined || prospect.percentageWinners == 0) {
+                error += 'Porcentaje de ganadores' + isReq;
             }
             if (prospect.impresionType == undefined || prospect.impresionType <= 0) {
                 error += 'Formato de Impresi&oacute;n' + isReq;
             }
-            if (prospect.statu == undefined || prospect.statu  <= 0) {
+            if (prospect.statu == undefined || prospect.statu <= 0) {
                 error += 'Estado' + isReq;
             }
             if (error !== '') {

@@ -2,7 +2,7 @@
  * Module: CreationTypeController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -16,8 +16,8 @@
         editableThemes.bs3.buttonsClass = 'btn-sm';
         editableThemes.bs3.submitTpl = '<button type="submit" class="btn btn-success"><span class="fa fa-check"></span></button>';
         editableThemes.bs3.cancelTpl = '<button type="button" class="btn btn-default" ng-click="$form.$cancel()">' +
-                                         '<span class="fa fa-times text-muted"></span>' +
-                                       '</button>';
+            '<span class="fa fa-times text-muted"></span>' +
+            '</button>';
         var self = this;
         this.loadProspectData = function (prospect) {
             window.loading.show();
@@ -48,7 +48,7 @@
         $scope.viewMode = false;
         $rootScope.$watch('activeStep', function () {
             if ($rootScope.activeStep == 5) {
-                self.loadProspectData( $rootScope.prospect);
+                self.loadProspectData($rootScope.prospect);
             }
         });
         if ($stateParams.prospectId > 0) {
@@ -95,9 +95,9 @@
         }
 
         $scope.showStatuDescription = function () {
-            try{
+            try {
                 return self.getDescriptionById($scope.prospect.statu, $scope.status);
-            }catch(e){}
+            } catch (e) { }
         }
 
         $scope.topGoToStep = function (step) {
@@ -125,11 +125,11 @@
         }
 
         $scope.showTotal = function () {
-                var total = 0;
-                $scope.prospect.awards.forEach(function (award) {
-                    total += award.value * award.quantity;
-                });
-                return total;
+            var total = 0;
+            $scope.prospect.awards.forEach(function (award) {
+                total += award.value * award.quantity;
+            });
+            return total;
         }
 
         $scope.goToBackStep = function () {

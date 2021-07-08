@@ -294,7 +294,7 @@ namespace Tickets.Models.Ticket
                                 totalInvoiceData -= (totalCreditNote + totalRequestCash);
                             }
 
-                            var allocation_ids = model.TicketAllocations.Select(a => a.Id).ToArray(); 
+                            var allocation_ids = model.TicketAllocations.Select(a => a.Id).ToArray();
 
                             var allocatList = context.TicketAllocations.Where(a => allocation_ids.Contains(a.Id)).ToList();
 

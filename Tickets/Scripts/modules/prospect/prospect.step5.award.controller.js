@@ -2,7 +2,7 @@
  * Module: ProspectAwardController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -64,7 +64,7 @@
                 error += 'Nombre' + isReq;
             }
 
-            if ( award.orderAward == undefined) {
+            if (award.orderAward == undefined) {
                 error += 'Orden' + isReq;
             }
             if (award.quantity == undefined) {
@@ -74,7 +74,7 @@
             if (award.byFraction == undefined) {
                 error += 'Por Fracci&#243;n' + isReq;
             }
-            if (award.typesAwardId == undefined ) {
+            if (award.typesAwardId == undefined) {
                 error += 'Tipo de premio' + isReq;
             }
             if (award.value == undefined) {
@@ -91,11 +91,11 @@
         }
 
         $scope.showTotal = function () {
-                var total = 0;
-                $scope.prospect.awards.forEach(function (award) {
-                    total += award.value * award.quantity;
-                });
-                return total;
+            var total = 0;
+            $scope.prospect.awards.forEach(function (award) {
+                total += award.value * award.quantity;
+            });
+            return total;
         }
 
         $scope.deleteAward = function (award) {

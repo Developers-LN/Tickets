@@ -56,8 +56,23 @@ namespace Tickets.Models.Raffles
                         Award currentAward;
                         List<RaffleAward> raffleAwardList = new List<RaffleAward>();
                         HashSet<int> controlNumberList = new HashSet<int>();
+                        HashSet<int> NumerosEnCirculacion = new HashSet<int>();
 
                         raffleAwards.ForEach(f => controlNumberList.Add(f.ControlNumber));
+
+                        var TicketsEnCirculacion = context.InvoiceTickets
+                                                          .Join(context.TicketAllocationNumbers,
+                                                          IT => IT.TicketNumberAllocationId,
+                                                          TAN => TAN.Id,
+                                                          (IT, TAN) => new
+                                                          {
+                                                              Numero = TAN.Number,
+                                                              Estado = TAN.Statu,
+                                                              Sorteo = TAN.RaffleId
+                                                          })
+                                                          .Where(w => w.Sorteo == raffleId && w.Estado == (int)TicketStatusEnum.Factured).ToList();
+
+                        TicketsEnCirculacion.ForEach(c => NumerosEnCirculacion.Add((int)c.Numero));
 
                         RaffleAward lastRaffleAward = null;
                         do
@@ -104,7 +119,7 @@ namespace Tickets.Models.Raffles
                                         }
                                         else
                                         {
-                                            numbers = GetGenerateNumber(currentAward, sourceAward, prospect.Production, controlNumberList);
+                                            numbers = GetGenerateNumber(currentAward, sourceAward, prospect.Production, controlNumberList, NumerosEnCirculacion, prospect.PercentageWinners.Value);
                                         }
                                         break;
                                     case (int)TypesAwardCreationEnum.Hundred:
@@ -284,7 +299,7 @@ namespace Tickets.Models.Raffles
             return numbers;
         }
 
-        private List<int> GetGenerateNumber(Award currentAward, Award sourceAward, int production, HashSet<int> controlNumberList)
+        private List<int> GetGenerateNumber(Award currentAward, Award sourceAward, int production, HashSet<int> controlNumberList, HashSet<int> NumerosCirculacion, decimal? percentageWinners)
         {
             int number = 0;
             if (sourceAward != null)
@@ -295,7 +310,7 @@ namespace Tickets.Models.Raffles
             }
             else
             {
-                number = GenerateRandonNumber(controlNumberList, production);
+                number = GenerateRandonNumber(controlNumberList, production, NumerosCirculacion, percentageWinners);
             }
             var numbers = new List<int>();
             numbers.Add(number);
@@ -342,7 +357,6 @@ namespace Tickets.Models.Raffles
                 }
                 var lastN = lastNumberSelect.Substring(0, lastNumberSelect.Length - lastNumber);
 
-
                 int n = int.Parse(lastN) + 1;
                 number = int.Parse(n + currentLastNumber);
             }
@@ -361,10 +375,23 @@ namespace Tickets.Models.Raffles
             return restantNumber == currentLastNumber;
         }
 
-        private int GenerateRandonNumber(HashSet<int> controlNumberList, int production)
+        private int GenerateRandonNumber(HashSet<int> controlNumberList, int production, HashSet<int> NumerosCirculacion, decimal? percentageWinners)
         {
             var randon = new Random();
-            int number = randon.Next(0, production);
+            int number = 0;
+            if (NumerosCirculacion.Count > 0 && percentageWinners > 0)
+            {
+                var LongitudLista = NumerosCirculacion.Count();
+                var MinNumber = NumerosCirculacion.Min(x => x);
+                var Porcentaje = (percentageWinners * LongitudLista) / 100;
+                var Tope = NumerosCirculacion.ToArray()[(int)Porcentaje];
+                //var MaxNumber = NumerosCirculacion.Max(x => x);
+                number = randon.Next(MinNumber, Tope);
+            }
+            else
+            {
+                number = randon.Next(0, production);
+            }
 
             while (controlNumberList.Where(controlNumber => controlNumber == number).Any())
             {

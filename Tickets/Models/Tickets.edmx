@@ -387,6 +387,7 @@
           <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="MaxReturnTickets" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="ExpirateDate" Type="date" Nullable="false" />
+          <Property Name="PercentageWinners" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="Prospect_Price">
           <Key>
@@ -3344,6 +3345,7 @@
           <NavigationProperty Name="Awards" Relationship="TicketsModel.FK_Award_Prospect" FromRole="Prospect" ToRole="Award" />
           <NavigationProperty Name="Prospect_Price" Relationship="TicketsModel.FK_Prospect_Price_Prospect" FromRole="Prospect" ToRole="Prospect_Price" />
           <NavigationProperty Name="Raffles" Relationship="TicketsModel.FK_Solteo_Prospect" FromRole="Prospect" ToRole="Raffle" />
+          <Property Name="PercentageWinners" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="Prospect_Price">
           <Key>
@@ -5389,6 +5391,7 @@
           <EntitySetMapping Name="Prospects">
             <EntityTypeMapping TypeName="TicketsModel.Prospect">
               <MappingFragment StoreEntitySet="Prospect">
+                <ScalarProperty Name="PercentageWinners" ColumnName="PercentageWinners" />
                 <ScalarProperty Name="ExpirateDate" ColumnName="ExpirateDate" />
                 <ScalarProperty Name="MaxReturnTickets" ColumnName="MaxReturnTickets" />
                 <ScalarProperty Name="Price" ColumnName="Price" />

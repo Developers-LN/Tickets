@@ -2,7 +2,7 @@
  * Module: CreationTypeController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -13,7 +13,7 @@
     function CreationTypeController($scope, $rootScope) {
         var self = this;
 
-        this.loadExistentProspect = function(){
+        this.loadExistentProspect = function () {
             window.loading.show();
             $.ajax({
                 type: 'GET',

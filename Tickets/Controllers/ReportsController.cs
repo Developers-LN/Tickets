@@ -930,8 +930,12 @@ namespace Tickets.Controllers
                 var endD = DateTime.Parse(endDate);
 
                 var raffles = context.Raffles.AsEnumerable()
-                                     .Where(r => r.DateSolteo.Date >= startD.Date && r.DateSolteo.Date <= endD.Date && 
-                                     r.Prospect.ImpresionType != (int)ProspectImpresionTypeEnum.Extraordinario).ToList();
+                                     .Where(r => r.DateSolteo.Date >= startD.Date && r.DateSolteo.Date <= endD.Date &&
+                                     r.Prospect.ImpresionType != (int)ProspectImpresionTypeEnum.Extraordinario /*&&
+                                     (r.ProspectId != (int)ProspectIdEnum.Electronico &&
+                                      r.ProspectId != (int)ProspectIdEnum.Electronico2018 &&
+                                      r.ProspectId != (int)ProspectIdEnum.Electronico2019 &&
+                                      r.ProspectId != (int)ProspectIdEnum.Electronico2020)*/).ToList();
 
                 if (raffles.Count == 0)
                 {

@@ -2,7 +2,7 @@
  * Module: ProspectDesingController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -45,7 +45,7 @@
                 self.loadDesingData();
             }
         });
-        
+
         $scope.goToNextStep = function () {
             if ($rootScope.prospectValidate($scope.prospect) == false) {
                 return;

@@ -42,6 +42,9 @@ namespace Tickets.Models.Prospects
         [JsonProperty(PropertyName = "maxReturnTickets")]
         public decimal MaxReturnTickets { get; set; }
 
+        [JsonProperty(PropertyName = "percentageWinners")]
+        public decimal? PercentageWinners { get; set; }
+
         [JsonProperty(PropertyName = "impresionType")]
         public int ImpresionType { get; set; }
 
@@ -85,6 +88,7 @@ namespace Tickets.Models.Prospects
                 ExpirateDateLong = prospect.ExpirateDate.ToUnixTime(),
                 ExpirateDate = prospect.ExpirateDate,
                 MaxReturnTickets = prospect.MaxReturnTickets,
+                PercentageWinners = prospect.PercentageWinners,
                 ImpresionType = prospect.ImpresionType,
                 ImpresionTypeDescription = context.Catalogs.FirstOrDefault(c => c.Id == prospect.ImpresionType).NameDetail,
                 Statu = prospect.Statu,
@@ -113,6 +117,7 @@ namespace Tickets.Models.Prospects
                 ExpirateDateLong = prospect.ExpirateDate.ToUnixTime(),
                 ExpirateDate = prospect.ExpirateDate,
                 MaxReturnTickets = prospect.MaxReturnTickets,
+                PercentageWinners = prospect.PercentageWinners,
                 ImpresionType = prospect.ImpresionType,
                 ImpresionTypeDescription = context.Catalogs.FirstOrDefault(c => c.Id == prospect.ImpresionType).NameDetail,
                 Statu = prospect.Statu,
@@ -258,6 +263,7 @@ namespace Tickets.Models.Prospects
                         prospect.LeafFraction = model.LeafFraction;
                         prospect.ExpirateDate = model.ExpirateDate;
                         prospect.MaxReturnTickets = model.MaxReturnTickets;
+                        prospect.PercentageWinners = model.PercentageWinners;
                         prospect.ImpresionType = model.ImpresionType;
                         prospect.Price = model.Price;
                         prospect.Statu = model.Statu;

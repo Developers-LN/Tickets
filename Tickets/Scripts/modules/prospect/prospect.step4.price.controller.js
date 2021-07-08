@@ -2,7 +2,7 @@
  * Module: ProspectPriceController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -147,7 +147,7 @@
                 }
                 return $scope.prospectPrices.some(function (price) {
                     return Number(price.priceId) === Number(item.id)
-	                && Number(selectedId) !== Number(item.id);
+                        && Number(selectedId) !== Number(item.id);
                 }) === false;
             });
         }
