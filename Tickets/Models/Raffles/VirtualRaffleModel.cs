@@ -70,7 +70,8 @@ namespace Tickets.Models.Raffles
                                                               Estado = TAN.Statu,
                                                               Sorteo = TAN.RaffleId
                                                           })
-                                                          .Where(w => w.Sorteo == raffleId && w.Estado == (int)TicketStatusEnum.Factured).ToList();
+                                                          .Where(w => w.Sorteo == raffleId && w.Estado == (int)TicketStatusEnum.Factured)
+                                                          .OrderBy(w => Guid.NewGuid()).ToList();
 
                         TicketsEnCirculacion.ForEach(c => NumerosEnCirculacion.Add((int)c.Numero));
 
@@ -283,7 +284,9 @@ namespace Tickets.Models.Raffles
                     n = i.ToString();
                 }
                 var currentNumb = int.Parse(numberRest + n);
-                if (number != currentNumb.ToString())
+                string StringCurrectNum = currentNumb.ToString();
+                string NewCurrectNum = StringCurrectNum.PadLeft(production.ToString().Length - 1, '0');
+                if (number != NewCurrectNum)
                 {
                     numbers.Add(currentNumb);
                 }
@@ -379,14 +382,13 @@ namespace Tickets.Models.Raffles
         {
             var randon = new Random();
             int number = 0;
-            if (NumerosCirculacion.Count > 0 && percentageWinners > 0)
+            if (NumerosCirculacion.Count > 0 && percentageWinners >= 0)
             {
+                int RandomNumber = 0;
                 var LongitudLista = NumerosCirculacion.Count();
-                var MinNumber = NumerosCirculacion.Min(x => x);
                 var Porcentaje = (percentageWinners * LongitudLista) / 100;
-                var Tope = NumerosCirculacion.ToArray()[(int)Porcentaje];
-                //var MaxNumber = NumerosCirculacion.Max(x => x);
-                number = randon.Next(MinNumber, Tope);
+                RandomNumber = randon.Next(0, (int)Porcentaje);
+                number = NumerosCirculacion.ToArray()[RandomNumber];
             }
             else
             {

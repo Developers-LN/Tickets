@@ -94,9 +94,58 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "poolPrice")]
         public decimal PoolPrice { get; set; }
 
+        [JsonProperty(PropertyName = "fractionCount")]
+        public int FractionCount { get; set; }
+
         [NotMapped]
         [JsonProperty(PropertyName = "invoiceStatusProv")]
         public string InvoiceStatusProv { get; set; }
+
+        internal TicketInvoiceModel InvoiceDetails(Invoice model, bool hasAllocaation = false, bool hasNumber = false)
+        {
+            var context = new TicketsEntities();
+            int expiredDay = model.InvoiceExpredDay ?? 14;
+            var expiredDate = model.InvoiceDate.AddDays(expiredDay);
+            var xpiredDate = model.InvoiceDate.AddDays(model.InvoiceExpredDay.Value);
+            //int productType = 5821; // model.InvoiceTickets.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Type;
+            var invoice = new TicketInvoiceModel()
+            {
+                Id = model.Id,
+                AgencyId = model.AgencyId,
+                AgencyDesc = context.Agencies.Where(r => r.Id == model.AgencyId).Select(c => c.Name).FirstOrDefault(),
+                ClientId = model.ClientId,
+                ClientDesc = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.Name).FirstOrDefault(),
+                Agente = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.TicketAllocations.Select(a => a.Agente).FirstOrDefault()).FirstOrDefault(),
+                RaffleId = model.RaffleId,
+                RaffleDesc = context.Raffles.Where(r => r.Id == model.RaffleId).Select(c => c.Name).FirstOrDefault(),
+                PaymentType = model.PaymentType,
+                PaymentTypeDesc = context.Catalogs.Where(r => r.Id == model.PaymentType).Select(c => c.NameDetail).FirstOrDefault(),
+                InvoiceExpredDay = expiredDay,
+                InvoiceExpredDate = expiredDate,
+                CraeteDate = model.CreateDate,
+                CraeteDateLong = model.CreateDate.ToUnixTime(),
+                InvoiceDate = model.InvoiceDate,
+                InvoiceDateLong = model.InvoiceDate.ToUnixTime(),
+                Condition = model.Condition,
+                InvoiceStatusProv = (xpiredDate.Date < DateTime.Now.Date && model.PaymentStatu == 2082) ? "Caducada" : "",
+                ConditionDesc = context.Catalogs.Where(r => r.Id == model.Condition).Select(c => c.NameDetail).FirstOrDefault(),
+                PaymentStatu = model.PaymentStatu,
+                PaymentStatuDesc = context.Catalogs.Where(r => r.Id == model.PaymentStatu).Select(c => c.NameDetail).FirstOrDefault(),
+                Statu = model.Statu,
+                StatuDesc = context.Catalogs.Where(r => r.Id == model.Statu).Select(c => c.NameDetail).FirstOrDefault(),
+                CreateUser = model.CreateUser,
+                CreateUserDesc = context.Users.Where(r => r.Id == model.CreateUser).Select(c => c.Name).FirstOrDefault(),
+                //TicketAllocations = new List<TicketAllocationModel>(),
+                //TicketInvoiceNumbers = new List<TicketInvoiceNumberModel>(),
+                FractionCount = model.InvoiceTickets.Select(s=>s.TicketAllocationNumber.FractionTo - s.TicketAllocationNumber.FractionFrom - 1).Sum()
+            };
+            if (hasAllocaation == true)
+            {
+                var ticketAllocationModel = new TicketAllocationModel();
+                invoice.TicketAllocations = model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select(a => ticketAllocationModel.ToObject(a.FirstOrDefault().TicketAllocationNumber.TicketAllocation, false, false)).ToList();
+            }
+            return invoice;
+        }
 
         internal TicketInvoiceModel ToObject(Invoice model, bool hasAllocaation = false, bool hasNumber = false)
         {
@@ -169,7 +218,7 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
 
             var invoice = context.Invoices.Where(i => i.Id == id).AsEnumerable()
-                .Select(dt => this.ToObject(dt, true, true)).FirstOrDefault();
+                .Select(dt => this.InvoiceDetails(dt, true, true)).FirstOrDefault();
 
             if (invoice == null)
             {

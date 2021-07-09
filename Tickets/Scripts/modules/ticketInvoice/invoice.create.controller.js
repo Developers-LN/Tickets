@@ -90,9 +90,7 @@
             ).then(function (allocationResponse, ticketPriceResponse/*, poolPriceResponse*/) {
                 window.loading.hide();
                 if (ticketPriceResponse[1] == 'success') {
-                    if (ticketPriceResponse[0].result != false) {
-                        $scope.invoice.ticketPrice = ticketPriceResponse[0].object.factionPrice;
-                    }
+                    $scope.invoice.ticketPrice = ticketPriceResponse[0].object.factionPrice;
                 }
 
                 /*if (poolPriceResponse[1] == 'success') {
@@ -214,6 +212,7 @@
             if (self.validateData($scope.invoice) === false) {
                 return;
             }
+            var t = $scope.invoice;
             window.loading.show();
             $.ajax({
                 type: 'POST',
