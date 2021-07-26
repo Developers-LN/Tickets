@@ -6,8 +6,8 @@
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
-    var allocations = context.TicketReturns.Where(a => 
-        a.TicketAllocationNumber.Number == Model.Number 
+    var allocations = context.TicketReturns.Where(a =>
+        a.TicketAllocationNumber.Number == Model.Number
         && a.RaffleId == Model.RaffleAward.RaffleId).ToList();
 
 }
@@ -72,7 +72,7 @@
                 <p>
                     Fecha de impresión <span style="text-decoration:underline">
                         <b>
-                         @allocations.FirstOrDefault().TicketAllocationNumber.PrintedDate.ToString()
+                            @allocations.FirstOrDefault().TicketAllocationNumber.PrintedDate.ToString()
                         </b>
                     </span>
                 </p>

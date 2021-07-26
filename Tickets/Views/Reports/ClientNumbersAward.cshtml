@@ -14,7 +14,7 @@
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>REPUBLICA DOMINICANA</b><br />
@@ -29,7 +29,7 @@
             <b>Cliente: </b> @Client.Name <br />
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
             <b>Hora: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
@@ -67,33 +67,35 @@
                     {
                         foreach (var award in typeAward.awards.Where(w => w.ControlNumber == a.number))
                         {
-                            if (flag) { 
-                            <tr>
-                                <th colspan="2">@typeAward.typeAwardName</th>
-                            </tr>
-                        }
-                        flag = false;
-                        subTotal += award.Award.Value;
+                            if (flag)
+                            {
+                                <tr>
+                                    <th colspan="2">@typeAward.typeAwardName</th>
+                                </tr>
+                            }
+                            flag = false;
+                            subTotal += award.Award.Value;
 
-                        string stringNumber = award.ControlNumber.ToString();
-                        int production = Model.Prospect.Production - 1;
-                        while (stringNumber.Length < production.ToString().Length)
-                        {
-                            stringNumber = "0" + stringNumber;
-                        }
-                        numberCount++;
-                        <tr>
-                            <td>@stringNumber @(award.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? award.Fraction.ToString() : "")</td>
-                            <td class="text-right">@award.Award.Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td> 
-                        </tr> 
+                            string stringNumber = award.ControlNumber.ToString();
+                            int production = Model.Prospect.Production - 1;
+                            while (stringNumber.Length < production.ToString().Length)
+                            {
+                                stringNumber = "0" + stringNumber;
+                            }
+                            numberCount++;
+                            <tr>
+                                <td>@stringNumber @(award.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? award.Fraction.ToString() : "")</td>
+                                <td class="text-right">@award.Award.Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            </tr>
+
                         }
                     }
                     if (subTotal != 0)
                     {
-                    <tr class="sub-total">
-                        <td class="text-right">SubTotal...:</td>
-                        <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>
+                        <tr class="sub-total">
+                            <td class="text-right">SubTotal...:</td>
+                            <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        </tr>
                     }
 
                     totalValue += subTotal;
@@ -102,12 +104,12 @@
             <tfoot>
                 <tr class="total">
                     <td class="text-left">Total Numeros...: @numberCount</td>
-                    <td class="text-right">Total...: @totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right">Total...: @totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
             </tfoot>
         </table>
     </div>
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center" style="padding-top:10%">
         <b>@adminName</b><br />
         <span>@adminCargo</span>

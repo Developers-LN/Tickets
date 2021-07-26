@@ -13,7 +13,7 @@
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>REPUBLICA DOMINICANA</b><br />
@@ -22,7 +22,7 @@
             <b>NUMEROS REIMPRESOS DEL SORTEO #@Model.Id EN FECHA @Model.DateSolteo.ToShortDateString() </b>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
             <b>Hora: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
@@ -45,13 +45,13 @@
                     int totalRePrint = 0;
                     int totalFraction = 0;
                 }
-                @foreach (var reprinted in reprinteds.GroupBy( r=> r.TicketAllocationNumber.Number) )
+                @foreach (var reprinted in reprinteds.GroupBy(r => r.TicketAllocationNumber.Number))
                 {
                     totalRePrint += reprinted.Count();
                     totalNumber += 1;
                     totalFraction += (reprinted.FirstOrDefault().TicketAllocationNumber.FractionTo - reprinted.FirstOrDefault().TicketAllocationNumber.FractionFrom + 1) * reprinted.Count();
                     <tr>
-                        <td class="text-center">@Tickets.Models.Utils.AddZeroToNumber( (Model.Prospect.Production - 1).ToString().Length,  (int)reprinted.FirstOrDefault().TicketAllocationNumber.Number)</td>
+                        <td class="text-center">@Tickets.Models.Utils.AddZeroToNumber((Model.Prospect.Production - 1).ToString().Length, (int)reprinted.FirstOrDefault().TicketAllocationNumber.Number)</td>
                         <td class="text-center">@reprinted.Count()</td>
                         <td class="text-center">@reprinted.FirstOrDefault().TicketAllocationNumber.FractionFrom</td>
                         <td class="text-center">@reprinted.FirstOrDefault().TicketAllocationNumber.FractionTo</td>
@@ -61,11 +61,11 @@
             </tbody>
             <tfoot>
                 <tr class="total">
-                    <td class="text-center">@totalNumber.ToString("N0",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    <td class="text-center">@totalRePrint.ToString("N0",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-center">@totalNumber.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-center">@totalRePrint.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
-                    <td class="text-center">@totalFraction.ToString("N0",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-center">@totalFraction.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
             </tfoot>
         </table>
@@ -73,7 +73,7 @@
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center" style="margin-bottom: 20px">
         <b>Total Numeros Impreso: @totalNumber.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</b>
     </div>
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>@adminName</b><br />
         <span>@adminCargo</span>

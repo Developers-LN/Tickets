@@ -10,28 +10,33 @@
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
 <style>
-    .col-lg-12{
+    .col-lg-12 {
         width: 100%;
         float: left;
     }
+
     .col-lg-4 {
         width: 33.333%;
-         float: left;
+        float: left;
     }
-    .col-lg-6{
+
+    .col-lg-6 {
         width: 50%;
         float: left;
-    } 
-    
+    }
+
     .text-center {
         text-align: center;
     }
+
     .text-right {
-        text-align:right;
+        text-align: right;
     }
+
     .text-left {
-        text-align:left;
+        text-align: left;
     }
+
     .no-padder {
         padding-left: 0px;
         padding-right: 0px;
@@ -55,20 +60,20 @@
     </div>
     <div class="col-lg-12 no-padder">
         <div class="col-lg-6 no-padder text-left">
-            <b>Cliente: </b> @Model.ClientName<br/>
+            <b>Cliente: </b> @Model.ClientName<br />
             @if (Model.CreditNoteId == 0)
             {
-             <b>Pago en efectivo</b><br />
+                <b>Pago en efectivo</b><br />
             }
             else
             {
-             <b>Nota de Credito: #</b> @Model.CreditNoteId<br />
+                <b>Nota de Credito: #</b> @Model.CreditNoteId<br />
             }
-            <b>Usuario: #</b> @context.Users.FirstOrDefault(u=>u.Id == Model.UserId).Name
+            <b>Usuario: #</b> @context.Users.FirstOrDefault(u => u.Id == Model.UserId).Name
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>Fecha: </b> @Model.CreateDate.ToShortDateString() <br/>
-            <b>Hora: </b> @Model.CreateDate.ToShortTimeString() <br/>
+            <b>Fecha: </b> @Model.CreateDate.ToShortDateString() <br />
+            <b>Hora: </b> @Model.CreateDate.ToShortTimeString() <br />
         </div>
     </div>
     <div>
@@ -89,7 +94,7 @@
                     @{
                         int totalFraction = 0;
                         decimal totalGeneral = 0;
-                        
+
                     }
                     @foreach (var number in Model.IdentifyBach.IdentifyNumbers)
                     {
@@ -116,15 +121,17 @@
                         }
                         if (wfrac == false)
                         {
-                            raffleAwardList.RemoveAll(w =>w.ControlNumber == number.TicketAllocationNumber.Number && w.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S);
+                            raffleAwardList.RemoveAll(w => w.ControlNumber == number.TicketAllocationNumber.Number && w.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S);
                         }
 
-                        foreach ( var raffleAward in raffleAwardList){
+                        foreach (var raffleAward in raffleAwardList)
+                        {
 
                             var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
                             var total = (number.FractionTo - number.FractionFrom + 1) * price;
 
-                            if(raffleAward.Award.TypesAward.Id == (int)Tickets.Models.Enums.AwardTypeEnum.WinFraction){
+                            if (raffleAward.Award.TypesAward.Id == (int)Tickets.Models.Enums.AwardTypeEnum.WinFraction)
+                            {
                                 total = raffleAward.Award.Value;
                                 totalFraction += 1;
                                 <tr>
@@ -134,7 +141,7 @@
                                     <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
                                     <td class="text-center">1</td>
                                     <td class="text-center">@(raffleAward.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100) ).ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                                    <td class="text-right" style="width:30%">@total.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right" style="width:30%">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                 </tr>
                             }
                             else
@@ -147,10 +154,12 @@
                                     <td class="text-center">@raffleAward.Award.TypesAward.Name</td>
                                     <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
                                     <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
-                                    <td class="text-center">@price.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                                    <td class="text-right" style="width:30%">@total.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                                </tr> 
-                         
+                                    <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right" style="width:30%">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                </tr>
+
+
+
                             }
                             totalGeneral += total;
                         }
@@ -160,7 +169,8 @@
 
 
                         decimal totalPayment = 0.0m;
-                        if( identifyBach.IdentifyBachPayments.Count > 0){
+                        if (identifyBach.IdentifyBachPayments.Count > 0)
+                        {
                             totalPayment += identifyBach.IdentifyBachPayments.Select(i => i.Value).Aggregate((i, e) => i + e);
                         }
                         if (identifyBach.NoteCredits.Count > 0)
@@ -169,7 +179,7 @@
                         }
                     }
                     @{
-                        decimal percentValue = totalGeneral * (((decimal) Model.ReceivablePercent) / 100);
+                        decimal percentValue = totalGeneral * (((decimal)Model.ReceivablePercent) / 100);
                     }
                     <tr class="total">
                         <td></td>
@@ -179,7 +189,8 @@
                         <td class="text-center"><strong>@totalFraction</strong></td>
                         <td class="text-right" colspan="2">Subtotal a pagar: <strong> @((totalGeneral).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
                     </tr>
-                    @if( Model.ReceivablePercent > 0 ){
+                    @if (Model.ReceivablePercent > 0)
+                    {
                         <tr>
                             <td class="text-right" style="border-top: none;" colspan="7">Comisión a mayorista @(Model.ReceivablePercent)%: <strong> @((percentValue ).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
                         </tr>

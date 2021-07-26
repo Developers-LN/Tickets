@@ -13,7 +13,7 @@
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>REPUBLICA DOMINICANA</b><br />
@@ -25,7 +25,7 @@
             fecha del sorteo: @Model.DateSolteo.ToLongDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
             <b>Hora: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
@@ -34,9 +34,9 @@
             <thead>
                 <tr>
                     <th>NUMERO</th>
-                    <th >CONTROL</th>
-                    <th >CANTIDAD DE FRACCIONES</th>
-                    <th >VALOR POR FRACCION</th>
+                    <th>CONTROL</th>
+                    <th>CANTIDAD DE FRACCIONES</th>
+                    <th>VALOR POR FRACCION</th>
                     <th class="text-right" style="width:15%">Monto</th>
                 </tr>
             </thead>
@@ -47,16 +47,18 @@
                     var invoiceNumberL = context.TicketAllocationNumbers.Where(n =>
                                n.TicketAllocation.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Invoiced
                                && n.TicketAllocation.RaffleId == Model.Id).ToList();
-                    var invoiceNumber = invoiceNumberL.AsEnumerable().GroupBy( n=>n.Number).Select( n=> new{
+                    var invoiceNumber = invoiceNumberL.AsEnumerable().GroupBy(n => n.Number).Select(n => new
+                    {
                         Number = n.FirstOrDefault().Number,
                         Control = n.FirstOrDefault().ControlNumber,
-                        FractionQuantity = n.Select( tn=> (tn.FractionTo - tn.FractionFrom + 1)).Aggregate( (s,d)=> s + d)
+                        FractionQuantity = n.Select(tn => (tn.FractionTo - tn.FractionFrom + 1)).Aggregate((s, d) => s + d)
                     }).ToList();
 
                     var returnedNumbersList = Model.TicketReturns.ToList();
-                    var returnedNumbers = returnedNumbersList.GroupBy( n=>n.TicketAllocationNumber.Number).Select( r=> new{
+                    var returnedNumbers = returnedNumbersList.GroupBy(n => n.TicketAllocationNumber.Number).Select(r => new
+                    {
                         Number = r.FirstOrDefault().TicketAllocationNumber.Number,
-                        FractionQuantity = r.Select( tn=> (tn.FractionTo - tn.FractionFrom + 1 )).Aggregate( (s,d)=> s + d)
+                        FractionQuantity = r.Select(tn => (tn.FractionTo - tn.FractionFrom + 1)).Aggregate((s, d) => s + d)
                     }).ToList();
                     var awardList = (from ra in Model.RaffleAwards.AsEnumerable()
                                      join n in invoiceNumber.AsEnumerable() on ra.ControlNumber equals n.Number
@@ -66,23 +68,26 @@
                                          AwardTypeName = ra.Award.TypesAward.Name,
                                          Number = ra.ControlNumber,
                                          FractionQuantity = n.FractionQuantity,
-                                         FractionReturnes = returnedNumbers.FirstOrDefault( r=> r.Number == ra.ControlNumber) != null? returnedNumbers.FirstOrDefault( r=> r.Number == ra.ControlNumber).FractionQuantity : 0,
+                                         FractionReturnes = returnedNumbers.FirstOrDefault(r => r.Number == ra.ControlNumber) != null ? returnedNumbers.FirstOrDefault(r => r.Number == ra.ControlNumber).FractionQuantity : 0,
                                          award = ra.Award,
                                          Fraction = ra.Fraction,
                                          Control = n.Control,
-                                     }).OrderByDescending( n=> n.award.Value).ToList();
-                    var awards = awardList.Where( r=> (r.FractionQuantity - r.FractionReturnes) > 0).AsEnumerable().GroupBy( a=>a.AwardTypeId).Select( a=> new{
+                                     }).OrderByDescending(n => n.award.Value).ToList();
+                    var awards = awardList.Where(r => (r.FractionQuantity - r.FractionReturnes) > 0).AsEnumerable().GroupBy(a => a.AwardTypeId).Select(a => new
+                    {
                         awards = a,
                         typeAwardName = a.FirstOrDefault().AwardTypeName
                     });
                 }
 
-                @foreach(var typeAward in awards){
+                @foreach (var typeAward in awards)
+                {
                     var subTotal = 0.0m;
                     <tr>
                         <th colspan="5">@typeAward.typeAwardName</th>
                     </tr>
-                    foreach( var award in typeAward.awards){
+                    foreach (var award in typeAward.awards)
+                    {
 
                         string stringNumber = award.Number.ToString();
                         int production = Model.Prospect.Production - 1;
@@ -98,29 +103,29 @@
                             <td>@stringNumber @(award.award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S? award.Fraction.ToString() : "")</td>
                             <td>@award.Control</td>
                             <td>@fractionQuantity</td>
-                            <td>@fractionValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                            <td class="text-right">@value.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td> 
+                            <td>@fractionValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right">@value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
-                    
+
                         subTotal += value;
                     }
                     <tr class="sub-total">
                         <td colspan="4" class="text-right">SubTotal...:</td>
-                        <td class="text-right">@subTotal.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
-                    
+
                     totalValue += subTotal;
                 }
             </tbody>
             <tfoot>
                 <tr class="total">
-                    <td colspan="3" >Total Numeros...: @numberCount</td>
-                    <td colspan="2" class="text-right">Total...:@totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td colspan="3">Total Numeros...: @numberCount</td>
+                    <td colspan="2" class="text-right">Total...:@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
             </tfoot>
         </table>
     </div>
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>@adminName</b><br />
         <span>@adminCargo</span>

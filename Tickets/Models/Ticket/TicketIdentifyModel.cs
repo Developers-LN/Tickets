@@ -74,17 +74,17 @@ namespace Tickets.Models.Ticket
         internal object GetIdentifyData(int identifyId)
         {
             var context = new TicketsEntities();
-            var config = context.SystemConfigs.FirstOrDefault();
-            int xpiredMount = 6;
+            /*var config = context.SystemConfigs.FirstOrDefault();
+            int xpiredDays = 90;
             if (config != null)
             {
                 var xpired = context.Catalogs.FirstOrDefault(c => c.Id == config.RaffleXpiredTime);
                 if (xpired != null)
                 {
-                    xpiredMount = int.Parse(xpired.Description);
+                    xpiredDays = int.Parse(xpired.Description);
                 }
-            }
-            var date = DateTime.Now.AddMonths(-xpiredMount);
+            }*/
+            var date = DateTime.Now.AddDays(-90);
             var raffles = context.Raffles.Where(s =>
                 s.Statu == (int)RaffleStatusEnum.Generated
                 && date <= s.DateSolteo

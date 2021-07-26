@@ -15,28 +15,33 @@
     var InvoiceDiscount2 = 0.0m;
 }
 <style>
-    .col-lg-12{
+    .col-lg-12 {
         width: 100%;
         float: left;
     }
+
     .col-lg-4 {
         width: 33.333%;
-         float: left;
+        float: left;
     }
-    .col-lg-6{
+
+    .col-lg-6 {
         width: 50%;
         float: left;
-    } 
-    
+    }
+
     .text-center {
         text-align: center;
     }
+
     .text-right {
-        text-align:right;
+        text-align: right;
     }
+
     .text-left {
-        text-align:left;
+        text-align: left;
     }
+
     .no-padder {
         padding-left: 0px;
         padding-right: 0px;
@@ -46,7 +51,7 @@
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b>
@@ -94,9 +99,10 @@
             <tbody>
                 @{
                     int subTotalNumber = 0, subTotalFraction = 0, subtotalBilletes = 0;
-                    decimal subTotalValue = 0.0m, totalClientDiscount=0.00m, InvoiceDiscount = 0.0m;
+                    decimal subTotalValue = 0.0m, totalClientDiscount = 0.00m, InvoiceDiscount = 0.0m;
                     var priceFraction = Model.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == Model.Client.PriceId).FactionPrice;
-                    var allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select( a=> new{
+                    var allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select(a => new
+                    {
                         AllocationId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocationId,
                         Quantity = a.FirstOrDefault().Quantity * a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers.Count(),
                         Numbers = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers,
@@ -104,54 +110,54 @@
                         FractionTo = a.FirstOrDefault().TicketAllocationNumber.FractionTo,
                         //ClientDiscount = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Client.Discount,
                         ClientDiscount = @Model.Discount, //a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Invoice.Discount,
-						//InvoiceDiscount = ClientDiscount,
+                                                          //InvoiceDiscount = ClientDiscount,
                         TypeId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Type
                     });
                 }
-                    @foreach (var number in allocations)
-                    {
-                        subTotalNumber += 1;
-                        subTotalFraction += number.Quantity;
-                        var subTotal = number.Quantity * priceFraction;
-                        subtotalBilletes += number.Numbers.Count; 
-                        <tr>
-                            <td class="text-center">@number.AllocationId</td>
-                            <td class="text-center">@number.Numbers.Count </td>
-                            <td class="text-center">@number.Quantity</td>
-                            <td class="text-right">@priceFraction.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                            <td class="text-right">@subTotal.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                        </tr>
-                        subTotalValue += subTotal;
-                        totalClientDiscount += (subTotal * number.ClientDiscount) / 100;
-						InvoiceDiscount2 = totalClientDiscount;
-                    }
-                </tbody>
-                <tfoot>
-                    <tr style="border-top: 4px double black">
-                        <td class="text-center">@subTotalNumber</td>
-                        <td class="text-center">@subtotalBilletes</td>
-                        <td class="text-center">@subTotalFraction</td>
-                        <td class="text-right"></td>
-                        <td class="text-right" style="font-weight:bold;">Sub Total: @subTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>
-                    <tr >
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right"></td>
-                        <td class="text-right" style="font-weight:bold;">Descuento: @(totalClientDiscount.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                    </tr>
+                @foreach (var number in allocations)
+                {
+                    subTotalNumber += 1;
+                    subTotalFraction += number.Quantity;
+                    var subTotal = number.Quantity * priceFraction;
+                    subtotalBilletes += number.Numbers.Count;
                     <tr>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right"></td>
-                        <td class="text-right" style="font-weight:bold;">Total: @((subTotalValue - totalClientDiscount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-center">@number.AllocationId</td>
+                        <td class="text-center">@number.Numbers.Count </td>
+                        <td class="text-center">@number.Quantity</td>
+                        <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
-                </tfoot>
+                    subTotalValue += subTotal;
+                    totalClientDiscount += (subTotal * number.ClientDiscount) / 100;
+                    InvoiceDiscount2 = totalClientDiscount;
+                }
+            </tbody>
+            <tfoot>
+                <tr style="border-top: 4px double black">
+                    <td class="text-center">@subTotalNumber</td>
+                    <td class="text-center">@subtotalBilletes</td>
+                    <td class="text-center">@subTotalFraction</td>
+                    <td class="text-right"></td>
+                    <td class="text-right" style="font-weight:bold;">Sub Total: @subTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right" style="font-weight:bold;">Descuento: @(totalClientDiscount.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right" style="font-weight:bold;">Total: @((subTotalValue - totalClientDiscount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
-    
+
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-6 col-md-6 col-sm-6 text-center">
             <div class="col-lg-12 no-padder text-center">
@@ -180,7 +186,7 @@
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b>
@@ -228,9 +234,10 @@
             <tbody>
                 @{
                     subTotalNumber = 0; subTotalFraction = 0; subtotalBilletes = 0;
-                    subTotalValue = 0.0m; totalClientDiscount=0.00m;
+                    subTotalValue = 0.0m; totalClientDiscount = 0.00m;
                     priceFraction = Model.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == Model.Client.PriceId).FactionPrice;
-                    allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select( a=> new{
+                    allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select(a => new
+                    {
                         AllocationId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocationId,
                         Quantity = a.FirstOrDefault().Quantity * a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers.Count(),
                         Numbers = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers,
@@ -240,49 +247,49 @@
                         TypeId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Type
                     });
                 }
-                    @foreach (var number in allocations)
-                    {
-                        subTotalNumber += 1;
-                        subTotalFraction += number.Quantity;
-                        var subTotal = number.Quantity * priceFraction;
-                        subtotalBilletes += number.Numbers.Count; 
-                        <tr>
-                            <td class="text-center">@number.AllocationId</td>
-                            <td class="text-center">@number.Numbers.Count </td>
-                            <td class="text-center">@number.Quantity</td>
-                            <td class="text-right">@priceFraction.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                            <td class="text-right">@subTotal.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                        </tr>
-                        subTotalValue += subTotal;
-                        totalClientDiscount = InvoiceDiscount2; //+= (subTotal * number.ClientDiscount) / 100;
-                    }
-                </tbody>
-                <tfoot>
-                    <tr style="border-top: 4px double black">
-                        <td class="text-center">@subTotalNumber</td>
-                        <td class="text-center">@subtotalBilletes</td>
-                        <td class="text-center">@subTotalFraction</td>
-                        <td class="text-right"></td>
-                        <td class="text-right" style="font-weight:bold;">Sub Total: @subTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>
-                    <tr >
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right"></td>
-                        <td class="text-right" style="font-weight:bold;">Descuento: @(totalClientDiscount.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                    </tr>
+                @foreach (var number in allocations)
+                {
+                    subTotalNumber += 1;
+                    subTotalFraction += number.Quantity;
+                    var subTotal = number.Quantity * priceFraction;
+                    subtotalBilletes += number.Numbers.Count;
                     <tr>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right"></td>
-                        <td class="text-right" style="font-weight:bold;">Total: @((subTotalValue - totalClientDiscount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-center">@number.AllocationId</td>
+                        <td class="text-center">@number.Numbers.Count </td>
+                        <td class="text-center">@number.Quantity</td>
+                        <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
-                </tfoot>
+                    subTotalValue += subTotal;
+                    totalClientDiscount = InvoiceDiscount2; //+= (subTotal * number.ClientDiscount) / 100;
+                }
+            </tbody>
+            <tfoot>
+                <tr style="border-top: 4px double black">
+                    <td class="text-center">@subTotalNumber</td>
+                    <td class="text-center">@subtotalBilletes</td>
+                    <td class="text-center">@subTotalFraction</td>
+                    <td class="text-right"></td>
+                    <td class="text-right" style="font-weight:bold;">Sub Total: @subTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right" style="font-weight:bold;">Descuento: @(totalClientDiscount.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right" style="font-weight:bold;">Total: @((subTotalValue - totalClientDiscount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
-    
+
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-6 col-md-6 col-sm-6 text-center">
             <div class="col-lg-12 no-padder text-center">

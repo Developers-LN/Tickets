@@ -10,37 +10,42 @@
 }
 
 <style>
-    .col-lg-12{
+    .col-lg-12 {
         width: 100%;
         float: left;
     }
+
     .col-lg-4 {
         width: 33.333%;
-         float: left;
+        float: left;
     }
-    .col-lg-6{
+
+    .col-lg-6 {
         width: 50%;
         float: left;
-    } 
-    
+    }
+
     .text-center {
         text-align: center;
     }
+
     .text-right {
-        text-align:right;
+        text-align: right;
     }
+
     .text-left {
-        text-align:left;
+        text-align: left;
     }
+
     .no-padder {
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 </style>
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b>
@@ -52,9 +57,9 @@
             <b>DETALLE DE FACTURAS SORTEO NO.@Model.Id DE FECHA @Model.DateSolteo.ToShortDateString()</b>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br/>
-            <b>Numero del Sorteo: </b> @Model.Id 
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+            <b>Numero del Sorteo: </b> @Model.Id
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
@@ -74,11 +79,12 @@
                     var clientId = ViewBag.ClientId == null ? 0 : (int)ViewBag.ClientId;
                     var invoiceId = ViewBag.invoiceId == null ? 0 : (int)ViewBag.invoiceId;
                     var invoices = context.Invoices.Where(n => n.RaffleId == Model.Id && (clientId == 0 || n.ClientId == clientId) && (invoiceId == 0 || n.Id == invoiceId)).
-                        GroupBy(i=> i.ClientId).Select( i=>new{
+                        GroupBy(i => i.ClientId).Select(i => new
+                        {
                             Invoices = i,
                             Client = i.FirstOrDefault().Client
                         });
-                    
+
                     var totalValue = 0.0m;
                     int totalFraction = 0;
                     int totalNumber = 0;
@@ -91,7 +97,8 @@
                     <tr>
                         <th colspan="6">@client.Client.Name</th>
                     </tr>
-                    foreach( var invoice in client.Invoices){
+                    foreach (var invoice in client.Invoices)
+                    {
                         foreach (var number in invoice.InvoiceTickets)
                         {
                             subTotalNumber += 1;
@@ -104,8 +111,8 @@
                                 <td class="text-right">@stringNumber</td>
                                 <td class="text-right">@number.TicketAllocationNumber.FractionFrom - @number.TicketAllocationNumber.FractionTo</td>
                                 <td class="text-right">@number.Quantity</td>
-                                <td class="text-right">@priceFraction.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                                <td class="text-right">@subTotal.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             </tr>
                             subTotalValue += subTotal;
                         }
@@ -117,7 +124,7 @@
                         <td class="text-right"></td>
                         <td class="text-right">@subTotalFraction</td>
                         <td class="text-right"></td>
-                        <td class="text-right"  style="font-weight:bold;">Sub Total: @subTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right" style="font-weight:bold;">Sub Total: @subTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     <tr class="">
                         <td class="text-right"></td>
@@ -125,7 +132,7 @@
                         <td class="text-right"></td>
                         <td class="text-right"></td>
                         <td class="text-right"></td>
-                        <td class="text-right" style="font-weight:bold;">@(client.Client.Discount)% Descuento del Cliente: @clientDiscount.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right" style="font-weight:bold;">@(client.Client.Discount)% Descuento del Cliente: @clientDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     <tr class="">
                         <td class="text-right"></td>
@@ -148,7 +155,7 @@
                     <td class="text-right"></td>
                     <td class="text-right">@totalFraction</td>
                     <td class="text-right"></td>
-                    <td class="text-right" style="font-weight:bold;"> Sub Total: @totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right" style="font-weight:bold;"> Sub Total: @totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
                 <tr class="">
                     <td class="text-right"></td>
@@ -156,7 +163,7 @@
                     <td class="text-right"></td>
                     <td class="text-right"></td>
                     <td class="text-right"></td>
-                    <td class="text-right" style="font-weight:bold;">Descuento: @totalClientDiscount.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right" style="font-weight:bold;">Descuento: @totalClientDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
                 <tr class="">
                     <td class="text-right"></td>
@@ -169,7 +176,7 @@
             </tfoot>
         </table>
     </div>
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>@adminName</b><br />
         <span>@adminCargo</span>

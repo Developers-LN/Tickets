@@ -3060,6 +3060,7 @@
     <Content Include="Views\Raffle\PrintRaffleReport.cshtml" />
     <Content Include="Views\Reports\ReporteSorteo.cshtml" />
     <Content Include="Views\Reports\NoteCreditDetail.cshtml" />
+    <Content Include="Views\Reports\IdentifyAwardsReportResumen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

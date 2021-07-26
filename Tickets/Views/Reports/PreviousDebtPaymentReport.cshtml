@@ -8,28 +8,33 @@
     string adminName = config != null ? config.LoteryAdmin : "";
 }
 <style>
-    .col-lg-12{
+    .col-lg-12 {
         width: 100%;
         float: left;
     }
+
     .col-lg-4 {
         width: 33.333%;
-         float: left;
+        float: left;
     }
-    .col-lg-6{
+
+    .col-lg-6 {
         width: 50%;
         float: left;
-    } 
-    
+    }
+
     .text-center {
         text-align: center;
     }
+
     .text-right {
-        text-align:right;
+        text-align: right;
     }
+
     .text-left {
-        text-align:left;
+        text-align: left;
     }
+
     .no-padder {
         padding-left: 0px;
         padding-right: 0px;
@@ -53,14 +58,14 @@
     </div>
     <div class="col-lg-12 no-padder">
         <div class="col-lg-6 no-padder text-left">
-            <b>Cliente: </b> @Model.ClientId - @Model.Client.Name<br/>
-            <b>Limite de Credito: </b> @Model.Client.CreditLimit.ToString("c",  new System.Globalization.CultureInfo("es-DO"))<br/>
+            <b>Cliente: </b> @Model.ClientId - @Model.Client.Name<br />
+            <b>Limite de Credito: </b> @Model.Client.CreditLimit.ToString("c", new System.Globalization.CultureInfo("es-DO"))<br />
             <b>Usuario: </b> @Model.CreateUser - @Model.User.Name
 
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>Fecha: </b> @Model.CreateDate.ToShortDateString() <br/>
-            <b>Hora: </b> @Model.CreateDate.ToShortTimeString() <br/>
+            <b>Fecha: </b> @Model.CreateDate.ToShortDateString() <br />
+            <b>Hora: </b> @Model.CreateDate.ToShortTimeString() <br />
             <b>Recibo: </b> #@Model.Id
         </div>
     </div>
@@ -80,42 +85,44 @@
                         <td class="text-center">@Model.CreateUser - @Model.User.Name</td>
                         <td class="text-center">@Model.CreateDate.ToString()</td>
                         <td class="text-center">@Model.Note</td>
-                        <td class="text-right" style="width:30%">@Model.PaimentValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right" style="width:30%">@Model.PaimentValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     @{
                         decimal totalValue = 0;
                         var previousPayments = Model.Client.PreviousDebtPayments.Where(p => p.Id != Model.Id).ToList();
                     }
-                    @if( previousPayments.Count > 0){
+                    @if (previousPayments.Count > 0)
+                    {
                         <tr>
-                            <td colspan="4" >PAGOS ANTERIORES</td>
+                            <td colspan="4">PAGOS ANTERIORES</td>
                         </tr>
-                        foreach (var payment in previousPayments){
+                        foreach (var payment in previousPayments)
+                        {
                             totalValue += payment.PaimentValue;
                             <tr>
                                 <td class="text-center">@payment.CreateUser - @payment.User.Name</td>
                                 <td class="text-center">@payment.CreateDate.ToString()</td>
                                 <td class="text-center">@payment.Note</td>
-                                <td class="text-right" style="width:30%">@payment.PaimentValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-right" style="width:30%">@payment.PaimentValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             </tr>
                         }
                         <tr class="sub-total">
-                            <td class="text-right" colspan="4" style="width:30%">Total pagos Anteriores: @totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right" colspan="4" style="width:30%">Total pagos Anteriores: @totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
                     }
-                    
-                   <tr class="total">
-                       <td class="text-right" style="border-top: none;" colspan="7">Deuda Inicial: <strong> @Model.Client.PreviousDebt.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</strong></td>
-                   </tr>
-                   <tr>
-                       <td class="text-right" style="border-top: none;" colspan="7">Pagos Anteriores: <strong> @totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</strong></td>
-                   </tr>
-                   <tr>
-                       <td class="text-right" style="border-top: none;" colspan="7">Pago Actual: <strong> @Model.PaimentValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</strong></td>
-                   </tr>
-                   <tr>
-                       <td class="text-right" style="border-top: none;" colspan="7">Deuda Restante: <strong> @((Model.Client.PreviousDebt - totalValue - Model.PaimentValue).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
-                   </tr>
+
+                    <tr class="total">
+                        <td class="text-right" style="border-top: none;" colspan="7">Deuda Inicial: <strong> @Model.Client.PreviousDebt.ToString("c", new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-right" style="border-top: none;" colspan="7">Pagos Anteriores: <strong> @totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-right" style="border-top: none;" colspan="7">Pago Actual: <strong> @Model.PaimentValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-right" style="border-top: none;" colspan="7">Deuda Restante: <strong> @((Model.Client.PreviousDebt - totalValue - Model.PaimentValue).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

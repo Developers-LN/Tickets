@@ -55,19 +55,23 @@
     table tr.t-r td {
         text-align: right;
     }
-    .span50{
-        margin-right:50%; 
-        text-align:right  !important;
+
+    .span50 {
+        margin-right: 50%;
+        text-align: right !important;
     }
-    .span10{
-        margin-right:10%;
+
+    .span10 {
+        margin-right: 10%;
     }
-     .span20{
-        margin-right:20%;
+
+    .span20 {
+        margin-right: 20%;
     }
-     .span30{
-         margin-right:30%;
-     }
+
+    .span30 {
+        margin-right: 30%;
+    }
 </style>
 
 
@@ -118,7 +122,7 @@
                 <tbody>
                     <tr>
                         <th class="text-left">Cantidad de billetes:</th>
-                        <td class="text-right"> @Model.CantBilletes.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00","")</td>
+                        <td class="text-right"> @Model.CantBilletes.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00", "")</td>
                     </tr>
                     <tr>
                         <th class="text-left">Cantidad de series:</th>
@@ -174,9 +178,9 @@
                     </tr>
                     <tr>
                         <th class="text-center" style="border-bottom: solid #8C8C8C 2px;">@Model.MontoFraFacturas.ToString("n", new System.Globalization.CultureInfo("es-DO"))</th>
-                        
+
                     </tr>
-                </thead>   
+                </thead>
             </table>
         </div>
     </div>
@@ -224,14 +228,14 @@
                         <th colspan="4">VENTA</th>
                     </tr>
                     <tr>
-                        <th class="text-left"  style="border-bottom: solid #8C8C8C 2px;"></th>
-                        <th class="text-left"  style="border-bottom: solid #8C8C8C 2px;">Fracciones</th>
-                        <th class="text-left"  style="border-bottom: solid #8C8C8C 2px;">Monto</th>
+                        <th class="text-left" style="border-bottom: solid #8C8C8C 2px;"></th>
+                        <th class="text-left" style="border-bottom: solid #8C8C8C 2px;">Fracciones</th>
+                        <th class="text-left" style="border-bottom: solid #8C8C8C 2px;">Monto</th>
                     </tr>
                 </thead>
                 <tr>
-                    <th class="text-left" >Venta fracciones cliente</th>
-                    @{  var ventaFraCliente = Model.MontoVentaFraCliente - Model.MontoDevueltoPorClientes;}
+                    <th class="text-left">Venta fracciones cliente</th>
+                    @{ var ventaFraCliente = Model.MontoVentaFraCliente - Model.MontoDevueltoPorClientes;}
 
                     <td class="text-right"><span class="span50">@Model.VentaFraccionesCliente.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00", "")</span></td>
                     <td class="text-right">@ventaFraCliente.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
@@ -300,13 +304,14 @@
                 </thead>
                 <tbody>
                     <tr><th colspan="2">BALANCE 01 (Venta Neta - Ganadores)</th></tr>
-                    <tr>                        @{  var resultado1 = ventaFraCliente - Model.GanadoresPublicos;}
+                    <tr>
+                        @{ var resultado1 = ventaFraCliente - Model.GanadoresPublicos;}
                         <th>Balance 01</th>
                         <td>@resultado1.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     <tr><th colspan="2">BALANCE 02 (Venta Neta - Ganadores + No Pagado )</th></tr>
                     <tr>
-                        @{  var resultado2 = ventaFraCliente - Model.GanadoresPublicos + Model.PendientePago;}
+                        @{ var resultado2 = ventaFraCliente - Model.GanadoresPublicos + Model.PendientePago;}
                         <th>Balance 02</th>
                         <td>@resultado2.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
@@ -331,7 +336,7 @@
                 </thead>
                 <tbody>
                     @foreach (var item in ViewBag.Costos)
-                    { 
+                    {
                         <tr>
                             <td>@item.Detalle</td>
                             <td class="text-right"><span class="span30">@item.Cantidad</span></td>
@@ -368,7 +373,7 @@
                 </tbody>
             </table>
         </div>
-        </div>
+    </div>
 
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -381,17 +386,17 @@
                 <tr>
                     <th class="text-left">Efectivo</th>
                     <td class="text-right">@Model.Efectivo.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
-           
+
                 </tr>
                 <tr>
                     <th class="text-left">Pagado con premios</th>
                     <td class="text-right">@Model.PagadoConPremios.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
-               
+
                 </tr>
                 <tr>
                     <th class="text-left">Otros</th>
                     <td class="text-right">@Model.otros.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
-                
+
                 </tr>
                 <tr>
                     @{
@@ -399,7 +404,7 @@
                     }
                     <th class="text-left">Total Pagado</th>
                     <td class="text-right">@totalpagado.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
-                   
+
                 </tr>
             </table>
         </div>
@@ -412,7 +417,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        @{ 
+                        @{
                             var cuadreFinal = totalpagado - balance03;
                         }
                         <th>BALANCE 04</th>
@@ -420,14 +425,10 @@
                     </tr>
                 </tbody>
             </table>
-         </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-                <b></b><br />
-                <span></span>
-            </div>
         </div>
-
-
-
-
-
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b></b><br />
+            <span></span>
+        </div>
+    </div>
+</div>

@@ -40,8 +40,8 @@
     }
 
     .no-padder {
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 </style>
 
@@ -86,7 +86,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @{  decimal totalGeneralAllocated = 0.0m;
+                    @{ decimal totalGeneralAllocated = 0.0m;
                         decimal totalGeneralPrinted = 0.0m;
                         decimal totalGeneralInvoice = 0.0m;
                         decimal totalGeneralDiscount = 0.0m;
@@ -161,71 +161,71 @@
 
                             }).ToList();
 
-                        
+
                         if (invoices.Count != 0)
                         {
                             <tr>
                                 <th colspan="10" class="text-left" style="background-color:#C4EECD">@raffleName</th>
                             </tr>
 
-                        foreach (var client in invoices)
-                        {
-                            decimal allocatedValue = 0.0m;
-                            foreach (var allocation in client.allocations.Where(w => w.clientId == client.clientId))
+                            foreach (var client in invoices)
                             {
-                                int Fractions = allocation.fractions * allocation.numbers;
-                                var Value = allocation.amount * Fractions;
-                                allocatedValue += Value;
-                            };
+                                decimal allocatedValue = 0.0m;
+                                foreach (var allocation in client.allocations.Where(w => w.clientId == client.clientId))
+                                {
+                                    int Fractions = allocation.fractions * allocation.numbers;
+                                    var Value = allocation.amount * Fractions;
+                                    allocatedValue += Value;
+                                };
 
 
-                            decimal printedValue = 0.0m;
-                            foreach (var printed in client.printedAllocations.Where(w => w.clientId == client.clientId))
-                            {
-                                int Fractions = printed.fractions * printed.numbers;
-                                var Value = printed.amount * Fractions;
-                                printedValue += Value;
-                            };
+                                decimal printedValue = 0.0m;
+                                foreach (var printed in client.printedAllocations.Where(w => w.clientId == client.clientId))
+                                {
+                                    int Fractions = printed.fractions * printed.numbers;
+                                    var Value = printed.amount * Fractions;
+                                    printedValue += Value;
+                                };
 
-                            totalValuec = allocatedValue;
-                            totalValueP = printedValue;
+                                totalValuec = allocatedValue;
+                                totalValueP = printedValue;
 
-                            var restant = client.invoiceValue - (client.discountValue + client.returnedValue + client.paymentValue + client.paymentIdentify + client.otherPayment);
-                            <tr>
-                                <td class="text-left">@client.clientName</td>
-                                <td class="text-right">@((totalValuec).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((totalValueP).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((client.invoiceValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((client.discountValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((client.returnedValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((client.paymentIdentify).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((client.otherPayment).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((client.paymentValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@((restant).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                var restant = client.invoiceValue - (client.discountValue + client.returnedValue + client.paymentValue + client.paymentIdentify + client.otherPayment);
+                                <tr>
+                                    <td class="text-left">@client.clientName</td>
+                                    <td class="text-right">@((totalValuec).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@((totalValueP).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@((client.invoiceValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@((client.discountValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@((client.returnedValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@((client.paymentIdentify).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@((client.otherPayment).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@((client.paymentValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@((restant).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                </tr>
+                                totalAllocated += totalValuec;
+                                totalPrinted += totalValueP;
+                                totalInvoice += client.invoiceValue;
+                                totalDiscount += client.discountValue;
+                                totalReturnedPayments += client.returnedValue;
+                                totalPayment += client.paymentValue;
+                                totalCredit += client.paymentIdentify;
+                                totalOther += client.otherPayment;
+                                totalRest += restant;
+                            }
+
+                            <tr class="sub-total" style="font-weight:bold">
+                                <td class="text-right">Total sorteo...:</td>
+                                <td class="text-right">@(totalAllocated.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(totalPrinted.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(totalInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(totalDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(totalReturnedPayments.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(totalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(totalOther.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(totalPayment.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(totalRest.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                             </tr>
-                            totalAllocated += totalValuec;
-                            totalPrinted += totalValueP;
-                            totalInvoice += client.invoiceValue;
-                            totalDiscount += client.discountValue;
-                            totalReturnedPayments += client.returnedValue;
-                            totalPayment += client.paymentValue;
-                            totalCredit += client.paymentIdentify;
-                            totalOther += client.otherPayment;
-                            totalRest += restant;
-                        }
-
-                        <tr class="sub-total" style="font-weight:bold">
-                            <td class="text-right">Total sorteo...:</td>
-                            <td class="text-right">@(totalAllocated.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalPrinted.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalReturnedPayments.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalOther.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalPayment.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalRest.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                        </tr>
                             totalGeneralAllocated += totalAllocated;
                             totalGeneralPrinted += totalPrinted;
                             totalGeneralInvoice += totalInvoice;
@@ -252,7 +252,7 @@
                         <td class="text-right">@(totalGeneralPayment.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                         <td class="text-right">@(totalGeneralRest.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                     </tr>
-                    
+
                 </tfoot>
             </table>
         </div>

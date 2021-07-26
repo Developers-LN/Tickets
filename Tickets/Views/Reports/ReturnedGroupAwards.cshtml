@@ -10,14 +10,29 @@
     string adminCargo = config != null ? config.Cargo : "";
 }
 <style type="text/css">
-     @@media print
-{
-  table { page-break-after:auto }
-  tr    { page-break-inside:avoid; page-break-after:auto }
-  td    { page-break-inside:avoid; page-break-after:auto }
-  thead { display:table-header-group }
-  tfoot { display:table-footer-group }
-}
+    @@media print {
+        table {
+            page-break-after: auto
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        td {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        thead {
+            display: table-header-group
+        }
+
+        tfoot {
+            display: table-footer-group
+        }
+    }
 </style>
 
 <div class="col-lg-12 col-md-12 col-sm-12 " style="padding-left: 30px; padding-right: 30px; padding-bottom:50px; ">
@@ -36,91 +51,91 @@
             <b>Hora: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 no-padder" >
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>NUMERO</th>
-                            <th class="text-center bold">PREMIO</th>
-                            <th class="text-center bold">CANTIDAD DE FRACCIONES</th>
-                            <th class="text-right bold">VALOR POR FRACCION</th>
-                            <th class="text-right bold" style="width:15%">MONTO</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{
-                            var returnedNumbers = Model.GroupBy(i => i.TicketAllocationNumber.Number).Select(i => new
-                            {
-                                returnedFractions = i.Select(s => s.FractionTo - s.FractionFrom + 1).Aggregate((a, e) => a + e),
-                                number = i.FirstOrDefault().TicketAllocationNumber.Number,
-                                award = Model.FirstOrDefault().Raffle.RaffleAwards.Where(a => a.ControlNumber == i.FirstOrDefault().TicketAllocationNumber.Number),
-                                returnedGroup = i.FirstOrDefault().ReturnedGroup,
-                                Client = i.FirstOrDefault().Client.Name
-                            });
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>NUMERO</th>
+                    <th class="text-center bold">PREMIO</th>
+                    <th class="text-center bold">CANTIDAD DE FRACCIONES</th>
+                    <th class="text-right bold">VALOR POR FRACCION</th>
+                    <th class="text-right bold" style="width:15%">MONTO</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var returnedNumbers = Model.GroupBy(i => i.TicketAllocationNumber.Number).Select(i => new
+                    {
+                        returnedFractions = i.Select(s => s.FractionTo - s.FractionFrom + 1).Aggregate((a, e) => a + e),
+                        number = i.FirstOrDefault().TicketAllocationNumber.Number,
+                        award = Model.FirstOrDefault().Raffle.RaffleAwards.Where(a => a.ControlNumber == i.FirstOrDefault().TicketAllocationNumber.Number),
+                        returnedGroup = i.FirstOrDefault().ReturnedGroup,
+                        Client = i.FirstOrDefault().Client.Name
+                    });
 
-                            var awards = returnedNumbers.Where(i =>
-                                i.award.Count() > 0).GroupBy(n => n.returnedGroup)
-                                .Select(n => new
-                                {
-                                    awards = n
-                                }).ToList();
-                            var totalValue = 0.0m;
-
-                            int count = 0;
-                        }
-
-                        @foreach (var groups in awards.Where(w => w.awards.Count() > 0).OrderBy(o => o.awards.FirstOrDefault().returnedGroup))
+                    var awards = returnedNumbers.Where(i =>
+                        i.award.Count() > 0).GroupBy(n => n.returnedGroup)
+                        .Select(n => new
                         {
-                            var subTotal = 0.0m;
-                            count++;
-                            <tr class="sub-group" >
-                                <th colspan="5" style="background-color:aliceblue; padding-left: 60px; " >
-                                    Grupo de Devolución @groups.awards.FirstOrDefault().returnedGroup -
-                                    @groups.awards.FirstOrDefault().Client
-                                </th>
-                            </tr>
-                            foreach (var a in groups.awards)
-                            {
-                                foreach (var award in a.award)
-                                {
-                                    string stringNumber = a.number.ToString();
-                                    int production = Model.FirstOrDefault().Raffle.Prospect.Production - 1;
-                                    while (stringNumber.Length < production.ToString().Length)
-                                    {
-                                        stringNumber = "0" + stringNumber;
-                                    }
-                                    var returnedFraction = a.returnedFractions;
-                                    var fractionValue = award.Award.Value / (Model.FirstOrDefault().Raffle.Prospect.LeafNumber * Model.FirstOrDefault().Raffle.Prospect.LeafFraction);
-                                    var value = returnedFraction * fractionValue;
-                                    <tr style="page-break-inside: avoid ">
-                                        <td>@stringNumber</td>
-                                        <td class="text-center">@award.Award.Name</td>
-                                        <td class="text-center">@returnedFraction</td>
-                                        <td class="text-right">@fractionValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                        <td class="text-right">@value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                    </tr>
-                                    subTotal += value;
-                                }
-                            }
-                            <tr class="sub-total page-break">
-                                <td colspan="4" class="text-right">SubTotal...:</td>
-                                <td class="text-right"> 
-                                    @subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))
-                                </td>
-                            </tr>
-                            totalValue += subTotal;
-                        }
-                    </tbody>
+                            awards = n
+                        }).ToList();
+                    var totalValue = 0.0m;
 
-                    <tfoot>
-                        <tr class="total">
-                            <td colspan="4" class="text-right">Total...:</td>
-                            <td class="text-right">@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+                    int count = 0;
+                }
+
+                @foreach (var groups in awards.Where(w => w.awards.Count() > 0).OrderBy(o => o.awards.FirstOrDefault().returnedGroup))
+                {
+                    var subTotal = 0.0m;
+                    count++;
+                    <tr class="sub-group">
+                        <th colspan="5" style="background-color:aliceblue; padding-left: 60px; ">
+                            Grupo de Devolución @groups.awards.FirstOrDefault().returnedGroup -
+                            @groups.awards.FirstOrDefault().Client
+                        </th>
+                    </tr>
+                    foreach (var a in groups.awards)
+                    {
+                        foreach (var award in a.award)
+                        {
+                            string stringNumber = a.number.ToString();
+                            int production = Model.FirstOrDefault().Raffle.Prospect.Production - 1;
+                            while (stringNumber.Length < production.ToString().Length)
+                            {
+                                stringNumber = "0" + stringNumber;
+                            }
+                            var returnedFraction = a.returnedFractions;
+                            var fractionValue = award.Award.Value / (Model.FirstOrDefault().Raffle.Prospect.LeafNumber * Model.FirstOrDefault().Raffle.Prospect.LeafFraction);
+                            var value = returnedFraction * fractionValue;
+                            <tr style="page-break-inside: avoid ">
+                                <td>@stringNumber</td>
+                                <td class="text-center">@award.Award.Name</td>
+                                <td class="text-center">@returnedFraction</td>
+                                <td class="text-right">@fractionValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-right">@value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            </tr>
+                            subTotal += value;
+                        }
+                    }
+                    <tr class="sub-total page-break">
+                        <td colspan="4" class="text-right">SubTotal...:</td>
+                        <td class="text-right">
+                            @subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))
+                        </td>
+                    </tr>
+                    totalValue += subTotal;
+                }
+            </tbody>
+
+            <tfoot>
+                <tr class="total">
+                    <td colspan="4" class="text-right">Total...:</td>
+                    <td class="text-right">@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>@adminName</b><br />

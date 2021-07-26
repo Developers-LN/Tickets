@@ -11,31 +11,36 @@
 }
 
 <style>
-    .col-lg-12{
+    .col-lg-12 {
         width: 100%;
         float: left;
     }
+
     .col-lg-4 {
         width: 33.333%;
-         float: left;
+        float: left;
     }
-    .col-lg-6{
+
+    .col-lg-6 {
         width: 50%;
         float: left;
-    } 
-    
+    }
+
     .text-center {
         text-align: center;
     }
+
     .text-right {
-        text-align:right;
+        text-align: right;
     }
+
     .text-left {
-        text-align:left;
+        text-align: left;
     }
+
     .no-padder {
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 </style>
 
@@ -58,8 +63,8 @@
         <div class="col-lg-6 no-padder text-left">
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br/>
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
         </div>
     </div>
     <div>
@@ -80,18 +85,18 @@
 
                     }
 
-                    @foreach(var raffle in infoRaffle)
+                    @foreach (var raffle in infoRaffle)
                     {
                         <tr>
                             <td class="text-center">@raffle.raffleName</td>
                         </tr>
                     }
-                    
+
                 </tbody>
                 <tfoot>
-                        <tr class="total"  style="font-weight:bold">
-                            <td class="text-right" colspan="3">Total General:..</td>
-                        </tr>
+                    <tr class="total" style="font-weight:bold">
+                        <td class="text-right" colspan="3">Total General:..</td>
+                    </tr>
                 </tfoot>
             </table>
         </div>

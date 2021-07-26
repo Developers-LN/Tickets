@@ -12,7 +12,7 @@
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
@@ -21,7 +21,7 @@
             Fecha del Sorteo @Model.DateSolteo.ToShortDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
             <b>Hora: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
@@ -63,7 +63,7 @@
                     int Fractions = allocation.fractions * allocation.numbers;
                     var Value = allocation.amount * Fractions;
                     int Sheets = allocation.numbers * allocation.sheets;
-                    
+
                     <tr>
                         <td class="text-left">@allocation.id</td>
                         <td class="text-left">@allocation.createDate</td>
@@ -73,7 +73,7 @@
                         <td class="text-right">@allocation.numbers.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td class="text-right">@Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
-                    
+
                     totalNumber += allocation.numbers;
                     totalFraction += Fractions;
                     totalValue += Value;
@@ -89,10 +89,10 @@
                     <td class="text-right"><h5><b>@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></h5></td>
                 </tr>
             </tbody>
-            
+
         </table>
     </div>
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 text-center">
         <b>@adminName</b><br />
         <span>@adminCargo</span>

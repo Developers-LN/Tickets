@@ -12,46 +12,52 @@
     {
         RaffleId = g.FirstOrDefault().RaffleId,
         ClientName = g.FirstOrDefault().Client.Name,
-        Quantity = g.Select( c=>(c.FractionTo - c.FractionFrom) + 1).Aggregate( (f, l) => f + l),
+        Quantity = g.Select(c => (c.FractionTo - c.FractionFrom) + 1).Aggregate((f, l) => f + l),
         Group = g.FirstOrDefault().ReturnedGroup,
         Prospect = g.FirstOrDefault().Raffle.Prospect,
         ClientPrice = g.FirstOrDefault().Client.PriceId,
-        Price = g.FirstOrDefault().Raffle.Prospect.Prospect_Price.Where(p => p.PriceId ==g.FirstOrDefault().Client.PriceId).FirstOrDefault().FactionPrice
+        Price = g.FirstOrDefault().Raffle.Prospect.Prospect_Price.Where(p => p.PriceId == g.FirstOrDefault().Client.PriceId).FirstOrDefault().FactionPrice
     }).ToList();
     var creditNote = context.NoteCredits.AsEnumerable().Where(c => c.RaffleId == Model.FirstOrDefault().RaffleId && c.ClientId == Model.FirstOrDefault().ClientId && Model.FirstOrDefault().Statu == (int)Tickets.Models.Enums.TicketReturnedStatuEnum.Invoiced).ToList();
 }
 <style>
-    .col-lg-12{
+    .col-lg-12 {
         width: 100%;
         float: left;
     }
-    .col-lg-4{
+
+    .col-lg-4 {
         width: 33.333%;
         float: left;
     }
-    .col-lg-8{
+
+    .col-lg-8 {
         width: 66.666%;
         float: left;
     }
+
     .text-center {
         text-align: center;
     }
+
     .text-right {
-        text-align:right;
+        text-align: right;
     }
+
     .text-left {
-        text-align:left;
+        text-align: left;
     }
+
     .no-padder {
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 </style>
 
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b>
@@ -62,7 +68,7 @@
         <div class="col-lg-12 no-padder text-center">
             <b>DIRECCIÓN DE SUPERVICIÓN DE PRODUCCIÓN DE SORTEO</b>
         </div>
-        
+
         <div class="col-lg-12 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
                 <b>Fecha: </b> @DateTime.Now.ToShortDateString()
@@ -76,10 +82,11 @@
                 <div class="col-lg-12 no-padder text-left">
                     <b>Cliente: </b> @datas.FirstOrDefault().ClientName
                 </div>
-                @if(creditNote.Count > 0){
-                <div class="col-lg-12 no-padder text-left">
-                    <b>Nota de Credito: </b> #@creditNote.LastOrDefault().Id
-                </div>
+                @if (creditNote.Count > 0)
+                {
+                    <div class="col-lg-12 no-padder text-left">
+                        <b>Nota de Credito: </b> #@creditNote.LastOrDefault().Id
+                    </div>
                 }
             </div>
             <div class="col-lg-4">
@@ -113,56 +120,57 @@
                 @{
                     var totals = 0.0m;
                     int totalFraction = 0;
-                    }
-                @foreach( var data in datas){
+                }
+                @foreach (var data in datas)
+                {
                     <tr>
                         @{
                             decimal total = data.Quantity * data.Price;
                             totalFraction += data.Quantity;
                             totals += total;
-                            }
+                        }
                         <td class="text-center">@data.Group</td>
                         <td class="text-center">Billetes</td>
                         <td class="text-center">@data.Quantity</td>
                         <td class="text-center">Fraccion</td>
-                        <td class="text-right">@data.Price.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td class="text-right">@total.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@data.Price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                 }
                 @{
                     var discount = totals * Model.FirstOrDefault().Discount / 100;
                     var totalValue = totals - discount;
-                    }
+                }
             </tbody>
-                <tfoot>
-                    <tr class="total">
-                        <td class="text-center">@datas.Count</td>
-                        <td class="text-center"></td>
-                        <td class="text-center">@totalFraction</td>
-                        <td class="text-right"></td>
-                        <td class="text-right"></td>
-                        <td class="text-right">Sub Total..: @totals.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>
-                    <tr>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right"></td>
-                        <td class="text-right"></td>
-                        <td class="text-right">Descuento..: @discount.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>
-                    <tr>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right"></td>
-                        <td class="text-right"></td>
-                        <td class="text-right">Total..: @totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>
-                </tfoot>
+            <tfoot>
+                <tr class="total">
+                    <td class="text-center">@datas.Count</td>
+                    <td class="text-center"></td>
+                    <td class="text-center">@totalFraction</td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right">Sub Total..: @totals.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right">Descuento..: @discount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right">Total..: @totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
-    
+
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-4 col-md-4 col-sm-4 text-center">
             <div class="col-lg-12 no-padder text-center">

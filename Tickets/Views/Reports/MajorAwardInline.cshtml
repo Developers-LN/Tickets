@@ -9,70 +9,80 @@
 
 <style>
 
-/*PREMIOS INTERMEDIOS*/
-.inter-award {
-    padding-left: 10px;
-}
-.inter-award .title {
-    font-size: 15pt;
-    line-height: 22px;
-}
-.inter-award .cash .title {
-    font-size: 7pt;
-    line-height: 10px;
-    border-radius: 0px;
-}
-   ul {
-            list-style-type: none;
+    /*PREMIOS INTERMEDIOS*/
+    .inter-award {
+        padding-left: 10px;
     }
-.inter-award .cash ul {
-    height: auto;
-    -webkit-column-count: 5;
-    -moz-column-count: 5;
-    column-count: 5;   
-    padding: 5px;
-    margin: 0;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    -webkit-column-gap: 5px; /* Chrome, Safari, Opera */
-    -moz-column-gap: 5px; /* Firefox */
-    column-gap: 5px;
-}
-.inter-award .cash ul li { 
-    padding: 0;
-    margin: 0;
-    line-height: normal;
-    font-size: 15pt;
-    font-weight: bold;
-}
-/*PREMIOS INTERMEDIOS*/
+
+        .inter-award .title {
+            font-size: 15pt;
+            line-height: 22px;
+        }
+
+        .inter-award .cash .title {
+            font-size: 7pt;
+            line-height: 10px;
+            border-radius: 0px;
+        }
+
+    ul {
+        list-style-type: none;
+    }
+
+    .inter-award .cash ul {
+        height: auto;
+        -webkit-column-count: 5;
+        -moz-column-count: 5;
+        column-count: 5;
+        padding: 5px;
+        margin: 0;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        -webkit-column-gap: 5px; /* Chrome, Safari, Opera */
+        -moz-column-gap: 5px; /* Firefox */
+        column-gap: 5px;
+    }
+
+        .inter-award .cash ul li {
+            padding: 0;
+            margin: 0;
+            line-height: normal;
+            font-size: 15pt;
+            font-weight: bold;
+        }
+    /*PREMIOS INTERMEDIOS*/
 
 
-    
-.col-lg-20 {
-    width: 19.60%;
-     float: left;
-}
-.col-lg-22 {
-    width: 21%;
-    float: left;
-}
-.col-lg-78 {
-    width: 78%;
-    float: left;
-}
-.col-lg-12{
-    width: 100%;
-    float: left;
-}
-.col-lg-3{
-    width: 24.6%;
-    float: left;
-}
-.col-lg-6{
-    width: 50%;
-    float: left;
-}
+
+    .col-lg-20 {
+        width: 19.60%;
+        float: left;
+    }
+
+    .col-lg-22 {
+        width: 21%;
+        float: left;
+    }
+
+    .col-lg-78 {
+        width: 78%;
+        float: left;
+    }
+
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-3 {
+        width: 24.6%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
 </style>
 
 
@@ -82,13 +92,13 @@
             <img src="~/Images/logo.png" />
         </div>
         @{
-            var majors = context.TypesAwards.Where(t => t.Id == (int)Tickets.Models.Enums.AwardTypeEnum.Mayors 
+            var majors = context.TypesAwards.Where(t => t.Id == (int)Tickets.Models.Enums.AwardTypeEnum.Mayors
                 || t.Id == (int)Tickets.Models.Enums.AwardTypeEnum.WinFraction);
             int numberLengh = (Model.Prospect.Production - 1).ToString().Length;
-            }
+        }
         <div class="col-lg-12" style="text-align:center">
             MINISTERIO DE HACIENDA<br />
-        ADMINSTRACION DE LA LOTERIA NACIONAL<br />
+            ADMINSTRACION DE LA LOTERIA NACIONAL<br />
             <h3>PREMIOS MAYORES PARA EL SORTEO NO. @Model.Id EN FECHA @Model.DateSolteo.ToLongDateString()</h3><br />
         </div>
         <div class="col-lg-12" style="text-align:center">
@@ -108,25 +118,26 @@
                             .Where(a => a.Award.TypesAwardId == major.Id)
                             .OrderBy(r => r.ControlNumber)
                             .GroupBy(r => r.AwardId)
-                            .Select(r => new { 
-                                awardName = r.FirstOrDefault().Award.Description, 
-                                numbers = r, 
-                                value = r.FirstOrDefault().Award.Value, 
-                                Award = r.FirstOrDefault().Award, 
-                                Fraction = r.FirstOrDefault().Fraction 
+                            .Select(r => new
+                            {
+                                awardName = r.FirstOrDefault().Award.Description,
+                                numbers = r,
+                                value = r.FirstOrDefault().Award.Value,
+                                Award = r.FirstOrDefault().Award,
+                                Fraction = r.FirstOrDefault().Fraction
                             }).OrderBy(r => r.Award.OrderAward);
                         foreach (var award in awards)
                         {
                             <tr>
                                 <td class="text-left"><h5>@award.awardName</h5></td>
-                                
+
                                 @foreach (var number in award.numbers)
                                 {
                                     <td class="text-center"><h5>@Tickets.Models.Utils.AddZeroToNumber(numberLengh, (int)number.ControlNumber) @(award.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? "Fracción " + award.Fraction.ToString() : "")</h5></td>
                                 }
                                 <td class="text-right"><h5>@award.value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</h5></td>
                             </tr>
-                            totalValue += award.value;  
+                            totalValue += award.value;
                         }
                     }
                 </tbody>
@@ -139,5 +150,5 @@
                 </tfoot>
             </table>
         </div>
-     </div>
+    </div>
 </div>

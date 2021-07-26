@@ -71,7 +71,8 @@ namespace Tickets.Models.Raffles
                                                               Sorteo = TAN.RaffleId
                                                           })
                                                           .Where(w => w.Sorteo == raffleId && w.Estado == (int)TicketStatusEnum.Factured)
-                                                          .OrderBy(w => Guid.NewGuid()).ToList();
+                                                          .OrderBy(w => Guid.NewGuid())
+                                                          .ToList();
 
                         TicketsEnCirculacion.ForEach(c => NumerosEnCirculacion.Add((int)c.Numero));
 
@@ -382,8 +383,16 @@ namespace Tickets.Models.Raffles
         {
             var randon = new Random();
             int number = 0;
-            if (NumerosCirculacion.Count > 0 && percentageWinners >= 0)
+            if (NumerosCirculacion.Count > 0 && percentageWinners > 0)
             {
+                //Metodo por rango de números dentro del arreglo
+                /*var LongitudLista1 = NumerosCirculacion.Count();
+                int MinNumber = NumerosCirculacion.Min(x => x);
+                var Porcentaje1 = (percentageWinners * LongitudLista1) / 100;
+                var StopNumber = NumerosCirculacion.ToArray()[(int)Porcentaje1];
+                number = randon.Next(MinNumber, StopNumber);*/
+
+                //Metodo por rango de index del arreglo
                 int RandomNumber = 0;
                 var LongitudLista = NumerosCirculacion.Count();
                 var Porcentaje = (percentageWinners * LongitudLista) / 100;

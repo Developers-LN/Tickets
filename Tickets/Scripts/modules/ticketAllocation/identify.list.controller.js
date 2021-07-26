@@ -2,7 +2,7 @@
  * Module: IdentifyAwardListController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -24,7 +24,7 @@
                     if (raffleId > 0 || clientId > 0) {
                         $scope.identifyBachs = data.identifyBachs;
                     }
-                    if (raffleId <= 0 && clientId <= 0 ) {
+                    if (raffleId <= 0 && clientId <= 0) {
                         $scope.raffles = data.raffles;
                         $scope.clients = data.clients;
                     }
@@ -43,8 +43,7 @@
         $scope.updateDelivered = function () {
             self.loadIdentifys($scope.RaffleId, $scope.ClientId);
         }
-        $scope.updateDelivered1 = function()
-        {
+        $scope.updateDelivered1 = function () {
             self.loadIdentifys1();
         }
 
@@ -81,7 +80,7 @@
                 url: 'TicketAllocation/GetBatchList',
 
                 success: function (data) {
-                        $scope.batchNumbers = data;
+                    $scope.batchNumbers = data;
                 }
             });
         }
@@ -107,7 +106,7 @@
             $('#sorteo_lotes').hide();
             $(document).ready(function () {
                 $('#SByBatch').click(function () {
-                 
+
                     $('#sorteo_lotes').fadeToggle();
                     $('#sorteo_filters').fadeToggle();
                     var value = $('#SByBatch').text();

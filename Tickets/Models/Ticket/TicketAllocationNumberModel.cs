@@ -163,6 +163,7 @@ namespace Tickets.Models.Ticket
                 n.Printed,
                 n.Statu,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == n.Statu).NameDetail,
+                Caducado = n.TicketAllocation.Raffle.DateSolteo.AddDays(90) < DateTime.Now ? true : false,
                 Allocation = new
                 {
                     n.TicketAllocation.Id,

@@ -1,4 +1,5 @@
 ﻿@model List<Tickets.Models.Raffle>
+
 @{
     ViewBag.Title = "IdentifyAwardsReportsResumen";
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
@@ -81,13 +82,13 @@
                 </thead>
                 <tbody>
                     @{
-                      decimal  totalidad = 0;
-                      int totalidadfraccion = 0;
+                        decimal totalidad = 0;
+                        int totalidadfraccion = 0;
                     }
-                    
+
                     @foreach (var raffle in Model.Where(w => w.Statu == (int)Tickets.Models.Enums.RaffleStatusEnum.Generated))
                     {
-                        
+
                         var clients = context.Clients.Where(w => (w.Statu == (int)Tickets.Models.Enums.ClientStatuEnum.Approbed && w.IdentifyBaches.Count() > 0) && (clientId == 0 || w.Id == clientId)).ToList();
                         var raffleName = raffle.Id + " - " + raffle.Name;
                         <tr>
@@ -132,18 +133,18 @@
                                 <tr>
                                     <th class="text-left">@clientDesc</th>
                                     <td class="text-center"><strong>@totalFraction</strong></td>
-                                    <td class="text-right" colspan="2" > <strong>@((totalGeneral).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                                    <td class="text-right" colspan="2"> <strong>@((totalGeneral).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
                                 </tr>
                                 totalidadfraccion += totalFraction;
                                 totalidad += totalGeneral;
                             }
                         }
                     }
-                    
+
                     <tr>
                         <th></th>
-                        <th class="text-center" >Total Fracción: <strong>@(totalidadfraccion)</strong></th>
-                        <th class="text-right" style="width:30%" >Total: <strong>@((totalidad).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong> </th>
+                        <th class="text-center">Total Fracción: <strong>@(totalidadfraccion)</strong></th>
+                        <th class="text-right" style="width:30%">Total: <strong>@((totalidad).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong> </th>
                     </tr>
                 </tbody>
             </table>

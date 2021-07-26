@@ -57,6 +57,7 @@
                     });
                     $scope.number = response.object;
                     $scope.numberFound = true;
+                    $scope.caducado = response.object.Caducado;
                     $scope.showTotals();
                     $rootScope.destroyDataTable();
                     $scope.$apply();

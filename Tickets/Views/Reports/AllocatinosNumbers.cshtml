@@ -12,7 +12,7 @@
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
@@ -21,7 +21,7 @@
             Fecha del Sorteo @Model.DateSolteo.ToShortDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
             <b>Hora: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
@@ -39,14 +39,15 @@
                 @{
                     var clientId = ViewBag.ClientId == null ? 0 : (int)ViewBag.ClientId;
                     var allocationId = ViewBag.AllocationId == null ? 0 : (int)ViewBag.AllocationId;
-                    var allocateNumbers = context.TicketAllocationNumbers.Where(n => n.TicketAllocation.RaffleId == Model.Id 
+                    var allocateNumbers = context.TicketAllocationNumbers.Where(n => n.TicketAllocation.RaffleId == Model.Id
                         && (clientId == 0 || n.TicketAllocation.ClientId == clientId)
                          && (allocationId == 0 || n.TicketAllocation.Id == allocationId));
-                    var clients = allocateNumbers.GroupBy(n => n.TicketAllocation.ClientId).Select(n => new { 
+                    var clients = allocateNumbers.GroupBy(n => n.TicketAllocation.ClientId).Select(n => new
+                    {
                         Client = n.FirstOrDefault().TicketAllocation.Client,
                         Number = n
                     });
-                    
+
                     var totalValue = 0.0m;
                     int totalFraction = 0;
                     int totalNumber = 0;
@@ -69,8 +70,8 @@
                         <tr>
                             <td class="text-right">@stringNumber</td>
                             <td class="text-right">@fractionQuantity</td>
-                            <td class="text-right">@priceFraction.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                            <td class="text-right">@subTotal.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
                         subTotalValue += subTotal;
                     }
@@ -78,7 +79,7 @@
                         <td class="text-right">@subTotalNumber</td>
                         <td class="text-right">@subTotalFraction</td>
                         <td class="text-right"></td>
-                        <td class="text-right">@subTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@subTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     totalNumber += subTotalNumber;
                     totalFraction += subTotalFraction;
@@ -90,12 +91,12 @@
                     <td class="text-right">@totalNumber</td>
                     <td class="text-right">@totalFraction</td>
                     <td class="text-right"></td>
-                    <td class="text-right">@totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right">@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
             </tfoot>
         </table>
     </div>
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>@adminName</b><br />
         <span>@adminCargo</span>

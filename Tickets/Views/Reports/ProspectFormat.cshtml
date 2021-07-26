@@ -3,7 +3,8 @@
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     ViewBag.Title = "Formato de Prospecto";
 
-    var awards = Model.Awards.OrderByDescending(a=>a.Value).GroupBy(a => a.TypesAward.Name).Select( a=> new{
+    var awards = Model.Awards.OrderByDescending(a => a.Value).GroupBy(a => a.TypesAward.Name).Select(a => new
+    {
         awardName = a.FirstOrDefault().TypesAward.Name,
         award = a
     });
@@ -15,7 +16,7 @@
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
@@ -48,15 +49,15 @@
                 {
                     <tr>
                         <td>@price.Catalog.NameDetail</td>
-                        <td class="text-right">@price.TicketPrice.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td class="text-right">@price.SeriePrice.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td class="text-right">@price.FactionPrice.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@price.TicketPrice.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@price.SeriePrice.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@price.FactionPrice.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
         <table class="table">
             @{
@@ -77,7 +78,7 @@
                         MONTO TOTAL DE PREMIOS
                     </th>
                 </tr>
-            </thead> 
+            </thead>
             @foreach (var awardType in awards)
             {
                 <thead>
@@ -92,31 +93,32 @@
                         </th>
                     </tr>
                 </thead>
-                    <tbody>
+                <tbody>
                     @{
-                var totalTypeAwardQuantity = 0;
-                    var totalTypeAwardValue = 0.0m;
-                    var totalTypeAwardTotalValue = 0.0m;
-                     }
-                    @foreach (var award in awardType.award.OrderBy(t=>t.OrderAward))
+                        var totalTypeAwardQuantity = 0;
+                        var totalTypeAwardValue = 0.0m;
+                        var totalTypeAwardTotalValue = 0.0m;
+                    }
+                    @foreach (var award in awardType.award.OrderBy(t => t.OrderAward))
                     {
                         totalTypeAwardQuantity += award.Quantity;
                         totalTypeAwardValue += award.TotalValue;
                         totalTypeAwardTotalValue += award.Value;
-                     <tr>
-                         <td class="text-right">
-                             @award.Quantity
-                         </td>
-                         <td>
-                             @award.Name
-                         </td>
-                         <td class="text-right">
-                             @award.Value.ToString("c",  new System.Globalization.CultureInfo("es-DO"))
-                         </td>
-                         <td class="text-right">
-                             @award.TotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))
-                         </td>
-                     </tr>   
+                        <tr>
+                            <td class="text-right">
+                                @award.Quantity
+                            </td>
+                            <td>
+                                @award.Name
+                            </td>
+                            <td class="text-right">
+                                @award.Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))
+                            </td>
+                            <td class="text-right">
+                                @award.TotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))
+                            </td>
+                        </tr>
+
                     }
                     @{
                         typeAwardQuantity += totalTypeAwardQuantity;
@@ -126,22 +128,23 @@
                     <tr class="sub-total">
                         <td class="text-right">@totalTypeAwardQuantity</td>
                         <td></td>
-                        <td class="text-right">@totalTypeAwardTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td class="text-right">@totalTypeAwardValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    </tr>                       
-                </tbody>  
+                        <td class="text-right">@totalTypeAwardTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@totalTypeAwardValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                </tbody>
+
             }
             <tfoot>
                 <tr class="total">
                     <td class="text-right">@typeAwardQuantity</td>
                     <td></td>
-                    <td class="text-right">@typeAwardTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                    <td class="text-right">@typeAwardValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                </tr> 
+                    <td class="text-right">@typeAwardTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right">@typeAwardValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
             </tfoot>
         </table>
     </div>
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>@adminName</b><br />
         <span>@adminCargo</span>

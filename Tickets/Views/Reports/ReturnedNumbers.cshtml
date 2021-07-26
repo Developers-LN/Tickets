@@ -12,7 +12,7 @@
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
@@ -21,7 +21,7 @@
             Desde @Model.StartReturnDate.ToShortDateString() hasta @Model.EndReturnDate.ToShortDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
             <b>Hora: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
@@ -59,12 +59,12 @@
                         subTotalFraction += (returned.FractionTo - returned.FractionFrom + 1);
                         var priceFraction = returned.TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice;
                         var stringNumber = returned.TicketAllocationNumber.Number.ToString();
-                        var subTotal = (returned.FractionTo - returned.FractionFrom + 1)  * priceFraction;
+                        var subTotal = (returned.FractionTo - returned.FractionFrom + 1) * priceFraction;
                         <tr>
                             <td class="text-right">@stringNumber</td>
                             <td class="text-right">@(returned.FractionTo - returned.FractionFrom + 1)</td>
-                            <td class="text-right">@priceFraction.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                            <td class="text-right">@subTotal.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
                         subTotalValue += subTotal;
                     }
@@ -72,7 +72,7 @@
                         <td class="text-right">@subTotalNumber</td>
                         <td class="text-right">@subTotalFraction</td>
                         <td class="text-right"></td>
-                        <td class="text-right">@subTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@subTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     totalNumber += subTotalNumber;
                     totalFraction += subTotalFraction;
@@ -84,12 +84,12 @@
                     <td class="text-right">@totalNumber</td>
                     <td class="text-right">@totalFraction</td>
                     <td class="text-right"></td>
-                    <td class="text-right">@totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right">@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
             </tfoot>
         </table>
     </div>
-    
+
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>@adminName</b><br />
         <span>@adminCargo</span>

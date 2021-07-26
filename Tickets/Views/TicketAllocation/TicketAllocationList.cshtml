@@ -54,6 +54,7 @@
                                 <td>{{(allocation.createDate | date:"dd/MM/yyyy hh:mm:ss a")}}</td>
                                 <td>{{allocation.statuDesc}}</td>
                                 <td class="text-center">
+                                    <a target="_blank" href="/Reports/AllocatinosNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-print"></i></a>
                                     <a ng-click="deleteAllocation(allocation)" ng-if="(allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Created) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.PendientPrint)) && allocation.canAllocate == true" title="Borrar Asignación de Billetes" class="{{moduleCanDelete}}"><i class="fa fa-times"></i></a>
                                     <a ng-click="xmlAllocationNumberDownload(allocation.id)" target="_blank" title="Descargar XML de la Asignación"><i class="fa fa-cloud-download"></i></a>
                                     <a href="/#/ticket/allocationDetails/{{allocation.id}}" title="Ver Detalle de asignación" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>

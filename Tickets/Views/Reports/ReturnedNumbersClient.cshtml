@@ -10,37 +10,42 @@
 }
 
 <style>
-    .col-lg-12{
+    .col-lg-12 {
         width: 100%;
         float: left;
     }
+
     .col-lg-4 {
         width: 33.333%;
-         float: left;
+        float: left;
     }
-    .col-lg-6{
+
+    .col-lg-6 {
         width: 50%;
         float: left;
-    } 
-    
+    }
+
     .text-center {
         text-align: center;
     }
+
     .text-right {
-        text-align:right;
+        text-align: right;
     }
+
     .text-left {
-        text-align:left;
+        text-align: left;
     }
+
     .no-padder {
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 </style>
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <img src="~/Images/logo.png"/>
+            <img src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
@@ -49,11 +54,11 @@
             Desde @Model.StartReturnDate.ToShortDateString() hasta @Model.EndReturnDate.ToShortDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br/>
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
             <b>Hora: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
-    
+
     @{
         var clients = Model.TicketReturns.GroupBy(t => t.ClientId).Select(c => new
         {
@@ -87,14 +92,14 @@
                     decimal fractionPrice = Model.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice;
                     var returnedGroups = client.Returneds.GroupBy(r => r.ReturnedGroup).Select(r => new
                     {
-                        Group = r.GroupBy( d=>d.TicketAllocationNumber.Number).Count(),
+                        Group = r.GroupBy(d => d.TicketAllocationNumber.Number).Count(),
                         Quantity = r.Count(),
-                        FractionQuantity = r.Select( e=> (e.FractionTo - e.FractionFrom + 1)).Aggregate((s,e)=> s+ e),
+                        FractionQuantity = r.Select(e => (e.FractionTo - e.FractionFrom + 1)).Aggregate((s, e) => s + e),
                         ProspectFraction = r.FirstOrDefault().Raffle.Prospect.LeafFraction,
-                        Price = r.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice, 
+                        Price = r.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice,
                         Descuento = r.FirstOrDefault().Discount
                     });
-                    
+
                     foreach (var returned in returnedGroups)
                     {
                         subTotalFraction += returned.FractionQuantity;
@@ -113,9 +118,9 @@
                         <td class="text-center">@subTotalGroup</td>
                         <td class="text-center">@subTotalFraction</td>
                         <td class="text-center">@subTotalLeef </td>
-                        <td class="text-right">@fractionPrice.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@fractionPrice.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td class="text-right">@((int)DescuentoCliente)%</td>
-                        <td class="text-right">@subTotalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@subTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     totalNumber += subTotalNumber;
                     totalFraction += subTotalFraction;
@@ -132,11 +137,11 @@
                     <td class="text-center">@totalLeef</td>
                     <td class="text-right"></td>
                     <td class="text-right"></td>
-                    <td class="text-right">@totalValue.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right">@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
             </tfoot>
         </table>
-    </div>    
+    </div>
     <div class="col-lg-12 no-padder">
         <b>** Cantidad Real Global De Números Devueltos y Valor real de devolución (utilizando valor real de números abonados)</b>
     </div>
@@ -151,7 +156,7 @@
             <div class="col-lg-12 no-padder text-center">
                 ______________________________
             </div>
-            Supervisor General 
+            Supervisor General
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
