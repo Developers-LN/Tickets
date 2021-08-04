@@ -1,4 +1,5 @@
 ﻿@model Tickets.Models.Raffle
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     ViewBag.Title = "Billetes en circulación";
@@ -18,8 +19,8 @@
                                    Invoiced.TicketNumberAllocationId,
                                    Ticket.RaffleId,
                                    Ticket.TicketAllocation.Statu,
-                           //StatusTicket = Ticket.Statu,
-                           FractionsReturned = Ticket.TicketReturns
+                                   //StatusTicket = Ticket.Statu,
+                                   FractionsReturned = Ticket.TicketReturns
                                    .Where(n => n.RaffleId == Model.Id && n.TicketAllocationNimberId == Invoiced.TicketNumberAllocationId)
                                    .Sum(n => ((int?)n.FractionTo - (int?)n.FractionFrom) + 1)
                                })

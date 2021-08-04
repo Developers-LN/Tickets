@@ -107,7 +107,7 @@
             if (prospect.maxReturnTickets == undefined || prospect.maxReturnTickets == 0) {
                 error += 'Porcentaje de devoluciones' + isReq;
             }
-            if (prospect.percentageWinners == undefined || prospect.percentageWinners == 0) {
+            if (prospect.percentageWinners == undefined || prospect.percentageWinners == null) {
                 error += 'Porcentaje de ganadores' + isReq;
             }
             if (prospect.impresionType == undefined || prospect.impresionType <= 0) {

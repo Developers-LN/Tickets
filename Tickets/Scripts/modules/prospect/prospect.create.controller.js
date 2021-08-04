@@ -46,7 +46,7 @@
             if (self.validateNumenber(prospect.MaxReturnTickets) === false) {
                 error += 'Porcentaje de devoluciones' + isReq;
             }
-            if (self.validateNumenber(prospect.PercentageWinners) === false) {
+            if (prospect.PercentageWinners == undefined || prospect.PercentageWinners == null) {
                 error += 'Porcentage de n&uacut;meros ganadores' + isReq;
             }
             if (self.validateNumenber(prospect.ImpresionType) === false) {
@@ -176,6 +176,7 @@
                     $scope.awardTypes = data.awardTypes;
                     $scope.typePrices = data.typePrices;
                     $scope.$apply();
+                    $rootScope.createSelect2();
                     $rootScope.dataTable();
                 }
             });
@@ -416,6 +417,7 @@
                     $scope.prospectList = data.prospects;
                     $scope.$apply();
                     $rootScope.dataTable();
+                    $rootScope.createSelect2();
                 }
             });
         }
