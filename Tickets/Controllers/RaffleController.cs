@@ -157,6 +157,13 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult PrintPayableAwards()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult PrintRaffleReport()
         {
             return View();

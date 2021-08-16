@@ -378,6 +378,15 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult PayableAwards(int raffleId)
+        {
+            var context = new TicketsEntities();
+            var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
+            return View(raffle);
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult BilletesCirculacion(int raffleId)
         {
             var context = new TicketsEntities();

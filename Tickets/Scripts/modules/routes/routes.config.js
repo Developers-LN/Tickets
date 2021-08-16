@@ -331,6 +331,11 @@
                 url: '/raffle/print/printTicketReport',
                 templateUrl: Route.base('Raffle/PrintTicketReport')
             })
+            //NUEVO REPORTE DE PREMIOS PAGABLES
+            .state('app.printPayableAwards', {
+                url: '/raffle/print/printPayableAwards',
+                templateUrl: Route.base('Raffle/PrintPayableAwards')
+            })
             //NUEVO REPORTE DE SORTEO
             .state('app.printRaffleReport', {
                 url: '/raffle/print/printRaffleReport',

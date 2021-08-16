@@ -213,7 +213,6 @@
                     </ul>
                 </li>
 
-
                 <li>
                     <a href="" title="Sorteos" ripple="">
                         <em class="sidebar-item-icon fa fa-sitemap"></em>
@@ -251,7 +250,6 @@
                         </li>
                     </ul>
                 </li>
-
 
                 <li>
                     <a href="" title="Auxiliares" ripple="">
@@ -410,6 +408,13 @@
                         </span>
                     </a>
                     <ul class="nav sidebar-subnav">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.printPayableAwards')">
+                            <a ui-sref="app.printPayableAwards" title="Reporte premios pagables">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Premios pagables</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.printTicketReport')">
                             <a ui-sref="app.printTicketReport" title="Reporte billetes de sorteo">
                                 <em class="sidebar-item-icon"></em>

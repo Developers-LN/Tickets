@@ -1,0 +1,165 @@
+﻿@model Tickets.Models.Raffle
+
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Billetes en pagables";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    var Porcentaje = config.LawDiscountPercentMayor;
+    string adminName = config != null ? config.LoteryAdmin : "";
+    string adminCargo = config != null ? config.Cargo : "";
+
+    var FraccionesDevueltas = 0;
+    var Contador = 0;
+    decimal MontoApagarSorteo = 0;
+    decimal ValorPremios = 0;
+
+    var Fracciones = context.Raffles.Where(w => w.Id == Model.Id)
+        .Select(s => s.Prospect.LeafFraction * s.Prospect.LeafNumber).FirstOrDefault();
+
+    var InvoiceTickets = context.InvoiceTickets.Where(w => w.Invoice.RaffleId == Model.Id)
+        .Select(s => s.TicketAllocationNumber.Number);
+
+    var RaffleAwards = context.RaffleAwards
+                       .Join(context.Awards,
+                       RA => RA.AwardId,
+                       A => A.Id,
+                       (RA, A) => new
+                       {
+                           RaffleID = RA.RaffleId,
+                           RaffleDate = RA.Raffle.DateSolteo,
+                           RaffleName = RA.Raffle.Name,
+                           Billete = RA.ControlNumber,
+                           AwardType = A.TypesAwardId,
+                           Terminal = A.Terminal,
+                           TypeAward = A.Name,
+                           Valor = A.Value,
+
+                           FractionsReturned = context.TicketReturns
+                                   .Where(n => n.RaffleId == Model.Id && n.TicketAllocationNumber.Number == RA.ControlNumber)
+                                   .Sum(n => ((int?)n.FractionTo - (int?)n.FractionFrom) + 1),
+
+                       }).Where(w => w.RaffleID == Model.Id && InvoiceTickets.Contains(w.Billete) && w.Terminal != 1)
+                       .OrderBy(o => o.Billete).ToList();
+
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>REPUBLICA DOMINICANA</b><br />
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION LOTERIA NACIONAL</b><br />
+            Fecha del sorteo: @Model.DateSolteo.ToLongDateString()
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>BILLETES PAGABLES DEL SORTEO NO. @Model.Id</b><br />
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 no-padder col-sm-12">
+        @if (Model.Statu != 70)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="6" class="text-center">@Model.Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center" colspan="6">
+                            <h1>EL SORTEO NO HA SIDO GENERADO</h1>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        else if (Model.Statu == 70)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="6" class="text-center">@Model.Name</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Fila</th>
+                        <th class="text-center">Billete</th>
+                        <th class="text-center">Fracción</th>
+                        <th class="text-center">Tipo de premio</th>
+                        <th class="text-center">Monto del premio</th>
+                        <th class="text-center">Monto a pagar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (RaffleAwards.Count == 0)
+                    {
+                        <tr>
+                            <td class="text-center" colspan="6">
+                                <h1>EL SORTEO NO TUVO GANADORES</h1>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var item in RaffleAwards)
+                        {
+                            if (item.FractionsReturned == null)
+                            {
+                                FraccionesDevueltas = 0;
+                            }
+                            else
+                            {
+                                FraccionesDevueltas = (int)item.FractionsReturned;
+                            }
+
+                            if (Fracciones - FraccionesDevueltas != 0)
+                            {
+                                Contador++;
+
+                                var RestoFracciones = Fracciones - FraccionesDevueltas;
+                                var TotalPagar = (item.Valor / Fracciones) * RestoFracciones;
+
+                                MontoApagarSorteo += TotalPagar;
+                                ValorPremios += item.Valor;
+                                <tr>
+                                    <td class="text-center">@Contador</td>
+                                    <td class="text-center">@item.Billete</td>
+                                    <td class="text-center">@RestoFracciones</td>
+                                    <td class="text-center">@item.TypeAward</td>
+                                    <td class="text-center">@item.Valor.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-center">@TotalPagar.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                </tr>
+                            }
+                        }
+                    }
+                    @*<tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <th class="text-center">Total: @ValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                        <th class="text-center">Total: @MontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                    </tr>*@
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>Total a pagar de este sorteo: @MontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>@adminName</b><br />
+        <span>@adminCargo</span><br />
+        <p>NOTA: Este reporte contiene los billetes pagables del sorteo número @Model.Id, excluyendo las coletillas</p>
+    </div>
+</div>

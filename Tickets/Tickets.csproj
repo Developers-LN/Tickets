@@ -3061,6 +3061,8 @@
     <Content Include="Views\Reports\ReporteSorteo.cshtml" />
     <Content Include="Views\Reports\NoteCreditDetail.cshtml" />
     <Content Include="Views\Reports\IdentifyAwardsReportResumen.cshtml" />
+    <Content Include="Views\Reports\PayableAwards.cshtml" />
+    <Content Include="Views\Raffle\PrintPayableAwards.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
