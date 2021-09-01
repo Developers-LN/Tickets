@@ -21,5 +21,17 @@ namespace Tickets.Models
         public int RaffleXpiredTime { get; set; }
         public Nullable<int> LawDiscountPercentMayor { get; set; }
         public string Cargo { get; set; }
+        public string ControlPremio { get; set; }
+        public string ControlPremioCargo { get; set; }
+        public string CajaGeneral { get; set; }
+        public string CajaGeneralCargo { get; set; }
+        public string Inspectoria { get; set; }
+        public string InspectoriaCargo { get; set; }
+        public string CreditosCobrosCargo { get; set; }
+        public string ProduccionSorteo { get; set; }
+        public string ProduccionSorteoCargo { get; set; }
+        public string Facturacion { get; set; }
+        public string FacturacionCargo { get; set; }
+        public string CreditosCobros { get; set; }
     }
 }

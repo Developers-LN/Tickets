@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
 using Tickets.Models.Enums;
+using Tickets.Models.Procedures;
 using Tickets.Models.Prospects;
 using Tickets.Models.Raffles;
 
@@ -378,11 +379,22 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult DatosPorCliente(int raffleId)
+        {
+            NetSalesByClientProcedure netSalesByClientProcedure = new NetSalesByClientProcedure();
+            var Resultado = netSalesByClientProcedure.ConsultaVentaNetaPorCliente(raffleId);
+
+            return View(Resultado);
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult PayableAwards(int raffleId)
         {
-            var context = new TicketsEntities();
-            var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
-            return View(raffle);
+            PayableAwardsProcedure payableAwardsProcedure = new PayableAwardsProcedure();
+            var Resultado = payableAwardsProcedure.ConsultaBilletesPagables(raffleId);
+
+            return View(Resultado);
         }
 
         [Authorize]

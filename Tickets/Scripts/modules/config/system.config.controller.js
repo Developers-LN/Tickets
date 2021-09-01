@@ -29,6 +29,36 @@
             if (config.LawDiscountPercentMayor === undefined) {
                 error += 'Tiempo de caducidad del sorteo' + isReq;
             }
+            if (config.ControlPremio === undefined) {
+                error += "El nombre del representante de control de premios" + isReq;
+            }
+            if (config.CajaGeneral === undefined) {
+                error += "El nombre del representante de caja general" + isReq;
+            }
+            if (config.CreditosCobros === undefined) {
+                error += "El nombre del representante de creditos y cobros" + isReq;
+            }
+            if (config.Inspectoria === undefined) {
+                error += "El nombre del representante de inspectoría" + isReq;
+            }
+            if (config.ProduccionSorteo === undefined) {
+                error += "El nombre del representante de producción y sorteo" + isReq;
+            }
+            if (config.ControlPremioCargo === undefined) {
+                error += "El cargo del representante de control de premios" + isReq;
+            }
+            if (config.CajaGeneralCargo === undefined) {
+                error += "El cargo del representante de caja general" + isReq;
+            }
+            if (config.CreditosCobrosCargo === undefined) {
+                error += "El cargo del representante de creditos y cobros" + isReq;
+            }
+            if (config.InspectoriaCargo === undefined) {
+                error += "El cargo del representante de inspectoría" + isReq;
+            }
+            if (config.ProduccionSorteoCargo === undefined) {
+                error += "El cargo del representante de producción y sorteos" + isReq;
+            }
             if (error !== '') {
                 alertify.showError('Alerta', error);
             }
@@ -42,7 +72,20 @@
             TicketDesign: undefined,
             RaffleXpiredTime: undefined,
             LawDiscountPercentMayor: undefined,
-            Cargo: undefined
+            Cargo: undefined,
+
+            ControlPremio: undefined,
+            ControlPremioCargo: undefined,
+            CajaGeneral: undefined,
+            CajaGeneralCargo: undefined,
+            Inspectoria: undefined,
+            InspectoriaCargo: undefined,
+            CreditosCobros: undefined,
+            CreditosCobrosCargo: undefined,
+            ProduccionSorteo: undefined,
+            ProduccionSorteoCargo: undefined,
+            Facturacion: undefined,
+            FacturacionCargo: undefined
         };
 
         $scope.saveConfig = function () {

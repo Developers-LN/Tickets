@@ -113,35 +113,30 @@
             </table>
         </div>
         <div class="col-lg-12" style="font-size:14px;">
-            <p>
-                Correspondientes al sorteo <span style="text-decoration:underline"><b>NO. @Model.RaffleAward.RaffleId</b></span> de fecha <span style="text-decoration:underline"><b>@Model.RaffleAward.Raffle.DateSolteo.ToShortDateString()</b></span>
-                <br />
-                @{if (Model.RaffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S)
-                    {
+            <p>Correspondientes al sorteo <span style="text-decoration:underline"><b>NO. @Model.RaffleAward.RaffleId</b></span> de fecha <span style="text-decoration:underline"><b>@Model.RaffleAward.Raffle.DateSolteo.ToShortDateString()</b></span></p>
+            <br />
+            @{
+                if (Model.RaffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S)
+                {
                     <p>Con un premio para la fracción ganadora <b>@(Model.RaffleAward.Fraction)</b> con un total de @value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</p>
                 }
                 else
                 {
                     <p>Con un premio ganador de @value.ToString("c", new System.Globalization.CultureInfo("es-DO")) cada fracción. Lo que hace un total de @totalGeneral.ToString("c", new System.Globalization.CultureInfo("es-DO")).</p>
                 }
-                }
-                </p>
-                <p>
-                    <b>Certificamos</b>
-                    <br />
-                    Dicha revisión fue hecha por el directo de Produccíon y Sorteos, Encargado de Imprenta, Inspector General,
-                    <br />
-                    Contador general y Director de Control de Premios, de esta institución, quienes Certificamos que está correcto.
-                </p>
-                <p>
-                    El Billete Premiado por la Dirección de Producción y Sorteos fue Presentado por <span style="text-decoration:underline"><b>LOTERIA NACIONAL</b></span>.
-                    <br />
-                    Dado en Santo Domingo, Distrito Nacional, a los <span style="text-decoration:underline"><b>@DateTime.Now.Day</b></span> días del mes <span style="text-decoration:underline"><b>@DateTime.Now.Month</b></span> del año <span style="text-decoration:underline"><b>@DateTime.Now.Year</b></span>.
-                </p>
-
-            </div>
-
-
+            }
+            <p>
+                <b>Certificamos</b>
+                <br />
+                Dicha revisión fue hecha por el directo de Produccíon y Sorteos, Encargado de Imprenta, Inspector General,
+                <br />
+                Contador general y Director de Control de Premios, de esta institución, quienes Certificamos que está correcto.
+            </p>
+            <p>
+                El Billete Premiado por la Dirección de Producción y Sorteos fue Presentado por <span style="text-decoration:underline"><b>LOTERIA NACIONAL</b></span>.
+                <br />
+                Dado en Santo Domingo, Distrito Nacional, a los <span style="text-decoration:underline"><b>@DateTime.Now.Day</b></span> días del mes <span style="text-decoration:underline"><b>@DateTime.Now.Month</b></span> del año <span style="text-decoration:underline"><b>@DateTime.Now.Year</b></span>.
+            </p>
         </div>
     </div>
     <div class="col-lg-12  no-padder text-center" style="padding-top:6%; margin:0 auto">
@@ -198,3 +193,4 @@
             </div>
         </div>
     </div>
+</div>

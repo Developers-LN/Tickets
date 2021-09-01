@@ -19,9 +19,11 @@
                                    Invoiced.TicketNumberAllocationId,
                                    Ticket.RaffleId,
                                    Ticket.TicketAllocation.Statu,
+
                                    FractionsReturned = Ticket.TicketReturns
                                    .Where(n => n.RaffleId == Model.Id && n.TicketAllocationNimberId == Invoiced.TicketNumberAllocationId)
                                    .Sum(n => ((int?)n.FractionTo - (int?)n.FractionFrom) + 1)
+                               
                                })
                          .Where(r => r.RaffleId == Model.Id &&
                          (r.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Printed ||
@@ -39,7 +41,7 @@
             <b>REPUBLICA DOMINICANA</b><br />
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION LOTERIA NACIONAL</b><br />
-            fecha del sorteo: @Model.DateSolteo.ToLongDateString()
+            Fecha del sorteo: @Model.DateSolteo.ToLongDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>NUMEROS EN CIRCULACION DEL SORTEO NO. @Model.Id</b><br />
@@ -153,8 +155,8 @@
     </div>
 
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-        <b>@adminName</b><br />
-        <span>@adminCargo</span><br />
+        <b>Francisco José González Fernández</b><br />
+        <span>Encargado</span><br />
         <p>NOTA: Este reporte contiene los números que se encuentran en circulación del sorteo número @RaffleId, encontrándose a la izquierda el número del billete y a la derecha la cantidad de fracciones en circulación.</p>
     </div>
 </div>

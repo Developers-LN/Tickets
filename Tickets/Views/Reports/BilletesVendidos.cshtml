@@ -19,9 +19,8 @@
                                    Ticket.RaffleId,
                                    Ticket.TicketAllocation.Statu
                                })
-                         .Where(r => r.RaffleId == Model.Id &&
-                         (r.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Printed ||
-                         r.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Invoiced)).ToList();
+                         .Where(r => r.RaffleId == Model.Id &&  
+                         r.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Invoiced).ToList();
 
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
@@ -35,7 +34,7 @@
             <b>REPUBLICA DOMINICANA</b><br />
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION LOTERIA NACIONAL</b><br />
-            fecha del sorteo: @Model.DateSolteo.ToLongDateString()
+            Fecha del sorteo: @Model.DateSolteo.ToLongDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>NUMEROS FACTURADOS EN EL SORTEO NO. @Model.Id</b><br />
@@ -120,7 +119,7 @@
     </div>
 
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-        <b>@adminName</b><br />
-        <span>@adminCargo</span>
+        <b>Francisco José González Fernández</b><br />
+        <span>Encargado</span><br />
     </div>
 </div>

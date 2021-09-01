@@ -1,23 +1,29 @@
-﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelPayableAwards>
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelNetSalesByClient>
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Billetes en pagables";
+    ViewBag.Title = "Datos por cliente";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    var Porcentaje = config.LawDiscountPercentMayor;
     string adminName = config != null ? config.LoteryAdmin : "";
     string adminCargo = config != null ? config.Cargo : "";
 
-    var Contador = 0;
-    decimal MontoApagarSorteo = 0;
+    var CantidadBilletesVendidos = 0;
+    var CantidadBilletesDevueltos = 0;
+    var FracionesDevueltas = 0;
+    var VentaNeta = 0;
+    decimal PorcentajeDevolucion;
+    var ClientName = "";
+    var StringNumero = "";
+    var StringVentaNeta = "";
+    decimal DecimalNumero;
 
-    int raffleid = Model.Select(s => s.raffle).FirstOrDefault();
-
+    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
+    var Clientes = Model.Select(s => s.ClientId).Distinct().ToList();
 
-    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
 
 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -35,7 +41,7 @@
             Fecha del sorteo: @RaffleData.DateSolteo.ToLongDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <b>BILLETES PAGABLES DEL SORTEO NO. @RaffleData.Id</b>
+            <b>REPORTE DE BILLETES FACTURADOS VS DEVOLUCIONES</b>
             <br />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
@@ -45,7 +51,7 @@
         </div>
     </div>
     <div class="col-lg-12 col-md-12 no-padder col-sm-12">
-        @if (RaffleData.Statu != 70)
+        @if (Model.Select(s => s.Data).FirstOrDefault() == false)
         {
             <table class="table">
                 <thead>
@@ -56,13 +62,13 @@
                 <tbody>
                     <tr>
                         <td class="text-center" colspan="6">
-                            <h1>EL SORTEO NO HA SIDO GENERADO</h1>
+                            <h1>ESTE SORTEO NO TUVO VENTAS</h1>
                         </td>
                     </tr>
                 </tbody>
             </table>
         }
-        else if (RaffleData.Statu == 70)
+        else if (Model.Select(s => s.Data).FirstOrDefault() == true)
         {
             <table class="table">
                 <thead>
@@ -70,39 +76,46 @@
                         <th colspan="6" class="text-center">@RaffleData.Name</th>
                     </tr>
                     <tr>
-                        <th class="text-center">Fila</th>
-                        <th class="text-center">Billete</th>
-                        <th class="text-center">Fracción</th>
-                        <th class="text-center">Tipo de premio</th>
-                        <th class="text-center">Monto del premio</th>
-                        <th class="text-center">Monto a pagar</th>
+                        <th class="text-center">ID Cliente</th>
+                        <th class="text-center">Nombre del cliente</th>
+                        <th class="text-center">Cantidad de billetes <br /> facturados</th>
+                        <th class="text-center">Cantidad de billetes <br /> devueltos</th>
+                        <th class="text-center">Ventas neta</th>
+                        <th class="text-center">Porcentage de <br /> devolución <br /> aproximado</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model.Select(s => s.premios).FirstOrDefault() == false)
+                    @foreach (var item in Clientes)
                     {
+                        ClientName = Model.Where(w => w.ClientId == item).Select(s => s.ClientName).FirstOrDefault();
+                        CantidadBilletesVendidos = Model.Where(w => w.ClientId == item).Count();
+                        CantidadBilletesDevueltos = Model.Where(w => w.ClientId == item && w.ReturnFractions == w.TicketFractions).Count();
+                        FracionesDevueltas = Model.Where(w => w.ClientId == item && w.ReturnFractions > 0 && w.ReturnFractions < w.TicketFractions).Sum(s => s.ReturnFractions);
+                        VentaNeta = CantidadBilletesVendidos - CantidadBilletesDevueltos;
+                        StringVentaNeta = VentaNeta + "." + FracionesDevueltas;
+                        StringNumero = CantidadBilletesDevueltos + "." + FracionesDevueltas;
+                        DecimalNumero = decimal.Parse(StringNumero.Replace(".",","));
+                        PorcentajeDevolucion = (DecimalNumero * 100) / CantidadBilletesVendidos;
+
+                        if(Math.Round(PorcentajeDevolucion) == 100 || Math.Round(PorcentajeDevolucion) == 0)
+                        {
+                            PorcentajeDevolucion = Math.Round(PorcentajeDevolucion);
+                        }
+                        else
+                        {
+                            PorcentajeDevolucion = Math.Round(PorcentajeDevolucion, 2);
+                        }
+
                         <tr>
-                            <td class="text-center" colspan="6">
-                                <h1>EL SORTEO NO TUVO GANADORES</h1>
-                            </td>
+                            <td class="text-center">@item</td>
+                            <td class="text-center">@ClientName</td>
+                            <td class="text-center">@CantidadBilletesVendidos.00</td>
+                            <td class="text-center">@StringNumero</td>
+                            <td class="text-center">@StringVentaNeta</td>
+                            <td class="text-center">@PorcentajeDevolucion%</td>
                         </tr>
                     }
-                    else
-                    {
-                        foreach (var item in Model)
-                        {
-                            Contador++;
-                            MontoApagarSorteo += item.valorpagar;
-                            <tr>
-                                <td class="text-center">@Contador</td>
-                                <td class="text-center">@item.number</td>
-                                <td class="text-center">@item.fracciones</td>
-                                <td class="text-center">@item.nameaward</td>
-                                <td class="text-center">@item.value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                <td class="text-center">@item.valorpagar.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                            </tr>
-                        }
-                    }
+
                     @*<tr>
                             <td></td>
                             <td></td>
@@ -115,16 +128,11 @@
             </table>
         }
     </div>
-    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-        <b>Total a pagar de este sorteo: @MontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b>
-    </div>
 
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>Billy Nicanor De La Cruz Batista</b>
         <br />
         <span>Director</span>
-        <br />
-        <p>NOTA: Este reporte contiene los billetes pagables del sorteo número @RaffleData.Id, excluyendo las coletillas</p>
     </div>
 
     @*<div class="col-lg-12 no-padder text-center">

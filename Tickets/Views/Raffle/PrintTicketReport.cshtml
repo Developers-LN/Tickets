@@ -13,9 +13,10 @@
                         <thead>
                             <tr>
                                 <th>Sorteo</th>
-                                <th class="text-center">Billetes vendidos</th>
+                                <th class="text-center">Billetes facturados</th>
                                 <th class="text-center">Billetes devueltos</th>
                                 <th class="text-center">Billetes en circulación</th>
+                                <th class="text-center">Datos por cliente</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,6 +30,9 @@
                                 </td>
                                 <td class="text-center">
                                     <a href="/Reports/BilletesCirculacion?raffleId={{raffle.id}}" target="_blank" title="Numeros Billetes en circulación"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/DatosPorCliente?raffleId={{raffle.id}}" target="_blank" title="Datos por cliente"><i class="fa fa-print"></i></a>
                                 </td>
                             </tr>
                         </tbody>

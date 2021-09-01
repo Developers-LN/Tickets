@@ -355,6 +355,8 @@
     <Compile Include="Models\Log.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ModelsProcedures\ModelNetSalesByClient.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelPayableAwards.cs" />
     <Compile Include="Models\Module.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
@@ -370,6 +372,8 @@
     <Compile Include="Models\PreviousDebtPayment.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Procedures\NetSalesByClientProcedure.cs" />
+    <Compile Include="Models\Procedures\PayableAwardsProcedure.cs" />
     <Compile Include="Models\ProductionCost.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
@@ -3063,6 +3067,7 @@
     <Content Include="Views\Reports\IdentifyAwardsReportResumen.cshtml" />
     <Content Include="Views\Reports\PayableAwards.cshtml" />
     <Content Include="Views\Raffle\PrintPayableAwards.cshtml" />
+    <Content Include="Views\Reports\DatosPorCliente.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

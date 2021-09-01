@@ -61,6 +61,18 @@ namespace Tickets.Models
                         config.RaffleXpiredTime = systemConfig.RaffleXpiredTime;
                         config.LawDiscountPercentMayor = systemConfig.LawDiscountPercentMayor;
                         config.Cargo = systemConfig.Cargo;
+                        config.ControlPremio = systemConfig.ControlPremio;
+                        config.ControlPremioCargo = systemConfig.ControlPremioCargo;
+                        config.CajaGeneral = systemConfig.CajaGeneral;
+                        config.CajaGeneralCargo = systemConfig.CajaGeneralCargo;
+                        config.Inspectoria = systemConfig.Inspectoria;
+                        config.InspectoriaCargo = systemConfig.InspectoriaCargo;
+                        config.CreditosCobros = systemConfig.CreditosCobros;
+                        config.CreditosCobrosCargo = systemConfig.CreditosCobrosCargo;
+                        config.ProduccionSorteo = systemConfig.ProduccionSorteo;
+                        config.ProduccionSorteoCargo = systemConfig.ProduccionSorteoCargo;
+                        config.Facturacion = systemConfig.Facturacion;
+                        config.FacturacionCargo = systemConfig.FacturacionCargo;
                     }
                     context.SaveChanges();
                     tm.Commit();

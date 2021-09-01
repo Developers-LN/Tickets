@@ -37,7 +37,7 @@
         <EntityTypeShape EntityType="TicketsModel.ReturnedOpen" Width="1.5" PointX="10.5" PointY="73" />
         <EntityTypeShape EntityType="TicketsModel.Rol_Module" Width="1.5" PointX="15" PointY="72.75" />
         <EntityTypeShape EntityType="TicketsModel.RRentabilidadSorteo" Width="1.5" PointX="10.5" PointY="42.125" />
-        <EntityTypeShape EntityType="TicketsModel.SystemConfig" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TicketsModel.SystemConfig" Width="1.5" PointX="4.875" PointY="0.75" />
         <EntityTypeShape EntityType="TicketsModel.TicketAllocation" Width="1.5" PointX="10.5" PointY="49" />
         <EntityTypeShape EntityType="TicketsModel.TicketAllocationNumber" Width="1.5" PointX="18.75" PointY="48.75" />
         <EntityTypeShape EntityType="TicketsModel.TicketRePrint" Width="1.5" PointX="10.5" PointY="34.75" />

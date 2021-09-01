@@ -550,6 +550,18 @@
           <Property Name="RaffleXpiredTime" Type="int" Nullable="false" />
           <Property Name="LawDiscountPercentMayor" Type="int" />
           <Property Name="Cargo" Type="varchar" MaxLength="50" />
+          <Property Name="ControlPremio" Type="varchar" MaxLength="50" />
+          <Property Name="ControlPremioCargo" Type="varchar" MaxLength="50" />
+          <Property Name="CajaGeneral" Type="varchar" MaxLength="50" />
+          <Property Name="CajaGeneralCargo" Type="varchar" MaxLength="50" />
+          <Property Name="Inspectoria" Type="varchar" MaxLength="50" />
+          <Property Name="InspectoriaCargo" Type="varchar" MaxLength="50" />
+          <Property Name="CreditosCobros" Type="varchar" MaxLength="50" />
+          <Property Name="CreditosCobrosCargo" Type="varchar" MaxLength="50" />
+          <Property Name="ProduccionSorteo" Type="varchar" MaxLength="50" />
+          <Property Name="ProduccionSorteoCargo" Type="varchar" MaxLength="50" />
+          <Property Name="Facturacion" Type="varchar" MaxLength="50" />
+          <Property Name="FacturacionCargo" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="TicketAllocation">
           <Key>
@@ -3514,6 +3526,18 @@
           <Property Name="RaffleXpiredTime" Type="Int32" Nullable="false" />
           <Property Name="LawDiscountPercentMayor" Type="Int32" />
           <Property Name="Cargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ControlPremio" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ControlPremioCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CajaGeneral" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CajaGeneralCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Inspectoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="InspectoriaCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreditosCobrosCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProduccionSorteo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProduccionSorteoCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Facturacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FacturacionCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreditosCobros" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="TicketAllocation">
           <Key>
@@ -5547,6 +5571,18 @@
           <EntitySetMapping Name="SystemConfigs">
             <EntityTypeMapping TypeName="TicketsModel.SystemConfig">
               <MappingFragment StoreEntitySet="SystemConfig">
+                <ScalarProperty Name="CreditosCobros" ColumnName="CreditosCobros" />
+                <ScalarProperty Name="FacturacionCargo" ColumnName="FacturacionCargo" />
+                <ScalarProperty Name="Facturacion" ColumnName="Facturacion" />
+                <ScalarProperty Name="ProduccionSorteoCargo" ColumnName="ProduccionSorteoCargo" />
+                <ScalarProperty Name="ProduccionSorteo" ColumnName="ProduccionSorteo" />
+                <ScalarProperty Name="CreditosCobrosCargo" ColumnName="CreditosCobrosCargo" />
+                <ScalarProperty Name="InspectoriaCargo" ColumnName="InspectoriaCargo" />
+                <ScalarProperty Name="Inspectoria" ColumnName="Inspectoria" />
+                <ScalarProperty Name="CajaGeneralCargo" ColumnName="CajaGeneralCargo" />
+                <ScalarProperty Name="CajaGeneral" ColumnName="CajaGeneral" />
+                <ScalarProperty Name="ControlPremioCargo" ColumnName="ControlPremioCargo" />
+                <ScalarProperty Name="ControlPremio" ColumnName="ControlPremio" />
                 <ScalarProperty Name="Cargo" ColumnName="Cargo" />
                 <ScalarProperty Name="LawDiscountPercentMayor" ColumnName="LawDiscountPercentMayor" />
                 <ScalarProperty Name="RaffleXpiredTime" ColumnName="RaffleXpiredTime" />
