@@ -363,18 +363,18 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult BilletesVendidos(int raffleId)
         {
-            var context = new TicketsEntities();
-            var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
-            return View(raffle);
+            InvoicedTicketsProcedure invoicedTicketsProcedure = new InvoicedTicketsProcedure();
+            var Resultado = invoicedTicketsProcedure.ConsultaBilletesVendidos(raffleId);
+            return View(Resultado);
         }
 
         [Authorize]
         [HttpGet]
         public ActionResult BilletesDevueltos(int raffleId)
         {
-            var context = new TicketsEntities();
-            var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
-            return View(raffle);
+            ReturnedTicketsProcedure returnedTicketsProcedure = new ReturnedTicketsProcedure();
+            var Resultado = returnedTicketsProcedure.ConsultaBilletesDevueltos(raffleId);
+            return View(Resultado);
         }
 
         [Authorize]
@@ -383,7 +383,15 @@ namespace Tickets.Controllers
         {
             NetSalesByClientProcedure netSalesByClientProcedure = new NetSalesByClientProcedure();
             var Resultado = netSalesByClientProcedure.ConsultaVentaNetaPorCliente(raffleId);
+            return View(Resultado);
+        }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult PayableAwardsByClient(int raffleId)
+        {
+            PayableAwardByClientProcedure payableAwardByClientProcedure = new PayableAwardByClientProcedure();
+            var Resultado = payableAwardByClientProcedure.ConsultaBilletesPagablesPorCliente(raffleId);
             return View(Resultado);
         }
 
@@ -393,7 +401,6 @@ namespace Tickets.Controllers
         {
             PayableAwardsProcedure payableAwardsProcedure = new PayableAwardsProcedure();
             var Resultado = payableAwardsProcedure.ConsultaBilletesPagables(raffleId);
-
             return View(Resultado);
         }
 
@@ -401,9 +408,9 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult BilletesCirculacion(int raffleId)
         {
-            var context = new TicketsEntities();
-            var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
-            return View(raffle);
+            AvailableTicketsProcedure availableTicketsProcedure = new AvailableTicketsProcedure();
+            var Resultado = availableTicketsProcedure.ConsultaBilletesDisponible(raffleId);
+            return View(Resultado);
         }
 
         //
@@ -488,7 +495,7 @@ namespace Tickets.Controllers
         //  GET: Reports/ClientNumbersAward
         [Authorize]
         [HttpGet]
-        public ActionResult ClientNumbersAward(int raffleId, int clientId)
+        public ActionResult ClientNumbersAward(int? raffleId, int clientId)
         {
             var context = new TicketsEntities();
             ViewBag.clientId = clientId;

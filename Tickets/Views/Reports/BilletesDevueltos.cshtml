@@ -1,4 +1,5 @@
-﻿@model Tickets.Models.Raffle
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelReturnedTickets>
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     ViewBag.Title = "Billetes devueltos";
@@ -8,25 +9,10 @@
     string adminName = config != null ? config.LoteryAdmin : "";
     string adminCargo = config != null ? config.Cargo : "";
 
-    var TicketReturnList = context.TicketReturns.Where(r => r.RaffleId == Model.Id).Select(r => r.TicketAllocationNimberId);
+    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
+    var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
 
-    var numbers = context.InvoiceTickets
-                         .Join(context.TicketAllocationNumbers,
-                               Invoiced => Invoiced.TicketNumberAllocationId,
-                               Ticket => Ticket.Id,
-                               (Invoiced, Ticket) => new
-                               {
-                                   Ticket.Number,
-                                   Invoiced.TicketNumberAllocationId,
-                                   Ticket.RaffleId,
-                                   Ticket.TicketAllocation.Statu,
-                                   FractionsReturned = Ticket.TicketReturns
-                                   .Where(n => n.RaffleId == Model.Id && n.TicketAllocationNimberId == Invoiced.TicketNumberAllocationId)
-                                   .Sum(n => (n.FractionTo - n.FractionFrom) + 1)
-                               })
-                         .Where(r => TicketReturnList.Contains(r.TicketNumberAllocationId) && r.RaffleId == Model.Id &&
-                         (r.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Printed ||
-                         r.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Invoiced)).ToList();
+    int TicketsCount = 0;
 
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
@@ -40,10 +26,10 @@
             <b>REPUBLICA DOMINICANA</b><br />
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION LOTERIA NACIONAL</b><br />
-            Fecha del sorteo: @Model.DateSolteo.ToLongDateString()
+            Fecha del sorteo: @RaffleData.DateSolteo.ToLongDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <b>NUMEROS DEVUELTOS EN EL SORTEO NO. @Model.Id</b><br />
+            <b>NUMEROS DEVUELTOS EN EL SORTEO NO. @RaffleData.Id</b><br />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
             <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
@@ -54,73 +40,150 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th colspan="11" class="text-center">@Model.Name</th>
+                    <th colspan="10" class="text-center">@RaffleData.Name</th>
                 </tr>
                 <tr>
-                    <th class="text-left">FILA</th>
-                    <th class="text-center">COLUMNA 1</th>
-                    <th class="text-center">COLUMNA 2</th>
-                    <th class="text-center">COLUMNA 3</th>
-                    <th class="text-center">COLUMNA 4</th>
-                    <th class="text-center">COLUMNA 5</th>
-                    <th class="text-center">COLUMNA 6</th>
-                    <th class="text-center">COLUMNA 7</th>
-                    <th class="text-center">COLUMNA 8</th>
-                    <th class="text-center">COLUMNA 9</th>
+                    <th class="text-center">FILA</th>
+                    <th class="text-center">COL 1</th>
+                    <th class="text-center">COL 2</th>
+                    <th class="text-center">COL 3</th>
+                    <th class="text-center">COL 4</th>
+                    <th class="text-center">COL 5</th>
+                    <th class="text-center">COL 6</th>
+                    <th class="text-center">COL 7</th>
+                    <th class="text-center">COL 8</th>
+                    <th class="text-center">COL 9</th>
                 </tr>
             </thead>
             <tbody>
-                @{
-                    var RaffleId = Model.Id;
-                    var numberCount = numbers.Min(n => n.Number) - 1;
-                    var production = Model.Prospect.Production - 1;
-                    var Fractions = Model.Prospect.LeafFraction * Model.Prospect.LeafNumber;
-                    int line = 1;
-                    int TicketsCount = numbers.Count;
-                    var MaxNumber = numbers.Max(n => n.Number);
-                    int inicio = 0, fin = 0, CantidadFraccion = 0, LastFaction = 0;
-                    string stringNumber, newStringNumber, stringNumberI, stringNumberF, newStringNumberS;
-                }
-
-                @while (numberCount <= MaxNumber)
+                @if (Model.Any(a => a.Data) == true)
                 {
-                    int countTen = 1;
-                    <tr>
-                        <td class="text-left" style="color:red; font-weight:bold; font-size:12pt;">@line</td>
-                        @while (countTen <= 9 && numberCount <= MaxNumber)
+                    var TicketFractions = RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction;
+                    if (TicketFractions == 1)
+                    {
+                        HashSet<int> Billetes = new HashSet<int>();
+                        Model.ToList().ForEach(f => Billetes.Add(f.TicketNumber));
+
+                        var numberCount = -1;
+                        var production = RaffleData.Prospect.Production - 1;
+                        var NextBiggerNumber = 0;
+                        int line = 1;
+                        TicketsCount = Model.Count();
+                        var MaxNumber = Model.Max(n => n.TicketNumber);
+                        int inicio = 0, fin = 0;
+                        string stringNumber, newStringNumber, stringNumberI, stringNumberF, newStringNumberS;
+
+                        while (numberCount <= MaxNumber)
                         {
-                            numberCount++;
-                            if (numbers.Where(n => n.Number == numberCount).Any())
-                            {
-                                countTen++;
-                                stringNumber = numberCount.ToString();
-                                newStringNumber = stringNumber.PadLeft(production.ToString().Length, '0');
-                                LastFaction = numbers.Where(n => n.Number == numberCount).Select(f => f.FractionsReturned).FirstOrDefault();
-
-                                if (numbers.Where(n => n.Number == (numberCount + 1)).Any() && numbers.Where(n => n.Number == (numberCount + 1)).Select(f => f.FractionsReturned).FirstOrDefault() == LastFaction)
+                            int countTen = 1;
+                            <tr>
+                                <td class="text-center" style="color:red; font-weight:bold; font-size:12pt;">@line</td>
+                                @while (countTen <= 9 && numberCount <= MaxNumber)
                                 {
-                                    inicio = (int)numberCount;
-                                    numberCount++;
-                                    while (numbers.Where(n => n.Number == numberCount).Any() && numbers.Where(n => n.Number == numberCount).Select(f => f.FractionsReturned).FirstOrDefault() == LastFaction)
+                                    NextBiggerNumber = Billetes.FirstOrDefault(f => f > numberCount);
+                                    numberCount = NextBiggerNumber;
+                                    if (Model.Where(n => n.TicketNumber == numberCount).Any())
                                     {
-                                        LastFaction = numbers.Where(n => n.Number == numberCount).Select(f => f.FractionsReturned).FirstOrDefault();
-                                        fin = (int)numberCount++;
-                                    }
-                                    stringNumberI = inicio.ToString();
-                                    stringNumberF = fin.ToString();
-                                    newStringNumberS = (stringNumberI.PadLeft(production.ToString().Length, '0') + " - " + stringNumberF.PadLeft(production.ToString().Length, '0') + "." + LastFaction);
+                                        countTen++;
 
-                                    <td class="text-center">@newStringNumberS</td>
+                                        if (Model.Where(n => n.TicketNumber == (numberCount + 1)).Any())
+                                        {
+                                            inicio = (int)numberCount;
+                                            numberCount++;
+                                            while (Model.Where(n => n.TicketNumber == numberCount).Any())
+                                            {
+                                                fin = (int)numberCount++;
+                                            }
+                                            stringNumberI = inicio.ToString();
+                                            stringNumberF = fin.ToString();
+                                            newStringNumberS = (stringNumberI.PadLeft(production.ToString().Length, '0') + " - " + stringNumberF.PadLeft(production.ToString().Length, '0') + "." + TicketFractions);
+
+                                            <td class="text-center">@newStringNumberS</td>
+                                        }
+                                        else
+                                        {
+                                            stringNumber = numberCount.ToString();
+                                            newStringNumber = stringNumber.PadLeft(production.ToString().Length, '0');
+                                            <td class="text-center">@newStringNumber.@TicketFractions</td>
+                                        }
+                                        if (numberCount == MaxNumber)
+                                        {
+                                            numberCount++;
+                                        }
+                                    }
                                 }
-                                else
-                                {
-                                    CantidadFraccion = numbers.Where(n => n.Number == numberCount).Select(f => f.FractionsReturned).FirstOrDefault();
-                                    <td class="text-center">@newStringNumber.@CantidadFraccion</td>
-                                }
-                            }
+                            </tr>
+                            line += 1;
                         }
+                    }
+                    else
+                    {
+                        HashSet<int> Billetes = new HashSet<int>();
+                        Model.ToList().ForEach(f => Billetes.Add(f.TicketNumber));
+
+                        var numberCount = -1;
+                        var production = RaffleData.Prospect.Production - 1;
+                        var NextBiggerNumber = 0;
+                        int line = 1;
+                        TicketsCount = Model.Count();
+                        var MaxNumber = Model.Max(n => n.TicketNumber);
+                        int inicio = 0, fin = 0, CantidadFraccion = 0, LastFaction = 0;
+                        string stringNumber, newStringNumber, stringNumberI, stringNumberF, newStringNumberS;
+
+                        while (numberCount <= MaxNumber)
+                        {
+                            int countTen = 1;
+                            <tr>
+                                <td class="text-center" style="color:red; font-weight:bold; font-size:12pt;">@line</td>
+                                @while (countTen <= 9 && numberCount <= MaxNumber)
+                                {
+                                    NextBiggerNumber = Billetes.FirstOrDefault(f => f > numberCount);
+                                    numberCount = NextBiggerNumber;
+                                    if (Model.Where(n => n.TicketNumber == numberCount).Any())
+                                    {
+                                        countTen++;
+                                        LastFaction = Model.Where(n => n.TicketNumber == numberCount).Select(f => f.ReturnFractions).FirstOrDefault();
+
+                                        if (Model.Where(n => n.TicketNumber == (numberCount + 1)).Any() && Model.Where(n => n.TicketNumber == (numberCount + 1)).Select(f => f.ReturnFractions).FirstOrDefault() == LastFaction)
+                                        {
+                                            inicio = (int)numberCount;
+                                            numberCount++;
+                                            while (Model.Where(n => n.TicketNumber == numberCount).Any() && Model.Where(n => n.TicketNumber == numberCount).Select(f => f.ReturnFractions).FirstOrDefault() == LastFaction)
+                                            {
+                                                LastFaction = Model.Where(n => n.TicketNumber == numberCount).Select(f => f.ReturnFractions).FirstOrDefault();
+                                                fin = (int)numberCount++;
+                                            }
+                                            stringNumberI = inicio.ToString();
+                                            stringNumberF = fin.ToString();
+                                            newStringNumberS = (stringNumberI.PadLeft(production.ToString().Length, '0') + " - " + stringNumberF.PadLeft(production.ToString().Length, '0') + "." + LastFaction);
+
+                                            <td class="text-center">@newStringNumberS</td>
+                                        }
+                                        else
+                                        {
+                                            stringNumber = numberCount.ToString();
+                                            newStringNumber = stringNumber.PadLeft(production.ToString().Length, '0');
+                                            CantidadFraccion = Model.Where(n => n.TicketNumber == numberCount).Select(f => f.ReturnFractions).FirstOrDefault();
+                                            <td class="text-center">@newStringNumber.@CantidadFraccion</td>
+                                        }
+                                        if (numberCount == MaxNumber)
+                                        {
+                                            numberCount++;
+                                        }
+                                    }
+                                }
+                            </tr>
+                            line += 1;
+                        }
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10" class="text-center">
+                            ESTE SORTEO NO TUVO VENTAS
+                        </td>
                     </tr>
-                    line += 1;
                 }
             </tbody>
         </table>
@@ -132,6 +195,6 @@
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>Francisco José González Fernández</b><br />
         <span>Encargado</span><br />
-        <p>NOTA: Este reporte contiene los números que han sido devueltos en el sorteo @RaffleId, encontrándose posicionado a la izquierda del punto el número de billete y a la derecha la cantidad de fracciones devueltas</p>
+        <p>NOTA: Este reporte contiene los números que han sido devueltos en el sorteo @RaffleData.Id, encontrándose posicionado a la izquierda del punto el número de billete y a la derecha la cantidad de fracciones devueltas</p>
     </div>
 </div>

@@ -230,7 +230,7 @@ namespace Tickets.Controllers
                 {
                     using (var context = new TicketsEntities())
                     {
-                        client.Statu = (int)ClientStatuEnum.Created;
+                        client.Statu = (int)ClientStatuEnum.Approbed;
                         client.Fax = string.IsNullOrEmpty(client.Fax) ? "N/A" : client.Fax;
                         client.RNC = string.IsNullOrEmpty(client.RNC) ? "N/A" : client.RNC;
                         client.Tradename = string.IsNullOrEmpty(client.Tradename) ? "N/A" : client.Tradename;
@@ -256,7 +256,7 @@ namespace Tickets.Controllers
                     using (var context = new TicketsEntities())
                     {
                         var mClient = context.Clients.FirstOrDefault(c => c.Id == client.Id);
-                        mClient.Statu = (int)ClientStatuEnum.Created;
+                        mClient.Statu = (int)ClientStatuEnum.Approbed;
                         mClient.Addres = client.Addres;
                         mClient.Birthday = client.Birthday;
                         mClient.AmountDeposit = client.AmountDeposit;

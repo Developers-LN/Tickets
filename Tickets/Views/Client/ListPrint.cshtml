@@ -13,7 +13,7 @@
                             <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
                                 <select ng-required="true" class="form-control dropdown-select2" ng-model="RaffleId">
-                                    <option selected="selected" disabled="disabled" value="0">Todos los Sorteos</option>
+                                    <option selected="selected" value="0">Todos los Sorteos</option>
                                     <option ng-repeat="raffle in raffles" value="{{raffle.Id}}">{{raffle.Id}} - {{raffle.Name}}</option>
                                 </select>
                             </div>
@@ -29,9 +29,9 @@
                                 <th class="text-center">Devoluciones</th>
                                 <th class="text-center">Asignaciones</th>
                                 <th class="text-center">Facturas</th>
-                                <th class="text-center">Historial de Pago</th>
-                                <th class="text-center">Deuda Anterior</th>
-                                <th class="text-center">Asignaciones Premiadas</th>
+                                <th class="text-center">Historial <br /> de Pago</th>
+                                <th class="text-center">Deuda <br /> Anterior</th>
+                                <th class="text-center">Asignaciones <br /> Premiadas</th>
                             </tr>
                         </thead>
                         <tbody>

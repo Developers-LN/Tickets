@@ -5,34 +5,32 @@ using Tickets.Models.ModelsProcedures;
 
 namespace Tickets.Models.Procedures
 {
-    public class PayableAwardsProcedure
+    public class PayableAwardByClientProcedure
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ModelPayableAwards> ConsultaBilletesPagables(int raffle)
+        public IEnumerable<ModelPayableAwardByClient> ConsultaBilletesPagablesPorCliente(int raffle)
         {
-            var lista = new List<ModelPayableAwards>();
+            var lista = new List<ModelPayableAwardByClient>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
-                SqlCommand sqlCommand = new SqlCommand("PayableAward", sqlConnection);
+                SqlCommand sqlCommand = new SqlCommand("PayableAwardByClient", sqlConnection);
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@Raffle", raffle);
                 sqlConnection.Open();
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-                if(sqlDataReader.HasRows)
+                if (sqlDataReader.HasRows)
                 {
                     while (sqlDataReader.Read())
                     {
-                        var pagables = new ModelPayableAwards()
+                        var pagables = new ModelPayableAwardByClient()
                         {
-                            premios = true,
+                            Data = true,
                             number = Convert.ToInt32(sqlDataReader["number"].ToString()),
                             ClientId = Convert.ToInt32(sqlDataReader["ClientId"].ToString()),
-                            raffle = Convert.ToInt32(sqlDataReader["RaffleId"].ToString()),
-                            quantity = Convert.ToInt32(sqlDataReader["Quantity"].ToString()),
+                            RaffleId = raffle,
                             nameaward = sqlDataReader["name"].ToString(),
-                            terminal = Convert.ToInt32(sqlDataReader["terminal"].ToString()),
                             fracciones = Convert.ToInt32(sqlDataReader["fracciones"].ToString()),
                             valorpagar = Convert.ToDecimal(sqlDataReader["valorapagar"].ToString()),
                             value = Convert.ToDecimal(sqlDataReader["value"].ToString()),
@@ -42,15 +40,13 @@ namespace Tickets.Models.Procedures
                 }
                 else
                 {
-                    var pagables = new ModelPayableAwards()
+                    var pagables = new ModelPayableAwardByClient()
                     {
-                        premios = false,
+                        Data = false,
                         number = 0,
                         ClientId = 0,
-                        raffle = raffle,
-                        quantity = 0,
+                        RaffleId = raffle,
                         nameaward = "N/A",
-                        terminal = 0,
                         fracciones = 0,
                         valorpagar = 0,
                         value = 0,

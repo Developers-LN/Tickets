@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures
                 {
                     while (sqlDataReader.Read())
                     {
-                        var pagables = new ModelNetSalesByClient()
+                        var Ventas = new ModelNetSalesByClient()
                         {
                             Data = true,
                             ClientId = Convert.ToInt32(sqlDataReader["ClientId"].ToString()),
@@ -40,17 +40,17 @@ namespace Tickets.Models.Procedures
                             ReturnFractions = Convert.ToInt32(sqlDataReader["ReturnFractions"].ToString()),
                             NetSale = Convert.ToDecimal(sqlDataReader["NetSale"].ToString())
                         };
-                        lista.Add(pagables);
+                        lista.Add(Ventas);
                     }
                 }
                 else
                 {
-                    var pagables = new ModelNetSalesByClient()
+                    var Ventas = new ModelNetSalesByClient()
                     {
                         Data = false,
                         ClientId = 0,
                         ClientName = "N/A",
-                        RaffleId = 0,
+                        RaffleId = raffle,
                         ProspectId = 0,
                         TicketFractions = 0,
                         TicketNumber = 0,
@@ -61,7 +61,7 @@ namespace Tickets.Models.Procedures
                         ReturnFractions = 0,
                         NetSale = 0
                     };
-                    lista.Add(pagables);
+                    lista.Add(Ventas);
                 }
                 sqlConnection.Close();
             }

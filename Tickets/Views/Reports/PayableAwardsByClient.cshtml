@@ -1,0 +1,153 @@
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelPayableAwardByClient>
+
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Billetes en pagables por clientes";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    string adminCargo = config != null ? config.Cargo : "";
+
+    decimal MontoApagarSorteo = 0;
+    decimal ValorPremios = 0;
+    decimal MontoApagarTotal = 0;
+
+    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
+    var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
+
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>REPUBLICA DOMINICANA</b>
+            <br />
+            <b>MINISTERIO DE HACIENDA</b>
+            <br />
+            <b>ADMINISTRACION LOTERIA NACIONAL</b>
+            <br />
+            Fecha del sorteo: @RaffleData.DateSolteo.ToLongDateString()
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>BILLETES PAGABLES DEL SORTEO NO. @RaffleData.Id</b>
+            <br />
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+            <br />
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 no-padder col-sm-12">
+        @if (RaffleData.Statu != 70)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="6" class="text-center">@RaffleData.Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center" colspan="6">
+                            <h1>EL SORTEO NO HA SIDO GENERADO</h1>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        else if (RaffleData.Statu == 70)
+        {
+            if (Model.Select(s => s.Data).FirstOrDefault() == false)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">ESTE SORTEO NO TUVO GANADORES</th>
+                        </tr>
+                    </thead>
+                </table>
+            }
+            else
+            {
+                HashSet<int> Clientes = new HashSet<int>();
+                Model.Distinct().ToList().ForEach(f => Clientes.Add(f.ClientId));
+
+                foreach (var client in Clientes)
+                {
+                    MontoApagarSorteo = 0;
+                    ValorPremios = 0;
+                    <table class="table" style="margin-top:15px;">
+                        <thead>
+                            <tr>
+                                <th colspan="5" class="text-center">@context.Clients.Where(w => w.Id == client).Select(s => s.Name).FirstOrDefault()</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center">Billete</th>
+                                <th class="text-center">Fracciones</th>
+                                <th class="text-center">Tipo de premio</th>
+                                <th class="text-center">Monto del premio</th>
+                                <th class="text-center">Monto a pagar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Where(w => w.ClientId == client))
+                            {
+                                MontoApagarSorteo += item.valorpagar;
+                                ValorPremios += item.value;
+                                MontoApagarTotal += item.value;
+                                <tr>
+                                    <td class="text-center">@item.number</td>
+                                    <td class="text-center">@item.fracciones</td>
+                                    <td class="text-center">@item.nameaward</td>
+                                    <td class="text-center">@item.value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-center">@item.valorpagar.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <th class="text-center">Total: @ValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                                <th class="text-center">Total: @MontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+            }
+        }
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>Total a pagar de este sorteo: @MontoApagarTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <b>Billy Nicanor De La Cruz Batista</b>
+        <br />
+        <span>Director</span>
+        <br />
+        <p>NOTA: Este reporte contiene los billetes pagables del sorteo número @RaffleData.Id</p>
+    </div>
+
+    @*<div class="col-lg-12 no-padder text-center">
+            <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+                <div class="col-lg-12 no-padder text-center">
+                    <br />
+                    ______________________________
+                </div>
+                Firma del Asesor
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+                <div class="col-lg-12 no-padder text-center">
+                    <br />
+                    ______________________________
+                </div>
+                <p>Firma del encargado del departamento de tecnología de la información y comunicación</p>
+            </div>
+        </div>*@
+</div>

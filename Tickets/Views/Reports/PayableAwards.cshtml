@@ -14,7 +14,6 @@
     decimal MontoApagarSorteo = 0;
 
     int raffleid = Model.Select(s => s.raffle).FirstOrDefault();
-
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
 
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
