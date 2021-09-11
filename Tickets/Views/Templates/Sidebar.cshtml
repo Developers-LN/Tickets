@@ -7,14 +7,14 @@
                 <li class="nav-heading">
                     <span translate="sidebar.heading.HEADER" class="text-muted">Main Navigation</span>
                 </li>
-                <li >
+                <li>
                     <a ui-sref="app.dashboard" title="Layouts" ripple="">
                         <em class="sidebar-item-icon icon-pie-graph"></em>
                         <!--<em class="sidebar-item-caret fa pull-right fa-angle-right"></em>-->
                         <span translate="sidebar.nav.DASHBOARD">Dashboard</span>
                     </a>
                 </li>
-                <li> 
+                <li>
                     <a href="" title="Prospectos" ripple="">
                         <em class="sidebar-item-icon fa fa-users"></em>
                         <em class="sidebar-item-caret fa pull-right fa-angle-right"></em>
@@ -28,25 +28,29 @@
                             <a ui-sref="app.prospectlist" title="Listado" ripple="" href="#/ProspectList">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Listado</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.prospectSuspends')">
                             <a ui-sref="app.prospectSuspends" title="Histórico de prospectos">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Histórico</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.prospectWorkflowList')">
                             <a ui-sref="app.prospectWorkflowList" title="aprobación de prospecto">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Aprobación</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.typesawardlist')">
                             <a ui-sref="app.typesawardlist" title="Listado de tipo de premios">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Tipo de Premios</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -61,57 +65,65 @@
                         </span>
                     </a>
                     <ul class="nav sidebar-subnav">
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.ticketAllocationList')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketAllocationList')">
                             <a ui-sref="app.ticketAllocationList" title="Asignación de billetes">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Asignación</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
 
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.ticketPrintList')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketPrintList')">
                             <a ui-sref="app.ticketPrintList" title="Impresion de Billetes">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Impresión</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
 
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.ticketReviewList')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketReviewList')">
                             <a ui-sref="app.ticketReviewList" title="Revisión de Billetes">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Revisión de Billetes</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
 
-                        <li ui-sref-active="active" style="display:none;"  ng-show="verifyCanView('app.allocationPrintList')">
+                        <li ui-sref-active="active" style="display:none;" ng-show="verifyCanView('app.allocationPrintList')">
                             <a ui-sref="app.allocationPrintList" title="Impresion de Asignación">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Impresion de Asignación</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
 
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.ticketSuscriberList')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketSuscriberList')">
                             <a ui-sref="app.ticketSuscriberList" title="Abonado de billetes">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Abonados</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.ticketDeliveryList')" style="display:none">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketDeliveryList')" style="display:none">
                             <a ui-sref="app.ticketDeliveryList" title="Entrega de billetes">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Entregas</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.ticketReturnedList')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketReturnedList')">
                             <a ui-sref="app.ticketReturnedList" title="Devolución de billetes">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Devoluciones</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.typesawardAwardNumber')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.typesawardAwardNumber')">
                             <a ui-sref="app.typesawardAwardNumber" title="Trazabilidad de billetes">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Trazabilidad de Billetes</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.ReturnedTraceability')">
                             <a ui-sref="app.ReturnedTraceability" title="Trazabilidad de billetes Devueltos">
@@ -134,11 +146,12 @@
                                 <span class="ripple"></span>
                             </a>
                         </li>
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.ticketReturnedAward')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketReturnedAward')">
                             <a ui-sref="app.ticketReturnedAward" title="Certificación de Devolución">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Certificación de Devoluciones Premiadas</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.awardsCertifications')">
                             <a ui-sref="app.awardsCertifications" title="Certificación de Premios">
@@ -154,61 +167,70 @@
                                 <span class="ripple"></span>
                             </a>
                         </li>
-                        
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.ticketInvoiceList')">
-                            <a ui-sref="app.ticketInvoiceList" title="Lista de Billetes Facturados" >
+
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketInvoiceList')">
+                            <a ui-sref="app.ticketInvoiceList" title="Lista de Billetes Facturados">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Facturación y Entregas</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.ticketInvoiceSuspendList')">
-                            <a ui-sref="app.ticketInvoiceSuspendList" title="Anular Factura" >
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketInvoiceSuspendList')">
+                            <a ui-sref="app.ticketInvoiceSuspendList" title="Anular Factura">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Anular Factura</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.cashOpen')">
                             <a ui-sref="app.cashOpen" title="Full Height">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Abrir Caja</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.cashReceivableList')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.cashReceivableList')">
                             <a ui-sref="app.cashReceivableList" title="Cuentas por Cobrar">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Cuenta por Cobrar</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.cashClose')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.cashClose')">
                             <a ui-sref="app.cashClose" title="Cuadre de Caja">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Cuadre de Caja</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.ticketIdentifyBachList')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketIdentifyBachList')">
                             <a ui-sref="app.ticketIdentifyBachList" title="Identificación de Premios">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Identificación de Premios</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
 
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.reprintTicketList')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.reprintTicketList')">
                             <a ui-sref="app.reprintTicketList" title="Reimpresión de Billetes">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Reimpresión de Billetes</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.reprintWorkflows')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.reprintWorkflows')">
                             <a ui-sref="app.reprintWorkflows" title="Aprobación de Reimpresión de Billetes">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Aprobación de Reimpresión</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
-                        <li ui-sref-active="active"  ng-show="verifyCanView('app.reprintTicketRepornt')">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.reprintTicketRepornt')">
                             <a ui-sref="app.reprintTicketRepornt" title="Reimpresion de Billetes">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Reimpresión</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -227,7 +249,8 @@
                             <a ui-sref="app.solteoList" title="Lista de Sorteo">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Lista de Sorteo</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.activeRaffle')">
                             <a ui-sref="app.activeRaffle" title="Sorteo Activo">
@@ -240,13 +263,15 @@
                             <a ui-sref="app.raffleOpenReturned" title="Abrir devoluciones">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Abrir Devoluciones</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.generatedRaffleList')">
                             <a ui-sref="app.generatedRaffleList" title="Lista de Sorteo">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Lista de Sorteos Generados</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -265,25 +290,29 @@
                             <a ui-sref="app.agencyList" title="Agencias">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Agencias</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.clientList')">
                             <a ui-sref="app.clientList" title="Listado de Cliente">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Clientes</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.cashNoteCreditList')">
                             <a ui-sref="app.cashNoteCreditList" title="Notas de Crédito">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Notas de Crédito</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.clientWorkflowList')">
                             <a ui-sref="app.clientWorkflowList" title="Aprobación de Cliente">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Aprobación de Clientes</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.previousDebt')">
                             <a ui-sref="app.previousDebt" title="Pago de deuda Anterior">
@@ -296,19 +325,22 @@
                             <a ui-sref="app.departmentList" title="Departamentos">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Departamentos</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.employeeList')">
                             <a ui-sref="app.employeeList" title="Empleados">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Empleados</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="false">
                             <a ui-sref="app-fh.columns" title="Full Height" ripple="" href="#/fh/columns">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Vendedores</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -332,16 +364,18 @@
                     </a>
                     <ul class="nav sidebar-subnav">
                         <li ui-sref-active="active" ng-show="verifyCanView('app.securityUserList')">
-                            <a ui-sref="app.securityUserList" title="Usuarios" ripple=""  href="#/UserList">
+                            <a ui-sref="app.securityUserList" title="Usuarios" ripple="" href="#/UserList">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Usuarios</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.securityRolList')">
-                            <a ui-sref="app.securityRolList" title="Roles" ripple=""  href="#/RolList">
+                            <a ui-sref="app.securityRolList" title="Roles" ripple="" href="#/RolList">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Roles</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.securityOfficeList')" class="hide">
                             <a ui-sref="app.securityOfficeList" title="Roles" ripple="" href="#/OfficeList">
@@ -354,31 +388,36 @@
                             <a ui-sref="app.securityModuleList" title="Modulos" ripple="">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Modulos</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.configCatalogList')">
                             <a ui-sref="app.configCatalogList" title="Catalogos" ripple="">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Catalogos</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.configWorkflowTypeList')">
                             <a ui-sref="app.configWorkflowTypeList" title="Tipo de flujo de trabajo" ripple="">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Tipo de Flujo de Trabajo</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.securityLogs')">
                             <a ui-sref="app.securityLogs" title="Registro de Transacciones" ripple="">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Registro de Transacciones</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.configSystem')">
                             <a ui-sref="app.configSystem" title="Configuración del Sistema">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Configuración del Sistema</span>
-                                <span class="ripple"></span></a>
+                                <span class="ripple"></span>
+                            </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.emailConfig')">
                             <a ui-sref="app.emailConfig" title="Configuración de correo">
@@ -600,10 +639,44 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="" title="Reportes y Estadisticas" ripple="">
+                        <em class="sidebar-item-icon icon-file"></em>
+                        <em class="sidebar-item-caret fa pull-right fa-angle-right"></em>
+                        <span>Reportes a Excel</span>
+                        <span class="ripple">
+                            <span class="angular-ripple" style="width: 240px; height: 240px; left: -58px; top: -97px;"></span>
+                        </span>
+                    </a>
+                    <ul class="nav sidebar-subnav">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.creditReportsByRaffle')">
+                            <a ui-sref="app.creditReportsByRaffle" title="Reportes de Inspectoría">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Centas por cobrar</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.creditReports')">
+                            <a ui-sref="app.creditReports" title="Historico de pago por cliente">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Histórico de Pago por Cliente</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ProfitabilityReport')">
+                            <a ui-sref="app.ProfitabilityReport" title="Rentabilidad de sorteo">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Rentabilidad de sorteo</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
                     <a ng-click="logOff()" title="Salir" ripple="">
                         <em class="fa fa-sign-out"></em>
                         <!--<em class="sidebar-item-caret fa pull-right fa-angle-right"></em>-->
-                        <span >Salir</span>
+                        <span>Salir</span>
                     </a>
                 </li>
             </ul>

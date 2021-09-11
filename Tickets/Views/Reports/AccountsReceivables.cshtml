@@ -96,6 +96,7 @@
                             invoiceByClients = i.GroupBy(c => c.ClientId).Select(c => new
                             {
                                 clientName = c.FirstOrDefault().ClientId + " - " + c.FirstOrDefault().Client.Name,
+                                clientType = c.FirstOrDefault().Client.GroupId,
                                 invoices = c.ToList()
                             })
                         }).ToList();
@@ -124,7 +125,7 @@
 
                             <tr>
                                 <th colspan="2" class="text-left"></th>
-                                <th colspan="6" class="text-left">@client.clientName</th>
+                                <th colspan="6" class="text-left">@client.clientName - @context.Catalogs.Where(w => w.Id == client.clientType).Select(s => s.NameDetail).FirstOrDefault()</th>
                             </tr>
                             foreach (var invoice in client.invoices)
                             {
