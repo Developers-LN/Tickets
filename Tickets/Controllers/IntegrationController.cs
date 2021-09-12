@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -8,6 +10,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using Tickets.Models;
 using Tickets.Models.Enums;
+using Tickets.Models.Procedures;
 using Tickets.Models.Ticket;
 using Tickets.Models.XML;
 using WebMatrix.WebData;
@@ -22,6 +25,89 @@ namespace Tickets.Controllers
         public ActionResult ElectronicTicketXml()
         {
             return View();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult ExportToExcel(string FechaInicio = null, string FechaFin = null)
+        {
+            SalesAndPendingPayments salesAndPendingPayments = new SalesAndPendingPayments();
+            var Resultado = salesAndPendingPayments.ConsultaVentasCuentasPendientes(FechaInicio, FechaFin);
+
+            using (var workBook = new XLWorkbook())
+            {
+                var workSheet = workBook.Worksheets.Add("Cuentas");
+                var curretRow = 1;
+
+                workSheet.Cell(curretRow, 1).Value = "ID_Cliente";
+                workSheet.Cell(curretRow, 2).Value = "Nombre_Cliente";
+                workSheet.Cell(curretRow, 3).Value = "Tipo_Cliente";
+                workSheet.Cell(curretRow, 4).Value = "ID_Sorteo";
+                workSheet.Cell(curretRow, 5).Value = "Nombre_Sorteo";
+                workSheet.Cell(curretRow, 6).Value = "ID_Factura";
+                workSheet.Cell(curretRow, 7).Value = "Fecha_Factura";
+                workSheet.Cell(curretRow, 8).Value = "Estado_Factura";
+                workSheet.Cell(curretRow, 9).Value = "Total_Billetes";
+                workSheet.Cell(curretRow, 10).Value = "Precio_Billete";
+                workSheet.Cell(curretRow, 11).Value = "Total_Factura";
+                workSheet.Cell(curretRow, 12).Value = "Descuento";
+                workSheet.Cell(curretRow, 13).Value = "Total_Descuento";
+                workSheet.Cell(curretRow, 14).Value = "Total_A_Pagar";
+                workSheet.Cell(curretRow, 15).Value = "Pagos_Efectivo";
+                workSheet.Cell(curretRow, 16).Value = "Pagos_Credito";
+                workSheet.Cell(curretRow, 17).Value = "Total_Pagado";
+                workSheet.Cell(curretRow, 18).Value = "Total_Faltante";
+
+                foreach (var item in Resultado)
+                {
+                    curretRow++;
+                    workSheet.Cell(curretRow, 1).Value = item.IdClient;
+                    workSheet.Cell(curretRow, 2).Value = item.NameClient;
+                    workSheet.Cell(curretRow, 3).Value = item.TypeClient;
+                    workSheet.Cell(curretRow, 4).Value = item.IdRaffle;
+                    workSheet.Cell(curretRow, 5).Value = item.NameRaffle;
+                    workSheet.Cell(curretRow, 6).Value = item.IdInvoice;
+                    workSheet.Cell(curretRow, 7).Value = item.DateInvoice;
+                    workSheet.Cell(curretRow, 8).Value = item.StatusInvoice;
+                    workSheet.Cell(curretRow, 9).Value = item.TotalTickets;
+                    workSheet.Cell(curretRow, 10).Value = item.PriceTicket;
+                    workSheet.Cell(curretRow, 11).Value = item.TotalInvoice;
+                    workSheet.Cell(curretRow, 12).Value = item.DiscountPercent;
+                    workSheet.Cell(curretRow, 13).Value = item.TotalDiscount;
+                    workSheet.Cell(curretRow, 14).Value = item.TotalToPay;
+                    workSheet.Cell(curretRow, 15).Value = item.CashPayment;
+                    workSheet.Cell(curretRow, 16).Value = item.NoteCreditPayment;
+                    workSheet.Cell(curretRow, 17).Value = item.TotalPayed;
+                    workSheet.Cell(curretRow, 18).Value = item.TotalPending;
+                }
+
+                var range = workSheet.RangeUsed();
+                var table = range.CreateTable();
+                table.Theme = XLTableTheme.TableStyleLight9;
+                workSheet.Columns().AdjustToContents();
+                workSheet.Column(9).Style.NumberFormat.Format = "#,##0";
+                workSheet.Column(10).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(11).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(13).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(14).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(15).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(16).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(17).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(18).Style.NumberFormat.Format = "$ #,##0.00";
+
+                using (var stream = new MemoryStream())
+                {
+                    workBook.SaveAs(stream);
+                    var content = stream.ToArray();
+
+                    DateTime FI = Convert.ToDateTime(FechaInicio);
+                    DateTime FF = Convert.ToDateTime(FechaFin);
+
+                    string Nombre = ("Ventas y cuentas por cobrar desde " + FI.ToString("dd-MM-yyyy") + " hasta " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
+
+                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Nombre);
+                }
+            }
         }
 
         //NUEVO CODIGO PARA GENERAR XML DE LAS ASIGNACIONES

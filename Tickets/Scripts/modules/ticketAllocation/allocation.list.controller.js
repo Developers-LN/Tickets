@@ -53,7 +53,6 @@
                             window.loading.hide();
                             if (data.result == true) {
                                 alertify.success(data.message);
-
                                 var link = document.createElement("a");
                                 link.download = name;
                                 $(link).attr('download');

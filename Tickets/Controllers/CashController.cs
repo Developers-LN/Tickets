@@ -58,6 +58,15 @@ namespace Tickets.Controllers
         }
 
         //
+        // GET: /Cash/AccountsReceivablesReportsExcel
+        [Authorize]
+        [HttpGet]
+        public ActionResult AccountsReceivablesReportsExcel()
+        {
+            return View();
+        }
+
+        //
         // GET: /Cash/ClientGeneralBalance
         [Authorize]
         [HttpGet]

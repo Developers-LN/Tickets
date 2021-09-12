@@ -642,31 +642,16 @@
                     <a href="" title="Reportes y Estadisticas" ripple="">
                         <em class="sidebar-item-icon icon-file"></em>
                         <em class="sidebar-item-caret fa pull-right fa-angle-right"></em>
-                        <span>Reportes a Excel</span>
+                        <span>Reportes en Excel</span>
                         <span class="ripple">
                             <span class="angular-ripple" style="width: 240px; height: 240px; left: -58px; top: -97px;"></span>
                         </span>
                     </a>
                     <ul class="nav sidebar-subnav">
-                        <li ui-sref-active="active" ng-show="verifyCanView('app.creditReportsByRaffle')">
-                            <a ui-sref="app.creditReportsByRaffle" title="Reportes de Inspectoría">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.AccountsReceivablesReportsExcel')">
+                            <a ui-sref="app.AccountsReceivablesReportsExcel" title="Reportes de cuentas por cobrar a excel">
                                 <em class="sidebar-item-icon"></em>
-                                <span>Centas por cobrar</span>
-                                <span class="ripple"></span>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active" ng-show="verifyCanView('app.creditReports')">
-                            <a ui-sref="app.creditReports" title="Historico de pago por cliente">
-                                <em class="sidebar-item-icon"></em>
-                                <span>Histórico de Pago por Cliente</span>
-                                <span class="ripple"></span>
-                            </a>
-                        </li>
-
-                        <li ui-sref-active="active" ng-show="verifyCanView('app.ProfitabilityReport')">
-                            <a ui-sref="app.ProfitabilityReport" title="Rentabilidad de sorteo">
-                                <em class="sidebar-item-icon"></em>
-                                <span>Rentabilidad de sorteo</span>
+                                <span>Ventas y pagos pendientes</span>
                                 <span class="ripple"></span>
                             </a>
                         </li>

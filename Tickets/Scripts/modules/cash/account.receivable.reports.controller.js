@@ -2,7 +2,7 @@
  * Module: AccountReceivableReportsController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -89,6 +89,20 @@
             } catch (e) {
             }
             window.open('Reports/AccountsReceivables?startDate=' + $scope.cash.StartDate + '&endDate=' + $scope.cash.EndDate + '&clientId=' + $scope.cash.ClientId + '&raffleId=' + $scope.cash.RaffleId);
+        }
+
+        //NUEVO CODIGO PARA GENERAR EXCEL DE LAS VENTAS Y CUENTAS POR COBRAR
+        var url = 'http://' + location.host + '/';
+        $scope.GenerateExcelReport = function () {
+            alertify.confirm("&iquest;Desea descargar el archivo Excel?", function (e) {
+                if (e) {
+
+                    $scope.cash.EndDate = $rootScope.parseDate($scope.cash.EndDate, $scope.cash.EndDate).toJSON();
+                    $scope.cash.StartDate = $rootScope.parseDate($scope.cash.StartDate, $scope.cash.StartDate).toJSON();
+
+                    window.open('Integration/ExportToExcel?FechaInicio=' + $scope.cash.StartDate + '&FechaFin=' + $scope.cash.EndDate);
+                }
+            });
         }
     }
 })();
