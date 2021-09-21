@@ -4,6 +4,7 @@
     {
         public bool premios { get; set; }
         public int ClientId { get; set; }
+        public int tanId { get; set; }
         public int number { get; set; }
         public int raffle { get; set; }
         public int quantity { get; set; }

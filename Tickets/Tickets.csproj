@@ -387,6 +387,7 @@
     <Compile Include="Models\PreviousDebtPayment.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Procedures\AllPatyableAwardsProcedure.cs" />
     <Compile Include="Models\Procedures\AvailableTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\InvoicedTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\NetSalesByClientProcedure.cs" />
@@ -3091,6 +3092,7 @@
     <Content Include="Views\Reports\PayableAwardsByClient.cshtml" />
     <Content Include="Views\Cash\AccountsReceivablesReportsExcel.cshtml" />
     <Content Include="Views\Integration\ExportToExcel.cshtml" />
+    <Content Include="Views\Reports\AllPayableAwards.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -406,6 +406,15 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult AllPayableAwards(int raffleId)
+        {
+            AllPatyableAwardsProcedure allPatyableAwardsProcedure = new AllPatyableAwardsProcedure();
+            var Resultado = allPatyableAwardsProcedure.ConsultaTodosBilletesPagables(raffleId);
+            return View(Resultado);
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult BilletesCirculacion(int raffleId)
         {
             AvailableTicketsProcedure availableTicketsProcedure = new AvailableTicketsProcedure();
