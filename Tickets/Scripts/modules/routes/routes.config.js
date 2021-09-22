@@ -594,6 +594,10 @@
                 url: '/cash/accountsReceivablesReportsExcel',
                 templateUrl: Route.base('Cash/AccountsReceivablesReportsExcel')
             })
+            .state('app.PayableAwardsReportsExcel', {
+                url: '/cash/payableAwardsReportsExcel',
+                templateUrl: Route.base('Cash/PayableAwardsReportsExcel')
+            })
             .state('app.clientGeneralBalance', {
                 url: '/client/generalBalance',
                 templateUrl: Route.base('Cash/ClientGeneralBalance')

@@ -66,6 +66,13 @@ namespace Tickets.Controllers
             return View();
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult PayableAwardsReportsExcel()
+        {
+            return View();
+        }
+
         //
         // GET: /Cash/ClientGeneralBalance
         [Authorize]

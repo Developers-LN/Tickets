@@ -9,12 +9,22 @@ namespace Tickets.Models.Procedures
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ModelSalesAndPendingPayments> ConsultaVentasCuentasPendientes(string FechaInicio, string FechaFin)
+        public IEnumerable<ModelSalesAndPendingPayments> ConsultaVentasCuentasPendientes(string FechaInicio, string FechaFin, int RaffleId)
         {
             var lista = new List<ModelSalesAndPendingPayments>();
 
-            DateTime FI = Convert.ToDateTime(FechaInicio);
-            DateTime FF = Convert.ToDateTime(FechaFin);
+            DateTime FI, FF;
+
+            if(FechaInicio == "undefined" && FechaInicio == "undefined")
+            {
+                FI = DateTime.Now.AddYears(-1000);
+                FF = DateTime.Now.AddYears(1000);
+            }
+            else
+            {
+                FI = Convert.ToDateTime(FechaInicio);
+                FF = Convert.ToDateTime(FechaFin);
+            }
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -22,6 +32,7 @@ namespace Tickets.Models.Procedures
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@FechaInicio", FI.ToString("yyyy-MM-dd"));
                 sqlCommand.Parameters.AddWithValue("@FechaFin", FF.ToString("yyyy-MM-dd"));
+                sqlCommand.Parameters.AddWithValue("@RaffleId", RaffleId);
                 sqlConnection.Open();
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                 if (sqlDataReader.HasRows)

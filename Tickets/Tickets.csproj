@@ -3093,6 +3093,7 @@
     <Content Include="Views\Cash\AccountsReceivablesReportsExcel.cshtml" />
     <Content Include="Views\Integration\ExportToExcel.cshtml" />
     <Content Include="Views\Reports\AllPayableAwards.cshtml" />
+    <Content Include="Views\Cash\PayableAwardsReportsExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

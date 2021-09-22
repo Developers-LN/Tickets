@@ -6,8 +6,8 @@
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.LoteryAdmin : "";
-    string adminCargo = config != null ? config.Cargo : "";
+    string adminName = config != null ? config.CreditosCobros : "";
+    string adminCargo = config != null ? config.CreditosCobrosCargo : "";
 
     var Efectivo = Tickets.Models.Enums.PaymentTypeTextEnum.Efectivo;
     var Cheque = Tickets.Models.Enums.PaymentTypeTextEnum.Cheques;
@@ -184,7 +184,7 @@
     </div>
 
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-        <b>George Ruiz Payano</b><br />
-        <span>Encargado</span>
+        <b>@adminName</b><br />
+        <span>@adminCargo</span>
     </div>
 </div>

@@ -6,8 +6,8 @@
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.LoteryAdmin : "";
-    string adminCargo = config != null ? config.Cargo : "";
+    string adminName = config != null ? config.ControlPremio : "";
+    string adminCargo = config != null ? config.ControlPremioCargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 }
 <style>
@@ -127,10 +127,10 @@
         <br>
         <br>
 
-        <b>George Ruíz Payano</b>
+        <b>@adminName</b>
     </div>
     <div class="col-lg-12 no-padder text-center">
-        <span>Encargado</span>
+        <span>@adminCargo</span>
     </div>
 </div>
 
@@ -217,9 +217,9 @@
         <br>
         <br>
 
-        <b>George Ruíz Payano</b>
+        <b>@adminName</b>
     </div>
     <div class="col-lg-12 no-padder text-center">
-        <span>Encargado</span>
+        <span>@adminCargo</span>
     </div>
 </div>

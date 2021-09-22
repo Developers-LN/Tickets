@@ -5,8 +5,8 @@
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.LoteryAdmin : "";
-    string adminCargo = config != null ? config.Cargo : "";
+    string adminName = config != null ? config.ControlPremio : "";
+    string adminCargo = config != null ? config.ControlPremioCargo : "";
 }
 
 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -94,7 +94,7 @@
     </div>
 
     <div class="col-lg-12 col-md-12 col-sm-12 text-center">
-        <b>Inocencia Arelis Cruz Reyes De Datwyler</b><br />
-        <span>Directora</span>
+        <b>@adminName</b><br />
+        <span>@adminCargo</span>
     </div>
 </div>

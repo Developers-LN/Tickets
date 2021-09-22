@@ -2,13 +2,13 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Billetes en pagables";
+    ViewBag.Title = "Billetes pagables";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     var Porcentaje = config.LawDiscountPercentMayor;
-    string adminName = config != null ? config.LoteryAdmin : "";
-    string adminCargo = config != null ? config.Cargo : "";
+    string adminName = config != null ? config.ControlPremio : "";
+    string adminCargo = config != null ? config.ControlPremioCargo : "";
 
     var Contador = 0;
     decimal MontoApagarSorteo = 0;
@@ -135,13 +135,13 @@
         }
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-        <b>Total a pagar de este sorteo: @MontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b>
+        <b>Total a pagar: @MontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b>
     </div>
 
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-        <b>Billy Nicanor De La Cruz Batista</b>
+        <b>@adminName</b>
         <br />
-        <span>Director</span>
+        <span>@adminCargo</span>
         <br />
         <p>NOTA: Este reporte contiene los billetes pagables del sorteo número @RaffleData.Id</p>
     </div>

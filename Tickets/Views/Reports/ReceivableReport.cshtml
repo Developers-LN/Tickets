@@ -5,8 +5,8 @@
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.LoteryAdmin : "";
-    string adminCargo = config != null ? config.Cargo : "";
+    string adminName = config != null ? config.CajaGeneral : "";
+    string adminCargo = config != null ? config.CajaGeneralCargo : "";
     var lastReceivable = Model.ReceivablePayments.Count > 0 ? Model.ReceivablePayments.ToList().Last() : null;
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
     //Datos Detalle Factura
@@ -250,10 +250,10 @@
         </div>
     </div>
     <div class="col-lg-12 no-padder text-center">
-        <b>Wanda Joselyn Arias Espinal</b>
+        <b>@adminName</b>
     </div>
     <div class="col-lg-12 no-padder text-center">
-        <span>Encargada</span>
+        <span>@adminCargo</span>
     </div>
 </div>
 
@@ -453,9 +453,9 @@
         </div>
     </div>
     <div class="col-lg-12 no-padder text-center">
-        <b>Wanda Joselyn Arias Espinal</b>
+        <b>@adminName</b>
     </div>
     <div class="col-lg-12 no-padder text-center">
-        <span>Encargada</span>
+        <span>@adminCargo</span>
     </div>
 </div>

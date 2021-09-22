@@ -655,6 +655,15 @@
                             </a>
                         </li>
                     </ul>
+                    <ul class="nav sidebar-subnav">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.PayableAwardsReportsExcel')">
+                            <a ui-sref="app.PayableAwardsReportsExcel" title="Reportes de cuentas por cobrar a excel">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Premios pagables</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a ng-click="logOff()" title="Salir" ripple="">
