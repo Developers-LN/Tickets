@@ -22,6 +22,17 @@ namespace Tickets.Controllers
         }
 
         //
+        //  GET: ticket/ticketAllocationApi/getTicketAllocationConsignateList
+        [HttpGet]
+        [Authorize]
+        [ActionName("getTicketAllocationConsignateList")]
+        public RequestResponseModel GetTicketAllocationConsignateList(int raffleId, int clientId = 0)
+        {
+            var response = new TicketAllocationModel().GetTicketAllocationConsignateList(raffleId, clientId);
+            return response;
+        }
+
+        //
         //  GET: ticket/ticketAllocationApi/getReviewAllocations
         [HttpGet]
         [Authorize]
@@ -139,6 +150,28 @@ namespace Tickets.Controllers
         public RequestResponseModel DeleteAllocationNumber(TicketAllocationNumberModel model)
         {
             var response = new TicketAllocationNumberModel().DeleteAllocationNumber(model);
+            return response;
+        }
+
+        //
+        //  POST: ticket/ticketAllocationApi/deleteAllocationNumber
+        [HttpPost]
+        [Authorize]
+        [ActionName("unConsignateNumber")]
+        public RequestResponseModel UnConsignateNumber(TicketAllocationNumberModel model)
+        {
+            var response = new TicketAllocationNumberModel().UnConsignateNumber(model);
+            return response;
+        }
+
+        //
+        //  POST: ticket/ticketAllocationApi/deleteAllocationNumber
+        [HttpPost]
+        [Authorize]
+        [ActionName("consingAllocation")]
+        public RequestResponseModel ConsingAllocation(int id)
+        {
+            var response = new TicketAllocationNumberModel().ConsignateAllocation(id);
             return response;
         }
 

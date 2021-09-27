@@ -6,6 +6,7 @@
         PendientPrint = 2086,
         Printed = 2087,
         Invoiced = 3092,
-        Review = 5839
+        Review = 5839,
+        Consigned = 5858
     }
 }

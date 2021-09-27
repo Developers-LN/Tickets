@@ -457,6 +457,11 @@
                 templateUrl: Route.base('TicketAllocation/TicketAllocationList'),
                 resolve: {}
             })
+            .state('app.ticketAllocationConsignatedList', {
+                url: '/ticket/ConsignmentAllocations',
+                templateUrl: Route.base('TicketAllocation/TicketAllocationConsignmentList'),
+                resolve: {}
+            })
             .state('app.ticketPrintList', {
                 url: '/ticket/ticketPrint',
                 templateUrl: Route.base('TicketPrint/TicketPrint'),
@@ -480,6 +485,11 @@
             .state('app.ticketAllocationDetails', {
                 url: '/ticket/allocationDetails/:allocationId',
                 templateUrl: Route.base('TicketAllocation/AllocationDetails'),
+                resolve: {}
+            })
+            .state('app.ticketAllocationConsignedDetails', {
+                url: '/ticket/allocationConsignedDetails/:allocationId',
+                templateUrl: Route.base('TicketAllocation/AllocationConsignedDetails'),
                 resolve: {}
             })
             .state('app.ticketNumberDetail', {

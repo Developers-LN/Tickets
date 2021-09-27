@@ -73,6 +73,14 @@
                             </a>
                         </li>
 
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketAllocationConsignatedList')">
+                            <a ui-sref="app.ticketAllocationConsignatedList" title="Consignación de billetes">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Consignación</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+
                         <li ui-sref-active="active" ng-show="verifyCanView('app.ticketPrintList')">
                             <a ui-sref="app.ticketPrintList" title="Impresion de Billetes">
                                 <em class="sidebar-item-icon"></em>

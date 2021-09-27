@@ -349,6 +349,23 @@ namespace Tickets.Models.Ticket
             };
         }
 
+        internal RequestResponseModel GetTicketAllocationConsignateList(int raffleId, int clientId = 0, int statu = 0, bool hasNumber = false)
+        {
+            var context = new TicketsEntities();
+            var allocation = context.TicketAllocations
+                .Where(a =>
+                    (a.Statu == 5858 || a.Statu == 2087)
+                    && a.RaffleId == raffleId
+                    && (a.ClientId == clientId || clientId == 0)).AsEnumerable()
+                .Select(a => this.ListadoAsignaciones(a)).ToList();
+
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Object = allocation
+            };
+        }
+
         internal RequestResponseModel TicketAllocationListForPrint(int raffleId, int clientId = 0, int statu = 0, bool hasNumber = false)
         {
             var context = new TicketsEntities();
@@ -567,6 +584,7 @@ namespace Tickets.Models.Ticket
                                     Number = number.Number,
                                     Invoiced = false,
                                     Printed = false,
+                                    Consignated = false,
                                     ControlNumber = "",
                                     TicketAllocationId = model.Id,
                                     CreateUser = WebSecurity.CurrentUserId,

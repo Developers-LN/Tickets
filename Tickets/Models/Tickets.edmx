@@ -593,6 +593,8 @@
           <Property Name="FractionFrom" Type="int" Nullable="false" />
           <Property Name="FractionTo" Type="int" Nullable="false" />
           <Property Name="RaffleId" Type="int" />
+          <Property Name="Consignated" Type="bit" />
+          <Property Name="UserConsigned" Type="int" />
         </EntityType>
         <EntityType Name="TicketRePrint">
           <Key>
@@ -3579,6 +3581,8 @@
           <NavigationProperty Name="TicketRePrintNumbers" Relationship="TicketsModel.FK_TicketRePrintNumber_TicketAllocationNumber" FromRole="TicketAllocationNumber" ToRole="TicketRePrintNumber" />
           <NavigationProperty Name="TicketReturns" Relationship="TicketsModel.FK_TicketReturn_TicketAllocationNumber" FromRole="TicketAllocationNumber" ToRole="TicketReturn" />
           <Property Name="RaffleId" Type="Int32" />
+          <Property Name="Consignated" Type="Boolean" />
+          <Property Name="UserConsigned" Type="Int32" />
         </EntityType>
         <EntityType Name="TicketRePrint">
           <Key>
@@ -5610,6 +5614,8 @@
           <EntitySetMapping Name="TicketAllocationNumbers">
             <EntityTypeMapping TypeName="TicketsModel.TicketAllocationNumber">
               <MappingFragment StoreEntitySet="TicketAllocationNumber">
+                <ScalarProperty Name="UserConsigned" ColumnName="UserConsigned" />
+                <ScalarProperty Name="Consignated" ColumnName="Consignated" />
                 <ScalarProperty Name="RaffleId" ColumnName="RaffleId" />
                 <ScalarProperty Name="FractionTo" ColumnName="FractionTo" />
                 <ScalarProperty Name="FractionFrom" ColumnName="FractionFrom" />

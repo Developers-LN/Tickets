@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Billetes en pagables por clientes";
+    ViewBag.Title = "Billetes pagables por cliente";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -80,7 +80,7 @@
 
                 foreach (var client in Clientes)
                 {
-                    MontoApagarSorteo = 0;
+                    //MontoApagarSorteo = 0;
                     ValorPremios = 0;
                     <table class="table" style="margin-top:15px;">
                         <thead>

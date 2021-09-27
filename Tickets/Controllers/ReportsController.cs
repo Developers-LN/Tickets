@@ -422,6 +422,15 @@ namespace Tickets.Controllers
             return View(Resultado);
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult AllocationConsigNumberList(int allocationId)
+        {
+            var context = new TicketsEntities();
+            var allocation = context.TicketAllocations.FirstOrDefault(r => r.Id == allocationId);
+            return View(allocation);
+        }
+
         //
         //  GET: Reports/NoPrintedNumbesAward
         [Authorize]

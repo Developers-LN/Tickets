@@ -57,27 +57,175 @@ namespace Tickets.Models.Ticket
         internal RequestResponseModel DeleteAllocationNumber(TicketAllocationNumberModel model)
         {
             var context = new TicketsEntities();
-            var number = context.TicketAllocationNumbers.FirstOrDefault(n => n.Id == model.Id);
 
-            if (number == null)
+            using (var Trans = context.Database.BeginTransaction())
             {
-                return new RequestResponseModel()
+                try
                 {
-                    Result = false,
-                    Message = "El numero no fue encontrado!"
-                };
+                    var number = context.TicketAllocationNumbers.FirstOrDefault(n => n.Id == model.Id);
+
+                    if (number == null)
+                    {
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "El numero no fue encontrado!"
+                        };
+                    }
+
+                    context.TicketAllocationNumbers.Remove(number);
+                    context.SaveChanges();
+
+                    Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Delete, "Borando Asignación de Billetes", model);
+
+                    Trans.Commit();
+
+                    return new RequestResponseModel()
+                    {
+                        Result = true,
+                        Message = "El Numero fue borrado correctamente!"
+                    };
+                }
+                catch (Exception)
+                {
+                    Trans.Rollback();
+                    return new RequestResponseModel()
+                    {
+                        Result = true,
+                        Message = "El Numero fue borrado correctamente!"
+                    };
+                }
             }
+        }
 
-            context.TicketAllocationNumbers.Remove(number);
-            context.SaveChanges();
+        internal RequestResponseModel UnConsignateNumber(TicketAllocationNumberModel model)
+        {
+            var context = new TicketsEntities();
 
-            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Delete, "Borando Asignación de Billetes", model);
-
-            return new RequestResponseModel()
+            using (var Trans = context.Database.BeginTransaction())
             {
-                Result = true,
-                Message = "El Numero fue borrado correctamente!"
-            };
+                try
+                {
+                    var number = context.TicketAllocationNumbers.FirstOrDefault(n => n.Id == model.Id);
+                    var Raffle = number.RaffleId;
+                    var generalAllocation = context.TicketAllocations.Where(w => w.RaffleId == Raffle && w.ClientId == (int)GeneralClientEnum.CajaGeneral)
+                        .Select(s => s.Id).FirstOrDefault();
+
+                    if (number == null)
+                    {
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "El numero no fue encontrado!"
+                        };
+                    }
+
+                    if (generalAllocation == 0)
+                    {
+                        var ticketAllocation = new TicketAllocation()
+                        {
+                            ClientId = (int)GeneralClientEnum.CajaGeneral,
+                            RaffleId = Raffle.Value,
+                            CreateUser = WebSecurity.CurrentUserId,
+                            CreateDate = DateTime.Now,
+                            Type = (int)AllocationTypeEnum.Tickets,
+                            Statu = (int)AllocationStatuEnum.Printed,
+                            Agente = null
+                        };
+                        context.TicketAllocations.Add(ticketAllocation);
+                        context.SaveChanges();
+
+                        generalAllocation = ticketAllocation.Id;
+                    }
+
+                    number.TicketAllocationId = generalAllocation;
+
+                    context.SaveChanges();
+
+                    Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Delete, "Borando Asignación de Billetes", model);
+
+                    Trans.Commit();
+
+                    return new RequestResponseModel()
+                    {
+                        Result = true,
+                        Message = "El Numero fue eliminado de la consignacion correctamente!"
+                    };
+                }
+                catch (Exception)
+                {
+                    Trans.Rollback();
+                    return new RequestResponseModel()
+                    {
+                        Result = true,
+                        Message = "Ocurrio un error al intentar eliminar el billete"
+                    };
+                }
+            }
+        }
+
+        internal RequestResponseModel ConsignateAllocation(int id)
+        {
+            var context = new TicketsEntities();
+
+            using (var Trans = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var allocation = context.TicketAllocations.FirstOrDefault(n => n.Id == id);
+
+                    if (allocation == null)
+                    {
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "El numero no fue encontrado!"
+                        };
+                    }
+
+                    var allocationNumber = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == id);
+
+                    if (allocationNumber.Any(a => a.Printed == false))
+                    {
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "Hay billetes sin imprimir!"
+                        };
+                    }
+
+                    var CurrentUser = WebSecurity.CurrentUserId;
+
+                    foreach (var item in allocationNumber)
+                    {
+                        item.UserConsigned = CurrentUser;
+                        item.Consignated = true;
+                    }
+
+                    allocation.Statu = (int)AllocationStatuEnum.Consigned;
+
+                    context.SaveChanges();
+
+                    Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Consignado de asignación", id);
+
+                    Trans.Commit();
+
+                    return new RequestResponseModel()
+                    {
+                        Result = true,
+                        Message = "La asingación fue consignada correctamente!"
+                    };
+                }
+                catch (Exception)
+                {
+                    Trans.Rollback();
+                    return new RequestResponseModel()
+                    {
+                        Result = false,
+                        Message = "Error al intentar realizar la consignacion!"
+                    };
+                }
+            }
         }
 
         internal RequestResponseModel AwardNumberDetails(int number, int raffleId, int fractionFrom, int fractionTo)

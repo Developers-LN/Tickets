@@ -1,0 +1,68 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Listado de consignaciones";
+}
+
+<div class="col-lg-12 no-padder" ng-controller="AllocationListController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-6 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sorteo: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="RaffleId" ng-change="changeValuesConsigned()">
+                                    <option selected="selected" value="0">Todos los sorteo</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-6 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Cliente: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="ClientId" ng-change="changeValuesConsigned()">
+                                    <option selected="selected" value="0">Todos los cliente</option>
+                                    <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row-border hover">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Numero</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th class="editColumm text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="allocation in allocations">
+                                <td>#{{allocation.id}}</td>
+                                <td>{{allocation.clientId}} - {{allocation.clientDesc}} {{allocation.Agente}}</td>
+                                <td>{{(allocation.createDate | date:"dd/MM/yyyy hh:mm:ss a")}}</td>
+                                <td>{{allocation.statuDesc}}</td>
+                                <td class="text-center">
+                                    <a ng-show="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Consigned)" target="_blank" href="/Reports/AllocationConsigNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-print"></i></a>
+                                    <a href="/#/ticket/allocationConsignedDetails/{{allocation.id}}" title="Ver Detalle de asignación" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg">
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

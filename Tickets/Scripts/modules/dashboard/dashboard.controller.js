@@ -97,7 +97,6 @@
 
         self.loadData();
 
-
         /*this.testWebService = function () {
             var identify = {
                 raffleId: 3753,

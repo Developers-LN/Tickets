@@ -1,0 +1,192 @@
+﻿@model Tickets.Models.TicketAllocation
+
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.Facturacion : "";
+    string adminCargo = config != null ? config.FacturacionCargo : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+
+    var consignadorId = Model.TicketAllocationNumbers.Select(s => s.UserConsigned).FirstOrDefault();
+    var Consignador = context.Users.Where(w => w.Id == consignadorId).Select(s => new { Consignador = s.Employee.Name + " " + s.Employee.LastName }).FirstOrDefault();
+}
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>DETALLE DE CONSIGNACION DEL SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
+        </div>
+        <div class="col-lg-6 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <b>Consignatario: </b> @Model.Client.Name @Model.Agente
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Consignado por: </b> @Consignador.Consignador
+            </div>
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <div class="col-lg-12 no-padder text-right">
+                <b>Consignación: </b> #@Model.Id
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">FILA</th>
+                    <th class="text-center">COL 1</th>
+                    <th class="text-center">COL 2</th>
+                    <th class="text-center">COL 3</th>
+                    <th class="text-center">COL 4</th>
+                    <th class="text-center">COL 5</th>
+                    <th class="text-center">COL 6</th>
+                    <th class="text-center">COL 7</th>
+                    <th class="text-center">COL 8</th>
+                    <th class="text-center">COL 9</th>
+                    <th class="text-center">COL 10</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.TicketAllocationNumbers.Any())
+                {
+                    HashSet<int> Billetes = new HashSet<int>();
+                    Model.TicketAllocationNumbers.ToList().ForEach(f => Billetes.Add((int)f.Number));
+
+                    var numberCount = -1;
+                    int line = 1;
+                    var production = Model.Raffle.Prospect.Production - 1;
+                    var NextBiggerNumber = 0;
+                    var MaxNumber = Model.TicketAllocationNumbers.Max(n => n.Number);
+                    int inicio = 0, fin = 0;
+
+                    while (numberCount <= MaxNumber)
+                    {
+                        int countTen = 1;
+                        <tr>
+                            <td class="text-center" style="color:red; font-weight:bold; font-size:12pt;">@line</td>
+                            @while (countTen <= 10 && numberCount <= MaxNumber)
+                            {
+                                NextBiggerNumber = Billetes.FirstOrDefault(f => f > numberCount);
+                                numberCount = NextBiggerNumber;
+                                if (Model.TicketAllocationNumbers.Where(n => n.Number == numberCount).Any())
+                                {
+                                    countTen++;
+
+                                    if (Model.TicketAllocationNumbers.Where(n => n.Number == (numberCount + 1)).Any())
+                                    {
+                                        inicio = (int)numberCount;
+                                        numberCount++;
+                                        while (Model.TicketAllocationNumbers.Where(n => n.Number == numberCount).Any())
+                                        {
+                                            fin = (int)numberCount++;
+                                        }
+                                        string stringNumberI = inicio.ToString();
+                                        string stringNumberF = fin.ToString();
+                                        string newStringNumberS = (stringNumberI.PadLeft(production.ToString().Length, '0') + " - " + stringNumberF.PadLeft(production.ToString().Length, '0'));
+
+                                        <td class="text-center">@newStringNumberS</td>
+                                    }
+                                    else
+                                    {
+                                        string stringNumber = numberCount.ToString();
+                                        string newStringNumber = stringNumber.PadLeft(production.ToString().Length, '0');
+                                        <td class="text-center">@newStringNumber</td>
+                                    }
+                                    if (numberCount == MaxNumber)
+                                    {
+                                        numberCount++;
+                                    }
+
+                                }
+                            }
+                        </tr>
+                        line += 1;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="11" class="text-center">
+                            NO TIENE BILLETES CONSIGNADOS
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma del consignatario
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma del consignador
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <b>@adminName</b>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+        <div class="col-lg-12 no-padder text-center">
+
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <span>@adminCargo</span>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Detalle de consignación";
+}
+<div class="col-lg-12 no-padder" ng-controller="AllocationDetailsController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 well no-padder">
+                    <fieldset>
+                        <div class="col-lg-12 no-padder">
+                            <div class="col-lg-4">Asignación: #<b ng-bind="allocation.id"></b></div>
+                            <div class="col-lg-4">Fecha de Asignación: <b>{{(allocation.createDate | date:"dd/MM/yyyy h:mm:ss a")}}</b></div>
+                            @*<div class="col-lg-4">Cliente: <b ng-bind="allocation.clientDesc"></b></div>*@
+                            <div class="col-lg-4">Cliente: <b>{{allocation.clientDesc}} {{allocation.Agente}}</b></div>
+                        </div>
+                    </fieldset>
+                    <br />
+                    <fieldset>
+                        <div class="col-lg-12 no-padder">
+                            <div class="col-lg-4">Sorteo: <b>{{allocation.raffleDesc}}</b></div>
+                            <div class="col-lg-4">Precio por Fracción: <b ng-bind="parseMoney(allocation.fractionPrice)"></b></div>
+                            <div class="col-lg-4">Tipo de Asignación: <b>{{allocation.typeDesc}}</b></div>
+                        </div>
+                    </fieldset>
+                    <br />
+                    <div ng-show="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Printed)" class="col-lg-12 no-padder text-center">
+                        <a ng-click="consignarAsignacion(allocation.id)" class="btn btn-success btn-sm"><i class="fa fa-check"></i> Consignar</a>
+                    </div>
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Numeros</th>
+                                <th>{{allocation.typeId == @((int)Tickets.Models.Enums.AllocationTypeEnum.Tickets)? 'Fracciónes' : 'Cantidad'}}</th>
+                                <th>Precio</th>
+                                <th class="text-right">Total</th>
+                                <th class="editColumm {{moduleCanAdd}} text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="number in allocation.ticketAllocationNumbers">
+                                <td ng-bind="addZeroToNumber((allocation.production - 1), number.number)"></td>
+                                <td ng-bind="(number.fractionTo - number.fractionFrom + 1)"></td>
+                                <td ng-bind="parseMoney(allocation.fractionPrice)"></td>
+                                <td class="text-right" ng-bind="parseMoney(showSubTotal(number))"></td>
+                                <td class="text-center {{moduleCanAdd}}">
+                                    <a ng-click="unConsignateNumber(number)" ng-if="(allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Printed) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Review))" title="Borrar Billetes" class="{{moduleCanDelete}}"><i class="fa fa-times"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td ng-bind="parseNumber(totals.number)"></td>
+                                <td ng-bind="parseNumber(totals.fraction)"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right">Total:.. <b ng-bind="parseMoney(totals.total)"></b></td>
+                                <td class="{{moduleCanAdd}}"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg">
+    <a href="{{globalReturnURL}}" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

@@ -20,6 +20,13 @@ namespace Tickets.Controllers
             return View();
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult TicketAllocationConsignmentList()
+        {
+            return View();
+        }
+
         //
         // GET: /TicketAllocation/TicketAllocationCreate
         [HttpGet]
@@ -43,6 +50,13 @@ namespace Tickets.Controllers
         [Authorize]
         [HttpGet]
         public ActionResult AllocationDetails()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult AllocationConsignedDetails()
         {
             return View();
         }
