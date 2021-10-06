@@ -5,13 +5,13 @@
     ViewBag.Title = "";
 
     var context = new Tickets.Models.TicketsEntities();
+    var availableTicketsToInvoice = new Tickets.Models.Procedures.AvailableTicketToInvoice();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.Facturacion : "";
     string adminCargo = config != null ? config.FacturacionCargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 
     var xpiredDate = Model.InvoiceDate.AddDays(Model.InvoiceExpredDay.Value);
-
     var InvoiceDiscount2 = 0.0m;
 }
 <style>
@@ -104,26 +104,28 @@
                     var allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select(a => new
                     {
                         AllocationId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocationId,
-                        Quantity = a.FirstOrDefault().Quantity * a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers.Count(),
-                        Numbers = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers,
-                        FractionFrom = a.FirstOrDefault().TicketAllocationNumber.FractionFrom,
-                        FractionTo = a.FirstOrDefault().TicketAllocationNumber.FractionTo,
-                        //ClientDiscount = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Client.Discount,
-                        ClientDiscount = @Model.Discount, //a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Invoice.Discount,
-                                                          //InvoiceDiscount = ClientDiscount,
+                        //Quantity = a.FirstOrDefault().Quantity * a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers.Count(),
+                        //Numbers = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers,
+                        //FractionFrom = a.FirstOrDefault().TicketAllocationNumber.FractionFrom,
+                        //FractionTo = a.FirstOrDefault().TicketAllocationNumber.FractionTo,
+                        ClientDiscount = @Model.Discount, 
                         TypeId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Type
                     });
                 }
                 @foreach (var number in allocations)
                 {
+                    var Resultado = availableTicketsToInvoice.AvailableTicketsToInvoice(Model.Raffle.Id, number.AllocationId).ToList();
+
+                    var TotalFracciones = Resultado.Where(w => w.AllocationId == number.AllocationId).Sum(s => s.AvailableFractions);
+
                     subTotalNumber += 1;
-                    subTotalFraction += number.Quantity;
-                    var subTotal = number.Quantity * priceFraction;
-                    subtotalBilletes += number.Numbers.Count;
+                    subTotalFraction += TotalFracciones;
+                    var subTotal = TotalFracciones * priceFraction;
+                    subtotalBilletes += Resultado.Count;
                     <tr>
                         <td class="text-center">@number.AllocationId</td>
-                        <td class="text-center">@number.Numbers.Count </td>
-                        <td class="text-center">@number.Quantity</td>
+                        <td class="text-center">@Resultado.Count </td>
+                        <td class="text-center">@TotalFracciones</td>
                         <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
@@ -244,24 +246,28 @@
                     allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select(a => new
                     {
                         AllocationId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocationId,
-                        Quantity = a.FirstOrDefault().Quantity * a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers.Count(),
-                        Numbers = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers,
-                        FractionFrom = a.FirstOrDefault().TicketAllocationNumber.FractionFrom,
-                        FractionTo = a.FirstOrDefault().TicketAllocationNumber.FractionTo,
+                        //Quantity = a.FirstOrDefault().Quantity * a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers.Count(),
+                        //Numbers = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers,
+                        //FractionFrom = a.FirstOrDefault().TicketAllocationNumber.FractionFrom,
+                        //FractionTo = a.FirstOrDefault().TicketAllocationNumber.FractionTo,
                         ClientDiscount = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Client.Discount,
                         TypeId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Type
                     });
                 }
                 @foreach (var number in allocations)
                 {
+                    var Resultado = availableTicketsToInvoice.AvailableTicketsToInvoice(Model.Raffle.Id, number.AllocationId).ToList();
+
+                    var TotalFracciones = Resultado.Where(w => w.AllocationId == number.AllocationId).Sum(s => s.AvailableFractions);
+
                     subTotalNumber += 1;
-                    subTotalFraction += number.Quantity;
-                    var subTotal = number.Quantity * priceFraction;
-                    subtotalBilletes += number.Numbers.Count;
+                    subTotalFraction += TotalFracciones;
+                    var subTotal = TotalFracciones * priceFraction;
+                    subtotalBilletes += Resultado.Count;
                     <tr>
                         <td class="text-center">@number.AllocationId</td>
-                        <td class="text-center">@number.Numbers.Count </td>
-                        <td class="text-center">@number.Quantity</td>
+                        <td class="text-center">@Resultado.Count </td>
+                        <td class="text-center">@TotalFracciones</td>
                         <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>

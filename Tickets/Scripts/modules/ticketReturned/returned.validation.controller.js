@@ -42,9 +42,9 @@
         }
         $rootScope.dataTable();
 
-        $scope.creditNoteApply = function (returned) {
+        $scope.validateReturn = function (returned) {
             // confirm dialog
-            alertify.confirm("&iquest;Desea aplicar esta nota de credito?", function (e) {
+            alertify.confirm("&iquest;Desea validar esta devolucion?", function (e) {
                 if (e) {
                     window.loading.show();
                     $.ajax({

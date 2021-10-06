@@ -1063,7 +1063,7 @@ namespace Tickets.Controllers
         public JsonResult CreditNoteGroupApply(string group, int raffleId, int clientId)
         {
             var groups = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(group);
-            object note;
+            //object note;
             using (var context = new TicketsEntities())
             {
                 using (var tx = context.Database.BeginTransaction())
@@ -1071,15 +1071,14 @@ namespace Tickets.Controllers
                     context.Database.CommandTimeout = (10 * 60);
                     try
                     {
-                        decimal totalPrice = 0.0M;
+                        //decimal totalPrice = 0.0M;
                         var clientReturneds = context.Clients.FirstOrDefault(c => c.Id == clientId)
                             .TicketReturns.AsEnumerable().Where(r => r.RaffleId == raffleId && r.Statu == (int)TicketReturnedStatuEnum.Created);
 
-                        decimal discountValue = clientReturneds.FirstOrDefault().Discount;
+                        //decimal discountValue = clientReturneds.FirstOrDefault().Discount;
 
-
-                        var price = clientReturneds.Where(r => groups.Where(g => g == r.ReturnedGroup).Any())
-                            .FirstOrDefault().TicketAllocationNumber.InvoiceTickets.FirstOrDefault().PricePerFraction;
+                        /*var price = clientReturneds.Where(r => groups.Where(g => g == r.ReturnedGroup).Any())
+                            .FirstOrDefault().TicketAllocationNumber.InvoiceTickets.FirstOrDefault().PricePerFraction;*/
 
                         var returnesToChanged = clientReturneds
                             .Where(r =>
@@ -1088,12 +1087,12 @@ namespace Tickets.Controllers
 
                         foreach (var ret in returnesToChanged)
                         {
-                            totalPrice += (ret.FractionTo - ret.FractionFrom + 1) * price;
+                            //totalPrice += (ret.FractionTo - ret.FractionFrom + 1) * price;
                             ret.Statu = (int)TicketReturnedStatuEnum.Invoiced;
                         }
                         context.SaveChanges();
 
-                        decimal discountTotal = totalPrice * discountValue / 100;
+                        /*decimal discountTotal = totalPrice * discountValue / 100;
                         var creditNote = new NoteCredit()
                         {
                             ClientId = clientId,
@@ -1108,7 +1107,7 @@ namespace Tickets.Controllers
                         };
                         context.NoteCredits.Add(creditNote);
                         context.SaveChanges();
-                        note = CreditNoteToObject(context.NoteCredits.FirstOrDefault(n => n.Id == creditNote.Id));
+                        note = CreditNoteToObject(context.NoteCredits.FirstOrDefault(n => n.Id == creditNote.Id));*/
                         tx.Commit();
                     }
                     catch (Exception e)
@@ -1118,8 +1117,8 @@ namespace Tickets.Controllers
                     }
                 }
             }
-            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Nota de Credito", note);
-            return new JsonResult() { Data = new { result = true, message = "Nota de credito guardada correctamente!" } };
+            //Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Nota de Credito", note);
+            return new JsonResult() { Data = new { result = true, message = "Devoluciones guardadas correctamente!" } };
         }
         //
         //  GET: Cash/GetCreditNoteReturneds

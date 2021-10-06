@@ -70,7 +70,7 @@
                                     <td>{{returned.statusId == @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Created)? 'Sin validar' : 'Validada'}}</td>
                                     <td class="text-center">
                                         <a target="_blank" href="~/Reports/ReturnedDeatils?raffleId={{returned.raffleId}}&clientId={{returned.clientId}}&statu={{returned.statusId}}" title="Imprimir detalle de Devolución" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
-                                        <a ng-show="returned.statusId == @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Created)" ng-click="creditNoteApply(returned)" title="Aplicar Nota de Credito" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>
+                                        <a ng-show="returned.statusId == @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Created)" ng-click="validateReturn(returned)" title="Validar devolución" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -113,7 +113,7 @@
                                     <td>{{returned.statusId == @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Created)? 'Sin validar' : 'Validada'}}</td>
                                     <td class="text-center">
                                         <a target="_blank" href="~/Reports/ReturnedDeatils?raffleId={{returned.raffleId}}&clientId={{returned.clientId}}&statu={{returned.statusId}}" title="Imprimir detalle de Devolución" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
-                                        <a ng-show="returned.statusId == @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Created)" ng-click="creditNoteApply(returned)" title="Aplicar Nota de Credito" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>
+                                        <a ng-show="returned.statusId == @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Created)" ng-click="validateReturn(returned)" title="Validar devolución" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>
                                     </td>
                                 </tr>
                             </tbody>

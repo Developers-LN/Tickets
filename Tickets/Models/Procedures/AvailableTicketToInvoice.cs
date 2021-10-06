@@ -29,6 +29,8 @@ namespace Tickets.Models.Procedures
                         {
                             Data = true,
                             RaffleId = raffle,
+                            Statu = Convert.ToInt32(sqlDataReader["Statu"].ToString()),
+                            AllocationId = Convert.ToInt32(sqlDataReader["IdAllocation"].ToString()),
                             AllocationNumberId = Convert.ToInt32(sqlDataReader["IdAllocationNumber"].ToString()),
                             AvailableFractions = Convert.ToInt32(sqlDataReader["AvailableFractions"].ToString()),
                             Number = Convert.ToInt32(sqlDataReader["TicketNumber"].ToString())
@@ -42,6 +44,8 @@ namespace Tickets.Models.Procedures
                     {
                         Data = true,
                         RaffleId = raffle,
+                        AllocationId = 0,
+                        Statu = 0,
                         AllocationNumberId = 0,
                         AvailableFractions = 0,
                         Number = 0
