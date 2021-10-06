@@ -8,5 +8,4 @@
         Factured = 62,
         Delivered = 1068
     }
-
 }

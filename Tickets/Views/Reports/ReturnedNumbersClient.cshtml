@@ -1,4 +1,4 @@
-﻿@model Tickets.Models.Raffle
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelReturnedNumbersByClient>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     ViewBag.Title = "Devoluciones por Grupo";
@@ -7,6 +7,9 @@
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.ProduccionSorteo : "";
     string adminCargo = config != null ? config.ProduccionSorteoCargo : "";
+
+    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
+    var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
 }
 
 <style>
@@ -50,8 +53,8 @@
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
-            <b>DEVOLUCION DE BILLETES DEL SORTEO @Model.Id</b><br />
-            Desde @Model.StartReturnDate.ToShortDateString() hasta @Model.EndReturnDate.ToShortDateString()
+            <b>DEVOLUCION DE BILLETES DEL SORTEO @RaffleData.Id</b><br />
+            Desde @RaffleData.StartReturnDate.ToShortDateString() hasta @RaffleData.EndReturnDate.ToShortDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
             <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
@@ -59,88 +62,85 @@
         </div>
     </div>
 
-    @{
-        var clients = Model.TicketReturns.GroupBy(t => t.ClientId).Select(c => new
-        {
-            Client = c.FirstOrDefault().Client,
-            Returneds = c
-        }).ToList();
-        decimal totalValue = 0.0m, totalLeef = 0.0m;
-        int totalFraction = 0;
-        int totalNumber = 0;
-        int totalGroup = 0;
-    }
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="text-center">CLIENTE</th>
-                    <th class="text-center">NUMEROS</th>
-                    <th class="text-center">FRACCIONES</th>
-                    <th class="text-center">HOJAS</th>
-                    <th class="text-right">PRECIO FRACCIONES</th>
-                    <th class="text-right">DESCUENTO</th>
-                    <th class="text-right">TOTAL</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var client in clients)
-                {
-                    var DescuentoCliente = 0.0m;
-                    int subTotalNumber = 0, subTotalFraction = 0, subTotalGroup = 0;
-                    decimal subTotalValue = 0.0m, subTotalLeef = 0.0m;
-                    decimal fractionPrice = Model.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice;
-                    var returnedGroups = client.Returneds.GroupBy(r => r.ReturnedGroup).Select(r => new
-                    {
-                        Group = r.GroupBy(d => d.TicketAllocationNumber.Number).Count(),
-                        Quantity = r.Count(),
-                        FractionQuantity = r.Select(e => (e.FractionTo - e.FractionFrom + 1)).Aggregate((s, e) => s + e),
-                        ProspectFraction = r.FirstOrDefault().Raffle.Prospect.LeafFraction,
-                        Price = r.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice,
-                        Descuento = r.FirstOrDefault().Discount
-                    });
+        @if (Model.Any(a => a.datos) == true)
+        {
+            var TotalBilletes = 0;
+            var TotalFraccionesRestantes = 0;
+            var FraccionesTotales = 0;
+            var TotalHojas = 0.0m;
+            var TotalDescontado = 0.0m;
+            var TotalRestante = 0.0m;
+            var TotalFactura = 0.0m;
 
-                    foreach (var returned in returnedGroups)
-                    {
-                        subTotalFraction += returned.FractionQuantity;
-                        var subTotal = returned.FractionQuantity * returned.Price;
-                        decimal leef = ((decimal)returned.FractionQuantity) / ((decimal)returned.ProspectFraction);
-
-                        subTotalValue += subTotal;
-                        subTotalNumber += returned.Quantity;
-                        subTotalGroup += returned.Group;
-                        subTotalLeef += leef;
-                        DescuentoCliente = returned.Descuento;
-                    }
-                    subTotalValue = subTotalValue - ((subTotalValue * DescuentoCliente) / 100);
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>@client.Client.Name</td>
-                        <td class="text-center">@subTotalGroup</td>
-                        <td class="text-center">@subTotalFraction</td>
-                        <td class="text-center">@subTotalLeef </td>
-                        <td class="text-right">@fractionPrice.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td class="text-right">@((int)DescuentoCliente)%</td>
-                        <td class="text-right">@subTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <th class="text-center">CLIENTE</th>
+                        <th class="text-center">BILLETES</th>
+                        <th class="text-center">FRACCIONES <br /> RESTANTES</th>
+                        <th class="text-center">TOTAL DE <br /> FRACCIONES</th>
+                        <th class="text-center">HOJAS</th>
+                        <th class="text-right">PRECIO <br /> FRACCIONES</th>
+                        <th class="text-right">TOTAL</th>
+                        <th class="text-center">PORCENTAJE <br /> DESCUENTO</th>
+                        <th class="text-right">TOTAL EN <br /> DESCUENTOS</th>
+                        <th class="text-right">TOTAL <br /> RESTANTE</th>
                     </tr>
-                    totalNumber += subTotalNumber;
-                    totalFraction += subTotalFraction;
-                    totalValue += subTotalValue;
-                    totalGroup += subTotalGroup;
-                    totalLeef += subTotalLeef;
-                }
-            </tbody>
-            <tfoot>
-                <tr class="total">
-                    <td class="text-center"></td>
-                    <td class="text-center">@totalGroup</td>
-                    <td class="text-center">@totalFraction</td>
-                    <td class="text-center">@totalLeef</td>
-                    <td class="text-right"></td>
-                    <td class="text-right"></td>
-                    <td class="text-right">@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                </tr>
-            </tfoot>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var Hojas = item.Fracciones / RaffleData.Prospect.LeafNumber;
+                        <tr>
+                            <td>@item.ClientName</td>
+                            <td class="text-center">@item.Billetes</td>
+                            <td class="text-center">@item.FraccionesRestantes</td>
+                            <td class="text-center">@item.Fracciones</td>
+                            <td class="text-center">@Hojas </td>
+                            <td class="text-right">@item.PrecioFraccion.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right">@item.Factura.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-center">@(Math.Round(item.PorcientoDescuento,0))%</td>
+                            <td class="text-right">@item.Descuento.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right">@item.Total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        </tr>
+                        TotalBilletes += item.Billetes;
+                        TotalFraccionesRestantes += item.FraccionesRestantes;
+                        FraccionesTotales += item.Fracciones;
+                        TotalDescontado += item.Descuento;
+                        TotalHojas += Hojas;
+                        TotalRestante += item.Total;
+                        TotalFactura += item.Factura;
+                    }
+                </tbody>
+                <tfoot>
+                    <tr class="total">
+                        <td class="text-center"></td>
+                        <td class="text-center">@TotalBilletes</td>
+                        <td class="text-center">@TotalFraccionesRestantes</td>
+                        <td class="text-center">@FraccionesTotales</td>
+                        <td class="text-center">@TotalHojas</td>
+                        <td class="text-right"></td>
+                        <td class="text-right">@TotalFactura.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right"></td>
+                        <td class="text-right">@TotalDescontado.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@TotalRestante.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                </tfoot>
+            </table>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <h1>NO SE ENCONTRARON RESULTADOS</h1>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        }
     </div>
     <div class="col-lg-12 no-padder">
         <b>** Cantidad Real Global De Números Devueltos y Valor real de devolución (utilizando valor real de números abonados)</b>

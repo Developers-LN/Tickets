@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Tickets.Models.Enums;
+using Tickets.Models.Procedures;
 using WebMatrix.WebData;
 
 namespace Tickets.Models.Ticket
@@ -137,7 +138,7 @@ namespace Tickets.Models.Ticket
                 CreateUserDesc = context.Users.Where(r => r.Id == model.CreateUser).Select(c => c.Name).FirstOrDefault(),
                 //TicketAllocations = new List<TicketAllocationModel>(),
                 //TicketInvoiceNumbers = new List<TicketInvoiceNumberModel>(),
-                FractionCount = model.InvoiceTickets.Select(s=>s.TicketAllocationNumber.FractionTo - s.TicketAllocationNumber.FractionFrom - 1).Sum()
+                FractionCount = model.InvoiceTickets.Select(s => s.TicketAllocationNumber.FractionTo - s.TicketAllocationNumber.FractionFrom - 1).Sum()
             };
             if (hasAllocaation == true)
             {
@@ -392,17 +393,28 @@ namespace Tickets.Models.Ticket
                             List<InvoiceTicket> invoiceTicketList = new List<InvoiceTicket>();
                             foreach (var allocation in allocations)
                             {
+                                AvailableTicketToInvoice availableTicketToInvoice = new AvailableTicketToInvoice();
+                                var Resultado = availableTicketToInvoice.AvailableTicketsToInvoice(model.RaffleId, allocation.Id);
+
                                 foreach (var number in allocation.TicketAllocationNumbers)
                                 {
-                                    invoiceTicketList.Add(new InvoiceTicket()
+                                    if (Resultado.Any(a => a.AllocationNumberId == number.Id))
                                     {
-                                        InvoiceId = invoice.Id,
-                                        PricePerFraction = model.TicketPrice,
-                                        Quantity = (number.FractionTo - number.FractionFrom) + 1,
-                                        TicketNumberAllocationId = number.Id,
-                                    });
-                                    number.Invoiced = true;
-                                    number.Statu = (int)TicketStatusEnum.Factured;
+                                        invoiceTicketList.Add(new InvoiceTicket()
+                                        {
+                                            InvoiceId = invoice.Id,
+                                            PricePerFraction = model.TicketPrice,
+                                            Quantity = Resultado.Where(w => w.AllocationNumberId == number.Id).FirstOrDefault().AvailableFractions,
+                                            TicketNumberAllocationId = number.Id,
+                                        });
+                                        number.Invoiced = true;
+                                        number.Statu = (int)TicketStatusEnum.Factured;
+                                    }
+                                    else
+                                    {
+                                        number.Invoiced = false;
+                                        number.Statu = (int)TicketStatusEnum.Returned;
+                                    }
                                 }
                                 allocation.Statu = (int)AllocationStatuEnum.Invoiced;
                             }

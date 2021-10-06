@@ -5,45 +5,48 @@ using Tickets.Models.ModelsProcedures;
 
 namespace Tickets.Models.Procedures
 {
-    public class ReturnedTicketsProcedure
+    public class AvailableTicketToInvoice
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ModelReturnedTickets> ConsultaBilletesDevueltos(int raffle)
+        public IEnumerable<ModelAvailableTicketsToInvoice> AvailableTicketsToInvoice(int raffle, int Allocation)
         {
-            var lista = new List<ModelReturnedTickets>();
+            var lista = new List<ModelAvailableTicketsToInvoice>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
-                SqlCommand sqlCommand = new SqlCommand("ReturnedTickets", sqlConnection);
+                SqlCommand sqlCommand = new SqlCommand("AvailableTicketToInvoice", sqlConnection);
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@Raffle", raffle);
+                sqlCommand.Parameters.AddWithValue("@Allocation", Allocation);
                 sqlConnection.Open();
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                 if (sqlDataReader.HasRows)
                 {
                     while (sqlDataReader.Read())
                     {
-                        var Devoluciones = new ModelReturnedTickets()
+                        var Disponibles = new ModelAvailableTicketsToInvoice()
                         {
                             Data = true,
                             RaffleId = raffle,
-                            TicketNumber = Convert.ToInt32(sqlDataReader["TicketNumber"].ToString()),
-                            ReturnFractions = Convert.ToInt32(sqlDataReader["ReturnFractions"].ToString())
+                            AllocationNumberId = Convert.ToInt32(sqlDataReader["IdAllocationNumber"].ToString()),
+                            AvailableFractions = Convert.ToInt32(sqlDataReader["AvailableFractions"].ToString()),
+                            Number = Convert.ToInt32(sqlDataReader["TicketNumber"].ToString())
                         };
-                        lista.Add(Devoluciones);
+                        lista.Add(Disponibles);
                     }
                 }
                 else
                 {
-                    var Devoluciones = new ModelReturnedTickets()
+                    var Disponibles = new ModelAvailableTicketsToInvoice()
                     {
-                        Data = false,
+                        Data = true,
                         RaffleId = raffle,
-                        TicketNumber = 0,
-                        ReturnFractions = 0
+                        AllocationNumberId = 0,
+                        AvailableFractions = 0,
+                        Number = 0
                     };
-                    lista.Add(Devoluciones);
+                    lista.Add(Disponibles);
                 }
                 sqlConnection.Close();
             }

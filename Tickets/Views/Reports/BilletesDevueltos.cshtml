@@ -15,6 +15,7 @@
     int TicketsCount = 0;
     int FractionCount = 0;
     int Fracciones = 0;
+    var TicketFractions = 0;
 
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
@@ -60,7 +61,7 @@
             <tbody>
                 @if (Model.Any(a => a.Data) == true)
                 {
-                    var TicketFractions = RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction;
+                    TicketFractions = RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction;
                     if (TicketFractions == 1)
                     {
                         HashSet<int> Billetes = new HashSet<int>();
@@ -198,11 +199,18 @@
         }
         else
         {
-            var Billetes = FractionCount / Fracciones;
-            var FraccionesRestantes = FractionCount % Fracciones;
-            <b>Total de billetes devueltos: @Billetes</b>
-            <br />
-            <b>Total de fracciones devueltas: @FraccionesRestantes</b>
+            if (TicketFractions == 0)
+            {
+                var Billetes = FractionCount / Fracciones;
+                var FraccionesRestantes = FractionCount % Fracciones;
+                <b>Total de billetes devueltos: @Billetes</b>
+                <br />
+                <b>Total de fracciones devueltas: @FraccionesRestantes</b>
+            }
+            else
+            {
+                <b>Total de billetes devueltos: @TicketsCount</b>
+            }
         }
     </div>
 

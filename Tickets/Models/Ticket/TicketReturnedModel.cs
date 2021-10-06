@@ -259,7 +259,7 @@ namespace Tickets.Models.Ticket
                                         {
                                             if (fraction >= allocationNumber.FractionFrom && fraction <= allocationNumber.FractionTo)
                                             {
-                                                messageList.Add("La fracción " + fraction + " del billete " + allocationNumber.Number + " fue impresa pero no facturada.");
+                                                messageList.Add("La fracción " + fraction + " del billete " + allocationNumber.Number + " fue impresa pero no fue entregado al cliente.");
                                             }
                                         }
                                     }

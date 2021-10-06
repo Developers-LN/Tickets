@@ -5,8 +5,8 @@
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.ControlPremio : "";
-    string adminCargo = config != null ? config.ControlPremioCargo : "";
+    string adminName = config != null ? config.CreditosCobros : "";
+    string adminCargo = config != null ? config.CreditosCobrosCargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 }
 
@@ -116,7 +116,6 @@
                         </tr>
                         foreach (var client in raffle.invoiceByClients)
                         {
-
                             decimal totalInvoicec = 0.0m;
                             decimal totalDiscountc = 0.0m;
                             decimal totalGeneralc = 0.0m;
@@ -129,7 +128,6 @@
                             </tr>
                             foreach (var invoice in client.invoices)
                             {
-
                                 var xpiredDate = invoice.InvoiceDate.AddDays(invoice.InvoiceExpredDay.Value);
                                 var isXpired = (xpiredDate.Date < DateTime.Now.Date && invoice.PaymentStatu == 2082);
 

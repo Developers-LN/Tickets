@@ -17,8 +17,8 @@ namespace Tickets.Models.Procedures
 
             if(FechaInicio == "undefined" && FechaInicio == "undefined")
             {
-                FI = DateTime.Now.AddYears(-1000);
-                FF = DateTime.Now.AddYears(1000);
+                FI = DateTime.Now;
+                FF = DateTime.Now;
             }
             else
             {

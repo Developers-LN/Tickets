@@ -200,6 +200,7 @@ namespace Tickets.Models.Ticket
                     {
                         item.UserConsigned = CurrentUser;
                         item.Consignated = true;
+                        item.Statu = (int)TicketStatusEnum.Delivered;
                     }
 
                     allocation.Statu = (int)AllocationStatuEnum.Consigned;

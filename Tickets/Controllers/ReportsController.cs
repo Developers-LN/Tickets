@@ -617,9 +617,9 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult ReturnedNumbersClient(int raffleId)
         {
-            var context = new TicketsEntities();
-            var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
-            return View(raffle);
+            ReturnedNumbersByClient returnedNumbersByClient = new ReturnedNumbersByClient();
+            var Resultado = returnedNumbersByClient.ConsultarBilletesDevueltosPorCliente(raffleId);
+            return View(Resultado);
         }
 
         //

@@ -41,6 +41,8 @@
                     <th class="text-right"><h5><b>HOJAS</b></h5></th>
                     <th class="text-right"><h5><b>NUMEROS</b></h5></th>
                     <th class="text-right"><h5><b>MONTO</b></h5></th>
+                    <th class="text-right"><h5><b>DESCUENTO</b></h5></th>
+                    <th class="text-right"><h5><b>MONTO A <br /> PAGAR</b></h5></th>
                 </tr>
             </thead>
             <tbody>
@@ -54,6 +56,7 @@
                             createDate = s.CreateDate,
                             client = s.Client.Name,
                             clientId = s.ClientId,
+                            discount = s.TicketAllocationNumbers.FirstOrDefault().InvoiceTickets.Select(d => d.Invoice.Discount).FirstOrDefault(),
                             fractions = s.TicketAllocationNumbers.FirstOrDefault().FractionTo - s.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1,
                             numbers = s.TicketAllocationNumbers.Count,
                             amount = s.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == s.Client.PriceId).FactionPrice,
@@ -62,6 +65,7 @@
                     }).ToList();
 
                     var totalValue = 0.0m;
+                    var totalValueToPay = 0.0m;
                     int totalFraction = 0;
                     int totalNumber = 0;
                     int totalSheets = 0;
@@ -72,15 +76,18 @@
                     int totalFractionc = 0;
                     int totalNumberc = 0;
                     int totalSheetsc = 0;
+                    var discountTotalc = 0.0m;
 
                     <tr class="text-left">
-                        <th class="text-left" colspan="6" style="background-color:aliceblue; padding-left: 70px">@client.client</th>
+                        <th class="text-left" colspan="8" style="background-color:aliceblue; padding-left: 70px">@client.client</th>
                     </tr>
                     foreach (var allocation in client.allocations)
                     {
                         int Fractions = allocation.fractions * allocation.numbers;
                         var Value = allocation.amount * Fractions;
                         int Sheets = allocation.numbers * allocation.sheets;
+                        var discount = Math.Round(allocation.discount, 0);
+                        var discountTotal = Value - ((Value * allocation.discount) / 100);
 
                         <tr>
                             <td class="text-left">@allocation.id</td>
@@ -89,12 +96,15 @@
                             <td class="text-right">@Sheets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-right">@allocation.numbers.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-right">@Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-right">@discount%</td>
+                            <td class="text-right">@discountTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
 
                         totalNumberc += allocation.numbers;
                         totalFractionc += Fractions;
                         totalValuec += Value;
                         totalSheetsc += Sheets;
+                        discountTotalc += discountTotal;
                     }
                     if (clients.Count > 1)
                     {
@@ -105,12 +115,15 @@
                             <td class="text-right"><b>@totalSheetsc.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
                             <td class="text-right"><b>@totalNumberc.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
                             <td class="text-right"><b>@totalValuec.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                            <td></td>
+                            <td class="text-right"><b>@discountTotalc.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
                         </tr>
                     }
                     totalNumber += totalNumberc;
                     totalFraction += totalFractionc;
                     totalValue += totalValuec;
                     totalSheets += totalSheetsc;
+                    totalValueToPay += discountTotalc;
                 }
                 <tr class="total">
                     <td class="text-left"><h4></h4></td>
@@ -119,6 +132,8 @@
                     <td class="text-right"><h4><b>@totalSheets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></h4></td>
                     <td class="text-right"><h4><b>@totalNumber.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></h4></td>
                     <td class="text-right"><h4><b>@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></h4></td>
+                    <td></td>
+                    <td class="text-right"><h5><b>@totalValueToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></h5></td>
                 </tr>
             </tbody>
         </table>
