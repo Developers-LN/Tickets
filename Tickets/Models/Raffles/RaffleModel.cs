@@ -276,7 +276,8 @@ namespace Tickets.Models.Raffles
                             raffle = new Raffle
                             {
                                 CreateDate = DateTime.Now,
-                                CreateUser = WebSecurity.CurrentUserId
+                                CreateUser = WebSecurity.CurrentUserId,
+                                Consignacion = true
                             };
                         }
                         else

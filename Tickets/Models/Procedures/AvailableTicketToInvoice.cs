@@ -33,6 +33,7 @@ namespace Tickets.Models.Procedures
                             AllocationId = Convert.ToInt32(sqlDataReader["IdAllocation"].ToString()),
                             AllocationNumberId = Convert.ToInt32(sqlDataReader["IdAllocationNumber"].ToString()),
                             AvailableFractions = Convert.ToInt32(sqlDataReader["AvailableFractions"].ToString()),
+                            TicketFraction = Convert.ToInt32(sqlDataReader["TicketFractions"].ToString()),
                             Number = Convert.ToInt32(sqlDataReader["TicketNumber"].ToString())
                         };
                         lista.Add(Disponibles);
@@ -47,6 +48,7 @@ namespace Tickets.Models.Procedures
                         AllocationId = 0,
                         Statu = 0,
                         AllocationNumberId = 0,
+                        TicketFraction = 0,
                         AvailableFractions = 0,
                         Number = 0
                     };

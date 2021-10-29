@@ -425,6 +425,7 @@
           <Property Name="EndAllocationDate" Type="datetime" />
           <Property Name="Symbol" Type="varchar" MaxLength="50" />
           <Property Name="Separator" Type="char" MaxLength="1" />
+          <Property Name="Consignacion" Type="bit" />
         </EntityType>
         <EntityType Name="RaffleAward">
           <Key>
@@ -3416,6 +3417,7 @@
           <NavigationProperty Name="RaffleAwards" Relationship="TicketsModel.FK_RaffleAward_Raffle" FromRole="Raffle" ToRole="RaffleAward" />
           <Property Name="Symbol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Separator" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Consignacion" Type="Boolean" />
         </EntityType>
         <EntityType Name="ReceiptPayment">
           <Key>
@@ -5460,6 +5462,7 @@
           <EntitySetMapping Name="Raffles">
             <EntityTypeMapping TypeName="TicketsModel.Raffle">
               <MappingFragment StoreEntitySet="Raffle">
+                <ScalarProperty Name="Consignacion" ColumnName="Consignacion" />
                 <ScalarProperty Name="Separator" ColumnName="Separator" />
                 <ScalarProperty Name="Symbol" ColumnName="Symbol" />
                 <ScalarProperty Name="EndAllocationDate" ColumnName="EndAllocationDate" />

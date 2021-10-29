@@ -19,6 +19,8 @@ namespace Tickets.Controllers
 {
     public class IntegrationController : Controller
     {
+        //private static Random random = new Random();
+
         //GET: /Integration/ElectronicTicketXml
         [Authorize]
         [HttpGet]
@@ -81,7 +83,7 @@ namespace Tickets.Controllers
                     workBook.SaveAs(stream);
                     var content = stream.ToArray();
 
-                    string Nombre = ("Billetes pagables del sorteo " + raffleId  + ".xlsx").ToString();
+                    string Nombre = ("Billetes pagables del sorteo " + raffleId + ".xlsx").ToString();
 
                     return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Nombre);
                 }
@@ -210,48 +212,27 @@ namespace Tickets.Controllers
 
                         var allocationXML = new Models.XML.TicketAllocateXML();
 
-                        if (raffle.Prospect.ImpresionType == (int)PrintTypeProspect.Ordinario)
+                        allocationXML = new Models.XML.TicketAllocateXML()
                         {
-                            allocationXML = new Models.XML.TicketAllocateXML()
-                            {
-                                RaffleDate = allocation.Raffle.DateSolteo.ToShortDateString(),
-                                RaffleId = allocation.RaffleId,
-                                /*User = WebSecurity.CurrentUserName,*/
-                                CreateDate = DateTime.Now.ToString(),
-                                Allocation = id,
-                                ControlNumber = ClientControlNumber,
-                                TicketAllocationNumbers = new List<Models.XML.TicketAllocationNumber>()
-                            };
+                            RaffleId = allocation.RaffleId,
+                            RaffleName = allocation.Raffle.Name,
+                            RaffleDate = allocation.Raffle.DateSolteo.ToShortDateString(),
+                            StopSales = allocation.Raffle.EndReturnDate.ToShortDateString(),
+                            CreateDate = DateTime.Now.ToString(),
+                            Allocation = id,
+                            TicketAllocationNumbers = new List<Models.XML.TicketAllocationNumber>()
+                        };
 
-                            raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id).ToList().ForEach(t =>
-                                allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
-                                {
-                                    TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
-                                    FractionFrom = t.FractionFrom,
-                                    FractionTo = t.FractionTo
-                                })
-                            ));
-                        }
-                        else
-                        {
-                            allocationXML = new Models.XML.TicketAllocateXML()
+                        raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id).ToList().ForEach(t =>
+                            allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
                             {
-                                RaffleDate = allocation.Raffle.DateSolteo.ToShortDateString(),
-                                RaffleId = allocation.RaffleId,
-                                /*User = WebSecurity.CurrentUserName,*/
-                                CreateDate = DateTime.Now.ToString(),
-                                Allocation = id,
-                                ControlNumber = ClientControlNumber,
-                                ticketAllocationNumberExtraordinarios = new List<Models.XML.TicketAllocationNumberExtraordinario>()
-                            };
-
-                            raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id).ToList().ForEach(t =>
-                                allocationXML.ticketAllocationNumberExtraordinarios.Add(new Models.XML.TicketAllocationNumberExtraordinario()
-                                {
-                                    TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number) + raffle.Separator + raffle.Symbol
-                                })
-                            ));
-                        }
+                                IdNumber = t.Id,
+                                TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
+                                ControlNumber = t.ControlNumber, 
+                                FractionFrom = t.FractionFrom,
+                                FractionTo = t.FractionTo
+                            })
+                        ));
 
                         XmlDocument xmlDoc = new XmlDocument();
                         //Represents an XML document,

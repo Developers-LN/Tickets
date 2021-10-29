@@ -11,6 +11,8 @@ namespace Tickets.Models.Ticket
 {
     public class TicketAllocationModel
     {
+        private static Random random = new Random();
+
         [JsonProperty(PropertyName = "id")]
         [ConcurrencyCheck]
         public int Id { get; set; }
@@ -62,6 +64,12 @@ namespace Tickets.Models.Ticket
 
         [JsonProperty(PropertyName = "fractionCount")]
         public int FractionCount { get; set; }
+
+        [JsonProperty(PropertyName = "fractionRest")]
+        public int FractionRest { get; set; }
+
+        [JsonProperty(PropertyName = "returnFractions")]
+        public int ReturnFractions { get; set; }
 
         [JsonProperty(PropertyName = "Agente")]
         public string Agente { get; set; }
@@ -233,86 +241,54 @@ namespace Tickets.Models.Ticket
             AvailableTicketToInvoice availableTicketToInvoice = new AvailableTicketToInvoice();
             var Resultado = availableTicketToInvoice.AvailableTicketsToInvoice(model.RaffleId, model.Id);
 
-            if (Resultado.Any(a => a.Statu == (int)TicketReturnedStatuEnum.Invoiced))
-            {
-                var allocation = new TicketAllocationModel()
-                {
-                    Id = model.Id,
-                    ClientId = model.ClientId,
-                    RaffleId = model.RaffleId,
-                    StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
-                    StatuId = model.Statu,
-                    TypeId = model.Type,
-                    Agente = model.Agente,
-                    CreateDate = model.CreateDate,
-                    CreateDateLong = model.CreateDate.ToUnixTime(),
-                    NumberCount = Resultado.Count(),
-                    FractionCount = Resultado.Select(s => s.AvailableFractions).Sum()
-                };
-                if (hasNumber)
-                {
-                    var numberModel = new TicketAllocationNumberModel();
-                    allocation.TicketAllocationNumbers = model.TicketAllocationNumbers.Select(n => numberModel.ToObject(n)).ToList();
-                }
-                if (hasProspectProperty)
-                {
-                    Prospect prospect = context.Prospects.FirstOrDefault(p => p.Id == model.Raffle.ProspectId);
+            var TotalFracciones = Resultado.Select(s => s.AvailableFractions).Sum();
 
-                    var price = prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == model.Client.PriceId);
-                    if (price == null)
-                    {
-                        allocation.FractionPrice = 16;
-                    }
-                    else
-                    {
-                        allocation.FractionPrice = price.FactionPrice;
-                    }
-                    allocation.Production = prospect.Production;
-                }
-                return allocation;
-            }
-            else if (Resultado.All(a => a.Statu == 0))
+            var allocation = new TicketAllocationModel()
             {
-                var allocation = new TicketAllocationModel()
-                {
-                    Id = model.Id,
-                    ClientId = model.ClientId,
-                    RaffleId = model.RaffleId,
-                    StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
-                    StatuId = model.Statu,
-                    TypeId = model.Type,
-                    Agente = model.Agente,
-                    CreateDate = model.CreateDate,
-                    CreateDateLong = model.CreateDate.ToUnixTime(),
-                    NumberCount = model.TicketAllocationNumbers.Count,
-                    FractionCount = model.TicketAllocationNumbers.Select(a => a.FractionTo - a.FractionFrom + 1).Sum()
-                };
-                if (hasNumber)
-                {
-                    var numberModel = new TicketAllocationNumberModel();
-                    allocation.TicketAllocationNumbers = model.TicketAllocationNumbers.Select(n => numberModel.ToObject(n)).ToList();
-                }
-                if (hasProspectProperty)
-                {
-                    Prospect prospect = context.Prospects.FirstOrDefault(p => p.Id == model.Raffle.ProspectId);
+                Id = model.Id,
+                ClientId = model.ClientId,
+                RaffleId = model.RaffleId,
+                StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
+                StatuId = model.Statu,
+                TypeId = model.Type,
+                Agente = model.Agente,
+                CreateDate = model.CreateDate,
+                CreateDateLong = model.CreateDate.ToUnixTime(),
+                NumberCount = (TotalFracciones / Resultado.FirstOrDefault().TicketFraction),
+                FractionCount = TotalFracciones,
+                FractionRest = (TotalFracciones % Resultado.FirstOrDefault().TicketFraction)
+            };
+            if (hasNumber)
+            {
+                var numberModel = new TicketAllocationNumberModel();
+                allocation.TicketAllocationNumbers = model.TicketAllocationNumbers.Select(n => numberModel.ToObject(n)).ToList();
 
-                    var price = prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == model.Client.PriceId);
-                    if (price == null)
-                    {
-                        allocation.FractionPrice = 16;
-                    }
-                    else
-                    {
-                        allocation.FractionPrice = price.FactionPrice;
-                    }
-                    allocation.Production = prospect.Production;
+                if (context.TicketReturns.Any(a => a.ClientId == model.ClientId && RaffleId == model.RaffleId))
+                {
+                    allocation.ReturnFractions = context.TicketReturns.Where(w => w.ClientId == model.ClientId && w.RaffleId == model.RaffleId)
+                    .Select(s => s.FractionTo - s.FractionFrom + 1).Sum();
                 }
-                return allocation;
+                else
+                {
+                    allocation.ReturnFractions = 0;
+                }
             }
-            else
+            if (hasProspectProperty)
             {
-                return null;
+                Prospect prospect = context.Prospects.FirstOrDefault(p => p.Id == model.Raffle.ProspectId);
+
+                var price = prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == model.Client.PriceId);
+                if (price == null)
+                {
+                    allocation.FractionPrice = 16;
+                }
+                else
+                {
+                    allocation.FractionPrice = price.FactionPrice;
+                }
+                allocation.Production = prospect.Production;
             }
+            return allocation;
         }
 
         internal TicketAllocationModel ToObject(TicketAllocation model, bool hasNumber = true, bool hasProspectProperty = true)
@@ -320,6 +296,7 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
             var raffle = context.Raffles.FirstOrDefault(c => c.Id == model.RaffleId);
             var client = context.Clients.FirstOrDefault(c => c.Id == model.ClientId);
+
             var allocation = new TicketAllocationModel()
             {
                 Id = model.Id,
@@ -375,12 +352,12 @@ namespace Tickets.Models.Ticket
                     && (a.ClientId == clientId || clientId == 0)).AsEnumerable()
                 .Select(a => this.InvoiceDetails(a)).ToList();
 
-            var allocation2 = allocation.Where(x => x != null).ToList();
+            //var allocation2 = allocation.Where(x => x != null).ToList();
 
             return new RequestResponseModel()
             {
                 Result = true,
-                Object = allocation2
+                Object = allocation
             };
         }
 
@@ -605,6 +582,9 @@ namespace Tickets.Models.Ticket
 
                             List<TicketAllocationNumber> ticketAllocations = new List<TicketAllocationNumber>();
 
+                            const int length = 8;
+                            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
                             foreach (var number in model.TicketAllocationNumbers)
                             {
                                 var ticket = new TicketAllocationNumber()
@@ -612,7 +592,7 @@ namespace Tickets.Models.Ticket
                                     Number = number.Number,
                                     Invoiced = false,
                                     Printed = false,
-                                    ControlNumber = "N/A",
+                                    ControlNumber = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray()),
                                     FractionFrom = number.FractionFrom,
                                     FractionTo = number.FractionTo,
                                     TicketAllocationId = ticketAllocation.Id,

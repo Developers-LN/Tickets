@@ -112,7 +112,7 @@
     </div>
     <!-- produccion de billetes -->
     <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-12 col-md-12 col-sm-12">
             <table class="table">
                 <thead>
                     <tr>
@@ -147,24 +147,24 @@
                     </tr>
                     <tr>
                         <th class="text-left" style="border-bottom: solid #8C8C8C 2px;"></th>
-                        <th class="text-left" style="border-bottom: solid #8C8C8C 2px;">Fracciones</th>
-                        <th class="text-left" style="border-bottom: solid #8C8C8C 2px;">Monto</th>
+                        <th class="text-right" style="border-bottom: solid #8C8C8C 2px;">Fracciones</th>
+                        <th class="text-right" style="border-bottom: solid #8C8C8C 2px;">Monto</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th class="text-left col-md-4">Asignación de billetes</th>
-                        <td class="text-right col-md-1"><span class="span50">@Model.AsignFracciones.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00", "")</span></td>
+                        <td class="text-right col-md-1"><span>@Model.AsignFracciones.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00", "")</span></td>
                         <td class="text-right col-md-1"> @Model.AsignFraMonto.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     <tr>
                         <th class="text-left col-md-4">Facturas</th>
-                        <td class="text-right col-md-1"><span class="span50">@Model.AsignFraFacturas.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00", "")</span></td>
+                        <td class="text-right col-md-1"><span>@Model.AsignFraFacturas.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00", "")</span></td>
                         <td class="text-right col-md-1">@Model.MontoFraFacturas.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     <tr>
                         <th class="text-left col-md-4">No facturadas</th>
-                        <td class="text-right col-md-1"><span class="span50">@Model.AsignFraNoFacturadas.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00", "")</span></td>
+                        <td class="text-right col-md-1"><span>@Model.AsignFraNoFacturadas.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00", "")</span></td>
                         <td class="text-right col-md-1">@Model.MontoFraNoFacturadas.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                 </tbody>
@@ -194,13 +194,13 @@
                     </tr>
                     <tr>
                         <th class="text-left" style="border-bottom: solid #8C8C8C 2px;"></th>
-                        <th class="text-left" style="border-bottom: solid #8C8C8C 2px;">Fracciones</th>
-                        <th class="text-left" style="border-bottom: solid #8C8C8C 2px;">Monto</th>
+                        <th class="text-right" style="border-bottom: solid #8C8C8C 2px;">Fracciones</th>
+                        <th class="text-right" style="border-bottom: solid #8C8C8C 2px;">Monto</th>
                     </tr>
                 </thead>
                 <tr>
                     <th class="text-left">Devuelto en hojas clientes</th>
-                    <td class="text-right"><span class="span50">@Model.FraDevueltasPorClientes.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00", "")</span></td>
+                    <td class="text-right"><span>@Model.FraDevueltasPorClientes.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00", "")</span></td>
                     <td class="text-right">@Model.MontoDevueltoPorClientes.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
             </table>
@@ -229,15 +229,15 @@
                     </tr>
                     <tr>
                         <th class="text-left" style="border-bottom: solid #8C8C8C 2px;"></th>
-                        <th class="text-left" style="border-bottom: solid #8C8C8C 2px;">Fracciones</th>
-                        <th class="text-left" style="border-bottom: solid #8C8C8C 2px;">Monto</th>
+                        <th class="text-right" style="border-bottom: solid #8C8C8C 2px;">Fracciones</th>
+                        <th class="text-right" style="border-bottom: solid #8C8C8C 2px;">Monto</th>
                     </tr>
                 </thead>
                 <tr>
                     <th class="text-left">Venta fracciones cliente</th>
                     @{ var ventaFraCliente = Model.MontoVentaFraCliente - Model.MontoDevueltoPorClientes;}
 
-                    <td class="text-right"><span class="span50">@Model.VentaFraccionesCliente.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00", "")</span></td>
+                    <td class="text-right"><span>@Model.VentaFraccionesCliente.ToString("n", new System.Globalization.CultureInfo("es-DO")).Replace(".00", "")</span></td>
                     <td class="text-right">@ventaFraCliente.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
             </table>
@@ -265,7 +265,7 @@
                     </tr>
                     <tr>
                         <th style="border-bottom: solid #8C8C8C 2px;"></th>
-                        <th style="border-bottom: solid #8C8C8C 2px;">Monto</th>
+                        <th class="text-right" style="border-bottom: solid #8C8C8C 2px;">Monto</th>
                     </tr>
                 </thead>
                 <tr>
@@ -299,17 +299,21 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th colspan="2">_</th>
+                        <th colspan="2">Venta neta, Ganadores, No Pagados</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><th colspan="2">BALANCE 01 (Venta Neta - Ganadores)</th></tr>
+                    <tr>
+                        <th colspan="2">BALANCE 01 (Venta Neta - Ganadores)</th>
+                    </tr>
                     <tr>
                         @{ var resultado1 = ventaFraCliente - Model.GanadoresPublicos;}
                         <th>Balance 01</th>
                         <td>@resultado1.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
-                    <tr><th colspan="2">BALANCE 02 (Venta Neta - Ganadores + No Pagado )</th></tr>
+                    <tr>
+                        <th colspan="2">BALANCE 02 (Venta Neta - Ganadores + No Pagado )</th>
+                    </tr>
                     <tr>
                         @{ var resultado2 = ventaFraCliente - Model.GanadoresPublicos + Model.PendientePago;}
                         <th>Balance 02</th>
@@ -328,19 +332,19 @@
                         <th colspan="4">COSTOS</th>
                     </tr>
                     <tr>
-                        <th style="border-bottom: solid #8C8C8C 2px;">Detalles</th>
-                        <th style="border-bottom: solid #8C8C8C 2px;">Cantidad</th>
-                        <th style="border-bottom: solid #8C8C8C 2px;">Monto</th>
-                        <th style="border-bottom: solid #8C8C8C 2px;">Sumas</th>
+                        <th class="text-left" style="border-bottom: solid #8C8C8C 2px;">Detalles</th>
+                        <th class="text-center" style="border-bottom: solid #8C8C8C 2px;">Cantidad</th>
+                        <th class="text-right" style="border-bottom: solid #8C8C8C 2px;">Monto</th>
+                        <th class="text-right" style="border-bottom: solid #8C8C8C 2px;">Sumas</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in ViewBag.Costos)
                     {
                         <tr>
-                            <td>@item.Detalle</td>
-                            <td class="text-right"><span class="span30">@item.Cantidad</span></td>
-                            <td class="text-right"><span class="span30">@item.Monto.ToString("n", new System.Globalization.CultureInfo("es-DO"))</span></td>
+                            <td class="text-left">@item.Detalle</td>
+                            <td class="text-center"><span>@item.Cantidad</span></td>
+                            <td class="text-right"><span>@item.Monto.ToString("n", new System.Globalization.CultureInfo("es-DO"))</span></td>
                             <td class="text-right">@((item.Monto * item.Cantidad).ToString("n", new System.Globalization.CultureInfo("es-DO")))</td>
                         </tr>
                     }
@@ -349,7 +353,7 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <th>Total</th>
+                        <th class="text-right">Total</th>
                         <td class="text-right"><b>@ViewBag.CostoTotal.ToString("n", new System.Globalization.CultureInfo("es-DO"))</b></td>
                     </tr>
                 </tfoot>
@@ -386,17 +390,14 @@
                 <tr>
                     <th class="text-left">Efectivo</th>
                     <td class="text-right">@Model.Efectivo.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
-
                 </tr>
                 <tr>
                     <th class="text-left">Pagado con premios</th>
                     <td class="text-right">@Model.PagadoConPremios.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
-
                 </tr>
                 <tr>
                     <th class="text-left">Otros</th>
                     <td class="text-right">@Model.otros.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
-
                 </tr>
                 <tr>
                     @{
@@ -404,7 +405,6 @@
                     }
                     <th class="text-left">Total Pagado</th>
                     <td class="text-right">@totalpagado.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
-
                 </tr>
             </table>
         </div>

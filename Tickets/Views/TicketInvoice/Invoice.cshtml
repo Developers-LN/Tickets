@@ -141,8 +141,10 @@
                         <thead>
                             <tr>
                                 <th class="text-center">Asignación</th>
-                                <th class="text-center">Cantidad de Billetes</th>
-                                <th class="text-center">Cantidad de Fracciones</th>
+                                <th class="text-center">Fracciones<br />Devueltas</th>
+                                <th class="text-center">Billetes a<br />facturar</th>
+                                <th class="text-center">Fracciones<br>a facturar</th>
+                                <th class="text-center">Total de <br /> Fracciones</th>
                                 <th class="text-right">Precio</th>
                                 <th class="text-right">Total</th>
                             </tr>
@@ -150,7 +152,9 @@
                         <tbody>
                             <tr data-ng-repeat="ticketNumber in invoice.ticketAllocations">
                                 <td class="text-center">#{{ticketNumber.id}}</td>
+                                <td class="text-center">{{ticketNumber.returnFractions}}</td>
                                 <td class="text-center">{{ticketNumber.numberCount}}</td>
+                                <td class="text-center">{{ticketNumber.fractionRest}}</td>
                                 <td class="text-center">{{ticketNumber.fractionCount}}</td>
                                 <td class="text-right">{{parseMoney(ticketNumber.price)}}</td>
                                 <td class="text-right" ng-bind="showSupTotalPrice(ticketNumber)"></td>
@@ -159,23 +163,29 @@
                         <tfoot>
                             <tr>
                                 <td class="text-center"><b>{{invoice.ticketAllocations.length}}</b></td>
+                                <td class="text-center"></td>
                                 <td class="text-center"><b ng-bind="showTotalPrice().ticket"></b></td>
+                                <td class="text-center"></td>
                                 <td class="text-center"><b>{{showTotalPrice().fraction}}</b></td>
-                                <td class="text-right">Sub Total:..</td>
+                                <td class="text-right">Sub Total:</td>
                                 <td class="text-right"><b ng-bind="showTotalPrice().subTotal"></b></td>
                             </tr>
                             <tr>
                                 <td class="text-center"></td>
                                 <td class="text-center"></td>
                                 <td class="text-center"></td>
-                                <td class="text-right">{{clientDiscount}}% Descuento de Cliente:..</td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-right">Descuento: {{clientDiscount}}%</td>
                                 <td class="text-right"><b ng-bind="showTotalPrice().totalDiscount"></b></td>
                             </tr>
                             <tr>
                                 <td class="text-center"></td>
                                 <td class="text-center"></td>
                                 <td class="text-center"></td>
-                                <td class="text-right">Total:..</td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-right">Total:</td>
                                 <td class="text-right"><b ng-bind="showTotalPrice().total"></b></td>
                             </tr>
                         </tfoot>
