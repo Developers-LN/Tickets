@@ -19,7 +19,7 @@ namespace Tickets.Controllers
 {
     public class IntegrationController : Controller
     {
-        //private static Random random = new Random();
+        private static Random random = new Random();
 
         //GET: /Integration/ElectronicTicketXml
         [Authorize]
@@ -216,19 +216,25 @@ namespace Tickets.Controllers
                         {
                             RaffleId = allocation.RaffleId,
                             RaffleName = allocation.Raffle.Name,
+                            FractionPrice = allocation.Raffle.Prospect.Price,
+                            TicketPrice = ((allocation.Raffle.Prospect.LeafFraction * allocation.Raffle.Prospect.LeafNumber) * allocation.Raffle.Prospect.Price),
                             RaffleDate = allocation.Raffle.DateSolteo.ToShortDateString(),
-                            StopSales = allocation.Raffle.EndReturnDate.ToShortDateString(),
+                            StopSales = allocation.Raffle.EndReturnDate.AddHours(-1).ToString(),
                             CreateDate = DateTime.Now.ToString(),
                             Allocation = id,
                             TicketAllocationNumbers = new List<Models.XML.TicketAllocationNumber>()
                         };
+
+                        const int length = 8;
+                        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
                         raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id).ToList().ForEach(t =>
                             allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
                             {
                                 IdNumber = t.Id,
                                 TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
-                                ControlNumber = t.ControlNumber, 
+                                //ControlNumber = t.ControlNumber,
+                                ControlNumber = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray()),
                                 FractionFrom = t.FractionFrom,
                                 FractionTo = t.FractionTo
                             })

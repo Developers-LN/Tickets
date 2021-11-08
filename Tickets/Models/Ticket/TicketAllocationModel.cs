@@ -593,6 +593,7 @@ namespace Tickets.Models.Ticket
                                     Invoiced = false,
                                     Printed = false,
                                     ControlNumber = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray()),
+                                    //ControlNumber = "N/A",
                                     FractionFrom = number.FractionFrom,
                                     FractionTo = number.FractionTo,
                                     TicketAllocationId = ticketAllocation.Id,
