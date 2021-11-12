@@ -61,9 +61,10 @@
             <tbody>
                 @if (Model.Any(a => a.Data) == true)
                 {
-                    TicketFractions = RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction;
-                    if (TicketFractions == 1)
+                    if (RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction == 1)
                     {
+                        TicketFractions = RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction;
+
                         HashSet<int> Billetes = new HashSet<int>();
                         Model.ToList().ForEach(f => Billetes.Add(f.Number));
 
@@ -194,23 +195,23 @@
         </table>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-        @if (TicketsCount != 0)
+        @if (TicketsCount == 0)
         {
-            <b>Total de billetes devueltos: @TicketsCount</b>
+            <b>Total de billetes en circulación: @TicketsCount</b>
         }
         else
         {
-            if (TicketFractions == 0)
+            if (TicketFractions != 0)
             {
                 var Billetes = FractionCount / Fracciones;
                 var FraccionesRestantes = FractionCount % Fracciones;
-                <b>Total de billetes devueltos: @Billetes</b>
+                <b>Total de billetes en circulación: @Billetes</b>
                 <br />
-                <b>Total de fracciones devueltas: @FraccionesRestantes</b>
+                <b>Total de fracciones en circulación: @FraccionesRestantes</b>
             }
             else
             {
-                <b>Total de billetes devueltos: @TicketsCount</b>
+                <b>Total de billetes en circulación: @TicketsCount</b>
             }
         }
     </div>
