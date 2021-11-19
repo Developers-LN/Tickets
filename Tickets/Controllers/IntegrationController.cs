@@ -194,6 +194,124 @@ namespace Tickets.Controllers
             }
         }
 
+        //NUEVO CODIGO PARA GENERAR XML DE LOS PREMIOS
+        //GET: /Integration/AllocationNumbers
+        [Authorize]
+        [HttpGet]
+        public JsonResult RaffleAwards(int ClientId, int RaffleId)
+        {
+            using (var context = new TicketsEntities())
+            {
+                using (var tx = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        PayableAwardByClientProcedure payableAwardByClientProcedure = new PayableAwardByClientProcedure();
+                        var Resultado = payableAwardByClientProcedure.ConsultaBilletesPagablesPorCliente(RaffleId);
+
+                        var DataPremios = Resultado.Where(w => w.ClientId == ClientId).ToList();
+                        var PremiosCliente = Resultado.Where(w => w.ClientId == ClientId).Select(s => s.Number).ToList();
+
+                        var raffleData = context.Raffles.Where(w => w.Id == RaffleId).FirstOrDefault();
+
+                        var awardNumbesXML = new Models.XML.AwardNumbesXML()
+                        {
+                            RaffleId = RaffleId,
+                            RaffleName = raffleData.Name,
+                            RaffleDate = raffleData.DateSolteo.ToShortDateString(),
+                            CreateDate = DateTime.Now.ToString(),
+                            TicketNumbers = new List<Models.XML.TicketNumber>()
+                        };
+                        var FractionTo = raffleData.Prospect.LeafFraction * raffleData.Prospect.LeafNumber;
+                        (from a in raffleData.RaffleAwards.Where(w => PremiosCliente.Contains((int)w.ControlNumber)).ToList()
+                         select new
+                         {
+                             TicketNumber = Utils.AddZeroToNumber((raffleData.Prospect.Production - 1).ToString().Length, (int)a.ControlNumber),
+                             Allocation = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).TaId,
+                             IdNumber = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).TanId,
+                             FractionFrom = 1,
+                             FractionTo,
+                             AvailableFractions = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).Fracciones,
+                             Award = new
+                             {
+                                 AwardId = a.Id,
+                                 AwardName = a.Award.Name,
+                                 AwardFractionPrice = (a.Award.Value / (raffleData.Prospect.LeafFraction * raffleData.Prospect.LeafNumber)),
+                                 AwardPrice = a.Award.Value,
+                                 ValueToPay = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).Valorpagar,
+                                 AvailableFractions = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).Fracciones
+                             }
+                         }).GroupBy(r => r.TicketNumber).ToList().ForEach(r => awardNumbesXML.TicketNumbers.Add(new Models.XML.TicketNumber()
+                         {
+                             TiketNumber = r.FirstOrDefault().TicketNumber,
+                             Allocation = r.FirstOrDefault().Allocation,
+                             IdNumber = r.FirstOrDefault().IdNumber,
+                             FractionFrom = r.FirstOrDefault().FractionFrom,
+                             FractionTo = r.FirstOrDefault().FractionTo,
+                             Awards = r.Select(a => new Models.XML.Award()
+                             {
+                                 AwardId = a.Award.AwardId,
+                                 AwardName = a.Award.AwardName,
+                                 AwardValue = a.Award.AwardPrice,
+                                 AwardPerFraction = a.Award.AwardFractionPrice,
+                                 AvailableFractions = a.AvailableFractions,
+                                 AwardToPay = a.Award.ValueToPay
+                             }).ToList()
+                         }));
+
+                        XmlDocument xmlDoc = new XmlDocument();
+                        //Represents an XML document,
+
+                        XmlSerializer xmlSerializer = new XmlSerializer(awardNumbesXML.GetType());
+                        // Creates a stream whose backing store is memory.
+                        using (MemoryStream xmlStream = new MemoryStream())
+                        {
+                            xmlSerializer.Serialize(xmlStream, awardNumbesXML);
+                            xmlStream.Position = 0;
+                            xmlDoc.Load(xmlStream);
+                        }
+                        string patch = System.Web.Hosting.HostingEnvironment.MapPath("~") + "generalRaffle";
+                        if (!System.IO.Directory.Exists(patch))
+                        {
+                            System.IO.Directory.CreateDirectory(patch);
+                        }
+                        patch += "/allocationXML";
+                        if (!System.IO.Directory.Exists(patch))
+                        {
+                            System.IO.Directory.CreateDirectory(patch);
+                        }
+
+                        var fileName = Guid.NewGuid().ToString() + ".xml";
+
+                        xmlDoc.Save(patch + "/" + fileName);
+
+                        return new System.Web.Mvc.JsonResult()
+                        {
+                            JsonRequestBehavior = System.Web.Mvc.JsonRequestBehavior.AllowGet,
+                            Data = new
+                            {
+                                result = true,
+                                message = "Números ganadores descargado en XML Correctamente.",
+                                path = "generalRaffle/allocationXML/" + fileName
+                            }
+                        };
+                    }
+                    catch (Exception e)
+                    {
+                        return new System.Web.Mvc.JsonResult()
+                        {
+                            JsonRequestBehavior = System.Web.Mvc.JsonRequestBehavior.AllowGet,
+                            Data = new
+                            {
+                                result = false,
+                                message = e.Message
+                            }
+                        };
+                    }
+                }
+            }
+        }
+
         //NUEVO CODIGO PARA GENERAR XML DE LAS ASIGNACIONES
         //GET: /Integration/AllocationNumbers
         [Authorize]
@@ -261,6 +379,7 @@ namespace Tickets.Controllers
                         {
                             System.IO.Directory.CreateDirectory(patch);
                         }
+
                         var fileName = Guid.NewGuid().ToString() + ".xml";
 
                         xmlDoc.Save(patch + "/" + fileName);
@@ -520,10 +639,10 @@ namespace Tickets.Controllers
                              FractionTo = r.FirstOrDefault().FractionTo,
                              Awards = r.Select(a => new Models.XML.Award()
                              {
-                                 AwardFractionPrice = a.Award.AwardFractionPrice,
+                                 AwardPerFraction = a.Award.AwardFractionPrice,
                                  AwardId = a.Award.AwardId,
                                  AwardName = a.Award.AwardName,
-                                 AwardPrice = a.Award.AwardPrice
+                                 AwardValue = a.Award.AwardPrice
                              }).ToList()
                          }));
 

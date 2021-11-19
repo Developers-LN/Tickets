@@ -55,6 +55,7 @@
                                 </td>
                                 <td class="text-center">
                                     <a href="/Reports/ClientNumbersAward?raffleId={{RaffleId}}&clientId={{client.Id}}" target="_blank" title="Numeros premiados"><i class="fa fa-print"></i></a>
+                                    <a ng-click="xmlAwardDownload(client.Id, RaffleId)" ng-if="client.GroupId == @((int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)" target="_blank" title="Descargar XML de la Asignación"><i class="fa fa-cloud-download"></i></a>
                                 </td>
                             </tr>
                         </tbody>

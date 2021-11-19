@@ -148,7 +148,7 @@ namespace Tickets.Controllers
         private object ListaClientes(Client c)
         {
             var context = new TicketsEntities();
-            var catalogs = context.Catalogs.ToList();
+            //var catalogs = context.Catalogs.ToList();
             return new
             {
                 c.Id,
@@ -159,8 +159,9 @@ namespace Tickets.Controllers
                 c.Phone,
                 c.RNC,
                 c.Statu,
-                StatuDesc = catalogs.FirstOrDefault(ct => ct.Id == c.Statu).NameDetail,
-                c.Tradename
+                StatuDesc = context.Catalogs.FirstOrDefault(ct => ct.Id == c.Statu).NameDetail,
+                c.Tradename,
+                c.GroupId
             };
         }
 

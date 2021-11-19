@@ -27,13 +27,15 @@ namespace Tickets.Models.Procedures
                         var pagables = new ModelPayableAwardByClient()
                         {
                             Data = true,
-                            number = Convert.ToInt32(sqlDataReader["number"].ToString()),
+                            TaId = Convert.ToInt32(sqlDataReader["taid"].ToString()),
+                            TanId = Convert.ToInt32(sqlDataReader["tanid"].ToString()),
+                            Number = Convert.ToInt32(sqlDataReader["number"].ToString()),
                             ClientId = Convert.ToInt32(sqlDataReader["ClientId"].ToString()),
                             RaffleId = raffle,
-                            nameaward = sqlDataReader["name"].ToString(),
-                            fracciones = Convert.ToInt32(sqlDataReader["fracciones"].ToString()),
-                            valorpagar = Convert.ToDecimal(sqlDataReader["valorapagar"].ToString()),
-                            value = Convert.ToDecimal(sqlDataReader["value"].ToString()),
+                            Nameaward = sqlDataReader["name"].ToString(),
+                            Fracciones = Convert.ToInt32(sqlDataReader["fracciones"].ToString()),
+                            Valorpagar = Convert.ToDecimal(sqlDataReader["valorapagar"].ToString()),
+                            Value = Convert.ToDecimal(sqlDataReader["value"].ToString()),
                         };
                         lista.Add(pagables);
                     }
@@ -43,13 +45,15 @@ namespace Tickets.Models.Procedures
                     var pagables = new ModelPayableAwardByClient()
                     {
                         Data = false,
-                        number = 0,
+                        TaId = 0,
+                        TanId = 0,
+                        Number = 0,
                         ClientId = 0,
                         RaffleId = raffle,
-                        nameaward = "N/A",
-                        fracciones = 0,
-                        valorpagar = 0,
-                        value = 0,
+                        Nameaward = "N/A",
+                        Fracciones = 0,
+                        Valorpagar = 0,
+                        Value = 0,
                     };
                     lista.Add(pagables);
                 }

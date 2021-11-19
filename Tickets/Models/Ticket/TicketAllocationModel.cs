@@ -74,6 +74,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "Agente")]
         public string Agente { get; set; }
 
+        [JsonProperty(PropertyName = "grupo")]
+        public int Grupo { get; set; }
+
         #region Private Method
         private static List<TicketAllocation> CopyTicketAllocation(TicketsEntities context, int sourceId, int targetId, int type)
         {
@@ -228,7 +231,8 @@ namespace Tickets.Models.Ticket
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
                 CreateDate = model.CreateDate,
                 StatuId = model.Statu,
-                Agente = model.Agente
+                Agente = model.Agente,
+                Grupo = context.Clients.FirstOrDefault(c => c.Id == model.ClientId).GroupId
             };
 
             return allocation;

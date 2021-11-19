@@ -105,7 +105,7 @@ namespace Tickets.Controllers
         private int GetTiketAllocationCount(List<TicketAllocation> allocatinos)
         {
             int numberCount = 0;
-            allocatinos.ForEach(a => numberCount += a.TicketAllocationNumbers.Count());
+            //allocatinos.ForEach(a => numberCount += a.TicketAllocationNumbers.Count());
             return numberCount;
         }
         private string GetColor(int statu)
@@ -128,8 +128,6 @@ namespace Tickets.Controllers
             }
             return color;
         }
-
-
 
         // GET: /Dashboard/GetRaffleAllocation
         [HttpGet]

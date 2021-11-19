@@ -14,6 +14,20 @@ namespace Tickets.Models.XML
         public int IdNumber { get; set; }
     }
 
+    public class AwardNumbers
+    {
+        public string TiketNumber { get; set; }
+        public int FractionFrom { get; set; }
+        public int FractionTo { get; set; }
+        public string ControlNumber { get; set; }
+        public int IdNumber { get; set; }
+        public string AwardName { get; set; }
+        public int AvailableFractions { get; set; }
+        public decimal AwardValue { get; set; }
+        public decimal TotalToPay { get; set; }
+        public int Allocation { get; set; }
+    }
+
     public class TicketAllocationNumberExtraordinario
     {
         public string TiketNumber { get; set; }
@@ -48,6 +62,8 @@ namespace Tickets.Models.XML
     public class TicketNumber
     {
         public string TiketNumber { get; set; }
+        public int Allocation { get; set; }
+        public int IdNumber { get; set; }
         public int FractionFrom { get; set; }
         public int FractionTo { get; set; }
         public List<Award> Awards { get; set; }
@@ -56,13 +72,16 @@ namespace Tickets.Models.XML
     {
         public int AwardId { get; set; }
         public string AwardName { get; set; }
-        public decimal AwardFractionPrice { get; set; }
-        public decimal AwardPrice { get; set; }
+        public decimal AwardPerFraction { get; set; }
+        public int AvailableFractions { get; set; }
+        public decimal AwardValue { get; set; }
+        public decimal AwardToPay { get; set; }
     }
 
     public class AwardNumbesXML
     {
         public int RaffleId { get; set; }
+        public string RaffleName { get; set; }
         public string RaffleDate { get; set; }
         public string CreateDate { get; set; }
         public string User { get; set; }

@@ -573,6 +573,9 @@ namespace Tickets.Controllers
                             receiptPayment.TotalCheck = totalCash;
                             receiptPayment.Recibo = Recibo;
                         }
+
+                        var t = receiptPayment;
+
                         context.ReceiptPayments.Add(receiptPayment);
                         context.SaveChanges();
 

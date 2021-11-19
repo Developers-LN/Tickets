@@ -2,7 +2,7 @@
  * Module: ElectronicTicketXmlController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -34,7 +34,7 @@
         this.getSolteoList(70);
         $('#invoiceFileButton').click(function () {
             $('#xmlInvoice').trigger('click');
-            
+
         });
         $scope.downloadRaffleReport = function (raffleId) {
             window.loading.show();
@@ -119,7 +119,7 @@
             $('#showUploadXmlInvoice').modal('show');
         }
 
-      
+
 
         $scope.invoice = {
             raffleId: 0,
@@ -192,7 +192,7 @@
                     } else {
                         $('#showUploadXmlInvoice').modal('hide');
                         alertify.alert(data.message);
-                        
+
                     }
                 }
             });
