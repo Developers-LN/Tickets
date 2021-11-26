@@ -68,6 +68,7 @@ namespace Tickets.Models.XML
         public int FractionTo { get; set; }
         public List<Award> Awards { get; set; }
     }
+
     public class Award
     {
         public int AwardId { get; set; }

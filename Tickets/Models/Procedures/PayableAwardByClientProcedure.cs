@@ -32,9 +32,9 @@ namespace Tickets.Models.Procedures
                             Number = Convert.ToInt32(sqlDataReader["number"].ToString()),
                             ClientId = Convert.ToInt32(sqlDataReader["ClientId"].ToString()),
                             RaffleId = raffle,
-                            Nameaward = sqlDataReader["name"].ToString(),
+                            NameAward = sqlDataReader["name"].ToString(),
                             Fracciones = Convert.ToInt32(sqlDataReader["fracciones"].ToString()),
-                            Valorpagar = Convert.ToDecimal(sqlDataReader["valorapagar"].ToString()),
+                            ValorPagar = Convert.ToDecimal(sqlDataReader["valorapagar"].ToString()),
                             Value = Convert.ToDecimal(sqlDataReader["value"].ToString()),
                         };
                         lista.Add(pagables);
@@ -50,9 +50,9 @@ namespace Tickets.Models.Procedures
                         Number = 0,
                         ClientId = 0,
                         RaffleId = raffle,
-                        Nameaward = "N/A",
+                        NameAward = "N/A",
                         Fracciones = 0,
-                        Valorpagar = 0,
+                        ValorPagar = 0,
                         Value = 0,
                     };
                     lista.Add(pagables);

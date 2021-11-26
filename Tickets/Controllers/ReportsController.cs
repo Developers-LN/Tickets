@@ -379,6 +379,15 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult ClientDetails(int ClientId)
+        {
+            var context = new TicketsEntities();
+            var client = context.Clients.FirstOrDefault(r => r.Id == ClientId);
+            return View(client);
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult DatosPorCliente(int raffleId)
         {
             NetSalesByClientProcedure netSalesByClientProcedure = new NetSalesByClientProcedure();

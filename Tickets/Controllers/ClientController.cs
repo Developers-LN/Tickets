@@ -227,27 +227,40 @@ namespace Tickets.Controllers
         {
             if (client.Id <= 0)
             {
-                try
+                using (var context = new TicketsEntities())
                 {
-                    using (var context = new TicketsEntities())
+                    using (var tx = context.Database.BeginTransaction())
                     {
-                        client.Statu = (int)ClientStatuEnum.Approbed;
-                        client.Fax = string.IsNullOrEmpty(client.Fax) ? "N/A" : client.Fax;
-                        client.RNC = string.IsNullOrEmpty(client.RNC) ? "N/A" : client.RNC;
-                        client.Tradename = string.IsNullOrEmpty(client.Tradename) ? "N/A" : client.Tradename;
-                        client.Comment = string.IsNullOrEmpty(client.Comment) ? "N/A" : client.Comment;
-                        client.CreateDate = DateTime.Now;
-                        client.ControlNumber = ("LN-" + (context.Clients.Max(c => c.Id) + 1)).ToString();
-                        client.CreateUser = WebSecurity.CurrentUserId;
-                        context.Clients.Add(client);
-                        context.SaveChanges();
-                        EmailUtil.SendClientEmail(ReportByEmailEnum.NEW_CLIENT, client);
+                        try
+                        {
+                            client.Statu = (int)ClientStatuEnum.Approbed;
+                            client.Fax = string.IsNullOrEmpty(client.Fax) ? "N/A" : client.Fax;
+                            client.RNC = string.IsNullOrEmpty(client.RNC) ? "N/A" : client.RNC;
+                            client.Tradename = string.IsNullOrEmpty(client.Tradename) ? "N/A" : client.Tradename;
+                            client.Comment = string.IsNullOrEmpty(client.Comment) ? "N/A" : client.Comment;
+                            client.CreateDate = DateTime.Now;
+                            client.ControlNumber = ("LN-" + (context.Clients.Max(c => c.Id) + 1)).ToString();
+                            client.CreateUser = WebSecurity.CurrentUserId;
+                            context.Clients.Add(client);
+                            context.SaveChanges();
+                            EmailUtil.SendClientEmail(ReportByEmailEnum.NEW_CLIENT, client);
+                        }
+                        catch (Exception e)
+                        {
+                            tx.Rollback();
+                            return new JsonResult()
+                            {
+                                Data = new
+                                {
+                                    result = false,
+                                    message = e.Message
+                                }
+                            };
+
+                        }
+                        Utils.SaveLog(WebSecurity.CurrentUserName, client.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Cliente", ClientToObject(client));
+                        tx.Commit();
                     }
-                }
-                catch (Exception error)
-                {
-                    var Test = error.Source;
-                    Utils.SaveLog(WebSecurity.CurrentUserName, client.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Cliente", ClientToObject(client));
                 }
             }
             else

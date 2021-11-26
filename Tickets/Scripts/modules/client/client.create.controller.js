@@ -152,7 +152,6 @@
                 }
             });
         }
-        
 
         this.loadClientData = function () {
             window.loading.show();

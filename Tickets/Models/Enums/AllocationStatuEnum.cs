@@ -7,6 +7,7 @@
         Printed = 2087,
         Invoiced = 3092,
         Review = 5839,
-        Consigned = 5858
+        Consigned = 5858,
+        Generated = 5860
     }
 }

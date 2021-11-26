@@ -3102,6 +3102,7 @@
     <Content Include="Views\TicketAllocation\TicketAllocationConsignmentList.cshtml" />
     <Content Include="Views\TicketAllocation\AllocationConsignedDetails.cshtml" />
     <Content Include="Views\Reports\AllocationConsigNumberList.cshtml" />
+    <Content Include="Views\Reports\ClientDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -387,7 +387,7 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
             var allocation = context.TicketAllocations
                 .Where(a =>
-                    (a.Statu == (int)AllocationStatuEnum.Consigned || a.Statu == (int)AllocationStatuEnum.Review)
+                    (a.Statu == (int)AllocationStatuEnum.Consigned || a.Statu == (int)AllocationStatuEnum.Review || a.Statu == (int)AllocationStatuEnum.Generated)
                     && a.RaffleId == raffleId && a.ClientId != (int)GeneralClientEnum.CajaGeneral
                     && (a.ClientId == clientId || clientId == 0)).AsEnumerable()
                 .Select(a => this.ListadoAsignaciones(a)).ToList();

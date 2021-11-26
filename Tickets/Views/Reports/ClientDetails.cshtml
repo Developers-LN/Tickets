@@ -1,0 +1,169 @@
+﻿@model Tickets.Models.Client
+
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Billetes en circulación";
+
+    var context = new Tickets.Models.TicketsEntities();
+
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.Facturacion : "";
+    string adminCargo = config != null ? config.FacturacionCargo : "";
+}
+
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>DATOS DEL CLIENTE</b>
+            <br />
+            <br />
+        </div>
+        <div class="col-lg-4 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <b>Cliente ID: </b> @Model.Id
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Nombre del cliente: </b> @Model.Name
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Nombre comercial: </b> @Model.Tradename
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>RNC: </b> @Model.RNC
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Fecha de nacimiento: </b> @Model.Birthday.ToShortDateString()
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Cédula: </b> @Model.DocumentNumber
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Estado civil: </b> @context.Catalogs.Where(w => w.Id == Model.MaritalStatus).FirstOrDefault().NameDetail
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Precio para los billetes: </b> @context.Catalogs.Where(w => w.Id == Model.PriceId).FirstOrDefault().NameDetail
+            </div>
+        </div>
+        <div class="col-lg-4 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <b>Sexo: </b> @context.Catalogs.Where(w=>w.Id == Model.Gender).FirstOrDefault().NameDetail
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Provincia: </b> @context.Provinces.Where(w=>w.Id == Model.Province).FirstOrDefault().Name
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Municipio: </b> @context.Towns.Where(w => w.ProvinceId == Model.Town).FirstOrDefault().Name
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Sección: </b> @context.DistTowns.Where(w => w.Id == Model.Section).FirstOrDefault().Name
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Dirección: </b> @Model.Addres
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Télefono: </b> @Model.Phone
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Fax: </b> @Model.Fax
+            </div>
+        </div>
+        <div class="col-lg-4 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <b>E-Mail: </b> @Model.Email
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Deuda anterior: </b> @Model.PreviousDebt
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Límite de crédito: </b> @Model.CreditLimit
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Monto fianza: </b> @Model.AmountDeposit
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Descuento: </b> @Model.Discount
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Tipo de cliente: </b> @context.Catalogs.Where(w=>w.Id == Model.ClientType).FirstOrDefault().NameDetail
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Grupo: </b> @context.Catalogs.Where(w => w.Id == Model.GroupId).FirstOrDefault().NameDetail
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Observaciones: </b> @Model.Comment
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 no-padder text-center">
+        <br />
+        <br />
+        <br />
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma del Cliente
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma del Cajero
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <b>@adminName</b>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+        <div class="col-lg-12 no-padder text-center">
+
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <span>@adminCargo</span>
+    </div>
+</div>

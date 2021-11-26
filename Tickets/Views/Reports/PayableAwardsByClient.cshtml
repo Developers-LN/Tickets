@@ -98,15 +98,15 @@
                         <tbody>
                             @foreach (var item in Model.Where(w => w.ClientId == client))
                             {
-                                MontoApagarSorteo += item.valorpagar;
-                                ValorPremios += item.value;
-                                MontoApagarTotal += item.value;
+                                MontoApagarSorteo += item.ValorPagar;
+                                ValorPremios += item.Value;
+                                MontoApagarTotal += item.Value;
                                 <tr>
-                                    <td class="text-center">@item.number</td>
-                                    <td class="text-center">@item.fracciones</td>
-                                    <td class="text-center">@item.nameaward</td>
-                                    <td class="text-center">@item.value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                    <td class="text-center">@item.valorpagar.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-center">@item.Number</td>
+                                    <td class="text-center">@item.Fracciones</td>
+                                    <td class="text-center">@item.NameAward</td>
+                                    <td class="text-center">@item.Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-center">@item.ValorPagar.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                 </tr>
                             }
                             <tr>

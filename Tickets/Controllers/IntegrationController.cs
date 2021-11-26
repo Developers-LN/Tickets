@@ -19,7 +19,7 @@ namespace Tickets.Controllers
 {
     public class IntegrationController : Controller
     {
-        //private static Random random = new Random();
+        private static Random random = new Random();
 
         //GET: /Integration/ElectronicTicketXml
         [Authorize]
@@ -238,7 +238,7 @@ namespace Tickets.Controllers
                                  AwardName = a.Award.Name,
                                  AwardFractionPrice = (a.Award.Value / (raffleData.Prospect.LeafFraction * raffleData.Prospect.LeafNumber)),
                                  AwardPrice = a.Award.Value,
-                                 ValueToPay = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).Valorpagar,
+                                 ValueToPay = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).ValorPagar,
                                  AvailableFractions = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).Fracciones
                              }
                          }).GroupBy(r => r.TicketNumber).ToList().ForEach(r => awardNumbesXML.TicketNumbers.Add(new Models.XML.TicketNumber()
@@ -281,7 +281,9 @@ namespace Tickets.Controllers
                             System.IO.Directory.CreateDirectory(patch);
                         }
 
-                        var fileName = Guid.NewGuid().ToString() + ".xml";
+                        //var fileName = Guid.NewGuid().ToString() + ".xml";
+
+                        var fileName = "Numeros_ganadores_del_sorteo_" + RaffleId + "_del_cliente_numero_" + ClientId + ".xml";
 
                         xmlDoc.Save(patch + "/" + fileName);
 
@@ -343,20 +345,48 @@ namespace Tickets.Controllers
                             TicketAllocationNumbers = new List<Models.XML.TicketAllocationNumber>()
                         };
 
-                        //const int length = 8;
-                        //const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                        DateTime actualDate = DateTime.Now;
 
-                        raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id).ToList().ForEach(t =>
-                            allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
+                        if (allocation.Statu != (int)AllocationStatuEnum.Generated)
+                        {
+                            const int length = 8;
+                            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+                            raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id).ToList().ForEach(t =>
+                                allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
+                                {
+                                    IdNumber = t.Id,
+                                    TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
+                                    ControlNumber = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray()),
+                                    FractionFrom = t.FractionFrom,
+                                    FractionTo = t.FractionTo
+                                })
+                            ));
+
+                            allocation.TicketAllocationNumbers.ToList().ForEach(f =>
                             {
-                                IdNumber = t.Id,
-                                TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
-                                ControlNumber = t.ControlNumber,
-                                //ControlNumber = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray()),
-                                FractionFrom = t.FractionFrom,
-                                FractionTo = t.FractionTo
-                            })
-                        ));
+                                f.ControlNumber = allocationXML.TicketAllocationNumbers.Where(w => w.IdNumber == f.Id).FirstOrDefault().ControlNumber;
+                                f.PrintedDate = actualDate;
+                            });
+
+                            allocation.Statu = (int)AllocationStatuEnum.Generated;
+
+                            context.SaveChanges();
+                            tx.Commit();
+                        }
+                        else
+                        {
+                            raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id).ToList().ForEach(t =>
+                                allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
+                                {
+                                    IdNumber = t.Id,
+                                    TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
+                                    ControlNumber = t.ControlNumber,
+                                    FractionFrom = t.FractionFrom,
+                                    FractionTo = t.FractionTo
+                                })
+                            ));
+                        }
 
                         XmlDocument xmlDoc = new XmlDocument();
                         //Represents an XML document,
@@ -380,7 +410,7 @@ namespace Tickets.Controllers
                             System.IO.Directory.CreateDirectory(patch);
                         }
 
-                        var fileName = Guid.NewGuid().ToString() + ".xml";
+                        var fileName = "Asignacion_" + id + "_" + actualDate.Year + actualDate.Month + actualDate.Day + "_" + allocation.ClientId + ".xml";
 
                         xmlDoc.Save(patch + "/" + fileName);
 
@@ -905,7 +935,6 @@ namespace Tickets.Controllers
                 }
             }
         }
-
 
         //POST: /Integration/CreateBachXML
         [Authorize]

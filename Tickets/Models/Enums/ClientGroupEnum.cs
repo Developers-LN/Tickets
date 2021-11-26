@@ -3,6 +3,7 @@
     public enum ClientGroupEnum
     {
         Mayorista = 36,
-        DistribuidorElectronico = 5859
+        DistribuidorElectronico = 5859,
+        CajasOficinaPrincipal = 38
     }
 }

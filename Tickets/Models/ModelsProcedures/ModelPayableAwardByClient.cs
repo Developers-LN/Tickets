@@ -9,9 +9,9 @@
         public int ClientId { get; set; }
         public int RaffleId { get; set; }
         public int Number { get; set; }
-        public string Nameaward { get; set; }
+        public string NameAward { get; set; }
         public decimal Value { get; set; }
         public int Fracciones { get; set; }
-        public decimal Valorpagar { get; set; }
+        public decimal ValorPagar { get; set; }
     }
 }

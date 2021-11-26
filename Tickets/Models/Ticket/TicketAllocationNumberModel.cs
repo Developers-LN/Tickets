@@ -179,7 +179,47 @@ namespace Tickets.Models.Ticket
                         return new RequestResponseModel()
                         {
                             Result = false,
-                            Message = "El numero no fue encontrado!"
+                            Message = "El numero de asignación no fue encontrado!"
+                        };
+                    }
+
+                    var expiredInvoices = (from i in context.Invoices
+                                           join it in context.InvoiceTickets on i.Id equals it.InvoiceId
+                                           where i.ClientId == allocation.ClientId
+                                             && i.Condition == (int)InvoiceConditionEnum.Credit
+                                             && i.PaymentStatu == (int)InvoicePaymentStatuEnum.Pendient
+                                           select new
+                                           {
+                                               i.ClientId,
+                                               i.Condition,
+                                               i.Id,
+                                               i.PaymentStatu,
+                                               i.InvoiceDate,
+                                               i.InvoiceExpredDay,
+                                               it.Quantity,
+                                               it.PricePerFraction
+                                           }).AsEnumerable().GroupBy(i => i.Id).Select(ig => new
+                                           {
+                                               ig.FirstOrDefault().ClientId,
+                                               ig.FirstOrDefault().Condition,
+                                               ig.FirstOrDefault().Id,
+                                               ig.FirstOrDefault().PaymentStatu,
+                                               ig.FirstOrDefault().InvoiceDate,
+                                               ig.FirstOrDefault().InvoiceExpredDay,
+                                               InvoiceTickets = ig.Select(it => new
+                                               {
+                                                   it.Quantity,
+                                                   it.PricePerFraction
+                                               }).ToList()
+                                           }).ToList();
+
+                    if (expiredInvoices.Where(i => DateTime.Now > i.InvoiceDate.AddDays(i.InvoiceExpredDay ?? 45)).ToList().Count > 0)
+                    {
+                        Trans.Rollback();
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "El cliente tiene facturas pendiente."
                         };
                     }
 
@@ -196,12 +236,12 @@ namespace Tickets.Models.Ticket
 
                     var CurrentUser = WebSecurity.CurrentUserId;
 
-                    foreach (var item in allocationNumber)
+                    allocationNumber.ToList().ForEach(f =>
                     {
-                        item.UserConsigned = CurrentUser;
-                        item.Consignated = true;
-                        item.Statu = (int)TicketStatusEnum.Delivered;
-                    }
+                        f.UserConsigned = CurrentUser;
+                        f.Consignated = true;
+                        f.Statu = (int)TicketStatusEnum.Delivered;
+                    });
 
                     allocation.Statu = (int)AllocationStatuEnum.Consigned;
 
