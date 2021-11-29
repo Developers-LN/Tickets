@@ -492,6 +492,11 @@
                 templateUrl: Route.base('TicketAllocation/AllocationConsignedDetails'),
                 resolve: {}
             })
+            .state('app.invoicePaymentHistory', {
+                url: '/cash/invoicePaymentHistory/:invoiceId',
+                templateUrl: Route.base('Cash/InvoicePaymentHistory'),
+                resolve: {}
+            })
             .state('app.ticketNumberDetail', {
                 url: '/ticket/numberdetail/:numberId',
                 templateUrl: Route.base('TicketAllocation/NumberDetail'),

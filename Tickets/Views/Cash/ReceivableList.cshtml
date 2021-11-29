@@ -37,19 +37,19 @@
                 <div class="col-lg-4 text-right m-b-xs no-padder">
 
                 </div>
-                <div class="row-border hover ">
+                <div class="row-border hover">
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
                                 <th>Codigo</th>
-                                <th>Sorteo</th>
+                                @*<th>Sorteo</th>*@
                                 <th>Cliente</th>
                                 <th>Cantidad</th>
                                 <th>Descuento</th>
-                                <th>Cantidad Total</th>
-                                <th>Cantidad Restante</th>
+                                <th>Cantidad <br /> Total</th>
+                                <th>Cantidad <br /> Restante</th>
                                 <th>Fecha</th>
-                                <th>Fec. de Expiración</th>
+                                <th>Fecha de <br /> Expiración</th>
                                 <th>Estado</th>
                                 <th>Acción</th>
                             </tr>
@@ -57,7 +57,7 @@
                         <tbody>
                             <tr data-ng-repeat="invoice in invoices">
                                 <td>#{{invoice.Id}}</td>
-                                <td>{{invoice.RaffleId}}</td>
+                                @*<td>{{invoice.RaffleId}}</td>*@
                                 <td>{{invoice.ClientDesc}} {{invoice.Agente}}</td>
                                 <td>{{parseMoney(invoice.Payment.totalInvoice)}}</td>
                                 <td>{{parseMoney(invoice.Payment.discount)}}</td>
@@ -69,13 +69,14 @@
                                 <td>
                                     <a ng-if="invoice.PaymentStatu == @((int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Pendient)" href="#/cash/receivable/{{invoice.Id}}" class="{{moduleCanEdit}}"><i class="fa fa-money"></i></a>
                                     <a ng-click="saveReceivablePayment(invoice.Id)" class="{{moduleCanEdit}}"><i class="fa fa-file-o"></i></a>
+                                    <a ng-show="verifyCanView('app.invoicePaymentHistory')" ng-if="invoice.clientType == @((int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)" href="#/cash/invoicePaymentHistory/{{invoice.Id}}" title="Lista de pagos" class="{{moduleCanView}}"><i class="fa fa-file-text-o"></i></a>
                                 </td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td></td>
-                                <td></td>
+                                @*<td></td>*@
                                 <td></td>
                                 <td>{{parseMoney(totalBruton)}}</td>
                                 <td>{{parseMoney(totalDiscount)}}</td>

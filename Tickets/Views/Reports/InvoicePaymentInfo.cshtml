@@ -1,0 +1,300 @@
+﻿@model Tickets.Models.ReceiptPayment
+
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Pago de factura";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.Facturacion : "";
+    string adminCargo = config != null ? config.FacturacionCargo : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+
+    var Efectivo = Tickets.Models.Enums.PaymentTypeTextEnum.Efectivo;
+    var Cheque = Tickets.Models.Enums.PaymentTypeTextEnum.Cheques;
+    var TargetaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.TarjetaDeCredito;
+    var NotaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.NotaDeCredito;
+    var DepTransf = Tickets.Models.Enums.PaymentTypeTextEnum.DepTransf;
+}
+
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 35px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>RECIBO DE PAGO DEL SORTEO NO.@Model.Invoice.Raffle.Id DE FECHA @Model.Invoice.Raffle.DateSolteo.ToShortDateString()</b>
+        </div>
+        <div class="col-lg-6 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <b>Ventanilla: </b> #@Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Comprador: </b> @Model.Nombre
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Cédula: </b> @Model.Cedula
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Teléfono: </b> @Model.Telefono
+            </div>
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <div class="col-lg-12 no-padder text-right">
+                <b>Factura: </b> #@Model.Id
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Recibo: </b>#@Model.Id
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">Tipo de Pago</th>
+                    @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                    {
+                        <th class="text-center">Referencia</th>
+                    }
+                    <th class="text-center">Concepto</th>
+                    <th class="text-center">Fecha del Pago</th>
+                    <th class="text-right">Monto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">
+                        @context.Catalogs.FirstOrDefault(f => f.Id == Model.ReceiptType).NameDetail
+                    </td>
+                    @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                    {
+                        <td class="text-center">
+                            @Model.Recibo
+                        </td>
+                    }
+                    <td class="text-center">
+                        @Model.Observaciones
+                    </td>
+                    <td class="text-center">
+                        @Model.CreateDate
+                    </td>
+                    <td class="text-right">
+                        @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
+                        {
+                            @Model.TotalCash;
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
+                        {
+                            @Model.TotalCheck;
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
+                        {
+                            @Model.TotalCredit;
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                        {
+                            @Model.TotalCheck;
+                        }
+                    </td>
+                </tr>
+        </table>
+    </div>
+
+    <div class="col-lg-12 no-padder text-center">
+        <br />
+        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma Del Cliente
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma cajera
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <b>@adminName</b>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <span>@adminCargo</span>
+    </div>
+</div>
+
+<div class="col-lg-12" style="margin-top:15px;">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 35px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>RECIBO DE PAGO DEL SORTEO NO.@Model.Invoice.Raffle.Id DE FECHA @Model.Invoice.Raffle.DateSolteo.ToShortDateString()</b>
+        </div>
+        <div class="col-lg-6 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <b>Ventanilla: </b> #@Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Comprador: </b> @Model.Nombre
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Cédula: </b> @Model.Cedula
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Teléfono: </b> @Model.Telefono
+            </div>
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <div class="col-lg-12 no-padder text-right">
+                <b>Factura: </b> #@Model.Id
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Recibo: </b>#@Model.Id
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">Tipo de Pago</th>
+                    @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                    {
+                        <th class="text-center">Referencia</th>
+                    }
+                    <th class="text-center">Concepto</th>
+                    <th class="text-center">Fecha del Pago</th>
+                    <th class="text-right">Monto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">
+                        @context.Catalogs.FirstOrDefault(f => f.Id == Model.ReceiptType).NameDetail
+                    </td>
+                    @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                    {
+                        <td class="text-center">
+                            @Model.Recibo
+                        </td>
+                    }
+                    <td class="text-center">
+                        @Model.Observaciones
+                    </td>
+                    <td class="text-center">
+                        @Model.CreateDate
+                    </td>
+                    <td class="text-right">
+                        @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
+                        {
+                            @Model.TotalCash;
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
+                        {
+                            @Model.TotalCheck;
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
+                        {
+                            @Model.TotalCredit;
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                        {
+                            @Model.TotalCheck;
+                        }
+                    </td>
+                </tr>
+        </table>
+    </div>
+
+    <div class="col-lg-12 no-padder text-center">
+        <br />
+        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma Del Cliente
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma cajera
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <b>@adminName</b>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <span>@adminCargo</span>
+    </div>
+</div>

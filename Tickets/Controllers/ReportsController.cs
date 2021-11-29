@@ -713,6 +713,15 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult InvoicePaymentInfo(int paymentId)
+        {
+            var context = new TicketsEntities();
+            var payment = context.ReceiptPayments.FirstOrDefault(f => f.Id == paymentId);
+            return View(payment);
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult NoteCreditDetail(int noteCreditId)
         {
             var context = new TicketsEntities();

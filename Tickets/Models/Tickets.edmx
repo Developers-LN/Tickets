@@ -458,6 +458,11 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="CreateUser" Type="int" Nullable="false" />
           <Property Name="Recibo" Type="varchar" MaxLength="50" />
+          <Property Name="Cedula" Type="varchar" MaxLength="50" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" />
+          <Property Name="Observaciones" Type="text" />
+          <Property Name="Telefono" Type="varchar" MaxLength="50" />
+          <Property Name="Codigo" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ReceivablePayment">
           <Key>
@@ -596,6 +601,7 @@
           <Property Name="RaffleId" Type="int" />
           <Property Name="Consignated" Type="bit" />
           <Property Name="UserConsigned" Type="int" />
+          <Property Name="NoOrden" Type="int" />
         </EntityType>
         <EntityType Name="TicketRePrint">
           <Key>
@@ -3439,6 +3445,11 @@
           <NavigationProperty Name="Invoice" Relationship="TicketsModel.FK_ReceiptPayment_Invoice" FromRole="ReceiptPayment" ToRole="Invoice" />
           <NavigationProperty Name="NoteCreditReceiptPayments" Relationship="TicketsModel.FK_NoteCreditReceiptPayment_ReceiptPayment" FromRole="ReceiptPayment" ToRole="NoteCreditReceiptPayment" />
           <Property Name="Recibo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Cedula" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Observaciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Codigo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ReceivablePayment">
           <Key>
@@ -3585,6 +3596,7 @@
           <Property Name="RaffleId" Type="Int32" />
           <Property Name="Consignated" Type="Boolean" />
           <Property Name="UserConsigned" Type="Int32" />
+          <Property Name="NoOrden" Type="Int32" />
         </EntityType>
         <EntityType Name="TicketRePrint">
           <Key>
@@ -5483,6 +5495,11 @@
           <EntitySetMapping Name="ReceiptPayments">
             <EntityTypeMapping TypeName="TicketsModel.ReceiptPayment">
               <MappingFragment StoreEntitySet="ReceiptPayment">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
                 <ScalarProperty Name="Recibo" ColumnName="Recibo" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
@@ -5617,6 +5634,7 @@
           <EntitySetMapping Name="TicketAllocationNumbers">
             <EntityTypeMapping TypeName="TicketsModel.TicketAllocationNumber">
               <MappingFragment StoreEntitySet="TicketAllocationNumber">
+                <ScalarProperty Name="NoOrden" ColumnName="NoOrden" />
                 <ScalarProperty Name="UserConsigned" ColumnName="UserConsigned" />
                 <ScalarProperty Name="Consignated" ColumnName="Consignated" />
                 <ScalarProperty Name="RaffleId" ColumnName="RaffleId" />

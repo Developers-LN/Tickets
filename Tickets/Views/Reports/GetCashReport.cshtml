@@ -89,7 +89,7 @@
                 <tbody>
                     @foreach (var receiptPayment in Model)
                     {
-                        Total += receiptPayment.TotalCash;
+                        Total += (receiptPayment.TotalCash + receiptPayment.TotalCheck + receiptPayment.TotalCredit);
                         <tr>
                             <td>
                                 @receiptPayment.Invoice.Id

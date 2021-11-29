@@ -30,6 +30,13 @@ namespace Tickets.Controllers
             return View();
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult InvoicePaymentHistory()
+        {
+            return View();
+        }
+
         //
         // GET: /Cash/OpenCash
         [Authorize]
@@ -140,7 +147,8 @@ namespace Tickets.Controllers
                 invoiceDetail.ClientId,
                 ClientDesc = invoiceDetail.Client.Name,
                 UserDesc = invoiceDetail.User.Name,
-                UserId = invoiceDetail.CreateUser
+                UserId = invoiceDetail.CreateUser,
+                clientType = invoiceDetail.Client.GroupId
             };
         }
 
@@ -545,6 +553,11 @@ namespace Tickets.Controllers
                         var noteCreditReceiptPayments = receiptPayment.NoteCreditReceiptPayments;
                         var totalCash = receiptPayment.TotalCash;
                         var Recibo = receiptPayment.Recibo;
+                        var Cedula = receiptPayment.Cedula;
+                        var Nombre = receiptPayment.Nombre;
+                        var Observaciones = receiptPayment.Observaciones;
+                        var Telefono = receiptPayment.Telefono;
+                        var Codigo = receiptPayment.Codigo;
                         receiptPayment.CashId = cash.Id;
                         receiptPayment.ClientId = invoice.ClientId;
                         receiptPayment.CreateDate = DateTime.Now;
@@ -553,6 +566,11 @@ namespace Tickets.Controllers
                         receiptPayment.TotalCredit = 0;
                         receiptPayment.TotalCash = 0;
                         receiptPayment.Recibo = "";
+                        receiptPayment.Cedula = "";
+                        receiptPayment.Nombre = "";
+                        receiptPayment.Observaciones = "";
+                        receiptPayment.Telefono = "";
+                        receiptPayment.Codigo = "";
 
                         receiptPayment.NoteCreditReceiptPayments = new List<NoteCreditReceiptPayment>();
 
@@ -573,8 +591,14 @@ namespace Tickets.Controllers
                             receiptPayment.TotalCheck = totalCash;
                             receiptPayment.Recibo = Recibo;
                         }
-
-                        var t = receiptPayment;
+                        if (context.Clients.Where(f => f.Id == invoice.ClientId).FirstOrDefault().GroupId == (int)ClientGroupEnum.CajaDespachoExpress)
+                        {
+                            receiptPayment.Cedula = Cedula;
+                            receiptPayment.Nombre = Nombre;
+                            receiptPayment.Telefono = Telefono;
+                            receiptPayment.Codigo = Codigo;
+                            receiptPayment.Observaciones = Observaciones;
+                        }
 
                         context.ReceiptPayments.Add(receiptPayment);
                         context.SaveChanges();
@@ -619,7 +643,7 @@ namespace Tickets.Controllers
                         }
 
                         tx.Commit();
-                        return new JsonResult() { Data = new { result = true, message = "Recibo de Efectivo Guardado." } };
+                        return new JsonResult() { Data = new { result = true, message = "Recibo de Efectivo Guardado.", Pago = receiptPayment.Id } };
                     }
                     catch (Exception e)
                     {
@@ -653,7 +677,19 @@ namespace Tickets.Controllers
                     paymentTypes,
                     clientName = invoice.Client.Name,
                     clientId = invoice.ClientId,
+                    clientType = invoice.Client.GroupId,
+                    invoiceDiscount = invoice.Discount,
+                    invoiceDate = invoice.CreateDate.ToString("dd/MM/yyyy"),
                     Agente = invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault(),
+                    paymentsHistory = invoice.ReceiptPayments.AsEnumerable()
+                    .Where(w => w.InvoiceId == invoice.Id && invoice.Client.GroupId == (int)ClientGroupEnum.CajaDespachoExpress)
+                    .Select(s => new
+                    {
+                        s.Id,
+                        s.Nombre,
+                        s.Observaciones,
+                        paymentDate = s.CreateDate.ToString("dd/MM/yy")
+                    }).ToList(),
                     creditNotes = invoice.Client.NoteCredits.AsEnumerable().Where(c =>
                        c.Statu == (int)GeneralStatusEnum.Active
                        && (c.RaffleId.HasValue == false || c.RaffleId.Value == invoice.RaffleId)
@@ -661,6 +697,7 @@ namespace Tickets.Controllers
                     ).Select(c => CreditNoteToObject(c)).ToList(),
                     payment = GetPaymentCash(invoice),
                     raffleId = invoice.RaffleId,
+                    raffleName = invoice.Raffle.Name
                 }
             };
         }
@@ -817,13 +854,15 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var xpiredDate = invoice.InvoiceDate.AddDays(invoice.InvoiceExpredDay.Value);
+            var ClientData = context.Clients.Where(r => r.Id == invoice.ClientId).FirstOrDefault();
             return new
             {
                 invoice.Id,
                 invoice.RaffleId,
-                ClientDesc = context.Clients.Where(r => r.Id == invoice.ClientId).Select(c => c.Name).FirstOrDefault(),
+                ClientDesc = ClientData.Name,
                 InvoiceDate = invoice.InvoiceDate.ToUnixTime(),
                 invoice.PaymentStatu,
+                clientType = ClientData.GroupId,
                 Agente = invoice.InvoiceTickets.Where(i => i.InvoiceId == invoice.Id).Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault(),
                 xpiredDate = xpiredDate.ToUnixTime(),
                 xpiredDay = (xpiredDate.Date < DateTime.Now.Date && invoice.PaymentStatu == 2082) ? "Caducada" : "",

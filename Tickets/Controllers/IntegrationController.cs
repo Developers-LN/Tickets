@@ -356,7 +356,7 @@ namespace Tickets.Controllers
                                 allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
                                 {
                                     IdNumber = t.Id,
-                                    TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
+                                    TicketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
                                     ControlNumber = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray()),
                                     FractionFrom = t.FractionFrom,
                                     FractionTo = t.FractionTo
@@ -376,15 +376,16 @@ namespace Tickets.Controllers
                         }
                         else
                         {
-                            raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id).ToList().ForEach(t =>
-                                allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
-                                {
-                                    IdNumber = t.Id,
-                                    TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
-                                    ControlNumber = t.ControlNumber,
-                                    FractionFrom = t.FractionFrom,
-                                    FractionTo = t.FractionTo
-                                })
+                            raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id)
+                            .OrderBy(o => o.Number).ToList().ForEach(t =>
+                                  allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
+                                  {
+                                      IdNumber = t.Id,
+                                      TicketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
+                                      ControlNumber = t.ControlNumber,
+                                      FractionFrom = t.FractionFrom,
+                                      FractionTo = t.FractionTo
+                                  })
                             ));
                         }
 
@@ -465,7 +466,7 @@ namespace Tickets.Controllers
                         raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.ToList().ForEach(t =>
                             allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
                             {
-                                TiketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
+                                TicketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
                                 FractionFrom = t.FractionFrom,
                                 FractionTo = t.FractionTo
                             })

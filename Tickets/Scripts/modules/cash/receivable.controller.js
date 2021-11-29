@@ -14,6 +14,7 @@
 
         function validateData(receivable) {
             var error = '', isReq = ' es un campo requerido. <br>';
+            var isReq2 = ' son requeridos. <br>';
             if (receivable.ReceiptDate === undefined) {
                 error += 'La Fecha del Recibo' + isReq;
             }
@@ -23,7 +24,10 @@
             if (receivable.ReceiptType == 5857 && receivable.Recibo === undefined) {
                 error += 'El Numero de recibo' + isReq;
             }
-            if (receivable.TotalCash === undefined ) {
+            if (receivable.clientType == 5862 && receivable.Cedula === undefined && receivable.Nombre === undefined && receivable.Observaciones === undefined) {
+                error += 'Los datos del colaborador' + isReq2;
+            }
+            if (receivable.TotalCash === undefined) {
                 error += 'Verifique el monto a pagar' + isReq;
             }
             if ($scope.receivable.TotalCash > ($scope.payment.totalRestant - $scope.payment.discount)) {
@@ -44,7 +48,13 @@
             ReceiptType: undefined,
             NoteCreditReceiptPayments: [],
             TotalCash: undefined,
-            Recibo: undefined
+            Recibo: undefined,
+            Cedula: undefined,
+            Nombre: undefined,
+            Codigo: undefined,
+            Telefono: undefined,
+            Observaciones: undefined,
+            clientType: undefined
         };
 
         $scope.totalCreditNoteValue = 0;
@@ -75,22 +85,30 @@
                                 window.loading.hide();
                                 $scope.clientName = data.clientName;
                                 $scope.clientId = data.clientId;
+                                $scope.receivable.clientType = data.clientType;
                                 $scope.paymentTypes = data.paymentTypes.filter(function (p) {
                                     if (p.Id == 2075 && $rootScope.moduleCanDelete == '') {
                                         return p;
                                     }
-                                    if (p.Id != 2075 && $rootScope.moduleCanSearch == '')
-                                    {
+                                    if (p.Id != 2075 && $rootScope.moduleCanSearch == '') {
                                         return p;
                                     }
                                 });
                                 $scope.creditNotes = data.creditNotes;
                                 $scope.payment = data.payment;
                                 $scope.returneds = data.returneds;
-                                $scope.$apply();
-                                $rootScope.dataTable();
+                                //$rootScope.dataTable();
                                 $scope.invoiceId = $stateParams.invoiceId;
                                 $scope.raffleId = data.raffleId;
+
+                                $scope.paymentsHistory = data.paymentsHistory
+                                $scope.raffleName = data.raffleName;
+                                $scope.invoiceDate = data.invoiceDate;
+                                $scope.invoiceDiscount = data.invoiceDiscount;
+
+                                $rootScope.destroyDataTable();
+                                $scope.$apply();
+                                $rootScope.dataTable();
                                 rCheck($scope.creditNotes);
                             }
                         });
@@ -117,7 +135,7 @@
                 } else {
 
                     event.target.checked = null;
-                }              
+                }
             });
         }
 
@@ -126,27 +144,23 @@
                 //last change
                 if ($scope.totalCreditNoteValue <= $scope.payment.totalRestant && $scope.fullCredit == false) {
                     $scope.totalCreditNoteValue += creditNote.TotalRest;
-                    if ($scope.totalCreditNoteValue >= $scope.payment.totalRestant) { $scope.fullCredit = true;}
-                     $scope.receivable.NoteCreditReceiptPayments.push({ NoteCreditId: creditNote.Id });
-                   
+                    if ($scope.totalCreditNoteValue >= $scope.payment.totalRestant) { $scope.fullCredit = true; }
+                    $scope.receivable.NoteCreditReceiptPayments.push({ NoteCreditId: creditNote.Id });
+
                 } else {
                     e.target.checked = false;
                     if ($scope.totalCreditNoteValue < $scope.payment.totalRestant) { $scope.fullCredit = false; }
                 }
-                   
             } else {
                 var index = 0;
-                $scope.receivable.NoteCreditReceiptPayments.findIndex(function (e,i,a)
-                {
-                    if(e.NoteCreditId == creditNote.Id)
-                    {
+                $scope.receivable.NoteCreditReceiptPayments.findIndex(function (e, i, a) {
+                    if (e.NoteCreditId == creditNote.Id) {
                         index = i;
                         return i;
                     }
                 });
 
-                if (index > -1)
-                {
+                if (index > -1) {
                     $scope.receivable.NoteCreditReceiptPayments.splice(index, 1);
                 }
 
@@ -157,12 +171,12 @@
                 if ($scope.totalCreditNoteValue < $scope.payment.totalRestant) { $scope.fullCredit = false; }
             }
             $scope.receivable.TotalCash = $scope.totalCreditNoteValue;
-            if ($scope.receivable.TotalCash >= ($scope.payment.totalRestant - $scope.payment.discount) ) {
-                $scope.receivable.TotalCash = ($scope.payment.totalRestant- $scope.payment.discount);
+            if ($scope.receivable.TotalCash >= ($scope.payment.totalRestant - $scope.payment.discount)) {
+                $scope.receivable.TotalCash = ($scope.payment.totalRestant - $scope.payment.discount);
             }
             window.setTimeout(function () {
                 $scope.$apply();
-            },0);
+            }, 0);
         }
 
         $scope.saveForm = function () {
@@ -180,6 +194,7 @@
                 data: $scope.receivable,
                 success: function (data) {
                     if (data.result === true) {
+                        window.open('/Reports/InvoicePaymentInfo?paymentId=' + data.Pago);
                         alertify.success(data.message);
                         $state.go('app.cashReceivableList');
                     } else {

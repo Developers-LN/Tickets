@@ -7,7 +7,7 @@ namespace Tickets.Models.XML
 
     public class TicketAllocationNumber
     {
-        public string TiketNumber { get; set; }
+        public string TicketNumber { get; set; }
         public int FractionFrom { get; set; }
         public int FractionTo { get; set; }
         public string ControlNumber { get; set; }

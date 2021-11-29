@@ -1,0 +1,60 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Historial de pagos";
+}
+
+<div class="col-lg-12 no-padder" ng-controller="ReceivableController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div class="col-lg-12 well no-padder">
+                    <fieldset>
+                        <div class="col-lg-12 no-padder">
+                            <div class="col-lg-4">Número de factura: <b>#{{invoiceId}}</b></div>
+                            <div class="col-lg-4">Fecha de creación: <b>{{invoiceDate}}</b></div>
+                            <div class="col-lg-4">Cliente: <b>{{clientId}} - {{clientName}}</b></div>
+                        </div>
+                    </fieldset>
+                    <br />
+                    <fieldset>
+                        <div class="col-lg-12 no-padder">
+                            <div class="col-lg-8">Sorteo: <b>{{raffleName}}</b></div>
+                            <div class="col-lg-4">Descuento: <b>{{invoiceDiscount}}%</b></div>
+                        </div>
+                    </fieldset>
+                    <br />
+                </div>
+
+                <div class="row-border hover">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Recibo</th>
+                                <th>Cliente</th>
+                                <th>Observaciones</th>
+                                <th>Fecha de pago</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="payments in paymentsHistory">
+                                <td>#{{payments.Id}}</td>
+                                <td>{{payments.Nombre}}</td>
+                                <td>{{payments.Observaciones}}</td>
+                                <td>{{payments.paymentDate}}</td>
+                                <td>
+                                    <a target="_blank" href="/Reports/InvoicePaymentInfo?paymentId={{payments.Id}}" title="Reporte de pago"><i class="fa fa-print"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg">
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>
