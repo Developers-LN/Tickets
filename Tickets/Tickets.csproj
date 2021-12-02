@@ -336,6 +336,7 @@
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Enums\AllocationTypeEnum.cs" />
+    <Compile Include="Models\Enums\GenderEnum.cs" />
     <Compile Include="Models\Enums\GeneralClientEnum.cs" />
     <Compile Include="Models\Enums\PaymentTypeTextEnum.cs" />
     <Compile Include="Models\Enums\PrintTypeProspect.cs" />
@@ -3105,6 +3106,7 @@
     <Content Include="Views\Reports\ClientDetails.cshtml" />
     <Content Include="Views\Cash\InvoicePaymentHistory.cshtml" />
     <Content Include="Views\Reports\InvoicePaymentInfo.cshtml" />
+    <Content Include="Views\Reports\InvoicePayment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

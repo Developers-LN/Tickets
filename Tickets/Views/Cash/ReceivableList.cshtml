@@ -38,11 +38,11 @@
 
                 </div>
                 <div class="row-border hover">
-                    <table class="table dataTableGrid">
+                    <table class="table nowrap dataTableGrid">
                         <thead>
                             <tr>
                                 <th>Codigo</th>
-                                @*<th>Sorteo</th>*@
+                                <th>Sorteo</th>
                                 <th>Cliente</th>
                                 <th>Cantidad</th>
                                 <th>Descuento</th>
@@ -57,7 +57,7 @@
                         <tbody>
                             <tr data-ng-repeat="invoice in invoices">
                                 <td>#{{invoice.Id}}</td>
-                                @*<td>{{invoice.RaffleId}}</td>*@
+                                <td>{{invoice.RaffleId}}</td>
                                 <td>{{invoice.ClientDesc}} {{invoice.Agente}}</td>
                                 <td>{{parseMoney(invoice.Payment.totalInvoice)}}</td>
                                 <td>{{parseMoney(invoice.Payment.discount)}}</td>
@@ -76,7 +76,7 @@
                         <tfoot>
                             <tr>
                                 <td></td>
-                                @*<td></td>*@
+                                <td></td>
                                 <td></td>
                                 <td>{{parseMoney(totalBruton)}}</td>
                                 <td>{{parseMoney(totalDiscount)}}</td>

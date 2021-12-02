@@ -320,12 +320,14 @@ namespace Tickets.Models.Ticket
                                                     nc.TotalCash
                                                 }).ToList()
                                             }).ToList();
+
                             foreach (var expiredInvoice in expiredInvoices)
                             {
                                 foreach (var invoiceTicket in expiredInvoice.InvoiceTickets)
                                 {
                                     totalInvoiceData += (invoiceTicket.Quantity * invoiceTicket.PricePerFraction);
                                 }
+
                                 var totalCreditNote = 0.0M;
                                 var totalRequestCash = 0.0M;
 
@@ -350,7 +352,7 @@ namespace Tickets.Models.Ticket
 
                             allocatList.ForEach(a => a.TicketAllocationNumbers.ToList().ForEach(n => totalInvoiceData += (n.FractionTo - n.FractionFrom + 1) * model.TicketPrice));
 
-                            if (totalInvoiceData >= client.CreditLimit)
+                            if ((totalInvoiceData - ((totalInvoiceData * client.Discount) / 100)) >= client.CreditLimit)
                             {
                                 tx.Rollback();
                                 return new RequestResponseModel()

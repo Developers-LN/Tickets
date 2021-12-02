@@ -541,6 +541,8 @@ namespace Tickets.Controllers
 
                         var invoice = context.Invoices.FirstOrDefault(i => i.Id == receiptPayment.InvoiceId);
 
+                        var ClientType = invoice.Client.GroupId;
+
                         if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.TransDepDirect)
                         {
                             if (context.ReceiptPayments.FirstOrDefault(r => r.ClientId == invoice.ClientId && r.Recibo == receiptPayment.Recibo
@@ -591,7 +593,7 @@ namespace Tickets.Controllers
                             receiptPayment.TotalCheck = totalCash;
                             receiptPayment.Recibo = Recibo;
                         }
-                        if (context.Clients.Where(f => f.Id == invoice.ClientId).FirstOrDefault().GroupId == (int)ClientGroupEnum.CajaDespachoExpress)
+                        if (ClientType == (int)ClientGroupEnum.CajaDespachoExpress)
                         {
                             receiptPayment.Cedula = Cedula;
                             receiptPayment.Nombre = Nombre;
@@ -600,8 +602,12 @@ namespace Tickets.Controllers
                             receiptPayment.Observaciones = Observaciones;
                         }
 
+                        var Antes = receiptPayment;
+
                         context.ReceiptPayments.Add(receiptPayment);
                         context.SaveChanges();
+
+                        var Despues = receiptPayment;
 
                         if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.CreditNote)
                         {
@@ -643,7 +649,8 @@ namespace Tickets.Controllers
                         }
 
                         tx.Commit();
-                        return new JsonResult() { Data = new { result = true, message = "Recibo de Efectivo Guardado.", Pago = receiptPayment.Id } };
+                        var DespuesEnvio = receiptPayment;
+                        return new JsonResult() { Data = new { result = true, message = "Recibo de Efectivo Guardado.", Pago = receiptPayment.Id, clientType = ClientType } };
                     }
                     catch (Exception e)
                     {

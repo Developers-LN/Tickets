@@ -194,7 +194,12 @@
                 data: $scope.receivable,
                 success: function (data) {
                     if (data.result === true) {
-                        window.open('/Reports/InvoicePaymentInfo?paymentId=' + data.Pago);
+                        if (data.clientType == 5862) {
+                            window.open('/Reports/InvoicePaymentInfo?paymentId=' + data.Pago);
+                        }
+                        else {
+                            window.open('/Reports/InvoicePayment?paymentId=' + data.Pago);
+                        }
                         alertify.success(data.message);
                         $state.go('app.cashReceivableList');
                     } else {

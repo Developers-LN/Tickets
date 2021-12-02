@@ -6,9 +6,17 @@
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.LoteryAdmin : "";
+    string adminName = config != null ? config.CajaGeneral : "";
+    string adminCargo = config != null ? config.CajaGeneralCargo : "";
     decimal Total = 0.0m;
     var user = Model.Count > 0 ? context.Users.AsEnumerable().FirstOrDefault(u => u.Id == Model.FirstOrDefault().CreateUser) : null;
+    var Genero = 0;
+
+    if (user != null)
+    {
+        Genero = context.Users.Where(w => w.Id == user.Id).Select(s => s.Employee.Gender).FirstOrDefault();
+    }
+
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 
     var Efectivo = Tickets.Models.Enums.PaymentTypeTextEnum.Efectivo;
@@ -64,26 +72,39 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
-            <h4>
-                @*<b>REPORTE DE CAJA PARA EL SORTEO NO. @raffleId</b>*@
-            </h4>
+            <b>REPORTE DE CAJA DEL @Model.FirstOrDefault().CreateDate.ToShortDateString()</b>
         </div>
     </div>
     <div>
-        <div class="col-lg-12 no-padder" style="margin-top:50px">
-            Usuario: <strong>@(user != null ? (user.Id + " - " + user.Name) : "")</strong>
+        <div class="col-lg-12 no-padder">
+            @if (Genero == (int)Tickets.Models.Enums.GenderEnum.Femenino)
+            {
+                <strong>CAJERA: @(user.Employee.Name + " " + user.Employee.LastName)</strong>
+            }
+            else if (Genero == (int)Tickets.Models.Enums.GenderEnum.Masculino)
+            {
+                <strong>CAJERO: @(user.Employee.Name + " " + user.Employee.LastName)</strong>
+            }
+            @*else
+                {
+                    <strong>Usuario:@(user != null ? (user.Id + " - " + user.Name) : "")</strong>
+                }*@
         </div>
         <div class="col-lg-12 no-padder">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>NO. DE FACTURA</th>
+                        <th class="text-center">FACTURA</th>
+                        <th class="text-center">RECIBO</th>
                         <th>CLIENTE</th>
                         <th>FECHA</th>
-                        <th>SORTEO</th>
-                        <th>Forma de pago</th>
-                        <th>Referencia</th>
-                        <th class="text-right" style="width:15%">VALOR</th>
+                        <th class="text-center">SORTEO</th>
+                        <th>FORMA DE PAGO</th>
+                        @if (Model.Any(a => a.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect))
+                        {
+                            <th>REFERENCIA</th>
+                        }
+                        <th class="text-right">VALOR</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -91,12 +112,24 @@
                     {
                         Total += (receiptPayment.TotalCash + receiptPayment.TotalCheck + receiptPayment.TotalCredit);
                         <tr>
-                            <td>
+                            <td class="text-center">
                                 @receiptPayment.Invoice.Id
                             </td>
-                            <td>@receiptPayment.Client.Id - @receiptPayment.Client.Name</td>
+                            <td class="text-center">
+                                @receiptPayment.Id
+                            </td>
+                            <td>
+                                @if (receiptPayment.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)
+                                {
+                                    @(receiptPayment.Client.Id + " - " + receiptPayment.Client.Name)<br />@(receiptPayment.Nombre)
+                                }
+                                else
+                                {
+                                    @(receiptPayment.Client.Id + " - " + receiptPayment.Client.Name)
+                                }
+                            </td>
                             <td>@receiptPayment.CreateDate.ToString()</td>
-                            <td>@receiptPayment.Invoice.Raffle.Id</td>
+                            <td class="text-center">@receiptPayment.Invoice.Raffle.Id</td>
                             <td>
                                 @if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
                                 {
@@ -119,10 +152,13 @@
                                     @DepTransf;
                                 }
                             </td>
-                            <td>
-                                @receiptPayment.Recibo
-                            </td>
-                            <td class="text-right" style="width:15%">
+                            @if (Model.Any(a => a.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect))
+                            {
+                                <td>
+                                    @receiptPayment.Recibo
+                                </td>
+                            }
+                            <td class="text-right">
                                 @if (receiptPayment.TotalCash > 0)
                                 {
                                     @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
@@ -139,11 +175,23 @@
                         </tr>
                     }
                     <tr class="total">
-                        <td colspan="7" class="text-right">Total: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                        <td colspan="8" class="text-right">Total: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
                     </tr>
                 </tbody>
             </table>
 
         </div>
+    </div>
+
+    <div class="col-lg-12 no-padder text-center">
+        <b>@adminName</b>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+        <div class="col-lg-12 no-padder text-center">
+
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <span>@adminCargo</span>
     </div>
 </div>

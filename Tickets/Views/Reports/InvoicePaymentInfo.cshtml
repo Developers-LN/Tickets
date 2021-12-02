@@ -6,8 +6,8 @@
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.Facturacion : "";
-    string adminCargo = config != null ? config.FacturacionCargo : "";
+    string adminName = config != null ? config.CajaGeneral : "";
+    string adminCargo = config != null ? config.CajaGeneralCargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 
     var Efectivo = Tickets.Models.Enums.PaymentTypeTextEnum.Efectivo;
@@ -67,7 +67,7 @@
         </div>
         <div class="col-lg-6 no-padder">
             <div class="col-lg-12 no-padder text-left">
-                <b>Ventanilla: </b> #@Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+                <b>Ventanilla: </b> #@Model.Client.Id - @Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
             </div>
             <div class="col-lg-12 no-padder text-left">
                 <b>Comprador: </b> @Model.Nombre
@@ -81,7 +81,7 @@
         </div>
         <div class="col-lg-6 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>Factura: </b> #@Model.Id
+                <b>Factura: </b> #@Model.InvoiceId
             </div>
             <div class="col-lg-12 no-padder text-right">
                 <b>Recibo: </b>#@Model.Id
@@ -128,19 +128,19 @@
                     <td class="text-right">
                         @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
                         {
-                            @Model.TotalCash;
+                            @(Model.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
                         {
-                            @Model.TotalCheck;
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
                         {
-                            @Model.TotalCredit;
+                            @(Model.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                         {
-                            @Model.TotalCheck;
+                            @(Model.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                     </td>
                 </tr>
@@ -148,6 +148,7 @@
     </div>
 
     <div class="col-lg-12 no-padder text-center">
+        <br />
         <br />
         <div class="col-lg-4 col-md-6 col-sm-6 text-center">
             <div class="col-lg-12 no-padder text-center">
@@ -175,7 +176,7 @@
     </div>
 </div>
 
-<div class="col-lg-12" style="margin-top:15px;">
+<div class="col-lg-12" style="margin-top:50px;">
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-12 no-padder text-center" style="margin-top: 35px;">
             <img src="~/Images/logo.png" />
@@ -191,7 +192,7 @@
         </div>
         <div class="col-lg-6 no-padder">
             <div class="col-lg-12 no-padder text-left">
-                <b>Ventanilla: </b> #@Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+                <b>Ventanilla: </b> #@Model.Client.Id - @Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
             </div>
             <div class="col-lg-12 no-padder text-left">
                 <b>Comprador: </b> @Model.Nombre
@@ -205,7 +206,7 @@
         </div>
         <div class="col-lg-6 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>Factura: </b> #@Model.Id
+                <b>Factura: </b> #@Model.InvoiceId
             </div>
             <div class="col-lg-12 no-padder text-right">
                 <b>Recibo: </b>#@Model.Id
@@ -252,19 +253,19 @@
                     <td class="text-right">
                         @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
                         {
-                            @Model.TotalCash;
+                            @(Model.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
                         {
-                            @Model.TotalCheck;
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
                         {
-                            @Model.TotalCredit;
+                            @(Model.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                         {
-                            @Model.TotalCheck;
+                            @(Model.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                     </td>
                 </tr>
@@ -272,6 +273,7 @@
     </div>
 
     <div class="col-lg-12 no-padder text-center">
+        <br />
         <br />
         <div class="col-lg-4 col-md-6 col-sm-6 text-center">
             <div class="col-lg-12 no-padder text-center">

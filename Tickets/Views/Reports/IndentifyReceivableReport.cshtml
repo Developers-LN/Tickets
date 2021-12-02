@@ -99,7 +99,7 @@
                     @foreach (var number in Model.IdentifyBach.IdentifyNumbers)
                     {
                         var raffleAwardList = raffleAwards.Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number
-                       && number.TicketAllocationNumber.Id == number.NumberId).ToList();
+                        && number.TicketAllocationNumber.Id == number.NumberId).ToList();
 
                         bool wfrac = true;
                         var fFrom = number.FractionFrom;
