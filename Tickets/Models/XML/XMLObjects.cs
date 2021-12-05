@@ -95,6 +95,21 @@ namespace Tickets.Models.XML
         [System.Xml.Serialization.XmlElement("TicketNumber")]
         public string TicketNumber { get; set; }
 
+        [System.Xml.Serialization.XmlElement("IdNumber")]
+        public string IdNumber { get; set; }
+
+        [System.Xml.Serialization.XmlElement("TelNumber")]
+        public string TelNumber { get; set; }
+
+        [System.Xml.Serialization.XmlElement("CodAuth")]
+        public string CodAuth { get; set; }
+
+        [System.Xml.Serialization.XmlElement("ControlNumber")]
+        public string ControlNumber { get; set; }
+
+        [System.Xml.Serialization.XmlElement("DateSale")]
+        public DateTime DateSale { get; set; }
+
         [System.Xml.Serialization.XmlElement("FractionFrom")]
         public int FractionFrom { get; set; }
 

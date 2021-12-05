@@ -131,11 +131,12 @@
             if (!$scope.invoice) {
                 return;
             }
-            var total = 0, totalTicket = 0, totalFraccion = 0, totalDiscount = 0, subTotal = 0;
+            var total = 0, totalFractionReturned = 0, totalFraccionInvoice = 0, totalDiscount = 0, subTotal = 0, ticketFractions = 0;
             $scope.invoice.ticketAllocations.forEach(function (allocation) {
-                totalTicket += allocation.numberCount;
-                totalFraccion += allocation.fractionCount;
+                totalFractionReturned += allocation.returnFractions;
+                totalFraccionInvoice += allocation.fractionCount;
                 total += allocation.fractionCount * allocation.price;
+                ticketFractions = allocation.ticketFraction;
             });
             subTotal = total;
             totalDiscount = (total * $scope.clientDiscount) / 100;
@@ -144,8 +145,12 @@
                 subTotal: $rootScope.parseMoney(subTotal),
                 total: $rootScope.parseMoney(total),
                 totalDiscount: $rootScope.parseMoney(totalDiscount),
-                ticket: $rootScope.parseNumber(totalTicket),
-                fraction: $rootScope.parseNumber(totalFraccion)
+                fractionReturned: $rootScope.parseNumber(totalFractionReturned),
+                totalTicketsReturn: $rootScope.parseNumber(totalFractionReturned / ticketFractions),
+                totalFractionsReturn: $rootScope.parseNumber(totalFractionReturned % ticketFractions),
+                totalTicketsInvoice: $rootScope.parseNumber(totalFraccionInvoice / ticketFractions),
+                totalFractionsInvoice: $rootScope.parseNumber(totalFraccionInvoice % ticketFractions),
+                fractionInvoice: $rootScope.parseNumber(totalFraccionInvoice)
             };
         }
 

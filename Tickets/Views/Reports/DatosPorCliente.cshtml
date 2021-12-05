@@ -9,15 +9,11 @@
     string adminName = config != null ? config.ControlPremio : "";
     string adminCargo = config != null ? config.ControlPremioCargo : "";
 
-    var CantidadBilletesVendidos = 0;
-    var CantidadBilletesDevueltos = 0;
-    var FracionesDevueltas = 0;
+    int CantidadFraccionesDevueltas = 0;
     var VentaNeta = 0;
-    decimal PorcentajeDevolucion;
+    var CantidadFraccionesConsignadas = 0;
+    var PorcentajeDevolucion = 0.0m;
     var ClientName = "";
-    var StringNumero = "";
-    var StringVentaNeta = "";
-    decimal DecimalNumero;
 
     int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
@@ -41,7 +37,7 @@
             Fecha del sorteo: @RaffleData.DateSolteo.ToLongDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <b>REPORTE DE BILLETES FACTURADOS VS DEVOLUCIONES</b>
+            <b>REPORTE DE BILLETES CONSIGNADOS VS DEVOLUCIONES</b>
             <br />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
@@ -78,40 +74,55 @@
                     <tr>
                         <th class="text-center">ID Cliente</th>
                         <th class="text-center">Nombre del cliente</th>
-                        <th class="text-center">Cantidad de billetes <br /> consignado</th>
-                        <th class="text-center">Cantidad de billetes <br /> devueltos</th>
+                        <th class="text-center">Cantidad de billetes consignados</th>
+                        <th class="text-center">Cantidad de billetes y fracciones devueltas</th>
                         <th class="text-center">Ventas neta</th>
-                        <th class="text-center">Porcentage de <br /> devolución <br /> aproximado</th>
+                        <th class="text-center">Porcentage de devolución aproximado</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Clientes)
                     {
                         ClientName = Model.Where(w => w.ClientId == item).Select(s => s.ClientName).FirstOrDefault();
-                        CantidadBilletesVendidos = Model.Where(w => w.ClientId == item).Count();
-                        CantidadBilletesDevueltos = Model.Where(w => w.ClientId == item && w.ReturnFractions == w.TicketFractions).Count();
-                        FracionesDevueltas = Model.Where(w => w.ClientId == item && w.ReturnFractions > 0 && w.ReturnFractions < w.TicketFractions).Sum(s => s.ReturnFractions);
-                        VentaNeta = CantidadBilletesVendidos - CantidadBilletesDevueltos;
-                        StringVentaNeta = VentaNeta + "." + FracionesDevueltas;
-                        StringNumero = CantidadBilletesDevueltos + "." + FracionesDevueltas;
-                        DecimalNumero = decimal.Parse(StringNumero.Replace(".",","));
-                        PorcentajeDevolucion = (DecimalNumero * 100) / CantidadBilletesVendidos;
+                        CantidadFraccionesConsignadas = Model.Where(w => w.ClientId == item).Count();
 
-                        if(Math.Round(PorcentajeDevolucion) == 100 || Math.Round(PorcentajeDevolucion) == 0)
+                        CantidadFraccionesDevueltas = Model.Where(w => w.ClientId == item).Sum(s => s.ReturnFractions);
+
+                        VentaNeta = (CantidadFraccionesConsignadas * Model.FirstOrDefault().TicketFractions) - CantidadFraccionesDevueltas;
+
+                        if (CantidadFraccionesDevueltas != 0)
                         {
-                            PorcentajeDevolucion = Math.Round(PorcentajeDevolucion);
+                            PorcentajeDevolucion = (CantidadFraccionesDevueltas * 100) / (CantidadFraccionesConsignadas * Model.FirstOrDefault().TicketFractions);
                         }
                         else
                         {
-                            PorcentajeDevolucion = Math.Round(PorcentajeDevolucion, 2);
+                            PorcentajeDevolucion = 0;
                         }
 
                         <tr>
                             <td class="text-center">@item</td>
                             <td class="text-center">@ClientName</td>
-                            <td class="text-center">@CantidadBilletesVendidos.00</td>
-                            <td class="text-center">@StringNumero</td>
-                            <td class="text-center">@StringVentaNeta</td>
+                            <td class="text-center">@(CantidadFraccionesConsignadas.ToString("n0", new System.Globalization.CultureInfo("es-DO")))</td>
+                            @if (CantidadFraccionesDevueltas != 0 && CantidadFraccionesDevueltas % Model.FirstOrDefault().TicketFractions == 0)
+                            {
+                                <td class="text-center">@((CantidadFraccionesDevueltas / Model.FirstOrDefault().TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</td>
+                            }
+                            else if (CantidadFraccionesDevueltas != 0 && CantidadFraccionesDevueltas % Model.FirstOrDefault().TicketFractions != 0)
+                            {
+                                <td class="text-center">@((CantidadFraccionesDevueltas / Model.FirstOrDefault().TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))-@(CantidadFraccionesDevueltas % Model.FirstOrDefault().TicketFractions)</td>
+                            }
+                            else
+                            {
+                                <td class="text-center">0</td>
+                            }
+                            @if (VentaNeta % Model.FirstOrDefault().TicketFractions == 0)
+                            {
+                                <td class="text-center">@((VentaNeta / Model.FirstOrDefault().TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</td>
+                            }
+                            else
+                            {
+                                <td class="text-center">@((VentaNeta / Model.FirstOrDefault().TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))-@(VentaNeta % Model.FirstOrDefault().TicketFractions)</td>
+                            }
                             <td class="text-center">@PorcentajeDevolucion%</td>
                         </tr>
                     }

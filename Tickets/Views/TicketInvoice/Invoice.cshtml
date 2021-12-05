@@ -141,21 +141,21 @@
                         <thead>
                             <tr>
                                 <th class="text-center">Asignación</th>
-                                <th class="text-center">Fracciones<br />Devueltas</th>
-                                <th class="text-center">Billetes a<br />facturar</th>
-                                <th class="text-center">Fracciones<br>a facturar</th>
-                                <th class="text-center">Total de <br /> Fracciones</th>
-                                <th class="text-right">Precio</th>
+                                <th class="text-center">Fracciones devueltas</th>
+                                <th class="text-center">Total en billetes y fracciones devueltas</th>
+                                <th class="text-center">Fracciones a facturar</th>
+                                <th class="text-center">Total en billetes y fracciones a facturar</th>
+                                <th class="text-right">Precio por fracción</th>
                                 <th class="text-right">Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="ticketNumber in invoice.ticketAllocations">
                                 <td class="text-center">#{{ticketNumber.id}}</td>
-                                <td class="text-center">{{ticketNumber.returnFractions}}</td>
-                                <td class="text-center">{{ticketNumber.numberCount}}</td>
-                                <td class="text-center">{{ticketNumber.fractionRest}}</td>
-                                <td class="text-center">{{ticketNumber.fractionCount}}</td>
+                                <td class="text-center">{{ticketNumber.returnFractions | number}}</td>
+                                <td class="text-center">{{ticketNumber.returnTickets | number}} - {{ticketNumber.restReturnFractions}}</td>
+                                <td class="text-center">{{ticketNumber.fractionCount | number}}</td>
+                                <td class="text-center">{{ticketNumber.numberCount | number}} - {{ticketNumber.fractionRest}}</td>
                                 <td class="text-right">{{parseMoney(ticketNumber.price)}}</td>
                                 <td class="text-right" ng-bind="showSupTotalPrice(ticketNumber)"></td>
                             </tr>
@@ -163,10 +163,14 @@
                         <tfoot>
                             <tr>
                                 <td class="text-center"><b>{{invoice.ticketAllocations.length}}</b></td>
-                                <td class="text-center"></td>
-                                <td class="text-center"><b ng-bind="showTotalPrice().ticket"></b></td>
-                                <td class="text-center"></td>
-                                <td class="text-center"><b>{{showTotalPrice().fraction}}</b></td>
+                                <td class="text-center"><b ng-bind="showTotalPrice().fractionReturned"></b></td>
+                                <td class="text-center">
+                                    <b ng-bind="showTotalPrice().totalTicketsReturn"></b> - <b ng-bind="showTotalPrice().totalFractionsReturn"></b>
+                                </td>
+                                <td class="text-center"><b>{{showTotalPrice().fractionInvoice}}</b></td>
+                                <td class="text-center">
+                                    <b ng-bind="showTotalPrice().totalTicketsInvoice"></b> - <b ng-bind="showTotalPrice().totalFractionsInvoice"></b>
+                                </td>
                                 <td class="text-right">Sub Total:</td>
                                 <td class="text-right"><b ng-bind="showTotalPrice().subTotal"></b></td>
                             </tr>

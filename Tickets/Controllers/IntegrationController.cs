@@ -829,9 +829,7 @@ namespace Tickets.Controllers
                                 TicketAllocationId = ticketAllocation.Id,
                                 CreateUser = WebSecurity.CurrentUserId,
                                 CreateDate = DateTime.Now,
-                                Statu = (int)TicketStatusEnum.Printed,
-
-
+                                Statu = (int)TicketStatusEnum.Printed
                             };
                             ticketAllocations.Add(ticket);
                         }

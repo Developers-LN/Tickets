@@ -68,8 +68,17 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "fractionRest")]
         public int FractionRest { get; set; }
 
+        [JsonProperty(PropertyName = "ticketFraction")]
+        public int TicketFraction { get; set; }
+
         [JsonProperty(PropertyName = "returnFractions")]
         public int ReturnFractions { get; set; }
+
+        [JsonProperty(PropertyName = "returnTickets")]
+        public int ReturnTickets { get; set; }
+
+        [JsonProperty(PropertyName = "restReturnFractions")]
+        public int RestReturnFractions { get; set; }
 
         [JsonProperty(PropertyName = "Agente")]
         public string Agente { get; set; }
@@ -260,21 +269,27 @@ namespace Tickets.Models.Ticket
                 CreateDateLong = model.CreateDate.ToUnixTime(),
                 NumberCount = (TotalFracciones / Resultado.FirstOrDefault().TicketFraction),
                 FractionCount = TotalFracciones,
-                FractionRest = (TotalFracciones % Resultado.FirstOrDefault().TicketFraction)
+                FractionRest = (TotalFracciones % Resultado.FirstOrDefault().TicketFraction),
+                TicketFraction = Resultado.FirstOrDefault().TicketFraction
             };
             if (hasNumber)
             {
-                var numberModel = new TicketAllocationNumberModel();
-                allocation.TicketAllocationNumbers = model.TicketAllocationNumbers.Select(n => numberModel.ToObject(n)).ToList();
+                //var numberModel = new TicketAllocationNumberModel();
+                //allocation.TicketAllocationNumbers = model.TicketAllocationNumbers.Select(n => numberModel.ToObject(n)).ToList();
 
-                if (context.TicketReturns.Any(a => a.ClientId == model.ClientId && RaffleId == model.RaffleId))
+                if (context.TicketReturns.Any(a => a.ClientId == model.ClientId && a.RaffleId == model.RaffleId))
                 {
-                    allocation.ReturnFractions = context.TicketReturns.Where(w => w.ClientId == model.ClientId && w.RaffleId == model.RaffleId)
-                    .Select(s => s.FractionTo - s.FractionFrom + 1).Sum();
+                    allocation.ReturnFractions = context.TicketReturns.Where(w => w.ClientId == model.ClientId && w.RaffleId == model.RaffleId 
+                    && w.TicketAllocationNumber.TicketAllocationId == model.Id).Select(s => s.FractionTo - s.FractionFrom + 1).Sum();
+
+                    allocation.ReturnTickets = (allocation.ReturnFractions / Resultado.FirstOrDefault().TicketFraction);
+                    allocation.RestReturnFractions = (allocation.ReturnFractions % Resultado.FirstOrDefault().TicketFraction);
                 }
                 else
                 {
                     allocation.ReturnFractions = 0;
+                    allocation.ReturnTickets = 0;
+                    allocation.RestReturnFractions = 0;
                 }
             }
             if (hasProspectProperty)
