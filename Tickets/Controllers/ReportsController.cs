@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
 using Tickets.Models.Enums;
+using Tickets.Models.ModelsProcedures;
 using Tickets.Models.Procedures;
 using Tickets.Models.Prospects;
 using Tickets.Models.Raffles;
@@ -650,9 +651,9 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult AllocationSummary(int raffleId = 0)
         {
-            var context = new TicketsEntities();
-            var raffle = context.Raffles.FirstOrDefault(r => raffleId == 0 || r.Id == raffleId);
-            return View(raffle);
+            AllocationSummaryProcedure allocationSummaryProcedure = new AllocationSummaryProcedure();
+            var Resultado = allocationSummaryProcedure.ConsultaAsignacionesSorteo(raffleId);
+            return View(Resultado);
         }
 
         //

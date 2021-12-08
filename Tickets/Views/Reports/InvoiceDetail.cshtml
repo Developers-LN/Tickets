@@ -11,6 +11,7 @@
     string adminCargo = config != null ? config.FacturacionCargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 
+    var TicketFractions = 0;
     var xpiredDate = Model.InvoiceDate.AddDays(Model.InvoiceExpredDay.Value);
     var InvoiceDiscount2 = 0.0m;
 }
@@ -92,15 +93,15 @@
                 <thead>
                     <tr>
                         <th class="text-center">ASIGNACION</th>
-                        <th class="text-center">CANTIDAD DE BILLETES</th>
-                        <th class="text-center">CANTIDAD DE FRACCIONES</th>
+                        <th class="text-center">CANTIDAD DE FRACCIONES FACTURADAS</th>
+                        <th class="text-center">TOTAL EN BILLETES Y FRACCIONES</th>
                         <th class="text-right">PRECIO POR FRACCION</th>
                         <th class="text-right">TOTAL</th>
                     </tr>
                 </thead>
                 <tbody>
                     @{
-                        int subTotalNumber = 0, subTotalFraction = 0, subtotalBilletes = 0;
+                        int subTotalNumber = 0, subTotalFraction = 0;
                         decimal subTotalValue = 0.0m, totalClientDiscount = 0.00m, InvoiceDiscount = 0.0m;
                         var priceFraction = Model.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == Model.Client.PriceId).FactionPrice;
                         var allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select(a => new
@@ -117,18 +118,17 @@
                     @foreach (var number in allocations)
                     {
                         var Resultado = availableTicketsToInvoice.AvailableTicketsToInvoice(Model.Raffle.Id, number.AllocationId).ToList();
-
+                        TicketFractions = Resultado.FirstOrDefault().TicketFraction;
                         var TotalFracciones = Resultado.Where(w => w.AllocationId == number.AllocationId).Sum(s => s.AvailableFractions);
 
                         subTotalNumber += 1;
                         subTotalFraction += TotalFracciones;
                         var subTotal = TotalFracciones * priceFraction;
                         string restfracions = (TotalFracciones % Resultado.FirstOrDefault().TicketFraction).ToString().PadLeft(3, '0');
-                        subtotalBilletes += ((TotalFracciones / Resultado.FirstOrDefault().TicketFraction));
                         <tr>
                             <td class="text-center">@number.AllocationId</td>
-                            <td class="text-center">@(TotalFracciones / Resultado.FirstOrDefault().TicketFraction).@(TotalFracciones % Resultado.FirstOrDefault().TicketFraction) </td>
                             <td class="text-center">@TotalFracciones</td>
+                            <td class="text-center">@(TotalFracciones / Resultado.FirstOrDefault().TicketFraction)-@(TotalFracciones % Resultado.FirstOrDefault().TicketFraction) </td>
                             <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
@@ -140,8 +140,8 @@
                 <tfoot>
                     <tr style="border-top: 4px double black">
                         <td class="text-center">@subTotalNumber</td>
-                        <td class="text-center">@subtotalBilletes</td>
                         <td class="text-center">@subTotalFraction</td>
+                        <td class="text-center">@(subTotalFraction / TicketFractions)-@(subTotalFraction % TicketFractions)</td>
                         <td class="text-right"></td>
                         <td class="text-right" style="font-weight:bold;">Sub Total: @subTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
@@ -235,16 +235,16 @@
                 <thead>
                     <tr>
                         <th class="text-center">ASIGNACION</th>
-                        <th class="text-center">CANTIDAD DE BILLETES</th>
-                        <th class="text-center">CANTIDAD DE FRACCIONES</th>
+                        <th class="text-center">CANTIDAD DE FRACCIONES FACTURADAS</th>
+                        <th class="text-center">TOTAL EN BILLETES Y FRACCIONES</th>
                         <th class="text-right">PRECIO POR FRACCION</th>
                         <th class="text-right">TOTAL</th>
                     </tr>
                 </thead>
                 <tbody>
                     @{
-                        subTotalNumber = 0; subTotalFraction = 0; subtotalBilletes = 0;
-                        subTotalValue = 0.0m; totalClientDiscount = 0.00m;
+                        subTotalNumber = 0; subTotalFraction = 0;
+                        subTotalValue = 0.0m; totalClientDiscount = 0.00m; InvoiceDiscount = 0.0m;
                         priceFraction = Model.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == Model.Client.PriceId).FactionPrice;
                         allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select(a => new
                         {
@@ -253,36 +253,37 @@
                             //Numbers = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers,
                             //FractionFrom = a.FirstOrDefault().TicketAllocationNumber.FractionFrom,
                             //FractionTo = a.FirstOrDefault().TicketAllocationNumber.FractionTo,
-                            ClientDiscount = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Client.Discount,
+                            ClientDiscount = @Model.Discount,
                             TypeId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Type
                         });
                     }
                     @foreach (var number in allocations)
                     {
                         var Resultado = availableTicketsToInvoice.AvailableTicketsToInvoice(Model.Raffle.Id, number.AllocationId).ToList();
-
+                        TicketFractions = Resultado.FirstOrDefault().TicketFraction;
                         var TotalFracciones = Resultado.Where(w => w.AllocationId == number.AllocationId).Sum(s => s.AvailableFractions);
 
                         subTotalNumber += 1;
                         subTotalFraction += TotalFracciones;
                         var subTotal = TotalFracciones * priceFraction;
-                        subtotalBilletes += (TotalFracciones / Resultado.FirstOrDefault().TicketFraction);
+                        string restfracions = (TotalFracciones % Resultado.FirstOrDefault().TicketFraction).ToString().PadLeft(3, '0');
                         <tr>
                             <td class="text-center">@number.AllocationId</td>
-                            <td class="text-center">@(TotalFracciones / Resultado.FirstOrDefault().TicketFraction).@(TotalFracciones % Resultado.FirstOrDefault().TicketFraction) </td>
                             <td class="text-center">@TotalFracciones</td>
+                            <td class="text-center">@(TotalFracciones / Resultado.FirstOrDefault().TicketFraction)-@(TotalFracciones % Resultado.FirstOrDefault().TicketFraction) </td>
                             <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
                         subTotalValue += subTotal;
-                        totalClientDiscount = InvoiceDiscount2; //+= (subTotal * number.ClientDiscount) / 100;
+                        totalClientDiscount += (subTotal * number.ClientDiscount) / 100;
+                        InvoiceDiscount2 = totalClientDiscount;
                     }
                 </tbody>
                 <tfoot>
                     <tr style="border-top: 4px double black">
                         <td class="text-center">@subTotalNumber</td>
-                        <td class="text-center">@subtotalBilletes</td>
                         <td class="text-center">@subTotalFraction</td>
+                        <td class="text-center">@(subTotalFraction / TicketFractions)-@(subTotalFraction % TicketFractions)</td>
                         <td class="text-right"></td>
                         <td class="text-right" style="font-weight:bold;">Sub Total: @subTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
@@ -313,11 +314,6 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 text-center">
                 <div class="col-lg-12 no-padder text-center">
-
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 text-center">
-                <div class="col-lg-12 no-padder text-center">
                     ______________________________
                 </div>
                 Firma del Cajero
@@ -325,6 +321,11 @@
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>@adminName</b>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+
+            </div>
         </div>
         <div class="col-lg-12 no-padder text-center">
             <span>@adminCargo</span>

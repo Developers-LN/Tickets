@@ -367,6 +367,7 @@
     <Compile Include="Models\Log.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ModelsProcedures\AllocationSummary.cs" />
     <Compile Include="Models\ModelsProcedures\ModelAvailableTickets.cs" />
     <Compile Include="Models\ModelsProcedures\ModelAvailableTicketsToInvoice.cs" />
     <Compile Include="Models\ModelsProcedures\ModelInvoicedTickets.cs" />
@@ -391,6 +392,7 @@
     <Compile Include="Models\PreviousDebtPayment.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Procedures\AllocationSummaryProcedure.cs" />
     <Compile Include="Models\Procedures\AllPatyableAwardsProcedure.cs" />
     <Compile Include="Models\Procedures\AvailableTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\AvailableTicketToInvoice.cs" />

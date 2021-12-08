@@ -377,6 +377,7 @@ namespace Tickets.Controllers
                         else
                         {
                             raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id)
+                            .Select(s => new { s.Id, s.Number, s.ControlNumber, s.FractionFrom, s.FractionTo })
                             .OrderBy(o => o.Number).ToList().ForEach(t =>
                                   allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
                                   {

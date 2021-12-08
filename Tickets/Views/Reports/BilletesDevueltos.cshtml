@@ -12,10 +12,9 @@
     int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
 
-    int TicketsCount = 0;
-    int FractionCount = 0;
-    int Fracciones = 0;
-    var TicketFractions = 0;
+    int ExtraordinaryTicketsCount = 0;
+    int OrdinaryFractionsCount = 0;
+    int TicketFractios = 0;
 
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
@@ -63,7 +62,7 @@
                 {
                     if (RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction == 1)
                     {
-                        TicketFractions = RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction;
+                        //TicketFractions = RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction;
 
                         HashSet<int> Billetes = new HashSet<int>();
                         Model.ToList().ForEach(f => Billetes.Add(f.TicketNumber));
@@ -72,7 +71,7 @@
                         var production = RaffleData.Prospect.Production - 1;
                         var NextBiggerNumber = 0;
                         int line = 1;
-                        TicketsCount = Model.Count();
+                        ExtraordinaryTicketsCount = Model.Count();
                         var MaxNumber = Model.Max(n => n.TicketNumber);
                         int inicio = 0, fin = 0;
                         string stringNumber, newStringNumber, stringNumberI, stringNumberF, newStringNumberS;
@@ -129,8 +128,8 @@
                         var production = RaffleData.Prospect.Production - 1;
                         var NextBiggerNumber = 0;
                         int line = 1;
-                        Fracciones = RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction;
-                        FractionCount = Model.Sum(s => s.ReturnFractions);
+                        TicketFractios = RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction;
+                        OrdinaryFractionsCount = Model.Sum(s => s.ReturnFractions);
                         var MaxNumber = Model.Max(n => n.TicketNumber);
                         int inicio = 0, fin = 0, CantidadFraccion = 0, LastFaction = 0;
                         string stringNumber, newStringNumber, stringNumberI, stringNumberF, newStringNumberS;
@@ -194,23 +193,23 @@
         </table>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-        @if (TicketsCount == 0)
+        @if (ExtraordinaryTicketsCount != 0)
         {
-            <b>Total de billetes devueltos: @TicketsCount</b>
+            <b>Total de billetes devueltos: @ExtraordinaryTicketsCount</b>
         }
         else
         {
-            if (TicketFractions != 0)
+            if (OrdinaryFractionsCount != 0)
             {
-                var Billetes = FractionCount / Fracciones;
-                var FraccionesRestantes = FractionCount % Fracciones;
-                <b>Total de billetes devueltos: @Billetes</b>
+                var Billetes = OrdinaryFractionsCount / TicketFractios;
+                var FraccionesRestantes = OrdinaryFractionsCount % TicketFractios;
+                <b>Total de billetes devueltos: @Billetes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b>
                 <br />
                 <b>Total de fracciones devueltas: @FraccionesRestantes</b>
             }
             else
             {
-                <b>Total de billetes devueltos: @TicketsCount</b>
+                <b>Total de billetes devueltos: @OrdinaryFractionsCount</b>
             }
         }
     </div>
