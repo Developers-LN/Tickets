@@ -1061,6 +1061,14 @@ namespace Tickets.Controllers
         {
             return View();
         }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult CashAdvanceList()
+        {
+            return View();
+        }
+
         //
         // GET: /Cash/GetCreditNoteList
         [Authorize]
@@ -1078,7 +1086,7 @@ namespace Tickets.Controllers
                     c.Name
                 }).ToList<object>();
 
-                creditNotes = context.NoteCredits.AsEnumerable().OrderByDescending(n => n.Id).Select(c => new
+                creditNotes = context.NoteCredits.Where(w => w.TypeNote == (int)NoteCreditEnum.NoteCredit).AsEnumerable().OrderByDescending(n => n.Id).Select(c => new
                 {
                     c.Id,
                     c.ClientId,
@@ -1091,15 +1099,59 @@ namespace Tickets.Controllers
             }
             else
             {
-                creditNotes = context.NoteCredits.AsEnumerable().OrderByDescending(n => n.Id).Where(c => c.ClientId == clientId).Select(c => new
+                creditNotes = context.NoteCredits.AsEnumerable().OrderByDescending(n => n.Id)
+                    .Where(c => c.ClientId == clientId && c.TypeNote == (int)NoteCreditEnum.NoteCredit).Select(c => new
+                    {
+                        c.Id,
+                        c.ClientId,
+                        ClientDesc = c.Client.Name,
+                        NoteDate = c.NoteDate.ToShortDateString(),
+                        c.TotalCash,
+                        c.TotalRest
+                    }).ToList<object>();
+            }
+
+            return new JsonResult() { Data = new { clients, creditNotes }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [Authorize]
+        [HttpGet]
+        public JsonResult GetCashAdvancesList(int clientId)
+        {
+            var context = new TicketsEntities();
+            List<object> clients = new List<object>();
+            List<object> creditNotes = new List<object>();
+            if (clientId == 0)
+            {
+                clients = context.Clients.Where(c => c.Statu == (int)ClientStatuEnum.Approbed).Select(c => new
+                {
+                    c.Id,
+                    c.Name
+                }).ToList<object>();
+
+                creditNotes = context.NoteCredits.Where(w => w.TypeNote == (int)NoteCreditEnum.CashAdvance).AsEnumerable().OrderByDescending(n => n.Id).Select(c => new
                 {
                     c.Id,
                     c.ClientId,
                     ClientDesc = c.Client.Name,
                     NoteDate = c.NoteDate.ToShortDateString(),
+                    c.Concepts,
                     c.TotalCash,
                     c.TotalRest
                 }).ToList<object>();
+            }
+            else
+            {
+                creditNotes = context.NoteCredits.AsEnumerable().OrderByDescending(n => n.Id)
+                    .Where(c => c.ClientId == clientId && c.TypeNote == (int)NoteCreditEnum.CashAdvance).Select(c => new
+                    {
+                        c.Id,
+                        c.ClientId,
+                        ClientDesc = c.Client.Name,
+                        NoteDate = c.NoteDate.ToShortDateString(),
+                        c.TotalCash,
+                        c.TotalRest
+                    }).ToList<object>();
             }
 
             return new JsonResult() { Data = new { clients, creditNotes }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

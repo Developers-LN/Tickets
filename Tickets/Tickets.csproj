@@ -338,6 +338,7 @@
     <Compile Include="Models\Enums\AllocationTypeEnum.cs" />
     <Compile Include="Models\Enums\GenderEnum.cs" />
     <Compile Include="Models\Enums\GeneralClientEnum.cs" />
+    <Compile Include="Models\Enums\NoteCreditEnum.cs" />
     <Compile Include="Models\Enums\PaymentTypeTextEnum.cs" />
     <Compile Include="Models\Enums\PrintTypeProspect.cs" />
     <Compile Include="Models\Enums\ProspectIdEnum.cs" />
@@ -765,6 +766,7 @@
     <Content Include="Scripts\modules\cash\invoice.cash.reports.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\modules\cash\cash.advance.list.controller.js" />
     <Content Include="Scripts\modules\cash\previous.debt.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -3109,6 +3111,7 @@
     <Content Include="Views\Cash\InvoicePaymentHistory.cshtml" />
     <Content Include="Views\Reports\InvoicePaymentInfo.cshtml" />
     <Content Include="Views\Reports\InvoicePayment.cshtml" />
+    <Content Include="Views\Cash\CashAdvanceList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

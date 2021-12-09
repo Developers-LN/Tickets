@@ -320,6 +320,7 @@
           <Property Name="Concepts" Type="text" />
           <Property Name="DiscountPercent" Type="int" Nullable="false" />
           <Property Name="RaffleId" Type="int" />
+          <Property Name="TypeNote" Type="int" />
         </EntityType>
         <EntityType Name="NoteCreditReceiptPayment">
           <Key>
@@ -3283,6 +3284,7 @@
           <NavigationProperty Name="Raffle" Relationship="TicketsModel.FK_NoteCredit_Raffle" FromRole="NoteCredit" ToRole="Raffle" />
           <NavigationProperty Name="NoteCreditReceiptPayments" Relationship="TicketsModel.FK_NoteCreditReceiptPayment_NoteCredit" FromRole="NoteCredit" ToRole="NoteCreditReceiptPayment" />
           <NavigationProperty Name="IdentifyBaches" Relationship="TicketsModel.IdentifyBach_CreditNote" FromRole="NoteCredit" ToRole="IdentifyBach" />
+          <Property Name="TypeNote" Type="Int32" />
         </EntityType>
         <EntityType Name="NoteCreditReceiptPayment">
           <Key>
@@ -5365,6 +5367,7 @@
           <EntitySetMapping Name="NoteCredits">
             <EntityTypeMapping TypeName="TicketsModel.NoteCredit">
               <MappingFragment StoreEntitySet="NoteCredit">
+                <ScalarProperty Name="TypeNote" ColumnName="TypeNote" />
                 <ScalarProperty Name="RaffleId" ColumnName="RaffleId" />
                 <ScalarProperty Name="DiscountPercent" ColumnName="DiscountPercent" />
                 <ScalarProperty Name="Concepts" ColumnName="Concepts" />

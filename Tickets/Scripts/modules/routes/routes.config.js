@@ -654,6 +654,10 @@
                 url: '/cash/noteCredits',
                 templateUrl: Route.base('Cash/CreditNoteList')
             })
+            .state('app.cashAdvance', {
+                url: '/cash/CashAdvances',
+                templateUrl: Route.base('Cash/CashAdvanceList')
+            })
             .state('app.cashNoteCreditCreate', {
                 url: '/cash/noteCredit/:noteCreditId/:raffleAwardId',
                 templateUrl: Route.base('Cash/CreditNote')

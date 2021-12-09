@@ -1,5 +1,5 @@
-/**=========================================================
- * Module: DeliveryListController.js
+﻿/**=========================================================
+ * Module: CashAdvanceListController.js
  =========================================================*/
 
 (function () {
@@ -7,20 +7,20 @@
 
     angular
         .module('naut')
-        .controller('NoteCreaditListController', NoteCreaditListController);
+        .controller('CashAdvanceListController', CashAdvanceListController);
 
-    NoteCreaditListController.$inject = ['$scope', '$state', '$rootScope'];
-    function NoteCreaditListController($scope, $state, $rootScope) {
+    CashAdvanceListController.$inject = ['$scope', '$state', '$rootScope'];
+    function CashAdvanceListController($scope, $state, $rootScope) {
         $scope.ClientId = 0;
-        $scope.updateCreditNote = function (clientId) {
+        $scope.updateCashAdvance = function (clientId) {
             window.loading.show();
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                url: 'Cash/GetCreditNoteList?clientId=' + clientId,
+                url: 'Cash/GetCashAdvancesList?clientId=' + clientId,
                 success: function (data) {
                     window.loading.hide();
-                    $scope.creditNotes = data.creditNotes;
+                    $scope.cashAdvances = data.creditNotes;
                     if ($scope.ClientId === 0) {
                         $scope.clients = data.clients;
                     }
@@ -33,10 +33,10 @@
             });
         }
 
-        $scope.updateCreditNote(0);
+        $scope.updateCashAdvance(0);
 
-        $scope.changeCreditNote = function () {
-            $scope.updateCreditNote($scope.ClientId);
+        $scope.changeCashAdvance = function () {
+            $scope.updateCashAdvance($scope.ClientId);
         }
     }
 })();

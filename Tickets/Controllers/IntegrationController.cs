@@ -327,8 +327,9 @@ namespace Tickets.Controllers
                     try
                     {
                         var allocation = context.TicketAllocations.FirstOrDefault(i => i.Id == id);
-                        var raffle = context.Raffles.Where(r => r.Id == allocation.RaffleId).FirstOrDefault();
-                        var ClientControlNumber = context.Clients.Where(c => c.Id == allocation.ClientId).Select(c => c.ControlNumber).FirstOrDefault();
+                        //var raffle = context.Raffles.Where(r => r.Id == allocation.RaffleId).FirstOrDefault();
+                        //var ClientControlNumber = context.Clients.Where(c => c.Id == allocation.ClientId).Select(c => c.ControlNumber).FirstOrDefault();
+                        var Production = allocation.Raffle.Prospect.Production.ToString().Length - 1;
 
                         var allocationXML = new Models.XML.TicketAllocateXML();
 
@@ -347,48 +348,50 @@ namespace Tickets.Controllers
 
                         DateTime actualDate = DateTime.Now;
 
-                        if (allocation.Statu != (int)AllocationStatuEnum.Generated)
+                        /*if (allocation.Statu != (int)AllocationStatuEnum.Generated)
+                        {*/
+                        //const int length = 8;
+                        //const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+                        context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == id).OrderBy(o => o.Number)
+                        .Select(s => new { s.Id, s.Number, s.ControlNumber, s.FractionFrom, s.FractionTo }).ToList()
+                        .ForEach(f => allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
                         {
-                            const int length = 8;
-                            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                            IdNumber = f.Id,
+                            TicketNumber = f.Number.ToString().PadLeft(Production, '0'),
+                            ControlNumber = f.ControlNumber,
+                            //ControlNumber = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray()),
+                            FractionFrom = f.FractionFrom,
+                            FractionTo = f.FractionTo
+                        }));
 
-                            raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id).ToList().ForEach(t =>
-                                allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
-                                {
-                                    IdNumber = t.Id,
-                                    TicketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
-                                    ControlNumber = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray()),
-                                    FractionFrom = t.FractionFrom,
-                                    FractionTo = t.FractionTo
-                                })
-                            ));
-
-                            allocation.TicketAllocationNumbers.ToList().ForEach(f =>
-                            {
-                                f.ControlNumber = allocationXML.TicketAllocationNumbers.Where(w => w.IdNumber == f.Id).FirstOrDefault().ControlNumber;
-                                f.PrintedDate = actualDate;
-                            });
-
+                        /*allocation.TicketAllocationNumbers.ToList().ForEach(f =>
+                        {
+                            f.ControlNumber = allocationXML.TicketAllocationNumbers.Where(w => w.IdNumber == f.Id).FirstOrDefault().ControlNumber;
+                            f.PrintedDate = actualDate;
+                        });*/
+                        
+                        if(allocation.Statu != (int)AllocationStatuEnum.Generated)
+                        {
                             allocation.Statu = (int)AllocationStatuEnum.Generated;
+                        }
 
-                            context.SaveChanges();
-                            tx.Commit();
-                        }
-                        else
+                        context.SaveChanges();
+                        tx.Commit();
+                        //}
+                        /*else
                         {
-                            raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.Where(n => n.TicketAllocationId == id)
-                            .Select(s => new { s.Id, s.Number, s.ControlNumber, s.FractionFrom, s.FractionTo })
-                            .OrderBy(o => o.Number).ToList().ForEach(t =>
-                                  allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
-                                  {
-                                      IdNumber = t.Id,
-                                      TicketNumber = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)t.Number),
-                                      ControlNumber = t.ControlNumber,
-                                      FractionFrom = t.FractionFrom,
-                                      FractionTo = t.FractionTo
-                                  })
-                            ));
-                        }
+                            context.TicketAllocationNumbers.OrderBy(o => o.Number).Where(w => w.TicketAllocationId == id)
+                            .Select(s => new { s.Id, s.Number, s.ControlNumber, s.FractionFrom, s.FractionTo }).ToList()
+                            .ForEach(f => allocationXML.TicketAllocationNumbers.Add(new Models.XML.TicketAllocationNumber()
+                            {
+                                IdNumber = f.Id,
+                                TicketNumber = f.Number.ToString().PadLeft(Production, '0'),
+                                ControlNumber = f.ControlNumber,
+                                FractionFrom = f.FractionFrom,
+                                FractionTo = f.FractionTo
+                            }));
+                        }*/
 
                         XmlDocument xmlDoc = new XmlDocument();
                         //Represents an XML document,
