@@ -602,12 +602,8 @@ namespace Tickets.Controllers
                             receiptPayment.Observaciones = Observaciones;
                         }
 
-                        var Antes = receiptPayment;
-
                         context.ReceiptPayments.Add(receiptPayment);
                         context.SaveChanges();
-
-                        var Despues = receiptPayment;
 
                         if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.CreditNote)
                         {
@@ -649,7 +645,6 @@ namespace Tickets.Controllers
                         }
 
                         tx.Commit();
-                        var DespuesEnvio = receiptPayment;
                         return new JsonResult() { Data = new { result = true, message = "Recibo de Efectivo Guardado.", Pago = receiptPayment.Id, clientType = ClientType } };
                     }
                     catch (Exception e)
@@ -697,11 +692,14 @@ namespace Tickets.Controllers
                         s.Observaciones,
                         paymentDate = s.CreateDate.ToString("dd/MM/yy")
                     }).ToList(),
-                    creditNotes = invoice.Client.NoteCredits.AsEnumerable().Where(c =>
-                       c.Statu == (int)GeneralStatusEnum.Active
+                    creditNotes = invoice.Client.NoteCredits.AsEnumerable().Where(c => c.TypeNote == (int)NoteCreditEnum.NoteCredit
+                       && c.Statu == (int)GeneralStatusEnum.Active
                        && (c.RaffleId.HasValue == false || c.RaffleId.Value == invoice.RaffleId)
-                       && c.TotalRest > 0
-                    ).Select(c => CreditNoteToObject(c)).ToList(),
+                       && c.TotalRest > 0).Select(c => CreditNoteToObject(c)).ToList(),
+                    cashAdvances = invoice.Client.NoteCredits.AsEnumerable().Where(w => w.TypeNote == (int)NoteCreditEnum.CashAdvance
+                        && w.Statu == (int)GeneralStatusEnum.Active
+                        && (w.RaffleId.HasValue == false || w.RaffleId.Value == invoice.RaffleId)
+                        && w.TotalRest > 0).Select(s => CreditNoteToObject(s)).ToList(),
                     payment = GetPaymentCash(invoice),
                     raffleId = invoice.RaffleId,
                     raffleName = invoice.Raffle.Name
@@ -922,6 +920,32 @@ namespace Tickets.Controllers
             return View();
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult CashAdvance()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public JsonResult GetCashAdvanceInfo()
+        {
+            var context = new TicketsEntities();
+            var clients = context.Clients.Where(w => w.Statu == (int)ClientStatuEnum.Approbed).Select(s => new { s.Id, s.Name }).ToList();
+            var raffles = context.Raffles.Where(w => w.Statu == (int)RaffleStatusEnum.Planned).Select(s => new { s.Id, s.Name }).ToList();
+
+            return new JsonResult()
+            {
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                Data = new
+                {
+                    clients,
+                    raffles
+                }
+            };
+        }
+
         //
         //GET: /Cash/CreditNote
         [Authorize]
@@ -985,6 +1009,73 @@ namespace Tickets.Controllers
                 Concepts = noteCredit.IdentifyBaches.Count > 0 ? noteCredit.Concepts + " Lote #" + noteCredit.IdentifyBaches.FirstOrDefault().Id :
                 noteCredit.RaffleId.HasValue ? noteCredit.Concepts + " del Sorteo #" + noteCredit.RaffleId.Value : noteCredit.Concepts
             };
+        }
+
+        //
+        // GET: /Cash/CreditNote
+        [Authorize]
+        [HttpPost]
+        public JsonResult CashAdvance(NoteCredit creditNote)
+        {
+            using (var context = new TicketsEntities())
+            {
+                using (var tx = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        if (creditNote.Id == 0)
+                        {
+                            var identifyBachId = 0;
+                            Client client;
+                            if (creditNote.IdentifyBaches.Where(r => r.Id > 0).Any())
+                            {
+                                identifyBachId = creditNote.IdentifyBaches.FirstOrDefault().Id;
+                                client = context.IdentifyBaches.FirstOrDefault(i => i.Id == identifyBachId).Client;
+                                creditNote.IdentifyBaches = new List<IdentifyBach>();
+                                creditNote.DiscountPercent = client.GroupId == (int)ClientGroupEnum.Mayorista ? 2 : 0;
+                            }
+                            else
+                            {
+                                creditNote.IdentifyBaches = new List<IdentifyBach>();
+                                creditNote.DiscountPercent = 0;
+                            }
+                            creditNote.NoteDate = DateTime.Now.Date;
+                            creditNote.TotalRest = creditNote.TotalCash;
+                            creditNote.CreateDate = DateTime.Now;
+                            creditNote.CreateUser = WebSecurity.CurrentUserId;
+                            creditNote.Statu = (int)GeneralStatusEnum.Active;
+                            creditNote.TypeNote = (int)NoteCreditEnum.CashAdvance;
+                            context.NoteCredits.Add(creditNote);
+                            context.SaveChanges();
+                            if (identifyBachId > 0)
+                            {
+                                creditNote.IdentifyBaches.Add(context.IdentifyBaches.FirstOrDefault(r => r.Id == identifyBachId));
+                            }
+                            context.SaveChanges();
+                        }
+                        else
+                        {
+                            var mCreditNote = context.NoteCredits.FirstOrDefault(n => n.Id == creditNote.Id);
+                            mCreditNote.ClientId = creditNote.ClientId;
+                            mCreditNote.NoteDate = creditNote.CreateDate;
+                            mCreditNote.TotalCash = creditNote.TotalCash;
+                            mCreditNote.TotalRest = creditNote.TotalRest;
+                            mCreditNote.Concepts = creditNote.Concepts;
+                            context.SaveChanges();
+                            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Nota de Credito Editada", mCreditNote);
+                        }
+                        tx.Commit();
+                        Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Nota de Credito Editada", creditNote);
+
+                        return new JsonResult() { Data = new { result = true, message = "Nota de Credito Completada.", cashAdvance = creditNote.Id } };
+                    }
+                    catch (Exception e)
+                    {
+                        tx.Rollback();
+                        return new JsonResult() { Data = new { result = false, message = e.Message } };
+                    }
+                }
+            }
         }
 
         //

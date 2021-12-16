@@ -374,10 +374,10 @@ namespace Tickets.Controllers
                         if(allocation.Statu != (int)AllocationStatuEnum.Generated)
                         {
                             allocation.Statu = (int)AllocationStatuEnum.Generated;
+                            context.SaveChanges();
+                            tx.Commit();
                         }
 
-                        context.SaveChanges();
-                        tx.Commit();
                         //}
                         /*else
                         {

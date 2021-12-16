@@ -2,7 +2,7 @@
  * Module: IdentifyAwardDetailController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -50,7 +50,7 @@
                     $scope.identifyBach = data.identifyBach;
 
                     $scope.pricePerFraction = data.pricePerFraction;
-                    
+
                     $scope.showTotal();
                     window.loading.hide();
                     $rootScope.destroyDataTable();
@@ -63,7 +63,11 @@
         $scope.showSubTotal = function (number) {
             var subTotal = 0;
             subTotal = ((number.FractionTo - number.FractionFrom + 1) * number.RaffleAward.AwardValue);
-            return  subTotal;
+            return subTotal;
+        }
+
+        $scope.refreshPage = function () {
+            location.reload();
         }
 
         $scope.showTotal = function () {
@@ -72,7 +76,7 @@
                 $scope.totalFraction += fractions;
                 $scope.totalNumber += 1;
                 $scope.totalValue += (number.RaffleAward.AwardValue / fractions);
-                $scope.totalGeneral += ((fractions * number.RaffleAward.AwardValue) - (fractions * number.RaffleAward.AwardValue) * (number.RaffleAward.LawDiscount/100));
+                $scope.totalGeneral += ((fractions * number.RaffleAward.AwardValue) - (fractions * number.RaffleAward.AwardValue) * (number.RaffleAward.LawDiscount / 100));
             });
 
             $scope.identifyBach.IdentifyBachPayments.forEach(function (payment) {

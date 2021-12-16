@@ -218,6 +218,13 @@
                                 <span class="ripple"></span>
                             </a>
                         </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketIdentifyBachListToPay')">
+                            <a ui-sref="app.ticketIdentifyBachListToPay" title="Lista de premios a pagar">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Lista de premios a pagar</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.ticketIdentifyBachList')">
                             <a ui-sref="app.ticketIdentifyBachList" title="Identificación de Premios">
                                 <em class="sidebar-item-icon"></em>
@@ -225,7 +232,6 @@
                                 <span class="ripple"></span>
                             </a>
                         </li>
-
                         <li ui-sref-active="active" ng-show="verifyCanView('app.reprintTicketList')">
                             <a ui-sref="app.reprintTicketList" title="Reimpresión de Billetes">
                                 <em class="sidebar-item-icon"></em>

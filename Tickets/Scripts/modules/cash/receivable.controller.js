@@ -94,6 +94,7 @@
                                         return p;
                                     }
                                 });
+                                $scope.cashAdvances = data.cashAdvances;
                                 $scope.creditNotes = data.creditNotes;
                                 $scope.payment = data.payment;
                                 $scope.returneds = data.returneds;
@@ -110,6 +111,7 @@
                                 $scope.$apply();
                                 $rootScope.dataTable();
                                 rCheck($scope.creditNotes);
+                                rCheck($scope.cashAdvances);
                             }
                         });
                     }

@@ -99,6 +99,14 @@ namespace Tickets.Controllers
         {
             return View();
         }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult IdentifyAwardListToPay()
+        {
+            return View();
+        }
+
         //
         // GET: /Ticket/IdentifyAwardDetail
         [Authorize]
@@ -107,6 +115,16 @@ namespace Tickets.Controllers
         {
             return View();
         }
+
+        //
+        // GET: /Ticket/IdentifyAwardToPayDetail
+        [Authorize]
+        [HttpGet]
+        public ActionResult IdentifyAwardToPayDetail()
+        {
+            return View();
+        }
+
         //
         //GET:  /Ticket/GetIdentifyList
         [Authorize]
@@ -114,6 +132,20 @@ namespace Tickets.Controllers
         public JsonResult GetIdentifyList(int raffleId = 0, int clientId = 0)
         {
             var respnse = new TicketIdentifyModel().GetIdentifyList(raffleId, clientId);
+            return new JsonResult()
+            {
+                Data = respnse,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        //
+        //GET:  /Ticket/GetIdentifyList
+        [Authorize]
+        [HttpGet]
+        public JsonResult GetIdentifyListToPay(int raffleId = 0, int clientId = 0)
+        {
+            var respnse = new TicketIdentifyModel().GetIdentifyListToPay(raffleId, clientId);
             return new JsonResult()
             {
                 Data = respnse,

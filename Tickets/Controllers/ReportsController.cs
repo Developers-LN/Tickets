@@ -11,7 +11,6 @@ using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
 using Tickets.Models.Enums;
-using Tickets.Models.ModelsProcedures;
 using Tickets.Models.Procedures;
 using Tickets.Models.Prospects;
 using Tickets.Models.Raffles;
@@ -425,6 +424,33 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult ApprovedBach(int bachId)
+        {
+            var context = new TicketsEntities();
+
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var bach = context.IdentifyBaches.FirstOrDefault(r => r.Id == bachId);
+                    bach.Statu = (int)BachIdentifyStatuEnum.Approved;
+                    context.SaveChanges();
+                }
+                catch(Exception)
+                {
+                    dbContextTransaction.Rollback();
+                }
+
+                dbContextTransaction.Commit();
+            }
+
+            var bachApproved = context.IdentifyBaches.FirstOrDefault(r => r.Id == bachId);
+
+            return View(bachApproved);
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult BilletesCirculacion(int raffleId)
         {
             AvailableTicketsProcedure availableTicketsProcedure = new AvailableTicketsProcedure();
@@ -719,6 +745,15 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var payment = context.ReceiptPayments.FirstOrDefault(f => f.Id == paymentId);
             return View(payment);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult CashAdvanceReport(int cashAdvance)
+        {
+            var context = new TicketsEntities();
+            var cash = context.NoteCredits.FirstOrDefault(f => f.Id == cashAdvance);
+            return View(cash);
         }
 
         [Authorize]

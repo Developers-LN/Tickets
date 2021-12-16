@@ -12,33 +12,56 @@
                     <div class="col-lg-6 no-padder">
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Lote:</span>
-                                <span class="col-lg-8">
+                                <span class="col-lg-2 control-label">Lote:</span>
+                                <span class="col-lg-10">
                                     <b>#{{identifyBach.Id}}</b>
                                 </span>
                             </div>
                         </fieldset>
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Sorteo:</span>
-                                <span class="col-lg-8">
-                                    <b>{{identifyBach.RaffleDesc}}</b>
+                                <span class="col-lg-2 control-label">Cédula:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.Cedula}}</b>
                                 </span>
                             </div>
                         </fieldset>
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Total en premios:</span>
-                                <span class="col-lg-8">
-                                    <b>{{parseMoney(totalAwards)}}</b>
+                                <span class="col-lg-2 control-label">Nombre:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.Nombre}}</b>
                                 </span>
                             </div>
                         </fieldset>
-
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Teléfono:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.Telefono}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset ng-if="identifyBach.Notas != null">
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Nota:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.Notas}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Sorteo:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.RaffleDesc}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
                         <fieldset ng-if="identifyBach.percent > 0">
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Comision Mayorista ({{identifyBach.percent}}%):</span>
-                                <span class="col-lg-8">
+                                <span class="col-lg-5 control-label">Comision Mayorista ({{identifyBach.percent}}%):</span>
+                                <span class="col-lg-7">
                                     <b>{{parseMoney(totalAwards * identifyBach.percent / 100)}}</b>
                                 </span>
                             </div>
@@ -56,23 +79,23 @@
                     <div class="col-lg-6 no-padder">
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Cliente:</span>
-                                <span class="col-lg-8">
+                                <span class="col-lg-2 control-label">Cliente:</span>
+                                <span class="col-lg-10">
                                     <b>{{identifyBach.ClientDesc}}</b>
                                 </span>
                             </div>
                         </fieldset>
-                        <fieldset>
+                        @*<fieldset>
                             <div class="form-group m-t-xs">
                                 <span class="col-lg-4 control-label-left">Referencia:</span>
                                 <span class="col-lg-8">
                                     <b>{{identifyBach.Reference}}</b>
                                 </span>
                             </div>
-                        </fieldset>
+                        </fieldset>*@
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Total en pagado:</span>
+                                <span class="col-lg-4 control-label">Total pagado:</span>
                                 <span class="col-lg-8">
                                     <b>{{parseMoney(totalpayment)}}</b>
                                 </span>
@@ -83,6 +106,23 @@
                                 <span class="col-lg-4 control-label">Total restante:</span>
                                 <span class="col-lg-8">
                                     <b>{{parseMoney(totalRestant)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Estado del Lote:</span>
+                                <span class="col-lg-8">
+                                    @*<b>{{identifyBach.isPayed == true ? 'Pagado' : 'No Pagado'}}</b>*@
+                                    <b>{{((totalGeneral + (totalGeneral * identifyBach.percent / 100)) - totalpayment) == 0 ? 'Pagado' : 'En proceso de pago'}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total en premios:</span>
+                                <span class="col-lg-8">
+                                    <b>{{parseMoney(totalAwards)}}</b>
                                 </span>
                             </div>
                         </fieldset>

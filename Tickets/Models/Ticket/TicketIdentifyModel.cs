@@ -8,6 +8,49 @@ namespace Tickets.Models.Ticket
 {
     public class TicketIdentifyModel
     {
+        internal object GetIdentifyListToPay(int raffleId = 0, int clientId = 0)
+        {
+            var context = new TicketsEntities();
+
+            var raffles = new List<object>();
+            var clients = new List<object>();
+            var identifyBachs = new List<object>();
+            if (raffleId == 0 && clientId == 0)
+            {
+                raffles = context.Raffles.Where(s => s.Statu == (int)RaffleStatusEnum.Generated).Select(r => new
+                {
+                    r.Id,
+                    r.Name,
+                    Prices = r.Prospect.Prospect_Price.Select(p => new
+                    {
+                        p.PriceId,
+                        p.FactionPrice
+                    })
+                }).ToList<object>();
+
+
+                clients = context.Clients.Where(s => s.Statu == (int)ClientStatuEnum.Approbed).Select(r => new
+                {
+                    r.Id,
+                    r.Name,
+                    r.PriceId
+                }).ToList<object>();
+            }
+            else
+            {
+                var awards = context.RaffleAwards.Where(r => r.RaffleId == raffleId).ToList();
+                identifyBachs = context.IdentifyBaches.Where(a =>
+                    (a.RaffleId == raffleId || raffleId == 0)
+                    && (a.ClientId == clientId || clientId == 0)
+                    && a.Statu == (int)BachIdentifyStatuEnum.Approved)
+                    .AsEnumerable()
+                    .Select(t => this.IdentifyBachMainToObject(t, awards)).ToList();
+            }
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Lotes de Billetes");
+
+            return new { result = true, identifyBachs, raffles, clients };
+        }
+
         internal object GetIdentifyList(int raffleId = 0, int clientId = 0)
         {
             var context = new TicketsEntities();
@@ -230,13 +273,19 @@ namespace Tickets.Models.Ticket
                     {
                         if (identifyBach.Id <= 0)
                         {
-                            newIdentifyBach = new IdentifyBach();
-                            newIdentifyBach.RaffleId = identifyBach.RaffleId;
-                            newIdentifyBach.ClientId = identifyBach.ClientId;
-                            newIdentifyBach.Type = identifyBach.Type;
-                            newIdentifyBach.Statu = (int)BachIdentifyStatuEnum.Inproces;
-                            newIdentifyBach.CreateDate = DateTime.Now;
-                            newIdentifyBach.CreateUser = WebSecurity.CurrentUserId;
+                            newIdentifyBach = new IdentifyBach
+                            {
+                                RaffleId = identifyBach.RaffleId,
+                                ClientId = identifyBach.ClientId,
+                                Type = identifyBach.Type,
+                                Statu = (int)BachIdentifyStatuEnum.Inproces,
+                                CreateDate = DateTime.Now,
+                                CreateUser = WebSecurity.CurrentUserId,
+                                Nombre = identifyBach.Nombre,
+                                Cedula = identifyBach.Cedula,
+                                Telefono = identifyBach.Telefono,
+                                Notas = identifyBach.Notas
+                            };
 
                             context.IdentifyBaches.Add(newIdentifyBach);
                         }
@@ -246,6 +295,10 @@ namespace Tickets.Models.Ticket
                             newIdentifyBach.RaffleId = identifyBach.RaffleId;
                             newIdentifyBach.ClientId = identifyBach.ClientId;
                             newIdentifyBach.Type = identifyBach.Type;
+                            newIdentifyBach.Nombre = identifyBach.Nombre;
+                            newIdentifyBach.Cedula = identifyBach.Cedula;
+                            newIdentifyBach.Telefono = identifyBach.Telefono;
+                            newIdentifyBach.Notas = identifyBach.Notas;
                         }
                         context.SaveChanges();
                         newIdentifyBach.IdentifyNumbers = new List<IdentifyNumber>();
@@ -509,7 +562,9 @@ namespace Tickets.Models.Ticket
                 identifyBach.Id,
                 identifyBach.ClientId,
                 ClientDesc = identifyBach.Client.Name,
+                identifyBach.Statu,
                 identifyBach.RaffleId,
+                Nombre = identifyBach.Nombre,
                 RaffleDesc = identifyBach.Raffle.Name,
                 hasPayment = (identifyBach.IdentifyBachPayments.Count > 0 || identifyBach.NoteCredits.Count > 0),
                 isPayed = Utils.IdentifyBachIsPayedMinor(identifyBach, awards)
@@ -527,6 +582,10 @@ namespace Tickets.Models.Ticket
                 identifyBach.ClientId,
                 percent = identifyBach.Client.GroupId == (int)ClientGroupEnum.Mayorista ? 2 : 0,
                 ClientDesc = context.Clients.FirstOrDefault(c => c.Id == identifyBach.ClientId).Name,
+                Cedula = identifyBach.Cedula,
+                Nombre = identifyBach.Nombre,
+                Telefono = identifyBach.Telefono,
+                Notas = identifyBach.Notas,
                 identifyBach.RaffleId,
                 RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == identifyBach.RaffleId).Name,
                 RaffleDate = context.Raffles.FirstOrDefault(c => c.Id == identifyBach.RaffleId).DateSolteo.ToUnixTime(),

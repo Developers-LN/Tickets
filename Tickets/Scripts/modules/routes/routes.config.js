@@ -31,7 +31,6 @@
                 templateUrl: Route.base('Dashboard/Index'),
                 resolve: {}
             })
-
             .state('app.aboutUs', {
                 url: '/dashboard/aboutUs',
                 templateUrl: Route.base('Dashboard/AboutUs'),
@@ -302,7 +301,6 @@
                 templateUrl: Route.base('Raffle/ActiveRaffle'),
                 resolve: {}
             })
-
             .state('app.generatedRaffleList', {
                 url: '/raffle/generateds',
                 templateUrl: Route.base('Raffle/GeneratedList'),
@@ -508,6 +506,11 @@
                 templateUrl: Route.base('TicketAllocation/IdentifyAwardList'),
                 resolve: {}
             })
+            .state('app.ticketIdentifyBachListToPay', {
+                url: '/ticket/identifybachlisttopay',
+                templateUrl: Route.base('TicketAllocation/IdentifyAwardListToPay'),
+                resolve: {}
+            })
             .state('app.ticketIdentifyBach', {
                 url: '/ticket/identifybach/:identifyId',
                 templateUrl: Route.base('TicketAllocation/IdentifyAward'),
@@ -518,14 +521,16 @@
                 templateUrl: Route.base('TicketAllocation/IdentifyAwardDetail'),
                 resolve: {}
             })
-
+            .state('app.ticketIdentifyBachToPayDetail', {
+                url: '/ticket/identifybachtopaydetail/:identifyId',
+                templateUrl: Route.base('TicketAllocation/IdentifyAwardToPayDetail'),
+                resolve: {}
+            })
             .state('app.ticketAllocationsPrint', {
                 url: '/ticket/allocationPrint',
                 templateUrl: Route.base('TicketAllocation/AllocationListPrint'),
                 resolve: {}
             })
-
-
             //Returned
             .state('app.ticketReturned', {
                 url: '/ticket/returned',
@@ -662,6 +667,10 @@
                 url: '/cash/noteCredit/:noteCreditId/:raffleAwardId',
                 templateUrl: Route.base('Cash/CreditNote')
             })
+            .state('app.cashAdvanceCreate', {
+                url: '/cash/cashAdvance/:noteCreditId/:raffleAwardId',
+                templateUrl: Route.base('Cash/CashAdvance')
+            })
             .state('app.previousDebt', {
                 url: '/cash/previousDebt',
                 templateUrl: Route.base('Cash/PreviousDebt')
@@ -671,5 +680,5 @@
                 templateUrl: Route.base('Integration/ElectronicTicketXml'),
                 resolve: {}
             });
-    }
+        }
 })();

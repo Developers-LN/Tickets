@@ -28,6 +28,10 @@ namespace Tickets.Models
         public int CreateUser { get; set; }
         public System.DateTime CreateDate { get; set; }
         public int Type { get; set; }
+        public string Cedula { get; set; }
+        public string Nombre { get; set; }
+        public string Telefono { get; set; }
+        public string Notas { get; set; }
     
         public virtual Client Client { get; set; }
         public virtual Raffle Raffle { get; set; }

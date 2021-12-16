@@ -2,7 +2,7 @@
  * Module: IdentifyAwardController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -25,6 +25,10 @@
                 Id: 0,
                 RaffleId: undefined,
                 ClientId: undefined,
+                Cedula: undefined,
+                Nombre: undefined,
+                Notas: undefined,
+                Telefono: undefined,
                 IdentifyNumbers: [],
                 Type: $rootScope.moduleCanDelete == '' ? 4007 : 4006
             };
@@ -50,11 +54,9 @@
             return -1;
         }
 
-        $scope.GetFractionPrice = function()
-        {
+        $scope.GetFractionPrice = function () {
             if ($scope.identifyBach.RaffleId != undefined && $scope.identifyBach.ClientId != undefined
-                && $scope.identifyBach.RaffleId != 0 && $scope.identifyBach.ClientId != 0)
-            {
+                && $scope.identifyBach.RaffleId != 0 && $scope.identifyBach.ClientId != 0) {
 
                 var currentClient = self.seach($scope.clients, $scope.identifyBach.ClientId);
                 var currentSorteo = self.seach($scope.raffles, $scope.identifyBach.RaffleId);
@@ -67,7 +69,7 @@
 
 
         this.clearNumber = function (number) {
-            $scope.editingNumber = number? number: null;
+            $scope.editingNumber = number ? number : null;
             $scope.number = {
                 Id: number ? number.Id : 0,
                 NumberId: number ? number.NumberId : undefined,
@@ -106,7 +108,7 @@
                         FractionTo: Number(codeReadSplit[3]),
                         Type: $rootScope.moduleCanDelete == '' ? 4007 : 4006,
                         IdentityAwards: [],
-                        
+
                     };
                     console.log(number);
                     number.RaffleId = Number(codeReadSplit[0]);
@@ -127,7 +129,7 @@
                         type: 'POST',
                         dataType: 'json',
                         url: 'TicketAllocation/ValidateNumberAward',
-                        data: {awardTicket:number, clientId:0},
+                        data: { awardTicket: number, clientId: 0 },
                         success: function (data) {
                             window.loading.hide();
                             if (data.result === true) {
@@ -207,6 +209,15 @@
             if (identifyBach.ClientId === undefined) {
                 error += 'Cliente' + isReq;
             }
+            if (identifyBach.Cedula === undefined) {
+                error += 'Cédula' + isReq;
+            }
+            if(identifyBach.Nombre === undefined) {
+                error += 'Nombre' + isReq;
+            }
+            if (identifyBach.Telefono === undefined) {
+                error += 'Teléfono' + isReq;
+            }
             if (error !== '') {
                 alertify.showError('Alerta', error);
             }
@@ -255,20 +266,20 @@
             self.clearNumber(number);
         }
 
-       $scope.deleteNumber = function (number) {
+        $scope.deleteNumber = function (number) {
             // confirm dialog
             alertify.confirm("&iquest;Desea borrar este Numero?", function (e) {
                 if (e) {
                     setTimeout(function () {
-                    for (var i = 0; i < $scope.IdentityAwards.length; i++) {
+                        for (var i = 0; i < $scope.IdentityAwards.length; i++) {
                             if (parseInt(number.NumberId) == $scope.IdentityAwards[i].AwardNumber && number.FractionFrom == $scope.IdentityAwards[i].FractionFrom
                                 && number.FractionTo == $scope.IdentityAwards[i].FractionTo) {
                                 $scope.showTotalValue -= $scope.IdentityAwards[i].TotalValue;
-                                $scope.IdentityAwards.splice(i,1);
+                                $scope.IdentityAwards.splice(i, 1);
                                 i--;
 
                             }
-                        }             
+                        }
 
                         $scope.identifyBach.IdentifyNumbers = $scope.identifyBach.IdentifyNumbers.filter(function (item) {
                             return item.$$hashKey !== number.$$hashKey;
@@ -290,7 +301,7 @@
                         type: 'POST',
                         dataType: 'json',
                         url: 'TicketAllocation/IdentifyNumberDelete',
-                        data: number, 
+                        data: number,
                         success: function (data) {
                             if (data.result === true) {
 
@@ -358,7 +369,6 @@
                     }
                 }
             });
-
         }
 
         this.saveAwardNumber = function (currentNumber) {
@@ -390,7 +400,7 @@
                 $scope.identifyBach.IdentifyNumbers = $scope.identifyBach.IdentifyNumbers.filter(function (n) {
                     return $scope.identifyBach.IdentifyNumbers.some(function (i) {
                         return i.FractionFrom == n.FractionFrom && i.FractionTo == n.FractionTo && i.$$hashKey != n.$$hashKey && (i.NumberId == n.NumberId || i.NumberDesc == n.NumberId);
-                    }) == false; 
+                    }) == false;
                 });
                 self.clearNumber();
                 $scope.$apply();
@@ -416,7 +426,6 @@
                 data: $scope.identifyBach,
                 success: function (data) {
                     if (data.result === true) {
-
                         alertify.success(data.message);
                         window.location.href = '/#/ticket/identifybachdetail/' + data.bachId;
                         window.loading.hide();
@@ -507,28 +516,25 @@
 
                 }
             });
-         }
+        }
 
-         function GetAwardsObj (numberDetails) {
+        function GetAwardsObj(numberDetails) {
 
-             var nArray = [];
-             for (var i = 0; i < numberDetails.length; i++) {
+            var nArray = [];
+            for (var i = 0; i < numberDetails.length; i++) {
 
-                 nArray.push({
-                     Id : numberDetails[i].Id,
-                     AwardNumber: numberDetails[i].AwardNumber,
-                     FractionFrom: numberDetails[i].FractionFrom,
-                     FractionTo: numberDetails[i].FractionTo,
-                     Fractions: numberDetails[i].Fractions,
-                     AwardName: numberDetails[i].AwardName,
-                     AwardValue: numberDetails[i].AwardValue,
-                     TotalValue: numberDetails[i].TotalValue
-
-                 });
-             }
-             return nArray;
-         }
-
+                nArray.push({
+                    Id: numberDetails[i].Id,
+                    AwardNumber: numberDetails[i].AwardNumber,
+                    FractionFrom: numberDetails[i].FractionFrom,
+                    FractionTo: numberDetails[i].FractionTo,
+                    Fractions: numberDetails[i].Fractions,
+                    AwardName: numberDetails[i].AwardName,
+                    AwardValue: numberDetails[i].AwardValue,
+                    TotalValue: numberDetails[i].TotalValue
+                });
+            }
+            return nArray;
+        }
     }
-
 })();

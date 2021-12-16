@@ -39,7 +39,7 @@ namespace Tickets.Controllers
         [ActionName("getReviewAllocations")]
         public RequestResponseModel GetReviewAllocations(int raffleId, int clientId = 0)
         {
-            var response = new TicketAllocationModel().GetTicketAllocationListForInvoice(raffleId, clientId, (int)AllocationStatuEnum.Consigned);
+            var response = new TicketAllocationModel().GetTicketAllocationListForInvoice(raffleId, clientId);
             return response;
         }
 

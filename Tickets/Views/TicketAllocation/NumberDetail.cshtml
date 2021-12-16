@@ -11,45 +11,39 @@
                     <div class="col-lg-6 no-padder">
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Cliente:</span>
-                                <span class="col-lg-8">
-                                    <b>{{number.Allocation.ClientDesc}}</b>
-                                </span>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Billete:</span><span class="col-lg-8">
+                                <span class="col-lg-2 control-label">Billete:</span>
+                                <span class="col-lg-10">
                                     <b>{{number.Number}}</b>
                                 </span>
                             </div>
                         </fieldset>
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label-left">Fracciones:</span>
-                                <span class="col-lg-8">
+                                <span class="col-lg-2 control-label-left">Fracciones:</span>
+                                <span class="col-lg-10">
                                     <b>{{number.Allocation.FractionFrom}} - {{number.Allocation.FractionTo}}</b>
                                 </span>
                             </div>
                         </fieldset>
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label-left">Facturado:</span>
-                                <span class="col-lg-8">
+                                <span class="col-lg-2 control-label-left">Facturado:</span>
+                                <span class="col-lg-10">
                                     <b>{{number.Invoiced === true? 'Si' : 'No'}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Cliente:</span>
+                                <span class="col-lg-10">
+                                    <b>{{number.Allocation.ClientDesc}}</b>
                                 </span>
                             </div>
                         </fieldset>
                     </div>
 
                     <div class="col-lg-6 no-padder">
-                        <fieldset>
-                            <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label">Sorteo:</span><span class="col-lg-8">
-                                    <b>{{number.Allocation.RaffleId}} - {{number.Allocation.RaffleDesc}}</b>
-                                </span>
-                            </div>
-                        </fieldset>
                         <fieldset>
                             <div class="form-group m-t-xs">
                                 <span class="col-lg-4 control-label">Numero de Control:</span>
@@ -60,9 +54,17 @@
                         </fieldset>
                         <fieldset>
                             <div class="form-group m-t-xs">
-                                <span class="col-lg-4 control-label-left">Impreso:</span>
-                                <span class="col-lg-8">
+                                <span class="col-lg-2 control-label-left">Impreso:</span>
+                                <span class="col-lg-10">
                                     <b>{{number.Printed === true? 'Si' : 'No'}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Sorteo:</span>
+                                <span class="col-lg-10">
+                                    <b>{{number.Allocation.RaffleId}} - {{number.Allocation.RaffleDesc}}</b>
                                 </span>
                             </div>
                         </fieldset>

@@ -4,6 +4,7 @@
     {
         Inproces = 2077,
         Fatured = 2078,
-        Suspended = 2079
+        Suspended = 2079,
+        Approved = 5866
     }
 }

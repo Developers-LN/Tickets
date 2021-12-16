@@ -1,0 +1,188 @@
+﻿@model Tickets.Models.IdentifyBach
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.ControlPremio : "";
+    string adminCargo = config != null ? config.ControlPremioCargo : "";
+    var raffleAwards = context.Raffles.FirstOrDefault(r => r.Id == Model.RaffleId).RaffleAwards.ToList();
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
+}
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>AUTORIZACION DE PAGO DE PREMIO DEL SORTEO #@Model.RaffleId</b>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <div class="col-lg-6 no-padder text-left">
+            <b>Cédula: </b> @Model.Cedula<br />
+            <b>Nombre: </b> @Model.Nombre<br />
+            <b>Teléfono: </b> @Model.Telefono<br />
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <b>Lote: </b> @Model.Id<br />
+            <b>Fecha: </b> @Model.CreateDate.ToShortDateString() <br />
+            <b>Hora: </b> @Model.CreateDate.ToShortTimeString() <br />
+        </div>
+    </div>
+    <div>
+        <div class="col-lg-12 no-padder">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">NUMERO</th>
+                        <th class="text-center">TIPO DE PREMIO</th>
+                        <th class="text-center">FRACCIONES DESDE-HASTA</th>
+                        <th class="text-center">CANTIDAD FRACCIONES</th>
+                        <th class="text-center">VALOR FRACCCION</th>
+                        <th class="text-right">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int totalFraction = 0;
+                        decimal totalGeneral = 0;
+
+                    }
+                    @foreach (var number in Model.IdentifyNumbers)
+                    {
+                        var raffleAwardList = raffleAwards.Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number
+                        && number.TicketAllocationNumber.Id == number.NumberId).ToList();
+
+                        bool wfrac = true;
+                        var fFrom = number.FractionFrom;
+                        var fTo = number.FractionTo;
+                        foreach (var a in raffleAwardList.Where(w => w.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S))
+                        {
+                            for (int i = fFrom; i <= fTo; i++)
+                            {
+                                if (i == a.Fraction)
+                                {
+                                    wfrac = true;
+                                    break;
+                                }
+                                else
+                                {
+                                    wfrac = false;
+                                }
+                            }
+                        }
+                        if (wfrac == false)
+                        {
+                            raffleAwardList.RemoveAll(w => w.ControlNumber == number.TicketAllocationNumber.Number && w.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S);
+                        }
+
+                        foreach (var raffleAward in raffleAwardList)
+                        {
+
+                            var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
+                            var total = (number.FractionTo - number.FractionFrom + 1) * price;
+
+                            if (raffleAward.Award.TypesAward.Id == (int)Tickets.Models.Enums.AwardTypeEnum.WinFraction)
+                            {
+                                total = raffleAward.Award.Value;
+                                totalFraction += 1;
+                                <tr>
+                                    <td class="text-center">@number.TicketAllocationNumber.Number</td>
+                                    <td class="text-center">@raffleAward.Award.TypesAward.Name</td>
+                                    <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">@(raffleAward.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100) ).ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right" style="width:30%">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                </tr>
+                            }
+                            else
+                            {
+
+                                totalFraction += (number.FractionTo - number.FractionFrom + 1);
+                                <tr>
+                                    <td class="text-center">@number.TicketAllocationNumber.Number</td>
+                                    <td class="text-center">@raffleAward.Award.TypesAward.Name</td>
+                                    <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
+                                    <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
+                                    <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right" style="width:30%">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                </tr>
+                            }
+                            totalGeneral += total;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-12 no-padder text-center">
+    <br />
+    <br />
+    <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Firma del cliente
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+        <div class="col-lg-12 no-padder text-center">
+
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Encargado de identificación
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-center">
+    <b>@adminName</b>
+</div>
+<div class="col-lg-12 no-padder text-center">
+    <span>@adminCargo</span>
+</div>

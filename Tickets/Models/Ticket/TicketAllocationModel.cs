@@ -279,7 +279,7 @@ namespace Tickets.Models.Ticket
 
                 if (context.TicketReturns.Any(a => a.ClientId == model.ClientId && a.RaffleId == model.RaffleId))
                 {
-                    allocation.ReturnFractions = context.TicketReturns.Where(w => w.ClientId == model.ClientId && w.RaffleId == model.RaffleId 
+                    allocation.ReturnFractions = context.TicketReturns.Where(w => w.ClientId == model.ClientId && w.RaffleId == model.RaffleId
                     && w.TicketAllocationNumber.TicketAllocationId == model.Id).Select(s => s.FractionTo - s.FractionFrom + 1).Sum();
 
                     allocation.ReturnTickets = (allocation.ReturnFractions / Resultado.FirstOrDefault().TicketFraction);
@@ -323,16 +323,16 @@ namespace Tickets.Models.Ticket
                 ClientDesc = client.Name,
                 RaffleDesc = model.RaffleId + " - " + raffle.Name,
                 RaffleId = model.RaffleId,
-                StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
+                StatuDesc = context.Catalogs.Where(c => c.Id == model.Statu).Select(s => s.NameDetail).FirstOrDefault(),
                 StatuId = model.Statu,
-                TypeDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Type).NameDetail,
+                TypeDesc = context.Catalogs.Where(c => c.Id == model.Type).Select(s => s.NameDetail).FirstOrDefault(),
                 TypeId = model.Type,
                 CreateDate = model.CreateDate,
                 CreateDateLong = model.CreateDate.ToUnixTime(),
                 CanAllocate = DateTime.Now <= raffle.EndAllocationDate,
                 NumberCount = model.TicketAllocationNumbers.Count,
                 Agente = model.Agente,
-                FractionCount = model.TicketAllocationNumbers.Select(a => a.FractionTo - a.FractionFrom + 1).Sum()
+                FractionCount = model.TicketAllocationNumbers.Sum(s => (s.FractionTo - s.FractionFrom) + 1)
             };
             if (hasNumber)
             {
@@ -366,7 +366,7 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
             var allocation = context.TicketAllocations
                 .Where(a =>
-                    (a.Statu == statu || statu == 0)
+                    (a.Statu == (int)AllocationStatuEnum.Consigned || a.Statu == (int)AllocationStatuEnum.Generated)
                     && a.RaffleId == raffleId
                     && (a.ClientId == clientId || clientId == 0)).AsEnumerable()
                 .Select(a => this.InvoiceDetails(a)).ToList();

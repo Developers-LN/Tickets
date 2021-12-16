@@ -1,5 +1,5 @@
-/**=========================================================
- * Module: IdentifyAwardListController.js
+﻿/**=========================================================
+ * Module: IdentifyAwardListToPayController.js
  =========================================================*/
 
 (function () {
@@ -7,7 +7,7 @@
 
     angular
         .module('naut')
-        .controller('IdentifyAwardListController', IdentifyAwardListController);
+        .controller('IdentifyAwardListToPayController', IdentifyAwardListController);
 
     IdentifyAwardListController.$inject = ['$scope', '$state', '$rootScope'];
 
@@ -19,7 +19,7 @@
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                url: 'TicketAllocation/GetIdentifyList?raffleId=' + raffleId + '&clientId=' + clientId,
+                url: 'TicketAllocation/GetIdentifyListToPay?raffleId=' + raffleId + '&clientId=' + clientId,
                 success: function (data) {
                     if (raffleId > 0 || clientId > 0) {
                         $scope.identifyBachs = data.identifyBachs;

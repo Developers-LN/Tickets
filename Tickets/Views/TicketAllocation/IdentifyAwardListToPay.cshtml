@@ -1,31 +1,15 @@
-@{
+ï»¿@{
     Layout = null;
-    ViewBag.Title = "Listado de lotes de números identificados";
+    ViewBag.Title = "Listado de lotes de Numero Identificados por pagar";
 }
 
-<div class="col-lg-12 no-padder" ng-controller="IdentifyAwardListController" ng-init="app.title = '@(ViewBag.Title)'">
+<div class="col-lg-12 no-padder" ng-controller="IdentifyAwardListToPayController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
 
             <div class="panel-body">
-                <div id="sorteo_lotes" class="col-lg-8">
 
-                    <div class="col-lg-4 text-left m-b-xs no-padder">
-                        <fieldset>
-                            <div class="form-group">
-                                <label class="col-lg-12 control-label-left">Busqueda por Lotes: </label>
-                                <div class="col-lg-12">
-                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="batchId" ng-change="updateDelivered1()">
-                                        <option selected="selected" value="0">Seleccione un lote</option>
-                                        <option ng-repeat="Id in batchNumbers" value="{{Id}}">Lote de no.{{Id}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                </div>
-                <div id="sorteo_filters" class="col-lg-8">
-
+                <div id="sorteo_filters" class="col-lg-12">
                     <div class="col-lg-6 text-left m-b-xs no-padder">
                         <fieldset>
                             <div class="form-group">
@@ -53,12 +37,7 @@
                         </fieldset>
                     </div>
                 </div>
-                <div class="col-lg-4 text-right m-b-xs no-padder">
 
-                    <button id="SByBatch" class="btn btn-square btn-warning">Busqueda por lotes</button>
-                    <a href="/#/ticket/identifybach/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Crear Lote de Billetes</a>
-
-                </div>
                 <div class="row-border hover ">
                     <table class="table dataTableGrid">
                         <thead>
@@ -66,20 +45,16 @@
                                 <th>Lote</th>
                                 <th>Sorteo</th>
                                 <th>Cliente</th>
-                                <th class="editColumm">Acción</th>
+                                <th class="editColumm">AcciÃ³n</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="identifyBach in identifyBachs">
                                 <td>#{{identifyBach.Id}}</td>
-                                <td>{{identifyBach.RaffleId}} - {{identifyBach.RaffleDesc}}</td>
-                                <td>{{identifyBach.ClientId}} - {{identifyBach.ClientDesc}}</td>
+                                <td>{{identifyBach.RaffleDesc}}</td>
+                                <td>{{identifyBach.Nombre}}</td>
                                 <td>
-                                    @*<a ng-if="identifyBach.hasPayment == false" href="/#/ticket/identifybach/{{identifyBach.Id}}" title="Modificar lote de identificación" class="{{moduleCanView}}"><i class="fa fa-pencil"></i></a>*@
-                                    <a ng-if="identifyBach.hasPayment == false && identifyBach.Statu == 2077" href="/#/ticket/identifybach/{{identifyBach.Id}}" title="Modificar lote de identificación" class="{{moduleCanView}}"><i class="fa fa-pencil"></i></a>
-                                    <a href="/#/ticket/identifybachdetail/{{identifyBach.Id}}" title="Ver detalles del lote" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
-                                    <a ng-if="identifyBach.hasPayment == false && identifyBach.Statu == 2077" ng-click="deleteIdentifyBach(identifyBach)" title="Borrar Identificacion de Numeros"><i class="fa fa-times"></i></a>
-                                    @*<a ng-if="identifyBach.hasPayment == false" ng-click="deleteIdentifyBach(identifyBach)" title="Borrar Identificacion de Numeros"><i class="fa fa-times"></i></a>*@
+                                    <a href="/#/ticket/identifybachtopaydetail/{{identifyBach.Id}}" title="Ver detalles del lote" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                         </tbody>

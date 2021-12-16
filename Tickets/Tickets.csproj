@@ -80,8 +80,8 @@
     <Reference Include="ExcelNumberFormat, Version=1.1.0.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelNumberFormat.1.1.0\lib\net20\ExcelNumberFormat.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.11.38.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.11.38\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.11.39.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.39\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="HtmlRenderer, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlRenderer.Core.1.5.0.6\lib\net45\HtmlRenderer.dll</HintPath>
@@ -221,6 +221,9 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.3.2.7\lib\net45\WebMatrix.WebData.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
+    <Reference Include="Z.EntityFramework.Extensions, Version=6.13.3.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Extensions.6.13.3\lib\net45\Z.EntityFramework.Extensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\AttributeRoutingConfig.cs" />
@@ -767,6 +770,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\modules\cash\cash.advance.list.controller.js" />
+    <Content Include="Scripts\modules\cash\cash.advance.controller.js" />
     <Content Include="Scripts\modules\cash\previous.debt.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -836,6 +840,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\modules\raffle\raffle.ProfitabilityRaffle.js" />
+    <Content Include="Scripts\modules\ticketAllocation\identify.list.topay.controller.js" />
     <Content Include="Scripts\modules\ticketInvoice\invoice.list.suspend.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -3112,6 +3117,11 @@
     <Content Include="Views\Reports\InvoicePaymentInfo.cshtml" />
     <Content Include="Views\Reports\InvoicePayment.cshtml" />
     <Content Include="Views\Cash\CashAdvanceList.cshtml" />
+    <Content Include="Views\Cash\CashAdvance.cshtml" />
+    <Content Include="Views\Reports\CashAdvanceReport.cshtml" />
+    <Content Include="Views\Reports\ApprovedBach.cshtml" />
+    <Content Include="Views\TicketAllocation\IdentifyAwardListToPay.cshtml" />
+    <Content Include="Views\TicketAllocation\IdentifyAwardToPayDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

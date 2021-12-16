@@ -99,6 +99,35 @@
                                     </tr>
                                 </tbody>
                             </table>
+
+                            <table ng-show="receivable.ReceiptType == 5865" class="table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Código</th>
+                                        <th>Fecha</th>
+                                        <th>Cantidad Restante</th>
+                                        <th>Concepto</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="creditNote in cashAdvances">
+                                        <td>
+                                            <div class="checkbox c-checkbox needsclick">
+                                                <label class="needsclick m-r-xs">
+                                                    <input type="checkbox" class="needsclick" ng-checked="isreturn(creditNote) == true" ng-disabled="isreturn(creditNote) == true" ng-click="selectCreditNote($event, creditNote)" />
+                                                    <span class="fa fa-check"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>#{{creditNote.Id}}</td>
+                                        <td>{{creditNote.NoteDate}}</td>
+                                        <td>{{parseMoney(creditNote.TotalRest)}}</td>
+                                        <td>{{creditNote.Concepts}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
                         </div>
                         <div class="col-lg-2 no-padder">
                             <div ng-show="receivable.ReceiptType == 5857">
