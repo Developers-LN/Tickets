@@ -106,7 +106,6 @@
             $('#sorteo_lotes').hide();
             $(document).ready(function () {
                 $('#SByBatch').click(function () {
-
                     $('#sorteo_lotes').fadeToggle();
                     $('#sorteo_filters').fadeToggle();
                     var value = $('#SByBatch').text();

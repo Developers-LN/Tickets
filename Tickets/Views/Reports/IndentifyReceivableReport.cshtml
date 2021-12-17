@@ -5,7 +5,8 @@
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.LoteryAdmin : "";
+    string adminName = config != null ? config.CajaGeneral : "";
+    string adminCargo = config != null ? config.CajaGeneralCargo : "";
     var raffleAwards = context.Raffles.FirstOrDefault(r => r.Id == Model.IdentifyBach.RaffleId).RaffleAwards.ToList();
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
@@ -69,7 +70,7 @@
             {
                 <b>Nota de Credito: #</b> @Model.CreditNoteId<br />
             }
-            <b>Usuario: #</b> @context.Users.FirstOrDefault(u => u.Id == Model.UserId).Name
+            @*<b>Usuario: #</b> @context.Users.FirstOrDefault(u => u.Id == Model.UserId).Name*@
         </div>
         <div class="col-lg-6 no-padder text-right">
             <b>Fecha: </b> @Model.CreateDate.ToShortDateString() <br />
@@ -87,7 +88,7 @@
                         <th class="text-center">FRACCIONES DESDE-HASTA</th>
                         <th class="text-center">CANTIDAD FRACCIONES</th>
                         <th class="text-center">VALOR FRACCCION</th>
-                        <th class="text-right" style="width:30%">TOTAL</th>
+                        <th class="text-right">TOTAL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -141,7 +142,7 @@
                                     <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
                                     <td class="text-center">1</td>
                                     <td class="text-center">@(raffleAward.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100) ).ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                                    <td class="text-right" style="width:30%">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                 </tr>
                             }
                             else
@@ -155,7 +156,7 @@
                                     <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
                                     <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
                                     <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                    <td class="text-right" style="width:30%">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                 </tr>
 
 
@@ -201,10 +202,16 @@
                     <tr>
                         <td class="text-right" style="border-top: none;" colspan="7">Pago actual: <strong> @(Model.Value.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
                     </tr>
-
                     <tr>
-                        <td colspan="4" style="font-size:small"><b>Concepto:</b> @Model.Concept</td>
-                        <td class="text-right" style="border-top: none;" colspan="3">Pendiente por Pagar: <strong> @((totalGeneral + percentValue - totalPayment).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                        @if (Model.CreditNoteId != 0)
+                        {
+                            <td colspan="4" style="font-size:small; border-top:none;"><b>Concepto:</b> @Model.Concept</td>
+                            <td class="text-right" style="border-top: none;" colspan="3">Pendiente por Pagar: <strong> @((totalGeneral + percentValue - totalPayment).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                        }
+                        else
+                        {
+                            <td class="text-right" style="border-top: none;" colspan="7">Pendiente por Pagar: <strong> @((totalGeneral + percentValue - totalPayment).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                        }
                     </tr>
                 </tbody>
             </table>
@@ -213,16 +220,29 @@
 </div>
 
 <div class="col-lg-12 no-padder text-center">
-    <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+    <br />
+    <br />
+    <div class="col-lg-4 col-md-6 col-sm-6 text-center">
         <div class="col-lg-12 no-padder text-center">
             ______________________________
         </div>
-        Cliente
+        Firma del cliente
     </div>
-    <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+    <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+        <div class="col-lg-12 no-padder text-center">
+
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-6 text-center">
         <div class="col-lg-12 no-padder text-center">
             ______________________________
         </div>
-        Enc Verificación
+        Firma del cajero
     </div>
+</div>
+<div class="col-lg-12 no-padder text-center">
+    <b>@adminName</b>
+</div>
+<div class="col-lg-12 no-padder text-center">
+    <span>@adminCargo</span>
 </div>
