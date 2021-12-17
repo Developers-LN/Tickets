@@ -33,15 +33,16 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th class="text-left"><h5><b>ASIGNACIONES</b></h5></th>
-                    <th class="text-left"><h5><b>FECHA</b></h5></th>
-                    <th class="text-left"><h5><b>NOMBRE</b></h5></th>
-                    <th class="text-right"><h5><b>FRACCIONES</b></h5></th>
-                    <th class="text-right"><h5><b>HOJAS</b></h5></th>
-                    <th class="text-right"><h5><b>NUMEROS</b></h5></th>
-                    <th class="text-right"><h5><b>MONTO</b></h5></th>
-                    <th class="text-right"><h5><b>DESCUENTO</b></h5></th>
-                    <th class="text-right"><h5><b>MONTO A <br /> PAGAR</b></h5></th>
+                    <th class="text-center"><b>ASIGNACION</b></th>
+                    @*<th class="text-left"><b>FECHA</b></th>*@
+                    <th class="text-left"><b>TIPO DE <br /> ASIGNACION</b></th>
+                    <th class="text-left"><b>NOMBRE</b></th>
+                    <th class="text-right"><b>FRACCIONES</b></th>
+                    <th class="text-right"><b>HOJAS</b></th>
+                    <th class="text-right"><b>NUMEROS</b></th>
+                    <th class="text-right"><b>MONTO</b></th>
+                    <th class="text-right"><b>DESCUENTO</b></th>
+                    <th class="text-right"><b>MONTO A <br /> PAGAR</b></th>
                 </tr>
             </thead>
             <tbody>
@@ -56,8 +57,16 @@
                 @foreach (var allocation in Model)
                 {
                     <tr>
-                        <td class="text-left">@allocation.AsignacionId</td>
-                        <td class="text-left">@allocation.Fecha</td>
+                        <td class="text-center">@allocation.AsignacionId</td>
+                        @*<td class="text-left">@allocation.Fecha</td>*@
+                        @if (context.Clients.FirstOrDefault(w => w.Id == allocation.ClientId).GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)
+                        {
+                            <td class="text-left">Electrónica</td>
+                        }
+                        else
+                        {
+                            <td class="text-left">Tradicional</td>
+                        }
                         <td class="text-left">@allocation.Cliente</td>
                         <td class="text-right">@allocation.Fracciones.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td class="text-right">@allocation.Hojas.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
@@ -74,15 +83,15 @@
                     totalValueToPay += allocation.MontoAPagar;
                 }
                 <tr class="total">
-                    <td class="text-left"><h5></h5></td>
-                    <td class="text-left"><h5></h5></td>
-                    <td class="text-left"><h5><b>Total...:</b></h5></td>
-                    <td class="text-right"><h5><b>@totalFraction.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></h5></td>
-                    <td class="text-right"><h5><b>@totalSheets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></h5></td>
-                    <td class="text-right"><h5><b>@totalNumber.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></h5></td>
-                    <td class="text-right"><h5><b>@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></h5></td>
+                    <td class="text-left"></td>
+                    <td class="text-left"></td>
+                    <td class="text-left"><b>Total...:</b></td>
+                    <td class="text-right"><b>@totalFraction.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-right"><b>@totalSheets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-right"><b>@totalNumber.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-right"><b>@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
                     <td></td>
-                    <td class="text-right"><h5><b>@totalValueToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></h5></td>
+                    <td class="text-right"><b>@totalValueToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
                 </tr>
             </tbody>
 

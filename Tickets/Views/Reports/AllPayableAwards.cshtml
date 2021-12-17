@@ -75,6 +75,7 @@
                         <th class="text-center">Fila</th>
                         <th class="text-center">Billete</th>
                         <th class="text-center">Estatus <br /> de pago</th>
+                        <th class="text-center">Tipo de <br /> premio</th>
                         <th class="text-center">Fracción</th>
                         <th class="text-center">Tipo de premio</th>
                         <th class="text-center">Monto del <br /> premio</th>
@@ -111,9 +112,17 @@
                                 {
                                     <td class="text-center">@Pagado</td>
                                 }
-                                else 
+                                else
                                 {
                                     <td class="text-center">@Pendiente</td>
+                                }
+                                @if (context.Clients.FirstOrDefault(w => w.Id == item.ClientId).GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)
+                                {
+                                    <td class="text-center">Electrónico</td>
+                                }
+                                else
+                                {
+                                    <td class="text-center">Tradicional</td>
                                 }
                                 <td class="text-center">@item.fracciones</td>
                                 <td class="text-center">@item.nameaward</td>

@@ -841,6 +841,7 @@
     </Content>
     <Content Include="Scripts\modules\raffle\raffle.ProfitabilityRaffle.js" />
     <Content Include="Scripts\modules\ticketAllocation\identify.list.topay.controller.js" />
+    <Content Include="Scripts\modules\ticketAllocation\identify.topay.detail.controller.js" />
     <Content Include="Scripts\modules\ticketInvoice\invoice.list.suspend.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -80,7 +80,7 @@
                         <th class="text-center">FRACCIONES DESDE-HASTA</th>
                         <th class="text-center">CANTIDAD FRACCIONES</th>
                         <th class="text-center">VALOR FRACCCION</th>
-                        <th class="text-right" style="width:30%">TOTAL</th>
+                        <th class="text-right">TOTAL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -134,7 +134,7 @@
                                             <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction : number.FractionFrom)  - @(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction : number.FractionTo)</td>
                                             <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? 1 : (number.FractionTo - number.FractionFrom + 1))</td>
                                             <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Award.Value.ToString("c", new System.Globalization.CultureInfo("es-DO")) : price.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                            <td class="text-right" style="width:30%">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                            <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                         </tr>
                                         totalGeneral += total;
                                     }
