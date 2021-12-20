@@ -20,6 +20,7 @@
     var TargetaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.TarjetaDeCredito;
     var NotaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.NotaDeCredito;
     var DepTransf = Tickets.Models.Enums.PaymentTypeTextEnum.DepTransf;
+    var CashAdvance = Tickets.Models.Enums.PaymentTypeTextEnum.CashAdvance;
 }
 
 <style>
@@ -127,26 +128,23 @@
                                 <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
                                 <td>@payment.Recibo</td>
                                 <td class="text-center">
-                                    @if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
-                                    {
-                                        @Efectivo;
-                                    }
-                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
-                                    {
-                                        @Cheque;
-                                    }
-                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
-                                    {
-                                        @TargetaCredito;
-                                    }
-                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
-                                    {
-                                        @NotaCredito;
-                                    }
-                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
-                                    {
-                                        @DepTransf;
-                                    }
+                                    @NotaCredito
+                                </td>
+                                <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
+                                <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            </tr>
+                        }
+                    }
+                    if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
+                    {
+                        foreach (var creditNote in payment.NoteCreditReceiptPayments)
+                        {
+                            totalPayment += creditNote.TotalCash;
+                            <tr>
+                                <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
+                                <td>@payment.Recibo</td>
+                                <td class="text-center">
+                                    @CashAdvance
                                 </td>
                                 <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
                                 <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
@@ -330,6 +328,41 @@
                             <tr>
                                 <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
                                 <td class="text-center">@payment.Recibo</td>
+                                <td class="text-center">
+                                    @if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
+                                    {
+                                        @Efectivo;
+                                    }
+                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
+                                    {
+                                        @Cheque;
+                                    }
+                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
+                                    {
+                                        @TargetaCredito;
+                                    }
+                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                                    {
+                                        @NotaCredito;
+                                    }
+                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                                    {
+                                        @DepTransf;
+                                    }
+                                </td>
+                                <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
+                                <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            </tr>
+                        }
+                    }
+                    if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
+                    {
+                        foreach (var creditNote in payment.NoteCreditReceiptPayments)
+                        {
+                            totalPayment += creditNote.TotalCash;
+                            <tr>
+                                <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
+                                <td>@payment.Recibo</td>
                                 <td class="text-center">
                                     @if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
                                     {

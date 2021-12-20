@@ -247,6 +247,8 @@
     <Compile Include="Controllers\ConfigController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\ElectronicSalesApiController.cs" />
+    <Compile Include="Controllers\ElectronicSalesController.cs" />
     <Compile Include="Controllers\TicketSuscriberApiController.cs" />
     <Compile Include="Controllers\TicketSuscriberController.cs" />
     <Compile Include="Controllers\TicketIdentifyApiController.cs" />
@@ -334,11 +336,15 @@
     <Compile Include="Models\DistTown.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ElectronicTicketSale.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\EmailUtil.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Enums\AllocationTypeEnum.cs" />
+    <Compile Include="Models\Enums\ElectronicSalesStatusEnum.cs" />
     <Compile Include="Models\Enums\GenderEnum.cs" />
     <Compile Include="Models\Enums\GeneralClientEnum.cs" />
     <Compile Include="Models\Enums\NoteCreditEnum.cs" />
@@ -381,6 +387,7 @@
     <Compile Include="Models\ModelsProcedures\ModelReturnedNumbersByClient.cs" />
     <Compile Include="Models\ModelsProcedures\ModelReturnedTickets.cs" />
     <Compile Include="Models\ModelsProcedures\ModelSalesAndPendingPayments.cs" />
+    <Compile Include="Models\ModelsProcedures\ValidateElectronicSale.cs" />
     <Compile Include="Models\Module.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
@@ -407,6 +414,7 @@
     <Compile Include="Models\Procedures\ReturnedNumbersByClient.cs" />
     <Compile Include="Models\Procedures\ReturnedTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\SalesAndPendingPayments.cs" />
+    <Compile Include="Models\Procedures\ValidateElectronicSalesProcedure.cs" />
     <Compile Include="Models\ProductionCost.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
@@ -468,6 +476,8 @@
     <Compile Include="Models\TicketSuscriberNumber.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Ticket\ElectronicSalesModel.cs" />
+    <Compile Include="Models\Ticket\ElectronicSalesNumberModel.cs" />
     <Compile Include="Models\Ticket\TicketReturnedModel.cs" />
     <Compile Include="Models\Ticket\TicketInvoiceNumberModel.cs" />
     <Compile Include="Models\Ticket\TicketSuscriberNumberModel.cs" />
@@ -796,6 +806,8 @@
     <Content Include="Scripts\modules\dashboard\about.us.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\modules\electronicSales\electronicsales.list.controller.js" />
+    <Content Include="Scripts\modules\electronicSales\electronicsales.details.controller.js" />
     <Content Include="Scripts\modules\integration\electronic.ticket.xml.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -3123,6 +3135,9 @@
     <Content Include="Views\Reports\ApprovedBach.cshtml" />
     <Content Include="Views\TicketAllocation\IdentifyAwardListToPay.cshtml" />
     <Content Include="Views\TicketAllocation\IdentifyAwardToPayDetail.cshtml" />
+    <Content Include="Views\ElectronicSales\ElectronicSalesList.cshtml" />
+    <Content Include="Views\ElectronicSales\ElectronicSalesGroupDetails.cshtml" />
+    <Content Include="Views\Reports\ElectronicSaleDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

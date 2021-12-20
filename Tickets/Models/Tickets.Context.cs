@@ -81,6 +81,7 @@ namespace Tickets.Models
         public DbSet<WorkflowType_User> WorkflowType_User { get; set; }
         public DbSet<AwardCertification> AwardCertification { get; set; }
         public DbSet<RaffleAward> RaffleAwards { get; set; }
+        public DbSet<ElectronicTicketSale> ElectronicTicketSales { get; set; }
     
         public virtual int procDelOverduelBill()
         {

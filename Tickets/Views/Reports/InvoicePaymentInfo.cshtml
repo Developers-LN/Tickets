@@ -142,6 +142,10 @@
                         {
                             @(Model.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
+                        {
+                            @(context.NoteCreditReceiptPayments.FirstOrDefault(f=>f.ReceiptPaymentId == Model.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
                     </td>
                 </tr>
         </table>
@@ -266,6 +270,10 @@
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                         {
                             @(Model.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
+                        {
+                            @(context.NoteCreditReceiptPayments.FirstOrDefault(f=>f.ReceiptPaymentId == Model.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                     </td>
                 </tr>

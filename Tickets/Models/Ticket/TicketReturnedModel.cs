@@ -44,7 +44,7 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "numberCount")]
         public int NumberCount { get; set; }
 
-        internal TicketReturnedModel ListaDevoluciones(List<TicketReturn> ticketReturneds, bool hasNumber = false)
+        /*internal TicketReturnedModel ListaDevoluciones(List<TicketReturn> ticketReturneds, bool hasNumber = false)
         {
             var context = new TicketsEntities();
             var subGroups = "";
@@ -69,7 +69,7 @@ namespace Tickets.Models.Ticket
                 model.TicketReturnedNumbers = ticketReturneds.Select(t => ticketReturnedNumberModel.ToObject(t)).ToList();
             }
             return model;
-        }
+        }*/
 
         internal TicketReturnedModel ToObject(List<TicketReturn> ticketReturneds, bool hasNumber = false)
         {

@@ -7,7 +7,8 @@
         Cash = 2068,
         CreditNote = 2075,
         Ninguno = 0,
-        TransDepDirect = 5857
+        TransDepDirect = 5857,
+        CashAdvance = 5865
     }
 
 }

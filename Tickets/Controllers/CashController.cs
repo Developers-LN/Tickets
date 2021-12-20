@@ -637,6 +637,38 @@ namespace Tickets.Controllers
                             context.SaveChanges();
                         }
 
+                        if(receiptPayment.ReceiptType == (int)PaymentTypeEnum.CashAdvance)
+                        {
+                            var creditNotePaymentList = new List<NoteCreditReceiptPayment>();
+                            foreach (var credit in noteCreditReceiptPayments)
+                            {
+                                var noteCredit = context.NoteCredits.FirstOrDefault(n => n.Id == credit.NoteCreditId);
+                                var noteCreditTotalCash = 0.00m;
+                                if (totalCash >= noteCredit.TotalRest)
+                                {
+                                    noteCreditTotalCash = noteCredit.TotalRest;
+                                    noteCredit.Statu = (int)GeneralStatusEnum.Delete;
+                                    noteCredit.TotalRest = 0;
+                                    totalCash -= noteCreditTotalCash;
+                                }
+                                else
+                                {
+                                    noteCreditTotalCash = totalCash;
+                                    noteCredit.TotalRest -= totalCash;
+                                    totalCash = 0;
+                                }
+                                var cp = new NoteCreditReceiptPayment()
+                                {
+                                    NoteCreditId = noteCredit.Id,
+                                    ReceiptPaymentId = receiptPayment.Id,
+                                    TotalCash = noteCreditTotalCash
+                                };
+                                creditNotePaymentList.Add(cp);
+                            }
+                            context.NoteCreditReceiptPayments.AddRange(creditNotePaymentList);
+                            context.SaveChanges();
+                        }
+
                         var payment = GetPaymentCash(invoice);
                         if ((payment.totalRestant - payment.discount) <= 0)
                         {
@@ -1312,6 +1344,7 @@ namespace Tickets.Controllers
             //Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Nota de Credito", note);
             return new JsonResult() { Data = new { result = true, message = "Devoluciones guardadas correctamente!" } };
         }
+
         //
         //  GET: Cash/GetCreditNoteReturneds
         [Authorize]

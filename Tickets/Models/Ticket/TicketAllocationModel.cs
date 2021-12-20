@@ -86,6 +86,21 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "grupo")]
         public int Grupo { get; set; }
 
+        [JsonProperty(PropertyName = "allocationId")]
+        public int AllocationId { get; set; }
+
+        [JsonProperty(PropertyName = "fractionQuantity")]
+        public int FractionQuantity { get; set; }
+
+        [JsonProperty(PropertyName = "allocationFractionQuantity")]
+        public int AllocationFractionQuantity { get; set; }
+
+        [JsonProperty(PropertyName = "totalRest")]
+        public int TotalRest { get; set; }
+
+        [JsonProperty(PropertyName = "anyReturn")]
+        public int AnyReturn { get; set; }
+
         #region Private Method
         private static List<TicketAllocation> CopyTicketAllocation(TicketsEntities context, int sourceId, int targetId, int type)
         {
@@ -243,7 +258,6 @@ namespace Tickets.Models.Ticket
                 Agente = model.Agente,
                 Grupo = context.Clients.FirstOrDefault(c => c.Id == model.ClientId).GroupId
             };
-
             return allocation;
         }
 

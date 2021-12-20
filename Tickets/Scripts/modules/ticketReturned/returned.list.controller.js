@@ -30,7 +30,6 @@
                     $rootScope.dataTable();
                 }
             });
-            
         }
         
         /*Mover Grupo*/

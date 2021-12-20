@@ -451,6 +451,15 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult ElectronicSaleDetails(int allocationId)
+        {
+            AvailableTicketsProcedure availableTicketsProcedure = new AvailableTicketsProcedure();
+            var Resultado = availableTicketsProcedure.ConsultaBilletesDisponible(allocationId);
+            return View(Resultado);
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult BilletesCirculacion(int raffleId)
         {
             AvailableTicketsProcedure availableTicketsProcedure = new AvailableTicketsProcedure();

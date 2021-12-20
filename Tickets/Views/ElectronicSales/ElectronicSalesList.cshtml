@@ -1,9 +1,9 @@
-@{
+锘緻{
     Layout = null;
-    ViewBag.Title = "Listado de billetes devueltos";
+    ViewBag.Title = "Listado de ventas electr贸nicas";
 }
 
-<div class="col-lg-12 no-padder" ng-controller="ReturnedListController"  ng-init="app.title = '@(ViewBag.Title)'">
+<div class="col-lg-12 no-padder" ng-controller="ElectronicSalesListController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="modal fade" id="showMoveGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-vertical-centered" role="document">
             <div class="modal-content">
@@ -14,7 +14,7 @@
                     <p class="modal-title col-lg-7" id="myModalLabel">Cliente: <b>{{currentReturned.clientDesc}}</b></p>
                     <p class="modal-title col-lg-5" id="myModalLabel">Sorteo: <b>{{currentReturned.raffleDesc}}</b></p>
                     <p class="modal-title col-lg-7" id="myModalLabel">Grupo actual: <b>{{currentReturned.returnedGroup}}</b></p>
-                    <p class="modal-title col-lg-5" id="myModalLabel">Cant. de Fracci髇: <b>{{currentReturned.fractionQuantity}}</b></p>
+                    <p class="modal-title col-lg-5" id="myModalLabel">Cant. de Fracci贸n: <b>{{currentReturned.fractionQuantity}}</b></p>
                 </div>
                 <div class="modal-body col-lg-12 no-padder">
                     <div class="row">
@@ -52,11 +52,11 @@
             </div>
         </div>
     </div>
-       
+
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
-            <div class="panel-body"> 
-                <div class="col-lg-4 text-left m-b-xs no-padder"> 
+            <div class="panel-body">
+                <div class="col-lg-12 text-left m-b-xs no-padder">
                     <fieldset>
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
@@ -69,45 +69,29 @@
                         </div>
                     </fieldset>
                 </div>
-                <div class="col-lg-4 text-left m-b-xs no-padder"> 
-                    <fieldset>
-                        <div class="form-group">
-                            <label class="col-lg-12 control-label-left">Cliente: </label>
-                            <div class="col-lg-12">
-                                <select class="form-control dropdown-select2" ng-model="groupClientId" ng-change="updateReturned()">
-                                    <option selected="selected" value="0">Seleccione un cliente</option>
-                                    <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="col-lg-4 text-right m-b-xs no-padder"> 
-                    <a href="#/ticket/returned" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Devoluci髇 de Billetes</a>
-                </div>
                 <div class="row-border hover ">
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
-                                <th>Sorteo</th>
                                 <th>Cliente</th>
-                                <th>Grupo</th>
-                                <th>Cantidad de Fracci髇</th>
-                                <th>Fecha</th>
-                                <th class="editColumm text-center">Acci髇</th>
+                                <th>Asignaci贸n</th>
+                                <th>Cantidad vendida</th>
+                                <th>Cantidad asignada</th>
+                                <th>Cantidad restante</th>
+                                <th class="editColumm text-center">Acci贸n</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="returned in returneds">
-                                <td>{{returned.raffleDesc}}</td>
                                 <td>{{returned.clientDesc}}</td>
-                                <td>{{returned.returnedGroup}}</td>
+                                <td>{{returned.allocationId}}</td>
                                 <td>{{returned.fractionQuantity}}</td>
-                                <td>{{(returned.returnedDate | date:"dd/MM/yyyy") }}</td>
+                                <td>{{returned.allocationFractionQuantity}}</td>
+                                <td>{{returned.totalRest}}</td>
                                 <td class="text-center">
-                                    <a class="{{modulecanview}}" href="#/ticket/returnedGroupDetails/{{returned.returnedGroup}}/{{returned.raffleId}}" title="ver detalles del grupo"><i class="fa fa-eye"></i></a>
-                                    <a class="{{moduleCanEdit}}" ng-if="returned.statusId != @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Invoiced)" ng-click="showMoveGroupModal(returned)" title="Mover Grupo"><i class="fa fa-external-link"></i></a>
-                                    <a ng-if="returned.statusId != @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Invoiced)" ng-click="deleteReturnedGroup(returned)" title="Borrar Grupo de devoluciones" class="{{moduleCanDelete}}"><i class="fa fa-times"></i></a>
+                                    <a target="_blank" href="/Reports/ElectronicSaleDetails?allocationId={{allocation.id}}" title="Detalle de venta electr贸nica"><i class="fa fa-print"></i></a>
+                                    @*<a class="{{modulecanview}}" href="#/ticket/electronicSalesGroupDetails/{{returned.allocationId}}" title="ver detalles del grupo"><i class="fa fa-eye"></i></a>*@
+                                    <a ng-show="returned.statusId != @((int)Tickets.Models.Enums.TicketStatusEnum.Returned)" ng-click="validateElectronicSale(returned)" title="Validar venta" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -118,6 +102,6 @@
         </div>
     </div>
 </div>
-<div class="col-lg-12 no-padder text-left m-b-lg"> 
+<div class="col-lg-12 no-padder text-left m-b-lg">
     <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
 </div>

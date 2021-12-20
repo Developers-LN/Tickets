@@ -13,7 +13,7 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "id")]
         public int Id { get; set; }
 
-        [JsonProperty(PropertyName = "raffleId")]
+        /*[JsonProperty(PropertyName = "raffleId")]
         public int RaffleId { get; set; }
 
         [JsonProperty(PropertyName = "raffleDesc")]
@@ -22,14 +22,14 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "production")]
         public int Production { get; set; }
 
-        [JsonProperty(PropertyName = "returnedGroup")]
-        public string ReturnedGroup { get; set; }
-
         [JsonProperty(PropertyName = "returnedSubGroup")]
         public string ReturnedSubGroup { get; set; }
 
         [JsonProperty(PropertyName = "returnedDate")]
-        public DateTime ReturnedDate { get; set; }
+        public DateTime ReturnedDate { get; set; }*/
+
+        [JsonProperty(PropertyName = "returnedGroup")]
+        public string ReturnedGroup { get; set; }
 
         [JsonProperty(PropertyName = "clientId")]
         public int ClientId { get; set; }
@@ -40,8 +40,8 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "createDate")]
         public DateTime CreateDate { get; set; }
 
-        [JsonProperty(PropertyName = "createUser")]
-        public int CreateUser { get; set; }
+        /*[JsonProperty(PropertyName = "createUser")]
+        public int CreateUser { get; set; }*/
 
         [JsonProperty(PropertyName = "userDesc")]
         public string UserDesc { get; set; }
@@ -55,8 +55,8 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "statuId")]
         public int Status { get; set; }
 
-        [JsonProperty(PropertyName = "statusDesc")]
-        public string StatusDesc { get; set; }
+        /*[JsonProperty(PropertyName = "statusDesc")]
+        public string StatusDesc { get; set; }*/
 
         [JsonProperty(PropertyName = "numberId")]
         public int NumberId { get; set; }
@@ -70,22 +70,25 @@ namespace Tickets.Models.Ticket
             var model = new TicketReturnedNumberModel()
             {
                 Id = ticketReturned.Id,
-                RaffleId = ticketReturned.RaffleId,
-                RaffleDesc = context.Raffles.FirstOrDefault(r => r.Id == ticketReturned.RaffleId).Name,
-                Production = ticketReturned.Raffle.Prospect.Production,
+                //RaffleId = ticketReturned.RaffleId,
+                //RaffleDesc = context.Raffles.FirstOrDefault(r => r.Id == ticketReturned.RaffleId).Name,
+                //RaffleDesc = ticketReturned.Raffle.Name,
+                //Production = ticketReturned.Raffle.Prospect.Production,
                 ReturnedGroup = /*int.Parse(Regex.Match(*/ticketReturned.ReturnedGroup,/*@"\d+").Value),*/
-                ReturnedSubGroup = ticketReturned.ReturnedGroup,
-                ReturnedDate = ticketReturned.ReturnedDate,
-                ClientId = ticketReturned.ClientId,
-                ClientDesc = context.Clients.Where(r => r.Id == ticketReturned.ClientId).Select(c => c.Name).FirstOrDefault(),
+                //ReturnedSubGroup = ticketReturned.ReturnedGroup,
+                //ReturnedDate = ticketReturned.ReturnedDate,
+                //ClientId = ticketReturned.ClientId,
+                //ClientDesc = context.Clients.Where(r => r.Id == ticketReturned.ClientId).Select(c => c.Name).FirstOrDefault(),
+                ClientDesc = ticketReturned.Client.Name,
                 CreateDate = ticketReturned.CreateDate,
-                CreateUser = ticketReturned.CreateUser,
-                UserDesc = context.Users.FirstOrDefault(u => u.Id == ticketReturned.CreateUser).Name,
+                //CreateUser = ticketReturned.CreateUser,
+                //UserDesc = context.Users.FirstOrDefault(u => u.Id == ticketReturned.CreateUser).Name,
+                UserDesc = ticketReturned.User.Name,
                 FractionTo = ticketReturned.FractionTo,
                 FractionFrom = ticketReturned.FractionFrom,
                 Status = ticketReturned.Statu,
-                StatusDesc = context.Catalogs.FirstOrDefault(c => c.Id == ticketReturned.Statu).NameDetail,
-                NumberId = ticketReturned.TicketAllocationNumber.Id,
+                //StatusDesc = context.Catalogs.FirstOrDefault(c => c.Id == ticketReturned.Statu).NameDetail,
+                //NumberId = ticketReturned.TicketAllocationNumber.Id,
                 NumberDesc = ticketReturned.TicketAllocationNumber.Number
             };
             return model;

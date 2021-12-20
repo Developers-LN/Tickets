@@ -1,6 +1,6 @@
 @{
     Layout = null;
-    ViewBag.Title = "Listado de Asignación de Billetes";
+    ViewBag.Title = "Listado de asignación de billetes";
 }
 
 <div class="col-lg-12 no-padder" ng-controller="AllocationListController" ng-init="app.title = '@(ViewBag.Title)'">
@@ -37,7 +37,7 @@
                     <a href="/#/ticket/allocation/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Agregar Asignación de Billetes</a>
                 </div>
                 <div class="row-border hover">
-                    <table class="table nowrap dataTableGrid">
+                    <table class="table dataTableGrid">
                         <thead>
                             <tr>
                                 <th>Numero</th>
@@ -59,7 +59,7 @@
                                     <a href="/#/ticket/allocationDetails/{{allocation.id}}" title="Ver Detalle de asignación" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
                                     @*<a ng-click="sentAllocationToPrint(allocation)" ng-if="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Created) && allocation.canAllocate == true" title="Imprimir Billetes" class="{{moduleCanView}}"><i class="fa fa-external-link"></i></a>*@
                                     @*<a href="/#/ticket/reassign/{{allocation.id}}" ng-if="allocation.statuId != @((int)Tickets.Models.Enums.AllocationStatuEnum.Invoiced) && allocation.canAllocate == true" title="Transferir asignación" class="{{moduleCanView}}"><i class="fa fa-user"></i></a>*@
-                                    <a ng-click="uploadAllocation(allocation.id)" ng-if="allocation.grupo == @((int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)" target="_blank" title="Cargar asignación"><i class="fa fa-cloud-upload"></i></a>
+                                    <a target="_blank" ng-click="uploadAllocation(allocation.id)" ng-if="allocation.grupo == @((int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)" title="Cargar asignación"><i class="fa fa-cloud-upload"></i></a>
                                 </td>
                             </tr>
                         </tbody>

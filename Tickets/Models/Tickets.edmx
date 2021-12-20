@@ -168,6 +168,26 @@
           <Property Name="TownId" Type="int" Nullable="false" />
           <Property Name="ProvinceId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="ElectronicTicketSales">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="RaffleId" Type="int" Nullable="false" />
+          <Property Name="FractionFrom" Type="int" Nullable="false" />
+          <Property Name="FractionTo" Type="int" Nullable="false" />
+          <Property Name="TicketAllocationNimberId" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="CreateUser" Type="int" Nullable="false" />
+          <Property Name="SaleDate" Type="datetime" Nullable="false" />
+          <Property Name="Statu" Type="int" Nullable="false" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="50" />
+          <Property Name="Cedula" Type="varchar" MaxLength="50" />
+          <Property Name="COD_AUTH" Type="varchar" MaxLength="500" />
+          <Property Name="PDV_ID" Type="int" />
+          <Property Name="TicketAllocationId" Type="int" />
+        </EntityType>
         <EntityType Name="Employee">
           <Key>
             <PropertyRef Name="Id" />
@@ -1151,6 +1171,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ElectronicTicketSales_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="ElectronicTicketSales" Type="Self.ElectronicTicketSales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ElectronicTicketSales">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ElectronicTicketSales_Raffle1">
+          <End Role="Raffle" Type="Self.Raffle" Multiplicity="1" />
+          <End Role="ElectronicTicketSales" Type="Self.ElectronicTicketSales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Raffle">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ElectronicTicketSales">
+              <PropertyRef Name="RaffleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ElectronicTicketSales_TicketAllocationNumber">
+          <End Role="TicketAllocationNumber" Type="Self.TicketAllocationNumber" Multiplicity="1" />
+          <End Role="ElectronicTicketSales" Type="Self.ElectronicTicketSales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TicketAllocationNumber">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ElectronicTicketSales">
+              <PropertyRef Name="TicketAllocationNimberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ElectronicTicketSales_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="ElectronicTicketSales" Type="Self.ElectronicTicketSales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ElectronicTicketSales">
+              <PropertyRef Name="CreateUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Employee_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
@@ -2001,6 +2069,7 @@
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Costos" EntityType="Self.Costos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DistTown" EntityType="Self.DistTown" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ElectronicTicketSales" EntityType="Self.ElectronicTicketSales" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IdentifyBach" EntityType="Self.IdentifyBach" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IdentifyBach_CreditNote" EntityType="Self.IdentifyBach_CreditNote" Schema="dbo" store:Type="Tables" />
@@ -2166,6 +2235,22 @@
           <AssociationSet Name="FK_DistTown_Town" Association="Self.FK_DistTown_Town">
             <End Role="Town" EntitySet="Town" />
             <End Role="DistTown" EntitySet="DistTown" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ElectronicTicketSales_Client" Association="Self.FK_ElectronicTicketSales_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ElectronicTicketSales" EntitySet="ElectronicTicketSales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ElectronicTicketSales_Raffle1" Association="Self.FK_ElectronicTicketSales_Raffle1">
+            <End Role="Raffle" EntitySet="Raffle" />
+            <End Role="ElectronicTicketSales" EntitySet="ElectronicTicketSales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ElectronicTicketSales_TicketAllocationNumber" Association="Self.FK_ElectronicTicketSales_TicketAllocationNumber">
+            <End Role="TicketAllocationNumber" EntitySet="TicketAllocationNumber" />
+            <End Role="ElectronicTicketSales" EntitySet="ElectronicTicketSales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ElectronicTicketSales_User" Association="Self.FK_ElectronicTicketSales_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="ElectronicTicketSales" EntitySet="ElectronicTicketSales" />
           </AssociationSet>
           <AssociationSet Name="FK_Employee_User" Association="Self.FK_Employee_User">
             <End Role="User" EntitySet="User" />
@@ -2920,6 +3005,23 @@
             <End Role="Raffle" EntitySet="Raffles" />
             <End Role="RaffleAward" EntitySet="RaffleAwards" />
           </AssociationSet>
+          <EntitySet Name="ElectronicTicketSales" EntityType="TicketsModel.ElectronicTicketSale" />
+          <AssociationSet Name="FK_ElectronicTicketSales_Client" Association="TicketsModel.FK_ElectronicTicketSales_Client">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="ElectronicTicketSale" EntitySet="ElectronicTicketSales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ElectronicTicketSales_TicketAllocationNumber" Association="TicketsModel.FK_ElectronicTicketSales_TicketAllocationNumber">
+            <End Role="TicketAllocationNumber" EntitySet="TicketAllocationNumbers" />
+            <End Role="ElectronicTicketSale" EntitySet="ElectronicTicketSales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ElectronicTicketSales_User" Association="TicketsModel.FK_ElectronicTicketSales_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ElectronicTicketSale" EntitySet="ElectronicTicketSales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ElectronicTicketSales_Raffle1" Association="TicketsModel.FK_ElectronicTicketSales_Raffle1">
+            <End Role="Raffle" EntitySet="Raffles" />
+            <End Role="ElectronicTicketSale" EntitySet="ElectronicTicketSales" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Agency">
           <Key>
@@ -3096,6 +3198,7 @@
           <NavigationProperty Name="TicketReturns" Relationship="TicketsModel.FK_TicketReturn_Client" FromRole="Client" ToRole="TicketReturn" />
           <NavigationProperty Name="TicketSuscribers" Relationship="TicketsModel.FK_TicketSuscriber_Client" FromRole="Client" ToRole="TicketSuscriber" />
           <Property Name="ControlNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ElectronicTicketSales" Relationship="TicketsModel.FK_ElectronicTicketSales_Client" FromRole="Client" ToRole="ElectronicTicketSale" />
         </EntityType>
         <EntityType Name="DistTown">
           <Key>
@@ -3434,6 +3537,7 @@
           <Property Name="Symbol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Separator" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="Consignacion" Type="Boolean" />
+          <NavigationProperty Name="ElectronicTicketSales" Relationship="TicketsModel.FK_ElectronicTicketSales_Raffle1" FromRole="Raffle" ToRole="ElectronicTicketSale" />
         </EntityType>
         <EntityType Name="ReceiptPayment">
           <Key>
@@ -3607,6 +3711,7 @@
           <Property Name="Consignated" Type="Boolean" />
           <Property Name="UserConsigned" Type="Int32" />
           <Property Name="NoOrden" Type="Int32" />
+          <NavigationProperty Name="ElectronicTicketSales" Relationship="TicketsModel.FK_ElectronicTicketSales_TicketAllocationNumber" FromRole="TicketAllocationNumber" ToRole="ElectronicTicketSale" />
         </EntityType>
         <EntityType Name="TicketRePrint">
           <Key>
@@ -3737,6 +3842,7 @@
           <NavigationProperty Name="webpages_Roles" Relationship="TicketsModel.webpages_UsersInRoles" FromRole="User" ToRole="webpages_Roles" />
           <NavigationProperty Name="AwardCertification" Relationship="TicketsModel.FK_AwardCertification_User" FromRole="User" ToRole="AwardCertification" />
           <Property Name="Connected" Type="Int32" />
+          <NavigationProperty Name="ElectronicTicketSales" Relationship="TicketsModel.FK_ElectronicTicketSales_User" FromRole="User" ToRole="ElectronicTicketSale" />
         </EntityType>
         <EntityType Name="webpages_Membership">
           <Key>
@@ -5078,6 +5184,78 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ElectronicTicketSale">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="RaffleId" Type="Int32" Nullable="false" />
+          <Property Name="FractionFrom" Type="Int32" Nullable="false" />
+          <Property Name="FractionTo" Type="Int32" Nullable="false" />
+          <Property Name="TicketAllocationNimberId" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateUser" Type="Int32" Nullable="false" />
+          <Property Name="SaleDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Statu" Type="Int32" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Cedula" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="COD_AUTH" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="PDV_ID" Type="Int32" />
+          <NavigationProperty Name="Client" Relationship="TicketsModel.FK_ElectronicTicketSales_Client" FromRole="ElectronicTicketSale" ToRole="Client" />
+          <NavigationProperty Name="TicketAllocationNumber" Relationship="TicketsModel.FK_ElectronicTicketSales_TicketAllocationNumber" FromRole="ElectronicTicketSale" ToRole="TicketAllocationNumber" />
+          <NavigationProperty Name="User" Relationship="TicketsModel.FK_ElectronicTicketSales_User" FromRole="ElectronicTicketSale" ToRole="User" />
+          <NavigationProperty Name="Raffle" Relationship="TicketsModel.FK_ElectronicTicketSales_Raffle1" FromRole="ElectronicTicketSale" ToRole="Raffle" />
+          <Property Name="TicketAllocationId" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_ElectronicTicketSales_Client">
+          <End Type="TicketsModel.Client" Role="Client" Multiplicity="1" />
+          <End Type="TicketsModel.ElectronicTicketSale" Role="ElectronicTicketSale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ElectronicTicketSale">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ElectronicTicketSales_TicketAllocationNumber">
+          <End Type="TicketsModel.TicketAllocationNumber" Role="TicketAllocationNumber" Multiplicity="1" />
+          <End Type="TicketsModel.ElectronicTicketSale" Role="ElectronicTicketSale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TicketAllocationNumber">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ElectronicTicketSale">
+              <PropertyRef Name="TicketAllocationNimberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ElectronicTicketSales_User">
+          <End Type="TicketsModel.User" Role="User" Multiplicity="1" />
+          <End Type="TicketsModel.ElectronicTicketSale" Role="ElectronicTicketSale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ElectronicTicketSale">
+              <PropertyRef Name="CreateUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ElectronicTicketSales_Raffle1">
+          <End Type="TicketsModel.Raffle" Role="Raffle" Multiplicity="1" />
+          <End Type="TicketsModel.ElectronicTicketSale" Role="ElectronicTicketSale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Raffle">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ElectronicTicketSale">
+              <PropertyRef Name="RaffleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5900,6 +6078,27 @@
                 <ScalarProperty Name="ControlNumber" ColumnName="ControlNumber" />
                 <ScalarProperty Name="RaffleId" ColumnName="RaffleId" />
                 <ScalarProperty Name="AwardId" ColumnName="AwardId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ElectronicTicketSales">
+            <EntityTypeMapping TypeName="TicketsModel.ElectronicTicketSale">
+              <MappingFragment StoreEntitySet="ElectronicTicketSales">
+                <ScalarProperty Name="TicketAllocationId" ColumnName="TicketAllocationId" />
+                <ScalarProperty Name="PDV_ID" ColumnName="PDV_ID" />
+                <ScalarProperty Name="COD_AUTH" ColumnName="COD_AUTH" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Statu" ColumnName="Statu" />
+                <ScalarProperty Name="SaleDate" ColumnName="SaleDate" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="TicketAllocationNimberId" ColumnName="TicketAllocationNimberId" />
+                <ScalarProperty Name="FractionTo" ColumnName="FractionTo" />
+                <ScalarProperty Name="FractionFrom" ColumnName="FractionFrom" />
+                <ScalarProperty Name="RaffleId" ColumnName="RaffleId" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

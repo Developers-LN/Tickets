@@ -39,6 +39,7 @@ namespace Tickets.Models
             this.WorkflowProccesses = new HashSet<WorkflowProccess>();
             this.webpages_Roles = new HashSet<webpages_Roles>();
             this.AwardCertification = new HashSet<AwardCertification>();
+            this.ElectronicTicketSales = new HashSet<ElectronicTicketSale>();
         }
     
         public int Id { get; set; }
@@ -72,5 +73,6 @@ namespace Tickets.Models
         public virtual ICollection<WorkflowProccess> WorkflowProccesses { get; set; }
         public virtual ICollection<webpages_Roles> webpages_Roles { get; set; }
         public virtual ICollection<AwardCertification> AwardCertification { get; set; }
+        public virtual ICollection<ElectronicTicketSale> ElectronicTicketSales { get; set; }
     }
 }

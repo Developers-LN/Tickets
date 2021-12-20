@@ -20,6 +20,7 @@ namespace Tickets.Models
             this.InvoiceTickets = new HashSet<InvoiceTicket>();
             this.TicketRePrintNumbers = new HashSet<TicketRePrintNumber>();
             this.TicketReturns = new HashSet<TicketReturn>();
+            this.ElectronicTicketSales = new HashSet<ElectronicTicketSale>();
         }
     
         public int Id { get; set; }
@@ -45,5 +46,6 @@ namespace Tickets.Models
         public virtual User User { get; set; }
         public virtual ICollection<TicketRePrintNumber> TicketRePrintNumbers { get; set; }
         public virtual ICollection<TicketReturn> TicketReturns { get; set; }
+        public virtual ICollection<ElectronicTicketSale> ElectronicTicketSales { get; set; }
     }
 }

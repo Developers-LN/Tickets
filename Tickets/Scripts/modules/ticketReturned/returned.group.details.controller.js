@@ -2,7 +2,7 @@
  * Module: Returned.Group.Details.controller.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -56,25 +56,25 @@
         $scope.showMoveGroupModal = function (returned) {
             window.loading.show();
             $.when(
-                 $.ajax($rootScope.serverUrl + 'ticket/ticketReturnedApi/getGroupListSelect?raffleId=' + returned.raffleId),
-                 $.ajax($rootScope.serverUrl + 'ticket/clientApi/getClientSelect?statu=2089')//Sorteos en planificacion
-             ).then(function (groupResponse, clientsResponse) {
-                 window.loading.hide();
-                 $scope.groups = groupResponse[0].object;
-                 $scope.clientList = clientsResponse[0].object;
-                 $scope.currentReturned = returned;
-                 $('#showMoveGroupModal').modal('show');
-                 $scope.$apply();
-                 window.setTimeout(function () {
-                     $scope.Group = returned.returnedGroup;
-                     $scope.ClientId = returned.clientId;
-                     $scope.$apply();
-                 }, 0);
-             });
+                $.ajax($rootScope.serverUrl + 'ticket/ticketReturnedApi/getGroupListSelect?raffleId=' + returned.raffleId),
+                $.ajax($rootScope.serverUrl + 'ticket/clientApi/getClientSelect?statu=2089')//Sorteos en planificacion
+            ).then(function (groupResponse, clientsResponse) {
+                window.loading.hide();
+                $scope.groups = groupResponse[0].object;
+                $scope.clientList = clientsResponse[0].object;
+                $scope.currentReturned = returned;
+                $('#showMoveGroupModal').modal('show');
+                $scope.$apply();
+                window.setTimeout(function () {
+                    $scope.Group = returned.returnedGroup;
+                    $scope.ClientId = returned.clientId;
+                    $scope.$apply();
+                }, 0);
+            });
         }
 
         $scope.saveNewGroup = function () {
-           
+
             var data = {
                 group: $scope.Group,
                 returnedId: $scope.currentReturned.id,

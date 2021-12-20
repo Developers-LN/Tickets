@@ -375,10 +375,13 @@
                 url: '/ticket/returnedValidation',
                 templateUrl: Route.base('TicketReturned/ReturnedValidation')
             })
-
             .state('app.ticketReturnGroupDetails', {
                 url: '/ticket/returnedGroupDetails/:group/:raffleId',
                 templateUrl: Route.base('TicketReturned/ReturnedGroupDetails')
+            })
+            .state('app.ticketElectronicSalesDetails', {
+                url: '/ticket/electronicSalesGroupDetails/:allocationId',
+                templateUrl: Route.base('ElectronicSales/ElectronicSalesGroupDetails')
             })
             .state('app.ticketReturnValidationGroupDetails', {
                 url: '/ticket/returnedValidationGroupDetails/:group/:raffleId',
@@ -458,6 +461,11 @@
             .state('app.ticketAllocationConsignatedList', {
                 url: '/ticket/ConsignmentAllocations',
                 templateUrl: Route.base('TicketAllocation/TicketAllocationConsignmentList'),
+                resolve: {}
+            })
+            .state('app.electronicSales', {
+                url: '/ticket/electronicSales',
+                templateUrl: Route.base('ElectronicSales/ElectronicSalesList'),
                 resolve: {}
             })
             .state('app.ticketPrintList', {

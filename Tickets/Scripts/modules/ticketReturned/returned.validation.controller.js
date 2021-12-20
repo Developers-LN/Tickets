@@ -2,7 +2,7 @@
  * Module: ReturnedValidationController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -13,6 +13,7 @@
     function ReturnedValidationController($scope, $state, $rootScope) {
         $scope.raffleId = 0;
         $scope.clientId = 0;
+
         $rootScope.returnURL = '/#/ticket/returnedValidation';
 
         $scope.updateReturned = function () {
@@ -51,7 +52,7 @@
                         type: 'POST',
                         dataType: 'json',
                         url: 'Cash/CreditNoteGroupApply',
-                        data: { 
+                        data: {
                             group: JSON.stringify(returned.groupList),
                             raffleId: returned.raffleId,
                             clientId: returned.clientId
@@ -70,6 +71,7 @@
                 }
             });
         }
+
         $scope.ShowHideMessage = 'Ocultar';
         $scope.show = true;
         $scope.ShowHideContent = function () {
@@ -93,7 +95,6 @@
                 $scope.show2 = true;
             }
         }
-
 
         this.loadData = function () {
             window.loading.show();
