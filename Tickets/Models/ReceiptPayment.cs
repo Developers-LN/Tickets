@@ -36,6 +36,7 @@ namespace Tickets.Models
         public string Observaciones { get; set; }
         public string Telefono { get; set; }
         public string Codigo { get; set; }
+        public string Notas { get; set; }
     
         public virtual Cash Cash { get; set; }
         public virtual Client Client { get; set; }

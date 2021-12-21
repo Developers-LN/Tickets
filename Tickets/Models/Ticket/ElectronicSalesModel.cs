@@ -64,14 +64,6 @@ namespace Tickets.Models.Ticket
         {
             var context = new TicketsEntities();
 
-            /*var electronicTickets = context.ElectronicTicketSales.Where(d =>
-                    (d.RaffleId == raffleId)
-                    && (d.ClientId == clientId || clientId == 0)
-                ).ToList()
-                .GroupBy(d => d.TicketAllocationId)
-                .Select(r => this.ToObject(r.ToList()))
-                .ToList();*/
-
             var Clients = context.Clients.Where(w => w.GroupId == (int)ClientGroupEnum.DistribuidorElectronico).Select(s => s.Id).ToList();
 
             var electronicTickets = context.TicketAllocations
@@ -107,7 +99,7 @@ namespace Tickets.Models.Ticket
                 StatuId = model.Statu,
                 Agente = model.Agente,
                 Grupo = context.Clients.FirstOrDefault(c => c.Id == model.ClientId).GroupId,
-                //AnyReturn = context.TicketReturns.Any(a => model.TicketAllocationNumbers.Select(s => s.Id).ToList().Contains(a)),
+                AnyReturn = model.Statu,
                 AllocationFractionQuantity = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == model.Id).Select(s => s.FractionTo - s.FractionFrom + 1).Sum()
             };
 

@@ -54,7 +54,8 @@
             Codigo: undefined,
             Telefono: undefined,
             Observaciones: undefined,
-            clientType: undefined
+            clientType: undefined,
+            Notas: undefined
         };
 
         $scope.totalCreditNoteValue = 0;

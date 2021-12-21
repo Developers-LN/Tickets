@@ -89,9 +89,9 @@
                                 <td>{{returned.allocationFractionQuantity}}</td>
                                 <td>{{returned.totalRest}}</td>
                                 <td class="text-center">
-                                    <a target="_blank" href="/Reports/ElectronicSaleDetails?allocationId={{allocation.id}}" title="Detalle de venta electrónica"><i class="fa fa-print"></i></a>
+                                    @*<a target="_blank" href="/Reports/ElectronicSaleDetails?allocationId={{allocation.id}}" title="Detalle de venta electrónica"><i class="fa fa-print"></i></a>*@
                                     @*<a class="{{modulecanview}}" href="#/ticket/electronicSalesGroupDetails/{{returned.allocationId}}" title="ver detalles del grupo"><i class="fa fa-eye"></i></a>*@
-                                    <a ng-show="returned.statusId != @((int)Tickets.Models.Enums.TicketStatusEnum.Returned)" ng-click="validateElectronicSale(returned)" title="Validar venta" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>
+                                    <a ng-click="validateElectronicSale(returned)" ng-show="returned.anyReturn != @((int)Tickets.Models.Enums.AllocationStatuEnum.ReturnsProcessed) && returned.anyReturn != @((int)Tickets.Models.Enums.AllocationStatuEnum.Returned)" title="Validar venta" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>
                                 </td>
                             </tr>
                         </tbody>

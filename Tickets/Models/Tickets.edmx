@@ -488,6 +488,7 @@
           <Property Name="Observaciones" Type="text" />
           <Property Name="Telefono" Type="varchar" MaxLength="50" />
           <Property Name="Codigo" Type="varchar" MaxLength="50" />
+          <Property Name="Notas" Type="text" />
         </EntityType>
         <EntityType Name="ReceivablePayment">
           <Key>
@@ -3564,6 +3565,7 @@
           <Property Name="Observaciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Codigo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Notas" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ReceivablePayment">
           <Key>
@@ -5688,6 +5690,7 @@
           <EntitySetMapping Name="ReceiptPayments">
             <EntityTypeMapping TypeName="TicketsModel.ReceiptPayment">
               <MappingFragment StoreEntitySet="ReceiptPayment">
+                <ScalarProperty Name="Notas" ColumnName="Notas" />
                 <ScalarProperty Name="Codigo" ColumnName="Codigo" />
                 <ScalarProperty Name="Telefono" ColumnName="Telefono" />
                 <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />

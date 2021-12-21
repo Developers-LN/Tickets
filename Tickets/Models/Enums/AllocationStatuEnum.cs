@@ -8,6 +8,8 @@
         Invoiced = 3092,
         Review = 5839,
         Consigned = 5858,
-        Generated = 5860
+        Generated = 5860,
+        Returned = 5869,
+        ReturnsProcessed = 5870
     }
 }

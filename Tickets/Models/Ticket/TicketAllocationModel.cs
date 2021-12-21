@@ -385,8 +385,6 @@ namespace Tickets.Models.Ticket
                     && (a.ClientId == clientId || clientId == 0)).AsEnumerable()
                 .Select(a => this.InvoiceDetails(a)).ToList();
 
-            //var allocation2 = allocation.Where(x => x != null).ToList();
-
             return new RequestResponseModel()
             {
                 Result = true,
