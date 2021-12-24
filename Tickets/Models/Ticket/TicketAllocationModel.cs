@@ -291,7 +291,7 @@ namespace Tickets.Models.Ticket
                 //var numberModel = new TicketAllocationNumberModel();
                 //allocation.TicketAllocationNumbers = model.TicketAllocationNumbers.Select(n => numberModel.ToObject(n)).ToList();
 
-                if (context.TicketReturns.Any(a => a.ClientId == model.ClientId && a.RaffleId == model.RaffleId))
+                if (context.TicketReturns.Any(a => a.ClientId == model.ClientId && a.RaffleId == model.RaffleId && a.TicketAllocationNumber.TicketAllocationId == model.Id))
                 {
                     allocation.ReturnFractions = context.TicketReturns.Where(w => w.ClientId == model.ClientId && w.RaffleId == model.RaffleId
                     && w.TicketAllocationNumber.TicketAllocationId == model.Id).Select(s => s.FractionTo - s.FractionFrom + 1).Sum();

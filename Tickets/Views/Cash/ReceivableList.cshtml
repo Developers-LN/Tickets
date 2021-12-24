@@ -57,13 +57,16 @@
                                 <td>#{{invoice.Id}}</td>
                                 <td>{{invoice.RaffleId}}</td>
                                 <td>{{invoice.ClientDesc}} {{invoice.Agente}}</td>
-                                <td>{{parseMoney(invoice.Payment.totalInvoice)}}</td>
-                                <td>{{parseMoney(invoice.Payment.discount)}}</td>
-                                <td>{{parseMoney(invoice.Payment.totalInvoice - invoice.Payment.discount)}}</td>
-                                <td>{{parseMoney(invoice.Payment.totalRestant - invoice.Payment.discount)}}</td>
-                                <td>{{(invoice.InvoiceDate | date:"dd/MM/yyyy")}}</td>
-                                <td>{{(invoice.xpiredDate | date:"dd/MM/yyyy")}}</td>
-                                <td>{{invoice.xpiredDay == ''? invoice.PaymentStatuDesc : invoice.xpiredDay}}</td>
+                                <td>{{parseMoney(invoice.totalInvoice)}}</td>
+                                <td>{{parseMoney(invoice.discount)}}</td>
+                                @*<td>{{parseMoney(invoice.Payment.totalInvoice - invoice.Payment.discount)}}</td>
+                                <td>{{parseMoney(invoice.Payment.totalRestant - invoice.Payment.discount)}}</td>*@
+                                <td>{{parseMoney(invoice.totalQuantity)}}</td>
+                                <td>{{parseMoney(invoice.totalRestant)}}</td>
+                                <td>{{invoice.InvoiceDate}}</td>
+                                <td>{{invoice.xpiredDate}}</td>
+                                @*<td>{{invoice.xpiredDay == ''? invoice.PaymentStatuDesc : invoice.xpiredDay}}</td>*@
+                                <td>{{invoice.PaymentStatuDesc}}</td>
                                 <td>
                                     <a ng-if="invoice.PaymentStatu == @((int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Pendient)" href="#/cash/receivable/{{invoice.Id}}" class="{{moduleCanEdit}}"><i class="fa fa-money"></i></a>
                                     <a ng-click="saveReceivablePayment(invoice.Id)" class="{{moduleCanEdit}}"><i class="fa fa-file-o"></i></a>

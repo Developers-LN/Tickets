@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
 using Tickets.Models.Enums;
+using Tickets.Models.Procedures;
 using Tickets.Models.Ticket;
 using WebMatrix.WebData;
 
@@ -732,7 +733,7 @@ namespace Tickets.Controllers
                         && w.Statu == (int)GeneralStatusEnum.Active
                         && (w.RaffleId.HasValue == false || w.RaffleId.Value == invoice.RaffleId)
                         && w.TotalRest > 0).Select(s => CreditNoteToObject(s)).ToList(),
-                    payment = GetPaymentCash(invoice),
+                    payment = GetPaymentCashByProcedure(invoice),
                     raffleId = invoice.RaffleId,
                     raffleName = invoice.Raffle.Name
                 }
@@ -777,13 +778,16 @@ namespace Tickets.Controllers
             var invoices = new List<object>();
             if (raffleId != 0 || clientId != 0)
             {
-                invoices = context.Invoices.AsEnumerable().Where(i =>
+                InvoiceListProcedure invoiceListProcedure = new InvoiceListProcedure();
+                invoices = invoiceListProcedure.ListaFacturas(raffleId, clientId);
+
+                /*invoices = context.Invoices.AsEnumerable().Where(i =>
                     (i.RaffleId == raffleId || raffleId == 0)
                     && (i.ClientId == clientId || clientId == 0)
                     && i.Condition == (int)InvoiceConditionEnum.Credit
                     //&& i.PaymentStatu == (int)InvoicePaymentStatuEnum.Pendient
                     //&& VerifyReceivable(i)
-                    ).Select(i => InvoiceTicketsMainToObject(i)).ToList<object>();
+                    ).Select(i => InvoiceTicketsMainToObject(i)).ToList<object>();*/
             }
             return new JsonResult() { Data = new { invoices, clients, raffles }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -802,6 +806,25 @@ namespace Tickets.Controllers
                     }
                     return totalInvoiceTicketPrice > totalRequestCash;
                 }*/
+
+        public InvoicePaymentModel GetPaymentCashByProcedure(Invoice invoice)
+        {
+            var totalReturned = 0.0M;
+            var totalCreditNote = 0.0M;
+
+            InvoiceListProcedureByList invoiceListProcedureByList = new InvoiceListProcedureByList();
+            var Payments = invoiceListProcedureByList.ListaFacturas(invoice.RaffleId, invoice.ClientId);
+
+            return new InvoicePaymentModel
+            {
+                totalInvoice = Payments.FirstOrDefault().totalInvoice,
+                totalPayment = Payments.FirstOrDefault().totalPayer,
+                totalReturned = totalReturned,
+                totalCreditNote = totalCreditNote,
+                totalRestant = Payments.FirstOrDefault().totalRestant,
+                discount = Payments.FirstOrDefault().discount
+            };
+        }
 
         public InvoicePaymentModel GetPaymentCash(Invoice invoice)
         {

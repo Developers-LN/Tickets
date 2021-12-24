@@ -378,6 +378,7 @@
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ModelsProcedures\AllocationSummary.cs" />
+    <Compile Include="Models\ModelsProcedures\InvoiceListModel.cs" />
     <Compile Include="Models\ModelsProcedures\ModelAvailableTickets.cs" />
     <Compile Include="Models\ModelsProcedures\ModelAvailableTicketsToInvoice.cs" />
     <Compile Include="Models\ModelsProcedures\ModelInvoicedTickets.cs" />
@@ -408,6 +409,8 @@
     <Compile Include="Models\Procedures\AvailableTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\AvailableTicketToInvoice.cs" />
     <Compile Include="Models\Procedures\InvoicedTicketsProcedure.cs" />
+    <Compile Include="Models\Procedures\InvoiceListProcedure.cs" />
+    <Compile Include="Models\Procedures\InvoiceListProcedureByList.cs" />
     <Compile Include="Models\Procedures\NetSalesByClientProcedure.cs" />
     <Compile Include="Models\Procedures\PayableAwardByClientProcedure.cs" />
     <Compile Include="Models\Procedures\PayableAwardsProcedure.cs" />

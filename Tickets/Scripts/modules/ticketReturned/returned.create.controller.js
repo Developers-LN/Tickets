@@ -192,7 +192,6 @@
                 e.returnValue = false;
                 e.cancelBubble = true;
                 return false;
-
             } else {
                 $scope.verifyTicketNumber(e);
             }

@@ -160,8 +160,8 @@
                             <div class="col-lg-8 no-padder text-right">Monto Total:</div> <div class="col-lg-4 no-padder text-right"><b>{{parseMoney(payment.totalInvoice - payment.discount)}}</b></div>
                             <div class="col-lg-8 no-padder text-right">Monto pagado: </div> <div class="col-lg-4 no-padder text-right"><b>{{parseMoney(payment.totalPayment + payment.totalCreditNote)}}</b></div>
                             <div class="col-lg-8 no-padder text-right"><b>Monto a Pagar:</b></div> <div class="col-lg-4 no-padder text-right" style="color:#49AE6E "><b>{{parseMoney(receivable.TotalCash)}}</b></div>
-                            <div class="col-lg-8 no-padder text-right">Monto Deudado:</div> <div class="col-lg-4 no-padder text-right"><b>{{parseMoney(payment.totalRestant - payment.discount)}}</b></div>
-                            <div class="col-lg-8 no-padder text-right"><b>Prox. Monto Deudado:</b></div> <div class="col-lg-4 no-padder text-right" style="color:indianred"><b>{{parseMoney(payment.totalRestant - (payment.discount + receivable.TotalCash))}}</b></div>
+                            <div class="col-lg-8 no-padder text-right">Monto Deudado:</div> <div class="col-lg-4 no-padder text-right"><b>{{parseMoney(payment.totalRestant)}}</b></div>
+                            <div class="col-lg-8 no-padder text-right"><b>Prox. Monto Deudado:</b></div> <div class="col-lg-4 no-padder text-right" style="color:indianred"><b>{{parseMoney(payment.totalRestant - (receivable.TotalCash))}}</b></div>
                         </div>
                     </div>
                     <div class="col-lg-12 no-padder" ng-show="receivable.clientType == 5862">

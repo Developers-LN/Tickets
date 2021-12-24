@@ -26,8 +26,8 @@
                     window.loading.hide();
 
                     $scope.invoices = data.invoices.map(function (invoice) {
-                        invoice.InvoiceDate = new Date(invoice.InvoiceDate);
-                        invoice.xpiredDate = new Date(invoice.xpiredDate);
+                        //invoice.InvoiceDate = new Date(invoice.InvoiceDate);
+                        //invoice.xpiredDate = new Date(invoice.xpiredDate);
                         return invoice;
                     });
                     if (raffleId <= 0) {
@@ -57,10 +57,10 @@
             $scope.totalRest = 0;
             $scope.invoices.forEach(function (invoice) {
                 if (invoice.PaymentStatu != 2084) {
-                    $scope.totalBruton += invoice.Payment.totalInvoice;
-                    $scope.totalDiscount += invoice.Payment.discount;
-                    $scope.totalNeto += (invoice.Payment.totalInvoice - invoice.Payment.discount);
-                    $scope.totalRest += (invoice.Payment.totalRestant - invoice.Payment.discount);
+                    $scope.totalBruton += invoice.totalInvoice;
+                    $scope.totalDiscount += invoice.discount;
+                    $scope.totalNeto += invoice.totalQuantity;
+                    $scope.totalRest += invoice.totalRestant;
                 }
             });
         }

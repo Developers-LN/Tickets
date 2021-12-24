@@ -10,8 +10,8 @@
     string adminCargo = config != null ? config.ControlPremioCargo : "";
 
     decimal MontoApagarSorteo = 0;
+    decimal TotalPagarCliente = 0;
     decimal ValorPremios = 0;
-    decimal MontoApagarTotal = 0;
 
     int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
@@ -80,8 +80,8 @@
 
                 foreach (var client in Clientes)
                 {
-                    //MontoApagarSorteo = 0;
                     ValorPremios = 0;
+                    TotalPagarCliente = 0;
                     <table class="table" style="margin-top:15px;">
                         <thead>
                             <tr>
@@ -98,9 +98,9 @@
                         <tbody>
                             @foreach (var item in Model.Where(w => w.ClientId == client))
                             {
-                                MontoApagarSorteo += item.ValorPagar;
+                                TotalPagarCliente += item.ValorPagar;
                                 ValorPremios += item.Value;
-                                MontoApagarTotal += item.Value;
+                                MontoApagarSorteo += item.ValorPagar;
                                 <tr>
                                     <td class="text-center">@item.Number</td>
                                     <td class="text-center">@item.Fracciones</td>
@@ -114,7 +114,7 @@
                                 <td></td>
                                 <td></td>
                                 <th class="text-center">Total: @ValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
-                                <th class="text-center">Total: @MontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                                <th class="text-center">Total: @TotalPagarCliente.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
                             </tr>
                         </tbody>
                     </table>
