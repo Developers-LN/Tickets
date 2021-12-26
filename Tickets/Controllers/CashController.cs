@@ -638,7 +638,7 @@ namespace Tickets.Controllers
                             context.SaveChanges();
                         }
 
-                        if(receiptPayment.ReceiptType == (int)PaymentTypeEnum.CashAdvance)
+                        if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.CashAdvance)
                         {
                             var creditNotePaymentList = new List<NoteCreditReceiptPayment>();
                             foreach (var credit in noteCreditReceiptPayments)
@@ -715,7 +715,7 @@ namespace Tickets.Controllers
                     clientType = invoice.Client.GroupId,
                     invoiceDiscount = invoice.Discount,
                     invoiceDate = invoice.CreateDate.ToString("dd/MM/yyyy"),
-                    Agente = invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault(),
+                    Agente = invoice.InvoiceTickets.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Agente,
                     paymentsHistory = invoice.ReceiptPayments.AsEnumerable()
                     .Where(w => w.InvoiceId == invoice.Id && invoice.Client.GroupId == (int)ClientGroupEnum.CajaDespachoExpress)
                     .Select(s => new

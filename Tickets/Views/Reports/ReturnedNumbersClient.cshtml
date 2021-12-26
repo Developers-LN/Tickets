@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelReturnedNumbersByClient>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Devoluciones por Grupo";
+    ViewBag.Title = "Devoluciones por cliente del sorteo número" + Model.FirstOrDefault().RaffleId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -17,34 +17,29 @@
         width: 100%;
         float: left;
     }
-
     .col-lg-4 {
         width: 33.333%;
         float: left;
     }
-
     .col-lg-6 {
         width: 50%;
         float: left;
     }
-
     .text-center {
         text-align: center;
     }
-
     .text-right {
         text-align: right;
     }
-
     .text-left {
         text-align: left;
     }
-
     .no-padder {
         padding-left: 5px;
         padding-right: 5px;
     }
 </style>
+
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
@@ -63,15 +58,13 @@
     </div>
 
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
-        @if (Model.Any(a => a.datos) == true)
+        @if (Model.Any(a => a.Datos) == true)
         {
             var TotalBilletes = 0;
             var TotalFraccionesRestantes = 0;
             var FraccionesTotales = 0;
             var TotalHojas = 0.0m;
-            var TotalDescontado = 0.0m;
             var TotalRestante = 0.0m;
-            var TotalFactura = 0.0m;
 
             <table class="table">
                 <thead>
@@ -83,47 +76,35 @@
                         <th class="text-center">HOJAS</th>
                         <th class="text-right">PRECIO <br /> FRACCIONES</th>
                         <th class="text-right">TOTAL</th>
-                        <th class="text-center">PORCENTAJE <br /> DESCUENTO</th>
-                        <th class="text-right">TOTAL EN <br /> DESCUENTOS</th>
-                        <th class="text-right">TOTAL <br /> RESTANTE</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        var Hojas = item.Fracciones / RaffleData.Prospect.LeafNumber;
                         <tr>
                             <td>@item.ClientName</td>
-                            <td class="text-center">@item.Billetes</td>
+                            <td class="text-center">@item.Billetes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-center">@item.FraccionesRestantes</td>
-                            <td class="text-center">@item.Fracciones</td>
-                            <td class="text-center">@Hojas </td>
+                            <td class="text-center">@item.Fracciones.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-center">@item.Hojas.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-right">@item.PrecioFraccion.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                            <td class="text-right">@item.Factura.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                            <td class="text-center">@(Math.Round(item.PorcientoDescuento,0))%</td>
-                            <td class="text-right">@item.Descuento.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-right">@item.Total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
                         TotalBilletes += item.Billetes;
                         TotalFraccionesRestantes += item.FraccionesRestantes;
                         FraccionesTotales += item.Fracciones;
-                        TotalDescontado += item.Descuento;
-                        TotalHojas += Hojas;
+                        TotalHojas += item.Hojas;
                         TotalRestante += item.Total;
-                        TotalFactura += item.Factura;
                     }
                 </tbody>
                 <tfoot>
                     <tr class="total">
                         <td class="text-center"></td>
-                        <td class="text-center">@TotalBilletes</td>
+                        <td class="text-center">@TotalBilletes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td class="text-center">@TotalFraccionesRestantes</td>
-                        <td class="text-center">@FraccionesTotales</td>
-                        <td class="text-center">@TotalHojas</td>
+                        <td class="text-center">@FraccionesTotales.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-center">@TotalHojas.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td class="text-right"></td>
-                        <td class="text-right">@TotalFactura.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td class="text-right"></td>
-                        <td class="text-right">@TotalDescontado.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td class="text-right">@TotalRestante.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                 </tfoot>
@@ -144,6 +125,9 @@
     </div>
     <div class="col-lg-12 no-padder">
         <b>** Cantidad Real Global De Números Devueltos y Valor real de devolución (utilizando valor real de números abonados)</b>
+        <br />
+        <br />
+        <br />
     </div>
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-6 col-md-6 col-sm-6 text-center">

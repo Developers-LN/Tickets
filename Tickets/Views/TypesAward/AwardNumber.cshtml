@@ -63,25 +63,17 @@
                         <div class="col-lg-6 no-padder">
                             <fieldset>
                                 <div class="form-group m-t-xs">
-                                    <span class="col-lg-4 control-label">Sorteo:</span>
-                                    <span class="col-lg-8">
-                                        <b>{{number.Allocation.RaffleId}} - {{number.Allocation.RaffleDesc}}</b>
-                                    </span>
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <div class="form-group m-t-xs">
-                                    <span class="col-lg-4 control-label">Cliente:</span>
-                                    <span class="col-lg-8">
-                                        <b>{{number.Allocation.ClientDesc}}</b>
-                                    </span>
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <div class="form-group m-t-xs">
                                     <span class="col-lg-4 control-label">Billete:</span>
                                     <span class="col-lg-8">
                                         <b>{{addZeroToNumber((number.Production - 1), number.Number)}}</b>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label">Numero de Control:</span>
+                                    <span class="col-lg-8">
+                                        <b>{{number.ControlNumber}}</b>
                                     </span>
                                 </div>
                             </fieldset>
@@ -93,17 +85,31 @@
                                     </span>
                                 </div>
                             </fieldset>
-                        </div>
-
-                        <div class="col-lg-6 no-padder">
                             <fieldset>
-                                <div class="form-group m-t-xs">
-                                    <span class="col-lg-4 control-label">Numero de Control:</span>
+                                <div class="form-group m-t-xs" ng-show="number.Allocation.Telefono != null">
+                                    <span class="col-lg-4 control-label">Teléfono:</span>
                                     <span class="col-lg-8">
-                                        <b>{{number.ControlNumber}}</b>
+                                        <b>{{number.Allocation.Telefono}}</b>
+                                    </span>
+                                </div>
+                                <div class="form-group m-t-xs" ng-show="number.Allocation.Cedula != null">
+                                    <span class="col-lg-4 control-label">Cédula:</span>
+                                    <span class="col-lg-8">
+                                        <b>{{number.Allocation.Cedula}}</b>
                                     </span>
                                 </div>
                             </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label">Cliente:</span>
+                                    <span class="col-lg-8">
+                                        <b>{{number.Allocation.ClientDesc}}</b>
+                                    </span>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6 no-padder">
                             <fieldset>
                                 <div class="form-group m-t-xs">
                                     <span class="col-lg-4 control-label-left">Fracciones:</span>
@@ -125,6 +131,14 @@
                                     <span class="col-lg-4 control-label-left">Impreso:</span>
                                     <span class="col-lg-8">
                                         <b>{{number.Printed === true? 'Si' : 'No'}}</b>
+                                    </span>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label">Sorteo:</span>
+                                    <span class="col-lg-8">
+                                        <b>{{number.Allocation.RaffleId}} - {{number.Allocation.RaffleDesc}}</b>
                                     </span>
                                 </div>
                             </fieldset>

@@ -226,8 +226,8 @@ namespace Tickets.Models.Ticket
 
                     var allocationNumber = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == id);
 
-                    var LastAllocations = context.TicketAllocations.Where(w => w.ClientId == allocation.ClientId 
-                                                                          && w.RaffleId == allocation.RaffleId 
+                    var LastAllocations = context.TicketAllocations.Where(w => w.ClientId == allocation.ClientId
+                                                                          && w.RaffleId == allocation.RaffleId
                                                                           && w.Statu == (int)AllocationStatuEnum.Consigned);
 
                     var CashAdvances = context.NoteCredits.Where(w => w.ClientId == allocation.ClientId
@@ -391,7 +391,9 @@ namespace Tickets.Models.Ticket
                     n.TicketAllocation.ClientId,
                     ClientDesc = context.Clients.FirstOrDefault(c => c.Id == n.TicketAllocation.ClientId).Name,
                     n.TicketAllocation.RaffleId,
-                    RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == n.TicketAllocation.RaffleId).Name
+                    RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == n.TicketAllocation.RaffleId).Name,
+                    Cedula = context.Clients.FirstOrDefault(c => c.Id == n.TicketAllocation.ClientId).GroupId == (int)ClientGroupEnum.DistribuidorElectronico ? n.ElectronicTicketSales.FirstOrDefault().Cedula : null,
+                    Telefono = context.Clients.FirstOrDefault(c => c.Id == n.TicketAllocation.ClientId).GroupId == (int)ClientGroupEnum.DistribuidorElectronico ? n.ElectronicTicketSales.FirstOrDefault().PhoneNumber : null
                 },
                 Transactions = GetNumberTransactions(n),
                 returnes = context.TicketReturns.Where(r => r.RaffleId == n.TicketAllocation.RaffleId && r.TicketAllocationNumber.Number == n.Number).Select(r => new

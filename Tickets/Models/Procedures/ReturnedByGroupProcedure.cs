@@ -5,34 +5,34 @@ using Tickets.Models.ModelsProcedures;
 
 namespace Tickets.Models.Procedures
 {
-    public class ReturnedNumbersByClient
+    public class ReturnedByGroupProcedure
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ModelReturnedNumbersByClient> ConsultarBilletesDevueltosPorCliente(int raffle)
+        public IEnumerable<ReturnedByGroupModel> ConsultarBilletesDevueltosPorGrupo(int raffle)
         {
-            var lista = new List<ModelReturnedNumbersByClient>();
+            var lista = new List<ReturnedByGroupModel>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
-                SqlCommand sqlCommand = new SqlCommand("ReturnedNumbersByClient", sqlConnection);
+                SqlCommand sqlCommand = new SqlCommand("ReturnedGroup", sqlConnection);
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@Raffle", raffle);
+                sqlCommand.Parameters.AddWithValue("@RaffleId", raffle);
                 sqlConnection.Open();
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                 if (sqlDataReader.HasRows)
                 {
                     while (sqlDataReader.Read())
                     {
-                        var pagables = new ModelReturnedNumbersByClient()
+                        var pagables = new ReturnedByGroupModel()
                         {
                             Datos = true,
                             RaffleId = raffle,
                             ClientId = Convert.ToInt32(sqlDataReader["IdCliente"].ToString()),
                             ClientName = sqlDataReader["NombreCliente"].ToString(),
-                            Billetes = Convert.ToInt32(sqlDataReader["Billetes"].ToString()),
-                            FraccionesRestantes = Convert.ToInt32(sqlDataReader["FraccionesRestantes"].ToString()),
-                            Fracciones = Convert.ToInt32(sqlDataReader["TotalFracciones"].ToString()),
+                            Grupo = sqlDataReader["Grupo"].ToString(),
+                            TotalRegistros =Convert.ToInt32(sqlDataReader["TotalRegistros"].ToString()),
+                            Fracciones = Convert.ToInt32(sqlDataReader["Fracciones"].ToString()),
                             Hojas = Convert.ToDecimal(sqlDataReader["Hojas"].ToString()),
                             PrecioFraccion = Convert.ToDecimal(sqlDataReader["PrecioFraccion"].ToString()),
                             Total = Convert.ToDecimal(sqlDataReader["Total"].ToString())
@@ -42,14 +42,14 @@ namespace Tickets.Models.Procedures
                 }
                 else
                 {
-                    var pagables = new ModelReturnedNumbersByClient()
+                    var pagables = new ReturnedByGroupModel()
                     {
                         Datos = false,
                         RaffleId = raffle,
                         ClientId = 0,
                         ClientName = "N/A",
-                        Billetes = 0,
-                        FraccionesRestantes = 0,
+                        Grupo = "N/A",
+                        TotalRegistros = 0,
                         Fracciones = 0,
                         Hojas = 0,
                         PrecioFraccion = 0,

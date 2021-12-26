@@ -650,10 +650,9 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult ReturnedNumbersGroup(int raffleId = 0, int clientId = 0)
         {
-            var context = new TicketsEntities();
-            ViewBag.ClientId = clientId;
-            var raffle = context.Raffles.FirstOrDefault(r => raffleId == 0 || r.Id == raffleId);
-            return View(raffle);
+            ReturnedByGroupProcedure returnedByGroupProcedure = new ReturnedByGroupProcedure();
+            var Resultado = returnedByGroupProcedure.ConsultarBilletesDevueltosPorGrupo(raffleId);
+            return View(Resultado);
         }
 
         //

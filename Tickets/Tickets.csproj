@@ -388,6 +388,7 @@
     <Compile Include="Models\ModelsProcedures\ModelReturnedNumbersByClient.cs" />
     <Compile Include="Models\ModelsProcedures\ModelReturnedTickets.cs" />
     <Compile Include="Models\ModelsProcedures\ModelSalesAndPendingPayments.cs" />
+    <Compile Include="Models\ModelsProcedures\ReturnedByGroupModel.cs" />
     <Compile Include="Models\ModelsProcedures\ValidateElectronicSale.cs" />
     <Compile Include="Models\Module.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
@@ -414,6 +415,7 @@
     <Compile Include="Models\Procedures\NetSalesByClientProcedure.cs" />
     <Compile Include="Models\Procedures\PayableAwardByClientProcedure.cs" />
     <Compile Include="Models\Procedures\PayableAwardsProcedure.cs" />
+    <Compile Include="Models\Procedures\ReturnedByGroupProcedure.cs" />
     <Compile Include="Models\Procedures\ReturnedNumbersByClient.cs" />
     <Compile Include="Models\Procedures\ReturnedTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\SalesAndPendingPayments.cs" />
