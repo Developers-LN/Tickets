@@ -29,7 +29,7 @@ namespace Tickets.Models.Procedures
                         {
                             Data = true,
                             Id = Convert.ToInt32(sqlDataReader["IdFactura"].ToString()),
-                            RaffleId = raffle,
+                            RaffleId = Convert.ToInt32(sqlDataReader["IdSorteo"].ToString()),
                             ClientId = Convert.ToInt32(sqlDataReader["IdCliente"].ToString()),
                             ClientDesc = sqlDataReader["NombreCliente"].ToString(),
                             totalInvoice = Convert.ToDecimal(sqlDataReader["Cantidad"].ToString()),

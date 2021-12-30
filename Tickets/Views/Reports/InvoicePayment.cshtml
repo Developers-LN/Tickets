@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "Detalle de factura";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -152,6 +152,10 @@
                         {
                             @(Model.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                        {
+                            @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                         {
                             @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
@@ -287,6 +291,10 @@
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
                         {
                             @(Model.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                        {
+                            @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                         {

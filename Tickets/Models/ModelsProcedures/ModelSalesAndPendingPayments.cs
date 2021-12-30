@@ -10,8 +10,8 @@ namespace Tickets.Models.ModelsProcedures
         public string TypeClient { get; set; }
         public int IdRaffle { get; set; }
         public string NameRaffle { get; set; }
-        public int TicketReturn { get; set; }
-        public int FractionReturn { get; set; }
+        //public int TicketReturn { get; set; }
+        //public int FractionReturn { get; set; }
         public int IdInvoice { get; set; }
         public DateTime DateInvoice { get; set; }
         public string StatusInvoice { get; set; }

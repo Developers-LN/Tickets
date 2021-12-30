@@ -515,7 +515,11 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult ReturnedGroupAwards(int raffleId, string groupId = "")
         {
-            var context = new TicketsEntities();
+            DevolucionesPremiadasProcedure devolucionesPremiadasProcedure = new DevolucionesPremiadasProcedure();
+            var Resultado = devolucionesPremiadasProcedure.ConsultaDevolucionesPremiadas(raffleId, groupId);
+            return View(Resultado);
+
+            /*var context = new TicketsEntities();
             var returnedList = context.TicketReturns.Where(i =>
                 i.RaffleId == raffleId).ToList();
             if (groupId != "")
@@ -539,8 +543,7 @@ namespace Tickets.Controllers
                     return RedirectToAction("Error", new { message = "No se encontraron datos para los criterios seleccionados." });
                 }
                 return View(returned);
-            }
-
+            }*/
         }
 
         //
@@ -617,7 +620,11 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult RaffleGeneralOverR(int raffleId)
         {
-            var context = new TicketsEntities();
+            CuadreSorteoResumidoProcedure cuadreSorteoResumidoProcedure = new CuadreSorteoResumidoProcedure();
+            var resultado = cuadreSorteoResumidoProcedure.CuadreSorteoResumido(raffleId);
+            return View(resultado);
+
+            /*var context = new TicketsEntities();
             var raffle = context.Raffles.Where(r => r.Id == raffleId).Select(r => new RaffleModel()
             {
                 Id = r.Id,
@@ -629,7 +636,7 @@ namespace Tickets.Controllers
                     LeafNumber = r.Prospect.LeafNumber
                 }
             }).FirstOrDefault();
-            return View(raffle);
+            return View(raffle);*/
         }
 
         //

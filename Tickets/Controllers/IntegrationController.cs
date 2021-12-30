@@ -118,8 +118,8 @@ namespace Tickets.Controllers
                 workSheet.Cell(curretRow, 14).Value = "Total_A_Pagar";
                 workSheet.Cell(curretRow, 15).Value = "Pagos_Efectivo";
                 workSheet.Cell(curretRow, 16).Value = "Pagos_Nota_Credito";
-                workSheet.Cell(curretRow, 17).Value = "Billetes_Devueltos";
-                workSheet.Cell(curretRow, 18).Value = "Fracciones_Devueltas";
+                //workSheet.Cell(curretRow, 17).Value = "Billetes_Devueltos";
+                //workSheet.Cell(curretRow, 18).Value = "Fracciones_Devueltas";
                 workSheet.Cell(curretRow, 19).Value = "Total_Pagado";
                 workSheet.Cell(curretRow, 20).Value = "Total_Faltante";
 
@@ -142,8 +142,8 @@ namespace Tickets.Controllers
                     workSheet.Cell(curretRow, 14).Value = item.TotalToPay;
                     workSheet.Cell(curretRow, 15).Value = item.CashPayment;
                     workSheet.Cell(curretRow, 16).Value = item.NoteCreditPayment;
-                    workSheet.Cell(curretRow, 17).Value = item.TicketReturn;
-                    workSheet.Cell(curretRow, 18).Value = item.FractionReturn;
+                    //workSheet.Cell(curretRow, 17).Value = item.TicketReturn;
+                    //workSheet.Cell(curretRow, 18).Value = item.FractionReturn;
                     workSheet.Cell(curretRow, 19).Value = item.TotalPayed;
                     workSheet.Cell(curretRow, 20).Value = item.TotalPending;
                 }
@@ -159,7 +159,7 @@ namespace Tickets.Controllers
                 workSheet.Column(14).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(15).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(16).Style.NumberFormat.Format = "$ #,##0.00";
-                workSheet.Column(17).Style.NumberFormat.Format = "#,##0";
+                //workSheet.Column(17).Style.NumberFormat.Format = "#,##0";
                 workSheet.Column(19).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(20).Style.NumberFormat.Format = "$ #,##0.00";
 

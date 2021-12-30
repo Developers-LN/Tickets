@@ -2,7 +2,7 @@
  * Module: ReturnedAwardReportsController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -49,7 +49,6 @@
         $rootScope.createSelect2();
 
         $scope.printReport = function () {
-            
             window.open('Reports/ReturnedGroupAwards?raffleId=' + $scope.returned.RaffleId + '&groupId=' + $scope.returned.GroupId);
         };
     }

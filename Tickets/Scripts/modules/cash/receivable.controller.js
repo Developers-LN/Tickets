@@ -30,7 +30,7 @@
             if (receivable.TotalCash === undefined) {
                 error += 'Verifique el monto a pagar' + isReq;
             }
-            if ($scope.receivable.TotalCash > ($scope.payment.totalRestant - $scope.payment.discount)) {
+            if ($scope.receivable.TotalCash > $scope.payment.totalRestant) {
                 error += 'No se puede pagar mas de lo que debe' + isReq;
             }
             if (error !== '') {

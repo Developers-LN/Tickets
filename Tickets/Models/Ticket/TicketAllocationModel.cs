@@ -293,8 +293,7 @@ namespace Tickets.Models.Ticket
 
                 if (context.TicketReturns.Any(a => a.ClientId == model.ClientId && a.RaffleId == model.RaffleId && a.TicketAllocationNumber.TicketAllocationId == model.Id))
                 {
-                    allocation.ReturnFractions = context.TicketReturns.Where(w => w.ClientId == model.ClientId && w.RaffleId == model.RaffleId
-                    && w.TicketAllocationNumber.TicketAllocationId == model.Id).Select(s => s.FractionTo - s.FractionFrom + 1).Sum();
+                    allocation.ReturnFractions = context.TicketReturns.Where(w => w.ClientId == model.ClientId && w.RaffleId == model.RaffleId).Select(s => s.FractionTo - s.FractionFrom + 1).Sum();
 
                     allocation.ReturnTickets = (allocation.ReturnFractions / Resultado.FirstOrDefault().TicketFraction);
                     allocation.RestReturnFractions = (allocation.ReturnFractions % Resultado.FirstOrDefault().TicketFraction);

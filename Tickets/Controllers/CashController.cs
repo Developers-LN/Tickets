@@ -725,7 +725,7 @@ namespace Tickets.Controllers
                         s.Observaciones,
                         paymentDate = s.CreateDate.ToString("dd/MM/yy")
                     }).ToList(),
-                    creditNotes = invoice.Client.NoteCredits.AsEnumerable().Where(c => c.TypeNote == (int)NoteCreditEnum.NoteCredit
+                    creditNotes = invoice.Client.NoteCredits.AsEnumerable().Where(c => (c.TypeNote == (int)NoteCreditEnum.NoteCredit || c.TypeNote == null)
                        && c.Statu == (int)GeneralStatusEnum.Active
                        && (c.RaffleId.HasValue == false || c.RaffleId.Value == invoice.RaffleId)
                        && c.TotalRest > 0).Select(c => CreditNoteToObject(c)).ToList(),
@@ -817,12 +817,12 @@ namespace Tickets.Controllers
 
             return new InvoicePaymentModel
             {
-                totalInvoice = Payments.FirstOrDefault().totalInvoice,
-                totalPayment = Payments.FirstOrDefault().totalPayer,
+                totalInvoice = Payments.FirstOrDefault(w => w.Id == invoice.Id).totalInvoice,
+                totalPayment = Payments.FirstOrDefault(w => w.Id == invoice.Id).totalPayer,
                 totalReturned = totalReturned,
                 totalCreditNote = totalCreditNote,
-                totalRestant = Payments.FirstOrDefault().totalRestant,
-                discount = Payments.FirstOrDefault().discount
+                totalRestant = Payments.FirstOrDefault(w => w.Id == invoice.Id).totalRestant,
+                discount = Payments.FirstOrDefault(w => w.Id == invoice.Id).discount
             };
         }
 

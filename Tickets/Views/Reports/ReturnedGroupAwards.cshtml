@@ -1,13 +1,19 @@
-﻿@model List<Tickets.Models.TicketReturn>
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelDevolucionesPremiadas>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Reporte Premiados Facturados";
+    ViewBag.Title = "Reporte premiados facturados";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
     string adminName = config != null ? config.ControlPremio : "";
     string adminCargo = config != null ? config.ControlPremioCargo : "";
+
+    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
+    var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
+
+    var Produccion = RaffleData.Prospect.Production;
+    var totalValue = 0.0m;
 }
 <style type="text/css">
     @@media print {
@@ -44,7 +50,7 @@
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACIÓN DE LA LOTERÍA NACIONAL</b><br />
             <b>LISTADO DE NÚMEROS PREMIADOS DEVUELTOS PARA EL SORTEO: @Model.FirstOrDefault().RaffleId</b><br />
-            Fecha del sorteo: @Model.FirstOrDefault().Raffle.DateSolteo.ToLongDateString()
+            Fecha del sorteo: @RaffleData.DateSolteo.ToLongDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
             <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
@@ -64,67 +70,39 @@
                 </tr>
             </thead>
             <tbody>
-                @{
-                    var returnedNumbers = Model.GroupBy(i => i.TicketAllocationNumber.Number).Select(i => new
-                    {
-                        returnedFractions = i.Select(s => s.FractionTo - s.FractionFrom + 1).Aggregate((a, e) => a + e),
-                        number = i.FirstOrDefault().TicketAllocationNumber.Number,
-                        award = Model.FirstOrDefault().Raffle.RaffleAwards.Where(a => a.ControlNumber == i.FirstOrDefault().TicketAllocationNumber.Number),
-                        returnedGroup = i.FirstOrDefault().ReturnedGroup,
-                        Client = i.FirstOrDefault().Client.Name
-                    });
-
-                    var awards = returnedNumbers.Where(i =>
-                        i.award.Count() > 0).GroupBy(n => n.returnedGroup)
-                        .Select(n => new
-                        {
-                            awards = n
-                        }).ToList();
-                    var totalValue = 0.0m;
-
-                    int count = 0;
-                }
-
-                @foreach (var groups in awards.Where(w => w.awards.Count() > 0).OrderBy(o => o.awards.FirstOrDefault().returnedGroup))
+                @if (Model.FirstOrDefault().Data == true)
                 {
-                    var subTotal = 0.0m;
-                    count++;
-                    <tr class="sub-group">
-                        <th colspan="5" style="background-color:aliceblue; padding-left: 60px; ">
-                            Grupo de Devolución @groups.awards.FirstOrDefault().returnedGroup -
-                            @groups.awards.FirstOrDefault().Client
-                        </th>
-                    </tr>
-                    foreach (var a in groups.awards)
+                    var Clientes = Model.Select(s => s.ClientId).Distinct();
+
+                    foreach (var cliente in Clientes)
                     {
-                        foreach (var award in a.award)
+                        var subTotal = 0.0m;
+
+                        <tr class="sub-group">
+                            <th colspan="5" style="background-color:aliceblue; padding-left: 60px; ">
+                                Grupo de devolución @Model.FirstOrDefault(f => f.ClientId == cliente).ReturnedGroup - @Model.FirstOrDefault(f => f.ClientId == cliente).Cliente
+                            </th>
+                        </tr>
+
+                        foreach (var item in Model.Where(w => w.ClientId == cliente))
                         {
-                            string stringNumber = a.number.ToString();
-                            int production = Model.FirstOrDefault().Raffle.Prospect.Production - 1;
-                            while (stringNumber.Length < production.ToString().Length)
-                            {
-                                stringNumber = "0" + stringNumber;
-                            }
-                            var returnedFraction = a.returnedFractions;
-                            var fractionValue = award.Award.Value / (Model.FirstOrDefault().Raffle.Prospect.LeafNumber * Model.FirstOrDefault().Raffle.Prospect.LeafFraction);
-                            var value = returnedFraction * fractionValue;
                             <tr style="page-break-inside: avoid ">
-                                <td>@stringNumber</td>
-                                <td class="text-center">@award.Award.Name</td>
-                                <td class="text-center">@returnedFraction</td>
-                                <td class="text-right">@fractionValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                <td class="text-right">@value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td>@item.Numero.ToString().PadLeft(Produccion.ToString().Length - 1, '0')</td>
+                                <td class="text-center">@item.Premio</td>
+                                <td class="text-center">@item.CantidadFracciones</td>
+                                <td class="text-right">@item.ValorFraccion.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-right">@item.Monto.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             </tr>
-                            subTotal += value;
+                            subTotal += item.Monto;
+                            totalValue += item.Monto;
                         }
+                        <tr class="sub-total page-break">
+                            <td colspan="4" class="text-right">SubTotal...:</td>
+                            <td class="text-right">
+                                @subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))
+                            </td>
+                        </tr>
                     }
-                    <tr class="sub-total page-break">
-                        <td colspan="4" class="text-right">SubTotal...:</td>
-                        <td class="text-right">
-                            @subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))
-                        </td>
-                    </tr>
-                    totalValue += subTotal;
                 }
             </tbody>
 
@@ -143,8 +121,6 @@
     </div>
 </div>
 
-
 <script>
-
     $(document).ready(function () { $("table tbody th, table tbody td").wrapInner("<div></div>"); });
 </script>

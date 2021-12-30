@@ -381,6 +381,8 @@
     <Compile Include="Models\ModelsProcedures\InvoiceListModel.cs" />
     <Compile Include="Models\ModelsProcedures\ModelAvailableTickets.cs" />
     <Compile Include="Models\ModelsProcedures\ModelAvailableTicketsToInvoice.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelCuadreSorteoResumido.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelDevolucionesPremiadas.cs" />
     <Compile Include="Models\ModelsProcedures\ModelInvoicedTickets.cs" />
     <Compile Include="Models\ModelsProcedures\ModelNetSalesByClient.cs" />
     <Compile Include="Models\ModelsProcedures\ModelPayableAwardByClient.cs" />
@@ -409,6 +411,8 @@
     <Compile Include="Models\Procedures\AllPatyableAwardsProcedure.cs" />
     <Compile Include="Models\Procedures\AvailableTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\AvailableTicketToInvoice.cs" />
+    <Compile Include="Models\Procedures\CuadreSorteoResumidoProcedure.cs" />
+    <Compile Include="Models\Procedures\DevolucionesPremiadasProcedure.cs" />
     <Compile Include="Models\Procedures\InvoicedTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\InvoiceListProcedure.cs" />
     <Compile Include="Models\Procedures\InvoiceListProcedureByList.cs" />
