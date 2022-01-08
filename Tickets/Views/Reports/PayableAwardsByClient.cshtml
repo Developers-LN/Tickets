@@ -16,6 +16,11 @@
     int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
 
+    var Pendiente = "Pendiente";
+    var Pagado = "Pagado";
+
+    var TipoCliente = "";
+
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 }
 
@@ -75,6 +80,12 @@
             }
             else
             {
+                var IdentifyTickets = RaffleData.IdentifyBaches
+                    .Select(s => new
+                    {
+                        s.IdentifyNumbers
+                    }).ToList();
+
                 HashSet<int> Clientes = new HashSet<int>();
                 Model.Distinct().ToList().ForEach(f => Clientes.Add(f.ClientId));
 
@@ -82,13 +93,25 @@
                 {
                     ValorPremios = 0;
                     TotalPagarCliente = 0;
+
+                    if (context.Clients.FirstOrDefault(w => w.Id == client).GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)
+                    {
+                        TipoCliente = "Electrónico";
+                    }
+                    else
+                    {
+                        TipoCliente = "Tradicional";
+                    }
+
                     <table class="table" style="margin-top:15px;">
                         <thead>
                             <tr>
-                                <th colspan="5" class="text-center">@context.Clients.Where(w => w.Id == client).Select(s => s.Name).FirstOrDefault()</th>
+                                <th colspan="7" class="text-center">@context.Clients.Where(w => w.Id == client).Select(s => s.Name).FirstOrDefault()</th>
                             </tr>
                             <tr>
                                 <th class="text-center">Billete</th>
+                                <th class="text-center">Estatus <br /> de pago</th>
+                                <th class="text-center">Tipo de <br /> premio</th>
                                 <th class="text-center">Fracciones</th>
                                 <th class="text-center">Tipo de premio</th>
                                 <th class="text-center">Monto del premio</th>
@@ -103,6 +126,15 @@
                                 MontoApagarSorteo += item.ValorPagar;
                                 <tr>
                                     <td class="text-center">@item.Number</td>
+                                    @if (IdentifyTickets.Any(a => a.IdentifyNumbers.Any(a2 => a2.NumberId == item.TanId)))
+                                    {
+                                        <td class="text-center">@Pagado</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">@Pendiente</td>
+                                    }
+                                    <td class="text-center">@TipoCliente</td>
                                     <td class="text-center">@item.Fracciones</td>
                                     <td class="text-center">@item.NameAward</td>
                                     <td class="text-center">@item.Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>

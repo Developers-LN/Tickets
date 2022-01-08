@@ -97,13 +97,13 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-12 no-padder">
+    <div class="col-lg-12">
         <table class="table">
             <thead>
                 <tr>
                     <th class="text-center">Tipo de Pago</th>
                     <th class="text-center">Referencia</th>
-                    <th class="text-center">Concepto</th>
+                    <th class="text-center" width="30%">Concepto</th>
                     <th class="text-center">Fecha del Pago</th>
                     <th class="text-right">Monto</th>
                 </tr>
@@ -125,13 +125,13 @@
                         {
                             totalPayment += creditNote.TotalCash;
                             <tr>
-                                <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
-                                <td>@payment.Recibo</td>
-                                <td class="text-center">
+                                <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
+                                <td style="vertical-align:middle;">@payment.Recibo</td>
+                                <td style="vertical-align:middle;" class="text-center">
                                     @NotaCredito
                                 </td>
-                                <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
-                                <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td style="vertical-align:middle;" class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
+                                <td style="vertical-align:middle;" class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                             </tr>
                         }
                     }
@@ -141,13 +141,13 @@
                         {
                             totalPayment += creditNote.TotalCash;
                             <tr>
-                                <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
-                                <td>@payment.Recibo</td>
-                                <td class="text-center">
-                                    @CashAdvance
+                                <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
+                                <td style="vertical-align:middle;">@payment.Recibo</td>
+                                <td style="vertical-align:middle;" class="text-center">
+                                    @payment.Notas
                                 </td>
-                                <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
-                                <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td style="vertical-align:middle;" class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
+                                <td style="vertical-align:middle;" class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                             </tr>
                         }
                     }
@@ -155,32 +155,13 @@
                     {
                         totalPayment += totalCash;
                         <tr>
-                            <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
-                            <td class="text-center">@payment.Recibo</td>
-                            <td class="text-center">
-                                @if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
-                                {
-                                    @Efectivo;
-                                }
-                                else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
-                                {
-                                    @Cheque;
-                                }
-                                else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
-                                {
-                                    @TargetaCredito;
-                                }
-                                else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
-                                {
-                                    @NotaCredito;
-                                }
-                                else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
-                                {
-                                    @DepTransf;
-                                }
+                            <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
+                            <td style="vertical-align:middle;" class="text-center">@payment.Recibo</td>
+                            <td style="vertical-align:middle;" class="text-center">
+                                @payment.Notas
                             </td>
-                            <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
-                            <td class="text-right">@(((decimal)totalCash).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                            <td style="vertical-align:middle;" class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
+                            <td style="vertical-align:middle;" class="text-right">@(((decimal)totalCash).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
                         </tr>
                     }
                 }
@@ -256,7 +237,7 @@
     </div>
 </div>
 
-<div class="col-lg-12">
+@*<div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
             <img src="~/Images/logo.png" />
@@ -364,26 +345,7 @@
                                 <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
                                 <td>@payment.Recibo</td>
                                 <td class="text-center">
-                                    @if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
-                                    {
-                                        @Efectivo;
-                                    }
-                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
-                                    {
-                                        @Cheque;
-                                    }
-                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
-                                    {
-                                        @TargetaCredito;
-                                    }
-                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
-                                    {
-                                        @NotaCredito;
-                                    }
-                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
-                                    {
-                                        @DepTransf;
-                                    }
+                                    @payment.Notas
                                 </td>
                                 <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
                                 <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
@@ -397,26 +359,7 @@
                             <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
                             <td class="text-center">@payment.Recibo</td>
                             <td class="text-center">
-                                @if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
-                                {
-                                    @Efectivo;
-                                }
-                                else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
-                                {
-                                    @Cheque;
-                                }
-                                else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
-                                {
-                                    @TargetaCredito;
-                                }
-                                else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
-                                {
-                                    @NotaCredito;
-                                }
-                                else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
-                                {
-                                    @DepTransf;
-                                }
+                                @payment.Notas
                             </td>
                             <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
                             <td class="text-right">@(((decimal)totalCash).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
@@ -492,4 +435,4 @@
     <div class="col-lg-12 no-padder text-center">
         <span>@adminCargo</span>
     </div>
-</div>
+</div>*@

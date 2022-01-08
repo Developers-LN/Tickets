@@ -1,7 +1,7 @@
 ﻿@model Tickets.Models.IdentifyBach
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "Aprobación de pago a premio";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -10,6 +10,7 @@
     var raffleAwards = context.Raffles.FirstOrDefault(r => r.Id == Model.RaffleId).RaffleAwards.ToList();
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
+
 <style>
     .col-lg-12 {
         width: 100%;
@@ -79,8 +80,8 @@
                         <th class="text-center">NUMERO</th>
                         <th class="text-center">TIPO DE PREMIO</th>
                         <th class="text-center">FRACCIONES DESDE-HASTA</th>
-                        <th class="text-center">CANTIDAD FRACCIONES</th>
                         <th class="text-center">VALOR FRACCCION</th>
+                        <th class="text-center">CANTIDAD FRACCIONES</th>
                         <th class="text-right">TOTAL</th>
                     </tr>
                 </thead>
@@ -132,27 +133,34 @@
                                     <td class="text-center">@number.TicketAllocationNumber.Number</td>
                                     <td class="text-center">@raffleAward.Award.TypesAward.Name</td>
                                     <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
-                                    <td class="text-center">1</td>
                                     <td class="text-center">@(raffleAward.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100) ).ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                                    <td class="text-right" style="width:30%">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                 </tr>
                             }
                             else
                             {
-
                                 totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                 <tr>
                                     <td class="text-center">@number.TicketAllocationNumber.Number</td>
                                     <td class="text-center">@raffleAward.Award.TypesAward.Name</td>
                                     <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
-                                    <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
                                     <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                    <td class="text-right" style="width:30%">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
+                                    <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                 </tr>
                             }
                             totalGeneral += total;
                         }
                     }
+                    <tr class="total">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-center"><strong>@totalFraction</strong></td>
+                        <td class="text-right" colspan="2">Subtotal a pagar: <strong> @((totalGeneral).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

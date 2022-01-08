@@ -125,22 +125,7 @@
                                         <td class="text-center">@receipt.ReceiptDate.ToString()</td>
                                         <td class="text-center">@receipt.Recibo</td>
                                         <td class="text-center">
-                                            @if (receipt.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
-                                            {
-                                                @Efectivo;
-                                            }
-                                            else if (receipt.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
-                                            {
-                                                @Cheque;
-                                            }
-                                            else if (receipt.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
-                                            {
-                                                @TargetaCredito;
-                                            }
-                                            else if (receipt.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
-                                            {
-                                                @DepTransf;
-                                            }
+                                            @receipt.Notas
                                         </td>
                                         <td class="text-center">@receipt.Id</td>
                                         <td class="text-center"></td>

@@ -186,7 +186,7 @@
 
         this.barcodeReader = function (e) {
 
-            if (e.which == 17 || e.which == 74) {
+            if (e.which == 17 || e.which == 13) {
                 e.stopPropagation();
                 e.preventDefault();
                 e.returnValue = false;

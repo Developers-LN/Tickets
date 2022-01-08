@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelDevolucionesPremiadas>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Reporte premiados facturados";
+    ViewBag.Title = "Reporte de devoluciones premiadas";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -79,7 +79,7 @@
                         var subTotal = 0.0m;
 
                         <tr class="sub-group">
-                            <th colspan="5" style="background-color:aliceblue; padding-left: 60px; ">
+                            <th colspan="5" style="background-color:aliceblue;">
                                 Grupo de devolución @Model.FirstOrDefault(f => f.ClientId == cliente).ReturnedGroup - @Model.FirstOrDefault(f => f.ClientId == cliente).Cliente
                             </th>
                         </tr>
@@ -87,7 +87,7 @@
                         foreach (var item in Model.Where(w => w.ClientId == cliente))
                         {
                             <tr style="page-break-inside: avoid ">
-                                <td>@item.Numero.ToString().PadLeft(Produccion.ToString().Length - 1, '0')</td>
+                                <td>@item.Numero.ToString().PadLeft(Produccion.ToString().Length, '0')</td>
                                 <td class="text-center">@item.Premio</td>
                                 <td class="text-center">@item.CantidadFracciones</td>
                                 <td class="text-right">@item.ValorFraccion.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>

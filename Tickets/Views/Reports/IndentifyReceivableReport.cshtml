@@ -1,7 +1,7 @@
 ﻿@model Tickets.Models.PaymentReceivableReportModel
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "Pago a premio";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -10,6 +10,7 @@
     var raffleAwards = context.Raffles.FirstOrDefault(r => r.Id == Model.IdentifyBach.RaffleId).RaffleAwards.ToList();
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
+
 <style>
     .col-lg-12 {
         width: 100%;
@@ -128,7 +129,6 @@
 
                         foreach (var raffleAward in raffleAwardList)
                         {
-
                             var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
                             var total = (number.FractionTo - number.FractionFrom + 1) * price;
 
@@ -148,7 +148,6 @@
                             }
                             else
                             {
-
                                 totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                 <tr>
                                     <td class="text-center">@number.IdentifyBachId</td>
@@ -159,16 +158,12 @@
                                     <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                     <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                 </tr>
-
-
-
                             }
                             totalGeneral += total;
                         }
                     }
                     @{
                         var identifyBach = context.IdentifyBaches.FirstOrDefault(i => i.Id == Model.IdentifyBach.Id);
-
 
                         decimal totalPayment = 0.0m;
                         if (identifyBach.IdentifyBachPayments.Count > 0)
@@ -194,7 +189,7 @@
                     @if (Model.ReceivablePercent > 0)
                     {
                         <tr>
-                            <td class="text-right" style="border-top: none;" colspan="7">Comisión a mayorista @(Model.ReceivablePercent)%: <strong> @((percentValue ).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                            <td class="text-right" style="border-top: none;" colspan="7">Comisión a mayorista @(Model.ReceivablePercent)%: <strong> @((percentValue).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
                         </tr>
                     }
                     <tr>

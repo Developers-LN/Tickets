@@ -6,7 +6,6 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
@@ -436,7 +435,7 @@ namespace Tickets.Controllers
                     bach.Statu = (int)BachIdentifyStatuEnum.Approved;
                     context.SaveChanges();
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     dbContextTransaction.Rollback();
                 }

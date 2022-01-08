@@ -33,8 +33,8 @@
                 Type: $rootScope.moduleCanDelete == '' ? 4007 : 4006
             };
         }
-        self.seach = function (array, id) {
 
+        self.seach = function (array, id) {
             var i
             for (i = 0; i < array.length; i++) {
                 if (array[i].Id == id) {
@@ -67,7 +67,6 @@
             }
         }
 
-
         this.clearNumber = function (number) {
             $scope.editingNumber = number ? number : null;
             $scope.number = {
@@ -84,14 +83,13 @@
         this.ticketReaderString = '';
 
         $scope.verifyTicketNumber = function (event) {
-            if (eval.ctrlKey == true && event.keyCode == 74) {
+            if (eval.ctrlKey == true && event.keyCode == 13) {
                 e.stopPropagation();
                 e.preventDefault();
                 e.returnValue = false;
                 e.cancelBubble = true;
                 return false;
             }
-
             if (event.keyCode === 13) {
                 var codeRead = self.ticketReaderString;
                 try {
@@ -108,7 +106,6 @@
                         FractionTo: Number(codeReadSplit[3]),
                         Type: $rootScope.moduleCanDelete == '' ? 4007 : 4006,
                         IdentityAwards: [],
-
                     };
                     console.log(number);
                     number.RaffleId = Number(codeReadSplit[0]);
@@ -134,13 +131,11 @@
                             window.loading.hide();
                             if (data.result === true) {
                                 error += self.validateNumberInList(number);
-
                                 if (error !== '') {
                                     self.clearNumber();
                                     alertify.showError('Alerta', error);
                                     return;
                                 }
-
                                 self.saveAwardNumber(number);
                             } else {
                                 if (data.message) {
@@ -212,7 +207,7 @@
             if (identifyBach.Cedula === undefined) {
                 error += 'Cédula' + isReq;
             }
-            if(identifyBach.Nombre === undefined) {
+            if (identifyBach.Nombre === undefined) {
                 error += 'Nombre' + isReq;
             }
             if (identifyBach.Telefono === undefined) {
@@ -457,7 +452,7 @@
         this.clearNumber();
 
         this.barcodeReader = function (e) {
-            if (e.which == 17 || e.which == 74) {
+            if (e.which == 17 || e.which == 13) {
                 e.stopPropagation();
                 e.preventDefault();
                 e.returnValue = false;

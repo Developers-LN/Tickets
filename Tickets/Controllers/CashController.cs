@@ -1232,21 +1232,22 @@ namespace Tickets.Controllers
                     c.Name
                 }).ToList<object>();
 
-                creditNotes = context.NoteCredits.Where(w => w.TypeNote == (int)NoteCreditEnum.NoteCredit).AsEnumerable().OrderByDescending(n => n.Id).Select(c => new
-                {
-                    c.Id,
-                    c.ClientId,
-                    ClientDesc = c.Client.Name,
-                    NoteDate = c.NoteDate.ToShortDateString(),
-                    c.Concepts,
-                    c.TotalCash,
-                    c.TotalRest
-                }).ToList<object>();
+                creditNotes = context.NoteCredits.Where(w => w.TypeNote == (int)NoteCreditEnum.NoteCredit || w.TypeNote == null)
+                    .AsEnumerable().OrderByDescending(n => n.Id).Select(c => new
+                    {
+                        c.Id,
+                        c.ClientId,
+                        ClientDesc = c.Client.Name,
+                        NoteDate = c.NoteDate.ToShortDateString(),
+                        c.Concepts,
+                        c.TotalCash,
+                        c.TotalRest
+                    }).ToList<object>();
             }
             else
             {
                 creditNotes = context.NoteCredits.AsEnumerable().OrderByDescending(n => n.Id)
-                    .Where(c => c.ClientId == clientId && c.TypeNote == (int)NoteCreditEnum.NoteCredit).Select(c => new
+                    .Where(c => c.ClientId == clientId && (c.TypeNote == (int)NoteCreditEnum.NoteCredit || c.TypeNote == null)).Select(c => new
                     {
                         c.Id,
                         c.ClientId,
@@ -1424,7 +1425,6 @@ namespace Tickets.Controllers
                     r.Name,
                     r.PreviousDebt,
                     PrevieusPayment = r.PreviousDebtPayments.Count > 0 ? r.PreviousDebtPayments.Select(p => p.PaimentValue).Aggregate((i, s) => i + s) : 0
-
                 }).ToList();
 
             return new JsonResult() { Data = clients, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -1440,6 +1440,7 @@ namespace Tickets.Controllers
         {
             return View();
         }
+
         //
         //GET: /Cash/GetPaymentData
         [Authorize]
@@ -1463,6 +1464,7 @@ namespace Tickets.Controllers
                 }
             };
         }
+
         //
         // POST: /Cash/Payment
         [Authorize]

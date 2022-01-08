@@ -115,26 +115,7 @@
                         </td>
                     }
                     <td class="text-center">
-                        @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
-                        {
-                            @Efectivo;
-                        }
-                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
-                        {
-                            @Cheque;
-                        }
-                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
-                        {
-                            @TargetaCredito;
-                        }
-                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
-                        {
-                            @NotaCredito;
-                        }
-                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
-                        {
-                            @DepTransf;
-                        }
+                        @Model.Notas
                     </td>
                     <td class="text-center">
                         @Model.CreateDate
@@ -256,26 +237,7 @@
                         </td>
                     }
                     <td class="text-center">
-                        @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
-                        {
-                            @Efectivo;
-                        }
-                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
-                        {
-                            @Cheque;
-                        }
-                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
-                        {
-                            @TargetaCredito;
-                        }
-                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
-                        {
-                            @NotaCredito;
-                        }
-                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
-                        {
-                            @DepTransf;
-                        }
+                        @Model.Notas
                     <td class="text-center">
                         @Model.CreateDate
                     </td>
