@@ -147,12 +147,18 @@
                 //last change
                 if ($scope.totalCreditNoteValue <= $scope.payment.totalRestant && $scope.fullCredit == false) {
                     $scope.totalCreditNoteValue += creditNote.TotalRest;
-                    if ($scope.totalCreditNoteValue >= $scope.payment.totalRestant) { $scope.fullCredit = true; }
+
+                    if ($scope.totalCreditNoteValue >= $scope.payment.totalRestant) {
+                        $scope.fullCredit = true;
+                    }
+
                     $scope.receivable.NoteCreditReceiptPayments.push({ NoteCreditId: creditNote.Id });
 
                 } else {
                     e.target.checked = false;
-                    if ($scope.totalCreditNoteValue < $scope.payment.totalRestant) { $scope.fullCredit = false; }
+                    if ($scope.totalCreditNoteValue < $scope.payment.totalRestant) {
+                        $scope.fullCredit = false;
+                    }
                 }
             } else {
                 var index = 0;
@@ -171,11 +177,15 @@
                 $scope.receivable.NoteCreditReceiptPayments.filter(function (r) {
                     return r.NoteCreditId != creditNote.Id;
                 });
-                if ($scope.totalCreditNoteValue < $scope.payment.totalRestant) { $scope.fullCredit = false; }
+
+                if ($scope.totalCreditNoteValue < $scope.payment.totalRestant) {
+                    $scope.fullCredit = false;
+                }
             }
             $scope.receivable.TotalCash = $scope.totalCreditNoteValue;
-            if ($scope.receivable.TotalCash >= ($scope.payment.totalRestant - $scope.payment.discount)) {
-                $scope.receivable.TotalCash = ($scope.payment.totalRestant - $scope.payment.discount);
+
+            if ($scope.receivable.TotalCash >= ($scope.payment.totalRestant /*- $scope.payment.discount*/)) {
+                $scope.receivable.TotalCash = ($scope.payment.totalRestant /*- $scope.payment.discount*/);
             }
             window.setTimeout(function () {
                 $scope.$apply();

@@ -83,7 +83,7 @@
         this.ticketReaderString = '';
 
         $scope.verifyTicketNumber = function (event) {
-            if (eval.ctrlKey == true && event.keyCode == 13) {
+            if (event.keyCode == 17 || event.keyCode == 13 || event.keyCode == 16) {
                 e.stopPropagation();
                 e.preventDefault();
                 e.returnValue = false;
@@ -440,7 +440,6 @@
                 url: 'TypesAward/AwardNumber',
                 data: $scope.awardNumber,
                 success: function (data) {
-
                     window.loading.hide();
                     $scope.$apply();
                 }
@@ -452,7 +451,7 @@
         this.clearNumber();
 
         this.barcodeReader = function (e) {
-            if (e.which == 17 || e.which == 13) {
+            if (e.which == 17 || e.which == 13 || e.which == 16) {
                 e.stopPropagation();
                 e.preventDefault();
                 e.returnValue = false;
@@ -482,7 +481,6 @@
             }
         }
 
-
         //function showTotalValue() {
         //        $scope.IdentityAwards.forEach(function (i) {
         //            totalc += i.TotalValue;
@@ -508,7 +506,6 @@
                         $scope.showTotalValue += t[i].TotalValue;
                     }
                     $scope.$apply();
-
                 }
             });
         }

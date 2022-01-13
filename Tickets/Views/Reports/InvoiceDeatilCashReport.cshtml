@@ -1,7 +1,7 @@
 ﻿@model List<Tickets.Models.IdentifyNumber>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "Recibo por pago a premio";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -81,7 +81,7 @@
                         <th class="text-center">FRACCIONES DESDE-HASTA</th>
                         <th class="text-center">CANTIDAD FRACCIONES</th>
                         <th class="text-center">VALOR FRACCCION</th>
-                        <th class="text-right" style="width:30%">TOTAL</th>
+                        <th class="text-right">TOTAL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,25 +90,26 @@
                         decimal totalGeneral = 0;
                         var identifyBachs = Model.OrderBy(i => i.IdentifyBachId);
                         var raffleAwards = context.RaffleAwards.Where(r => r.RaffleId == first.IdentifyBach.RaffleId).ToList();
+                        var totalFraction2 = identifyBachs.Select(s => new { s.NumberId, total = s.FractionTo - s.FractionFrom + 1 }).Distinct().ToList();
+                        totalFraction = totalFraction2.Sum(s => s.total);
                     }
                     @foreach (var number in identifyBachs)
                     {
-
                         var raffleAwardList = raffleAwards.Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number).ToList();
                         foreach (var raffleAward in raffleAwardList)
                         {
                             var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
                             var total = (number.FractionTo - number.FractionFrom + 1) * price;
-                            totalFraction += (number.FractionTo - number.FractionFrom + 1);
+                            //totalFraction += (number.FractionTo - number.FractionFrom + 1);
                             <tr>
                                 <td class="text-center">@number.IdentifyBachId</td>
                                 <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToShortDateString()</td>
                                 <td class="text-center">@number.TicketAllocationNumber.Number</td>
-                                <td class="text-center">@raffleAward.Award.TypesAward.Name</td>
+                                <td class="text-center">@raffleAward.Award.Name</td>
                                 <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
                                 <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
                                 <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                <td class="text-right" style="width:30%">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             </tr>
                             totalGeneral += total;
                         }
@@ -119,7 +120,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="text-center"><strong>@totalFraction</strong></td>
+                        <td class="text-center"><strong>@totalFraction.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</strong></td>
                         <td class="text-right" colspan="2">Subtotal a pagar: <strong> @((totalGeneral).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
                     </tr>
 

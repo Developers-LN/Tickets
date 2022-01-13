@@ -185,8 +185,7 @@
         this.ticketReaderString = '';
 
         this.barcodeReader = function (e) {
-
-            if (e.which == 17 || e.which == 13) {
+            if (e.which == 17 || e.which == 13 || e.which == 16) {
                 e.stopPropagation();
                 e.preventDefault();
                 e.returnValue = false;
