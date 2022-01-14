@@ -177,6 +177,7 @@ namespace Tickets.Controllers
 
                         if (identifyNumbers.Count <= 0)
                         {
+                            tx.Rollback();
                             return new JsonResult() { Data = new { result = false, message = "No se encontro pago para este rango de fecha" } };
                         }
 

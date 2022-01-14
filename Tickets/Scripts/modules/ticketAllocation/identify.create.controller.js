@@ -83,7 +83,7 @@
         this.ticketReaderString = '';
 
         $scope.verifyTicketNumber = function (event) {
-            if (event.keyCode == 17 || event.keyCode == 13 || event.keyCode == 16) {
+            if (eval.ctrlKey == true) {
                 e.stopPropagation();
                 e.preventDefault();
                 e.returnValue = false;
@@ -451,7 +451,7 @@
         this.clearNumber();
 
         this.barcodeReader = function (e) {
-            if (e.which == 17 || e.which == 13 || e.which == 16) {
+            if (e.which == 17) {
                 e.stopPropagation();
                 e.preventDefault();
                 e.returnValue = false;

@@ -162,6 +162,9 @@ namespace Tickets.Models.Raffles
                         /*Changing Virtual Raffle*/
 
                         transManager.Commit();
+
+                        Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Sorteo generado", raffleAwardList);
+
                         return new RequestResponseModel()
                         {
                             Result = true,
