@@ -2,7 +2,7 @@
  * Module: SettingsService
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -21,14 +21,14 @@
         /////////////////
 
         self.themes = [
-          { name: 'primary', sidebar: 'bg-white', sidebarHeader: 'bg-primary bg-light', brand: 'bg-primary', topbar: 'bg-primary' },
-          { name: 'purple', sidebar: 'bg-white', sidebarHeader: 'bg-purple bg-light', brand: 'bg-purple', topbar: 'bg-purple' },
-          { name: 'success', sidebar: 'bg-white', sidebarHeader: 'bg-success bg-light', brand: 'bg-success', topbar: 'bg-success' },
-          { name: 'warning', sidebar: 'bg-white', sidebarHeader: 'bg-warning bg-light', brand: 'bg-warning', topbar: 'bg-warning' },
-          { name: 'info', sidebar: 'bg-white', sidebarHeader: 'bg-info bg-light', brand: 'bg-info', topbar: 'bg-info' },
-          { name: 'danger', sidebar: 'bg-white', sidebarHeader: 'bg-danger bg-light', brand: 'bg-danger', topbar: 'bg-danger' },
-          { name: 'pink', sidebar: 'bg-white', sidebarHeader: 'bg-pink bg-light', brand: 'bg-pink', topbar: 'bg-pink' },
-          { name: 'amber', sidebar: 'bg-white', sidebarHeader: 'bg-amber bg-light', brand: 'bg-amber', topbar: 'bg-amber' },
+            { name: 'primary', sidebar: 'bg-white', sidebarHeader: 'bg-primary bg-light', brand: 'bg-primary', topbar: 'bg-primary' },
+            { name: 'purple', sidebar: 'bg-white', sidebarHeader: 'bg-purple bg-light', brand: 'bg-purple', topbar: 'bg-purple' },
+            { name: 'success', sidebar: 'bg-white', sidebarHeader: 'bg-success bg-light', brand: 'bg-success', topbar: 'bg-success' },
+            { name: 'warning', sidebar: 'bg-white', sidebarHeader: 'bg-warning bg-light', brand: 'bg-warning', topbar: 'bg-warning' },
+            { name: 'info', sidebar: 'bg-white', sidebarHeader: 'bg-info bg-light', brand: 'bg-info', topbar: 'bg-info' },
+            { name: 'danger', sidebar: 'bg-white', sidebarHeader: 'bg-danger bg-light', brand: 'bg-danger', topbar: 'bg-danger' },
+            { name: 'pink', sidebar: 'bg-white', sidebarHeader: 'bg-pink bg-light', brand: 'bg-pink', topbar: 'bg-pink' },
+            { name: 'amber', sidebar: 'bg-white', sidebarHeader: 'bg-amber bg-light', brand: 'bg-amber', topbar: 'bg-amber' },
         ];
         $rootScope.notifications = [];
         function init() {
@@ -64,7 +64,7 @@
             };
         }
         $rootScope.dataTable = function (paging) {
-            try{
+            try {
                 $('.dataTableGrid').each(function (i, d) {
                     $(d).DataTable({
                         destroy: true,
@@ -84,20 +84,20 @@
             return $rootScope.parseMoney(number).substring(3, $rootScope.parseMoney(number).length - 3);
         }
         $rootScope.destroyDataTable = function (datatableId) {
-            try{
-            if (datatableId) {
-                var dataTable = $('#' + datatableId).dataTable();
-                dataTable.fnClearTable();
-                dataTable.fnDraw();
-                dataTable.fnDestroy();
-                return;
-            }
-            $('.dataTableGrid').each(function (i, d) {
-                var dataTable = $(d).dataTable();
-                dataTable.fnClearTable();
-                dataTable.fnDraw();
-                dataTable.fnDestroy();
-            });
+            try {
+                if (datatableId) {
+                    var dataTable = $('#' + datatableId).dataTable();
+                    dataTable.fnClearTable();
+                    dataTable.fnDraw();
+                    dataTable.fnDestroy();
+                    return;
+                }
+                $('.dataTableGrid').each(function (i, d) {
+                    var dataTable = $(d).dataTable();
+                    dataTable.fnClearTable();
+                    dataTable.fnDraw();
+                    dataTable.fnDestroy();
+                });
             } catch (e) { }
         }
         function azt(number) {
@@ -119,8 +119,7 @@
         $rootScope.addZeroToNumber = function (lenght, number) {
             lenght = (lenght + '').length;
             var stringNumber = number + '';
-            while (stringNumber.length < lenght)
-            {
+            while (stringNumber.length < lenght) {
                 stringNumber = "0" + stringNumber;
             }
             return stringNumber;
@@ -215,25 +214,25 @@
                 $.ajax($rootScope.serverUrl + 'ticket/workflowApi/getWorkflowList?type=' + 1),//Tipo de Workflow para prospecto
                 $.ajax($rootScope.serverUrl + 'ticket/workflowApi/getWorkflowList?type=' + 4),//Tipo de Workflow para reimprecion
                 $.ajax("Cash/GetCreditNoteReturneds")
-                ).done(function (prospectResponse, reprintResponse, creditNote) {
-                    if (creditNote[1] == 'success') {
-                        creditNote[0].forEach(function (n) {
-                            $rootScope.notifications.push({
-                                title: 'Nota de Credito',
-                                descripcion: 'Al cliente ' + n.clientname + ' se le agrego una nota de cr\u00e9dito por devoluci\u00f3n de billete del sorteo #' + n.raffleId,
-                                link: '#/cash/receivables'
-                            });
-                        });
-                    }
-                    /*if (clientResponse[1] == 'success') {
-                        clientResponse[0].forEach(function (n) {
+            ).done(function (prospectResponse, reprintResponse, creditNote) {
+                if (creditNote[1] == 'success') {
+                    creditNote[0].forEach(function (n) {
                         $rootScope.notifications.push({
-                            title: 'Aprobacion de Cliente',
-                            descripcion: n.client.name,
-                            link: '#/client/workflows'
+                            title: 'Nota de Credito',
+                            descripcion: 'Al cliente ' + n.clientname + ' se le agrego una nota de cr\u00e9dito por devoluci\u00f3n de billete del sorteo #' + n.raffleId,
+                            link: '#/cash/receivables'
                         });
                     });
-                }*/
+                }
+                /*if (clientResponse[1] == 'success') {
+                    clientResponse[0].forEach(function (n) {
+                    $rootScope.notifications.push({
+                        title: 'Aprobacion de Cliente',
+                        descripcion: n.client.name,
+                        link: '#/client/workflows'
+                    });
+                });
+            }*/
                 if (prospectResponse[1] == 'success') {
                     prospectResponse[0].object.forEach(function (n) {
                         $rootScope.notifications.push({

@@ -492,8 +492,7 @@
                     </div>
                     <div class="col-lg-12 no-padder text-center m-t-min-65">
                         <span class="award">
-                            @award.Award.Value.ToString("C",
-        System.Globalization.CultureInfo.CreateSpecificCulture("es-DO"))
+                            @award.Award.Value.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("es-DO"))
                         </span>
                     </div>
 
@@ -510,8 +509,7 @@
                         {
                             <span class="number">@aprox.ControlNumber</span>
                             <span class="award">
-                                @aprox.Award.Value.ToString("C",
-            System.Globalization.CultureInfo.CreateSpecificCulture("es-DO")) APROX
+                                @aprox.Award.Value.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("es-DO")) APROX
                             </span>
                         }
                     </div>
@@ -547,10 +545,7 @@
             @foreach (var award in Model.RaffleAwards.OrderBy(r => r.Award.OrderAward).Where(a => a.Award.TypesAwardId ==
             interMin.Id).OrderBy(r => r.ControlNumber).GroupBy(r => r.AwardId).Select(r => new
             {
-                awardName =
-            r.FirstOrDefault().Award.Description,
-                numbers = r,
-                value = r.FirstOrDefault().Award.Value
+                awardName = r.FirstOrDefault().Award.Description, numbers = r, value = r.FirstOrDefault().Award.Value
             }).OrderByDescending(r => r.value))
             {
                 <div class="col-lg-20 no-padder cash m-t-2-px">
@@ -684,6 +679,5 @@
                 </ul>
             </div>
         </div>
-
     }
 }

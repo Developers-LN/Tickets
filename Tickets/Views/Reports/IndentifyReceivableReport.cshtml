@@ -98,7 +98,12 @@
                         int totalFraction = 0;
                         decimal totalGeneral = 0;
                         var totalFraction2 = Model.IdentifyBach.IdentifyNumbers
-                            .Select(s => new { s.NumberId, total = s.FractionTo - s.FractionFrom + 1 }).Distinct().ToList();
+                            .Select(s => new 
+                            { 
+                                s.NumberId, 
+                                total = s.FractionTo - s.FractionFrom + 1,
+                                s.FractionFrom, s.FractionTo
+                            }).Distinct().ToList();
                         totalFraction = totalFraction2.Sum(s => s.total);
                     }
                     @foreach (var number in Model.IdentifyBach.IdentifyNumbers)
@@ -141,7 +146,7 @@
                                 <tr>
                                     <td class="text-center">@number.IdentifyBachId</td>
                                     <td class="text-center">@number.TicketAllocationNumber.Number</td>
-                                    <td class="text-center">@raffleAward.Award.TypesAward.Name</td>
+                                    <td class="text-center">@raffleAward.Award.Name</td>
                                     <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
                                     <td class="text-center">1</td>
                                     <td class="text-center">@(raffleAward.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100) ).ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
@@ -154,7 +159,7 @@
                                 <tr>
                                     <td class="text-center">@number.IdentifyBachId</td>
                                     <td class="text-center">@number.TicketAllocationNumber.Number</td>
-                                    <td class="text-center">@raffleAward.Award.TypesAward.Name</td>
+                                    <td class="text-center">@raffleAward.Award.Name</td>
                                     <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
                                     <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
                                     <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>

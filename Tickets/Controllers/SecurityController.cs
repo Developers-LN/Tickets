@@ -54,7 +54,6 @@ namespace Tickets.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
-
             string query = Request.QueryString["ReturnUrl"];
             if (!string.IsNullOrWhiteSpace(query))
             {

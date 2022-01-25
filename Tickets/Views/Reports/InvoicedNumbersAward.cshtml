@@ -65,7 +65,7 @@
                                      select new
                                      {
                                          AwardTypeId = ra.Award.TypesAwardId,
-                                         AwardTypeName = ra.Award.TypesAward.Name,
+                                         AwardTypeName = ra.Award.Name,
                                          Number = ra.ControlNumber,
                                          FractionQuantity = n.FractionQuantity,
                                          FractionReturnes = returnedNumbers.FirstOrDefault(r => r.Number == ra.ControlNumber) != null ? returnedNumbers.FirstOrDefault(r => r.Number == ra.ControlNumber).FractionQuantity : 0,

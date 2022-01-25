@@ -166,11 +166,19 @@ namespace Tickets.Controllers
                 {
                     try
                     {
+                        var invoiceDetailExist = context.InvoiceDetails.Any(a => a.RaffleId == model.RaffleId && a.ClientId == model.ClientId
+                        && a.StartDate == model.StartDate.Date && a.EndDate == model.EndDate.Date);
+
+                        if (invoiceDetailExist == true)
+                        {
+                            tx.Rollback();
+                            return new JsonResult() { Data = new { result = false, message = "Ya existe una factura con estos datos" } };
+                        }
+
                         var awards = context.RaffleAwards.Where(a => a.RaffleId == model.RaffleId).ToList();
                         List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
                         context.IdentifyBaches.AsEnumerable().Where(i =>
-                            i.RaffleId == model.RaffleId &&
-                            i.ClientId == model.ClientId &&
+                            i.RaffleId == model.RaffleId && i.ClientId == model.ClientId &&
                             (i.IdentifyBachPayments.Any(p => p.CreateDate.Date >= model.StartDate.Date && p.CreateDate.Date <= model.EndDate.Date) == true)
                             && (Utils.IdentifyBachIsPayedMinor(i, awards) || Utils.IdentifyBachIsPayedMayor(i, awards))
                         ).ToList().ForEach(i => identifyNumbers.AddRange(i.IdentifyNumbers));
