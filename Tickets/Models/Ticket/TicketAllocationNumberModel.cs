@@ -36,6 +36,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "ticketAllocationId")]
         public int TicketAllocationId { get; set; }
 
+        [JsonProperty(PropertyName = "serie")]
+        public string Serie { get; set; }
+
         internal TicketAllocationNumberModel ToObject(TicketAllocationNumber model)
         {
             var number = new TicketAllocationNumberModel()
@@ -48,7 +51,8 @@ namespace Tickets.Models.Ticket
                 Number = model.Number,
                 Printed = model.Printed,
                 Statu = model.Statu,
-                TicketAllocationId = model.TicketAllocationId
+                TicketAllocationId = model.TicketAllocationId,
+                Serie = null
             };
 
             return number;

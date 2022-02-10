@@ -17,6 +17,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "ticketReprintId")]
         public int TicketReprintId { get; set; }
 
+        [JsonProperty(PropertyName = "serie")]
+        public string Serie { get; set; }
+
         internal TicketReprintNumberModel ToObject(TicketRePrintNumber model)
         {
             var context = new TicketsEntities();
@@ -25,11 +28,11 @@ namespace Tickets.Models.Ticket
                 Id = model.Id,
                 TicketAllocationNumberId = model.TicketAllocationNumberId,
                 Number = context.TicketAllocationNumbers.FirstOrDefault(n => n.Id == model.TicketAllocationNumberId).Number,
-                TicketReprintId = model.TicketRePrintId
+                TicketReprintId = model.TicketRePrintId,
+                Serie = model.Serie
             };
 
             return number;
         }
-
     }
 }

@@ -164,7 +164,6 @@ namespace Tickets.Controllers
                         message = "El numero " + awardNumber.Number + " no fue asignado en el sorteo No." + awardNumber.RaffleId
                     }
                 };
-
             }
             else
             {
@@ -176,7 +175,6 @@ namespace Tickets.Controllers
                         numberId = number.Id
                     }
                 };
-
             }
         }
 

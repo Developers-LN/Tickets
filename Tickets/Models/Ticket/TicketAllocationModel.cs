@@ -281,22 +281,31 @@ namespace Tickets.Models.Ticket
                 Agente = model.Agente,
                 CreateDate = model.CreateDate,
                 CreateDateLong = model.CreateDate.ToUnixTime(),
-                NumberCount = (TotalFracciones / Resultado.FirstOrDefault().TicketFraction),
+                NumberCount = TotalFracciones == 0 ? 0 : (TotalFracciones / Resultado.FirstOrDefault().TicketFraction),
                 FractionCount = TotalFracciones,
-                FractionRest = (TotalFracciones % Resultado.FirstOrDefault().TicketFraction),
-                TicketFraction = Resultado.FirstOrDefault().TicketFraction
+                FractionRest = TotalFracciones == 0 ? 0 : (TotalFracciones % Resultado.FirstOrDefault().TicketFraction),
+                TicketFraction = TotalFracciones == 0 ? model.Raffle.Prospect.LeafFraction * model.Raffle.Prospect.LeafNumber : model.Raffle.Prospect.LeafFraction * model.Raffle.Prospect.LeafNumber
             };
+
             if (hasNumber)
             {
                 //var numberModel = new TicketAllocationNumberModel();
                 //allocation.TicketAllocationNumbers = model.TicketAllocationNumbers.Select(n => numberModel.ToObject(n)).ToList();
 
-                if (context.TicketReturns.Any(a => a.ClientId == model.ClientId && a.RaffleId == model.RaffleId && a.TicketAllocationNumber.TicketAllocationId == model.Id))
+                if (context.TicketReturns.Any(a => a.TicketAllocationNumber.TicketAllocationId == model.Id))
                 {
-                    allocation.ReturnFractions = context.TicketReturns.Where(w => w.ClientId == model.ClientId && w.RaffleId == model.RaffleId).Select(s => s.FractionTo - s.FractionFrom + 1).Sum();
+                    allocation.ReturnFractions = context.TicketReturns.Where(w => w.TicketAllocationNumber.TicketAllocationId == model.Id).Select(s => s.FractionTo - s.FractionFrom + 1).Sum();
 
-                    allocation.ReturnTickets = (allocation.ReturnFractions / Resultado.FirstOrDefault().TicketFraction);
-                    allocation.RestReturnFractions = (allocation.ReturnFractions % Resultado.FirstOrDefault().TicketFraction);
+                    if (TotalFracciones != 0)
+                    {
+                        allocation.ReturnTickets = (allocation.ReturnFractions / Resultado.FirstOrDefault().TicketFraction);
+                        allocation.RestReturnFractions = (allocation.ReturnFractions % Resultado.FirstOrDefault().TicketFraction);
+                    }
+                    else
+                    {
+                        allocation.ReturnTickets = (allocation.ReturnFractions / (model.Raffle.Prospect.LeafFraction * model.Raffle.Prospect.LeafNumber));
+                        allocation.RestReturnFractions = (allocation.ReturnFractions % (model.Raffle.Prospect.LeafFraction * model.Raffle.Prospect.LeafNumber));
+                    }
                 }
                 else
                 {

@@ -187,6 +187,8 @@
           <Property Name="COD_AUTH" Type="varchar" MaxLength="500" />
           <Property Name="PDV_ID" Type="int" />
           <Property Name="TicketAllocationId" Type="int" />
+          <Property Name="PDV_NAME" Type="varchar" MaxLength="500" />
+          <Property Name="Province" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -647,6 +649,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TicketRePrintId" Type="int" Nullable="false" />
           <Property Name="TicketAllocationNumberId" Type="int" Nullable="false" />
+          <Property Name="Serie" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="TicketReturn">
           <Key>
@@ -3737,6 +3740,7 @@
           <Property Name="TicketAllocationNumberId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="TicketAllocationNumber" Relationship="TicketsModel.FK_TicketRePrintNumber_TicketAllocationNumber" FromRole="TicketRePrintNumber" ToRole="TicketAllocationNumber" />
           <NavigationProperty Name="TicketRePrint" Relationship="TicketsModel.FK_TicketRePrintNumber_TicketRePrint" FromRole="TicketRePrintNumber" ToRole="TicketRePrint" />
+          <Property Name="Serie" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="TicketReturn">
           <Key>
@@ -5209,6 +5213,8 @@
           <NavigationProperty Name="User" Relationship="TicketsModel.FK_ElectronicTicketSales_User" FromRole="ElectronicTicketSale" ToRole="User" />
           <NavigationProperty Name="Raffle" Relationship="TicketsModel.FK_ElectronicTicketSales_Raffle1" FromRole="ElectronicTicketSale" ToRole="Raffle" />
           <Property Name="TicketAllocationId" Type="Int32" />
+          <Property Name="PDV_NAME" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Province" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_ElectronicTicketSales_Client">
           <End Type="TicketsModel.Client" Role="Client" Multiplicity="1" />
@@ -5864,6 +5870,7 @@
           <EntitySetMapping Name="TicketRePrintNumbers">
             <EntityTypeMapping TypeName="TicketsModel.TicketRePrintNumber">
               <MappingFragment StoreEntitySet="TicketRePrintNumber">
+                <ScalarProperty Name="Serie" ColumnName="Serie" />
                 <ScalarProperty Name="TicketAllocationNumberId" ColumnName="TicketAllocationNumberId" />
                 <ScalarProperty Name="TicketRePrintId" ColumnName="TicketRePrintId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -6088,6 +6095,8 @@
           <EntitySetMapping Name="ElectronicTicketSales">
             <EntityTypeMapping TypeName="TicketsModel.ElectronicTicketSale">
               <MappingFragment StoreEntitySet="ElectronicTicketSales">
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="PDV_NAME" ColumnName="PDV_NAME" />
                 <ScalarProperty Name="TicketAllocationId" ColumnName="TicketAllocationId" />
                 <ScalarProperty Name="PDV_ID" ColumnName="PDV_ID" />
                 <ScalarProperty Name="COD_AUTH" ColumnName="COD_AUTH" />

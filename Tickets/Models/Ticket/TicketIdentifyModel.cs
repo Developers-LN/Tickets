@@ -441,7 +441,8 @@ namespace Tickets.Models.Ticket
                     var identifyNumbers = context.IdentifyNumbers.Where(r =>
                         r.IdentifyBach.RaffleId == allocationNumber.TicketAllocation.RaffleId
                         && r.TicketAllocationNumber.Number == allocationNumber.Number
-                        && r.IdentifyBach.Type == awardTicket.Type).ToList();
+                        /*&& r.IdentifyBach.Type == awardTicket.Type*/).ToList();
+
                     string identifyError = "";
                     for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
                     {
@@ -487,7 +488,6 @@ namespace Tickets.Models.Ticket
                             }
                         }
                     }
-
                 }
             }
 

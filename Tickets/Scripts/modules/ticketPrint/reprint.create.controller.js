@@ -2,7 +2,7 @@
  * Module: ReprintCreateController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -70,6 +70,7 @@
         }
 
         $scope.updateAllocationNumbers = function () {
+            window.loading.show();
             var selectedNumbers = $scope.reprint.ticketReprintNumbers;
             $scope.reprint.ticketReprintNumbers = [];
             $scope.allocations.forEach(function (allocation) {
@@ -90,6 +91,7 @@
             window.setTimeout(function () {
                 $scope.$apply();
                 $rootScope.dataTable();
+                window.loading.hide();
             }, 0);
         }
 
@@ -113,6 +115,16 @@
             });
         }
 
+        $scope.serieNumber = function (e, number, serie) {
+            $scope.reprint.ticketReprintNumbers.forEach(function (n, i) {
+                if (n.id == number.id) {
+                    $scope.reprint.ticketReprintNumbers[i].serie = serie;
+                    var y = $scope.reprint.ticketReprintNumbers[i];
+                    var t = $scope.reprint.ticketReprintNumbers;
+                }
+            });
+        }
+
         $scope.saveTicketForm = function () {
             if (self.validateData($scope.reprint) === false) {
                 return;
@@ -122,6 +134,7 @@
                 numbers.push(t);
                 return t.selected == true;
             });
+            var r = $scope.reprint;
             window.loading.show();
             $.ajax({
                 type: 'POST',
@@ -133,7 +146,7 @@
                     if (response.result === false) {
                         $scope.reprint.ticketReprintNumbers = numbers;
                         alertify.alert(response.message);
-                    }else{
+                    } else {
                         alertify.success(response.message);
                         $scope.returnTo();
                     }

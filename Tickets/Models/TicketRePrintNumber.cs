@@ -17,6 +17,7 @@ namespace Tickets.Models
         public int Id { get; set; }
         public int TicketRePrintId { get; set; }
         public int TicketAllocationNumberId { get; set; }
+        public string Serie { get; set; }
     
         public virtual TicketAllocationNumber TicketAllocationNumber { get; set; }
         public virtual TicketRePrint TicketRePrint { get; set; }

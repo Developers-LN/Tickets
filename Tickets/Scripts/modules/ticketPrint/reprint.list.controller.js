@@ -2,7 +2,7 @@
  * Module: ReprintListController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -32,7 +32,7 @@
             });
         };
 
-        this.getReprintList = function ( ) {
+        this.getReprintList = function () {
             window.loading.show();
             $.ajax({
                 type: 'GET',

@@ -1,15 +1,23 @@
 ﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelAvailableTickets>
 
 @{
-    Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Billetes en circulación";
-
     var context = new Tickets.Models.TicketsEntities();
+    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+
+    if(context.Raffles.FirstOrDefault(f=>f.Id == raffleid).Prospect.ImpresionType == (int)Tickets.Models.Enums.PrintTypeProspect.Ordinario)
+    {
+        ViewBag.Title = "Billetes vendidos del sorteo No. " + Model.FirstOrDefault().RaffleId;
+    }
+    else
+    {
+        ViewBag.Title = "Boletos vendidos del sorteo No. " + Model.FirstOrDefault().RaffleId;
+    }
+
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.ProduccionSorteo : "";
     string adminCargo = config != null ? config.ProduccionSorteoCargo : "";
 
-    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
 
     int ExtraordinaryTicketsCount = 0;
@@ -31,7 +39,14 @@
             Fecha del sorteo: @RaffleData.DateSolteo.ToLongDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <b>NUMEROS EN CIRCULACION DEL SORTEO NO. @RaffleData.Id</b><br />
+            @if (context.Raffles.FirstOrDefault(f => f.Id == raffleid).Prospect.ImpresionType == (int)Tickets.Models.Enums.PrintTypeProspect.Ordinario)
+            {
+                <b>BILLETES VENDIDOS DEL SORTEO NO. @RaffleData.Id</b><br />
+            }
+            else
+            {
+                <b>BOLETOS VENDIDOS DEL SORTEO NO. @RaffleData.Id</b><br />
+            }
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
             <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
@@ -196,7 +211,7 @@
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         @if (ExtraordinaryTicketsCount != 0)
         {
-            <b>Total de billetes en circulación: @ExtraordinaryTicketsCount</b>
+            <b>Total de boletos vendidos: @ExtraordinaryTicketsCount</b>
         }
         else
         {
@@ -206,18 +221,29 @@
                 var FraccionesRestantes = OrdinaryFractionsCount % TicketFractios;
                 <b>Total de billetes en circulación: @Billetes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b>
                 <br />
-                <b>Total de fracciones en circulación: @FraccionesRestantes</b>
+                <b>Total de fracciones vendidas: @FraccionesRestantes</b>
             }
             else
             {
-                <b>Total de billetes en circulación: @OrdinaryFractionsCount</b>
+                <b>Total de billetes vendidos: @OrdinaryFractionsCount</b>
             }
         }
     </div>
 
-    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-        <b>@adminName</b><br />
-        <span>@adminCargo</span><br />
-        <p>NOTA: Este reporte contiene los números que se encuentran en circulación del sorteo número @RaffleData.Id, encontrándose a la izquierda el número del billete y a la derecha la cantidad de fracciones en circulación.</p>
-    </div>
+    @if (context.Raffles.FirstOrDefault(f => f.Id == raffleid).Prospect.ImpresionType == (int)Tickets.Models.Enums.PrintTypeProspect.Ordinario)
+    {
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>@adminName</b><br />
+            <span>@adminCargo</span><br />
+            <p>NOTA: Este reporte contiene los billetes que fueron vendidos del sorteo número @RaffleData.Id, encontrándose a la izquierda el número del billete y a la derecha la cantidad de fracciones en circulación.</p>
+        </div>
+    }
+    else
+    {
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>@adminName</b><br />
+            <span>@adminCargo</span><br />
+            <p>NOTA: Este reporte contiene los boletos que fueron vendiros del sorteo número @RaffleData.Id, encontrándose a la izquierda el número del billete y a la derecha la cantidad de fracciones en circulación.</p>
+        </div>
+    }
 </div>

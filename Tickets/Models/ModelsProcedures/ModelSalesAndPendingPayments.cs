@@ -16,6 +16,7 @@ namespace Tickets.Models.ModelsProcedures
         public DateTime DateInvoice { get; set; }
         public string StatusInvoice { get; set; }
         public int TotalTickets { get; set; }
+        public int TotalFractions { get; set; }
         public decimal PriceTicket { get; set; }
         public decimal TotalInvoice { get; set; }
         public decimal DiscountPercent { get; set; }

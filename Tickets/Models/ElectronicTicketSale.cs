@@ -29,6 +29,8 @@ namespace Tickets.Models
         public string COD_AUTH { get; set; }
         public Nullable<int> PDV_ID { get; set; }
         public Nullable<int> TicketAllocationId { get; set; }
+        public string PDV_NAME { get; set; }
+        public string Province { get; set; }
     
         public virtual Client Client { get; set; }
         public virtual TicketAllocationNumber TicketAllocationNumber { get; set; }

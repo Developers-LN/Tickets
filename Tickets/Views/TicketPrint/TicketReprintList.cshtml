@@ -2,6 +2,7 @@
     Layout = null;
     ViewBag.Title = "Listado de reimpresión de billetes";
 }
+
 <div class="col-lg-12 no-padder" ng-controller="ReprintListController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
@@ -32,21 +33,24 @@
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
+                                <th style="width:50px;">Lote</th>
                                 <th>Sorteo</th>
-                                <th>Cantidad de Numero</th>
-                                <th>Fecha</th>
-                                <th>Estado</th>
-                                <th class="editColumm">Acciones</th>
+                                <th style="width:80px;" class="text-center">Cantidad <br /> de numeros</th>
+                                <th style="width:160px;" class="text-center">Fecha</th>
+                                <th style="width:90px;" class="text-center">Estado</th>
+                                <th style="width:70px;" class="text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="ticket in ticketReprints">
+                                <td>{{ticket.id}}</td>
                                 <td>{{ticket.raffleDesc}}</td>
-                                <td>{{ticket.numberCount}}</td>
-                                <td>{{(ticket.createDate | date:"dd/MM/yyyy h:mm:ss a")}}</td>
-                                <td>{{ticket.statuDesc}}</td>
+                                <td class="text-center">{{ticket.numberCount}}</td>
+                                <td class="text-center">{{(ticket.createDate | date:"dd/MM/yyyy h:mm:ss a")}}</td>
+                                <td class="text-center">{{ticket.statuDesc}}</td>
                                 <td>
-                                    <a ng-click="startWorkflowProspect(ticket)" ng-if="ticket.statu == @((int)Tickets.Models.Enums.TicketReprintStatuEnum.Created)" title="Enviar reimpresion a aprobación" class="{{moduleCanAdd}}"><i class="fa fa-external-link"></i></a>
+                                    <a ng-click="startWorkflowProspect(ticket)" ng-show="verifyCanView('app.approvedRePrint')" ng-if="ticket.statu == @((int)Tickets.Models.Enums.TicketReprintStatuEnum.Created)" title="Aprobar reimpresión" class="{{moduleCanAdd}}"><i class="fa fa-external-link"></i></a>
+                                    <a ng-click="deleteTicket(ticket)" ng-show="verifyCanView('app.approvedRePrintList')" ng-if="ticket.statu == @((int)Tickets.Models.Enums.TicketReprintStatuEnum.Created)" title="Cancelar" class="{{moduleCanDelete}}"><i class="fa fa-times"></i></a>
                                     <a ng-click="deleteTicket(ticket)" ng-if="ticket.statu == @((int)Tickets.Models.Enums.TicketReprintStatuEnum.Created)" title="Cancelar" class="{{moduleCanDelete}}"><i class="fa fa-times"></i></a>
                                 </td>
                             </tr>
@@ -58,6 +62,6 @@
         </div>
     </div>
 </div>
-<div class="col-lg-12 no-padder text-left m-b-lg"> 
+<div class="col-lg-12 no-padder text-left m-b-lg">
     <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
 </div>

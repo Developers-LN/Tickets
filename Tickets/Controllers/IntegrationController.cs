@@ -111,17 +111,18 @@ namespace Tickets.Controllers
                 workSheet.Cell(curretRow, 7).Value = "Fecha_Factura";
                 workSheet.Cell(curretRow, 8).Value = "Estado_Factura";
                 workSheet.Cell(curretRow, 9).Value = "Total_Billetes";
-                workSheet.Cell(curretRow, 10).Value = "Precio_Billete";
-                workSheet.Cell(curretRow, 11).Value = "Total_Factura";
-                workSheet.Cell(curretRow, 12).Value = "Descuento";
-                workSheet.Cell(curretRow, 13).Value = "Total_Descuento";
-                workSheet.Cell(curretRow, 14).Value = "Total_A_Pagar";
-                workSheet.Cell(curretRow, 15).Value = "Pagos_Efectivo";
-                workSheet.Cell(curretRow, 16).Value = "Pagos_Nota_Credito";
+                workSheet.Cell(curretRow, 10).Value = "Total_Fracciones";
+                workSheet.Cell(curretRow, 11).Value = "Precio_Billete";
+                workSheet.Cell(curretRow, 12).Value = "Total_Factura";
+                workSheet.Cell(curretRow, 13).Value = "Descuento";
+                workSheet.Cell(curretRow, 14).Value = "Total_Descuento";
+                workSheet.Cell(curretRow, 15).Value = "Total_A_Pagar";
+                workSheet.Cell(curretRow, 16).Value = "Pagos_Efectivo";
+                workSheet.Cell(curretRow, 17).Value = "Pagos_Nota_Credito";
                 //workSheet.Cell(curretRow, 17).Value = "Billetes_Devueltos";
                 //workSheet.Cell(curretRow, 18).Value = "Fracciones_Devueltas";
-                workSheet.Cell(curretRow, 19).Value = "Total_Pagado";
-                workSheet.Cell(curretRow, 20).Value = "Total_Faltante";
+                workSheet.Cell(curretRow, 18).Value = "Total_Pagado";
+                workSheet.Cell(curretRow, 19).Value = "Total_Faltante";
 
                 foreach (var item in Resultado)
                 {
@@ -135,17 +136,18 @@ namespace Tickets.Controllers
                     workSheet.Cell(curretRow, 7).Value = item.DateInvoice;
                     workSheet.Cell(curretRow, 8).Value = item.StatusInvoice;
                     workSheet.Cell(curretRow, 9).Value = item.TotalTickets;
-                    workSheet.Cell(curretRow, 10).Value = item.PriceTicket;
-                    workSheet.Cell(curretRow, 11).Value = item.TotalInvoice;
-                    workSheet.Cell(curretRow, 12).Value = item.DiscountPercent;
-                    workSheet.Cell(curretRow, 13).Value = item.TotalDiscount;
-                    workSheet.Cell(curretRow, 14).Value = item.TotalToPay;
-                    workSheet.Cell(curretRow, 15).Value = item.CashPayment;
-                    workSheet.Cell(curretRow, 16).Value = item.NoteCreditPayment;
+                    workSheet.Cell(curretRow, 10).Value = item.TotalFractions;
+                    workSheet.Cell(curretRow, 11).Value = item.PriceTicket;
+                    workSheet.Cell(curretRow, 12).Value = item.TotalInvoice;
+                    workSheet.Cell(curretRow, 13).Value = item.DiscountPercent;
+                    workSheet.Cell(curretRow, 14).Value = item.TotalDiscount;
+                    workSheet.Cell(curretRow, 15).Value = item.TotalToPay;
+                    workSheet.Cell(curretRow, 16).Value = item.CashPayment;
+                    workSheet.Cell(curretRow, 17).Value = item.NoteCreditPayment;
                     //workSheet.Cell(curretRow, 17).Value = item.TicketReturn;
                     //workSheet.Cell(curretRow, 18).Value = item.FractionReturn;
-                    workSheet.Cell(curretRow, 19).Value = item.TotalPayed;
-                    workSheet.Cell(curretRow, 20).Value = item.TotalPending;
+                    workSheet.Cell(curretRow, 18).Value = item.TotalPayed;
+                    workSheet.Cell(curretRow, 19).Value = item.TotalPending;
                 }
 
                 var range = workSheet.RangeUsed();
@@ -153,15 +155,15 @@ namespace Tickets.Controllers
                 table.Theme = XLTableTheme.TableStyleLight9;
                 workSheet.Columns().AdjustToContents();
                 workSheet.Column(9).Style.NumberFormat.Format = "#,##0";
-                workSheet.Column(10).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(11).Style.NumberFormat.Format = "$ #,##0.00";
-                workSheet.Column(13).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(12).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(14).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(15).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(16).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(17).Style.NumberFormat.Format = "$ #,##0.00";
                 //workSheet.Column(17).Style.NumberFormat.Format = "#,##0";
+                workSheet.Column(18).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(19).Style.NumberFormat.Format = "$ #,##0.00";
-                workSheet.Column(20).Style.NumberFormat.Format = "$ #,##0.00";
 
                 using (var stream = new MemoryStream())
                 {
@@ -370,8 +372,8 @@ namespace Tickets.Controllers
                             f.ControlNumber = allocationXML.TicketAllocationNumbers.Where(w => w.IdNumber == f.Id).FirstOrDefault().ControlNumber;
                             f.PrintedDate = actualDate;
                         });*/
-                        
-                        if(allocation.Statu != (int)AllocationStatuEnum.Generated)
+
+                        if (allocation.Statu != (int)AllocationStatuEnum.Generated)
                         {
                             allocation.Statu = (int)AllocationStatuEnum.Generated;
                             context.SaveChanges();

@@ -15,23 +15,22 @@ namespace Tickets.Models.Procedures
 
             DateTime FI, FF;
 
-            if(FechaInicio == "undefined" && FechaInicio == "undefined")
-            {
-                FI = DateTime.Now;
-                FF = DateTime.Now;
-            }
-            else
-            {
-                FI = Convert.ToDateTime(FechaInicio);
-                FF = Convert.ToDateTime(FechaFin);
-            }
-
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
                 SqlCommand sqlCommand = new SqlCommand("SalesAndPendingPayments", sqlConnection);
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@FechaInicio", FI.ToString("yyyy-MM-dd"));
-                sqlCommand.Parameters.AddWithValue("@FechaFin", FF.ToString("yyyy-MM-dd"));
+                if (FechaInicio == "undefined" && FechaInicio == "undefined")
+                {
+                    sqlCommand.Parameters.AddWithValue("@FechaInicio", "");
+                    sqlCommand.Parameters.AddWithValue("@FechaFin", "");
+                }
+                else
+                {
+                    FI = Convert.ToDateTime(FechaInicio);
+                    FF = Convert.ToDateTime(FechaFin);
+                    sqlCommand.Parameters.AddWithValue("@FechaInicio", FI.ToString("yyyy-MM-dd"));
+                    sqlCommand.Parameters.AddWithValue("@FechaFin", FF.ToString("yyyy-MM-dd"));
+                }
                 sqlCommand.Parameters.AddWithValue("@RaffleId", RaffleId);
                 sqlConnection.Open();
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
@@ -52,6 +51,7 @@ namespace Tickets.Models.Procedures
                             IdInvoice = Convert.ToInt32(sqlDataReader["ID_Factura"].ToString()),
                             DateInvoice = Convert.ToDateTime(sqlDataReader["Fecha_Factura"].ToString()),
                             StatusInvoice = sqlDataReader["Estado_Factura"].ToString(),
+                            TotalFractions = Convert.ToInt32(sqlDataReader["Total_Fracciones"].ToString()),
                             TotalTickets = Convert.ToInt32(sqlDataReader["Total_Billetes"].ToString()),
                             PriceTicket = Convert.ToDecimal(sqlDataReader["Precio_Billete"].ToString()),
                             TotalInvoice = Convert.ToDecimal(sqlDataReader["Total_Factura"].ToString()),
@@ -81,6 +81,7 @@ namespace Tickets.Models.Procedures
                         IdInvoice = 0,
                         DateInvoice = DateTime.Now,
                         StatusInvoice = "",
+                        TotalFractions = 0,
                         TotalTickets = 0,
                         PriceTicket = 0,
                         TotalInvoice = 0,

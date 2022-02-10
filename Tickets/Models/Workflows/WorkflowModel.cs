@@ -458,7 +458,8 @@ namespace Tickets.Models.Workflows
                             context.SaveChanges();
                         }
 
-                        reprint.Statu = (int)TicketReprintStatuEnum.Improcess;
+                        //reprint.Statu = (int)TicketReprintStatuEnum.Improcess;
+                        reprint.Statu = (int)TicketReprintStatuEnum.Approved;
                         context.SaveChanges();
 
                         dbContextTransaction.Commit();

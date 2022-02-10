@@ -337,7 +337,6 @@
                 url: 'TicketAllocation/ValidateNumberAward?number=' + $scope.number + '&ClientId=' + $scope.identifyBach.ClientId,
                 data: $scope.number,
                 success: function (data) {
-
                     window.loading.hide();
                     if (data.result === true) {
                         self.saveAwardNumber($scope.number);
