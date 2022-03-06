@@ -49,6 +49,7 @@
                                 <td class="text-center">{{(ticket.createDate | date:"dd/MM/yyyy h:mm:ss a")}}</td>
                                 <td class="text-center">{{ticket.statuDesc}}</td>
                                 <td>
+                                    <a target="_blank" href="/Reports/AllocatinosNumberList?allocationId={{ticket.id}}" title="Imprimir lista de billetes del lote" class="{{moduleCanAdd}}"><i class="fa fa-print"></i></a>
                                     <a ng-click="startWorkflowProspect(ticket)" ng-show="verifyCanView('app.approvedRePrint')" ng-if="ticket.statu == @((int)Tickets.Models.Enums.TicketReprintStatuEnum.Created)" title="Aprobar reimpresión" class="{{moduleCanAdd}}"><i class="fa fa-external-link"></i></a>
                                     <a ng-click="deleteTicket(ticket)" ng-show="verifyCanView('app.approvedRePrintList')" ng-if="ticket.statu == @((int)Tickets.Models.Enums.TicketReprintStatuEnum.Created)" title="Cancelar" class="{{moduleCanDelete}}"><i class="fa fa-times"></i></a>
                                     <a ng-click="deleteTicket(ticket)" ng-if="ticket.statu == @((int)Tickets.Models.Enums.TicketReprintStatuEnum.Created)" title="Cancelar" class="{{moduleCanDelete}}"><i class="fa fa-times"></i></a>

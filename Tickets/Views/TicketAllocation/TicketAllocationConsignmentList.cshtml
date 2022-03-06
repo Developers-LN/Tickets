@@ -51,9 +51,11 @@
                                 <td>{{(allocation.createDate | date:"dd/MM/yyyy hh:mm:ss a")}}</td>
                                 <td>{{allocation.statuDesc}}</td>
                                 <td class="text-center">
-                                    <a ng-if="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Consigned) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Generated)" target="_blank" href="/Reports/AllocationConsigNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-print"></i></a>
-                                    <a href="/#/ticket/allocationConsignedDetails/{{allocation.id}}" title="Ver detalle de consignación" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
-                                    <a ng-click="xmlAllocationNumberDownload(allocation.id)" ng-if="allocation.grupo == @((int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico) && (allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Consigned) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Generated))" target="_blank" title="Descargar XML de la Asignación"><i class="fa fa-cloud-download"></i></a>
+                                    <div ng-if="allocation.statuId != @((int)Tickets.Models.Enums.AllocationStatuEnum.Deleted)">
+                                        <a ng-if="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Consigned) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Generated)" target="_blank" href="/Reports/AllocationConsigNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-print"></i></a>
+                                        <a href="/#/ticket/allocationConsignedDetails/{{allocation.id}}" title="Ver detalle de consignación" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
+                                        <a ng-click="xmlAllocationNumberDownload(allocation.id)" ng-if="allocation.grupo == @((int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico) && (allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Consigned) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Generated))" target="_blank" title="Descargar XML de la Asignación"><i class="fa fa-cloud-download"></i></a>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

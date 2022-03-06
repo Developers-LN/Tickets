@@ -1,7 +1,7 @@
 ﻿@model Tickets.Models.Invoice
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "Detalle de pagos a factura";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -69,26 +69,26 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
-            <b>DETALLE DE FACTURAS SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
+            <b>DETALLE DE PAGOS A FACTURA SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
         </div>
         <div class="col-lg-6 no-padder">
             <div class="col-lg-12 no-padder text-left">
                 <b>Cliente: </b> #@Model.Client.Name @Model.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Factura: </b> #@Model.Id
             </div>
             @if (lastReceivable != null)
             {
                 <div class="col-lg-12 no-padder text-left">
                     <b>Estado: </b> @context.Catalogs.FirstOrDefault(c => c.Id == lastReceivable.Invoice.PaymentStatu).NameDetail
                 </div>
-                <div class="col-lg-12 no-padder text-left">
-                    <b>Recibo: </b>#@lastReceivable.Id
-                </div>
             }
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <div class="col-lg-12 no-padder text-right">
-                <b>Factura: </b> #@Model.Id
-            </div>
+            @*<div class="col-lg-12 no-padder text-right">
+                <b>Recibo: </b>#@lastReceivable.Id
+            </div>*@
             <div class="col-lg-12 no-padder text-right">
                 <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
             </div>
@@ -101,6 +101,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th class="text-center">Recibo</th>
                     <th class="text-center">Tipo de Pago</th>
                     <th class="text-center">Referencia</th>
                     <th class="text-center" width="30%">Concepto</th>
@@ -124,6 +125,9 @@
                         {
                             totalPayment += creditNote.TotalCash;
                             <tr>
+                                <td style="vertical-align:middle;" class="text-center">
+                                    @payment.Id
+                                </td>
                                 <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
                                 <td style="vertical-align:middle;">@payment.Recibo</td>
                                 <td style="vertical-align:middle;" class="text-center">
@@ -140,6 +144,9 @@
                         {
                             totalPayment += creditNote.TotalCash;
                             <tr>
+                                <td style="vertical-align:middle;" class="text-center">
+                                    @payment.Id
+                                </td>
                                 <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
                                 <td style="vertical-align:middle;">@payment.Recibo</td>
                                 <td style="vertical-align:middle;" class="text-center">
@@ -154,6 +161,9 @@
                     {
                         totalPayment += totalCash;
                         <tr>
+                            <td style="vertical-align:middle;" class="text-center">
+                                @payment.Id
+                            </td>
                             <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
                             <td style="vertical-align:middle;" class="text-center">@payment.Recibo</td>
                             <td style="vertical-align:middle;" class="text-center">
@@ -175,9 +185,11 @@
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
+                    <td class="text-center"></td>
                     <td class="text-right">Total Pagado..: @totalPayment.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
                 <tr>
+                    <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
@@ -189,6 +201,7 @@
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
+                    <td class="text-center"></td>
                     <td class="text-right" style="font-weight: bold;">Total Descuento..: @discount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
                 <tr>
@@ -196,9 +209,11 @@
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
+                    <td class="text-center"></td>
                     <td class="text-right" style="font-weight: bold;">Total Facturado..: @((totalInvoice - discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
                 </tr>
                 <tr>
+                    <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
@@ -237,201 +252,201 @@
 </div>
 
 @*<div class="col-lg-12">
-    <div class="col-lg-12 no-padder text-center">
-        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
-            <img src="~/Images/logo.png" />
-        </div>
         <div class="col-lg-12 no-padder text-center">
-            <b>MINISTERIO DE HACIENDA</b>
-        </div>
-        <div class="col-lg-12 no-padder text-center">
-            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
-        </div>
-        <div class="col-lg-12 no-padder text-center">
-            <b>DETALLE DE FACTURAS SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
-        </div>
-        <div class="col-lg-6 no-padder">
-            <div class="col-lg-12 no-padder text-left">
-                <b>Cliente: </b> #@Model.Client.Name @Model.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+            <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+                <img src="~/Images/logo.png" />
             </div>
-            @if (lastReceivable != null)
-            {
+            <div class="col-lg-12 no-padder text-center">
+                <b>MINISTERIO DE HACIENDA</b>
+            </div>
+            <div class="col-lg-12 no-padder text-center">
+                <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+            </div>
+            <div class="col-lg-12 no-padder text-center">
+                <b>DETALLE DE FACTURAS SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
+            </div>
+            <div class="col-lg-6 no-padder">
                 <div class="col-lg-12 no-padder text-left">
-                    <b>Estado: </b> @context.Catalogs.FirstOrDefault(c => c.Id == lastReceivable.Invoice.PaymentStatu).NameDetail
+                    <b>Cliente: </b> #@Model.Client.Name @Model.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
                 </div>
-                <div class="col-lg-12 no-padder text-left">
-                    <b>Recibo: </b>#@lastReceivable.Id
-                </div>
-            }
-        </div>
-        <div class="col-lg-6 no-padder text-right">
-            <div class="col-lg-12 no-padder text-right">
-                <b>Factura: </b> #@Model.Id
-            </div>
-            <div class="col-lg-12 no-padder text-right">
-                <b>Fecha: </b> @DateTime.Now.ToShortDateString()
-            </div>
-            <div class="col-lg-12 no-padder text-right">
-                <b>Hora: </b> @DateTime.Now.ToShortTimeString()
-            </div>
-        </div>
-    </div>
-
-
-    <div class="col-lg-12 no-padder">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="text-center">Tipo de Pago</th>
-                    <th class="text-center">Referencia</th>
-                    <th class="text-center">Concepto</th>
-                    <th class="text-center">Fecha del Pago</th>
-                    <th class="text-right">Monto</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    totalPayment = 0.0m; totalRestant = 0.0m; totalInvoice = 0.0m;
-                    //var totals2 = new Tickets.Controllers.CashController().GetPaymentCash(Model);
-                    totalRestant = totals.totalRestant;
-                    totalInvoice = totals.totalInvoice;
-
-                }
-                @foreach (var payment in Model.ReceiptPayments)
+                @if (lastReceivable != null)
                 {
-                    var totalCash = payment.TotalCash > 0 ? payment.TotalCash : payment.TotalCheck > 0 ? payment.TotalCheck : payment.TotalCredit;
-                    if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
-                    {
-                        foreach (var creditNote in payment.NoteCreditReceiptPayments)
-                        {
-                            totalPayment += creditNote.TotalCash;
-                            <tr>
-                                <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
-                                <td class="text-center">@payment.Recibo</td>
-                                <td class="text-center">
-                                    @if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
-                                    {
-                                        @Efectivo;
-                                    }
-                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
-                                    {
-                                        @Cheque;
-                                    }
-                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
-                                    {
-                                        @TargetaCredito;
-                                    }
-                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
-                                    {
-                                        @NotaCredito;
-                                    }
-                                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
-                                    {
-                                        @DepTransf;
-                                    }
-                                </td>
-                                <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
-                                <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                            </tr>
-                        }
+                    <div class="col-lg-12 no-padder text-left">
+                        <b>Estado: </b> @context.Catalogs.FirstOrDefault(c => c.Id == lastReceivable.Invoice.PaymentStatu).NameDetail
+                    </div>
+                    <div class="col-lg-12 no-padder text-left">
+                        <b>Recibo: </b>#@lastReceivable.Id
+                    </div>
+                }
+            </div>
+            <div class="col-lg-6 no-padder text-right">
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Factura: </b> #@Model.Id
+                </div>
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+                </div>
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-12 no-padder">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">Tipo de Pago</th>
+                        <th class="text-center">Referencia</th>
+                        <th class="text-center">Concepto</th>
+                        <th class="text-center">Fecha del Pago</th>
+                        <th class="text-right">Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        totalPayment = 0.0m; totalRestant = 0.0m; totalInvoice = 0.0m;
+                        //var totals2 = new Tickets.Controllers.CashController().GetPaymentCash(Model);
+                        totalRestant = totals.totalRestant;
+                        totalInvoice = totals.totalInvoice;
+
                     }
-                    if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
+                    @foreach (var payment in Model.ReceiptPayments)
                     {
-                        foreach (var creditNote in payment.NoteCreditReceiptPayments)
+                        var totalCash = payment.TotalCash > 0 ? payment.TotalCash : payment.TotalCheck > 0 ? payment.TotalCheck : payment.TotalCredit;
+                        if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
                         {
-                            totalPayment += creditNote.TotalCash;
+                            foreach (var creditNote in payment.NoteCreditReceiptPayments)
+                            {
+                                totalPayment += creditNote.TotalCash;
+                                <tr>
+                                    <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
+                                    <td class="text-center">@payment.Recibo</td>
+                                    <td class="text-center">
+                                        @if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
+                                        {
+                                            @Efectivo;
+                                        }
+                                        else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
+                                        {
+                                            @Cheque;
+                                        }
+                                        else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
+                                        {
+                                            @TargetaCredito;
+                                        }
+                                        else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                                        {
+                                            @NotaCredito;
+                                        }
+                                        else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                                        {
+                                            @DepTransf;
+                                        }
+                                    </td>
+                                    <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
+                                    <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                </tr>
+                            }
+                        }
+                        if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
+                        {
+                            foreach (var creditNote in payment.NoteCreditReceiptPayments)
+                            {
+                                totalPayment += creditNote.TotalCash;
+                                <tr>
+                                    <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
+                                    <td>@payment.Recibo</td>
+                                    <td class="text-center">
+                                        @payment.Notas
+                                    </td>
+                                    <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
+                                    <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            totalPayment += totalCash;
                             <tr>
-                                <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
-                                <td>@payment.Recibo</td>
+                                <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
+                                <td class="text-center">@payment.Recibo</td>
                                 <td class="text-center">
                                     @payment.Notas
                                 </td>
                                 <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
-                                <td class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(((decimal)totalCash).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
                             </tr>
                         }
                     }
-                    else
-                    {
-                        totalPayment += totalCash;
-                        <tr>
-                            <td class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
-                            <td class="text-center">@payment.Recibo</td>
-                            <td class="text-center">
-                                @payment.Notas
-                            </td>
-                            <td class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
-                            <td class="text-right">@(((decimal)totalCash).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                        </tr>
+                    @{
+                        //var discount = totalInvoice * Model.Client.Discount / 100;
                     }
-                }
-                @{
-                    //var discount = totalInvoice * Model.Client.Discount / 100;
-                }
-            </tbody>
-            <tfoot>
-                <tr class="total">
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-right">Total Pagado..: @totalPayment.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                </tr>
-                <tr>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-right" style="font-weight: bold;">Facturado..: @totalInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                </tr>
-                <tr>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-right" style="font-weight: bold;">Total Descuento..: @discount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                </tr>
-                <tr>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-right" style="font-weight: bold;">Total Facturado..: @((totalInvoice - discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                </tr>
-                <tr>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-right" style="font-weight: bold;">Total Restante..: @((totalRestant- discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+                </tbody>
+                <tfoot>
+                    <tr class="total">
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-right">Total Pagado..: @totalPayment.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-right" style="font-weight: bold;">Facturado..: @totalInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-right" style="font-weight: bold;">Total Descuento..: @discount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-right" style="font-weight: bold;">Total Facturado..: @((totalInvoice - discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-right" style="font-weight: bold;">Total Restante..: @((totalRestant- discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
 
-    <div class="col-lg-12 no-padder text-center">
-        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
-            <div class="col-lg-12 no-padder text-center">
-                ______________________________
+        <div class="col-lg-12 no-padder text-center">
+            <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+                <div class="col-lg-12 no-padder text-center">
+                    ______________________________
+                </div>
+                Firma Del Cliente
             </div>
-            Firma Del Cliente
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
-            <div class="col-lg-12 no-padder text-center">
+            <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+                <div class="col-lg-12 no-padder text-center">
 
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+                <div class="col-lg-12 no-padder text-center">
+                    ______________________________
+                </div>
+                Firma cajera
             </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
-            <div class="col-lg-12 no-padder text-center">
-                ______________________________
-            </div>
-            Firma cajera
+        <div class="col-lg-12 no-padder text-center">
+            <b>@adminName</b>
         </div>
-    </div>
-    <div class="col-lg-12 no-padder text-center">
-        <b>@adminName</b>
-    </div>
-    <div class="col-lg-12 no-padder text-center">
-        <span>@adminCargo</span>
-    </div>
-</div>*@
+        <div class="col-lg-12 no-padder text-center">
+            <span>@adminCargo</span>
+        </div>
+    </div>*@

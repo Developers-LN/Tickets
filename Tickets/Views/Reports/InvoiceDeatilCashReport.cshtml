@@ -39,8 +39,8 @@
     }
 
     .no-padder {
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 </style>
 
@@ -65,8 +65,8 @@
             <b>Cliente: </b> @Model.FirstOrDefault().IdentifyBach.Client.Name
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+            <b>Fecha: </b> @ViewBag.invoiceDetailDate <br />
+            <b>Hora: </b> @ViewBag.invoiceDetailTime <br />
         </div>
     </div>
     <div>

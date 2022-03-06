@@ -922,6 +922,8 @@ namespace Tickets.Controllers
                 return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo #" + invoiceDetail.RaffleId + "." });
             }
             ViewBag.invoiceDetailId = invoiceDetailId;
+            ViewBag.invoiceDetailDate = invoiceDetail.CreateDate.ToShortDateString();
+            ViewBag.invoiceDetailTime = invoiceDetail.CreateDate.ToShortTimeString();
             return View(identifyNumbers);
         }
 
