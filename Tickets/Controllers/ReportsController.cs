@@ -935,13 +935,14 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var reprint = context.TicketRePrints.FirstOrDefault(r => r.Id == reprintId);
-            if (reprint.Statu == (int)TicketReprintStatuEnum.Printed)
+            
+            /*if (reprint.Statu == (int)TicketReprintStatuEnum.Printed)
             {
                 return RedirectToAction("Error", new { message = "Los Billetes de la reimpresion " + reprintId + " fueron impreso." });
             }
 
             reprint.Statu = (int)AllocationStatuEnum.Printed;
-            context.SaveChanges();
+            context.SaveChanges();*/
 
             return View(reprint);
         }

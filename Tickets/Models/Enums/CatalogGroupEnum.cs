@@ -36,6 +36,12 @@
         TicketsDesing = 33,
         RaffleXpiredTime = 35,
         XpriedInvoiceTime = 36,
-        AllocationType = 37
+        AllocationType = 37,
+        AwardCertificationStatu = 38,
+        NoteCreditType = 39,
+        ElectronicSalesStatus = 40,
+        TaxReceiptType = 41,
+        TaxReceiptStatu = 42,
+        TaxReceiptNumberStatu = 43
     }
 }
