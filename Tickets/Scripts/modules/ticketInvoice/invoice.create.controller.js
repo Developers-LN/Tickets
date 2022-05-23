@@ -25,6 +25,9 @@
             if (invoice.condition == undefined) {
                 error += 'El Condicion' + isReq;
             }
+            if (invoice.taxReceipt == 0) {
+                error += 'El tipo de comprobante fiscal' + isReq;
+            }
             if (invoice.invoiceDate == undefined) {
                 error += 'La Fecha' + isReq;
             }
@@ -48,15 +51,19 @@
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getInvoiceConditionSelect'),
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getXpriedInvoiceTimeSelect'),
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getPaymentTypeSelect'),
+                $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getTaxReceipts'),
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getAllocationTypeSelect')
-            ).then(function (invoiceResponse, clientResponse, raffleResponse, invoiceConditionResponse, xpriedInvoiceTimeResponse, paymentTypeResponse) {
+            ).then(function (invoiceResponse, clientResponse, raffleResponse, invoiceConditionResponse, xpriedInvoiceTimeResponse, paymentTypeResponse, taxReceipts) {
                 window.loading.hide();
 
                 $scope.clients = clientResponse[0].object;
                 $scope.raffles = raffleResponse[0].object;
                 $scope.conditions = invoiceConditionResponse[0].object;
+
                 $scope.xpireInvoiceTimes = xpriedInvoiceTimeResponse[0].object;
                 $scope.paymentTypes = paymentTypeResponse[0].object;
+
+                $scope.taxReceiptList = taxReceipts[0].object;
 
                 invoiceResponse[0].object.invoiceDate = new Date(invoiceResponse[0].object.invoiceDateLong);
                 $scope.invoice = invoiceResponse[0].object;
@@ -183,7 +190,7 @@
 
             self.getAllocationsByClient(ticketProspectId, poolProspectId, clientPriceId);
         }
-
+        //
         $scope.updateAllocationNumbers = function () {
             if ($scope.invoice.id > 0) {
                 return;

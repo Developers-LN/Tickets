@@ -82,6 +82,8 @@ namespace Tickets.Models
         public DbSet<AwardCertification> AwardCertification { get; set; }
         public DbSet<RaffleAward> RaffleAwards { get; set; }
         public DbSet<ElectronicTicketSale> ElectronicTicketSales { get; set; }
+        public DbSet<TaxReceipt> TaxReceipts { get; set; }
+        public DbSet<TaxReceiptNumber> TaxReceiptNumbers { get; set; }
     
         public virtual int procDelOverduelBill()
         {

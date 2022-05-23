@@ -26,30 +26,54 @@
                     <br />
                 </div>
 
-                <div class="row-border hover">
+                <div class="row-border hover" ng-show="receivable.clientType != 5862">
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
-                                <th>Recibo</th>
-                                <th>Cliente</th>
-                                <th>Observaciones</th>
-                                <th>Fecha de pago</th>
-                                <th>Acción</th>
+                                <th class="text-center">Recibo</th>
+                                <th class="text-center">Tipo de pago</th>
+                                <th class="text-center">Fecha de pago</th>
+                                <th class="text-center">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="payments in paymentsHistory">
-                                <td>#{{payments.Id}}</td>
-                                <td>{{payments.Nombre}}</td>
-                                <td>{{payments.Observaciones}}</td>
-                                <td>{{payments.paymentDate}}</td>
-                                <td>
+                                <td class="text-center">#{{payments.Id}}</td>
+                                <td class="text-center">{{payments.receiptType}}</td>
+                                <td class="text-center">{{payments.paymentDate}}</td>
+                                <td class="text-center">
                                     <a target="_blank" href="/Reports/InvoicePaymentInfo?paymentId={{payments.Id}}" title="Reporte de pago"><i class="fa fa-print"></i></a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+
+                <div class="row-border hover" ng-show="receivable.clientType == 5862">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Recibo</th>
+                                <th>Cliente</th>
+                                <th>Observaciones</th>
+                                <th class="text-center">Fecha de pago</th>
+                                <th class="text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="payments in paymentsHistory">
+                                <td class="text-center">#{{payments.Id}}</td>
+                                <td>{{payments.Nombre}}</td>
+                                <td>{{payments.Observaciones}}</td>
+                                <td class="text-center">{{payments.paymentDate}}</td>
+                                <td class="text-center">
+                                    <a target="_blank" href="/Reports/InvoicePaymentInfo?paymentId={{payments.Id}}" title="Reporte de pago"><i class="fa fa-print"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <!-- END table-responsive-->
             </div>
         </div>

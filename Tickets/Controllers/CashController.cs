@@ -603,6 +603,10 @@ namespace Tickets.Controllers
                             receiptPayment.TotalCheck = totalCash;
                             receiptPayment.Recibo = Recibo;
                         }
+                        else if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.DescuentoNomina)
+                        {
+                            receiptPayment.TotalCheck = totalCash;
+                        }
                         if (ClientType == (int)ClientGroupEnum.CajaDespachoExpress)
                         {
                             receiptPayment.Cedula = Cedula;
@@ -705,12 +709,26 @@ namespace Tickets.Controllers
         public JsonResult GetReceivableData(int invoiceId)
         {
             var context = new TicketsEntities();
-            var paymentTypes = context.Catalogs.Where(c => c.IdGroup == (int)CatalogGroupEnum.PaymentType).Select(c => new
+            var invoice = context.Invoices.Where(i => i.Id == invoiceId).FirstOrDefault();
+
+            var clientGroup = context.Clients.Where(w => w.Id == invoice.ClientId).Select(s => s.GroupId).FirstOrDefault();
+
+            var paymentTypes = context.Catalogs.Where(c => c.IdGroup == (int)CatalogGroupEnum.PaymentType && c.Id != (int)PaymentTypeEnum.DescuentoNomina)
+            .Select(c => new
             {
                 c.Id,
                 c.NameDetail
             }).ToList();
-            var invoice = context.Invoices.Where(i => i.Id == invoiceId).FirstOrDefault();
+
+            if (clientGroup == (int)ClientGroupEnum.Empreados)
+            {
+                paymentTypes = context.Catalogs.Where(c => c.IdGroup == (int)CatalogGroupEnum.PaymentType).Select(c => new
+                {
+                    c.Id,
+                    c.NameDetail
+                }).ToList();
+            }
+
             ///    var ticketController = new TicketAllocationController();  // esta instancia de clase no presenta ninguna funcionalidad
             if (invoice == null) { return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { } }; }
             return new JsonResult()
@@ -726,12 +744,13 @@ namespace Tickets.Controllers
                     invoiceDate = invoice.CreateDate.ToString("dd/MM/yyyy"),
                     Agente = invoice.InvoiceTickets.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Agente,
                     paymentsHistory = invoice.ReceiptPayments.AsEnumerable()
-                    .Where(w => w.InvoiceId == invoice.Id && invoice.Client.GroupId == (int)ClientGroupEnum.CajaDespachoExpress)
+                    .Where(w => w.InvoiceId == invoice.Id)
                     .Select(s => new
                     {
                         s.Id,
                         s.Nombre,
                         s.Observaciones,
+                        receiptType = context.Catalogs.Where(w => w.Id == s.ReceiptType).Select(f => f.NameDetail).FirstOrDefault(),
                         paymentDate = s.CreateDate.ToString("dd/MM/yy")
                     }).ToList(),
                     creditNotes = invoice.Client.NoteCredits.AsEnumerable().Where(c => (c.TypeNote == (int)NoteCreditEnum.NoteCredit || c.TypeNote == null)
@@ -912,9 +931,9 @@ namespace Tickets.Controllers
                     }
                 }
             }
-            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Recibo de cuenta po cobrar", receibableObject);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Recibo de cuenta por cobrar", receibableObject);
 
-            return new JsonResult() { Data = new { result = true, receibableId = receivableId, message = "Recibo de Efectivo Guardado." } };
+            return new JsonResult() { Data = new { result = true, receibableId = receivableId, message = "Recibo de pagos a factura generado." } };
         }
 
         #endregion

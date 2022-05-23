@@ -70,7 +70,7 @@
                                 <td>
                                     <a ng-if="invoice.PaymentStatu == @((int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Pendient)" href="#/cash/receivable/{{invoice.Id}}" class="{{moduleCanEdit}}"><i class="fa fa-money"></i></a>
                                     <a ng-click="saveReceivablePayment(invoice.Id)" class="{{moduleCanEdit}}"><i class="fa fa-file-o"></i></a>
-                                    <a ng-show="verifyCanView('app.invoicePaymentHistory')" ng-if="invoice.clientType == @((int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)" href="#/cash/invoicePaymentHistory/{{invoice.Id}}" title="Lista de pagos" class="{{moduleCanView}}"><i class="fa fa-file-text-o"></i></a>
+                                    <a ng-show="verifyCanView('app.invoicePaymentHistory')" href="#/cash/invoicePaymentHistory/{{invoice.Id}}" title="Lista de pagos" class="{{moduleCanView}}"><i class="fa fa-file-text-o"></i></a>
                                 </td>
                             </tr>
                         </tbody>

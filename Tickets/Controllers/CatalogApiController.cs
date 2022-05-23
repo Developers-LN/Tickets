@@ -108,6 +108,15 @@ namespace Tickets.Controllers
             return response;
         }
 
+        [HttpGet]
+        [Authorize]
+        [ActionName("getTaxReceipts")]
+        public RequestResponseModel GetTaxReceipts()
+        {
+            var response = new CatalogModel().GetAvailableTaxRecipts();
+            return response;
+        }
+
         //
         //  GET: ticket/catalogApi/getInvoiceConditionSelect
         [HttpGet]

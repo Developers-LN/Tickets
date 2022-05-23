@@ -284,6 +284,7 @@
           <Property Name="InvoiceExpredDay" Type="int" />
           <Property Name="Discount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="DeleteUser" Type="int" />
+          <Property Name="TaxReceipt" Type="int" />
         </EntityType>
         <EntityType Name="InvoiceDetails">
           <Key>
@@ -596,6 +597,29 @@
           <Property Name="ProduccionSorteoCargo" Type="varchar" MaxLength="50" />
           <Property Name="Facturacion" Type="varchar" MaxLength="50" />
           <Property Name="FacturacionCargo" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TaxReceipt">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Statu" Type="int" Nullable="false" />
+          <Property Name="CreateUser" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="Notas" Type="text" />
+          <Property Name="DueDate" Type="datetime" Nullable="false" />
+          <Property Name="SequenceFrom" Type="int" Nullable="false" />
+          <Property Name="SequenceTo" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaxReceiptNumbers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Number" Type="int" Nullable="false" />
+          <Property Name="TaxReceiptId" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" />
         </EntityType>
         <EntityType Name="TicketAllocation">
           <Key>
@@ -1739,6 +1763,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TaxReceipt_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="TaxReceipt" Type="Self.TaxReceipt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxReceipt">
+              <PropertyRef Name="CreateUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxReceiptNumbers_TaxReceipt">
+          <End Role="TaxReceipt" Type="Self.TaxReceipt" Multiplicity="1" />
+          <End Role="TaxReceiptNumbers" Type="Self.TaxReceiptNumbers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxReceipt">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxReceiptNumbers">
+              <PropertyRef Name="TaxReceiptId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TicketAllocation_Client1">
           <End Role="Client" Type="Self.Client" Multiplicity="1" />
           <End Role="TicketAllocation" Type="Self.TicketAllocation" Multiplicity="*" />
@@ -2102,6 +2150,8 @@
           <EntitySet Name="Rol_Module" EntityType="Self.Rol_Module" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RRentabilidadSorteo" EntityType="Self.RRentabilidadSorteo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SystemConfig" EntityType="Self.SystemConfig" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaxReceipt" EntityType="Self.TaxReceipt" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaxReceiptNumbers" EntityType="Self.TaxReceiptNumbers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TicketAllocation" EntityType="Self.TicketAllocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TicketAllocationNumber" EntityType="Self.TicketAllocationNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TicketRePrint" EntityType="Self.TicketRePrint" Schema="dbo" store:Type="Tables" />
@@ -2427,6 +2477,14 @@
           <AssociationSet Name="FK_Solteo_User" Association="Self.FK_Solteo_User">
             <End Role="User" EntitySet="User" />
             <End Role="Raffle" EntitySet="Raffle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxReceipt_User" Association="Self.FK_TaxReceipt_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="TaxReceipt" EntitySet="TaxReceipt" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxReceiptNumbers_TaxReceipt" Association="Self.FK_TaxReceiptNumbers_TaxReceipt">
+            <End Role="TaxReceipt" EntitySet="TaxReceipt" />
+            <End Role="TaxReceiptNumbers" EntitySet="TaxReceiptNumbers" />
           </AssociationSet>
           <AssociationSet Name="FK_TicketAllocation_Client1" Association="Self.FK_TicketAllocation_Client1">
             <End Role="Client" EntitySet="Client" />
@@ -3026,6 +3084,16 @@
             <End Role="Raffle" EntitySet="Raffles" />
             <End Role="ElectronicTicketSale" EntitySet="ElectronicTicketSales" />
           </AssociationSet>
+          <EntitySet Name="TaxReceipts" EntityType="TicketsModel.TaxReceipt" />
+          <EntitySet Name="TaxReceiptNumbers" EntityType="TicketsModel.TaxReceiptNumber" />
+          <AssociationSet Name="FK_TaxReceipt_User" Association="TicketsModel.FK_TaxReceipt_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="TaxReceipt" EntitySet="TaxReceipts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxReceiptNumbers_TaxReceipt" Association="TicketsModel.FK_TaxReceiptNumbers_TaxReceipt">
+            <End Role="TaxReceipt" EntitySet="TaxReceipts" />
+            <End Role="TaxReceiptNumber" EntitySet="TaxReceiptNumbers" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Agency">
           <Key>
@@ -3326,6 +3394,7 @@
           <NavigationProperty Name="ReceiptPayments" Relationship="TicketsModel.FK_ReceiptPayment_Invoice" FromRole="Invoice" ToRole="ReceiptPayment" />
           <NavigationProperty Name="ReceivablePayments" Relationship="TicketsModel.FK_ReceivablePayment_Invoice" FromRole="Invoice" ToRole="ReceivablePayment" />
           <Property Name="DeleteUser" Type="Int32" />
+          <Property Name="TaxReceipt" Type="Int32" />
         </EntityType>
         <EntityType Name="InvoiceDetail">
           <Key>
@@ -3849,6 +3918,7 @@
           <NavigationProperty Name="AwardCertification" Relationship="TicketsModel.FK_AwardCertification_User" FromRole="User" ToRole="AwardCertification" />
           <Property Name="Connected" Type="Int32" />
           <NavigationProperty Name="ElectronicTicketSales" Relationship="TicketsModel.FK_ElectronicTicketSales_User" FromRole="User" ToRole="ElectronicTicketSale" />
+          <NavigationProperty Name="TaxReceipts" Relationship="TicketsModel.FK_TaxReceipt_User" FromRole="User" ToRole="TaxReceipt" />
         </EntityType>
         <EntityType Name="webpages_Membership">
           <Key>
@@ -5264,6 +5334,56 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="TaxReceipt">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Statu" Type="Int32" Nullable="false" />
+          <Property Name="CreateUser" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="Notas" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User" Relationship="TicketsModel.FK_TaxReceipt_User" FromRole="TaxReceipt" ToRole="User" />
+          <NavigationProperty Name="TaxReceiptNumbers" Relationship="TicketsModel.FK_TaxReceiptNumbers_TaxReceipt" FromRole="TaxReceipt" ToRole="TaxReceiptNumber" />
+          <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SequenceFrom" Type="Int32" Nullable="false" />
+          <Property Name="SequenceTo" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaxReceiptNumber">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaxReceiptId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" />
+          <NavigationProperty Name="TaxReceipt" Relationship="TicketsModel.FK_TaxReceiptNumbers_TaxReceipt" FromRole="TaxReceiptNumber" ToRole="TaxReceipt" />
+          <Property Name="Number" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_TaxReceipt_User">
+          <End Type="TicketsModel.User" Role="User" Multiplicity="1" />
+          <End Type="TicketsModel.TaxReceipt" Role="TaxReceipt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxReceipt">
+              <PropertyRef Name="CreateUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxReceiptNumbers_TaxReceipt">
+          <End Type="TicketsModel.TaxReceipt" Role="TaxReceipt" Multiplicity="1" />
+          <End Type="TicketsModel.TaxReceiptNumber" Role="TaxReceiptNumber" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxReceipt">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxReceiptNumber">
+              <PropertyRef Name="TaxReceiptId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5494,6 +5614,7 @@
           <EntitySetMapping Name="Invoices">
             <EntityTypeMapping TypeName="TicketsModel.Invoice">
               <MappingFragment StoreEntitySet="Invoice">
+                <ScalarProperty Name="TaxReceipt" ColumnName="TaxReceipt" />
                 <ScalarProperty Name="DeleteUser" ColumnName="DeleteUser" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />
                 <ScalarProperty Name="InvoiceExpredDay" ColumnName="InvoiceExpredDay" />
@@ -6111,6 +6232,31 @@
                 <ScalarProperty Name="FractionFrom" ColumnName="FractionFrom" />
                 <ScalarProperty Name="RaffleId" ColumnName="RaffleId" />
                 <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaxReceipts">
+            <EntityTypeMapping TypeName="TicketsModel.TaxReceipt">
+              <MappingFragment StoreEntitySet="TaxReceipt">
+                <ScalarProperty Name="SequenceTo" ColumnName="SequenceTo" />
+                <ScalarProperty Name="SequenceFrom" ColumnName="SequenceFrom" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="Notas" ColumnName="Notas" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="Statu" ColumnName="Statu" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaxReceiptNumbers">
+            <EntityTypeMapping TypeName="TicketsModel.TaxReceiptNumber">
+              <MappingFragment StoreEntitySet="TaxReceiptNumbers">
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TaxReceiptId" ColumnName="TaxReceiptId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

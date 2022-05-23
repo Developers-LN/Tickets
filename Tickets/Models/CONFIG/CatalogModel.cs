@@ -144,6 +144,19 @@ namespace Tickets.Models
             };
         }
 
+        internal RequestResponseModel GetAvailableTaxRecipts()
+        {
+            var context = new TicketsEntities();
+            var taxReceipts = context.Catalogs.Where(c => c.Statu == true && c.IdGroup == (int)CatalogGroupEnum.TaxReceiptType).AsEnumerable()
+                .Select(catalog => this.CatalogToObject(catalog)).ToList();
+
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Object = taxReceipts
+            };
+        }
+
         internal RequestResponseModel GetReprintDesing()
         {
             var context = new TicketsEntities();

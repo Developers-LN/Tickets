@@ -331,7 +331,7 @@ namespace Tickets.Controllers
                         var allocation = context.TicketAllocations.FirstOrDefault(i => i.Id == id);
                         //var raffle = context.Raffles.Where(r => r.Id == allocation.RaffleId).FirstOrDefault();
                         //var ClientControlNumber = context.Clients.Where(c => c.Id == allocation.ClientId).Select(c => c.ControlNumber).FirstOrDefault();
-                        var Production = allocation.Raffle.Prospect.Production.ToString().Length - 1;
+                        var Production = allocation.Raffle.Prospect.Production.ToString().Length;
 
                         var allocationXML = new Models.XML.TicketAllocateXML();
 

@@ -40,6 +40,7 @@ namespace Tickets.Models
             this.webpages_Roles = new HashSet<webpages_Roles>();
             this.AwardCertification = new HashSet<AwardCertification>();
             this.ElectronicTicketSales = new HashSet<ElectronicTicketSale>();
+            this.TaxReceipts = new HashSet<TaxReceipt>();
         }
     
         public int Id { get; set; }
@@ -74,5 +75,6 @@ namespace Tickets.Models
         public virtual ICollection<webpages_Roles> webpages_Roles { get; set; }
         public virtual ICollection<AwardCertification> AwardCertification { get; set; }
         public virtual ICollection<ElectronicTicketSale> ElectronicTicketSales { get; set; }
+        public virtual ICollection<TaxReceipt> TaxReceipts { get; set; }
     }
 }

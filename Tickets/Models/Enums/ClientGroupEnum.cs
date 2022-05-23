@@ -5,6 +5,7 @@
         Mayorista = 36,
         DistribuidorElectronico = 5859,
         CajasOficinaPrincipal = 38,
-        CajaDespachoExpress = 5862
+        CajaDespachoExpress = 5862,
+        Empreados = 40
     }
 }

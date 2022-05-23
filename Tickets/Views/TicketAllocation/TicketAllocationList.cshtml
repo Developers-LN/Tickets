@@ -59,7 +59,8 @@
                                     <a href="/#/ticket/allocationDetails/{{allocation.id}}" title="Ver Detalle de asignación" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
                                     @*<a ng-click="sentAllocationToPrint(allocation)" ng-if="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Created) && allocation.canAllocate == true" title="Imprimir Billetes" class="{{moduleCanView}}"><i class="fa fa-external-link"></i></a>*@
                                     @*<a href="/#/ticket/reassign/{{allocation.id}}" ng-if="allocation.statuId != @((int)Tickets.Models.Enums.AllocationStatuEnum.Invoiced) && allocation.canAllocate == true" title="Transferir asignación" class="{{moduleCanView}}"><i class="fa fa-user"></i></a>*@
-                                    <a target="_blank" ng-click="uploadAllocation(allocation.id)" ng-if="allocation.grupo == @((int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)" title="Cargar asignación"><i class="fa fa-cloud-upload"></i></a>
+                                    @*<a target="_blank" ng-click="uploadAllocation(allocation.id)" ng-if="allocation.grupo == @((int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)" title="Cargar asignación"><i class="fa fa-cloud-upload"></i></a>*@
+                                    <a ng-click="xmlAllocationNumberDownload(allocation.id)" ng-if="allocation.grupo == @((int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)" target="_blank" title="Descargar XML de la Asignación"><i class="fa fa-cloud-download"></i></a>
                                 </td>
                             </tr>
                         </tbody>

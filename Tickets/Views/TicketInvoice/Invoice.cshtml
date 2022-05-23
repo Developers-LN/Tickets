@@ -69,12 +69,27 @@
                                 </div>
                             </div>
                         </fieldset>
+                    </div>
+                    <div class="col-lg-6 no-padder">
                         <fieldset ng-show="invoice.condition == @((int)Tickets.Models.Enums.InvoiceConditionEnum.Credit)">
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Dias de expiración:  <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
                                     <select ng-required="true" class="form-control" ng-model="invoice.invoiceExpredDay">
                                         <option ng-repeat="xpireInvoiceTime in xpireInvoiceTimes" value="{{xpireInvoiceTime.description}}" ng-selected="xpireInvoiceTime.description == invoice.invoiceExpredDay">{{xpireInvoiceTime.nameDetail}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Tipo de comprobante fiscal:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12" ng-if="invoice.id == 0">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="invoice.taxReceipt">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un tipo de comprobante fiscal</option>
+                                        <option ng-repeat="taxRecepit in taxReceiptList" value="{{taxRecepit.id}}">{{taxRecepit.nameDetail}}</option>
                                     </select>
                                 </div>
                             </div>

@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "Lista de comprobantes fiscales";
+    Layout = null;
+}
+
+<div class="col-lg-12 no-padder" ng-controller="TaxReceiptListController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-6 text-left m-b-xs no-padder"></div>
+                <div class="col-lg-6 text-right m-b-xs no-padder">
+                    <a href="#/taxReceipt/taxReceipt" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Agregar comprobantes fiscales</a>
+                </div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Tipo de <br /> comprobante</th>
+                                <th class="text-center">Fecha de <br /> creación</th>
+                                <th class="text-center">Fecha de <br /> caducidad</th>
+                                <th class="text-center">Secuencia</th>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-center">Disponibles</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="taxReceipt in taxReceiptList">
+                                <td class="text-center">{{taxReceipt.type}}</td>
+                                <td class="text-center">{{taxReceipt.CreateDate}}</td>
+                                <td class="text-center">{{taxReceipt.DueDate}}</td>
+                                <td class="text-center">{{taxReceipt.from}} - {{taxReceipt.to}}</td>
+                                <td class="text-center">{{taxReceipt.total}}</td>
+                                <td class="text-center">{{taxReceipt.available}}</td>
+                                <td class="text-center">{{taxReceipt.statu}}</td>
+                                @*<td><a href="#/cash/noteCredit/{{taxReceipt.Id}}/0" class="{{moduleCanEdit}}"><i class="fa fa-pencil"></i></a></td>*@
+                                <td class="text-center">
+                                    <a target="_blank" href="~/Reports/NoteCreditDetail?noteCreditId={{taxReceipt.Id}}" title="Imprimir Detalle de Factura">
+                                        <i class="fa fa-print"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg">
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

@@ -213,9 +213,16 @@
                             </a>
                         </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.cashAdvance')">
-                            <a ui-sref="app.cashAdvance" title="Avance de efectivo">
+                            <a ui-sref="app.cashAdvance" title="Avances de efectivo">
                                 <em class="sidebar-item-icon"></em>
-                                <span>Avance de efectivo</span>
+                                <span>Avances de efectivo</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.taxReceiptList')">
+                            <a ui-sref="app.taxReceiptList" title="Comprobantes fiscales">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Comprobantes fiscales</span>
                                 <span class="ripple"></span>
                             </a>
                         </li>
@@ -248,19 +255,19 @@
                             </a>
                         </li>
                         @*<li ui-sref-active="active" ng-show="verifyCanView('app.reprintWorkflows')">
-                            <a ui-sref="app.reprintWorkflows" title="Aprobación de reimpresión de billetes">
-                                <em class="sidebar-item-icon"></em>
-                                <span>Aprobación de reimpresión</span>
-                                <span class="ripple"></span>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active" ng-show="verifyCanView('app.reprintTicketRepornt')">
-                            <a ui-sref="app.reprintTicketRepornt" title="Reimpresion de billetes">
-                                <em class="sidebar-item-icon"></em>
-                                <span>Reimpresión</span>
-                                <span class="ripple"></span>
-                            </a>
-                        </li>*@
+            <a ui-sref="app.reprintWorkflows" title="Aprobación de reimpresión de billetes">
+                <em class="sidebar-item-icon"></em>
+                <span>Aprobación de reimpresión</span>
+                <span class="ripple"></span>
+            </a>
+        </li>
+        <li ui-sref-active="active" ng-show="verifyCanView('app.reprintTicketRepornt')">
+            <a ui-sref="app.reprintTicketRepornt" title="Reimpresion de billetes">
+                <em class="sidebar-item-icon"></em>
+                <span>Reimpresión</span>
+                <span class="ripple"></span>
+            </a>
+        </li>*@
                     </ul>
                 </li>
 

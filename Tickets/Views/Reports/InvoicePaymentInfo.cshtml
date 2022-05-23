@@ -54,7 +54,7 @@
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-12 no-padder text-center" style="margin-top: 35px;">
-            <img src="~/Images/logo.png" />
+            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b>
@@ -66,33 +66,62 @@
             <b>RECIBO DE PAGO DEL SORTEO NO.@Model.Invoice.Raffle.Id DE FECHA @Model.Invoice.Raffle.DateSolteo.ToShortDateString()</b>
         </div>
         <div class="col-lg-6 no-padder">
-            <div class="col-lg-12 no-padder text-left">
-                <b>Ventanilla: </b> #@Model.Client.Id - @Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
-            </div>
-            <div class="col-lg-12 no-padder text-left">
-                <b>Comprador: </b> @Model.Nombre
-            </div>
-            <div class="col-lg-12 no-padder text-left">
-                <b>Cédula: </b> @Model.Cedula
-            </div>
-            <div class="col-lg-12 no-padder text-left">
-                <b>Teléfono: </b> @Model.Telefono
-            </div>
+            @if (Model.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)
+            {
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Ventanilla: </b> #@Model.Client.Id - @Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+                </div>
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Comprador: </b> @Model.Nombre
+                </div>
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Cédula: </b> @Model.Cedula
+                </div>
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Teléfono: </b> @Model.Telefono
+                </div>
+            }
+            else
+            {
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Cliente: </b> #@Model.Client.Id - @Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+                </div>
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Factura: </b> #@Model.InvoiceId
+                </div>
+            }
         </div>
-        <div class="col-lg-6 no-padder text-right">
-            <div class="col-lg-12 no-padder text-right">
-                <b>Factura: </b> #@Model.InvoiceId
+        @if (Model.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)
+        {
+            <div class="col-lg-6 no-padder text-right">
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Factura: </b> #@Model.InvoiceId
+                </div>
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Recibo: </b>#@Model.Id
+                </div>
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+                </div>
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+                </div>
             </div>
-            <div class="col-lg-12 no-padder text-right">
-                <b>Recibo: </b>#@Model.Id
+        }
+        else
+        {
+            <div class="col-lg-6 no-padder text-right">
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Recibo: </b>#@Model.Id
+                </div>
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+                </div>
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+                </div>
             </div>
-            <div class="col-lg-12 no-padder text-right">
-                <b>Fecha: </b> @DateTime.Now.ToShortDateString()
-            </div>
-            <div class="col-lg-12 no-padder text-right">
-                <b>Hora: </b> @DateTime.Now.ToShortTimeString()
-            </div>
-        </div>
+        }
     </div>
     <div class="col-lg-12 no-padder">
         <table class="table">
@@ -119,9 +148,18 @@
                             @Model.Recibo
                         </td>
                     }
-                    <td class="text-center">
-                        @Model.Observaciones
-                    </td>
+                    @if (Model.Notas != null)
+                    {
+                        <td class="text-center">
+                            @Model.Notas
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-center">
+                            @Model.Observaciones
+                        </td>
+                    }
                     <td class="text-center">
                         @Model.CreateDate
                     </td>
@@ -145,6 +183,10 @@
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
                         {
                             @(context.NoteCreditReceiptPayments.FirstOrDefault(f=>f.ReceiptPaymentId == Model.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoNomina)
+                        {
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                     </td>
                 </tr>
@@ -183,7 +225,7 @@
 <div class="col-lg-12" style="margin-top:50px;">
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-12 no-padder text-center" style="margin-top: 35px;">
-            <img src="~/Images/logo.png" />
+            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b>
@@ -248,9 +290,18 @@
                             @Model.Recibo
                         </td>
                     }
-                    <td class="text-center">
-                        @Model.Observaciones
-                    </td>
+                    @if (Model.Notas != null)
+                    {
+                        <td class="text-center">
+                            @Model.Notas
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-center">
+                            @Model.Observaciones
+                        </td>
+                    }
                     <td class="text-center">
                         @Model.CreateDate
                     </td>
@@ -274,6 +325,10 @@
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
                         {
                             @(context.NoteCreditReceiptPayments.FirstOrDefault(f=>f.ReceiptPaymentId == Model.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoNomina)
+                        {
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                     </td>
                 </tr>

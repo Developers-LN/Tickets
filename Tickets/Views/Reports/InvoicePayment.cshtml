@@ -54,7 +54,7 @@
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
-            <img src="~/Images/logo.png" />
+            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b>
@@ -140,6 +140,10 @@
                         {
                             @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoNomina)
+                        {
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
                     </td>
                 </tr>
             </tbody>
@@ -176,7 +180,7 @@
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
-            <img src="~/Images/logo.png" />
+            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b>
@@ -258,6 +262,10 @@
                             @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                        {
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoNomina)
                         {
                             @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }

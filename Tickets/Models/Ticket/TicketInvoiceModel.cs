@@ -38,6 +38,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "condition")]
         public int Condition { get; set; }
 
+        [JsonProperty(PropertyName = "taxReceipt")]
+        public int TaxReceipt { get; set; }
+
         [JsonProperty(PropertyName = "conditionDesc")]
         public string ConditionDesc { get; set; }
 
@@ -358,10 +361,15 @@ namespace Tickets.Models.Ticket
                                 return new RequestResponseModel()
                                 {
                                     Result = false,
-                                    Message = "El cliente Agoto el limite de credito."
+                                    Message = "El cliente agoto el limite de credito."
                                 };
                             }
                             var user = context.Users.Where(u => u.Id == WebSecurity.CurrentUserId).FirstOrDefault();
+
+                            int? taxReceiptNumber = context.TaxReceipts
+                                .Where(w => w.DueDate >= DateTime.Now && w.Statu == (int)TaxReceiptStatuEnum.Activo && w.Type == model.TaxReceipt)
+                                .Select(f => f.TaxReceiptNumbers.Where(w2 => w2.Status == (int)TaxReceiptNumberStatuEnum.Disponible)
+                                .Select(f2 => f2.Id).FirstOrDefault()).FirstOrDefault();
 
                             invoice = new Invoice()
                             {
@@ -376,7 +384,8 @@ namespace Tickets.Models.Ticket
                                 Statu = (int)GeneralStatusEnum.Active,
                                 OutstandingBalance = 0.0M,
                                 CreateUser = WebSecurity.CurrentUserId,
-                                CreateDate = DateTime.Now
+                                CreateDate = DateTime.Now,
+                                TaxReceipt = taxReceiptNumber.Value
                             };
                             if (model.Condition == (int)InvoiceConditionEnum.Credit)
                             {
@@ -385,6 +394,23 @@ namespace Tickets.Models.Ticket
                             else
                             {
                                 invoice.PaymentStatu = (int)InvoicePaymentStatuEnum.Payed;
+                            }
+
+                            if (taxReceiptNumber.Value != 0 || taxReceiptNumber != 0 || taxReceiptNumber > 1 || taxReceiptNumber.Value > 1)
+                            {
+                                var lasTaxReceiptNumber = context.TaxReceiptNumbers.Where(w => w.Id == taxReceiptNumber).FirstOrDefault();
+                                lasTaxReceiptNumber.Status = (int)TaxReceiptNumberStatuEnum.Ocupado;
+
+                                var taxReceiptOut = context.TaxReceipts.Where(w => w.Id == lasTaxReceiptNumber.TaxReceiptId).FirstOrDefault();
+
+                                if (context.TaxReceiptNumbers.Where(w => w.TaxReceiptId == taxReceiptOut.Id).Any(a => a.Status == (int)TaxReceiptNumberStatuEnum.Disponible) == false)
+                                {
+                                    taxReceiptOut.Statu = (int)TaxReceiptStatuEnum.Agotado;
+                                }
+                                if (context.TaxReceipts.Where(w => w.Id == lasTaxReceiptNumber.TaxReceiptId && w.DueDate < DateTime.Now).Any() == true)
+                                {
+                                    taxReceiptOut.Statu = (int)TaxReceiptStatuEnum.Caducado;
+                                }
                             }
 
                             context.Invoices.Add(invoice);

@@ -671,6 +671,10 @@
                 url: '/cash/CashAdvances',
                 templateUrl: Route.base('Cash/CashAdvanceList')
             })
+            .state('app.taxReceiptList', {
+                url: '/taxReceipt/taxReceiptList',
+                templateUrl: Route.base('TaxReceipt/TaxReceiptList')
+            })
             .state('app.cashNoteCreditCreate', {
                 url: '/cash/noteCredit/:noteCreditId/:raffleAwardId',
                 templateUrl: Route.base('Cash/CreditNote')
@@ -678,6 +682,10 @@
             .state('app.cashAdvanceCreate', {
                 url: '/cash/cashAdvance/:noteCreditId/:raffleAwardId',
                 templateUrl: Route.base('Cash/CashAdvance')
+            })
+            .state('app.taxReceiptCreate', {
+                url: '/taxReceipt/taxReceipt',
+                templateUrl: Route.base('TaxReceipt/TaxReceipt')
             })
             .state('app.previousDebt', {
                 url: '/cash/previousDebt',
