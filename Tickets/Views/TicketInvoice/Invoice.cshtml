@@ -92,6 +92,9 @@
                                         <option ng-repeat="taxRecepit in taxReceiptList" value="{{taxRecepit.id}}">{{taxRecepit.nameDetail}}</option>
                                     </select>
                                 </div>
+                                <div class="col-lg-12" ng-if="invoice.id > 0">
+                                    <h4><span class="label label-info">{{invoice.taxReceiptName}}</span></h4>
+                                </div>
                             </div>
                         </fieldset>
                     </div>

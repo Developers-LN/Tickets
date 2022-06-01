@@ -2,7 +2,7 @@
  * Module: RaffleCreateController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -18,7 +18,7 @@
                 $.ajax($rootScope.serverUrl + 'ticket/raffleApi/getRaffle?id=' + $stateParams.raffleId),
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getRaffleStatuSelect'),
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getRaffleCommoditySelect'),
-                $.ajax($rootScope.serverUrl + 'ticket/prospectApi/getTicketProspectSelect?statu=' + 23/*Aprobado*/ ),
+                $.ajax($rootScope.serverUrl + 'ticket/prospectApi/getTicketProspectSelect?statu=' + 23/*Aprobado*/),
                 $.ajax($rootScope.serverUrl + 'ticket/prospectApi/getPoolsProspectSelect?statu=' + 23/*Aprobado*/)
             ).then(function (raffleResponse, statuResponse, commodityResponse, ticketProspectResponse, poolProspectResponse) {
                 window.loading.hide();
@@ -62,14 +62,14 @@
         }
 
         $scope.changeRaffleDate = function () {
-            try{
+            try {
                 var date = $scope.raffle.raffleDate;
 
                 var maxdate = new Date(date);
                 maxdate.setDate(date.getDate());
                 maxdate.setHours(23);
                 $scope.maxReturnedDate = maxdate;
-            }catch(e){
+            } catch (e) {
                 $scope.maxReturnedDate = new Date();
             }
         }
@@ -77,12 +77,12 @@
         $scope.prospectChange = function () {
             $scope.ticketProspects.forEach(function (prospect) {
                 if (prospect.value == $scope.raffle.ticketProspectId) {
-                    $scope.expirateDate = new Date( prospect.expirateDate);
+                    $scope.expirateDate = new Date(prospect.expirateDate);
                 }
             });
         }
 
-        this.validate = function(raffle) {
+        this.validate = function (raffle) {
             var error = '', isReq = ' es un campo requerido. <br>';
             if (raffle.name == undefined) {
                 error += 'Nombre' + isReq;
@@ -93,7 +93,7 @@
             if (raffle.ticketProspectId == undefined || raffle.ticketProspectId <= 0) {
                 error += 'Prospecto de billetes' + isReq;
             }
-            if (raffle.commodityId == undefined || raffle.commodityId  <= 0) {
+            if (raffle.commodityId == undefined || raffle.commodityId <= 0) {
                 error += 'Mercanc&iacute;a' + isReq;
             }
             if (raffle.startReturnDate == undefined) {
@@ -105,7 +105,7 @@
             if (raffle.endAllocationDate == undefined) {
                 error += 'Fecha fin de asignaci&oacute;n' + isReq;
             }
-            if (raffle.statu == undefined || raffle.statu  <= 0) {
+            if (raffle.statu == undefined || raffle.statu <= 0) {
                 error += 'Status' + isReq;
             }
             if (error !== '') {
@@ -126,7 +126,6 @@
                 } else {
                     $scope.raffle.endReturnDate = $rootScope.parseDate($scope.raffle.endDate, $scope.raffle.endTime).toJSON();
                 }
-                
                 if ($scope.raffle.raffleDate === undefined) {
                     $scope.raffle.raffleDate = undefined;
                 } else {

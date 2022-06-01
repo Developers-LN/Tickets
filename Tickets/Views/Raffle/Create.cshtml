@@ -1,6 +1,6 @@
 @{
     Layout = null;
-    ViewBag.Title = "Creación de Sorteo";
+    ViewBag.Title = "Creación de sorteo";
 
     var context = new Tickets.Models.TicketsEntities();
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
@@ -37,8 +37,8 @@
                     <form name="test">
                         <fieldset>
                             <div class="form-group">
-                                <label class="col-lg-12 control-label-left">Fecha del sorteo: <span class="color-red">*</span></label>
-                                <div class="{{test.raffleDate.$error.max ? 'col-lg-6' : 'col-lg-12'}}">
+                                <div class="{{test.raffleDate.$error.max ? 'col-lg-6' : 'col-lg-12'}} col-lg-6">
+                                    <label class="control-label-left">Fecha del sorteo: <span class="color-red">*</span></label>
                                     <input type="date"
                                            ng-change="changeRaffleDate()"
                                            ng-model="raffle.raffleDate"
@@ -50,14 +50,21 @@
                                 <div class="col-lg-6 alert alert-warning" ng-if='test.raffleDate.$error.max'>
                                     La fecha del sorteo no puede ser mayor a la fecha de expiración del prospecto ( {{(expirateDate | date:"dd/MM/yyyy")}} )
                                 </div>
+                                <div class="col-lg-6">
+                                    <label class="control-label-left">Hora de fin de venta electrónica: <span class="color-red">*</span></label>
+                                    <input type="time"
+                                           ng-model="raffle.raffleDate"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
                             </div>
                         </fieldset>
                     </form>
                     <fieldset>
                         <div class="form-group">
-                            <label class="col-lg-12 control-label-left">Fecha de inicio de devolución: <span class="color-red">*</span></label>
                             <div class="col-lg-12 no-padder">
                                 <div class="col-lg-6">
+                                    <label class="control-label-left">Fecha de inicio de devolución: <span class="color-red">*</span></label>
                                     <input type="date"
                                            ng-model="raffle.startDate"
                                            ng-max="raffle.endDate"
@@ -65,6 +72,7 @@
                                            ng-required="true" />
                                 </div>
                                 <div class="col-lg-6">
+                                    <label class="control-label-left">Hora de inicio de devolución: <span class="color-red">*</span></label>
                                     <input type="time"
                                            ng-model="raffle.startTime"
                                            class="form-control input-sm"
@@ -75,9 +83,9 @@
                     </fieldset>
                     <fieldset>
                         <div class="form-group">
-                            <label class="col-lg-12 control-label-left">Fecha fin de devolución: <span class="color-red">*</span></label>
                             <div class="col-lg-12 no-padder">
                                 <div class="col-lg-6">
+                                    <label class="control-label-left">Fecha fin de devolución: <span class="color-red">*</span></label>
                                     <input type="date"
                                            ng-model="raffle.endDate"
                                            class="form-control input-sm"
@@ -86,6 +94,7 @@
                                            ng-max="maxReturnedDate" />
                                 </div>
                                 <div class="col-lg-6">
+                                    <label class="control-label-left">Hora fin de devolución: <span class="color-red">*</span></label>
                                     <input type="time"
                                            ng-model="raffle.endTime"
                                            class="form-control input-sm"
@@ -109,9 +118,9 @@
                     </fieldset>
                     <fieldset>
                         <div class="form-group">
-                            <label class="col-lg-12 control-label-left">Fecha fin de asignación: <span class="color-red">*</span></label>
                             <div class="col-lg-12 no-padder">
                                 <div class="col-lg-6">
+                                    <label class="control-label-left">Fecha fin de asignación: <span class="color-red">*</span></label>
                                     <input type="date"
                                            ng-model="raffle.endAllocationDateOnly"
                                            class="form-control input-sm"
@@ -119,6 +128,7 @@
                                            ng-max="maxReturnedDate" />
                                 </div>
                                 <div class="col-lg-6">
+                                    <label class="control-label-left">Hora fin de asignación: <span class="color-red">*</span></label>
                                     <input type="time"
                                            ng-model="raffle.endAllocationTime"
                                            class="form-control input-sm"

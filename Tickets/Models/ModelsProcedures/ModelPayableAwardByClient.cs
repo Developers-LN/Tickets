@@ -12,6 +12,7 @@
         public string NameAward { get; set; }
         public decimal Value { get; set; }
         public int Fracciones { get; set; }
+        public int RaffleAwardId { get; set; }
         public decimal ValorPagar { get; set; }
     }
 }

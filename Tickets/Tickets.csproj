@@ -362,6 +362,7 @@
     <Compile Include="Models\Enums\AwardCertificationStatuEnum.cs" />
     <Compile Include="Models\Enums\TaxReceiptNumberStatuEnum.cs" />
     <Compile Include="Models\Enums\TaxReceiptStatuEnum.cs" />
+    <Compile Include="Models\Enums\TaxReceiptTypeEnum.cs" />
     <Compile Include="Models\Enums\UserRolEnum.cs" />
     <Compile Include="Models\GenericErrorResponse.cs" />
     <Compile Include="Models\IdentifyBach.cs">
@@ -438,6 +439,9 @@
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Prospect.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProspectFraction.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Prospect_Price.cs">

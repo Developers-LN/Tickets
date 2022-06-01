@@ -168,6 +168,8 @@
         <EntityTypeShape EntityType="TicketsModel.TaxReceiptNumber" Width="1.5" PointX="10.5" PointY="25.875" />
         <AssociationConnector Association="TicketsModel.FK_TaxReceipt_User" />
         <AssociationConnector Association="TicketsModel.FK_TaxReceiptNumbers_TaxReceipt" />
+        <EntityTypeShape EntityType="TicketsModel.ProspectFraction" Width="1.5" PointX="11.25" PointY="31" />
+        <AssociationConnector Association="TicketsModel.FK_ProspectFractions_Prospect" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

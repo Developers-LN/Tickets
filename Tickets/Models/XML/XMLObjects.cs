@@ -66,6 +66,8 @@ namespace Tickets.Models.XML
         public int IdNumber { get; set; }
         public int FractionFrom { get; set; }
         public int FractionTo { get; set; }
+        public int AvailableFractions { get; set; }
+        public decimal TotalToPay { get; set; }
         public List<Award> Awards { get; set; }
     }
 

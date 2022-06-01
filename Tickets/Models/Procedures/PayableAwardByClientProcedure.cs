@@ -15,7 +15,7 @@ namespace Tickets.Models.Procedures
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
-                SqlCommand sqlCommand = new SqlCommand("PayableAwardByClient", sqlConnection);
+                SqlCommand sqlCommand = new SqlCommand("AllPayableAward", sqlConnection);
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@Raffle", raffle);
                 sqlConnection.Open();
@@ -33,6 +33,7 @@ namespace Tickets.Models.Procedures
                             ClientId = Convert.ToInt32(sqlDataReader["ClientId"].ToString()),
                             RaffleId = raffle,
                             NameAward = sqlDataReader["name"].ToString(),
+                            RaffleAwardId = Convert.ToInt32(sqlDataReader["RaffleAwardId"].ToString()),
                             Fracciones = Convert.ToInt32(sqlDataReader["fracciones"].ToString()),
                             ValorPagar = Convert.ToDecimal(sqlDataReader["valorapagar"].ToString()),
                             Value = Convert.ToDecimal(sqlDataReader["value"].ToString()),
@@ -51,6 +52,7 @@ namespace Tickets.Models.Procedures
                         ClientId = 0,
                         RaffleId = raffle,
                         NameAward = "N/A",
+                        RaffleAwardId = 0,
                         Fracciones = 0,
                         ValorPagar = 0,
                         Value = 0,

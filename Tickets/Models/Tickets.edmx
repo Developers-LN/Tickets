@@ -428,6 +428,16 @@
           <Property Name="SeriePrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="FactionPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ProspectFractions">
+          <Key>
+            <PropertyRef Name="ProspectId" />
+            <PropertyRef Name="Fraction" />
+          </Key>
+          <Property Name="ProspectId" Type="int" Nullable="false" />
+          <Property Name="Fraction" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Province">
           <Key>
             <PropertyRef Name="Id" />
@@ -1559,6 +1569,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ProspectFractions_Prospect">
+          <End Role="Prospect" Type="Self.Prospect" Multiplicity="1" />
+          <End Role="ProspectFractions" Type="Self.ProspectFractions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Prospect">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProspectFractions">
+              <PropertyRef Name="ProspectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RaffleAward_Award">
           <End Role="Award" Type="Self.Award" Multiplicity="1" />
           <End Role="RaffleAward" Type="Self.RaffleAward" Multiplicity="*" />
@@ -2170,6 +2192,12 @@
           <EntitySet Name="WorkflowProccess" EntityType="Self.WorkflowProccess" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WorkflowType" EntityType="Self.WorkflowType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WorkflowType_User" EntityType="Self.WorkflowType_User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProspectFractions" EntityType="Self.ProspectFractions" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[ProspectFractions].[ProspectId] AS [ProspectId], 
+[ProspectFractions].[Fraction] AS [Fraction]
+FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK__OverduelB__Agenc__6CC31A31" Association="Self.FK__OverduelB__Agenc__6CC31A31">
             <End Role="Agency" EntitySet="Agency" />
             <End Role="OverduelBill" EntitySet="OverduelBill" />
@@ -2409,6 +2437,10 @@
           <AssociationSet Name="FK_Prospect_Price_Prospect" Association="Self.FK_Prospect_Price_Prospect">
             <End Role="Prospect" EntitySet="Prospect" />
             <End Role="Prospect_Price" EntitySet="Prospect_Price" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProspectFractions_Prospect" Association="Self.FK_ProspectFractions_Prospect">
+            <End Role="Prospect" EntitySet="Prospect" />
+            <End Role="ProspectFractions" EntitySet="ProspectFractions" />
           </AssociationSet>
           <AssociationSet Name="FK_RaffleAward_Award" Association="Self.FK_RaffleAward_Award">
             <End Role="Award" EntitySet="Award" />
@@ -3094,6 +3126,11 @@
             <End Role="TaxReceipt" EntitySet="TaxReceipts" />
             <End Role="TaxReceiptNumber" EntitySet="TaxReceiptNumbers" />
           </AssociationSet>
+          <EntitySet Name="ProspectFractions" EntityType="TicketsModel.ProspectFraction" />
+          <AssociationSet Name="FK_ProspectFractions_Prospect" Association="TicketsModel.FK_ProspectFractions_Prospect">
+            <End Role="Prospect" EntitySet="Prospects" />
+            <End Role="ProspectFraction" EntitySet="ProspectFractions" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Agency">
           <Key>
@@ -3553,6 +3590,7 @@
           <NavigationProperty Name="Prospect_Price" Relationship="TicketsModel.FK_Prospect_Price_Prospect" FromRole="Prospect" ToRole="Prospect_Price" />
           <NavigationProperty Name="Raffles" Relationship="TicketsModel.FK_Solteo_Prospect" FromRole="Prospect" ToRole="Raffle" />
           <Property Name="PercentageWinners" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="ProspectFractions" Relationship="TicketsModel.FK_ProspectFractions_Prospect" FromRole="Prospect" ToRole="ProspectFraction" />
         </EntityType>
         <EntityType Name="Prospect_Price">
           <Key>
@@ -5384,6 +5422,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ProspectFraction">
+          <Key>
+            <PropertyRef Name="ProspectId" />
+            <PropertyRef Name="Fraction" />
+          </Key>
+          <Property Name="ProspectId" Type="Int32" Nullable="false" />
+          <Property Name="Fraction" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Prospect" Relationship="TicketsModel.FK_ProspectFractions_Prospect" FromRole="ProspectFraction" ToRole="Prospect" />
+        </EntityType>
+        <Association Name="FK_ProspectFractions_Prospect">
+          <End Type="TicketsModel.Prospect" Role="Prospect" Multiplicity="1" />
+          <End Type="TicketsModel.ProspectFraction" Role="ProspectFraction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Prospect">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProspectFraction">
+              <PropertyRef Name="ProspectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -6258,6 +6317,14 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="TaxReceiptId" ColumnName="TaxReceiptId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProspectFractions">
+            <EntityTypeMapping TypeName="TicketsModel.ProspectFraction">
+              <MappingFragment StoreEntitySet="ProspectFractions">
+                <ScalarProperty Name="Fraction" ColumnName="Fraction" />
+                <ScalarProperty Name="ProspectId" ColumnName="ProspectId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

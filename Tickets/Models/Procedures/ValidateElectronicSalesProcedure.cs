@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 using Tickets.Models.ModelsProcedures;
 
 namespace Tickets.Models.Procedures
@@ -11,7 +9,7 @@ namespace Tickets.Models.Procedures
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable <ValidateElectronicSale> ValidateElectronicSales(int AllocationId, int CreateUser)
+        public IEnumerable<ValidateElectronicSale> ValidateElectronicSales(int AllocationId, int CreateUser)
         {
             var resultado = new List<ValidateElectronicSale>();
 

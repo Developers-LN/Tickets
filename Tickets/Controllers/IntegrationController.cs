@@ -45,10 +45,11 @@ namespace Tickets.Controllers
 
                 workSheet.Cell(curretRow, 1).Value = "Billete";
                 workSheet.Cell(curretRow, 2).Value = "Estatus_De_Pago";
-                workSheet.Cell(curretRow, 3).Value = "Fracciones";
-                workSheet.Cell(curretRow, 4).Value = "Tipo_De_Premio";
-                workSheet.Cell(curretRow, 5).Value = "Monto_Del_Premio";
-                workSheet.Cell(curretRow, 6).Value = "Monto_A_Pagar";
+                workSheet.Cell(curretRow, 3).Value = "Cliente";
+                workSheet.Cell(curretRow, 4).Value = "Fracciones";
+                workSheet.Cell(curretRow, 5).Value = "Tipo_De_Premio";
+                workSheet.Cell(curretRow, 6).Value = "Monto_Del_Premio";
+                workSheet.Cell(curretRow, 7).Value = "Monto_A_Pagar";
 
                 var IdentifyTickets = context.IdentifyBaches.Where(w => w.RaffleId == raffleId).Select(s => new { s.IdentifyNumbers }).ToList();
 
@@ -65,18 +66,19 @@ namespace Tickets.Controllers
                     {
                         workSheet.Cell(curretRow, 2).Value = "Pendiente";
                     }
-                    workSheet.Cell(curretRow, 3).Value = item.fracciones;
-                    workSheet.Cell(curretRow, 4).Value = item.nameaward;
-                    workSheet.Cell(curretRow, 5).Value = item.value;
-                    workSheet.Cell(curretRow, 6).Value = item.valorpagar;
+                    workSheet.Cell(curretRow, 3).Value = item.Id_Name;
+                    workSheet.Cell(curretRow, 4).Value = item.fracciones;
+                    workSheet.Cell(curretRow, 5).Value = item.nameaward;
+                    workSheet.Cell(curretRow, 6).Value = item.value;
+                    workSheet.Cell(curretRow, 7).Value = item.valorpagar;
                 }
 
                 var range = workSheet.RangeUsed();
                 var table = range.CreateTable();
                 table.Theme = XLTableTheme.TableStyleLight9;
                 workSheet.Columns().AdjustToContents();
-                workSheet.Column(5).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(6).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(7).Style.NumberFormat.Format = "$ #,##0.00";
 
                 using (var stream = new MemoryStream())
                 {
@@ -225,24 +227,26 @@ namespace Tickets.Controllers
                             TicketNumbers = new List<Models.XML.TicketNumber>()
                         };
                         var FractionTo = raffleData.Prospect.LeafFraction * raffleData.Prospect.LeafNumber;
+
                         (from a in raffleData.RaffleAwards.Where(w => PremiosCliente.Contains((int)w.ControlNumber)).ToList()
                          select new
                          {
-                             TicketNumber = Utils.AddZeroToNumber((raffleData.Prospect.Production - 1).ToString().Length, (int)a.ControlNumber),
+                             TicketNumber = Utils.AddZeroToNumber((raffleData.Prospect.Production).ToString().Length, (int)a.ControlNumber),
                              Allocation = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).TaId,
                              IdNumber = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).TanId,
                              FractionFrom = 1,
                              FractionTo,
                              AvailableFractions = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).Fracciones,
-                             Award = new
+                             TotalToPay = DataPremios.Where(w => w.Number == a.ControlNumber).Sum(s => s.Value),
+                             /*Award = new
                              {
                                  AwardId = a.Id,
                                  AwardName = a.Award.Name,
                                  AwardFractionPrice = (a.Award.Value / (raffleData.Prospect.LeafFraction * raffleData.Prospect.LeafNumber)),
                                  AwardPrice = a.Award.Value,
-                                 ValueToPay = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).ValorPagar,
+                                 ValueToPay = DataPremios.FirstOrDefault(f => f.RaffleAwardId == a.Id).ValorPagar,
                                  AvailableFractions = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).Fracciones
-                             }
+                             }*/
                          }).GroupBy(r => r.TicketNumber).ToList().ForEach(r => awardNumbesXML.TicketNumbers.Add(new Models.XML.TicketNumber()
                          {
                              TiketNumber = r.FirstOrDefault().TicketNumber,
@@ -250,7 +254,9 @@ namespace Tickets.Controllers
                              IdNumber = r.FirstOrDefault().IdNumber,
                              FractionFrom = r.FirstOrDefault().FractionFrom,
                              FractionTo = r.FirstOrDefault().FractionTo,
-                             Awards = r.Select(a => new Models.XML.Award()
+                             AvailableFractions = r.FirstOrDefault().AvailableFractions,
+                             TotalToPay = r.FirstOrDefault().TotalToPay
+                             /*Awards = r.Select(a => new Models.XML.Award()
                              {
                                  AwardId = a.Award.AwardId,
                                  AwardName = a.Award.AwardName,
@@ -258,7 +264,7 @@ namespace Tickets.Controllers
                                  AwardPerFraction = a.Award.AwardFractionPrice,
                                  AvailableFractions = a.AvailableFractions,
                                  AwardToPay = a.Award.ValueToPay
-                             }).ToList()
+                             }).ToList()*/
                          }));
 
                         XmlDocument xmlDoc = new XmlDocument();

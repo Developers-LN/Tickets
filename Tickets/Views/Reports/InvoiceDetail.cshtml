@@ -21,7 +21,7 @@
     DateTime taxReceiptDueDate = DateTime.Now;
     int TaxNumber = 0;
 
-    if (Model.TaxReceipt != 0)
+    if (Model.TaxReceipt != 0 && Model.TaxReceipt != null)
     {
         var data = context.TaxReceiptNumbers.Where(w => w.Id == Model.TaxReceipt).FirstOrDefault();
         taxReceiptTypeId = data.TaxReceipt.Type;
@@ -84,6 +84,9 @@
                 </div>
                 <div class="col-lg-12 no-padder text-left">
                     <b>FECHA:</b> @Model.CreateDate.ToShortDateString()
+                </div>
+                <div class="col-lg-12 no-padder text-left">
+                    <b>FACTURA:</b> @Model.Id
                 </div>
             </div>
             @if (Model.TaxReceipt != 0)
@@ -277,7 +280,7 @@ else
     <div class="col-lg-12">
         <div class="col-lg-12 no-padder text-center">
             <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
-                <img src="~/Images/logo.png" />
+                <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
             </div>
             <div class="col-lg-12 no-padder text-center">
                 <b>MINISTERIO DE HACIENDA</b>
@@ -417,7 +420,7 @@ else
     <div class="col-lg-12">
         <div class="col-lg-12 no-padder text-center">
             <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
-                <img src="~/Images/logo.png" />
+                <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
             </div>
             <div class="col-lg-12 no-padder text-center">
                 <b>MINISTERIO DE HACIENDA</b>

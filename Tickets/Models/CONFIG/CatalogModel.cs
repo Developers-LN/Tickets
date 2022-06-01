@@ -148,7 +148,7 @@ namespace Tickets.Models
         {
             var context = new TicketsEntities();
             var taxReceipts = context.Catalogs.Where(c => c.Statu == true && c.IdGroup == (int)CatalogGroupEnum.TaxReceiptType).AsEnumerable()
-                .Select(catalog => this.CatalogToObject(catalog)).ToList();
+                .Select(catalog => this.CatalogToObject(catalog)).OrderBy(o => o.IdDetail).ToList();
 
             return new RequestResponseModel()
             {

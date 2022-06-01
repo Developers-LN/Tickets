@@ -19,6 +19,7 @@ namespace Tickets.Models
             this.Awards = new HashSet<Award>();
             this.Prospect_Price = new HashSet<Prospect_Price>();
             this.Raffles = new HashSet<Raffle>();
+            this.ProspectFractions = new HashSet<ProspectFraction>();
         }
     
         public int Id { get; set; }
@@ -40,5 +41,6 @@ namespace Tickets.Models
         public virtual ICollection<Award> Awards { get; set; }
         public virtual ICollection<Prospect_Price> Prospect_Price { get; set; }
         public virtual ICollection<Raffle> Raffles { get; set; }
+        public virtual ICollection<ProspectFraction> ProspectFractions { get; set; }
     }
 }

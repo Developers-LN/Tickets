@@ -41,6 +41,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "taxReceipt")]
         public int TaxReceipt { get; set; }
 
+        [JsonProperty(PropertyName = "taxReceiptName")]
+        public string TaxReceiptName { get; set; }
+
         [JsonProperty(PropertyName = "conditionDesc")]
         public string ConditionDesc { get; set; }
 
@@ -131,6 +134,8 @@ namespace Tickets.Models.Ticket
                 InvoiceDate = model.InvoiceDate,
                 InvoiceDateLong = model.InvoiceDate.ToUnixTime(),
                 Condition = model.Condition,
+                TaxReceipt = (int)((model.TaxReceipt == null || model.TaxReceipt == 0) ? (int)TaxReceiptTypeEnum.NotReceipt : model.TaxReceipt),
+                TaxReceiptName = (model.TaxReceipt == null || model.TaxReceipt == 0) ? "SIN COMPROBANTE" : context.Catalogs.Where(w => w.Id == model.TaxReceipt).Select(s => s.NameDetail).FirstOrDefault(),
                 InvoiceStatusProv = (xpiredDate.Date < DateTime.Now.Date && model.PaymentStatu == 2082) ? "Caducada" : "",
                 ConditionDesc = context.Catalogs.Where(r => r.Id == model.Condition).Select(c => c.NameDetail).FirstOrDefault(),
                 PaymentStatu = model.PaymentStatu,
@@ -366,10 +371,15 @@ namespace Tickets.Models.Ticket
                             }
                             var user = context.Users.Where(u => u.Id == WebSecurity.CurrentUserId).FirstOrDefault();
 
-                            int? taxReceiptNumber = context.TaxReceipts
+                            int? taxReceiptNumber = 0;
+
+                            if (model.TaxReceipt != (int)TaxReceiptTypeEnum.NotReceipt)
+                            {
+                                taxReceiptNumber = context.TaxReceipts
                                 .Where(w => w.DueDate >= DateTime.Now && w.Statu == (int)TaxReceiptStatuEnum.Activo && w.Type == model.TaxReceipt)
                                 .Select(f => f.TaxReceiptNumbers.Where(w2 => w2.Status == (int)TaxReceiptNumberStatuEnum.Disponible)
                                 .Select(f2 => f2.Id).FirstOrDefault()).FirstOrDefault();
+                            }
 
                             invoice = new Invoice()
                             {
