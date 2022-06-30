@@ -20,12 +20,7 @@ namespace Tickets.Models.Ticket
                 raffles = context.Raffles.Where(s => s.Statu == (int)RaffleStatusEnum.Generated).Select(r => new
                 {
                     r.Id,
-                    r.Name,
-                    Prices = r.Prospect.Prospect_Price.Select(p => new
-                    {
-                        p.PriceId,
-                        p.FactionPrice
-                    })
+                    r.Name
                 }).ToList<object>();
 
 
@@ -33,18 +28,52 @@ namespace Tickets.Models.Ticket
                 {
                     r.Id,
                     r.Name,
-                    r.PriceId
                 }).ToList<object>();
             }
             else
             {
-                var awards = context.RaffleAwards.Where(r => r.RaffleId == raffleId).ToList();
                 identifyBachs = context.IdentifyBaches.Where(a =>
                     (a.RaffleId == raffleId || raffleId == 0)
                     && (a.ClientId == clientId || clientId == 0)
                     && a.Statu == (int)BachIdentifyStatuEnum.Approved)
                     .AsEnumerable()
-                    .Select(t => this.IdentifyBachMainToObject(t, awards)).ToList();
+                    .Select(t => this.ListaIdentificacionPremios(t)).ToList();
+            }
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Lotes de Billetes");
+
+            return new { result = true, identifyBachs, raffles, clients };
+        }
+
+        internal object ObtenerListaIdentificacionPremios(int raffleId = 0, int clientId = 0)
+        {
+            var context = new TicketsEntities();
+
+            var raffles = new List<object>();
+            var clients = new List<object>();
+            var identifyBachs = new List<object>();
+            if (raffleId == 0 && clientId == 0)
+            {
+                raffles = context.Raffles.Where(s => s.Statu == (int)RaffleStatusEnum.Generated).Select(r => new
+                {
+                    r.Id,
+                    r.Name
+                }).ToList<object>();
+
+
+                clients = context.Clients.Where(s => s.Statu == (int)ClientStatuEnum.Approbed).Select(r => new
+                {
+                    r.Id,
+                    r.Name
+                }).ToList<object>();
+            }
+            else
+            {
+                //var awards = context.RaffleAwards.Where(r => r.RaffleId == raffleId).ToList();
+                identifyBachs = context.IdentifyBaches.Where(a =>
+                    (a.RaffleId == raffleId || raffleId == 0)
+                    && (a.ClientId == clientId || clientId == 0))
+                    .AsEnumerable()
+                    .Select(t => this.ListaIdentificacionPremios(t)).ToList();
             }
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Lotes de Billetes");
 
@@ -555,6 +584,21 @@ namespace Tickets.Models.Ticket
         }
 
         #region Public Method
+        public object ListaIdentificacionPremios(IdentifyBach identifyBach)
+        {
+            return new
+            {
+                identifyBach.Id,
+                identifyBach.ClientId,
+                ClientDesc = identifyBach.Client.Name,
+                identifyBach.RaffleId,
+                identifyBach.Statu,
+                Nombre = identifyBach.Nombre,
+                hasPayment = (identifyBach.IdentifyBachPayments.Count > 0 || identifyBach.NoteCredits.Count > 0),
+                RaffleDesc = identifyBach.Raffle.Name
+            };
+        }
+
         public object IdentifyBachMainToObject(IdentifyBach identifyBach, List<RaffleAward> awards)
         {
             return new

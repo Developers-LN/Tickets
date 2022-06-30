@@ -58,12 +58,13 @@ namespace Tickets.Models.XML
     }
 
     [Serializable()]
-    [System.Xml.Serialization.XmlRoot("TicketNumber")]
-    public class TicketNumber
+    [System.Xml.Serialization.XmlRoot("AwardTicketNumber")]
+    public class AwardTicketNumber
     {
-        public string TiketNumber { get; set; }
+        public string TicketNumber { get; set; }
         public int Allocation { get; set; }
         public int IdNumber { get; set; }
+        public string ControlNumber { get; set; }
         public int FractionFrom { get; set; }
         public int FractionTo { get; set; }
         public int AvailableFractions { get; set; }
@@ -88,7 +89,7 @@ namespace Tickets.Models.XML
         public string RaffleDate { get; set; }
         public string CreateDate { get; set; }
         public string User { get; set; }
-        public List<TicketNumber> TicketNumbers { get; set; }
+        public List<AwardTicketNumber> TicketNumbers { get; set; }
     }
 
     [Serializable()]
@@ -139,7 +140,7 @@ namespace Tickets.Models.XML
     [Serializable()]
     public class TicketNumberAward
     {
-        [System.Xml.Serialization.XmlElement("TiketNumber")]
+        [System.Xml.Serialization.XmlElement("TicketNumber")]
         public string TicketNumber { get; set; }
 
         [System.Xml.Serialization.XmlElement("FractionFrom")]

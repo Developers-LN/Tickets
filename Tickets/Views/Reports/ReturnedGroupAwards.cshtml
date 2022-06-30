@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelDevolucionesPremiadas>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Reporte de devoluciones premiadas";
+    ViewBag.Title = "Reporte de devoluciones premiadas del sorteo " + Model.FirstOrDefault().RaffleId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -50,7 +50,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACIÓN DE LA LOTERÍA NACIONAL</b><br />
-            <b>LISTADO DE NÚMEROS PREMIADOS DEVUELTOS PARA EL SORTEO: @Model.FirstOrDefault().RaffleId</b><br />
+            <b>LISTADO DE NÚMEROS PREMIADOS DEVUELTOS PARA EL SORTEO No. @Model.FirstOrDefault().RaffleId</b><br />
             Fecha del sorteo: @RaffleData.DateSolteo.ToLongDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">

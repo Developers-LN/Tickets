@@ -1,12 +1,16 @@
-﻿@model Tickets.Models.Raffles.RaffleModel
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelCuadreSorteo>
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "Reporte detallado del sorteo número" + Model.FirstOrDefault().RaffleId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
     string adminCargo = config != null ? config.Cargo : "";
+
+    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
+    var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
 }
 <style>
     .col-lg-12 {
@@ -69,7 +73,7 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <b>DETALLE DE FACTURAS SORTEO no.@Model.Id DE FECHA @Model.RaffleDate.ToShortDateString()</b>
+            <b>DETALLE DE FACTURAS SORTEO No. @RaffleData.Id DE FECHA @RaffleData.DateSolteo.ToShortDateString()</b>
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
@@ -113,253 +117,44 @@
                     decimal invoiceMont = 0.0m; decimal invoiceQuantity = 0.0m;
                     decimal noPayMont = 0.0m; decimal noPayQuantity = 0.0m;
                     decimal payMont = 0.0m; decimal payQuantity = 0.0m;
-
-                    List<Tickets.Models.TicketAllocationNumber> ticketNumber = new List<Tickets.Models.TicketAllocationNumber>();
-                    var numberByFraction = (from tn in context.TicketAllocationNumbers
-                                            join a in context.TicketAllocations on tn.TicketAllocationId equals a.Id
-                                            where a.RaffleId == Model.Id
-                                            group tn by tn.Number into g
-                                            select new
-                                            {
-                                                number = g.Key,
-                                                ticketNumber = g
-                                            }).ToList();
-                    var awards = context.Awards.Where(a => a.ProspectId == Model.TicketProspectId).Select(w => new
-                    {
-                        Quantity = w.Quantity,
-                        Value = w.Value,
-                        ByFraction = w.ByFraction,
-                        Name = w.Name,
-                        Id = w.Id
-                    }).ToList();
-                    var raffleAwards = context.RaffleAwards.Where(ra => ra.RaffleId == Model.Id).Select(ra => new
-                    {
-                        RaffleId = ra.RaffleId,
-                        ControlNumber = ra.ControlNumber,
-                        Fraction = ra.Fraction,
-                        AwardId = ra.AwardId
-                    }).ToList();
-                    var raffleReturneds = context.TicketReturns.Where(t => t.RaffleId == Model.Id).Select(r => new
-                    {
-                        Number = r.TicketAllocationNumber.Number,
-                        FractionFrom = r.FractionFrom,
-                        FractionTo = r.FractionTo
-                    }).ToList();
-                    var identifyNumbers = (from ifn in context.IdentifyNumbers
-                                           join tan in context.TicketAllocationNumbers on ifn.NumberId equals tan.Id
-                                           join ifb in context.IdentifyBaches on ifn.IdentifyBachId equals ifb.Id
-                                           where ifb.RaffleId == Model.Id
-                                           select new
-                                           {
-                                               Number = tan.Number,
-                                               FractionFrom = ifn.FractionFrom,
-                                               FractionTo = ifn.FractionTo
-                                           }).ToList();
                 }
-                @foreach (var award in awards)
+
+                @foreach (var award in Model)
                 {
-                    totalMont += award.Quantity * award.Value;
-
-                    decimal houceM = 0.0m; decimal houceQ = 0.0m;
-                    decimal invoiceM = 0.0m; decimal invoiceQ = 0.0m;
-                    decimal noAllocateM = 0.0m; decimal noAllocateQ = 0.0m;
-                    decimal noPayM = 0.0m; decimal noPayQ = 0.0m;
-                    decimal payM = 0.0m; decimal payQ = 0.0m;
-
-                    foreach (var a in raffleAwards.Where(r => r.AwardId == award.Id))
-                    {
-                        int prospectFraction = award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? 1 :
-                            Model.TicketProspect.LeafFraction * Model.TicketProspect.LeafNumber;
-                        int returnedInvoiceQuantity = 0;
-                        decimal returnedInvoiceValue = 0;
-                        int invoiceQuantityNumber = 0;
-                        decimal invoiceValueNumber = 0;
-                        decimal PPrint = 0.0m;
-
-                        var number = numberByFraction.FirstOrDefault(t => t.number == a.ControlNumber);
-
-
-                        if (number == null)
-                        {
-                            noAllocateQ += prospectFraction;
-                            noAllocateM += award.Value;
-                        }
-                        else
-                        {
-                            foreach (var tn in number.ticketNumber)
-                            {
-
-                                var fraction = award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? 1 : (tn.FractionTo - tn.FractionFrom + 1);
-                                var value = award.Value / (award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? 1 : prospectFraction);
-                                if (tn.TicketAllocation.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Invoiced)
-                                {
-
-                                    if ((prospectFraction > 1))
-                                    {
-                                        invoiceQuantityNumber += fraction;
-                                        invoiceValueNumber += fraction * value;
-
-                                    }
-                                    else
-                                    {
-                                        if ((a.Fraction >= tn.FractionFrom && a.Fraction <= tn.FractionTo))
-                                        {
-                                            invoiceQuantityNumber = fraction;
-                                            invoiceValueNumber = fraction * value;
-
-                                        }
-                                    }
-
-                                }
-                                else if (tn.TicketAllocation.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Printed)
-                                {
-                                    if (prospectFraction > 1)
-                                    {
-                                        houceQ += fraction;
-                                        houceM += fraction * value;
-                                    }
-                                    else
-                                    {
-                                        houceQ = fraction;
-                                        houceM = fraction * value;
-
-                                    }
-                                }
-                                else if (tn.TicketAllocation.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Created || tn.TicketAllocation.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.PendientPrint || tn.TicketAllocation.Statu == (int)Tickets.Models.Enums.AllocationStatuEnum.Review)
-                                {
-                                    if (prospectFraction > 1)
-                                    {
-                                        noAllocateQ += fraction;
-                                        noAllocateM += fraction * value;
-
-                                    }
-                                    else
-                                    {
-                                        noAllocateQ = fraction;
-                                        noAllocateM = fraction * value;
-                                    }
-                                }
-                            }
-                            if (invoiceQuantityNumber != 0 /*&& (prospectFraction > (invoiceQuantityNumber + houceQ))*/)
-                            {
-                                var Rvalue = award.Value / (award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? 1 : prospectFraction);
-                                noAllocateQ += (prospectFraction - invoiceQuantityNumber);
-                                noAllocateM += (prospectFraction - invoiceQuantityNumber) * Rvalue;
-                            }
-                            var numberReturneds = raffleReturneds.Where(t => t.Number == number.number).ToList();
-                            foreach (var returned in numberReturneds)
-                            {
-                                if (award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S)
-                                {
-                                    //houceQ += (returned.FractionFrom >= a.Fraction && returned.FractionTo <= a.Fraction) ? 1 : 0;
-                                    //houceM += (returned.FractionFrom >= a.Fraction && returned.FractionTo <= a.Fraction) ? award.Value : 0;
-                                    houceQ += (a.Fraction >= returned.FractionFrom && a.Fraction <= returned.FractionTo) ? 1 : 0;
-                                    houceM += (a.Fraction >= returned.FractionFrom && a.Fraction <= returned.FractionTo) ? award.Value : 0;
-
-                                }
-                                else
-                                {
-                                    houceQ += returned.FractionTo - returned.FractionFrom + 1;
-                                    houceM += (returned.FractionTo - returned.FractionFrom + 1) * (award.Value / prospectFraction);
-
-                                    returnedInvoiceQuantity += returned.FractionTo - returned.FractionFrom + 1;
-                                    returnedInvoiceValue += (returned.FractionTo - returned.FractionFrom + 1) * (award.Value / prospectFraction);
-                                }
-                            }
-                            if ((prospectFraction == 1) && (houceM != 0))
-                            {
-                                invoiceQuantityNumber = 0;
-                                invoiceValueNumber = 0;
-                            }
-                            else
-                            {
-                                invoiceQuantityNumber -= returnedInvoiceQuantity;
-                                invoiceValueNumber -= returnedInvoiceValue;
-                            }
-                            var invoiceAwardQuantity = 0;
-                            var invoiceAwardValue = 0.0m;
-                            var identifyNumbersGrouped = identifyNumbers.Where(i => i.Number == number.number).GroupBy(i => i.FractionFrom).Select(i => new
-                            {
-                                i.FirstOrDefault().FractionFrom,
-                                i.FirstOrDefault().FractionTo
-                            }).ToList();
-
-                            foreach (var identify in identifyNumbersGrouped)
-                            {
-                                if (award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S)
-                                {
-                                    //invoiceAwardQuantity += (identify.FractionFrom >= a.Fraction && identify.FractionTo <= a.Fraction) ? 1 : 0;
-                                    //invoiceAwardValue += (identify.FractionFrom >= a.Fraction && identify.FractionTo <= a.Fraction) ? award.Value : 0;
-                                    invoiceAwardQuantity += (a.Fraction >= identify.FractionFrom && a.Fraction <= identify.FractionTo) ? 1 : 0;
-                                    invoiceAwardValue += (a.Fraction >= identify.FractionFrom && a.Fraction <= identify.FractionTo) ? award.Value : 0;
-                                }
-                                else
-                                {
-                                    invoiceAwardQuantity += (identify.FractionTo - identify.FractionFrom + 1);
-                                    invoiceAwardValue += ((identify.FractionTo - identify.FractionFrom + 1) * (award.Value / prospectFraction));
-                                }
-                            }
-
-
-                            payQ += invoiceAwardQuantity;
-                            payM += invoiceAwardValue;
-
-                            invoiceQ += invoiceQuantityNumber;
-                            invoiceM += invoiceValueNumber;
-
-                            noPayQ += (invoiceQuantityNumber - invoiceAwardQuantity);
-                            noPayM += (invoiceValueNumber - invoiceAwardValue);
-
-
-                        }
-                    }
-
-                    houceMont += houceM;
-                    houceQuantity += houceQ;
-
-                    invoiceMont += invoiceM;
-                    invoiceQuantity += invoiceQ;
-
-                    noallocateQuantity += noAllocateQ;
-                    noallocateMont += noAllocateM;
-
-                    noPayQuantity += noPayQ;
-                    noPayMont += noPayM;
-
-                    payQuantity += payQ;
-                    payMont += payM;
-
                     <tr class="t-r">
-                        <td style="text-align:left; border-right: solid #8C8C8C 1px;">@award.Name</td>
+                        <td style="text-align:left; border-right: solid #8C8C8C 1px;">@award.Premio</td>
 
-                        @{
-                            int frac = award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? 1 : Model.TicketProspect.LeafFraction * Model.TicketProspect.LeafNumber;
+                        <td>@award.ProspectoFracciones.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td style="border-right: solid #8C8C8C 1px;">@award.MontoPremioProspecto.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
 
-                            totalQuantity += (frac * award.Quantity);
+                        <td>@award.CasaFracciones.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td style="border-right: solid #8C8C8C 1px;">@award.CasaMonto.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
 
-                            //decimal axolote = award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? award.Value - invoiceM : noAllocateM;
+                        <td>@award.CalleFracciones.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td style="border-right: solid #8C8C8C 1px;">@award.CalleMonto.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
 
-                        }
-                        <td>@((frac * award.Quantity).ToString("N0", new System.Globalization.CultureInfo("es-DO")))</td>
-                        <td style="border-right: solid #8C8C8C 1px;">@award.Value.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td>@award.NoImpresoFracciones.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td style="border-right: solid #8C8C8C 1px;">@award.NoImpresoMonto.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
 
-                        <td>@houceQ.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td style="border-right: solid #8C8C8C 1px;">@houceM.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td>@award.FraccionesPagadas.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td style="border-right: solid #8C8C8C 1px;">@award.MontoFraccionesPagadas.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
 
-                        <td>@invoiceQ.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td style="border-right: solid #8C8C8C 1px;">@invoiceM.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
-
-                        <td>@noAllocateQ.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td style="border-right: solid #8C8C8C 1px;">@noAllocateM.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
-                        @*<td style="border-right: solid #8C8C8C 1px;">@axolote.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>*@
-
-                        <td>@payQ.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td style="border-right: solid #8C8C8C 1px;">@payM.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
-
-                        <td>@noPayQ.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td style="border-right: solid #8C8C8C 1px;">@noPayM.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
-
+                        <td>@award.FraccionesNoPagadas.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td style="border-right: solid #8C8C8C 1px;">@award.MontoFraccionesNoPagadas.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
+                    
+                    totalQuantity += award.ProspectoFracciones;
+                    totalMont += award.MontoEnPremios;
+                    houceQuantity += award.CasaFracciones;
+                    houceMont += award.CasaMonto;
+                    invoiceQuantity += award.CalleFracciones;
+                    invoiceMont += award.CalleMonto;
+                    noallocateQuantity += award.NoImpresoFracciones;
+                    noallocateMont += award.NoImpresoMonto;
+                    payQuantity += award.FraccionesPagadas;
+                    payMont += award.MontoFraccionesPagadas;
+                    noPayQuantity += award.FraccionesNoPagadas;
+                    noPayMont += award.MontoFraccionesNoPagadas;
                 }
             </tbody>
             <tfoot>
@@ -382,7 +177,6 @@
 
                     <td class="text-right">@noPayQuantity.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
                     <td class="text-right">@noPayMont.ToString("N", new System.Globalization.CultureInfo("es-DO"))</td>
-
                 </tr>
             </tfoot>
         </table>

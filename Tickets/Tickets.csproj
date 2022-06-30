@@ -391,7 +391,7 @@
     <Compile Include="Models\ModelsProcedures\InvoiceListModel.cs" />
     <Compile Include="Models\ModelsProcedures\ModelAvailableTickets.cs" />
     <Compile Include="Models\ModelsProcedures\ModelAvailableTicketsToInvoice.cs" />
-    <Compile Include="Models\ModelsProcedures\ModelCuadreSorteoResumido.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelCuadreSorteo.cs" />
     <Compile Include="Models\ModelsProcedures\ModelDevolucionesPremiadas.cs" />
     <Compile Include="Models\ModelsProcedures\ModelInvoicedTickets.cs" />
     <Compile Include="Models\ModelsProcedures\ModelNetSalesByClient.cs" />
@@ -3171,6 +3171,7 @@
     <Content Include="Views\Reports\ElectronicSaleDetails.cshtml" />
     <Content Include="Views\TaxReceipt\TaxReceipt.cshtml" />
     <Content Include="Views\TaxReceipt\TaxReceiptList.cshtml" />
+    <Content Include="Views\Reports\InvoicesDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

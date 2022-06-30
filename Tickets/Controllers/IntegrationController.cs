@@ -222,9 +222,9 @@ namespace Tickets.Controllers
                         {
                             RaffleId = RaffleId,
                             RaffleName = raffleData.Name,
-                            RaffleDate = raffleData.DateSolteo.ToShortDateString(),
-                            CreateDate = DateTime.Now.ToString(),
-                            TicketNumbers = new List<Models.XML.TicketNumber>()
+                            RaffleDate = raffleData.DateSolteo.ToString("yyyy/MM/dd"),
+                            CreateDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                            TicketNumbers = new List<Models.XML.AwardTicketNumber>()
                         };
                         var FractionTo = raffleData.Prospect.LeafFraction * raffleData.Prospect.LeafNumber;
 
@@ -232,12 +232,13 @@ namespace Tickets.Controllers
                          select new
                          {
                              TicketNumber = Utils.AddZeroToNumber((raffleData.Prospect.Production).ToString().Length, (int)a.ControlNumber),
+                             ControlNumber = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).ControlNumber,
                              Allocation = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).TaId,
                              IdNumber = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).TanId,
                              FractionFrom = 1,
                              FractionTo,
                              AvailableFractions = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).Fracciones,
-                             TotalToPay = DataPremios.Where(w => w.Number == a.ControlNumber).Sum(s => s.Value),
+                             TotalToPay = DataPremios.Where(w => w.Number == a.ControlNumber).Sum(s => s.ValorPagar),
                              /*Award = new
                              {
                                  AwardId = a.Id,
@@ -247,9 +248,10 @@ namespace Tickets.Controllers
                                  ValueToPay = DataPremios.FirstOrDefault(f => f.RaffleAwardId == a.Id).ValorPagar,
                                  AvailableFractions = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).Fracciones
                              }*/
-                         }).GroupBy(r => r.TicketNumber).ToList().ForEach(r => awardNumbesXML.TicketNumbers.Add(new Models.XML.TicketNumber()
+                         }).GroupBy(r => r.TicketNumber).ToList().ForEach(r => awardNumbesXML.TicketNumbers.Add(new Models.XML.AwardTicketNumber()
                          {
-                             TiketNumber = r.FirstOrDefault().TicketNumber,
+                             TicketNumber = r.FirstOrDefault().TicketNumber,
+                             ControlNumber = r.FirstOrDefault().ControlNumber,
                              Allocation = r.FirstOrDefault().Allocation,
                              IdNumber = r.FirstOrDefault().IdNumber,
                              FractionFrom = r.FirstOrDefault().FractionFrom,
@@ -658,7 +660,7 @@ namespace Tickets.Controllers
                             RaffleId = raffle.Id,
                             User = WebSecurity.CurrentUserName,
                             CreateDate = DateTime.Now.ToString(),
-                            TicketNumbers = new List<Models.XML.TicketNumber>()
+                            TicketNumbers = new List<Models.XML.AwardTicketNumber>()
                         };
                         var FractionTo = raffle.Prospect.LeafFraction * raffle.Prospect.LeafNumber;
                         (from a in raffle.RaffleAwards.ToList()
@@ -675,9 +677,9 @@ namespace Tickets.Controllers
                                  AwardFractionPrice = (a.Award.Value / (raffle.Prospect.LeafFraction * raffle.Prospect.LeafNumber)),
                                  AwardPrice = a.Award.Value
                              }
-                         }).GroupBy(r => r.Number).ToList().ForEach(r => awardNumbesXML.TicketNumbers.Add(new Models.XML.TicketNumber()
+                         }).GroupBy(r => r.Number).ToList().ForEach(r => awardNumbesXML.TicketNumbers.Add(new Models.XML.AwardTicketNumber()
                          {
-                             TiketNumber = r.FirstOrDefault().Number,
+                             TicketNumber = r.FirstOrDefault().Number,
                              FractionFrom = r.FirstOrDefault().FractionFrom,
                              FractionTo = r.FirstOrDefault().FractionTo,
                              Awards = r.Select(a => new Models.XML.Award()

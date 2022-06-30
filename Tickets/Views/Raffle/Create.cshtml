@@ -5,6 +5,7 @@
     var context = new Tickets.Models.TicketsEntities();
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
+
 <!-- START panel-->
 <div class="col-lg-12 no-padder" ng-controller="RaffleCreateController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
@@ -51,7 +52,7 @@
                                     La fecha del sorteo no puede ser mayor a la fecha de expiración del prospecto ( {{(expirateDate | date:"dd/MM/yyyy")}} )
                                 </div>
                                 <div class="col-lg-6">
-                                    <label class="control-label-left">Hora de fin de venta electrónica: <span class="color-red">*</span></label>
+                                    <label class="control-label-left">Hora de cierre de venta electrónica: <span class="color-red">*</span></label>
                                     <input type="time"
                                            ng-model="raffle.raffleDate"
                                            class="form-control input-sm"
@@ -85,7 +86,7 @@
                         <div class="form-group">
                             <div class="col-lg-12 no-padder">
                                 <div class="col-lg-6">
-                                    <label class="control-label-left">Fecha fin de devolución: <span class="color-red">*</span></label>
+                                    <label class="control-label-left">Fecha de cierre de devolución: <span class="color-red">*</span></label>
                                     <input type="date"
                                            ng-model="raffle.endDate"
                                            class="form-control input-sm"
@@ -94,7 +95,7 @@
                                            ng-max="maxReturnedDate" />
                                 </div>
                                 <div class="col-lg-6">
-                                    <label class="control-label-left">Hora fin de devolución: <span class="color-red">*</span></label>
+                                    <label class="control-label-left">Hora de cierre de devolución: <span class="color-red">*</span></label>
                                     <input type="time"
                                            ng-model="raffle.endTime"
                                            class="form-control input-sm"
@@ -120,7 +121,7 @@
                         <div class="form-group">
                             <div class="col-lg-12 no-padder">
                                 <div class="col-lg-6">
-                                    <label class="control-label-left">Fecha fin de asignación: <span class="color-red">*</span></label>
+                                    <label class="control-label-left">Fecha de cierre de asignación: <span class="color-red">*</span></label>
                                     <input type="date"
                                            ng-model="raffle.endAllocationDateOnly"
                                            class="form-control input-sm"
@@ -128,7 +129,7 @@
                                            ng-max="maxReturnedDate" />
                                 </div>
                                 <div class="col-lg-6">
-                                    <label class="control-label-left">Hora fin de asignación: <span class="color-red">*</span></label>
+                                    <label class="control-label-left">Hora de cierre de asignación: <span class="color-red">*</span></label>
                                     <input type="time"
                                            ng-model="raffle.endAllocationTime"
                                            class="form-control input-sm"

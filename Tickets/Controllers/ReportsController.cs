@@ -597,7 +597,11 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult RaffleGeneralOver(int raffleId)
         {
-            var context = new TicketsEntities();
+            CuadreSorteoResumidoProcedure cuadreSorteoResumidoProcedure = new CuadreSorteoResumidoProcedure();
+            var resultado = cuadreSorteoResumidoProcedure.CuadreSorteo(raffleId);
+            return View(resultado);
+
+            /*var context = new TicketsEntities();
             var raffle = context.Raffles.Where(r => r.Id == raffleId).Select(r => new RaffleModel()
             {
                 Id = r.Id,
@@ -610,7 +614,7 @@ namespace Tickets.Controllers
                 }
             }).FirstOrDefault();
 
-            return View(raffle);
+            return View(raffle);*/
         }
 
         //
@@ -620,7 +624,7 @@ namespace Tickets.Controllers
         public ActionResult RaffleGeneralOverR(int raffleId)
         {
             CuadreSorteoResumidoProcedure cuadreSorteoResumidoProcedure = new CuadreSorteoResumidoProcedure();
-            var resultado = cuadreSorteoResumidoProcedure.CuadreSorteoResumido(raffleId);
+            var resultado = cuadreSorteoResumidoProcedure.CuadreSorteo(raffleId);
             return View(resultado);
 
             /*var context = new TicketsEntities();
@@ -964,6 +968,27 @@ namespace Tickets.Controllers
             context.SaveChanges();
 
             return View(reprint);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult InvoicesDetail(int raffleId = 0)
+        {
+            var context = new TicketsEntities();
+            if (raffleId == 0)
+            {
+                return RedirectToAction("Error", new { message = "No se encontraron cuentas por cobrar para los criterios seleccionados." });
+            }
+            else
+            {
+                var invoices = context.Invoices.Where(w=>w.RaffleId == raffleId).ToList();
+
+                if (invoices.Count == 0)
+                {
+                    return RedirectToAction("Error", new { message = "No se encontraron cuentas por cobrar para los criterios seleccionados." });
+                }
+                return View(invoices);
+            }
         }
 
         //

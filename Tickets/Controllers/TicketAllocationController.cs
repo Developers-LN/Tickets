@@ -131,7 +131,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public JsonResult GetIdentifyList(int raffleId = 0, int clientId = 0)
         {
-            var respnse = new TicketIdentifyModel().GetIdentifyList(raffleId, clientId);
+            var respnse = new TicketIdentifyModel().ObtenerListaIdentificacionPremios(raffleId, clientId);
             return new JsonResult()
             {
                 Data = respnse,

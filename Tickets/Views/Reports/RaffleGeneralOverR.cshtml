@@ -1,7 +1,8 @@
-﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelCuadreSorteoResumido>
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelCuadreSorteo>
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Reporte general resumido del sorteo número" + Model.FirstOrDefault().RaffleId;
+    ViewBag.Title = "Reporte resumido del sorteo número" + Model.FirstOrDefault().RaffleId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -112,7 +113,7 @@
                         <td style="text-align:left; border-right: solid #8C8C8C 1px;">@item.Premio</td>
 
                         <td>@item.ProspectoFracciones.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td style="border-right: solid #8C8C8C 1px;">@item.ProspectoPremio.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td style="border-right: solid #8C8C8C 1px;">@item.MontoPremioProspecto.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
 
                         <td>@item.CasaFracciones.ToString("N0", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td style="border-right: solid #8C8C8C 1px;">@item.CasaMonto.ToString("n", new System.Globalization.CultureInfo("es-DO"))</td>
@@ -125,7 +126,7 @@
                     </tr>
 
                     totalQuantity += item.ProspectoFracciones;
-                    totalMont += item.ProspectoPremio;
+                    totalMont += item.MontoEnPremios;
                     houceQuantity += item.CasaFracciones;
                     houceMont += item.CasaMonto;
                     invoiceQuantity += item.CalleFracciones;

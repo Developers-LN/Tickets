@@ -16,6 +16,7 @@
                                 <th>Nombre de Sorteo</th>
                                 <th class="text-center">Facturaciones Por Numero</th>
                                 <th class="text-center">Facturaciones Por Asignaciones</th>
+                                <th class="text-center">Detalle de facturas</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -27,6 +28,9 @@
                                 </td>
                                 <td class="text-center">
                                     <a target="_blank" href="/Reports/InvoicesByRaffleAllocation?raffleId={{raffle.id}}" title="Imprimir Detalle de Facturación"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a target="_blank" href="/Reports/InvoicesDetail?raffleId={{raffle.id}}" title="Imprimir detalles facturas"><i class="fa fa-print"></i></a>
                                 </td>
                             </tr>
                         </tbody>

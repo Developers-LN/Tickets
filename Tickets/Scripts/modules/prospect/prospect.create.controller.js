@@ -2,7 +2,7 @@
  * Module: ProspectCreateController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -16,11 +16,11 @@
         editableThemes.bs3.buttonsClass = 'btn-sm';
         editableThemes.bs3.submitTpl = '<button type="submit" class="btn btn-success"><span class="fa fa-check"></span></button>';
         editableThemes.bs3.cancelTpl = '<button type="button" class="btn btn-default" ng-click="$form.$cancel()">' +
-                                         '<span class="fa fa-times text-muted"></span>' +
-                                       '</button>';
+            '<span class="fa fa-times text-muted"></span>' +
+            '</button>';
         var self = this;
         /*jshint validthis:true*/
-        this.validateProspectData = function(prospect) {
+        this.validateProspectData = function (prospect) {
             var error = '', isReq = ' es un campo requerido. <br>';
             if (prospect.Name == '') {
                 error += 'Nombre' + isReq;
@@ -41,8 +41,8 @@
                 error += 'Fracci&oacute;n por hojas' + isReq;
             }
             /*if (self.validateNumenber(prospect.ExpirateDate) === false) {
-	            error += 'Fecha de Expiraci&oacute;n' + isReq;
-	        }*/
+                error += 'Fecha de Expiraci&oacute;n' + isReq;
+            }*/
             if (self.validateNumenber(prospect.MaxReturnTickets) === false) {
                 error += 'Porcentaje de devoluciones' + isReq;
             }
@@ -61,7 +61,7 @@
             return error === '';
         }
 
-        this.validatePrice = function(price) {
+        this.validatePrice = function (price) {
             var error = '', isReq = ' es un campo requerido. <br>';
             if (price.PriceId === undefined) {
                 error += 'Tipo de Premio' + isReq;
@@ -139,7 +139,7 @@
             }
             return error === '';
         }
-        this.validateNumenber = function(number) {
+        this.validateNumenber = function (number) {
             if (!number || Number(number) <= 0 || number == '') {
                 return false
             }
@@ -148,7 +148,7 @@
 
         this.filterPriceList = function (selectedId) {
             if (!$scope.typePrices) {
-                return;s
+                return; s
             }
             var selectedId = selectedId || 0;
             $scope.typePricesFiltered = $scope.typePrices.filter(function (item) {
@@ -157,7 +157,7 @@
                 }
                 return $scope.prospect.Prospect_Price.some(function (price) {
                     return Number(price.PriceId) === Number(item.value)
-	                && Number(selectedId) !== Number(item.value);
+                        && Number(selectedId) !== Number(item.value);
                 }) === false;
             });
         }
@@ -533,8 +533,7 @@
             $scope.disabledByFraction = true;
             $scope.disabledByFraction = false;
             $scope.award.ByFraction = 15;
-            switch ( Number($scope.award.TypesAwardId))
-            {
+            switch (Number($scope.award.TypesAwardId)) {
                 case 7: //Aproximate
                     $scope.award.Terminal = 0;
                     $scope.award.Quantity = 2;
