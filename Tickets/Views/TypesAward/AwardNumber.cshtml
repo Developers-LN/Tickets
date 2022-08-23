@@ -85,7 +85,7 @@
                                     </span>
                                 </div>
                             </fieldset>
-                            <fieldset>
+                            <fieldset ng-show="number.Allocation.Telefono != null || number.Allocation.Cedula != null">
                                 <div class="form-group m-t-xs" ng-show="number.Allocation.Telefono != null">
                                     <span class="col-lg-4 control-label">Teléfono:</span>
                                     <span class="col-lg-8">

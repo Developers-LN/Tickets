@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.Allocations.AllocatedSummary>
+
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Resumen de asignaciones del sorteo " + Model.FirstOrDefault().RaffleId;
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.Inspectoria : "";
+    string adminCargo = config != null ? config.InspectoriaCargo : "";
+
+    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
+    var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
+            <h3><b>DETALLE DE ASIGNACIONES DEL SORTEO No. @RaffleData.Id</b></h3><br />
+            Fecha del Sorteo @RaffleData.DateSolteo.ToShortDateString()
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center"><b>FILA</b></th>
+                    <th class="text-center"><b>CLIENTE</b></th>
+                    <th class="text-center"><b>TOTAL <br /> ASIGNADO</b></th>
+                    <th class="text-center"><b>TOTAL <br /> CONSIGNADO</b></th>
+                    <th class="text-center"><b>TOTAL <br /> DEVUELTO</b></th>
+                    <th class="text-center"><b>TOTAL <br /> ANULADO</b></th>
+                    <th class="text-center"><b>TOTAL <br /> VENDIDO</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var totalAllocated = 0.0m;
+                    var totalConsignated = 0.0m;
+                    var totalReturned = 0.0m;
+                    var totalCanceled = 0.0m;
+                    var totalSold = 0.0m;
+                    var Fila = 1;
+                }
+
+                @foreach (var allocation in Model)
+                {
+                    <tr>
+                        <td class="text-center">@Fila</td>
+                        <td class="text-center">@allocation.ClientIdName</td>
+                        <td class="text-center">@allocation.TotalAllocated.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-center">@allocation.TotaConsignated.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-center">@allocation.TotalReturned.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-center">@allocation.TotalCanceled.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-center">@allocation.TotalSold.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                    Fila++;
+                    totalAllocated += allocation.TotalAllocated;
+                    totalConsignated += allocation.TotaConsignated;
+                    totalReturned += allocation.TotalReturned;
+                    totalCanceled += allocation.TotalCanceled;
+                    totalSold += allocation.TotalSold;
+                }
+                <tr class="total">
+                    <td class="text-left"></td>
+                    <td class="text-right"><b>Total...:</b></td>
+                    <td class="text-center"><b>@totalAllocated.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-center"><b>@totalConsignated.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-center"><b>@totalReturned.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-center"><b>@totalCanceled.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-center"><b>@totalSold.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+        <b>@adminName</b><br />
+        <span>@adminCargo</span>
+    </div>
+</div>

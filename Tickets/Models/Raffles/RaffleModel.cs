@@ -50,8 +50,14 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "startReturnDateLong")]
         public long StartReturnDateLong { get; set; }
 
+        [JsonProperty(PropertyName = "endElectronicSalesLong")]
+        public long EndElectronicSalesLong { get; set; }
+
         [JsonProperty(PropertyName = "endReturnDate")]
         public DateTime EndReturnDate { get; set; }
+
+        [JsonProperty(PropertyName = "endElectronicSales")]
+        public DateTime EndElectronicSales { get; set; }
 
         [JsonProperty(PropertyName = "endReturnDateLong")]
         public long EndReturnDateLong { get; set; }
@@ -107,7 +113,6 @@ namespace Tickets.Models.Raffles
                 EndAllocationDate = raffle.EndAllocationDate.Value,
                 EndAllocationDateLong = raffle.EndAllocationDate.Value.ToUnixTime(),
                 EndReturnDate = raffle.EndReturnDate,
-                EndReturnDateLong = raffle.EndReturnDate.ToUnixTime(),
                 Name = raffle.Name,
                 Note = raffle.Note,
                 //PoolsProspectId = raffle.PoolsProspectId.HasValue? raffle.PoolsProspectId.Value : 0,
@@ -116,6 +121,9 @@ namespace Tickets.Models.Raffles
                 RaffleDateLong = raffle.DateSolteo.ToUnixTime(),
                 StartReturnDate = raffle.StartReturnDate,
                 StartReturnDateLong = raffle.StartReturnDate.ToUnixTime(),
+                EndElectronicSales = raffle.EndElectronicSales ?? DateTime.Now,
+                EndElectronicSalesLong = !raffle.EndElectronicSales.HasValue ? raffle.DateSolteo.ToUnixTime() : raffle.EndElectronicSales.Value.ToUnixTime(),
+                EndReturnDateLong = raffle.EndReturnDate.ToUnixTime(),
                 Statu = raffle.Statu,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == raffle.Statu).NameDetail,
                 TicketProspectId = raffle.ProspectId,
@@ -284,7 +292,7 @@ namespace Tickets.Models.Raffles
                         {
                             raffle = context.Raffles.FirstOrDefault(c => c.Id == model.Id);
                         }
-                        raffle.Note = string.IsNullOrEmpty(model.Note) ? "" : model.Note;
+                        raffle.Note = string.IsNullOrEmpty(model.Note) ? " " : model.Note;
                         raffle.Name = model.Name;
                         raffle.ProspectId = model.TicketProspectId;
                         //raffle.PoolsProspectId = model.PoolsProspectId;
@@ -292,6 +300,7 @@ namespace Tickets.Models.Raffles
                         raffle.Statu = model.Statu;
                         raffle.StartReturnDate = model.StartReturnDate;
                         raffle.EndReturnDate = model.EndReturnDate;
+                        raffle.EndElectronicSales = model.EndElectronicSales;
                         raffle.EndAllocationDate = model.EndAllocationDate;
                         raffle.Note = string.IsNullOrEmpty(model.Note) ? "" : model.Note;
                         raffle.DateSolteo = model.RaffleDate;
@@ -386,6 +395,26 @@ namespace Tickets.Models.Raffles
             };
         }
 
+        internal RequestResponseModel GetRaffleConsignation()
+        {
+            var context = new TicketsEntities();
+            var prospectModel = new ProspectModel();
+            var raffles = context.Raffles.AsEnumerable()
+                .Where(s => s.Statu == (int)RaffleStatusEnum.Active || s.Statu == (int)RaffleStatusEnum.Planned)
+                .OrderByDescending(r => r.Id)
+                .Select(r => new
+                {
+                    value = r.Id,
+                    text = r.Name
+                }).ToList();
+
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Object = raffles
+            };
+        }
+
         internal RequestResponseModel GetRaffleSelect(int statu)
         {
             var context = new TicketsEntities();
@@ -401,6 +430,28 @@ namespace Tickets.Models.Raffles
                     //poolProspectId = r.PoolsProspectId,
                     isActive = DateTime.Now <= r.EndAllocationDate
 
+                }).ToList();
+
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Object = raffles
+            };
+        }
+
+        internal RequestResponseModel GetRaffleForElectronicSales()
+        {
+            var context = new TicketsEntities();
+            var prospectModel = new ProspectModel();
+            var raffles = context.Raffles.AsEnumerable()
+                .Where(s =>
+                    s.Statu == (int)RaffleStatusEnum.Active
+                    || s.Statu == (int)RaffleStatusEnum.Generated)
+                .OrderByDescending(r => r.Id)
+                .Select(r => new
+                {
+                    value = r.Id,
+                    text = r.Name
                 }).ToList();
 
             return new RequestResponseModel()

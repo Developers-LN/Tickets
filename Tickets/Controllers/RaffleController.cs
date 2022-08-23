@@ -45,7 +45,7 @@ namespace Tickets.Controllers
             var date = DateTime.Now.AddMonths(-xpiredMount);
             var raffles = context.Raffles.AsEnumerable().Where(r =>
                 ((r.Statu != (int)RaffleStatusEnum.Suspended
-                && r.EndReturnDate < DateTime.Now)
+                && r.EndReturnDate <= DateTime.Now)
                 || r.Statu == (int)RaffleStatusEnum.Generated)
                 && date <= r.DateSolteo
                 ).Select(r => new

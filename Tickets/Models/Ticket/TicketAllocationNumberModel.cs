@@ -258,14 +258,17 @@ namespace Tickets.Models.Ticket
                         };
                     }
 
-                    if (allocationNumber.Any(a => a.Printed == false))
+                    if (allocation.Client.GroupId != (int)ClientGroupEnum.DistribuidorElectronico)
                     {
-                        Trans.Rollback();
-                        return new RequestResponseModel()
+                        if (allocationNumber.Any(a => a.Printed == false))
                         {
-                            Result = false,
-                            Message = "Hay billetes sin imprimir!"
-                        };
+                            Trans.Rollback();
+                            return new RequestResponseModel()
+                            {
+                                Result = false,
+                                Message = "Hay billetes sin imprimir!"
+                            };
+                        }
                     }
 
                     var CurrentUser = WebSecurity.CurrentUserId;

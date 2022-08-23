@@ -434,26 +434,50 @@ namespace Tickets.Models.Ticket
                                 AvailableTicketToInvoice availableTicketToInvoice = new AvailableTicketToInvoice();
                                 var Resultado = availableTicketToInvoice.AvailableTicketsToInvoice(model.RaffleId, allocation.Id);
 
-                                foreach (var number in allocation.TicketAllocationNumbers)
+                                var clientType = context.TicketAllocations.Where(w => w.Id == allocation.Id).Select(s => s.Client.GroupId).FirstOrDefault();
+
+                                if (clientType == (int)ClientGroupEnum.DistribuidorElectronico)
                                 {
-                                    if (Resultado.Any(a => a.AllocationNumberId == number.Id))
+                                    foreach (var number in allocation.TicketAllocationNumbers)
                                     {
-                                        invoiceTicketList.Add(new InvoiceTicket()
+                                        if (Resultado.Any(a => a.AllocationNumberId == number.Id))
                                         {
-                                            InvoiceId = invoice.Id,
-                                            PricePerFraction = model.TicketPrice,
-                                            Quantity = Resultado.Where(w => w.AllocationNumberId == number.Id).FirstOrDefault().AvailableFractions,
-                                            TicketNumberAllocationId = number.Id,
-                                        });
-                                        number.Invoiced = true;
-                                        number.Statu = (int)TicketStatusEnum.Factured;
-                                    }
-                                    else
-                                    {
-                                        number.Invoiced = false;
-                                        number.Statu = (int)TicketStatusEnum.Returned;
+                                            invoiceTicketList.Add(new InvoiceTicket()
+                                            {
+                                                InvoiceId = invoice.Id,
+                                                PricePerFraction = model.TicketPrice,
+                                                Quantity = Resultado.Where(w => w.AllocationNumberId == number.Id).FirstOrDefault().AvailableFractions,
+                                                TicketNumberAllocationId = number.Id,
+                                            });
+                                            number.Invoiced = true;
+                                            number.Statu = (int)TicketStatusEnum.Factured;
+                                        }
                                     }
                                 }
+                                else
+                                {
+                                    foreach (var number in allocation.TicketAllocationNumbers)
+                                    {
+                                        if (Resultado.Any(a => a.AllocationNumberId == number.Id))
+                                        {
+                                            invoiceTicketList.Add(new InvoiceTicket()
+                                            {
+                                                InvoiceId = invoice.Id,
+                                                PricePerFraction = model.TicketPrice,
+                                                Quantity = Resultado.Where(w => w.AllocationNumberId == number.Id).FirstOrDefault().AvailableFractions,
+                                                TicketNumberAllocationId = number.Id,
+                                            });
+                                            number.Invoiced = true;
+                                            number.Statu = (int)TicketStatusEnum.Factured;
+                                        }
+                                        else
+                                        {
+                                            number.Invoiced = false;
+                                            number.Statu = (int)TicketStatusEnum.Returned;
+                                        }
+                                    }
+                                }
+
                                 allocation.Statu = (int)AllocationStatuEnum.Invoiced;
                             }
                             context.InvoiceTickets.AddRange(invoiceTicketList);

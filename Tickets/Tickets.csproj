@@ -388,6 +388,11 @@
     </Compile>
     <Compile Include="Models\ModelsProcedures\AllocatedByDate.cs" />
     <Compile Include="Models\ModelsProcedures\AllocationSummary.cs" />
+    <Compile Include="Models\ModelsProcedures\Allocations\AllocatedSummary.cs" />
+    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedureIdentifyBachPayment.cs" />
+    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedureIdentifyBachPaymentNoteCredit.cs" />
+    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedureIdentifyBach.cs" />
+    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModeProcedureIdentifyBachNumbers.cs" />
     <Compile Include="Models\ModelsProcedures\InvoiceListModel.cs" />
     <Compile Include="Models\ModelsProcedures\ModelAvailableTickets.cs" />
     <Compile Include="Models\ModelsProcedures\ModelAvailableTicketsToInvoice.cs" />
@@ -400,6 +405,7 @@
     <Compile Include="Models\ModelsProcedures\ModelReturnedNumbersByClient.cs" />
     <Compile Include="Models\ModelsProcedures\ModelReturnedTickets.cs" />
     <Compile Include="Models\ModelsProcedures\ModelSalesAndPendingPayments.cs" />
+    <Compile Include="Models\ModelsProcedures\PayableAward\ModelPayableAwardSummary.cs" />
     <Compile Include="Models\ModelsProcedures\ReturnedByGroupModel.cs" />
     <Compile Include="Models\ModelsProcedures\ValidateElectronicSale.cs" />
     <Compile Include="Models\Module.cs">
@@ -419,17 +425,23 @@
     </Compile>
     <Compile Include="Models\Procedures\AllocatedByDayProcedure.cs" />
     <Compile Include="Models\Procedures\AllocationSummaryProcedure.cs" />
+    <Compile Include="Models\Procedures\Allocations\AllocatedSummaryProcedure.cs" />
     <Compile Include="Models\Procedures\AllPatyableAwardsProcedure.cs" />
     <Compile Include="Models\Procedures\AvailableTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\AvailableTicketToInvoice.cs" />
     <Compile Include="Models\Procedures\CuadreSorteoResumidoProcedure.cs" />
     <Compile Include="Models\Procedures\DevolucionesPremiadasProcedure.cs" />
+    <Compile Include="Models\Procedures\IdentifyBachDetails\ProcedureIdentifyBachDetails.cs" />
+    <Compile Include="Models\Procedures\IdentifyBachDetails\ProcedureIdentifyBachNoteCreditPayment.cs" />
+    <Compile Include="Models\Procedures\IdentifyBachDetails\ProcedureIdentifyBachNumbers.cs" />
+    <Compile Include="Models\Procedures\IdentifyBachDetails\ProcedureIdentifyBachPayent.cs" />
     <Compile Include="Models\Procedures\InvoicedTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\InvoiceListProcedure.cs" />
     <Compile Include="Models\Procedures\InvoiceListProcedureByList.cs" />
     <Compile Include="Models\Procedures\NetSalesByClientProcedure.cs" />
     <Compile Include="Models\Procedures\PayableAwardByClientProcedure.cs" />
     <Compile Include="Models\Procedures\PayableAwardsProcedure.cs" />
+    <Compile Include="Models\Procedures\PayableAward\ProcedurePayableAwardSummary.cs" />
     <Compile Include="Models\Procedures\ReturnedByGroupProcedure.cs" />
     <Compile Include="Models\Procedures\ReturnedNumbersByClient.cs" />
     <Compile Include="Models\Procedures\ReturnedTicketsProcedure.cs" />
@@ -3172,6 +3184,8 @@
     <Content Include="Views\TaxReceipt\TaxReceipt.cshtml" />
     <Content Include="Views\TaxReceipt\TaxReceiptList.cshtml" />
     <Content Include="Views\Reports\InvoicesDetail.cshtml" />
+    <Content Include="Views\Reports\PayNotPay.cshtml" />
+    <Content Include="Views\Reports\AllocatedSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

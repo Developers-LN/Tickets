@@ -53,7 +53,7 @@
 
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
-        <div class="col-lg-12 no-padder text-center" style="margin-top: 35px;">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 10px;">
             <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
@@ -127,6 +127,11 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th class="text-center" colspan="4">
+                        Detalle del recibo de pago
+                    </th>
+                </tr>
+                <tr>
                     <th class="text-center">Tipo de Pago</th>
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                     {
@@ -178,7 +183,7 @@
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                         {
-                            @(Model.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
                         {
@@ -191,11 +196,43 @@
                     </td>
                 </tr>
         </table>
+        @if (context.NoteCredits.Any(a => a.ReceiptPaymentId == Model.Id))
+        {
+            var CashAdvance = context.NoteCredits.Where(w => w.ReceiptPaymentId == Model.Id).FirstOrDefault();
+
+            <div class="col-lg-12 no-padder text-center">
+                <div class="col-lg-6 no-padder"></div>
+                <div class="col-lg-6 no-padder">
+                    <div class="col-lg-12 no-padder text-right">
+                        <b>Avance: </b>#@CashAdvance.Id
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 no-padder">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center" colspan="2">
+                                Avance de efectivo
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Monto del avance</th>
+                            <th class="text-left">Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">@CashAdvance.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-left">@CashAdvance.Concepts</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 
     <div class="col-lg-12 no-padder text-center">
-        <br />
-        <br />
         <div class="col-lg-4 col-md-6 col-sm-6 text-center">
             <div class="col-lg-12 no-padder text-center">
                 ______________________________
@@ -222,9 +259,9 @@
     </div>
 </div>
 
-<div class="col-lg-12" style="margin-top:50px;">
+<div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
-        <div class="col-lg-12 no-padder text-center" style="margin-top: 35px;">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 40px;">
             <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
@@ -237,37 +274,71 @@
             <b>RECIBO DE PAGO DEL SORTEO NO.@Model.Invoice.Raffle.Id DE FECHA @Model.Invoice.Raffle.DateSolteo.ToShortDateString()</b>
         </div>
         <div class="col-lg-6 no-padder">
-            <div class="col-lg-12 no-padder text-left">
-                <b>Ventanilla: </b> #@Model.Client.Id - @Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
-            </div>
-            <div class="col-lg-12 no-padder text-left">
-                <b>Comprador: </b> @Model.Nombre
-            </div>
-            <div class="col-lg-12 no-padder text-left">
-                <b>Cédula: </b> @Model.Cedula
-            </div>
-            <div class="col-lg-12 no-padder text-left">
-                <b>Teléfono: </b> @Model.Telefono
-            </div>
+            @if (Model.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)
+            {
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Ventanilla: </b> #@Model.Client.Id - @Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+                </div>
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Comprador: </b> @Model.Nombre
+                </div>
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Cédula: </b> @Model.Cedula
+                </div>
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Teléfono: </b> @Model.Telefono
+                </div>
+            }
+            else
+            {
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Cliente: </b> #@Model.Client.Id - @Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+                </div>
+                <div class="col-lg-12 no-padder text-left">
+                    <b>Factura: </b> #@Model.InvoiceId
+                </div>
+            }
         </div>
-        <div class="col-lg-6 no-padder text-right">
-            <div class="col-lg-12 no-padder text-right">
-                <b>Factura: </b> #@Model.InvoiceId
+        @if (Model.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)
+        {
+            <div class="col-lg-6 no-padder text-right">
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Factura: </b> #@Model.InvoiceId
+                </div>
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Recibo: </b>#@Model.Id
+                </div>
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+                </div>
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+                </div>
             </div>
-            <div class="col-lg-12 no-padder text-right">
-                <b>Recibo: </b>#@Model.Id
+        }
+        else
+        {
+            <div class="col-lg-6 no-padder text-right">
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Recibo: </b>#@Model.Id
+                </div>
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+                </div>
+                <div class="col-lg-12 no-padder text-right">
+                    <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+                </div>
             </div>
-            <div class="col-lg-12 no-padder text-right">
-                <b>Fecha: </b> @DateTime.Now.ToShortDateString()
-            </div>
-            <div class="col-lg-12 no-padder text-right">
-                <b>Hora: </b> @DateTime.Now.ToShortTimeString()
-            </div>
-        </div>
+        }
     </div>
     <div class="col-lg-12 no-padder">
         <table class="table">
             <thead>
+                <tr>
+                    <th class="text-center" colspan="4">
+                        Detalle del recibo de pago
+                    </th>
+                </tr>
                 <tr>
                     <th class="text-center">Tipo de Pago</th>
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
@@ -320,7 +391,7 @@
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                         {
-                            @(Model.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
                         {
@@ -333,11 +404,43 @@
                     </td>
                 </tr>
         </table>
+        @if (context.NoteCredits.Any(a => a.ReceiptPaymentId == Model.Id))
+        {
+            var CashAdvance = context.NoteCredits.Where(w => w.ReceiptPaymentId == Model.Id).FirstOrDefault();
+
+            <div class="col-lg-12 no-padder text-center">
+                <div class="col-lg-6 no-padder"></div>
+                <div class="col-lg-6 no-padder">
+                    <div class="col-lg-12 no-padder text-right">
+                        <b>Avance: </b>#@CashAdvance.Id
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 no-padder">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center" colspan="2">
+                                Avance de efectivo
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Monto del avance</th>
+                            <th class="text-left">Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">@CashAdvance.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-left">@CashAdvance.Concepts</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 
     <div class="col-lg-12 no-padder text-center">
-        <br />
-        <br />
         <div class="col-lg-4 col-md-6 col-sm-6 text-center">
             <div class="col-lg-12 no-padder text-center">
                 ______________________________

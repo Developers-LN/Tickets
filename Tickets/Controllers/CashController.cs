@@ -534,7 +534,7 @@ namespace Tickets.Controllers
 
         [HttpPost]
         [Authorize]
-        public JsonResult Receivable(ReceiptPayment receiptPayment)
+        public JsonResult Receivable(ReceiptPayment receiptPayment, int includeCashAdvance, decimal totalCashAdvance, string noteCashAdvance)
         {
             using (var context = new TicketsEntities())
             {
@@ -687,6 +687,26 @@ namespace Tickets.Controllers
                         if ((payment.totalRestant - payment.discount) <= 0)
                         {
                             invoice.PaymentStatu = (int)InvoicePaymentStatuEnum.Payed;
+                            context.SaveChanges();
+                        }
+
+                        if (includeCashAdvance == 1)
+                        {
+                            NoteCredit cashAdvance = new NoteCredit
+                            {
+                                ClientId = receiptPayment.ClientId,
+                                TotalCash = totalCashAdvance,
+                                TotalRest = totalCashAdvance,
+                                NoteDate = DateTime.Now.Date,
+                                Statu = (int)GeneralStatusEnum.Active,
+                                CreateUser = WebSecurity.CurrentUserId,
+                                CreateDate = DateTime.Now,
+                                Concepts = noteCashAdvance,
+                                DiscountPercent = 0,
+                                TypeNote = (int)NoteCreditEnum.CashAdvance,
+                                ReceiptPaymentId = receiptPayment.Id
+                            };
+                            context.NoteCredits.Add(cashAdvance);
                             context.SaveChanges();
                         }
 
@@ -1095,7 +1115,7 @@ namespace Tickets.Controllers
         }
 
         //
-        // GET: /Cash/CreditNote
+        // GET: /Cash/CashAdvance
         [Authorize]
         [HttpPost]
         public JsonResult CashAdvance(NoteCredit creditNote)

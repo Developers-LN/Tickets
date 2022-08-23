@@ -1,6 +1,6 @@
 @{
     Layout = null;
-    ViewBag.Title = "Reportes de Inspectoría";
+    ViewBag.Title = "Reportes de inspectoría";
 }
 <div class="col-lg-12 no-padder" ng-controller="RaffleForInspectorReporController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
@@ -11,16 +11,16 @@
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
-                                <th>Sorteo</th>
-                                <th class="text-center">Premiados No Impreso</th>
-                                <th class="text-center">Premiados Vendidos</th>
-                                <th class="text-center">PREMIADOS</th>
-                                <th class="text-center">PREMIADOS CADUCADOS</th>
+                                <th>SORTEOS</th>
+                                <th class="text-center">PREMIOS NO IMPRESOS</th>
+                                <th class="text-center">PREMIOS VENDIDOS</th>
+                                <th class="text-center">PREMIOS</th>
+                                <th class="text-center">PREMIOS CADUCADOS</th>
                                 <th class="text-center">CUADRE DE SORTEO</th>
                                 <th class="text-center">CUADRE DE SORTEO RESUMIDO</th>
-                                <th class="text-center">Resumen de Asignaciones</th>
-                                <th class="text-center">Asignaciones</th>
-
+                                <th class="text-center">RESUMEN DE ASIGNACIONES</th>
+                                <th class="text-center">ASIGNACIONES</th>
+                                <th class="text-center">DETALLE DE ASIGNACIONES</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,9 +47,11 @@
                                 <td class="text-center">
                                     <a href="/Reports/AllocationSummary?raffleId={{raffle.id}}" target="_blank" title="Imprimir: Resumen Asignaciones"><i class="fa fa-print"></i></a>
                                 </td>
-
                                 <td class="text-center">
                                     <a href="/Reports/AllocatinosNumbers?raffleId={{raffle.id}}" target="_blank" title="Imprimir: Reporte Asignaciones"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/AllocatedSummary?raffleId={{raffle.id}}" target="_blank" title="Imprimir: Reporte Asignaciones"><i class="fa fa-print"></i></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -60,6 +62,6 @@
         </div>
     </div>
 </div>
-<div class="col-lg-12 no-padder text-left m-b-lg"> 
+<div class="col-lg-12 no-padder text-left m-b-lg">
     <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
 </div>

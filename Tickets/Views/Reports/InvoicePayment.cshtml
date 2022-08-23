@@ -53,7 +53,7 @@
 
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
-        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 10px;">
             <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
@@ -92,6 +92,11 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th class="text-center" colspan="4">
+                        Detalle del recibo de pago
+                    </th>
+                </tr>
+                <tr>
                     <th class="text-center">Tipo de Pago</th>
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                     {
@@ -148,6 +153,40 @@
                 </tr>
             </tbody>
         </table>
+        @if (context.NoteCredits.Any(a => a.ReceiptPaymentId == Model.Id))
+        {
+            var CashAdvance = context.NoteCredits.Where(w => w.ReceiptPaymentId == Model.Id).FirstOrDefault();
+
+            <div class="col-lg-12 no-padder text-center">
+                <div class="col-lg-6 no-padder"></div>
+                <div class="col-lg-6 no-padder">
+                    <div class="col-lg-12 no-padder text-right">
+                        <b>Avance: </b>#@CashAdvance.Id
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 no-padder">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center" colspan="2">
+                                Avance de efectivo
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Monto del avance</th>
+                            <th class="text-left">Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">@CashAdvance.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-left">@CashAdvance.Concepts</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 
     <div class="col-lg-12 no-padder text-center">
@@ -179,7 +218,7 @@
 
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
-        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 40px;">
             <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12 no-padder text-center">
@@ -218,6 +257,11 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th class="text-center" colspan="4">
+                        Detalle del recibo de pago
+                    </th>
+                </tr>
+                <tr>
                     <th class="text-center">Tipo de Pago</th>
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                     {
@@ -273,6 +317,40 @@
                 </tr>
             </tbody>
         </table>
+        @if (context.NoteCredits.Any(a => a.ReceiptPaymentId == Model.Id))
+        {
+            var CashAdvance = context.NoteCredits.Where(w => w.ReceiptPaymentId == Model.Id).FirstOrDefault();
+
+            <div class="col-lg-12 no-padder text-center">
+                <div class="col-lg-6 no-padder"></div>
+                <div class="col-lg-6 no-padder">
+                    <div class="col-lg-12 no-padder text-right">
+                        <b>Avance: </b>#@CashAdvance.Id
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 no-padder">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center" colspan="2">
+                                Avance de efectivo
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Monto del avance</th>
+                            <th class="text-left">Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">@CashAdvance.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-left">@CashAdvance.Concepts</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 
     <div class="col-lg-12 no-padder text-center">

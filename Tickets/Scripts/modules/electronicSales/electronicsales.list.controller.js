@@ -63,7 +63,7 @@
             window.loading.show();
             $.when(
                 $.ajax($rootScope.serverUrl + 'ticket/clientApi/getClientSelect?statu=2089'),/*Clientes aprobados*/
-                $.ajax($rootScope.serverUrl + 'ticket/raffleApi/getRaffleForReturnedSelect')//Sorteos en planificacion
+                $.ajax($rootScope.serverUrl + 'ticket/raffleApi/getRaffleForElectronicSales')//Sorteos en planificacion
             ).then(function (clientResponse, raffleResponse) {
                 window.loading.hide();
                 if (clientResponse[1] == 'success') {

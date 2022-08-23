@@ -33,6 +33,9 @@
             if ($scope.receivable.TotalCash > $scope.payment.totalRestant) {
                 error += 'No se puede pagar mas de lo que debe' + isReq;
             }
+            if ($scope.receivable.IncludeCashAdvance === 1 && $scope.receivable.CashAdvance === undefined && $scope.receivable.CashAdvanceNote === undefined) {
+                error += 'Los datos del avance de efectivo' + isReq2;
+            }
             if (error !== '') {
                 alertify.showError('Alerta', error);
             }
@@ -55,7 +58,10 @@
             Telefono: undefined,
             Observaciones: undefined,
             clientType: undefined,
-            Notas: undefined
+            Notas: undefined,
+            CashAdvance: undefined,
+            IncludeCashAdvance: undefined,
+            CashAdvanceNote: undefined
         };
 
         $scope.totalCreditNoteValue = 0;
@@ -196,6 +202,11 @@
             try {
                 $scope.receivable.ReceiptDate = $rootScope.parseDate($scope.receivable.ReceiptDate, $scope.receivable.ReceiptDate).toJSON();
                 $scope.receivable.InvoiceId = $stateParams.invoiceId;
+                if ($scope.receivable.includeCashAdvance === undefined || $scope.receivable.includeCashAdvance === 0) {
+                    $scope.receivable.IncludeCashAdvance = 0;
+                    $scope.receivable.CashAdvance = 0;
+                    $scope.receivable.CashAdvanceNote = "N/A";
+                }
             } catch (e) { }
             if (validateData($scope.receivable) === false) {
                 return;
@@ -204,7 +215,14 @@
                 type: 'POST',
                 dataType: 'json',
                 url: 'Cash/Receivable',
-                data: $scope.receivable,
+                //data: $scope.receivable,
+                data:
+                {
+                    receiptPayment: $scope.receivable,
+                    includeCashAdvance: $scope.receivable.IncludeCashAdvance,
+                    totalCashAdvance: $scope.receivable.CashAdvance,
+                    noteCashAdvance: $scope.receivable.CashAdvanceNote
+                },
                 success: function (data) {
                     if (data.result === true) {
                         if (data.clientType == 5862) {

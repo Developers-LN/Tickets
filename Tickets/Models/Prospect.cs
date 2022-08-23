@@ -36,7 +36,6 @@ namespace Tickets.Models
         public decimal Price { get; set; }
         public decimal MaxReturnTickets { get; set; }
         public System.DateTime ExpirateDate { get; set; }
-        public Nullable<decimal> PercentageWinners { get; set; }
     
         public virtual ICollection<Award> Awards { get; set; }
         public virtual ICollection<Prospect_Price> Prospect_Price { get; set; }

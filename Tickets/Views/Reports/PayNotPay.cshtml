@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.PayableAward.ModelPayableAwardSummary>
+
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Resumen de premios pagables " + Model.FirstOrDefault().RaffleId;
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.ControlPremio : "";
+    string adminCargo = config != null ? config.ControlPremioCargo : "";
+
+    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
+    var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b><br />
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
+            <h3><b>DETALLE DE PAGO A PREMIOS DEL SORTEO No. @RaffleData.Id</b></h3><br />
+            Fecha del Sorteo @RaffleData.DateSolteo.ToShortDateString()
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center"><b>FILA</b></th>
+                    <th class="text-center"><b>CLIENTE</b></th>
+                    <th class="text-center"><b>PREMIOS</b></th>
+                    <th class="text-center"><b>TOTAL EN PREMIOS</b></th>
+                    <th class="text-center"><b>PREMIOS PAGADOS</b></th>
+                    <th class="text-center"><b>TOTAL PAGADO</b></th>
+                    <th class="text-center"><b>PREMIOS PENDIENTES</b></th>
+                    <th class="text-center"><b>TOTAL PENDIENTES</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var countAwards = 0;
+                    var totalPayable = 0.0m;
+                    var countPayed = 0;
+                    var totalPayed = 0.0m;
+                    var countPending = 0;
+                    var totalPending = 0.0m;
+                    var Fila = 1;
+                }
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">@Fila</td>
+                        <td class="text-center">@item.ClientName</td>
+                        <td class="text-center">@item.CountAward.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-center">@item.TotalPayable.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-center">@item.CountPayed.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-center">@item.TotalPayed.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-center">@item.CountPending.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-center">@item.TotalPending.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                    Fila++;
+                    countAwards += item.CountAward;
+                    totalPayable += item.TotalPayable;
+                    countPayed += item.CountPayed;
+                    totalPayed += item.TotalPayed;
+                    countPending += item.CountPending;
+                    totalPending += item.TotalPending;
+                }
+                <tr class="total">
+                    <td class="text-left"></td>
+                    <td class="text-right"><b>Total...:</b></td>
+                    <td class="text-center"><b>@countAwards.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-center"><b>@totalPayable.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-center"><b>@countPayed.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-center"><b>@totalPayed.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-center"><b>@countPending.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-center"><b>@totalPending.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+        <b>@adminName</b><br />
+        <span>@adminCargo</span>
+    </div>
+</div>

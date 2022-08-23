@@ -23,14 +23,18 @@
             window.loading.show();
             $.when(
                 $.ajax($rootScope.serverUrl + 'ticket/clientApi/getClientSelect?statu=2089'),/*Clientes aprobados*/
-                $.ajax($rootScope.serverUrl + 'ticket/raffleApi/getRaffleSelect?statu=68')//Sorteos en planificacion
-            ).then(function (clientResponse, raffleResponse) {
+                $.ajax($rootScope.serverUrl + 'ticket/raffleApi/getRaffleSelect?statu=68'),//Sorteos en planificacion
+                $.ajax($rootScope.serverUrl + 'ticket/raffleApi/getRaffleConsignation')
+            ).then(function (clientResponse, raffleResponse, raffleResponseConsignation) {
                 window.loading.hide();
                 if (clientResponse[1] == 'success') {
                     $scope.clients = clientResponse[0].object;
                 }
                 if (raffleResponse[1] == 'success') {
                     $scope.raffles = raffleResponse[0].object;
+                }
+                if (raffleResponseConsignation[1] == 'success') {
+                    $scope.rafflesConsignation = raffleResponseConsignation[0].object;
                 }
                 window.setTimeout(function () {
                     $scope.$apply();

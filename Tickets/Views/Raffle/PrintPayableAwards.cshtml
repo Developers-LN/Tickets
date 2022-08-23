@@ -13,9 +13,10 @@
                         <thead>
                             <tr>
                                 <th>Sorteo</th>
-                                <th class="text-center">Todos los <br /> billetes pagables</th>
-                                <th class="text-center">Billetes pagables <br /> sin terminal</th>
-                                <th class="text-center">Billetes pagables <br /> por cliente</th>
+                                <th class="text-center">Todos los Billetes pagables</th>
+                                @*<th class="text-center">Billetes pagables <br /> sin terminal</th>*@
+                                <th class="text-center">Billetes pagables por cliente</th>
+                                <th class="text-center">Billetes pagados y pendientes</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -24,11 +25,14 @@
                                 <td class="text-center">
                                     <a href="/Reports/AllPayableAwards?raffleId={{raffle.id}}" target="_blank" title="Imprimir billetes pagables"><i class="fa fa-print"></i></a>
                                 </td>
-                                <td class="text-center">
-                                    <a href="/Reports/PayableAwards?raffleId={{raffle.id}}" target="_blank" title="Imprimir billetes pagables"><i class="fa fa-print"></i></a>
-                                </td>
+                                @*<td class="text-center">
+                                        <a href="/Reports/PayableAwards?raffleId={{raffle.id}}" target="_blank" title="Imprimir billetes pagables"><i class="fa fa-print"></i></a>
+                                    </td>*@
                                 <td class="text-center">
                                     <a href="/Reports/PayableAwardsByClient?raffleId={{raffle.id}}" target="_blank" title="Imprimir billetes pagables por cliente"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/PayNotPay?raffleId={{raffle.id}}" target="_blank" title="Imprimir Billetes pagables y pendientes de pagos"><i class="fa fa-print"></i></a>
                                 </td>
                             </tr>
                         </tbody>

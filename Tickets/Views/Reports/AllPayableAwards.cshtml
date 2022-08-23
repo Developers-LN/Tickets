@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelPayableAwards>
 
 @{
+    int raffleid = Model.Select(s => s.raffle).FirstOrDefault();
+
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Billetes pagables";
+    ViewBag.Title = "Billetes pagables del sorteo " + raffleid;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -12,8 +14,8 @@
 
     var Contador = 0;
     decimal MontoApagarSorteo = 0;
+    decimal ValorPremios = 0;
 
-    int raffleid = Model.Select(s => s.raffle).FirstOrDefault();
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
 
     var Pendiente = "Pendiente";
@@ -66,43 +68,107 @@
         }
         else if (RaffleData.Statu == 70)
         {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th colspan="8" class="text-center">@RaffleData.Name</th>
-                    </tr>
-                    <tr>
-                        <th class="text-center">Fila</th>
-                        <th class="text-center">Billete</th>
-                        <th class="text-center">Estatus <br /> de pago</th>
-                        <th class="text-center">Tipo de <br /> premio</th>
-                        <th class="text-center">Fracción</th>
-                        <th class="text-center">Tipo de premio</th>
-                        <th class="text-center">Monto del <br /> premio</th>
-                        <th class="text-center">Monto a <br /> pagar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.Select(s => s.premios).FirstOrDefault() == false)
-                    {
+            if (Model.Select(s => s.premios).FirstOrDefault() == false)
+            {
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td class="text-center" colspan="8">
+                            <th class="text-center">
                                 <h1>EL SORTEO NO TUVO GANADORES</h1>
-                            </td>
+                            </th>
                         </tr>
-                    }
-                    else
-                    {
-                        var IdentifyTickets = RaffleData.IdentifyBaches
-                            .Select(s => new
-                            {
-                                s.IdentifyNumbers
-                            }).ToList();
+                    </thead>
+                </table>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="6" class="text-center">Resumen de premios</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Fila</th>
+                            <th class="text-center">Premios</th>
+                            <th class="text-center">Valor del premio</th>
+                            <th class="text-center">Cantidad</th>
+                            <th class="text-center">Monto en premios</th>
+                            <th class="text-center">Monto a pagar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var totalPremios = 0;
+                            var TotalPremios = 1;
+                            decimal resumenValorPremios = 0, resumenMontoApagarSorteo = 0;
+                            var resumenPremios = Model.GroupBy(g => g.nameaward)
+                                .Select(s => new
+                                {
+                                    name = s.Key,
+                                    monto = s.FirstOrDefault().value,
+                                    cantidad = s.Count(),
+                                    totalPremio = s.Sum(s1 => s1.value),
+                                    totalPagar = s.Sum(s2 => s2.valorpagar)
+                                });
+                        }
+                        @foreach (var item in resumenPremios)
+                        {
+                            totalPremios += item.cantidad;
+                            resumenValorPremios += item.totalPremio;
+                            resumenMontoApagarSorteo += item.totalPagar;
+                            <tr>
+                                <td class="text-center">@TotalPremios</td>
+                                <td class="text-center">@item.name</td>
+                                <td class="text-center">@item.monto.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-center">@item.cantidad.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-center">@item.totalPremio.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-center">@item.totalPagar.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            </tr>
+                            TotalPremios++;
+                        }
+                        <tr>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                            <th class="text-center">Cantidad de premios: @totalPremios.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">Total en premios: @resumenValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">Total a pagar: @resumenMontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                        </tr>
+                    </tbody>
+                </table>
 
-                        foreach (var item in Model)
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="8" class="text-center">@RaffleData.Name</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Fila</th>
+                            <th class="text-center">Billete</th>
+                            <th class="text-center">Estatus de pago</th>
+                            <th class="text-center">Premio</th>
+                            <th class="text-center">Fracción</th>
+                            <th class="text-center">Tipo de premio</th>
+                            <th class="text-center">Monto del premio</th>
+                            <th class="text-center">Monto a pagar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var IdentifyTickets = RaffleData.IdentifyBaches.Where(w => w.RaffleId == raffleid)
+                                .Select(s => new
+                                {
+                                    s.IdentifyNumbers
+                                }).ToList();
+
+                            var totalFractions = Model.GroupBy(g => g.number).Count();
+                        }
+
+                        @foreach (var item in Model)
                         {
                             Contador++;
                             MontoApagarSorteo += item.valorpagar;
+                            ValorPremios += item.value;
 
                             <tr>
                                 <td class="text-center">@Contador</td>
@@ -129,19 +195,23 @@
                                 <td class="text-center">@item.valorpagar.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             </tr>
                         }
-                    }
-                    @*<tr>
+                        <tr>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <th class="text-center">Total: @ValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
-                            <th class="text-center">Total: @MontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
-                        </tr>*@
-                </tbody>
-            </table>
+                            <th class="text-center">Fracciones: @totalFractions.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <td></td>
+                            <th class="text-center">Total en valor de premios: @ValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">Total en premios: @MontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                        </tr>
+                    </tbody>
+                </table>
+            }
         }
     </div>
+
+
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>Total a pagar: @MontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b>
     </div>

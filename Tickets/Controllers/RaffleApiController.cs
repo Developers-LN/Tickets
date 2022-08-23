@@ -87,6 +87,15 @@ namespace Tickets.Controllers
             return response;
         }
 
+        [HttpGet]
+        [Authorize]
+        [ActionName("getRaffleConsignation")]
+        public RequestResponseModel GetRaffleConsignation()
+        {
+            var response = new RaffleModel().GetRaffleConsignation();
+            return response;
+        }
+
         //
         //  GET: ticket/raffleApi/getRaffleForReturnedSelect
         [HttpGet]
@@ -95,6 +104,15 @@ namespace Tickets.Controllers
         public RequestResponseModel GetRaffleForReturnedSelect()
         {
             var response = new RaffleModel().GetRaffleForReturnedSelect();
+            return response;
+        }
+
+        [HttpGet]
+        [Authorize]
+        [ActionName("getRaffleForElectronicSales")]
+        public RequestResponseModel GetRaffleForElectronicSales()
+        {
+            var response = new RaffleModel().GetRaffleForElectronicSales();
             return response;
         }
 

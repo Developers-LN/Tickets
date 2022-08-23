@@ -41,10 +41,11 @@
                         $scope.raffle.startReturnDate = new Date($scope.raffle.startReturnDateLong);
                         $scope.raffle.endReturnDate = new Date($scope.raffle.endReturnDateLong);
                         $scope.raffle.endAllocationDate = new Date($scope.raffle.endAllocationDateLong);
+                        $scope.raffle.endElectronicSales = new Date($scope.raffle.endElectronicSalesLong);
 
                         $scope.raffle.startDate = $scope.raffle.startReturnDate;
                         $scope.raffle.startTime = $scope.raffle.startReturnDate;
-
+                        $scope.raffle.endElectronicSalesTime = $scope.raffle.endElectronicSales;
                         $scope.raffle.endDate = $scope.raffle.endReturnDate;
                         $scope.raffle.endTime = $scope.raffle.endReturnDate;
 
@@ -108,6 +109,9 @@
             if (raffle.statu == undefined || raffle.statu <= 0) {
                 error += 'Status' + isReq;
             }
+            if (raffle.endElectronicSales == undefined) {
+                error += "Hora de cierre de venta electrónica" + isReq;
+            }
             if (error !== '') {
                 alertify.showError('Alerta', error);
             }
@@ -116,6 +120,7 @@
 
         $scope.saveRaffleForm = function () {
             try {
+                var DateSorteo = undefined;
                 if ($scope.raffle.startDate === undefined || $scope.raffle.startTime === undefined) {
                     $scope.raffle.startReturnDate = undefined;
                 } else {
@@ -129,12 +134,19 @@
                 if ($scope.raffle.raffleDate === undefined) {
                     $scope.raffle.raffleDate = undefined;
                 } else {
+                    DateSorteo = $scope.raffle.raffleDate;
                     $scope.raffle.raffleDate = $rootScope.parseDate($scope.raffle.raffleDate, $scope.raffle.raffleDate).toJSON();
                 }
                 if ($scope.raffle.endAllocationDateOnly === undefined || $scope.raffle.endAllocationTime === undefined) {
                     $scope.raffle.endAllocationDate = undefined;
                 } else {
                     $scope.raffle.endAllocationDate = $rootScope.parseDate($scope.raffle.endAllocationDateOnly, $scope.raffle.endAllocationTime).toJSON();
+                }
+                if ($scope.raffle.endElectronicSalesTime === undefined) {
+                    $scope.raffle.endElectronicSales = undefined
+                }
+                else {
+                    $scope.raffle.endElectronicSales = $rootScope.parseDate(DateSorteo, $scope.raffle.endElectronicSalesTime).toJSON();
                 }
             } catch (e) { }
             if (self.validate($scope.raffle) === false) {
@@ -157,7 +169,6 @@
                 }
             });
         }
-
         self.getRaffleData();
     }
 })();

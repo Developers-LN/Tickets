@@ -6,6 +6,7 @@
         public int TanId { get; set; }
         public int TaId { get; set; }
         public string ControlNumber { get; set; }
+        public string ClientName { get; set; }
         public int ClientId { get; set; }
         public int RaffleId { get; set; }
         public int Number { get; set; }

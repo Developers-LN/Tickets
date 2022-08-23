@@ -624,7 +624,7 @@ namespace Tickets.Models.Ticket
             {
                 identifyBach.Id,
                 identifyBach.ClientId,
-                percent = identifyBach.Client.GroupId == (int)ClientGroupEnum.Mayorista ? 2 : 0,
+                percent = identifyBach.Client.GroupId == (int)ClientGroupEnum.Mayorista || identifyBach.Client.GroupId == (int)ClientGroupEnum.DistribuidorElectronico ? 2 : 0,
                 ClientDesc = context.Clients.FirstOrDefault(c => c.Id == identifyBach.ClientId).Name,
                 Cedula = identifyBach.Cedula,
                 Nombre = identifyBach.Nombre,

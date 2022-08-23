@@ -10,7 +10,10 @@ using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
 using Tickets.Models.Enums;
+using Tickets.Models.ModelsProcedures.Allocations;
 using Tickets.Models.Procedures;
+using Tickets.Models.Procedures.Allocations;
+using Tickets.Models.Procedures.PayableAward;
 using Tickets.Models.Prospects;
 using Tickets.Models.Raffles;
 
@@ -423,6 +426,22 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult PayNotPay(int raffleId)
+        {
+            ProcedurePayableAwardSummary procedurePayableAwardSummary = new ProcedurePayableAwardSummary();
+            var Resultado = procedurePayableAwardSummary.payableAwardSummary(raffleId);
+            return View(Resultado);
+        }
+
+        public ActionResult AllocatedSummary(int raffleId)
+        {
+            AllocatedSummaryProcedure allocatedSummaryProcedure = new AllocatedSummaryProcedure();
+            var Resultado = allocatedSummaryProcedure.AllocatedSummary(raffleId);
+            return View(Resultado);
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult ApprovedBach(int bachId)
         {
             var context = new TicketsEntities();
@@ -623,11 +642,11 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult RaffleGeneralOverR(int raffleId)
         {
-            CuadreSorteoResumidoProcedure cuadreSorteoResumidoProcedure = new CuadreSorteoResumidoProcedure();
+            /*CuadreSorteoResumidoProcedure cuadreSorteoResumidoProcedure = new CuadreSorteoResumidoProcedure();
             var resultado = cuadreSorteoResumidoProcedure.CuadreSorteo(raffleId);
-            return View(resultado);
+            return View(resultado);*/
 
-            /*var context = new TicketsEntities();
+            var context = new TicketsEntities();
             var raffle = context.Raffles.Where(r => r.Id == raffleId).Select(r => new RaffleModel()
             {
                 Id = r.Id,
@@ -639,7 +658,7 @@ namespace Tickets.Controllers
                     LeafNumber = r.Prospect.LeafNumber
                 }
             }).FirstOrDefault();
-            return View(raffle);*/
+            return View(raffle);
         }
 
         //
