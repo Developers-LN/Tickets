@@ -24,25 +24,26 @@
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
+                                <th class="text-center">Asignación</th>
                                 <th>Cliente</th>
-                                <th>Asignación</th>
-                                <th>Cantidad vendida</th>
-                                <th>Cantidad asignada</th>
-                                <th>Cantidad restante</th>
+                                <th class="text-center">Vendido</th>
+                                <th class="text-center">Asignado</th>
+                                <th class="text-center">Anulado/Devuelto</th>
                                 <th class="editColumm text-center">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr data-ng-repeat="returned in returneds">
-                                <td>{{returned.clientDesc}}</td>
-                                <td>{{returned.allocationId}}</td>
-                                <td>{{returned.fractionQuantity}}</td>
-                                <td>{{returned.allocationFractionQuantity}}</td>
-                                <td>{{returned.totalRest}}</td>
+                            <tr data-ng-repeat="allocation in ElectronicSales">
+                                <td class="text-center">{{allocation.allocationId}}</td>
+                                <td>{{allocation.clientDesc}}</td>
+                                <td class="text-center">{{allocation.fractionQuantity | number}}</td>
+                                <td class="text-center">{{allocation.allocationFractionQuantity | number}}</td>
+                                <td class="text-center">{{allocation.totalRest | number}}</td>
                                 <td class="text-center">
+                                    <a ng-show="verifyCanView('app.electronicSalesDetails')" href="#/electronic/electronicSales/{{allocation.allocationId}}" title="Ventas por día" class="{{moduleCanView}}"><i class="fa fa-calendar"></i></a>
                                     @*<a target="_blank" href="/Reports/ElectronicSaleDetails?allocationId={{allocation.id}}" title="Detalle de venta electrónica"><i class="fa fa-print"></i></a>*@
-                                    @*<a class="{{modulecanview}}" href="#/ticket/electronicSalesGroupDetails/{{returned.allocationId}}" title="ver detalles del grupo"><i class="fa fa-eye"></i></a>*@
-                                    <a ng-click="validateElectronicSale(returned)" ng-show="returned.anyReturn != @((int)Tickets.Models.Enums.AllocationStatuEnum.ReturnsProcessed) && returned.anyReturn != @((int)Tickets.Models.Enums.AllocationStatuEnum.Returned)" title="Validar venta" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>
+                                    @*<a class="{{modulecanview}}" href="#/ticket/electronicSalesGroupDetails/{{allocation.allocationId}}" title="ver detalles del grupo"><i class="fa fa-eye"></i></a>*@
+                                    <a ng-click="validateElectronicSale(allocation)" ng-show="allocation.anyReturn != @((int)Tickets.Models.Enums.AllocationStatuEnum.ReturnsProcessed) && allocation.anyReturn != @((int)Tickets.Models.Enums.AllocationStatuEnum.Returned)" title="Validar venta" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>
                                 </td>
                             </tr>
                         </tbody>

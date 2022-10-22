@@ -193,6 +193,10 @@
                         {
                             @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                        {
+                            @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
                     </td>
                 </tr>
         </table>
@@ -400,6 +404,10 @@
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoNomina)
                         {
                             @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                        {
+                            @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                     </td>
                 </tr>

@@ -503,6 +503,11 @@
                 templateUrl: Route.base('Cash/InvoicePaymentHistory'),
                 resolve: {}
             })
+            .state('app.electronicSalesDetails', {
+                url: '/electronic/electronicSales/:allocationId',
+                templateUrl: Route.base('ElectronicSales/ElectronicSalesDetails'),
+                resolve: {}
+            })
             .state('app.ticketNumberDetail', {
                 url: '/ticket/numberdetail/:numberId',
                 templateUrl: Route.base('TicketAllocation/NumberDetail'),

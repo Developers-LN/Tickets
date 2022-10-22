@@ -750,7 +750,10 @@ namespace Tickets.Controllers
             }
 
             ///    var ticketController = new TicketAllocationController();  // esta instancia de clase no presenta ninguna funcionalidad
-            if (invoice == null) { return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { } }; }
+            if (invoice == null)
+            {
+                return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { } };
+            }
             return new JsonResult()
             {
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
@@ -1202,7 +1205,7 @@ namespace Tickets.Controllers
                                 identifyBachId = creditNote.IdentifyBaches.FirstOrDefault().Id;
                                 client = context.IdentifyBaches.FirstOrDefault(i => i.Id == identifyBachId).Client;
                                 creditNote.IdentifyBaches = new List<IdentifyBach>();
-                                creditNote.DiscountPercent = client.GroupId == (int)ClientGroupEnum.Mayorista ? 2 : 0;
+                                creditNote.DiscountPercent = client.GroupId == (int)ClientGroupEnum.Mayorista || client.GroupId == (int)ClientGroupEnum.DistribuidorElectronico ? 2 : 0;
                             }
                             else
                             {

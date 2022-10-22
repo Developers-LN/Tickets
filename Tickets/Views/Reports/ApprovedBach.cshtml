@@ -139,7 +139,7 @@
                                 total = raffleAward.Award.Value;
                                 //totalFraction += 1;
                                 <tr>
-                                    <td class="text-center">@number.TicketAllocationNumber.Number</td>
+                                    <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Raffle.Prospect.Production.ToString().Length, '0')</td>
                                     <td class="text-center">@raffleAward.Award.Name</td>
                                     <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
                                     <td class="text-center">@(raffleAward.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100) ).ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
@@ -151,7 +151,7 @@
                             {
                                 //totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                 <tr>
-                                    <td class="text-center">@number.TicketAllocationNumber.Number</td>
+                                    <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Raffle.Prospect.Production.ToString().Length, '0')</td>
                                     <td class="text-center">@raffleAward.Award.Name</td>
                                     <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
                                     <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>

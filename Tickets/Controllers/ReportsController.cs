@@ -10,7 +10,6 @@ using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
 using Tickets.Models.Enums;
-using Tickets.Models.ModelsProcedures.Allocations;
 using Tickets.Models.Procedures;
 using Tickets.Models.Procedures.Allocations;
 using Tickets.Models.Procedures.PayableAward;
@@ -63,6 +62,17 @@ namespace Tickets.Controllers
                 (i.RaffleId == raffleId || raffleId == 0)
                 && (i.ClientId == clientId || clientId == 0)).ToList();
             return View(indentifybatchs);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult DataByDay(int allocationId, string dateSale)
+        {
+            var context = new TicketsEntities();
+            var date = DateTime.Parse(dateSale);
+            ViewBag.dateSale = date;
+            var ticketAllocation = context.TicketAllocations.FirstOrDefault(w => w.Id == allocationId);
+            return View(ticketAllocation);
         }
 
         // 
@@ -958,7 +968,7 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var reprint = context.TicketRePrints.FirstOrDefault(r => r.Id == reprintId);
-            
+
             /*if (reprint.Statu == (int)TicketReprintStatuEnum.Printed)
             {
                 return RedirectToAction("Error", new { message = "Los Billetes de la reimpresion " + reprintId + " fueron impreso." });
@@ -1000,7 +1010,7 @@ namespace Tickets.Controllers
             }
             else
             {
-                var invoices = context.Invoices.Where(w=>w.RaffleId == raffleId).ToList();
+                var invoices = context.Invoices.Where(w => w.RaffleId == raffleId).ToList();
 
                 if (invoices.Count == 0)
                 {

@@ -40,31 +40,60 @@ namespace Tickets.Models.Ticket
         internal RequestResponseModel GetElectronicSalesDetails(int AllocationId)
         {
             var context = new TicketsEntities();
-            var electronicTickets = context.ElectronicTicketSales
+
+            var Allocation = context.TicketAllocations.FirstOrDefault(f => f.Id == AllocationId);
+
+            if (Allocation.Client.GroupId == (int)ClientGroupEnum.DistribuidorXML)
+            {
+                var electronicTickets = context.ElectronicTicketSales
                 .Where(w => w.TicketAllocationId == AllocationId).AsEnumerable()
                 .Select(s => this.ElectronicSaleObject(s)).FirstOrDefault();
 
-            if (electronicTickets == null)
-            {
-                electronicTickets = new ElectronicSalesModel()
+                if (electronicTickets == null)
                 {
-                    ClientId = 0,
-                    RaffleId = 0,
-                    ElectronicTickets = new List<ElectronicSalesNumberModel>()
+                    electronicTickets = new ElectronicSalesModel()
+                    {
+                        ClientId = 0,
+                        RaffleId = 0,
+                        ElectronicTickets = new List<ElectronicSalesNumberModel>()
+                    };
+                }
+                return new RequestResponseModel()
+                {
+                    Result = true,
+                    Object = electronicTickets
                 };
             }
-            return new RequestResponseModel()
+            else
             {
-                Result = true,
-                Object = electronicTickets
-            };
+                var electronicTickets = context.ElectronicTicketSales
+                .Where(w => w.TicketAllocationId == AllocationId).AsEnumerable()
+                .Select(s => this.ElectronicSaleObject(s)).FirstOrDefault();
+
+                if (electronicTickets == null)
+                {
+                    electronicTickets = new ElectronicSalesModel()
+                    {
+                        ClientId = 0,
+                        RaffleId = 0,
+                        ElectronicTickets = new List<ElectronicSalesNumberModel>()
+                    };
+                }
+                return new RequestResponseModel()
+                {
+                    Result = true,
+                    Object = electronicTickets
+                };
+            }
         }
 
         internal RequestResponseModel GetList(int raffleId, int clientId = 0, int statu = 0)
         {
             var context = new TicketsEntities();
 
-            var Clients = context.Clients.Where(w => w.GroupId == (int)ClientGroupEnum.DistribuidorElectronico).Select(s => s.Id).ToList();
+            var Clients = context.Clients
+                .Where(w => w.GroupId == (int)ClientGroupEnum.DistribuidorElectronico ||
+                w.GroupId == (int)ClientGroupEnum.DistribuidorXML).Select(s => s.Id).ToList();
 
             var electronicTickets = context.TicketAllocations
                 .Where(a => a.RaffleId == raffleId
@@ -82,33 +111,67 @@ namespace Tickets.Models.Ticket
         {
             var context = new TicketsEntities();
             var AllocationId = model.Id;
+            var allocation = new TicketAllocationModel();
             var TotalVentaElectroica = 0;
-            if (context.ElectronicTicketSales.Where(w => w.TicketAllocationId == AllocationId).Any())
+            var client = context.Clients.FirstOrDefault(f => f.Id == model.ClientId);
+
+            if (client.GroupId == (int)ClientGroupEnum.DistribuidorXML)
             {
-                TotalVentaElectroica = context.ElectronicTicketSales.Where(w => w.TicketAllocationId == AllocationId).Select(s => s.FractionTo - s.FractionFrom + 1).Sum();
+                if (context.ElectronicTicketSales.Where(w => w.TicketAllocationId == AllocationId).Any())
+                {
+                    TotalVentaElectroica = context.ElectronicTicketSales.Where(w => w.TicketAllocationId == AllocationId).Select(s => s.FractionTo - s.FractionFrom + 1).Sum();
+                }
+
+                allocation = new TicketAllocationModel()
+                {
+                    ClientId = model.ClientId,
+                    AllocationId = model.Id,
+                    ClientDesc = model.Client.Name,
+                    StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
+                    CreateDate = model.CreateDate,
+                    FractionQuantity = TotalVentaElectroica,
+                    StatuId = model.Statu,
+                    Agente = model.Agente,
+                    Grupo = context.Clients.FirstOrDefault(c => c.Id == model.ClientId).GroupId,
+                    AnyReturn = model.Statu,
+                    AllocationFractionQuantity = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == model.Id).Select(s => s.FractionTo - s.FractionFrom + 1).Sum()
+                };
+
+                if (context.TicketReturns.Where(w => w.ClientId == model.ClientId && w.RaffleId == model.RaffleId && w.TicketAllocationNumber.TicketAllocation.Id == model.Id).Any())
+                {
+                    var TotalAllocated = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == model.Id).Select(s => s.Id).ToList();
+                    allocation.TotalRest = context.TicketReturns.Where(w => TotalAllocated.Contains(w.TicketAllocationNimberId)).Select(s => s.FractionFrom - s.FractionTo + 1).Sum();
+                }
+                else
+                {
+                    allocation.TotalRest = 0;
+                }
             }
-
-            var allocation = new TicketAllocationModel()
+            else if (client.GroupId == (int)ClientGroupEnum.DistribuidorElectronico)
             {
-                ClientId = model.ClientId,
-                AllocationId = model.Id,
-                ClientDesc = model.Client.Name,
-                StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
-                CreateDate = model.CreateDate,
-                FractionQuantity = TotalVentaElectroica,
-                StatuId = model.Statu,
-                Agente = model.Agente,
-                Grupo = context.Clients.FirstOrDefault(c => c.Id == model.ClientId).GroupId,
-                AnyReturn = model.Statu,
-                AllocationFractionQuantity = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == model.Id).Select(s => s.FractionTo - s.FractionFrom + 1).Sum()
-            };
+                TotalVentaElectroica = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == model.Id).Select(s => s.FractionTo - s.FractionFrom + 1).Sum();
 
-            allocation.TotalRest = allocation.AllocationFractionQuantity - allocation.FractionQuantity;
+                allocation = new TicketAllocationModel()
+                {
+                    ClientId = model.ClientId,
+                    AllocationId = model.Id,
+                    ClientDesc = model.Client.Name,
+                    StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
+                    CreateDate = model.CreateDate,
+                    FractionQuantity = TotalVentaElectroica,
+                    StatuId = model.Statu,
+                    Agente = model.Agente,
+                    Grupo = context.Clients.FirstOrDefault(c => c.Id == model.ClientId).GroupId,
+                    AnyReturn = model.Statu,
+                    AllocationFractionQuantity = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == model.Id).Select(s => s.FractionTo - s.FractionFrom + 1).Sum(),
+                    TotalRest = context.TicketAllocationNumbers.Any(w => w.TicketAllocationId == model.Id && w.Statu == (int)TicketStatusEnum.Anulated) ? context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == model.Id && w.Statu == (int)TicketStatusEnum.Anulated).Select(s => s.FractionTo - s.FractionFrom + 1).Sum() : 0
+                };
+            }
 
             return allocation;
         }
 
-        internal ElectronicSalesModel ToObject(List<ElectronicTicketSale> electronicTickets, bool hasNumber = false)
+        /*internal ElectronicSalesModel ToObject(List<ElectronicTicketSale> electronicTickets, bool hasNumber = false)
         {
             var context = new TicketsEntities();
             var Allocation = electronicTickets.FirstOrDefault().TicketAllocationId;
@@ -133,7 +196,7 @@ namespace Tickets.Models.Ticket
                 model.ElectronicTickets = electronicTickets.Select(t => electronicSalesNumberModel.ToObject(t)).ToList();
             }
             return model;
-        }
+        }*/
 
         internal ElectronicSalesModel ElectronicSaleObject(ElectronicTicketSale electronicTicketSale, bool hasNumber = true)
         {
@@ -151,15 +214,21 @@ namespace Tickets.Models.Ticket
             if (hasNumber)
             {
                 var ElectronicTicketsList = context.ElectronicTicketSales.Where(w => w.TicketAllocationId == Allocation).ToList();
-                foreach (var item in ElectronicTicketsList)
+
+                var GroupByDate = ElectronicTicketsList.GroupBy(g => g.SaleDate.ToShortDateString()).Select(s => new
                 {
-                    var electronicSalesNumberModel = new ElectronicSalesNumberModel()
+                    date = s.Key,
+                    totalSold = s.Count()
+                }).ToList();
+
+                foreach (var item in GroupByDate)
+                {
+                    var dataElectronicSale = new ElectronicSalesNumberModel()
                     {
-                        NumberDesc = item.TicketAllocationNumber.Number,
-                        FractionFrom = item.FractionFrom,
-                        FractionTo = item.FractionTo
+                        DateSold = item.date,
+                        TotalSold = item.totalSold
                     };
-                    electronicTickets.ElectronicTickets.Add(electronicSalesNumberModel);
+                    electronicTickets.ElectronicTickets.Add(dataElectronicSale);
                 }
 
             }

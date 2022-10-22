@@ -69,7 +69,7 @@
 
         $scope.saveForm = function () {
             try {
-                $scope.taxReceipt.dueDate = $rootScope.parseDate($scope.taxReceipt.dueDate, $scope.taxReceipt.dueDate).toJSON();
+                $scope.taxReceipt.DueDate = $rootScope.parseDate($scope.taxReceipt.DueDate, $scope.taxReceipt.DueDate).toJSON();
             } catch (e) { }
             if (validateData($scope.taxReceipt) === false) {
                 return;

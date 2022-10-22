@@ -24,7 +24,7 @@
                 url: $rootScope.serverUrl + 'ticket/electronicSalesApi/getElectronicSalesList?raffleId=' + $scope.raffleId + '&clientId=' + $scope.groupClientId,
                 success: function (response) {
                     window.loading.hide();
-                    $scope.returneds = response.object;
+                    $scope.ElectronicSales = response.object;
                     $rootScope.destroyDataTable();
                     $scope.$apply();
                     $rootScope.dataTable();

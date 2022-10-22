@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "Detalles de la asignación No. " + Model.Id;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -55,24 +55,24 @@
 
 <div class="col-lg-12 ">
     <div class="col-lg-3 no-padder text-left">
-        Fecha Impresión: <b>@(Model.TicketAllocationNumbers.FirstOrDefault().PrintedDate.HasValue? Model.TicketAllocationNumbers.FirstOrDefault().PrintedDate.Value: DateTime.Now)</b><br />
-        Facturado a: <b>@Model.Client.Name @Model.TicketAllocationNumbers.Select(t => t.TicketAllocation.Agente).FirstOrDefault()</b>
+        FECHA CREACION: <b>@(Model.TicketAllocationNumbers.FirstOrDefault().PrintedDate.HasValue? Model.TicketAllocationNumbers.FirstOrDefault().PrintedDate.Value: DateTime.Now)</b><br />
+        FACTURADO A: <b>@Model.Client.Name @Model.TicketAllocationNumbers.Select(t => t.TicketAllocation.Agente).FirstOrDefault()</b>
     </div>
     <div class="col-lg-6 no-padder text-center">
         <div class="col-lg-12  no-padder text-center">
-            <img src="~/Images/logo.png" style="height:65px; width:auto; height: 38px;" />
+            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
         </div>
         <div class="col-lg-12  no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
-            <b>Asignación de Billetes del sorteo @Model.Raffle.Name No.@Model.Raffle.Id</b>
+            <b>ASIGNACION DE BILLETES DEL SORTEO @Model.Raffle.Name NO. @Model.Raffle.Id</b>
         </div>
     </div>
     <div class="col-lg-3  no-padder text-right">
-        <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-        <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
-        <b>Fec. sorteo:</b> @Model.Raffle.DateSolteo.ToShortDateString() <br />
-        <b>Asignación: </b>#@Model.Id
+        <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
+        <b>HORA: </b> @DateTime.Now.ToShortTimeString() <br />
+        <b>FECHA SORTEO:</b> @Model.Raffle.DateSolteo.ToShortDateString() <br />
+        <b>ASIGNACION: </b>#@Model.Id
     </div>
     <div class="col-lg-12 col-md-12 no-padder col-sm-12">
 

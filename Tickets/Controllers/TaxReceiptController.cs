@@ -137,15 +137,18 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var result = false;
             var message = "";
-            var Min = context.TaxReceipts.Min(mi => mi.SequenceFrom);
-            var Max = context.TaxReceipts.Max(ma => ma.SequenceTo);
+            var Min = context.TaxReceipts.Any() == false ? 0 : context.TaxReceipts.Min(mi => mi.SequenceFrom);
+            var Max = context.TaxReceipts.Any() == false ? 0 : context.TaxReceipts.Max(ma => ma.SequenceTo);
 
             if (From < To)
             {
-                if ((From <= Min || From <= Max) || (To <= Min || To <= Max))
+                if(Min != 0 || Max != 0)
                 {
-                    result = true;
-                    message = "Este rango de secuencia ya esta en uso";
+                    if ((From <= Min || From <= Max) || (To <= Min || To <= Max))
+                    {
+                        result = true;
+                        message = "Este rango de secuencia ya esta en uso";
+                    }
                 }
             }
             else
@@ -162,8 +165,8 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var taxType = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.TaxReceiptType && w.Statu == true).Select(s => new { s.Id, s.NameDetail }).ToList();
-            int? Min = context.TaxReceipts.Min(mi => mi.SequenceFrom);
-            int? Max = context.TaxReceipts.Max(ma => ma.SequenceTo);
+            int? Min = context.TaxReceipts.Any() == false ? 0 : context.TaxReceipts.Min(mi => mi.SequenceFrom);
+            int? Max = context.TaxReceipts.Any() == false ? 0 : context.TaxReceipts.Max(ma => ma.SequenceTo);
 
             return new JsonResult()
             {
@@ -171,7 +174,7 @@ namespace Tickets.Controllers
                 Data = new
                 {
                     taxType,
-                    Min, 
+                    Min,
                     Max
                 }
             };

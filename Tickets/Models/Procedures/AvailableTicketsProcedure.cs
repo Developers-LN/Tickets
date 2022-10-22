@@ -38,7 +38,7 @@ namespace Tickets.Models.Procedures
                 {
                     var Disponibles = new ModelAvailableTickets()
                     {
-                        Data = true,
+                        Data = false,
                         RaffleId = raffle,
                         AvailableFractions = 0,
                         Number = 0

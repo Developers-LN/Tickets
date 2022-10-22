@@ -35,7 +35,7 @@
                 error += 'Producci&oacute;n' + isReq;
             }
             if (self.validateNumenber(prospect.LeafNumber) === false) {
-                error += 'Hojas por número' + isReq;
+                error += 'Hojas por nï¿½mero' + isReq;
             }
             if (self.validateNumenber(prospect.LeafFraction) === false) {
                 error += 'Fracci&oacute;n por hojas' + isReq;
