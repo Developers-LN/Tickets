@@ -135,7 +135,7 @@ namespace Tickets.Models
         {
             var context = new TicketsEntities();
             var prospectGroups = context.Catalogs.Where(c => c.Statu == true && c.IdGroup == groupId).AsEnumerable()
-                .Select(catalog => this.CatalogToObject(catalog)).ToList();
+                .Select(catalog => this.CatalogToObject(catalog)).OrderBy(o => o.IdDetail).ToList();
 
             return new RequestResponseModel()
             {

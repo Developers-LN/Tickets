@@ -1,6 +1,6 @@
 @{
     Layout = null;
-    ViewBag.Title = "Listado de Prospectos";
+    ViewBag.Title = "Listado de prospectos";
 }
 <div class="col-lg-12 no-padder" ng-controller="ProspectListController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
@@ -14,6 +14,7 @@
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
+                                <th>Número</th>
                                 <th>Nombre</th>
                                 <th class="hidden-xs">Precio</th>
                                 <th class="hidden-xs">Producción</th>
@@ -24,6 +25,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="prospect in prospects">
+                                <td>{{prospect.id}}</td>
                                 <td>{{prospect.name}}</td>
                                 <td class="hidden-xs">{{parseMoney(prospect.price)}}</td>
                                 <td class="hidden-xs">{{parseNumber(prospect.production)}}</td>

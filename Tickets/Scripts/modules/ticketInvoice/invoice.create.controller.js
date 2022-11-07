@@ -49,7 +49,7 @@
                 $.ajax($rootScope.serverUrl + 'ticket/clientApi/getClientSelect?statu=2089'),/*Clientes aprobados*/
                 $.ajax($rootScope.serverUrl + 'ticket/raffleApi/getRaffleSelect?statu=0'),//Sorteos en planificacion
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getInvoiceConditionSelect'),
-                $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getXpriedInvoiceTimeSelect'),
+                $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getXpriedInvoiceTimeSelect'), //Dias de expiracion
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getPaymentTypeSelect'),
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getTaxReceipts'),
                 $.ajax($rootScope.serverUrl + 'ticket/catalogApi/getAllocationTypeSelect')
