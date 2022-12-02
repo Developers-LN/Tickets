@@ -33,8 +33,8 @@ namespace Tickets.Models.Prospects
         [JsonProperty(PropertyName = "sourceAward")]
         public int? SourceAward { get; set; }
 
-        [JsonProperty(PropertyName = "sourceAwardDesc")]
-        public string SourceAwardDesc { get; set; }
+        [JsonProperty(PropertyName = "sourceAwardDescription")]
+        public string SourceAwardDescription { get; set; }
 
         [JsonProperty(PropertyName = "terminal")]
         public int? Terminal { get; set; }
@@ -65,7 +65,7 @@ namespace Tickets.Models.Prospects
                 ProspectId = award.ProspectId,
                 Quantity = award.Quantity,
                 SourceAward = award.SourceAward,
-                SourceAwardDesc = award.SourceAward.HasValue ? awardList.FirstOrDefault(sa => sa.Id == award.SourceAward.Value).Name : "",
+                SourceAwardDescription = award.SourceAward.HasValue ? awardList.FirstOrDefault(sa => sa.Id == award.SourceAward.Value).Name : "",
                 Terminal = award.Terminal,
                 TotalValue = award.TotalValue,
                 Value = award.Value,

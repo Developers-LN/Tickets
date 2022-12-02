@@ -99,7 +99,7 @@ namespace Tickets.Models.Prospects
         {
             var context = new TicketsEntities();
             var awardModel = new AwardModel();
-            var awardList = context.Awards.ToList();
+            var awardList = context.Awards.Where(w => w.ProspectId == prospect.Id).ToList();
             var prospectModel = new ProspectModel()
             {
                 Id = prospect.Id,
@@ -323,8 +323,12 @@ namespace Tickets.Models.Prospects
 
                             if (awardModel.SourceAward.HasValue)
                             {
-                                var sourceAward = context.Awards.Where(a => a.ProspectId == prospect.Id && a.OrderAward == awardModel.SourceAward).FirstOrDefault();
-                                awardModel.SourceAward = sourceAward.Id;
+                                int test;
+                                if (int.TryParse(awardModel.SourceAward.Value.ToString(), out test))
+                                {
+                                    var sourceAward = context.Awards.Where(a => a.ProspectId == prospect.Id && a.Id == awardModel.SourceAward).FirstOrDefault();
+                                    awardModel.SourceAward = sourceAward.Id;
+                                }
                             }
 
                             award.Name = awardModel.Name.ToUpper();

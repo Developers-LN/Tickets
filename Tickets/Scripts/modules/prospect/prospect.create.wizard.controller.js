@@ -52,12 +52,11 @@
                     window.loading.hide();
                     if (response.result == true) {
                         response.object.expirateDate = new Date(response.object.expirateDateLong);
-
                         for (var i = 0; i < response.object.awards.length; i++) {
                             if (response.object.awards[i].sourceAward > 0) {
                                 for (var x = 0; x < response.object.awards.length; x++) {
                                     if (response.object.awards[x].id === response.object.awards[i].sourceAward) {
-                                        response.object.awards[i].sourceAward = response.object.awards[x].orderAward;
+                                        response.object.awards[i].sourceAward = response.object.awards[x].id;
                                     }
                                 }
                             }

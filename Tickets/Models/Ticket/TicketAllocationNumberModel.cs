@@ -319,7 +319,65 @@ namespace Tickets.Models.Ticket
                 };
             }
 
-            var awards = context.RaffleAwards.Where(r => r.RaffleId == n.TicketAllocation.RaffleId && r.ControlNumber == n.Number).ToList();
+            var awards = context.RaffleAwards.Where(r => r.RaffleId == n.TicketAllocation.RaffleId && r.ControlNumber == n.Number && r.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived).ToList();
+            bool wfrac = true;
+            var fFrom = fractionFrom;
+            var fTo = fractionTo;
+            foreach (var a in awards.Where(w => w.Award.ByFraction == (int)ByFractionEnum.S))
+            {
+                for (int i = fFrom; i < fTo; i++)
+                {
+                    if (i == a.Fraction)
+                    {
+                        wfrac = true;
+                        break;
+                    }
+                    else
+                    {
+                        wfrac = false;
+                    }
+                }
+            }
+            if (wfrac == false)
+            {
+                awards.RemoveAll(w => w.Award.ByFraction == (int)ByFractionEnum.S);
+            }
+
+            var numberDetails = awards.Select(s => new
+            {
+                AwardNumber = s.ControlNumber,
+                FractionFrom = fFrom,
+                FractionTo = fTo,
+                Fractions = s.Award.ByFraction == (int)ByFractionEnum.S ? 1 : fTo - fFrom + 1,
+                AwardName = s.Award.ByFraction == (int)ByFractionEnum.S ? s.Award.Name + "- NO." + s.Fraction : s.Award.Name,
+                AwardValue = s.Award.ByFraction == (int)ByFractionEnum.S ? s.Award.Value : s.Award.Value / (n.TicketAllocation.Raffle.Prospect.LeafNumber * n.TicketAllocation.Raffle.Prospect.LeafFraction),
+                TotalValue = s.Award.ByFraction == (int)ByFractionEnum.S ? 1 * s.Award.Value : (fTo - fFrom + 1) * (s.Award.Value / (n.TicketAllocation.Raffle.Prospect.LeafNumber * n.TicketAllocation.Raffle.Prospect.LeafFraction)),
+                s.Id
+
+            }).ToList();
+
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Object = numberDetails
+            };
+        }
+
+        internal RequestResponseModel AwardSellerNumberDetails(int number, int raffleId, int fractionFrom, int fractionTo)
+        {
+            var context = new TicketsEntities();
+            var n = context.TicketAllocationNumbers.Where(tn => tn.TicketAllocation.RaffleId == raffleId && tn.Number == number).FirstOrDefault();
+            if (n == null)
+            {
+                return new RequestResponseModel()
+                {
+                    Result = false,
+                    Message = "El numero no fue encontrado!"
+                };
+            }
+
+            var awards = context.RaffleAwards.Where(r => r.RaffleId == n.TicketAllocation.RaffleId && r.ControlNumber == n.Number && r.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived).ToList();
+
             bool wfrac = true;
             var fFrom = fractionFrom;
             var fTo = fractionTo;
@@ -399,8 +457,6 @@ namespace Tickets.Models.Ticket
                     ClientDesc = context.Clients.FirstOrDefault(c => c.Id == n.TicketAllocation.ClientId).Name,
                     n.TicketAllocation.RaffleId,
                     RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == n.TicketAllocation.RaffleId).Name,
-                    //Cedula = context.Clients.FirstOrDefault(c => c.Id == n.TicketAllocation.ClientId).GroupId == (int)ClientGroupEnum.DistribuidorElectronico ? n.ElectronicTicketSales.FirstOrDefault().Cedula : null,
-                    //Telefono = context.Clients.FirstOrDefault(c => c.Id == n.TicketAllocation.ClientId).GroupId == (int)ClientGroupEnum.DistribuidorElectronico ? n.ElectronicTicketSales.FirstOrDefault().PhoneNumber : null
                     Cedula = n.ElectronicTicketSales.Any(a => a.TicketAllocationNimberId == n.Id) ? n.ElectronicTicketSales.FirstOrDefault().Cedula : null,
                     Telefono = n.ElectronicTicketSales.Any(a => a.TicketAllocationNimberId == n.Id) ? n.ElectronicTicketSales.FirstOrDefault().PhoneNumber : null
                 },

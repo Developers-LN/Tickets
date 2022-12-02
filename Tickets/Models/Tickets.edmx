@@ -231,6 +231,7 @@
           <Property Name="Nombre" Type="varchar" MaxLength="200" />
           <Property Name="Telefono" Type="varchar" MaxLength="50" />
           <Property Name="Notas" Type="text" />
+          <Property Name="IdentifyType" Type="int" />
         </EntityType>
         <EntityType Name="IdentifyBach_CreditNote">
           <Key>
@@ -264,6 +265,7 @@
           <Property Name="FractionTo" Type="int" Nullable="false" />
           <Property Name="IdentifyBachId" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" />
+          <Property Name="IdentifyBachNumberType" Type="int" />
         </EntityType>
         <EntityType Name="Invoice">
           <Key>
@@ -3357,6 +3359,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Notas" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IdentifyType" Type="Int32" />
         </EntityType>
         <EntityType Name="IdentifyBachPayment">
           <Key>
@@ -3387,6 +3390,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="IdentifyBach" Relationship="TicketsModel.FK_IdentifyNumber_IdentifyBach" FromRole="IdentifyNumber" ToRole="IdentifyBach" />
           <NavigationProperty Name="TicketAllocationNumber" Relationship="TicketsModel.FK_IdentifyNumber_TicketAllocationNumber" FromRole="IdentifyNumber" ToRole="TicketAllocationNumber" />
           <Property Name="Status" Type="Int32" />
+          <Property Name="IdentifyBachNumberType" Type="Int32" />
         </EntityType>
         <EntityType Name="Invoice">
           <Key>
@@ -5615,6 +5619,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="IdentifyBaches">
             <EntityTypeMapping TypeName="TicketsModel.IdentifyBach">
               <MappingFragment StoreEntitySet="IdentifyBach">
+                <ScalarProperty Name="IdentifyType" ColumnName="IdentifyType" />
                 <ScalarProperty Name="Notas" ColumnName="Notas" />
                 <ScalarProperty Name="Telefono" ColumnName="Telefono" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
@@ -5647,6 +5652,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="IdentifyNumbers">
             <EntityTypeMapping TypeName="TicketsModel.IdentifyNumber">
               <MappingFragment StoreEntitySet="IdentifyNumber">
+                <ScalarProperty Name="IdentifyBachNumberType" ColumnName="IdentifyBachNumberType" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="IdentifyBachId" ColumnName="IdentifyBachId" />
                 <ScalarProperty Name="FractionTo" ColumnName="FractionTo" />

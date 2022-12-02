@@ -6,8 +6,8 @@
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.ControlPremio : "";
-    string adminCargo = config != null ? config.ControlPremioCargo : "";
+    string adminName = config != null ? config.CajaGeneral : "";
+    string adminCargo = config != null ? config.CajaGeneralCargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 }
 <style>

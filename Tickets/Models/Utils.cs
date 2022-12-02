@@ -63,17 +63,20 @@ namespace Tickets.Models
             decimal totalAwardValue = 0;
             decimal totalPaymentValue = 0;
             int percentMayorista = identifyBach.Client.GroupId == (int)ClientGroupEnum.Mayorista ? 2 : 0;
-            identifyBach.IdentifyNumbers.AsEnumerable().Join(awards.Where(a =>
-               a.Award.TypesAwardId != (int)AwardTypeEnum.Mayors
-               && a.Award.TypesAwardId != (int)AwardTypeEnum.WinFraction).AsEnumerable(), i => i.TicketAllocationNumber.Number, a => a.ControlNumber, (i, a) => new
+
+            identifyBach.IdentifyNumbers.Where(w => w.IdentifyBachNumberType == (int)IdentifyBachNumberTypeEnum.Gamer).AsEnumerable().Join(awards.Where(a =>
+               a.Award.TypesAwardId != (int)AwardTypeEnum.Mayors &&
+               a.Award.TypesAwardId != (int)AwardTypeEnum.WinFraction).AsEnumerable(), i => i.TicketAllocationNumber.Number, a => a.ControlNumber, (i, a) => new
                {
                    FractionTo = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionTo,
                    FractionFrom = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionFrom,
                    AwardValue = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Award.Value : a.Award.Value / (a.Raffle.Prospect.LeafNumber * a.Raffle.Prospect.LeafFraction)
-               }).ToList().ForEach(n =>
-                    totalAwardValue += ((n.FractionTo - n.FractionFrom + 1) + n.AwardValue));
+               }).ToList().ForEach(n => totalAwardValue += ((n.FractionTo - n.FractionFrom + 1) + n.AwardValue));
+
             identifyBach.IdentifyBachPayments.AsEnumerable().ToList().ForEach(p => totalPaymentValue += p.Value);
+
             identifyBach.NoteCredits.AsEnumerable().ToList().ForEach(n => totalPaymentValue += n.TotalCash);
+
             return totalPaymentValue >= (totalAwardValue + (totalAwardValue * percentMayorista / 100)) && totalPaymentValue > 0;
         }
 
@@ -81,19 +84,70 @@ namespace Tickets.Models
         {
             decimal totalAwardValue = 0;
             decimal totalPaymentValue = 0;
+
             int percentMayorista = identifyBach.Client.GroupId == (int)ClientGroupEnum.Mayorista ? 2 : 0;
-            identifyBach.IdentifyNumbers.AsEnumerable().Join(awards.Where(a =>
-                a.Award.TypesAwardId == (int)AwardTypeEnum.Mayors
-                || a.Award.TypesAwardId == (int)AwardTypeEnum.WinFraction).AsEnumerable(),
+
+            identifyBach.IdentifyNumbers.Where(w => w.IdentifyBachNumberType == (int)IdentifyBachNumberTypeEnum.Gamer).AsEnumerable().Join(awards.Where(a =>
+                a.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ||
+                a.Award.TypesAwardId == (int)AwardTypeEnum.WinFraction).AsEnumerable(),
                 i => i.TicketAllocationNumber.Number, a => a.ControlNumber, (i, a) => new
                 {
                     FractionTo = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionTo,
                     FractionFrom = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionFrom,
                     AwardValue = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Award.Value : a.Award.Value / (a.Raffle.Prospect.LeafNumber * a.Raffle.Prospect.LeafFraction)
-                }).ToList().ForEach(n =>
-                totalAwardValue += ((n.FractionTo - n.FractionFrom + 1) + n.AwardValue));
+                }).ToList().ForEach(n => totalAwardValue += ((n.FractionTo - n.FractionFrom + 1) + n.AwardValue));
+
             identifyBach.IdentifyBachPayments.AsEnumerable().ToList().ForEach(p => totalPaymentValue += p.Value);
+
             identifyBach.NoteCredits.AsEnumerable().ToList().ForEach(n => totalPaymentValue += n.TotalCash);
+
+            return totalPaymentValue >= (totalAwardValue + (totalAwardValue * percentMayorista / 100)) && totalPaymentValue > 0;
+        }
+
+        public static bool IdentifyBachSellerIsPayedMinor(IdentifyBach identifyBach, List<RaffleAward> awards)
+        {
+            decimal totalAwardValue = 0;
+            decimal totalPaymentValue = 0;
+            int percentMayorista = identifyBach.Client.GroupId == (int)ClientGroupEnum.Mayorista ? 2 : 0;
+
+            identifyBach.IdentifyNumbers.Where(w => w.IdentifyBachNumberType == (int)IdentifyBachNumberTypeEnum.Seller).AsEnumerable().Join(awards.Where(a =>
+               a.Award.TypesAwardId != (int)AwardTypeEnum.Mayors &&
+               a.Award.TypesAwardId != (int)AwardTypeEnum.WinFraction &&
+               a.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived).AsEnumerable(), i => i.TicketAllocationNumber.Number, a => a.ControlNumber, (i, a) => new
+               {
+                   FractionTo = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionTo,
+                   FractionFrom = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionFrom,
+                   AwardValue = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Award.Value : a.Award.Value / (a.Raffle.Prospect.LeafNumber * a.Raffle.Prospect.LeafFraction)
+               }).ToList().ForEach(n => totalAwardValue += ((n.FractionTo - n.FractionFrom + 1) + n.AwardValue));
+
+            identifyBach.IdentifyBachPayments.AsEnumerable().ToList().ForEach(p => totalPaymentValue += p.Value);
+
+            identifyBach.NoteCredits.AsEnumerable().ToList().ForEach(n => totalPaymentValue += n.TotalCash);
+
+            return totalPaymentValue >= (totalAwardValue + (totalAwardValue * percentMayorista / 100)) && totalPaymentValue > 0;
+        }
+
+        public static bool IdentifyBachSellerIsPayedMayor(IdentifyBach identifyBach, List<RaffleAward> awards)
+        {
+            decimal totalAwardValue = 0;
+            decimal totalPaymentValue = 0;
+
+            int percentMayorista = identifyBach.Client.GroupId == (int)ClientGroupEnum.Mayorista ? 2 : 0;
+
+            identifyBach.IdentifyNumbers.Where(w => w.IdentifyBachNumberType == (int)IdentifyBachNumberTypeEnum.Seller).AsEnumerable().Join(awards.Where(a =>
+                a.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ||
+                a.Award.TypesAwardId == (int)AwardTypeEnum.WinFraction &&
+                a.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived).AsEnumerable(), i => i.TicketAllocationNumber.Number, a => a.ControlNumber, (i, a) => new
+                {
+                    FractionTo = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionTo,
+                    FractionFrom = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionFrom,
+                    AwardValue = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Award.Value : a.Award.Value / (a.Raffle.Prospect.LeafNumber * a.Raffle.Prospect.LeafFraction)
+                }).ToList().ForEach(n => totalAwardValue += ((n.FractionTo - n.FractionFrom + 1) + n.AwardValue));
+
+            identifyBach.IdentifyBachPayments.AsEnumerable().ToList().ForEach(p => totalPaymentValue += p.Value);
+
+            identifyBach.NoteCredits.AsEnumerable().ToList().ForEach(n => totalPaymentValue += n.TotalCash);
+
             return totalPaymentValue >= (totalAwardValue + (totalAwardValue * percentMayorista / 100)) && totalPaymentValue > 0;
         }
 

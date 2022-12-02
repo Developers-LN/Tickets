@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\alexd\source\repos\AlexDDLC\Auditoria\Tickets\Tickets\Models\Tickets.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\ndiaz\OneDrive - LOTERIA NACIONAL\Documents\Proyectos\Listado de proyectos\Tickets\Fuentes\Tickets\Tickets\Models\Tickets.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

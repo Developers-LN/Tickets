@@ -15,44 +15,19 @@
                 <div class="modal-body">
                     <div class="row">
                         <form name="awardCreateForm" novalidate>
-                            <input
-                                type="hidden"
-                                class="hide"
-                                ng-model="award.Id" />
-                            <div class="col-lg-4 no-padder">
+                            <input type="hidden"
+                                   class="hide"
+                                   ng-model="award.Id" />
+                            <div class="col-lg-8 no-padder">
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
-                                        <input
-                                            type="text"
-                                            ng-model="award.name"
-                                            class="form-control input-sm"
-                                            ng-required="true" />
+                                        <input type="text"
+                                               ng-model="award.name"
+                                               class="form-control input-sm"
+                                               ng-required="true" />
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-lg-12 control-label-left">Descripción: </label>
-                                    <div class="col-lg-12">
-                                        <textarea
-                                            class="form-control input-sm"
-                                            ng-model="award.description"
-                                            style="max-height: 109px; height: 37px;"></textarea>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-lg-12 control-label-left">Orden:  <span class="color-red">*</span></label>
-                                    <div class="col-lg-12">
-                                        <input
-                                            type="number"
-                                            min="0"
-                                            ng-model="award.orderAward"
-                                            step="any"
-                                            class="form-control input-sm"
-                                            ng-required="true" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 no-padder">
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Tipo de premio: <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
@@ -67,19 +42,14 @@
                                     <div class="col-lg-12">
                                         <select id="sourceAwardDropdown" class="form-control input-sm" ng-model="award.sourceAward">
                                             <option selected="selected" value="Null"></option>
-                                            <option ng-repeat="a in awards" value="{{a.id}}" ng-selected="a.id == award.sourceAward" >{{a.name}}</option>
+                                            <option ng-repeat="a in awards" value="{{a.id}}" ng-selected="a.id == award.sourceAward">{{a.name}}</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-lg-12 control-label-left">Por Fracción: <span class="color-red">*</span></label>
+                                    <label class="col-lg-12 control-label-left">Descripción: </label>
                                     <div class="col-lg-12">
-                                        <select ng-required="true" id="byFractionDropdown"
-                                            ng-disabled="disabledByFraction == false"
-                                            class="form-control input-sm" ng-model="award.byFraction">
-                                            <option selected="selected" disabled="disabled" value="0">Seleccione la fracción</option>
-                                            <option ng-repeat="byFraction in byFractions" value="{{byFraction.id}}" ng-selected="byFraction.id == award.byFraction">{{byFraction.nameDetail}}</option>
-                                        </select>
+                                        <textarea class="form-control input-sm" rows="4" ng-model="award.description"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -87,40 +57,59 @@
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Cantidad: <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
-                                        <input
-                                            type="number"
-                                            min="0"
-                                            max="{{(prospect.production/prospect.leafFraction-1)}}"
-                                            ng-max="(prospect.production/prospect.leafFraction-1)"
-                                            ng-model="award.quantity"
-                                            ng-disabled="disabledByQuantity == false"
-                                            step="any"
-                                            class="form-control input-sm"
-                                            ng-required="true" />
+                                        <input type="number"
+                                               min="0"
+                                               max="{{(prospect.production/prospect.leafFraction-1)}}"
+                                               ng-max="(prospect.production/prospect.leafFraction-1)"
+                                               ng-model="award.quantity"
+                                               ng-disabled="disabledByQuantity == false"
+                                               step="any"
+                                               class="form-control input-sm"
+                                               ng-required="true" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label">Valor:  <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
-                                        <input
-                                            step="any"
-                                            type="number"
-                                            min="0"
-                                            ng-model="award.value"
-                                            class="form-control input-sm"
-                                            ng-required="true" />
+                                        <input step="any"
+                                               type="number"
+                                               min="0"
+                                               ng-model="award.value"
+                                               class="form-control input-sm"
+                                               ng-required="true" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Terminal: </label>
                                     <div class="col-lg-12">
-                                        <input
-                                            type="number"
-                                            ng-disabled="disabledTerminal == false"
-                                            min="0"
-                                            ng-model="award.terminal"
-                                            step="any"
-                                            class="form-control input-sm" />
+                                        <input type="number"
+                                               ng-disabled="disabledTerminal == false"
+                                               min="0"
+                                               ng-model="award.terminal"
+                                               step="any"
+                                               class="form-control input-sm" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Por Fracción: <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <select ng-required="true" id="byFractionDropdown"
+                                                ng-disabled="disabledByFraction == false"
+                                                class="form-control input-sm" ng-model="award.byFraction">
+                                            <option selected="selected" disabled="disabled" value="0">Seleccione la fracción</option>
+                                            <option ng-repeat="byFraction in byFractions" value="{{byFraction.id}}" ng-selected="byFraction.id == award.byFraction">{{byFraction.nameDetail}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Orden:  <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <input type="number"
+                                               min="0"
+                                               ng-model="award.orderAward"
+                                               step="any"
+                                               class="form-control input-sm"
+                                               ng-required="true" />
                                     </div>
                                 </div>
                             </div>

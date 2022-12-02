@@ -353,6 +353,7 @@
     <Compile Include="Models\Enums\ElectronicSalesStatusEnum.cs" />
     <Compile Include="Models\Enums\GenderEnum.cs" />
     <Compile Include="Models\Enums\GeneralClientEnum.cs" />
+    <Compile Include="Models\Enums\IdentifyBachNumberTypeEnum.cs" />
     <Compile Include="Models\Enums\NoteCreditEnum.cs" />
     <Compile Include="Models\Enums\PaymentTypeTextEnum.cs" />
     <Compile Include="Models\Enums\PrintTypeProspect.cs" />
@@ -895,7 +896,9 @@
     <Content Include="Scripts\modules\raffle\raffle.ProfitabilityRaffle.js" />
     <Content Include="Scripts\modules\taxes\tax.receipt.list.comtroller.js" />
     <Content Include="Scripts\modules\taxes\tax.receipt.controller.js" />
+    <Content Include="Scripts\modules\ticketAllocation\identify.list.seller.controller.js" />
     <Content Include="Scripts\modules\ticketAllocation\identify.list.topay.controller.js" />
+    <Content Include="Scripts\modules\ticketAllocation\identify.seller.create.controller.js" />
     <Content Include="Scripts\modules\ticketAllocation\identify.topay.detail.controller.js" />
     <Content Include="Scripts\modules\ticketInvoice\invoice.list.suspend.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3188,6 +3191,10 @@
     <Content Include="Views\Reports\AllocatedSummary.cshtml" />
     <Content Include="Views\ElectronicSales\ElectronicSalesDetails.cshtml" />
     <Content Include="Views\Reports\DataByDay.cshtml" />
+    <Content Include="Views\TicketAllocation\SellerAwardList.cshtml" />
+    <Content Include="Views\TicketAllocation\IdentifyAwardSeller.cshtml" />
+    <Content Include="Views\TicketAllocation\IdentifySellerAwardDetail.cshtml" />
+    <Content Include="Scripts\modules\ticketAllocation\identify.detail.seller.controller.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

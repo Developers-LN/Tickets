@@ -51,7 +51,8 @@ namespace Tickets.Models.Raffles
                         var prospect = context.Prospects.FirstOrDefault(p => p.Id == raffle.ProspectId);
 
                         var awardList = prospect.Awards
-                            .Where(a => a.TypesAward.Creation != (int)TypesAwardCreationEnum.Digited)
+                            .Where(a => a.TypesAward.Creation != (int)TypesAwardCreationEnum.Digited &&
+                                   a.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived)
                             .OrderBy(a => a.OrderAward);
 
                         Award currentAward;
@@ -136,6 +137,67 @@ namespace Tickets.Models.Raffles
                                 }
                             }
                         } while (currentAward != null);
+
+                        var awardListDerived = prospect.Awards
+                            .Where(a => a.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived)
+                            .OrderBy(a => a.OrderAward);
+
+                        lastRaffleAward = null;
+                        do
+                        {
+                            currentAward = awardListDerived.FirstOrDefault(a =>
+                            (raffle.RaffleAwards.Where(ra => ra.AwardId == a.Id).Count()
+                            + raffleAwardList.Where(ra => ra.AwardId == a.Id).Count()) < a.Quantity);
+
+                            if (currentAward != null)
+                            {
+                                List<int> numbers = new List<int>();
+                                Award sourceAward = null;
+                                if (currentAward.SourceAward.HasValue)
+                                {
+                                    sourceAward = context.Awards.FirstOrDefault(a => a.Id == currentAward.SourceAward.Value);
+                                }
+
+                                switch (currentAward.TypesAward.Creation)
+                                {
+                                    case (int)TypesAwardCreationEnum.SameAwardDerived:
+                                        if (!raffleAwardList.Any(a => a.AwardId == currentAward.SourceAward))
+                                        {
+                                            int selectedNumberD = selectedNumberD = (int)sourceAward.RaffleAwards.FirstOrDefault().ControlNumber;
+                                            numbers.Add(selectedNumberD);
+                                        }
+                                        else
+                                        {
+                                            var ListOfSources = raffleAwardList.Where(w => w.AwardId == currentAward.SourceAward).ToArray();
+                                            for (var n = 0; n < currentAward.Quantity; n++)
+                                            {
+                                                numbers.Add((int)ListOfSources[n].ControlNumber);
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                foreach (var number in numbers)
+                                {
+                                    controlNumberList.Add(number);
+
+                                    var raffleAward = new RaffleAward()
+                                    {
+                                        AwardId = currentAward.Id,
+                                        ControlNumber = number,
+                                        CreateDate = DateTime.Now,
+                                        CreateUser = WebSecurity.CurrentUserId,
+                                        Fraction = 0,
+                                        RaffleId = raffle.Id
+                                    };
+                                    raffleAwardList.Add(raffleAward);
+                                    lastRaffleAward = raffleAward;
+                                }
+                            }
+                        }
+                        while (currentAward != null);
 
                         context.RaffleAwards.AddRange(raffleAwardList);
                         context.SaveChanges();

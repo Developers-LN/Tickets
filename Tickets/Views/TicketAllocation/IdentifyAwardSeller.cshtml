@@ -1,15 +1,15 @@
 ﻿@{
     Layout = null;
-    ViewBag.Title = "Identificación de premios";
+    ViewBag.Title = "Identificación de premios al vendedor";
 }
 
-<div class="col-lg-12 no-padder" ng-controller="IdentifyAwardController" ng-init="app.title = '@(ViewBag.Title)'">
+<div class="col-lg-12 no-padder" ng-controller="IdentifySellerAwardController" ng-init="app.title = '@(ViewBag.Title)'">
     <!-- START panel-->
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-lg-12 well">
-                    <h4>Creación del Lote</h4>
+                    <h4>Creación del lote del ganador</h4>
                     <div class="col-lg-12 no-padder">
                         <div class="col-lg-6 no-padder">
                             <fieldset>
@@ -48,10 +48,7 @@
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Cédula:  <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
-                                        <input type="text"
-                                               ng-model="identifyBach.Cedula"
-                                               class="form-control input-sm"
-                                               ng-required="true" />
+                                        <input type="text" ng-model="identifyBach.Cedula" class="form-control input-sm" ng-required="true" />
                                     </div>
                                 </div>
                             </fieldset>
@@ -61,10 +58,7 @@
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
-                                        <input type="text"
-                                               ng-model="identifyBach.Nombre"
-                                               class="form-control input-sm"
-                                               ng-required="true" />
+                                        <input type="text" ng-model="identifyBach.Nombre" class="form-control input-sm" ng-required="true" />
                                     </div>
                                 </div>
                             </fieldset>
@@ -74,15 +68,11 @@
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Teléfono:  <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
-                                        <input type="number"
-                                               ng-model="identifyBach.Telefono"
-                                               class="form-control input-sm"
-                                               ng-required="true" />
+                                        <input type="number" ng-model="identifyBach.Telefono" class="form-control input-sm" ng-required="true" />
                                     </div>
                                 </div>
                             </fieldset>
                         </div>
-
                     </div>
 
                     <div class="col-lg-12 no-padder">
@@ -98,6 +88,7 @@
                 <div class="col-lg-12 well">
                     <h4>Registro de Numeros</h4>
                     <div class="col-lg-12 no-padder">
+
                         <div class="col-lg-4 no-padder">
                             <fieldset>
                                 <div class="form-group">
@@ -143,7 +134,7 @@
 
                         <div class="col-lg-12 m-b-xs no-padder text-right">
                             <a ng-click="cancelNumber()" class="btn btn-warning btn-sm"><i class="fa fa-times"></i> Cancelar</a>
-                            <a ng-click="addNumber()" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Guardar</a>
+                            <a ng-click="addSellerNumber()" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Guardar</a>
                         </div>
                         <div class="col-lg-12 m-b-xs no-padder">
                             <table class="table">
@@ -213,7 +204,7 @@
                             </table>
                         </div>
                         <div class="col-lg-12 no-padder">
-                            <a ui-sref="app.ticketIdentifyBachList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Salir</a>
+                            <a ui-sref="app.sellerAwardsList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Salir</a>
                             <a ng-click="saveForm()" class="btn btn-primary" ng-show="viewMode !== true">Finalizar <i class="fa fa-floppy-o"></i></a>
                         </div>
                     </div>

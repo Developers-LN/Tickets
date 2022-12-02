@@ -1,13 +1,26 @@
 @{
     Layout = null;
-    ViewBag.Title = "Reportes de Facturaciones por Sorteos";
+    ViewBag.Title = "Reportes de facturaciones por sorteos";
 }
+
 <div class="col-lg-12 no-padder" ng-controller="RaffleGeneratedController" ng-init="app.title = '@(ViewBag.Title)'">
     <input type="hidden" class="hide" value="0" id="noStatusRaffle" />
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
             <div class="panel-body">
-
+                <div class="col-lg-6 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Tipo de comprobante fiscal:</label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="taxReceiptType">
+                                    <option selected="selected" value="0">SIN COMPROBANTE</option>
+                                    <option ng-repeat="taxreceipt in taxreceipts" value="{{taxreceipt.Id}}">{{taxreceipt.NameDetail}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
                 <div class="row-border hover ">
                     <table class="table dataTableGrid">
                         <thead>
@@ -30,7 +43,7 @@
                                     <a target="_blank" href="/Reports/InvoicesByRaffleAllocation?raffleId={{raffle.id}}" title="Imprimir Detalle de Facturación"><i class="fa fa-print"></i></a>
                                 </td>
                                 <td class="text-center">
-                                    <a target="_blank" href="/Reports/InvoicesDetail?raffleId={{raffle.id}}" title="Imprimir detalles facturas"><i class="fa fa-print"></i></a>
+                                    <a target="_blank" href="/Reports/InvoicesDetail?raffleId={{raffle.id}}&taxtReceipt={{taxReceiptType}}" title="Imprimir detalles facturas"><i class="fa fa-print"></i></a>
                                 </td>
                             </tr>
                         </tbody>

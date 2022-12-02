@@ -102,7 +102,7 @@
             // confirm dialog
             var dependentsName = '';
             var dependents = $scope.awards.filter(function (a) {
-                if (a.sourceAward == award.orderAward) {
+                if (a.sourceAward == award.id) {
                     dependentsName += a.name + "<br/>";
                     return true;
                 }

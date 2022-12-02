@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
+using Tickets.Models.Enums;
 using Tickets.Models.Ticket;
 
 namespace Tickets.Controllers
@@ -102,6 +103,27 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult SellerAwardList()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult IdentifyAwardSeller()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult IdentifyAwardSellerToPayDetail()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult IdentifyAwardListToPay()
         {
             return View();
@@ -112,6 +134,15 @@ namespace Tickets.Controllers
         [Authorize]
         [HttpGet]
         public ActionResult IdentifyAwardDetail()
+        {
+            return View();
+        }
+
+        //
+        // GET: /Ticket/IdentifySellerAwardDetail
+        [Authorize]
+        [HttpGet]
+        public ActionResult IdentifySellerAwardDetail()
         {
             return View();
         }
@@ -140,7 +171,21 @@ namespace Tickets.Controllers
         }
 
         //
-        //GET:  /Ticket/GetIdentifyList
+        //GET:  /Ticket/GetIdentifySellerList
+        [Authorize]
+        [HttpGet]
+        public JsonResult GetIdentifySellerList(int raffleId = 0, int clientId = 0)
+        {
+            var respnse = new TicketIdentifyModel().ObtenerListaIdentificacionPremiosVendedor(raffleId, clientId);
+            return new JsonResult()
+            {
+                Data = respnse,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        //
+        //GET:  /Ticket/GetIdentifyListToPay
         [Authorize]
         [HttpGet]
         public JsonResult GetIdentifyListToPay(int raffleId = 0, int clientId = 0)
@@ -224,6 +269,7 @@ namespace Tickets.Controllers
 
             }
         }
+
         //
         //GET:  /Ticket/GetIdentifyDetilsData
         [Authorize]
@@ -239,18 +285,61 @@ namespace Tickets.Controllers
         }
 
         //
-        //GET:  /Ticket/GetIdentifyData
+        //GET:  /Ticket/GetIdentifySellerDetilsData
         [Authorize]
         [HttpGet]
-        public JsonResult GetIdentifyData(int identifyId)
+        public JsonResult GetIdentifySellerDetilsData(int identifyId)
         {
-            var respnse = new TicketIdentifyModel().GetIdentifyData(identifyId);
+            var respnse = new TicketIdentifyModel().GetIdentifySellerDetilsData(identifyId);
             return new JsonResult()
             {
                 Data = respnse,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
+        //
+        //GET:  /Ticket/GetIdentifyData
+        [Authorize]
+        [HttpGet]
+        public JsonResult GetIdentifyData(int identifyId)
+        {
+            var context = new TicketsEntities();
+            var IdentifyBach = context.IdentifyBaches.FirstOrDefault(f => f.Id == identifyId);
+
+            if (IdentifyBach.IdentifyType == (int)IdentifyBachTypeEnum.Gamers)
+            {
+                var respnse = new TicketIdentifyModel().GetIdentifyData(identifyId);
+                return new JsonResult()
+                {
+                    Data = respnse,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+            else
+            {
+                var respnse = new TicketIdentifyModel().GetIdentifySellerData(identifyId);
+                return new JsonResult()
+                {
+                    Data = respnse,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+            }
+        }
+
+        //
+        //GET:  /Ticket/GetIdentifySellerData
+        /*[Authorize]
+        [HttpGet]
+        public JsonResult GetIdentifySellerData(int identifyId)
+        {
+            var respnse = new TicketIdentifyModel().GetIdentifySellerData(identifyId);
+            return new JsonResult()
+            {
+                Data = respnse,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }*/
 
         //
         //POST:  /Ticket/CertificationAwardData
@@ -314,12 +403,38 @@ namespace Tickets.Controllers
         }
 
         //
+        // POST: /Ticket/IdentifySellerAward
+        [Authorize]
+        [HttpPost]
+        public JsonResult IdentifySellerAward(IdentifyBach identifyBach)
+        {
+            var respnse = new TicketIdentifyModel().IdentifySellerAward(identifyBach);
+            return new JsonResult()
+            {
+                Data = respnse
+            };
+        }
+
+        //
         //  POST:   /Ticket/ValidateNumberAward
         [Authorize]
         [HttpPost]
         public JsonResult ValidateNumberAward(AwardTicketModel awardTicket, int clientId)
         {
             var respnse = new TicketIdentifyModel().ValidateNumberAward(awardTicket, clientId);
+            return new JsonResult()
+            {
+                Data = respnse
+            };
+        }
+
+        //
+        //  POST:   /Ticket/ValidateSellerNumberAward
+        [Authorize]
+        [HttpPost]
+        public JsonResult ValidateSellerNumberAward(AwardTicketModel awardTicket, int clientId)
+        {
+            var respnse = new TicketIdentifyModel().ValidateSellerNumberAward(awardTicket, clientId);
             return new JsonResult()
             {
                 Data = respnse

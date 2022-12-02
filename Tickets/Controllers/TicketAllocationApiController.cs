@@ -218,5 +218,16 @@ namespace Tickets.Controllers
             var response = new TicketAllocationNumberModel().AwardNumberDetails(number, raffleId, fractionFrom, fractionTo);
             return response;
         }
+
+        //
+        //  GET: ticket/ticketAllocationApi/getTicketNumberDetails
+        [HttpGet]
+        [Authorize]
+        [ActionName("awardSellerNumberDetails")]
+        public RequestResponseModel AwardSellerNumberDetails(int number, int raffleId, int fractionFrom, int fractionTo)
+        {
+            var response = new TicketAllocationNumberModel().AwardSellerNumberDetails(number, raffleId, fractionFrom, fractionTo);
+            return response;
+        }
     }
 }

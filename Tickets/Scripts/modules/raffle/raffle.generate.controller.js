@@ -32,6 +32,18 @@
             });
         }
 
+        this.getTaxReceiptList = function () {
+            window.loading.show();
+            $.ajax({
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                url: 'TaxReceipt/GetList',
+                success: function (response) {
+                    $scope.taxreceipts = response.taxreceipts;
+                }
+            });
+        }
+
         $scope.downloadRaffleReport = function (raffleId) {
             $.ajax({
                 type: 'GET',
@@ -48,6 +60,7 @@
             });
         }
 
+        this.getTaxReceiptList();
         this.getSolteoList();
     }
 })();

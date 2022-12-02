@@ -1001,7 +1001,7 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
-        public ActionResult InvoicesDetail(int raffleId = 0)
+        public ActionResult InvoicesDetail(int raffleId = 0, int taxtReceipt = 0)
         {
             var context = new TicketsEntities();
             if (raffleId == 0)
@@ -1010,13 +1010,30 @@ namespace Tickets.Controllers
             }
             else
             {
-                var invoices = context.Invoices.Where(w => w.RaffleId == raffleId).ToList();
-
-                if (invoices.Count == 0)
+                if (taxtReceipt != 0)
                 {
-                    return RedirectToAction("Error", new { message = "No se encontraron cuentas por cobrar para los criterios seleccionados." });
+                    var taxreceiptlist = context.TaxReceipts.Where(w => w.Type == taxtReceipt).Select(s => s.Id).ToList();
+                    var taxreceiptnumberlist = context.TaxReceiptNumbers.Where(w => taxreceiptlist.Contains(w.TaxReceiptId)).Select(s => s.Id).ToList();
+                    var invoices = context.Invoices.Where(w => w.RaffleId == raffleId && taxreceiptnumberlist.Contains((int)w.TaxReceipt)).ToList();
+
+                    if (invoices.Count == 0)
+                    {
+                        return RedirectToAction("Error", new { message = "No se encontraron cuentas por cobrar para los criterios seleccionados." });
+                    }
+                    ViewBag.TaxReceipt = taxtReceipt;
+                    return View(invoices);
                 }
-                return View(invoices);
+                else
+                {
+                    var invoices = context.Invoices.Where(w => w.RaffleId == raffleId).ToList();
+
+                    if (invoices.Count == 0)
+                    {
+                        return RedirectToAction("Error", new { message = "No se encontraron cuentas por cobrar para los criterios seleccionados." });
+                    }
+                    ViewBag.TaxReceipt = taxtReceipt;
+                    return View(invoices);
+                }
             }
         }
 

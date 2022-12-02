@@ -519,6 +519,11 @@
                 templateUrl: Route.base('TicketAllocation/IdentifyAwardList'),
                 resolve: {}
             })
+            .state('app.sellerAwardsList', {
+                url: '/ticket/sellerawardlist',
+                templateUrl: Route.base('TicketAllocation/SellerAwardList'),
+                resolve: {}
+            })
             .state('app.ticketIdentifyBachListToPay', {
                 url: '/ticket/identifybachlisttopay',
                 templateUrl: Route.base('TicketAllocation/IdentifyAwardListToPay'),
@@ -529,14 +534,30 @@
                 templateUrl: Route.base('TicketAllocation/IdentifyAward'),
                 resolve: {}
             })
+            .state('app.ticketIdentifyBachSeller', {
+                url: '/ticket/identifybachseller/:identifyId',
+                templateUrl: Route.base('TicketAllocation/IdentifyAwardSeller'),
+                resolve: {}
+            })
             .state('app.ticketIdentifyBachDetail', {
                 url: '/ticket/identifybachdetail/:identifyId',
                 templateUrl: Route.base('TicketAllocation/IdentifyAwardDetail'),
                 resolve: {}
             })
+            .state('app.ticketIdentifyBachSellerDetail', {
+                url: '/ticket/identifybachsellerdetail/:identifyId',
+                templateUrl: Route.base('TicketAllocation/IdentifySellerAwardDetail'),
+                resolve: {}
+            })
             .state('app.ticketIdentifyBachToPayDetail', {
                 url: '/ticket/identifybachtopaydetail/:identifyId',
                 templateUrl: Route.base('TicketAllocation/IdentifyAwardToPayDetail'),
+                resolve: {}
+            })
+            //REVISAR ESTA PARTE PARA DARLE UTILIDAD
+            .state('app.ticketIdentifyBachSellerToPayDetail', {
+                url: '/ticket/identifybachsellertopaydetail/:identifyId',
+                templateUrl: Route.base('TicketAllocation/IdentifyAwardSellerToPayDetail'),
                 resolve: {}
             })
             .state('app.ticketAllocationsPrint', {
@@ -701,5 +722,5 @@
                 templateUrl: Route.base('Integration/ElectronicTicketXml'),
                 resolve: {}
             });
-        }
+    }
 })();

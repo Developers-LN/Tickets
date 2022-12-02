@@ -142,7 +142,7 @@ namespace Tickets.Controllers
 
             if (From < To)
             {
-                if(Min != 0 || Max != 0)
+                if (Min != 0 || Max != 0)
                 {
                     if ((From <= Min || From <= Max) || (To <= Min || To <= Max))
                     {
@@ -222,6 +222,26 @@ namespace Tickets.Controllers
             {
                 return View();
             }
+        }
+
+        // GET: /Client/GetList
+        [HttpGet]
+        [Authorize]
+        public JsonResult GetList()
+        {
+            var context = new TicketsEntities();
+
+            var taxreceipts = context.Catalogs.Select(r => new
+            {
+                r.Id,
+                r.NameDetail,
+                r.IdDetail,
+                r.IdGroup
+            }).Where(w => w.IdGroup == (int)CatalogGroupEnum.TaxReceiptType && w.Id != (int)TaxReceiptTypeEnum.NotReceipt).OrderBy(o => o.IdDetail).ToList();
+
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de facturas");
+
+            return new JsonResult() { Data = new { taxreceipts }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }
