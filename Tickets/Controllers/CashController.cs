@@ -438,7 +438,6 @@ namespace Tickets.Controllers
         }
 
         //
-        // POST: Cash/Receivable
         //[HttpPost]
         //[Authorize]
         //public JsonResult Receivable(ReceiptPayment receiptPayment)
@@ -531,7 +530,7 @@ namespace Tickets.Controllers
         //    }
         //}
 
-
+        // POST: Cash/Receivable
         [HttpPost]
         [Authorize]
         public JsonResult Receivable(ReceiptPayment receiptPayment, int includeCashAdvance, decimal totalCashAdvance, string noteCashAdvance)
@@ -604,6 +603,14 @@ namespace Tickets.Controllers
                             receiptPayment.Recibo = Recibo;
                         }
                         else if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.DescuentoNomina)
+                        {
+                            receiptPayment.TotalCheck = totalCash;
+                        }
+                        else if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.DescuentoPrestaciones)
+                        {
+                            receiptPayment.TotalCheck = totalCash;
+                        }
+                        else if (receiptPayment.ReceiptType == (int)PaymentTypeEnum.Otros)
                         {
                             receiptPayment.TotalCheck = totalCash;
                         }
@@ -733,7 +740,7 @@ namespace Tickets.Controllers
 
             var clientGroup = context.Clients.Where(w => w.Id == invoice.ClientId).Select(s => s.GroupId).FirstOrDefault();
 
-            var paymentTypes = context.Catalogs.Where(c => c.IdGroup == (int)CatalogGroupEnum.PaymentType && c.Id != (int)PaymentTypeEnum.DescuentoNomina)
+            var paymentTypes = context.Catalogs.Where(c => c.IdGroup == (int)CatalogGroupEnum.PaymentType && c.Id != (int)PaymentTypeEnum.DescuentoNomina && c.Id != (int)PaymentTypeEnum.DescuentoPrestaciones)
             .Select(c => new
             {
                 c.Id,

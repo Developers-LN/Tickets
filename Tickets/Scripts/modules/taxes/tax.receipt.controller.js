@@ -36,12 +36,6 @@
             if (taxReceipt.DueDate === undefined) {
                 error += 'La fecha de caducidad' + isReq;
             }
-            if ((taxReceipt.SequenceFrom <= $scope.minSequence || taxReceipt.SequenceFrom <= $scope.maxSequence)) {
-                error += 'La secuencia desde debe ser mayor a ' + $scope.maxSequence;
-            }
-            if ((taxReceipt.SequenceTo <= $scope.minSequence || taxReceipt.SequenceTo <= $scope.maxSequence)) {
-                error += 'La secuencia hasta debe ser mayor a ' + $scope.maxSequence;
-            }
             if (error !== '') {
                 alertify.showError('Alerta', error);
             }
@@ -52,8 +46,6 @@
             window.loading.show();
             $.when($.ajax('TaxReceipt/GetTaxReceiptInfo')).done(function (taxReceiptInfo) {
                 $scope.taxTypes = taxReceiptInfo.taxType;
-                $scope.minSequence = taxReceiptInfo.Min;
-                $scope.maxSequence = taxReceiptInfo.Max;
                 window.loading.hide();
                 window.setTimeout(function () {
                     $scope.$apply();
@@ -80,7 +72,7 @@
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 url: 'TaxReceipt/CheckSequenceRange',
-                data: { 'From': $scope.taxReceipt.SequenceFrom, 'To': $scope.taxReceipt.SequenceTo },
+                data: { 'From': $scope.taxReceipt.SequenceFrom, 'To': $scope.taxReceipt.SequenceTo, 'Type': $scope.taxReceipt.Type },
                 success: function (data) {
                     window.loading.hide();
                     if (data.result === false) {

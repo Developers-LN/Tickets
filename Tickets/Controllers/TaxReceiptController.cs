@@ -117,6 +117,7 @@ namespace Tickets.Controllers
 
             taxReceipts = context.TaxReceipts.AsEnumerable().OrderByDescending(o => o.Id).Select(s => new
             {
+                Id = s.Id,
                 type = context.Catalogs.Where(w => w.Id == s.Type).FirstOrDefault().NameDetail,
                 CreateDate = s.CreateDate.ToString("dd/MM/yyyy"),
                 DueDate = s.DueDate.ToString("dd/MM/yyyy"),
@@ -132,13 +133,13 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
-        public JsonResult CheckSequenceRange(int From, int To)
+        public JsonResult CheckSequenceRange(int From, int To, int Type)
         {
             var context = new TicketsEntities();
             var result = false;
             var message = "";
-            var Min = context.TaxReceipts.Any() == false ? 0 : context.TaxReceipts.Min(mi => mi.SequenceFrom);
-            var Max = context.TaxReceipts.Any() == false ? 0 : context.TaxReceipts.Max(ma => ma.SequenceTo);
+            var Min = context.TaxReceipts.Any() == false ? 0 : context.TaxReceipts.Where(w => w.Type == Type).Min(mi => mi.SequenceFrom);
+            var Max = context.TaxReceipts.Any() == false ? 0 : context.TaxReceipts.Where(w => w.Type == Type).Max(ma => ma.SequenceTo);
 
             if (From < To)
             {
@@ -165,17 +166,13 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var taxType = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.TaxReceiptType && w.Statu == true).Select(s => new { s.Id, s.NameDetail }).ToList();
-            int? Min = context.TaxReceipts.Any() == false ? 0 : context.TaxReceipts.Min(mi => mi.SequenceFrom);
-            int? Max = context.TaxReceipts.Any() == false ? 0 : context.TaxReceipts.Max(ma => ma.SequenceTo);
 
             return new JsonResult()
             {
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
                 Data = new
                 {
-                    taxType,
-                    Min,
-                    Max
+                    taxType
                 }
             };
         }

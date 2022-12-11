@@ -1,0 +1,152 @@
+﻿@model Tickets.Models.TaxReceipt
+
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Información del comprobante fiscal";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.Facturacion : "";
+    string adminCargo = config != null ? config.FacturacionCargo : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+    var TotalTaxCodes = 0;
+    string taxDenomination = context.Catalogs.Where(w => w.Id == Model.Type).FirstOrDefault().Description2;
+    var TaxStatus = context.Catalogs.Where(w => w.IdGroup == (int)Tickets.Models.Enums.CatalogGroupEnum.TaxReceiptNumberStatu).ToList();
+}
+
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center" style="margin-bottom:20px;">
+            <b>DETALLE DEL COMPROBANTE FISCAL</b>
+        </div>
+        <div class="col-lg-6 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <b>TIPO DE COMPROBANTE: </b> @context.Catalogs.FirstOrDefault(f => f.Id == Model.Type).NameDetail
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>FECHA DE CADUCIDAD: </b> @Model.DueDate.ToShortDateString()
+            </div>
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <div class="col-lg-12 no-padder text-right">
+
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder" style="margin-top:20px;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">FILA</th>
+                    <th class="text-center">NUMERO DE COMPROBANTE</th>
+                    <th class="text-center">ESTADO</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.TaxReceiptNumbers.Any())
+                {
+                    TotalTaxCodes = Model.TaxReceiptNumbers.Count();
+                    int line = 1;
+
+                    foreach (var item in Model.TaxReceiptNumbers)
+                    {
+                        <tr>
+                            <td class="text-center" style="color:red; font-weight:bold; font-size:12pt;">@line</td>
+                            <td class="text-center">@taxDenomination@item.Number.ToString().PadLeft(8, '0')</td>
+                            <td class="text-center">@TaxStatus.FirstOrDefault(f => f.Id == item.Status).NameDetail</td>
+                        </tr>
+                        line += 1;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="11" class="text-center">
+                            NO TIENE NUMEROS DE COMPROBANTE FISCAL
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                Total de comprobantes fiscales: @TotalTaxCodes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma del consignatario
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma del consignador
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <b>@adminName</b>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+        <div class="col-lg-12 no-padder text-center">
+
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <span>@adminCargo</span>
+    </div>
+</div>

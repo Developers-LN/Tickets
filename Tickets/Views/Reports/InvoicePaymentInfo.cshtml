@@ -193,6 +193,14 @@
                         {
                             @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoPrestaciones)
+                        {
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Otros)
+                        {
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
                         {
                             @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
@@ -402,6 +410,14 @@
                             @(context.NoteCreditReceiptPayments.FirstOrDefault(f=>f.ReceiptPaymentId == Model.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoNomina)
+                        {
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoPrestaciones)
+                        {
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Otros)
                         {
                             @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }

@@ -136,7 +136,8 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NReco.ImageGenerator, Version=1.2.0.0, Culture=neutral, PublicKeyToken=0ef6c878974c90ac, processorArchitecture=MSIL">
       <HintPath>..\packages\NReco.ImageGenerator.1.2.0\lib\net45\NReco.ImageGenerator.dll</HintPath>
@@ -364,6 +365,7 @@
     <Compile Include="Models\Enums\TaxReceiptNumberStatuEnum.cs" />
     <Compile Include="Models\Enums\TaxReceiptStatuEnum.cs" />
     <Compile Include="Models\Enums\TaxReceiptTypeEnum.cs" />
+    <Compile Include="Models\Enums\TicketsTypeEnum.cs" />
     <Compile Include="Models\Enums\UserRolEnum.cs" />
     <Compile Include="Models\GenericErrorResponse.cs" />
     <Compile Include="Models\IdentifyBach.cs">
@@ -3195,6 +3197,7 @@
     <Content Include="Views\TicketAllocation\IdentifyAwardSeller.cshtml" />
     <Content Include="Views\TicketAllocation\IdentifySellerAwardDetail.cshtml" />
     <Content Include="Scripts\modules\ticketAllocation\identify.detail.seller.controller.js" />
+    <Content Include="Views\Reports\TaxReceiptInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

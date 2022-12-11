@@ -1001,6 +1001,22 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult TaxReceiptInfo(int? receiptId)
+        {
+            var context = new TicketsEntities();
+            if (receiptId == 0 || receiptId == null)
+            {
+                return RedirectToAction("Error", new { message = "No se encontraron cuentas por cobrar para los criterios seleccionados." });
+            }
+            else
+            {
+                var receipt = context.TaxReceipts.FirstOrDefault(f => f.Id == receiptId);
+                return View(receipt);
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult InvoicesDetail(int raffleId = 0, int taxtReceipt = 0)
         {
             var context = new TicketsEntities();
