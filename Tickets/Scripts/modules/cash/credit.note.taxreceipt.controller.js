@@ -7,16 +7,15 @@
 
     angular
         .module('naut')
-        .controller('CashAdvanceController', CashAdvanceController);
+        .controller('NoteCreaditTaxReceiptController', NoteCreaditController);
 
-    CashAdvanceController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
-    function CashAdvanceController($scope, $state, $rootScope, $stateParams) {
+    NoteCreaditController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
+    function NoteCreaditController($scope, $state, $rootScope, $stateParams) {
         var self = this;
         $scope.identifyBachId = $stateParams.raffleAwardId;
         $scope.creditNote = {
             Id: 0,
             ClientId: undefined,
-            RaffleId: undefined,
             TotalCash: undefined,
             Concepts: undefined,
             IdentifyBaches: [{ Id: $stateParams.raffleAwardId }]
@@ -71,24 +70,61 @@
 
         this.loadCreaditNote = function () {
             window.loading.show();
-            $.when($.ajax('Cash/GetCashAdvanceInfo')).done(function (cashAdvanceInfo) {
-                $scope.clients = cashAdvanceInfo.clients;
-                $scope.raffles = cashAdvanceInfo.raffles;
-                $scope.totalRestant = 100000000;
-                window.loading.hide();
-                window.setTimeout(function () {
-                    $scope.$apply();
-                    $rootScope.createSelect2();
-                }, 0);
-                $rootScope.dataTable();
-            });
+            $.when(
+                $.ajax('Cash/GetCreditNoteTaxReceiptData?creditNoteId=' + $stateParams.noteCreditId + '&identifyBachId=' + $stateParams.raffleAwardId),
+                $.ajax('TicketAllocation/GetIdentifyData?identifyId=' + $stateParams.raffleAwardId)).done(function (creditNoteData, identifyBachData) {
+                    if (creditNoteData[1] === 'success') {
+                        if (creditNoteData[0].result === false) {
+                            alertify.alert(creditNoteData[0].message);
+                            $scope.goBack();
+                        } else {
+                            if (creditNoteData[0].creditNote.Id) {
+                                creditNoteData[0].creditNote.NoteDate = new Date(creditNoteData[0].creditNote.NoteDate);
+                                $scope.creditNote = creditNoteData[0].creditNote;
+                                $scope.defaultValue = $scope.creditNote.ClientId;
+                            } else if (creditNoteData[0].creditNote.Id === 0) {
+                                $scope.creditNote.IdentifyBaches.push(creditNoteData[0].creditNote.RaffleAward);
+                                $scope.creditNote.ClientId = Number(creditNoteData[0].ClientId);
+                            }
+                            $scope.clients = creditNoteData[0].clients;
+                            if (identifyBachData[1] === 'success' && $stateParams.raffleAwardId != 0) {
+                                var identifyNumbers = [];
+                                identifyBachData[0].identifyBach.IdentifyNumbers.forEach(function (identifyNumber) {
+                                    identifyNumber.RaffleAwards.forEach(function (award) {
+                                        identifyNumbers.push({
+                                            FractionFrom: identifyNumber.FractionFrom,
+                                            FractionTo: identifyNumber.FractionTo,
+                                            Id: identifyNumber.Id,
+                                            IdentifyBachId: identifyNumber.IdentifyBachId,
+                                            NumberDesc: identifyNumber.NumberDesc,
+                                            NumberId: identifyNumber.NumberId,
+                                            RaffleAward: award
+                                        });
+                                    });
+                                });
+                                identifyBachData[0].identifyBach.IdentifyNumbers = identifyNumbers;
+                                $scope.identifyBach = identifyBachData[0].identifyBach;
+                                $scope.creditNote.ClientId = $scope.identifyBach.ClientId;
+                                self.showTotal();
+                            } else {
+                                $scope.totalRestant = 100000000;
+                            }
+                            window.loading.hide();
+                            window.setTimeout(function () {
+                                $scope.$apply();
+                                $rootScope.createSelect2();
+                            }, 0);
+                            $rootScope.dataTable();
+                        }
+                    }
+                });
         }
 
         $scope.goBack = function () {
             if ($scope.raffleAwardId > 0) {
                 window.location.href = '#/ticket/identifybachdetail/' + $scope.raffleAwardId;
             } else {
-                $state.go('app.cashAdvance');
+                $state.go('app.cashNoteTaxReceiptCreditList');
             }
         }
 
@@ -103,12 +139,11 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: 'Cash/CashAdvance',
+                url: 'Cash/CreditNoteTaxReceipt',
                 data: $scope.creditNote,
                 success: function (data) {
                     window.loading.hide();
                     if (data.result === true) {
-                        window.open('/Reports/CashAdvanceReport?cashAdvance=' + data.cashAdvance);
                         alertify.success(data.message);
                         $scope.goBack();
                     } else {

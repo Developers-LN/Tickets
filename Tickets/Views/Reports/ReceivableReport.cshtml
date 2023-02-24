@@ -1,7 +1,7 @@
 ﻿@model Tickets.Models.Invoice
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Detalle de pagos a factura";
+    ViewBag.Title = "Detalle de pagos a factura No. " + Model.Id;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -88,8 +88,8 @@
         </div>
         <div class="col-lg-6 no-padder text-right">
             @*<div class="col-lg-12 no-padder text-right">
-                <b>Recibo: </b>#@lastReceivable.Id
-            </div>*@
+                    <b>Recibo: </b>#@lastReceivable.Id
+                </div>*@
             <div class="col-lg-12 no-padder text-right">
                 <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
             </div>
@@ -132,14 +132,14 @@
                                 <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
                                 <td style="vertical-align:middle;">@payment.Recibo</td>
                                 <td style="vertical-align:middle;" class="text-center">
-                                    @NotaCredito
+                                    @payment.Notas
                                 </td>
                                 <td style="vertical-align:middle;" class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
                                 <td style="vertical-align:middle;" class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                             </tr>
                         }
                     }
-                    if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
+                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
                     {
                         foreach (var creditNote in payment.NoteCreditReceiptPayments)
                         {
@@ -151,7 +151,7 @@
                                 <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
                                 <td style="vertical-align:middle;">@payment.Recibo</td>
                                 <td style="vertical-align:middle;" class="text-center">
-                                    @payment.Notas
+                                    @creditNote.NoteCredit.Concepts
                                 </td>
                                 <td style="vertical-align:middle;" class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
                                 <td style="vertical-align:middle;" class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
@@ -168,7 +168,7 @@
                             <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
                             <td style="vertical-align:middle;" class="text-center">@payment.Recibo</td>
                             <td style="vertical-align:middle;" class="text-center">
-                                @payment.Notas
+                                @payment.Notas 
                             </td>
                             <td style="vertical-align:middle;" class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
                             <td style="vertical-align:middle;" class="text-right">@(((decimal)totalCash).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
@@ -176,7 +176,6 @@
                     }
                 }
                 @{
-                    //var discount = totalInvoice * Model.Client.Discount / 100;
                     var discount = totalInvoice * Model.Discount / 100;
                 }
             </tbody>
@@ -219,8 +218,19 @@
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
-                    <td class="text-right" style="font-weight: bold;">Total Restante..: @((totalRestant- discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                    <td class="text-right" style="font-weight: bold;">Total Restante..: @((totalRestant - discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
                 </tr>
+                @if (context.NoteCredits.Where(w => w.ClientId == Model.ClientId && w.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.CashAdvance && w.TotalRest > 0).Any())
+                {
+                    <tr>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-right" style="font-weight: bold;">Avance de efectivo por de aplicar..: @((context.NoteCredits.Where(w => w.ClientId == Model.ClientId && w.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.CashAdvance && w.TotalRest > 0).Sum(s => s.TotalRest)).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                    </tr>
+                }
             </tfoot>
         </table>
     </div>

@@ -228,7 +228,7 @@ namespace Tickets.Models.Ticket
                     xpiredDays = int.Parse(xpired.Description);
                 }
             }*/
-            var date = DateTime.Now.AddDays(-90);
+            var date = DateTime.Now.AddDays(-89);
             var raffles = context.Raffles.Where(s =>
                 s.Statu == (int)RaffleStatusEnum.Generated
                 && date <= s.DateSolteo
@@ -629,7 +629,9 @@ namespace Tickets.Models.Ticket
             {
                 clientGroup = context.Clients.Where(c => c.Id == clientId).FirstOrDefault().GroupId;
             }
-            var allocationNumbers = context.TicketAllocationNumbers.Where(t => t.Number == awardTicket.NumberId && t.TicketAllocation.RaffleId == awardTicket.RaffleId).ToList();
+            var allocationNumbers = context.TicketAllocationNumbers.Where(t => t.Number == awardTicket.NumberId &&
+                                                                          t.TicketAllocation.RaffleId == awardTicket.RaffleId &&
+                                                                          t.TicketType == (int)TicketsTypeEnum.AvailableTicket).ToList();
 
             if (allocationNumbers.Any() == false)
             {
@@ -777,7 +779,9 @@ namespace Tickets.Models.Ticket
             {
                 clientGroup = context.Clients.Where(c => c.Id == clientId).FirstOrDefault().GroupId;
             }
-            var allocationNumbers = context.TicketAllocationNumbers.Where(t => t.Number == awardTicket.NumberId && t.TicketAllocation.RaffleId == awardTicket.RaffleId).ToList();
+            var allocationNumbers = context.TicketAllocationNumbers.Where(t => t.Number == awardTicket.NumberId &&
+                                                                          t.TicketAllocation.RaffleId == awardTicket.RaffleId &&
+                                                                          t.TicketType == (int)TicketsTypeEnum.AvailableTicket).ToList();
 
             if (allocationNumbers.Any() == false)
             {
@@ -1124,13 +1128,13 @@ namespace Tickets.Models.Ticket
                 || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(s => s.Award.Name).FirstOrDefault(),
 
                 Value = context.RaffleAwards.Where(ra =>
-                ra.RaffleId == n.IdentifyBach.RaffleId
+                ra.RaffleId == n.IdentifyBach.RaffleId && ra.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived
                 && ra.ControlNumber == n.TicketAllocationNumber.Number
                 && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo)
                 || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(s => s.Award.Value / (s.Raffle.Prospect.LeafFraction * s.Raffle.Prospect.LeafNumber)).FirstOrDefault(),
 
                 Total = context.RaffleAwards.Where(ra =>
-                ra.RaffleId == n.IdentifyBach.RaffleId
+                ra.RaffleId == n.IdentifyBach.RaffleId && ra.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived
                 && ra.ControlNumber == n.TicketAllocationNumber.Number
                 && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo) || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(s => (s.Award.Value / (s.Raffle.Prospect.LeafFraction * s.Raffle.Prospect.LeafNumber)) * ((n.FractionTo - n.FractionFrom) + 1)).FirstOrDefault(),
 
@@ -1175,13 +1179,13 @@ namespace Tickets.Models.Ticket
                 || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(s => s.Award.Name).FirstOrDefault(),
 
                 Value = context.RaffleAwards.Where(ra =>
-                ra.RaffleId == n.IdentifyBach.RaffleId
+                ra.RaffleId == n.IdentifyBach.RaffleId && ra.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived
                 && ra.ControlNumber == n.TicketAllocationNumber.Number
                 && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo)
                 || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(s => s.Award.Value / (s.Raffle.Prospect.LeafFraction * s.Raffle.Prospect.LeafNumber)).FirstOrDefault(),
 
                 Total = context.RaffleAwards.Where(ra =>
-                ra.RaffleId == n.IdentifyBach.RaffleId
+                ra.RaffleId == n.IdentifyBach.RaffleId && ra.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived
                 && ra.ControlNumber == n.TicketAllocationNumber.Number
                 && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo) || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(s => (s.Award.Value / (s.Raffle.Prospect.LeafFraction * s.Raffle.Prospect.LeafNumber)) * ((n.FractionTo - n.FractionFrom) + 1)).FirstOrDefault(),
 

@@ -429,7 +429,7 @@
     <Compile Include="Models\Procedures\AllocatedByDayProcedure.cs" />
     <Compile Include="Models\Procedures\AllocationSummaryProcedure.cs" />
     <Compile Include="Models\Procedures\Allocations\AllocatedSummaryProcedure.cs" />
-    <Compile Include="Models\Procedures\AllPatyableAwardsProcedure.cs" />
+    <Compile Include="Models\Procedures\PayableAward\AllPatyableAwardsProcedure.cs" />
     <Compile Include="Models\Procedures\AvailableTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\AvailableTicketToInvoice.cs" />
     <Compile Include="Models\Procedures\CuadreSorteoResumidoProcedure.cs" />
@@ -442,13 +442,14 @@
     <Compile Include="Models\Procedures\InvoiceListProcedure.cs" />
     <Compile Include="Models\Procedures\InvoiceListProcedureByList.cs" />
     <Compile Include="Models\Procedures\NetSalesByClientProcedure.cs" />
-    <Compile Include="Models\Procedures\PayableAwardByClientProcedure.cs" />
+    <Compile Include="Models\Procedures\PayableAward\PayableAwardByClientProcedure.cs" />
     <Compile Include="Models\Procedures\PayableAwardsProcedure.cs" />
     <Compile Include="Models\Procedures\PayableAward\ProcedurePayableAwardSummary.cs" />
+    <Compile Include="Models\Procedures\Receivables\ReceivableClose.cs" />
     <Compile Include="Models\Procedures\ReturnedByGroupProcedure.cs" />
     <Compile Include="Models\Procedures\ReturnedNumbersByClient.cs" />
     <Compile Include="Models\Procedures\ReturnedTicketsProcedure.cs" />
-    <Compile Include="Models\Procedures\SalesAndPendingPayments.cs" />
+    <Compile Include="Models\Procedures\Receivables\SalesAndPendingPayments.cs" />
     <Compile Include="Models\Procedures\ValidateElectronicSalesProcedure.cs" />
     <Compile Include="Models\ProductionCost.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
@@ -497,6 +498,9 @@
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TaxReceiptNumber.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TaxReceiptNumbersHistory.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TicketAllocation.cs">
@@ -825,6 +829,9 @@
     </Content>
     <Content Include="Scripts\modules\cash\cash.advance.list.controller.js" />
     <Content Include="Scripts\modules\cash\cash.advance.controller.js" />
+    <Content Include="Scripts\modules\cash\credit.note.taxreceipt.list.controller.js" />
+    <Content Include="Scripts\modules\cash\credit.note.taxreceipt.controller.js" />
+    <Content Include="Scripts\modules\cash\account.receivable.close.reports.controller.js" />
     <Content Include="Scripts\modules\cash\previous.debt.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -3198,6 +3205,12 @@
     <Content Include="Views\TicketAllocation\IdentifySellerAwardDetail.cshtml" />
     <Content Include="Scripts\modules\ticketAllocation\identify.detail.seller.controller.js" />
     <Content Include="Views\Reports\TaxReceiptInfo.cshtml" />
+    <Content Include="Views\Reports\InvoiceDetailUpdate.cshtml" />
+    <Content Include="Views\Cash\CreditNoteListTaxReceipt.cshtml" />
+    <Content Include="Views\Cash\CreditNoteTaxReceipts.cshtml" />
+    <Content Include="Views\Reports\NoteCreditTaxReceiptDetail.cshtml" />
+    <Content Include="Views\Cash\AccountsReceivablesCloseReportsExcel.cshtml" />
+    <Content Include="Views\Reports\SpecificReturnedFractions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

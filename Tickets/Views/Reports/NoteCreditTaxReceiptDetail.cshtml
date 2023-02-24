@@ -1,0 +1,157 @@
+﻿@model Tickets.Models.NoteCredit
+
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Detalles de la nota de crédito No. " + Model.Id;
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.Facturacion : "";
+    string adminCargo = config != null ? config.FacturacionCargo : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+}
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-6 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>LOTERIA NACIONAL DOMINICANA</b>
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>SUCURSAL SANTO DOMINGO</b>
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>RNC:</b> 401007681
+            </div>
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <div class="col-lg-12 no-padder text-right">
+                @if (Model.TaxReceiptNumberId != null)
+                {
+                    <b>TIPO DE COMPROBANTE: </b> @Model.TaxReceiptNumber.TaxReceipt.Catalog.NameDetail
+                }
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                @if (Model.TaxReceiptNumberId != null)
+                {
+                    <b>NCF: </b> @String.Concat(Model.TaxReceiptNumber.TaxReceipt.Catalog.Description2, Model.TaxReceiptNumber.Number.ToString().PadLeft(8, '0'))
+                }
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                @if (Model.TaxReceiptNumberId != null)
+                {
+                    <b>NCF MODIFICADO: </b> @String.Concat(Model.NoteCreditReceiptPayments.FirstOrDefault().ReceiptPayment.Invoice.TaxReceiptNumbersHistories.FirstOrDefault().TaxReceiptNumber.TaxReceipt.Catalog.Description2, Model.NoteCreditReceiptPayments.FirstOrDefault().ReceiptPayment.Invoice.TaxReceiptNumbersHistories.FirstOrDefault().TaxReceiptNumber.Number.ToString().PadLeft(8, '0'))
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center" style="margin-top:25px;">
+        <div class="col-lg-6 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <b>CEDULA/RNC: </b> @Model.Client.DocumentNumber
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>RAZON SOCIAL/NOMBRE: </b> <br /> @Model.Client.Name
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>DIRECCION: </b> @Model.Client.Addres
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>TELEFONO: </b> @Model.Client.Phone
+            </div>
+        </div>
+        <div class="col-lg-6 no-padder">
+            <div class="col-lg-12 no-padder text-right">
+                <b>NOTA DE CREDITO NO. </b> @Model.Id
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>FECHA DE CREACION </b> @Model.NoteDate.ToShortDateString()
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">MONTO TOTAL</th>
+                    <th class="text-center">CONCEPTO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">@Model.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-center">@Model.Concepts</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-12 no-padder text-center">
+
+        <br>
+        <br>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            RECIBIDO POR
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            ENTREGADO POR
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="col-lg-12 no-padder text-center">
+
+        <br>
+        <br>
+
+        <b>@adminName</b>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <span>@adminCargo</span>
+    </div>
+</div>

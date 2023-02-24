@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Devoluciones por número del cliente " + Model.TicketReturns.FirstOrDefault().Client.Name + " para el sorteo " + Model.TicketReturns.FirstOrDefault().RaffleId;
+    ViewBag.Title = "Devoluciones por fracciones del cliente " + Model.TicketReturns.FirstOrDefault().Client.Name + " para el sorteo " + Model.TicketReturns.FirstOrDefault().RaffleId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -43,6 +43,7 @@
                         Client = c.FirstOrDefault().Client,
                         Returneds = c
                     }).ToList();
+
                     var totalValue = 0.0m;
                     int totalFraction = 0;
                     int totalNumber = 0;
@@ -63,7 +64,7 @@
                         var subTotal = (returned.FractionTo - returned.FractionFrom + 1) * priceFraction;
                         <tr>
                             <td class="text-right">@stringNumber</td>
-                            <td class="text-right">@(returned.FractionTo - returned.FractionFrom + 1)</td>
+                            <td class="text-right">@returned.FractionFrom - @returned.FractionTo</td>
                             <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>

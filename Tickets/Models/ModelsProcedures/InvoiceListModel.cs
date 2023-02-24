@@ -18,5 +18,5 @@ namespace Tickets.Models.ModelsProcedures
         public string InvoiceDate { get; set; }
         public string xpiredDate { get; set; }
         public string PaymentStatuDesc { get; set; }
-    }
+	}
 }

@@ -14,11 +14,20 @@ namespace Tickets.Models
     
     public partial class TaxReceiptNumber
     {
+        public TaxReceiptNumber()
+        {
+            this.TaxReceiptNumbersHistories = new HashSet<TaxReceiptNumbersHistory>();
+            this.NoteCredits = new HashSet<NoteCredit>();
+        }
+    
         public int Id { get; set; }
         public int TaxReceiptId { get; set; }
         public Nullable<int> Status { get; set; }
         public int Number { get; set; }
     
         public virtual TaxReceipt TaxReceipt { get; set; }
+        public virtual ICollection<TaxReceiptNumbersHistory> TaxReceiptNumbersHistories { get; set; }
+        public virtual Catalog Catalog { get; set; }
+        public virtual ICollection<NoteCredit> NoteCredits { get; set; }
     }
 }

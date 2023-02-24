@@ -40,7 +40,7 @@ namespace Tickets.Models.Procedures
                             InvoiceDate = sqlDataReader["FechaFactura"].ToString(),
                             xpiredDate = sqlDataReader["FechaExpiracion"].ToString(),
                             PaymentStatuDesc = sqlDataReader["EstadoFactura"].ToString()
-                        };
+						};
                         lista.Add(facturas);
                     }
                 }

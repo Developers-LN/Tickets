@@ -287,6 +287,7 @@
           <Property Name="Discount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="DeleteUser" Type="int" />
           <Property Name="TaxReceipt" Type="int" />
+          <Property Name="TaxReceiptAssignmentDate" Type="datetime" />
         </EntityType>
         <EntityType Name="InvoiceDetails">
           <Key>
@@ -351,6 +352,7 @@
           <Property Name="RaffleId" Type="int" />
           <Property Name="TypeNote" Type="int" />
           <Property Name="ReceiptPaymentId" Type="int" />
+          <Property Name="TaxReceiptNumberId" Type="int" />
         </EntityType>
         <EntityType Name="NoteCreditReceiptPayment">
           <Key>
@@ -634,6 +636,15 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <Property Name="TaxReceiptId" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" />
         </EntityType>
+        <EntityType Name="TaxReceiptNumbersHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceId" Type="int" Nullable="false" />
+          <Property Name="TaxReceiptId" Type="int" Nullable="false" />
+          <Property Name="TaxReceiptAssignmentDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="TicketAllocation">
           <Key>
             <PropertyRef Name="Id" />
@@ -667,6 +678,8 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <Property Name="Consignated" Type="bit" />
           <Property Name="UserConsigned" Type="int" />
           <Property Name="NoOrden" Type="int" />
+          <Property Name="No_Ticket_Electronico" Type="int" />
+          <Property Name="TicketType" Type="int" />
         </EntityType>
         <EntityType Name="TicketRePrint">
           <Key>
@@ -1488,6 +1501,18 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_NoteCredit_TaxReceipt">
+          <End Role="TaxReceiptNumbers" Type="Self.TaxReceiptNumbers" Multiplicity="0..1" />
+          <End Role="NoteCredit" Type="Self.NoteCredit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxReceiptNumbers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NoteCredit">
+              <PropertyRef Name="TaxReceiptNumberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_NoteCreditReceiptPayment_NoteCredit">
           <End Role="NoteCredit" Type="Self.NoteCredit" Multiplicity="1" />
           <End Role="NoteCreditReceiptPayment" Type="Self.NoteCreditReceiptPayment" Multiplicity="*" />
@@ -1776,6 +1801,18 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TaxReceipt_Type_Catalog">
+          <End Role="Catalog" Type="Self.Catalog" Multiplicity="1" />
+          <End Role="TaxReceipt" Type="Self.TaxReceipt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxReceipt">
+              <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TaxReceipt_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="TaxReceipt" Type="Self.TaxReceipt" Multiplicity="*" />
@@ -1788,6 +1825,18 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TaxReceiptNumbers_Status">
+          <End Role="Catalog" Type="Self.Catalog" Multiplicity="0..1" />
+          <End Role="TaxReceiptNumbers" Type="Self.TaxReceiptNumbers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxReceiptNumbers">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TaxReceiptNumbers_TaxReceipt">
           <End Role="TaxReceipt" Type="Self.TaxReceipt" Multiplicity="1" />
           <End Role="TaxReceiptNumbers" Type="Self.TaxReceiptNumbers" Multiplicity="*" />
@@ -1796,6 +1845,30 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="TaxReceiptNumbers">
+              <PropertyRef Name="TaxReceiptId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxReceiptNumbersHistory_Invoice">
+          <End Role="Invoice" Type="Self.Invoice" Multiplicity="1" />
+          <End Role="TaxReceiptNumbersHistory" Type="Self.TaxReceiptNumbersHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoice">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxReceiptNumbersHistory">
+              <PropertyRef Name="InvoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxReceiptNumbersHistory_TaxReceipt">
+          <End Role="TaxReceiptNumbers" Type="Self.TaxReceiptNumbers" Multiplicity="1" />
+          <End Role="TaxReceiptNumbersHistory" Type="Self.TaxReceiptNumbersHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxReceiptNumbers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxReceiptNumbersHistory">
               <PropertyRef Name="TaxReceiptId" />
             </Dependent>
           </ReferentialConstraint>
@@ -2165,6 +2238,7 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <EntitySet Name="SystemConfig" EntityType="Self.SystemConfig" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TaxReceipt" EntityType="Self.TaxReceipt" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TaxReceiptNumbers" EntityType="Self.TaxReceiptNumbers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaxReceiptNumbersHistory" EntityType="Self.TaxReceiptNumbersHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TicketAllocation" EntityType="Self.TicketAllocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TicketAllocationNumber" EntityType="Self.TicketAllocationNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TicketRePrint" EntityType="Self.TicketRePrint" Schema="dbo" store:Type="Tables" />
@@ -2401,6 +2475,10 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             <End Role="Raffle" EntitySet="Raffle" />
             <End Role="NoteCredit" EntitySet="NoteCredit" />
           </AssociationSet>
+          <AssociationSet Name="FK_NoteCredit_TaxReceipt" Association="Self.FK_NoteCredit_TaxReceipt">
+            <End Role="TaxReceiptNumbers" EntitySet="TaxReceiptNumbers" />
+            <End Role="NoteCredit" EntitySet="NoteCredit" />
+          </AssociationSet>
           <AssociationSet Name="FK_NoteCreditReceiptPayment_NoteCredit" Association="Self.FK_NoteCreditReceiptPayment_NoteCredit">
             <End Role="NoteCredit" EntitySet="NoteCredit" />
             <End Role="NoteCreditReceiptPayment" EntitySet="NoteCreditReceiptPayment" />
@@ -2497,13 +2575,29 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             <End Role="User" EntitySet="User" />
             <End Role="Raffle" EntitySet="Raffle" />
           </AssociationSet>
+          <AssociationSet Name="FK_TaxReceipt_Type_Catalog" Association="Self.FK_TaxReceipt_Type_Catalog">
+            <End Role="Catalog" EntitySet="Catalog" />
+            <End Role="TaxReceipt" EntitySet="TaxReceipt" />
+          </AssociationSet>
           <AssociationSet Name="FK_TaxReceipt_User" Association="Self.FK_TaxReceipt_User">
             <End Role="User" EntitySet="User" />
             <End Role="TaxReceipt" EntitySet="TaxReceipt" />
           </AssociationSet>
+          <AssociationSet Name="FK_TaxReceiptNumbers_Status" Association="Self.FK_TaxReceiptNumbers_Status">
+            <End Role="Catalog" EntitySet="Catalog" />
+            <End Role="TaxReceiptNumbers" EntitySet="TaxReceiptNumbers" />
+          </AssociationSet>
           <AssociationSet Name="FK_TaxReceiptNumbers_TaxReceipt" Association="Self.FK_TaxReceiptNumbers_TaxReceipt">
             <End Role="TaxReceipt" EntitySet="TaxReceipt" />
             <End Role="TaxReceiptNumbers" EntitySet="TaxReceiptNumbers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxReceiptNumbersHistory_Invoice" Association="Self.FK_TaxReceiptNumbersHistory_Invoice">
+            <End Role="Invoice" EntitySet="Invoice" />
+            <End Role="TaxReceiptNumbersHistory" EntitySet="TaxReceiptNumbersHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxReceiptNumbersHistory_TaxReceipt" Association="Self.FK_TaxReceiptNumbersHistory_TaxReceipt">
+            <End Role="TaxReceiptNumbers" EntitySet="TaxReceiptNumbers" />
+            <End Role="TaxReceiptNumbersHistory" EntitySet="TaxReceiptNumbersHistory" />
           </AssociationSet>
           <AssociationSet Name="FK_TicketAllocation_Client1" Association="Self.FK_TicketAllocation_Client1">
             <End Role="Client" EntitySet="Client" />
@@ -3118,6 +3212,27 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             <End Role="Prospect" EntitySet="Prospects" />
             <End Role="ProspectFraction" EntitySet="ProspectFractions" />
           </AssociationSet>
+          <EntitySet Name="TaxReceiptNumbersHistories" EntityType="TicketsModel.TaxReceiptNumbersHistory" />
+          <AssociationSet Name="FK_TaxReceiptNumbersHistory_Invoice" Association="TicketsModel.FK_TaxReceiptNumbersHistory_Invoice">
+            <End Role="Invoice" EntitySet="Invoices" />
+            <End Role="TaxReceiptNumbersHistory" EntitySet="TaxReceiptNumbersHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxReceiptNumbersHistory_TaxReceipt" Association="TicketsModel.FK_TaxReceiptNumbersHistory_TaxReceipt">
+            <End Role="TaxReceiptNumber" EntitySet="TaxReceiptNumbers" />
+            <End Role="TaxReceiptNumbersHistory" EntitySet="TaxReceiptNumbersHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxReceipt_Type_Catalog" Association="TicketsModel.FK_TaxReceipt_Type_Catalog">
+            <End Role="Catalog" EntitySet="Catalogs" />
+            <End Role="TaxReceipt" EntitySet="TaxReceipts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxReceiptNumbers_Status" Association="TicketsModel.FK_TaxReceiptNumbers_Status">
+            <End Role="Catalog" EntitySet="Catalogs" />
+            <End Role="TaxReceiptNumber" EntitySet="TaxReceiptNumbers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NoteCredit_TaxReceipt" Association="TicketsModel.FK_NoteCredit_TaxReceipt">
+            <End Role="TaxReceiptNumber" EntitySet="TaxReceiptNumbers" />
+            <End Role="NoteCredit" EntitySet="NoteCredits" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Agency">
           <Key>
@@ -3230,6 +3345,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="WorkflowType_User" Relationship="TicketsModel.FK_Workflow_User_Catalog" FromRole="Catalog" ToRole="WorkflowType_User" />
           <NavigationProperty Name="WorkflowProccesses" Relationship="TicketsModel.FK_WorkflowProccess_Catalog" FromRole="Catalog" ToRole="WorkflowProccess" />
           <NavigationProperty Name="WorkflowTypes" Relationship="TicketsModel.FK_WorkflowType_Catalog" FromRole="Catalog" ToRole="WorkflowType" />
+          <NavigationProperty Name="TaxReceipts" Relationship="TicketsModel.FK_TaxReceipt_Type_Catalog" FromRole="Catalog" ToRole="TaxReceipt" />
+          <NavigationProperty Name="TaxReceiptNumbers" Relationship="TicketsModel.FK_TaxReceiptNumbers_Status" FromRole="Catalog" ToRole="TaxReceiptNumber" />
         </EntityType>
         <EntityType Name="CertificationNumber">
           <Key>
@@ -3421,6 +3538,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="ReceivablePayments" Relationship="TicketsModel.FK_ReceivablePayment_Invoice" FromRole="Invoice" ToRole="ReceivablePayment" />
           <Property Name="DeleteUser" Type="Int32" />
           <Property Name="TaxReceipt" Type="Int32" />
+          <Property Name="TaxReceiptAssignmentDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="TaxReceiptNumbersHistories" Relationship="TicketsModel.FK_TaxReceiptNumbersHistory_Invoice" FromRole="Invoice" ToRole="TaxReceiptNumbersHistory" />
         </EntityType>
         <EntityType Name="InvoiceDetail">
           <Key>
@@ -3496,6 +3615,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="IdentifyBaches" Relationship="TicketsModel.IdentifyBach_CreditNote" FromRole="NoteCredit" ToRole="IdentifyBach" />
           <Property Name="TypeNote" Type="Int32" />
           <Property Name="ReceiptPaymentId" Type="Int32" />
+          <Property Name="TaxReceiptNumberId" Type="Int32" />
+          <NavigationProperty Name="TaxReceiptNumber" Relationship="TicketsModel.FK_NoteCredit_TaxReceipt" FromRole="NoteCredit" ToRole="TaxReceiptNumber" />
         </EntityType>
         <EntityType Name="NoteCreditReceiptPayment">
           <Key>
@@ -3814,6 +3935,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="UserConsigned" Type="Int32" />
           <Property Name="NoOrden" Type="Int32" />
           <NavigationProperty Name="ElectronicTicketSales" Relationship="TicketsModel.FK_ElectronicTicketSales_TicketAllocationNumber" FromRole="TicketAllocationNumber" ToRole="ElectronicTicketSale" />
+          <Property Name="No_Ticket_Electronico" Type="Int32" />
+          <Property Name="TicketType" Type="Int32" />
         </EntityType>
         <EntityType Name="TicketRePrint">
           <Key>
@@ -5377,6 +5500,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="SequenceFrom" Type="Int32" Nullable="false" />
           <Property Name="SequenceTo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Catalog" Relationship="TicketsModel.FK_TaxReceipt_Type_Catalog" FromRole="TaxReceipt" ToRole="Catalog" />
         </EntityType>
         <EntityType Name="TaxReceiptNumber">
           <Key>
@@ -5387,6 +5511,9 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="Status" Type="Int32" />
           <NavigationProperty Name="TaxReceipt" Relationship="TicketsModel.FK_TaxReceiptNumbers_TaxReceipt" FromRole="TaxReceiptNumber" ToRole="TaxReceipt" />
           <Property Name="Number" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TaxReceiptNumbersHistories" Relationship="TicketsModel.FK_TaxReceiptNumbersHistory_TaxReceipt" FromRole="TaxReceiptNumber" ToRole="TaxReceiptNumbersHistory" />
+          <NavigationProperty Name="Catalog" Relationship="TicketsModel.FK_TaxReceiptNumbers_Status" FromRole="TaxReceiptNumber" ToRole="Catalog" />
+          <NavigationProperty Name="NoteCredits" Relationship="TicketsModel.FK_NoteCredit_TaxReceipt" FromRole="TaxReceiptNumber" ToRole="NoteCredit" />
         </EntityType>
         <Association Name="FK_TaxReceipt_User">
           <End Type="TicketsModel.User" Role="User" Multiplicity="1" />
@@ -5430,6 +5557,77 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             </Principal>
             <Dependent Role="ProspectFraction">
               <PropertyRef Name="ProspectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TaxReceiptNumbersHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceId" Type="Int32" Nullable="false" />
+          <Property Name="TaxReceiptId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Invoice" Relationship="TicketsModel.FK_TaxReceiptNumbersHistory_Invoice" FromRole="TaxReceiptNumbersHistory" ToRole="Invoice" />
+          <NavigationProperty Name="TaxReceiptNumber" Relationship="TicketsModel.FK_TaxReceiptNumbersHistory_TaxReceipt" FromRole="TaxReceiptNumbersHistory" ToRole="TaxReceiptNumber" />
+          <Property Name="TaxReceiptAssignmentDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_TaxReceiptNumbersHistory_Invoice">
+          <End Type="TicketsModel.Invoice" Role="Invoice" Multiplicity="1" />
+          <End Type="TicketsModel.TaxReceiptNumbersHistory" Role="TaxReceiptNumbersHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoice">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxReceiptNumbersHistory">
+              <PropertyRef Name="InvoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxReceiptNumbersHistory_TaxReceipt">
+          <End Type="TicketsModel.TaxReceiptNumber" Role="TaxReceiptNumber" Multiplicity="1" />
+          <End Type="TicketsModel.TaxReceiptNumbersHistory" Role="TaxReceiptNumbersHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxReceiptNumber">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxReceiptNumbersHistory">
+              <PropertyRef Name="TaxReceiptId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxReceipt_Type_Catalog">
+          <End Type="TicketsModel.Catalog" Role="Catalog" Multiplicity="1" />
+          <End Type="TicketsModel.TaxReceipt" Role="TaxReceipt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxReceipt">
+              <PropertyRef Name="Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxReceiptNumbers_Status">
+          <End Type="TicketsModel.Catalog" Role="Catalog" Multiplicity="0..1" />
+          <End Type="TicketsModel.TaxReceiptNumber" Role="TaxReceiptNumber" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxReceiptNumber">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NoteCredit_TaxReceipt">
+          <End Type="TicketsModel.TaxReceiptNumber" Role="TaxReceiptNumber" Multiplicity="0..1" />
+          <End Type="TicketsModel.NoteCredit" Role="NoteCredit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxReceiptNumber">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NoteCredit">
+              <PropertyRef Name="TaxReceiptNumberId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5665,6 +5863,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="Invoices">
             <EntityTypeMapping TypeName="TicketsModel.Invoice">
               <MappingFragment StoreEntitySet="Invoice">
+                <ScalarProperty Name="TaxReceiptAssignmentDate" ColumnName="TaxReceiptAssignmentDate" />
                 <ScalarProperty Name="TaxReceipt" ColumnName="TaxReceipt" />
                 <ScalarProperty Name="DeleteUser" ColumnName="DeleteUser" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />
@@ -5737,6 +5936,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="NoteCredits">
             <EntityTypeMapping TypeName="TicketsModel.NoteCredit">
               <MappingFragment StoreEntitySet="NoteCredit">
+                <ScalarProperty Name="TaxReceiptNumberId" ColumnName="TaxReceiptNumberId" />
                 <ScalarProperty Name="ReceiptPaymentId" ColumnName="ReceiptPaymentId" />
                 <ScalarProperty Name="TypeNote" ColumnName="TypeNote" />
                 <ScalarProperty Name="RaffleId" ColumnName="RaffleId" />
@@ -6009,6 +6209,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="TicketAllocationNumbers">
             <EntityTypeMapping TypeName="TicketsModel.TicketAllocationNumber">
               <MappingFragment StoreEntitySet="TicketAllocationNumber">
+                <ScalarProperty Name="TicketType" ColumnName="TicketType" />
+                <ScalarProperty Name="No_Ticket_Electronico" ColumnName="No_Ticket_Electronico" />
                 <ScalarProperty Name="NoOrden" ColumnName="NoOrden" />
                 <ScalarProperty Name="UserConsigned" ColumnName="UserConsigned" />
                 <ScalarProperty Name="Consignated" ColumnName="Consignated" />
@@ -6318,6 +6520,16 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
               <MappingFragment StoreEntitySet="ProspectFractions">
                 <ScalarProperty Name="Fraction" ColumnName="Fraction" />
                 <ScalarProperty Name="ProspectId" ColumnName="ProspectId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaxReceiptNumbersHistories">
+            <EntityTypeMapping TypeName="TicketsModel.TaxReceiptNumbersHistory">
+              <MappingFragment StoreEntitySet="TaxReceiptNumbersHistory">
+                <ScalarProperty Name="TaxReceiptAssignmentDate" ColumnName="TaxReceiptAssignmentDate" />
+                <ScalarProperty Name="TaxReceiptId" ColumnName="TaxReceiptId" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

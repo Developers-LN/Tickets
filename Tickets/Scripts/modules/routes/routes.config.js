@@ -648,6 +648,10 @@
                 url: '/cash/accountsReceivablesReportsExcel',
                 templateUrl: Route.base('Cash/AccountsReceivablesReportsExcel')
             })
+            .state('app.AccountsReceivablesCloseReportsExcel', {
+                url: '/cash/accountsReceivableClosesReportsExcel',
+                templateUrl: Route.base('Cash/AccountsReceivablesCloseReportsExcel')
+            })
             .state('app.PayableAwardsReportsExcel', {
                 url: '/cash/payableAwardsReportsExcel',
                 templateUrl: Route.base('Cash/PayableAwardsReportsExcel')
@@ -693,6 +697,10 @@
                 url: '/cash/noteCredits',
                 templateUrl: Route.base('Cash/CreditNoteList')
             })
+            .state('app.cashNoteTaxReceiptCreditList', {
+                url: '/cash/noteCreditsTaxReceipt',
+                templateUrl: Route.base('Cash/CreditNoteListTaxReceipt')
+            })
             .state('app.cashAdvance', {
                 url: '/cash/CashAdvances',
                 templateUrl: Route.base('Cash/CashAdvanceList')
@@ -704,6 +712,10 @@
             .state('app.cashNoteCreditCreate', {
                 url: '/cash/noteCredit/:noteCreditId/:raffleAwardId',
                 templateUrl: Route.base('Cash/CreditNote')
+            })
+            .state('app.cashNoteCreditTaxReceiptCreate', {
+                url: '/cash/noteCreditTaxReceipt/:noteCreditId/:raffleAwardId',
+                templateUrl: Route.base('Cash/CreditNoteTaxReceipts')
             })
             .state('app.cashAdvanceCreate', {
                 url: '/cash/cashAdvance/:noteCreditId/:raffleAwardId',

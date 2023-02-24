@@ -25,21 +25,22 @@
                         <thead>
                             <tr>
                                 <th class="text-left">Nombre</th>
-                                <th class="text-left">RNC</th>
+                                @*<th class="text-center">RNC</th>*@
                                 <th class="text-center">Devoluciones</th>
                                 <th class="text-center">Asignaciones</th>
                                 <th class="text-center">Facturas</th>
-                                <th class="text-center">Historial <br /> de Pago</th>
-                                <th class="text-center">Deuda <br /> Anterior</th>
-                                <th class="text-center">Asignaciones <br /> Premiadas</th>
+                                <th class="text-center">Historial de pago</th>
+                                <th class="text-center">Deuda anterior</th>
+                                <th class="text-center">Asignaciones premiadas</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="client in clientList">
                                 <td class="text-left">{{client.Name}}</td>
-                                <td class="text-left">{{client.RNC}}</td>
+                                @*<td class="text-left">{{client.RNC}}</td>*@
                                 <td class="text-center">
-                                    <a href="/Reports/ReturnedNumbers?raffleId={{RaffleId}}&clientId={{client.Id}}" target="_blank" title="Imprimir Numeros Devueltos"><i class="fa fa-print"></i></a>
+                                    <a href="/Reports/ReturnedNumbers?raffleId={{RaffleId}}&clientId={{client.Id}}" target="_blank" title="Imprimir números devueltos"><i class="fa fa-print"></i></a>
+                                    <a href="/Reports/SpecificReturnedFractions?raffleId={{RaffleId}}&clientId={{client.Id}}" target="_blank" title="Imprimir fracciones devueltas"><i class="fa fa-print"></i></a>
                                 </td>
                                 <td class="text-center">
                                     <a href="/Reports/AllocatinosNumbers?raffleId={{RaffleId}}&clientId={{client.Id}}" target="_blank" title="Imprimir Numeros Asignados"><i class="fa fa-print"></i></a>

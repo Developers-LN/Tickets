@@ -1,8 +1,8 @@
 ﻿@model List<Tickets.Models.Invoice>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
-  
+    ViewBag.Title = "Reporte de cuentas por cobrar del sorteo No. " + Model.FirstOrDefault().RaffleId;
+
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.CreditosCobros : "";
@@ -111,8 +111,8 @@
                         decimal totalPaymentr = 0.0m;
 
                         <tr>
-                            <th class="text-left"></th>
-                            <th colspan="7" class="text-left">@raffle.raffleName</th>
+                            @*<th class="text-left"></th>*@
+                            <th colspan="8" class="text-center">@raffle.raffleName</th>
                         </tr>
                         foreach (var client in raffle.invoiceByClients)
                         {
@@ -123,8 +123,8 @@
                             decimal totalPaymentc = 0.0m;
 
                             <tr>
-                                <th colspan="2" class="text-left"></th>
-                                <th colspan="6" class="text-left">@client.clientName - @context.Catalogs.Where(w => w.Id == client.clientType).Select(s => s.NameDetail).FirstOrDefault()</th>
+                                @*<th colspan="2" class="text-left"></th>*@
+                                <th colspan="8" class="text-center">@client.clientName - @context.Catalogs.Where(w => w.Id == client.clientType).Select(s => s.NameDetail).FirstOrDefault()</th>
                             </tr>
                             foreach (var invoice in client.invoices)
                             {

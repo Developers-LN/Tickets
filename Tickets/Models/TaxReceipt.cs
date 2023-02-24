@@ -31,5 +31,6 @@ namespace Tickets.Models
     
         public virtual User User { get; set; }
         public virtual ICollection<TaxReceiptNumber> TaxReceiptNumbers { get; set; }
+        public virtual Catalog Catalog { get; set; }
     }
 }

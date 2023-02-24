@@ -171,7 +171,7 @@
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                url: 'TicketAllocation/GetIdentifyData?identifyId=' + $stateParams.identifyId,
+                url: 'TicketAllocation/GetIdentifyData?identifyId=' + $stateParams.identifyId + '&typeIdentify=' + 5899,
                 success: function (data) {
                     $scope.clients = data.clients;
                     $scope.raffles = data.raffles;

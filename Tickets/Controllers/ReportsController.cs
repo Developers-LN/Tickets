@@ -115,6 +115,8 @@ namespace Tickets.Controllers
                     Concept = n.Concepts
                 }).FirstOrDefault();
             }
+            var test = payment;
+            var t = 1;
             return View(payment);
         }
 
@@ -652,11 +654,11 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult RaffleGeneralOverR(int raffleId)
         {
-            /*CuadreSorteoResumidoProcedure cuadreSorteoResumidoProcedure = new CuadreSorteoResumidoProcedure();
+            CuadreSorteoResumidoProcedure cuadreSorteoResumidoProcedure = new CuadreSorteoResumidoProcedure();
             var resultado = cuadreSorteoResumidoProcedure.CuadreSorteo(raffleId);
-            return View(resultado);*/
+            return View(resultado);
 
-            var context = new TicketsEntities();
+            /*var context = new TicketsEntities();
             var raffle = context.Raffles.Where(r => r.Id == raffleId).Select(r => new RaffleModel()
             {
                 Id = r.Id,
@@ -668,7 +670,7 @@ namespace Tickets.Controllers
                     LeafNumber = r.Prospect.LeafNumber
                 }
             }).FirstOrDefault();
-            return View(raffle);
+            return View(raffle);*/
         }
 
         //
@@ -683,9 +685,21 @@ namespace Tickets.Controllers
             return View(raffle);
         }
 
-        //
-        //  GET: Reports/ReturnedNumbersGroup
-        [Authorize]
+		//
+		//  GET: Reports/SpecificReturnedFractions
+		[Authorize]
+		[HttpGet]
+		public ActionResult SpecificReturnedFractions(int raffleId = 0, int clientId = 0)
+		{
+			var context = new TicketsEntities();
+			ViewBag.ClientId = clientId;
+			var raffle = context.Raffles.FirstOrDefault(r => raffleId == 0 || r.Id == raffleId);
+			return View(raffle);
+		}
+
+		//
+		//  GET: Reports/ReturnedNumbersGroup
+		[Authorize]
         [HttpGet]
         public ActionResult ReturnedNumbersGroup(int raffleId = 0, int clientId = 0)
         {
@@ -785,7 +799,18 @@ namespace Tickets.Controllers
             return View(invoice);
         }
 
-        [Authorize]
+		//
+		//  GET: Reports/InvoiceDetail
+		[Authorize]
+		[HttpGet]
+		public ActionResult InvoiceDetailUpdate(int invoiceId)
+		{
+			var context = new TicketsEntities();
+			var invoice = context.Invoices.FirstOrDefault(r => r.Id == invoiceId);
+			return View(invoice);
+		}
+
+		[Authorize]
         [HttpGet]
         public ActionResult InvoicePaymentInfo(int paymentId)
         {
@@ -821,9 +846,18 @@ namespace Tickets.Controllers
             return View(notecredit);
         }
 
-        //
-        //  GET: Reports/ReturnedDeatils
-        [Authorize]
+		[Authorize]
+		[HttpGet]
+		public ActionResult NoteCreditTaxReceiptDetail(int noteCreditId)
+		{
+			var context = new TicketsEntities();
+			var notecredit = context.NoteCredits.FirstOrDefault(r => r.Id == noteCreditId);
+			return View(notecredit);
+		}
+
+		//
+		//  GET: Reports/ReturnedDeatils
+		[Authorize]
         [HttpGet]
         public ActionResult ReturnedDeatils(int raffleId, string group = "", int clientId = 0, int statu = (int)TicketReturnedStatuEnum.Created)
         {
@@ -941,8 +975,8 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var invoiceDetail = context.InvoiceDetails.Where(i => i.Id == invoiceDetailId).FirstOrDefault();
 
-            var awards = context.RaffleAwards.Where(a => a.RaffleId == invoiceDetail.RaffleId).ToList();
-            List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
+			var awards = context.RaffleAwards.Where(a => a.RaffleId == invoiceDetail.RaffleId).ToList();
+			List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
             context.IdentifyBaches.AsEnumerable().Where(i =>
                 i.RaffleId == invoiceDetail.RaffleId &&
                 i.ClientId == invoiceDetail.ClientId &&

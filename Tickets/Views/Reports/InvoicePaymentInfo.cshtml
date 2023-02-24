@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Pago de factura";
+    ViewBag.Title = "Pago de pago No. " + Model.Id + " de la factura " + Model.InvoiceId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -101,10 +101,10 @@
                     <b>Recibo: </b>#@Model.Id
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+                    <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+                    <b>Hora: </b> @Model.CreateDate.ToShortTimeString()
                 </div>
             </div>
         }
@@ -115,10 +115,10 @@
                     <b>Recibo: </b>#@Model.Id
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+                    <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+                    <b>Hora: </b> @Model.CreateDate.ToShortTimeString()
                 </div>
             </div>
         }
@@ -127,15 +127,28 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th class="text-center" colspan="4">
-                        Detalle del recibo de pago
-                    </th>
+                    @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect || Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TaxReceiptNoteCredit)
+                    {
+                        <th class="text-center" colspan="5">
+                            Detalle del recibo de pago
+                        </th>
+                    }
+                    else
+                    {
+                        <th class="text-center" colspan="4">
+                            Detalle del recibo de pago
+                        </th>
+                    }
                 </tr>
                 <tr>
                     <th class="text-center">Tipo de Pago</th>
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                     {
                         <th class="text-center">Referencia</th>
+                    }
+                    @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TaxReceiptNoteCredit)
+                    {
+                        <th class="text-center">NCF</th>
                     }
                     <th class="text-center">Concepto</th>
                     <th class="text-center">Fecha del Pago</th>
@@ -151,6 +164,18 @@
                     {
                         <td class="text-center">
                             @Model.Recibo
+                        </td>
+                    }
+                    @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TaxReceiptNoteCredit)
+                    {
+                        <td class="text-center">
+                            @{
+                                var NoteCreditId = context.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == Model.Id).NoteCreditId;
+                                var TaxReceipt = context.NoteCredits.FirstOrDefault(f => f.Id == NoteCreditId).TaxReceiptNumber;
+
+                                var test = TaxReceipt.TaxReceipt.Catalog.Description2;
+                            }
+                            @(String.Concat(TaxReceipt.TaxReceipt.Catalog.Description2, TaxReceipt.Number.ToString().PadLeft(8, '0')))
                         </td>
                     }
                     @if (Model.Notas != null)
@@ -202,6 +227,10 @@
                             @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                        {
+                            @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TaxReceiptNoteCredit)
                         {
                             @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
@@ -321,10 +350,10 @@
                     <b>Recibo: </b>#@Model.Id
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+                    <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+                    <b>Hora: </b> @Model.CreateDate.ToShortTimeString()
                 </div>
             </div>
         }
@@ -335,10 +364,10 @@
                     <b>Recibo: </b>#@Model.Id
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+                    <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+                    <b>Hora: </b> @Model.CreateDate.ToShortTimeString()
                 </div>
             </div>
         }
@@ -347,15 +376,28 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th class="text-center" colspan="4">
-                        Detalle del recibo de pago
-                    </th>
+                    @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect || Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TaxReceiptNoteCredit)
+                    {
+                        <th class="text-center" colspan="5">
+                            Detalle del recibo de pago
+                        </th>
+                    }
+                    else
+                    {
+                        <th class="text-center" colspan="4">
+                            Detalle del recibo de pago
+                        </th>
+                    }
                 </tr>
                 <tr>
                     <th class="text-center">Tipo de Pago</th>
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                     {
                         <th class="text-center">Referencia</th>
+                    }
+                    @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TaxReceiptNoteCredit)
+                    {
+                        <th class="text-center">NCF</th>
                     }
                     <th class="text-center">Concepto</th>
                     <th class="text-center">Fecha del Pago</th>
@@ -371,6 +413,18 @@
                     {
                         <td class="text-center">
                             @Model.Recibo
+                        </td>
+                    }
+                    @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TaxReceiptNoteCredit)
+                    {
+                        <td class="text-center">
+                            @{
+                                var NoteCreditId = context.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == Model.Id).NoteCreditId;
+                                var TaxReceipt = context.NoteCredits.FirstOrDefault(f => f.Id == NoteCreditId).TaxReceiptNumber;
+
+                                var test = TaxReceipt.TaxReceipt.Catalog.Description2;
+                            }
+                            @(String.Concat(TaxReceipt.TaxReceipt.Catalog.Description2, TaxReceipt.Number.ToString().PadLeft(8, '0')))
                         </td>
                     }
                     @if (Model.Notas != null)
@@ -422,6 +476,10 @@
                             @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                        {
+                            @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TaxReceiptNoteCredit)
                         {
                             @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }

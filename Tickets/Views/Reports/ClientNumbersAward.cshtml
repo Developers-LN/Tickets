@@ -1,15 +1,16 @@
 ﻿@model Tickets.Models.Raffle
 @{
-    Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Numeros premiados";
-
     var context = new Tickets.Models.TicketsEntities();
+    int ClientId = (int)ViewBag.clientId;
+    var Client = context.Clients.FirstOrDefault(f => f.Id == ClientId);
+
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "NUMEROS PREMIADOS DEL CLIENTE " + Client.Id + "-" + Client.Name;
+
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.ControlPremio : "";
     string adminCargo = config != null ? config.ControlPremioCargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
-    int ClientId = (int)ViewBag.clientId;
-    var Client = context.Clients.FirstOrDefault(f => f.Id == ClientId);
 }
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
@@ -44,10 +45,13 @@
             <tbody>
                 @{
                     int numberCount = 0;
-                    var allocations = context.TicketAllocationNumbers.Where(w => w.TicketAllocation.ClientId == ClientId && w.TicketAllocation.RaffleId == Model.Id).Select(s => new
-                    {
-                        number = s.Number
-                    }).ToList();
+                    var allocations = context.TicketAllocationNumbers.Where(w => w.TicketAllocation.ClientId == ClientId &&
+                                                                            w.TicketAllocation.RaffleId == Model.Id &&
+                                                                            (w.Statu == (int)Tickets.Models.Enums.TicketStatusEnum.Delivered ||
+                                                                             w.Statu == (int)Tickets.Models.Enums.TicketStatusEnum.Factured)).Select(s => new
+                                                                             {
+                                                                                 number = s.Number
+                                                                             }).ToList();
 
                     var awards = Model.RaffleAwards
                     .OrderByDescending(n => n.Award.Value).AsEnumerable().GroupBy(n => n.Award.TypesAwardId)

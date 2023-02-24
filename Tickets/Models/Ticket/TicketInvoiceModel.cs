@@ -104,6 +104,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "fractionCount")]
         public int FractionCount { get; set; }
 
+        [JsonProperty(PropertyName = "taxReceiptHistory")]
+        public int TaxReceiptHistory { get; set; }
+
         [NotMapped]
         [JsonProperty(PropertyName = "invoiceStatusProv")]
         public string InvoiceStatusProv { get; set; }
@@ -190,6 +193,7 @@ namespace Tickets.Models.Ticket
                 StatuDesc = context.Catalogs.Where(r => r.Id == model.Statu).Select(c => c.NameDetail).FirstOrDefault(),
                 CreateUser = model.CreateUser,
                 CreateUserDesc = context.Users.Where(r => r.Id == model.CreateUser).Select(c => c.Name).FirstOrDefault(),
+                TaxReceiptHistory = model.TaxReceiptNumbersHistories.Any() ? model.TaxReceiptNumbersHistories.OrderByDescending(o => o.Id).FirstOrDefault().TaxReceiptAssignmentDate.Value.Date > model.CreateDate.Date ? 1 : 0 : 0,
                 TicketAllocations = new List<TicketAllocationModel>(),
                 TicketInvoiceNumbers = new List<TicketInvoiceNumberModel>()
             };

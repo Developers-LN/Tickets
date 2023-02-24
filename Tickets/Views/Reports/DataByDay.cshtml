@@ -120,7 +120,7 @@
                         int countTen = 1;
                         <tr>
                             <td class="text-center" style="color:red; font-weight:bold; font-size:12pt;">@line</td>
-                            @while (countTen <= 9 && numberCount <= MaxNumber)
+                            @while (countTen <= 10 && numberCount <= MaxNumber)
                             {
                                 NextBiggerNumber = Billetes.FirstOrDefault(f => f > numberCount);
                                 numberCount = NextBiggerNumber;

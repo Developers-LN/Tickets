@@ -25,9 +25,9 @@
                     <div class="col-lg-6 text-left m-b-xs no-padder">
                         <fieldset>
                             <div class="form-group">
-                                <label class="col-lg-12 control-label-left">Sorteo: <span class="color-red">*</span></label>
+                                <label class="col-lg-12 control-label-left">Sorteo: </label>
                                 <div class="col-lg-12">
-                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="creditNote.RaffleId">
+                                    <select class="form-control dropdown-select2" ng-model="creditNote.RaffleId">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione un cliente</option>
                                         <option ng-repeat="raffle in raffles" ng-selected="defaultValue == raffle.Id" value="{{raffle.Id}}">{{raffle.Id}} - {{raffle.Name}}</option>
                                     </select>

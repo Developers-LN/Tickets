@@ -23,7 +23,7 @@
             window.loading.show();
             $.when(
                 $.ajax($rootScope.serverUrl + 'ticket/clientApi/getClientSelect?statu=2089'),/*Clientes aprobados*/
-                $.ajax($rootScope.serverUrl + 'ticket/raffleApi/getRaffleSelect?statu=68'),//Sorteos en planificacion
+                $.ajax($rootScope.serverUrl + 'ticket/raffleApi/getRaffleSelect?statu=0'),//Sorteos en planificacion
                 $.ajax($rootScope.serverUrl + 'ticket/raffleApi/getRaffleConsignation')
             ).then(function (clientResponse, raffleResponse, raffleResponseConsignation) {
                 window.loading.hide();

@@ -80,7 +80,7 @@
                         <th class="text-center">Cantidad de billetes consignados</th>
                         <th class="text-center">Cantidad de billetes y fracciones devueltas</th>
                         <th class="text-center">Ventas neta</th>
-                        <th class="text-center">Porcentage de devolución aproximado</th>
+                        <th class="text-center">Porcentaje de devolución aproximado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -144,7 +144,7 @@
                         <th class="text-center">Total consignado: <br /> @TotalConsignado.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
                         <th class="text-center">Total devuelto: <br /> @((TotalDevuelto / Model.FirstOrDefault().TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))-@(TotalDevuelto % Model.FirstOrDefault().TicketFractions)</th>
                         <th class="text-center">Total vendido: <br /> @((TotalVendido / Model.FirstOrDefault().TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))-@(TotalVendido % Model.FirstOrDefault().TicketFractions)</th>
-                        <th class="text-center">Porcentaje de debolución: <br /> @((TotalDevuelto * 100)/(TotalConsignado * Model.FirstOrDefault().TicketFractions))%</th>
+                        <th class="text-center">Porcentage de devolución: <br /> @((TotalDevuelto * 100)/(TotalConsignado * Model.FirstOrDefault().TicketFractions))%</th>
                     </tr>
                 </thead>
             </table>

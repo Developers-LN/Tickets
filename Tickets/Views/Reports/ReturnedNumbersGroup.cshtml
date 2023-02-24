@@ -11,6 +11,7 @@
     var totalNumber = 0;
     var totalValue = 0.0m;
     var totalFraction = 0;
+    var totalTickets = 0;
     var totalGroup = 0;
     var totalLeef = 0.0m;
     int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
@@ -26,11 +27,11 @@
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
             <b>DEVOLUCION DE BILLETES DEL SORTEO @RaffleData.Id</b><br />
-            Desde @RaffleData.StartReturnDate.ToShortDateString() hasta @RaffleData.EndReturnDate.ToShortDateString()
+            <b>DESDE @RaffleData.StartReturnDate.ToShortDateString() HASTA @RaffleData.EndReturnDate.ToShortDateString()</b>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>HORA: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
 
@@ -38,6 +39,7 @@
         @if (Model.FirstOrDefault().Datos == true)
         {
             var Clientes = Model.Select(s => s.ClientId).Distinct();
+            var TicketFractions = RaffleData.Prospect.LeafFraction * RaffleData.Prospect.LeafNumber;
 
             <table class="table">
                 <tbody>
@@ -47,45 +49,51 @@
                         var subTotalNumber = 0;
                         var subTotalLeef = 0.0m;
                         var subTotalFraction = 0;
+                        var subTotalTickets = 0;
                         var subTotalGroup = 0;
 
                         <tr>
-                            <th colspan="6">@Model.FirstOrDefault(s=>s.ClientId == item).ClientName</th>
+                            <th colspan="6">@Model.FirstOrDefault(s => s.ClientId == item).ClientName</th>
                         </tr>
                         <tr>
                             <th class="text-center">GRUPO</th>
-                            <th class="text-center">CANTIDAD DE REGISTRO</th>
+                            @*<th class="text-center">CANTIDAD DE REGISTRO</th>*@
+                            <th class="text-center">BILLETES</th>
                             <th class="text-center">FRACCIONES</th>
-                            <th class="text-center">HOJAS</th>
+                            @*<th class="text-center">HOJAS</th>*@
                             <th class="text-right">PRECIO FRACCIONES</th>
                             <th class="text-right">TOTAL</th>
                         </tr>
-                        foreach (var returned in Model.Where(w=>w.ClientId == item))
+                        foreach (var returned in Model.Where(w => w.ClientId == item))
                         {
                             <tr>
                                 <td class="text-center">@returned.Grupo</td>
-                                <td class="text-center">@returned.TotalRegistros.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
-                                <td class="text-center">@returned.Fracciones.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
-                                <td class="text-center">@returned.Hojas.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                                @*<td class="text-center">@returned.TotalRegistros.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>*@
+                                <td class="text-center">@((returned.Fracciones / TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-center">@((returned.Fracciones % TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</td>
+                                @*<td class="text-center">@returned.Hojas.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>*@
                                 <td class="text-right">@returned.PrecioFraccion.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                <td class="text-right">@returned.Total.ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-right">@returned.Total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             </tr>
                             subTotalValue += returned.Total;
                             subTotalNumber += returned.TotalRegistros;
-                            subTotalFraction += returned.Fracciones;
+                            subTotalFraction += (returned.Fracciones % TicketFractions);
+                            subTotalTickets += (returned.Fracciones / TicketFractions);
                             subTotalGroup += 1;
                             subTotalLeef += returned.Hojas;
                         }
                         <tr class="sub-total">
                             <td class="text-center">@subTotalGroup.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
-                            <td class="text-center">@subTotalNumber.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                            @*<td class="text-center">@subTotalNumber.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>*@
+                            <td class="text-center">@subTotalTickets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-center">@subTotalFraction.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
-                            <td class="text-center">@subTotalLeef.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                            @*<td class="text-center">@subTotalLeef.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>*@
                             <td class="text-right"></td>
                             <td class="text-right">@subTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
                         totalNumber += subTotalNumber;
                         totalFraction += subTotalFraction;
+                        totalTickets += subTotalTickets;
                         totalValue += subTotalValue;
                         totalGroup += subTotalGroup;
                         totalLeef += subTotalLeef;
@@ -94,9 +102,10 @@
                 <tfoot>
                     <tr class="total">
                         <td class="text-center">@totalGroup.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td class="text-center">@totalNumber.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        @*<td class="text-center">@totalNumber.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>*@
+                        <td class="text-center">@totalTickets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td class="text-center">@totalFraction.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td class="text-center">@totalLeef.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        @*<td class="text-center">@totalLeef.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>*@
                         <td class="text-right"></td>
                         <td class="text-right">@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>

@@ -11,7 +11,8 @@
         CashAdvance = 5865,
         DescuentoNomina = 5888,
         DescuentoPrestaciones = 5902,
-        Otros = 5903
+        Otros = 5903,
+        TaxReceiptNoteCredit = 5905
 	}
 
 }

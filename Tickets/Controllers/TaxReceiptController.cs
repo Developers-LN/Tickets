@@ -138,24 +138,27 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var result = false;
             var message = "";
-            var Min = context.TaxReceipts.Any() == false ? 0 : context.TaxReceipts.Where(w => w.Type == Type).Min(mi => mi.SequenceFrom);
-            var Max = context.TaxReceipts.Any() == false ? 0 : context.TaxReceipts.Where(w => w.Type == Type).Max(ma => ma.SequenceTo);
+            var Min = context.TaxReceipts.Any(a => a.Type == Type) == false ? 0 : context.TaxReceipts.Where(w => w.Type == Type).Min(mi => mi.SequenceFrom);
+            var Max = context.TaxReceipts.Any(a => a.Type == Type) == false ? 0 : context.TaxReceipts.Where(w => w.Type == Type).Max(ma => ma.SequenceTo);
 
-            if (From < To)
+            if (Min != 0 && Max != 0)
             {
-                if (Min != 0 || Max != 0)
+                if (From < To)
                 {
-                    if ((From <= Min || From <= Max) || (To <= Min || To <= Max))
+                    if (Min != 0 || Max != 0)
                     {
-                        result = true;
-                        message = "Este rango de secuencia ya esta en uso";
+                        if ((From <= Min || From <= Max) || (To <= Min || To <= Max))
+                        {
+                            result = true;
+                            message = "Este rango de secuencia ya esta en uso";
+                        }
                     }
                 }
-            }
-            else
-            {
-                result = true;
-                message = "La secuencia desde no debe ser mayor que la secuencia hasta";
+                else
+                {
+                    result = true;
+                    message = "La secuencia desde no debe ser mayor que la secuencia hasta";
+                }
             }
             return new JsonResult() { Data = new { result, message }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

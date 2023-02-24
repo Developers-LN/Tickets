@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "Detalles de la nota de crédito No. " + Model.Id;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -60,7 +60,7 @@
         </div>
         <div class="col-lg-6 no-padder">
             <div class="col-lg-12 no-padder text-left">
-                <b>Cliente: </b> #@Model.Client.Name
+                <b>Cliente: </b> @Model.Client.Id - @Model.Client.Name
             </div>
             <div class="col-lg-12 no-padder text-left">
                 <b>Cajero: </b> #@Model.CreateUser
@@ -92,8 +92,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="text-center">@Model.TotalCash</td>
-                    <td class="text-center">@Model.TotalRest </td>
+                    <td class="text-center">@Model.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-center">@Model.TotalRest.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     <td class="text-center">@Model.Concepts</td>
                 </tr>
             </tbody>
@@ -153,7 +153,7 @@
         </div>
         <div class="col-lg-6 no-padder">
             <div class="col-lg-12 no-padder text-left">
-                <b>Cliente: </b> #@Model.Client.Name
+                <b>Cliente: </b> @Model.Client.Id - @Model.Client.Name
             </div>
             <div class="col-lg-12 no-padder text-left">
                 <b>Cajero: </b> #@Model.CreateUser
@@ -185,8 +185,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="text-center">@Model.TotalCash</td>
-                    <td class="text-center">@Model.TotalRest </td>
+                    <td class="text-center">@Model.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-center">@Model.TotalRest.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     <td class="text-center">@Model.Concepts</td>
                 </tr>
             </tbody>

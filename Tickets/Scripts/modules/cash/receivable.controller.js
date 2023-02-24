@@ -202,9 +202,9 @@
             try {
                 $scope.receivable.ReceiptDate = $rootScope.parseDate($scope.receivable.ReceiptDate, $scope.receivable.ReceiptDate).toJSON();
                 $scope.receivable.InvoiceId = $stateParams.invoiceId;
-                if ($scope.receivable.includeCashAdvance === undefined || $scope.receivable.includeCashAdvance === 0) {
+                if ($scope.receivable.IncludeCashAdvance === undefined || $scope.receivable.IncludeCashAdvance == 0) {
                     $scope.receivable.IncludeCashAdvance = 0;
-                    $scope.receivable.CashAdvance = 0;
+                    $scope.receivable.CashAdvance = 0.0;
                     $scope.receivable.CashAdvanceNote = "N/A";
                 }
             } catch (e) { }

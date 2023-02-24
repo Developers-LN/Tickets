@@ -1,6 +1,6 @@
 @{
     Layout = null;
-    ViewBag.Title = "Listado de Billetes Facturados";
+    ViewBag.Title = "Listado de billetes facturados";
 }
 
 <div class="col-lg-12 no-padder" ng-controller="InvoiceListController" ng-init="app.title = '@(ViewBag.Title)'">
@@ -34,7 +34,7 @@
                     </fieldset>
                 </div>
                 <div class="col-lg-4 text-right m-b-xs no-padder">
-                    <a href="#/ticket/invoice/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Facturación de Billetes</a>
+                    <a href="#/ticket/invoice/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Facturación de billetes</a>
                 </div>
                 <div class="row-border hover">
                     <table class="table dataTableGrid">
@@ -44,7 +44,7 @@
                                 <th>Cliente</th>
                                 <th>Asignaciones</th>
                                 <th>Fecha</th>
-                                <th>Fecha de Expiración</th>
+                                <th>Fecha de expiración</th>
                                 <th>Estado</th>
                                 <th class="editColumm">Acción</th>
                             </tr>
@@ -61,6 +61,7 @@
                                 <td>{{(invoice.invoiceExpredDate | date:"dd/MM/yyyy")}}</td>
                                 <td>{{invoice.invoiceStatusProv == '' ? invoice.paymentStatuDesc : invoice.invoiceStatusProv}}</td>
                                 <th class="editColumm">
+                                    <a target="_blank" ng-if="invoice.taxReceiptHistory != 0" href="~/Reports/InvoiceDetailUpdate?invoiceId={{invoice.id}}" title="Imprimir Detalle de factura último comprobante" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
                                     <a target="_blank" href="~/Reports/InvoicesByRaffle?raffleId={{invoice.raffleId}}&clientId={{invoice.clientId}}&invoiceId={{invoice.id}}" title="Imprimir Detalle de asignación Factura" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
                                     <a target="_blank" href="~/Reports/InvoiceDetail?invoiceId={{invoice.id}}" title="Imprimir Detalle de Factura" class="{{moduleCanView}}"><i class="fa fa-print"></i></a>
                                     <a ng-if="invoice.paymentStatu == @((int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Pendient)" href="#/ticket/invoice/{{invoice.id}}" title="Moificar factura" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>

@@ -160,6 +160,10 @@
 					CanSearch: $('#RolModuleSearchCheckBox' + module.Id)[0].checked
 				});
 			});
+
+			var test = moduleList;
+			var t1 = 0;
+
 			$.ajax({
 				type: 'POST',
 				dataType: 'json',
@@ -250,7 +254,6 @@
 				case 'app.securityOfficeListInRol':
 					self.getOfficeList();
 					$scope.manageOfficeStatu = self.manageOfficeStatu;
-
 					break;
 			}
 		}

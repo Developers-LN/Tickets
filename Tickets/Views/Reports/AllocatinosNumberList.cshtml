@@ -55,7 +55,7 @@
 
 <div class="col-lg-12 ">
     <div class="col-lg-3 no-padder text-left">
-        FECHA CREACION: <b>@(Model.TicketAllocationNumbers.FirstOrDefault().PrintedDate.HasValue? Model.TicketAllocationNumbers.FirstOrDefault().PrintedDate.Value: DateTime.Now)</b><br />
+        FECHA CREACION: <b>@(Model.TicketAllocationNumbers.FirstOrDefault().PrintedDate.HasValue ? Model.TicketAllocationNumbers.FirstOrDefault().PrintedDate.Value: DateTime.Now)</b><br />
         FACTURADO A: <b>@Model.Client.Name @Model.TicketAllocationNumbers.Select(t => t.TicketAllocation.Agente).FirstOrDefault()</b>
     </div>
     <div class="col-lg-6 no-padder text-center">
@@ -81,8 +81,10 @@
             int numberCount = 0;
             int line = 1;
             var numbers = Model.TicketAllocationNumbers.OrderBy(o => o.Number).Select(s => s.Number).ToList();
+            //var numbers = Model.TicketAllocationNumbers.OrderBy(o => o.Number).GroupBy(g => g.Number).Select(s => s.Key).ToList();
             int length = (Model.Raffle.Prospect.Production - 1).ToString().Length;
             var totalNumbers = Model.TicketAllocationNumbers.Count;
+            //var totalNumbers = numbers.Count;
             var production = Model.Raffle.Prospect.Production - 1;
             var totalLeaf = totalNumbers * ((Model.TicketAllocationNumbers.FirstOrDefault().FractionTo - Model.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1) / Model.Raffle.Prospect.LeafFraction);
             var total = totalNumbers * (Model.TicketAllocationNumbers.FirstOrDefault().FractionTo - Model.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1);
@@ -108,7 +110,7 @@
                     <th class="text-center">COL 10</th>
                 </tr>
                 <tbody>
-                    @while (rows <= 50 && numberCount <= numbers.Count - 1)
+                    @while (rows <= 46 && numberCount <= numbers.Count - 1)
                     {
                         int countTen = 1;
                         <tr>
@@ -125,38 +127,6 @@
                         line += 1;
                         rows += 1;
                     }
-
-                    @*<tr style="border: 2px solid;">
-                            <td colspan="2" style="padding:0;margin: 0;line-height: 1;">
-                                <div style="float:left;">
-                                    @{var totalRows = (Model.TicketAllocationNumbers.Count / 29) + 1; }
-                                    @for (int i = 1; i <= totalRows; i++)
-                                    {
-                                        <div style="font-size: 8pt; font-weight:bold; padding-right: 10px; padding-top: 2px;padding-bottom: 2px;padding-left: 3px; border-bottom: 1px solid black; border-right: 1px solid black;">@i</div>
-                                    }
-                                </div>
-                                @{
-
-                                    var numbers = Tickets.Models.Utils.SplitList(Model.TicketAllocationNumbers.OrderBy(i => i.Number).Select(n => (int)n.Number).ToList(), totalRows);
-                                    int length = (Model.Raffle.Prospect.Production - 1).ToString().Length;
-                                    var totalNumbers = Model.TicketAllocationNumbers.Count;
-                                    var totalLeaf = totalNumbers * ((Model.TicketAllocationNumbers.FirstOrDefault().FractionTo - Model.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1) / Model.Raffle.Prospect.LeafFraction);
-                                    var total = totalNumbers * (Model.TicketAllocationNumbers.FirstOrDefault().FractionTo - Model.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1);
-                                    var prospect = context.Prospects.FirstOrDefault(p => p.Id == Model.Raffle.ProspectId);
-                                    var price = prospect.Prospect_Price.AsEnumerable().Where(pp => pp.PriceId == Model.Client.PriceId).FirstOrDefault().FactionPrice;
-                                }
-                                @foreach (var numberList in numbers)
-                                {
-                                    <div style="float:left;">
-                                        @foreach (var number in numberList)
-                                        {
-                                            <div style="font-size: 8pt; font-weight:bold; padding-right: 7px; padding-left: 7px; padding-top: 2px;padding-bottom: 2px; border-bottom: 1px solid black;">@Tickets.Models.Utils.AddZeroToNumber(length, number)</div>
-                                        }
-                                    </div>
-                                }
-                            </td>
-                        </tr>*@
-
                 </tbody>
             </table>
         }

@@ -352,7 +352,7 @@ namespace Tickets.Models.Ticket
 
                         var ticketAllocationNumbers = context.TicketAllocationNumbers
                             .Where(t => t.RaffleId == model.RaffleId &&
-                                   t.TicketAllocation.Statu == (int)AllocationStatuEnum.Consigned &&
+                                   (t.TicketAllocation.Statu == (int)AllocationStatuEnum.Consigned || t.TicketAllocation.Statu == (int)AllocationStatuEnum.Invoiced) &&
                                    t.TicketAllocation.ClientId == clientId).Select(t => new
                                    {
                                        t.Id,

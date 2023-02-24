@@ -24,6 +24,8 @@ namespace Tickets.Models
             this.WorkflowType_User = new HashSet<WorkflowType_User>();
             this.WorkflowProccesses = new HashSet<WorkflowProccess>();
             this.WorkflowTypes = new HashSet<WorkflowType>();
+            this.TaxReceipts = new HashSet<TaxReceipt>();
+            this.TaxReceiptNumbers = new HashSet<TaxReceiptNumber>();
         }
     
         public int Id { get; set; }
@@ -43,5 +45,7 @@ namespace Tickets.Models
         public virtual ICollection<WorkflowType_User> WorkflowType_User { get; set; }
         public virtual ICollection<WorkflowProccess> WorkflowProccesses { get; set; }
         public virtual ICollection<WorkflowType> WorkflowTypes { get; set; }
+        public virtual ICollection<TaxReceipt> TaxReceipts { get; set; }
+        public virtual ICollection<TaxReceiptNumber> TaxReceiptNumbers { get; set; }
     }
 }

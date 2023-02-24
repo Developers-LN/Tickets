@@ -39,6 +39,8 @@ namespace Tickets.Models
         public Nullable<bool> Consignated { get; set; }
         public Nullable<int> UserConsigned { get; set; }
         public Nullable<int> NoOrden { get; set; }
+        public Nullable<int> No_Ticket_Electronico { get; set; }
+        public Nullable<int> TicketType { get; set; }
     
         public virtual ICollection<IdentifyNumber> IdentifyNumbers { get; set; }
         public virtual ICollection<InvoiceTicket> InvoiceTickets { get; set; }

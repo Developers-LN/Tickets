@@ -1,0 +1,197 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Nota de crédito fiscal";
+}
+
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="NoteCreaditTaxReceiptController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 m-b-xs" ng-show="identifyBachId > 0">
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Lote:</span>
+                                <span class="col-lg-10">
+                                    <b>#{{identifyBach.Id}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Cédula:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.Cedula}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Nombre:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.Nombre}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Teléfono:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.Telefono}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset ng-if="identifyBach.Notas != null">
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Nota:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.Notas}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Sorteo:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.RaffleDesc}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset ng-if="identifyBach.percent > 0">
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-5 control-label">Comision Mayorista ({{identifyBach.percent}}%):</span>
+                                <span class="col-lg-7">
+                                    <b>{{parseMoney(totalAwards * identifyBach.percent / 100)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset ng-if="identifyBach.percent > 0">
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total en premios:</span>
+                                <span class="col-lg-8">
+                                    <b>{{parseMoney(totalGeneral)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Cliente:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.ClientDesc}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        @*<fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label-left">Referencia:</span>
+                                    <span class="col-lg-8">
+                                        <b>{{identifyBach.Reference}}</b>
+                                    </span>
+                                </div>
+                            </fieldset>*@
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total pagado:</span>
+                                <span class="col-lg-8">
+                                    <b>{{parseMoney(totalpayment)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total restante:</span>
+                                <span class="col-lg-8">
+                                    <b>{{parseMoney(totalRestant)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Estado del Lote:</span>
+                                <span class="col-lg-8">
+                                    @*<b>{{identifyBach.isPayed == true ? 'Pagado' : 'No Pagado'}}</b>*@
+                                    <b>{{((totalGeneral + (totalGeneral * identifyBach.percent / 100)) - totalpayment) == 0 ? 'Pagado' : 'En proceso de pago'}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total en premios:</span>
+                                <span class="col-lg-8">
+                                    <b>{{parseMoney(totalAwards)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 m-b-xs no-padder">
+                    <div class="col-lg-8 no-padder" ng-show="identifyBachId <= 0">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">NCF afectado: <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="creditNote.ClientId">
+                                        <option selected="selected" disabled="disabled" value="0">Seleccione un cliente</option>
+                                        <option ng-repeat="client in clients" ng-selected="defaultValue == client.Id" value="{{client.Id}}">{{client.Name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-4 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Monto de la nota de crédito:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           ng-model="creditNote.TotalCash"
+                                           class="form-control input-sm"
+                                           ng-max="totalRestant"
+                                           ng-required="true"
+                                           value="{{totalRestant}}"
+                                           ng-min="1" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 no-padder" ng-if="creditNote.Id > 0">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Monto a Restante:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           ng-model="creditNote.TotalRest"
+                                           class="form-control input-sm"
+                                           ng-max="creditNote.TotalCash"
+                                           value="{{creditNote.TotalRest}}"
+                                           ng-min="1" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Comentario: <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <textarea class="form-control input-sm"
+                                              ng-model="creditNote.Concepts"
+                                              style="max-height: 109px; height: 97px;"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ng-click="goBack()" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Salir</a>
+        <a ng-click="saveForm()" class="mr btn btn-square btn-primary {{moduleCanAdd}}"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

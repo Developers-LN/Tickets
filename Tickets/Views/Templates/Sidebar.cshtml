@@ -219,13 +219,6 @@
                                 <span class="ripple"></span>
                             </a>
                         </li>
-                        <li ui-sref-active="active" ng-show="verifyCanView('app.taxReceiptList')">
-                            <a ui-sref="app.taxReceiptList" title="Comprobantes fiscales">
-                                <em class="sidebar-item-icon"></em>
-                                <span>Comprobantes fiscales</span>
-                                <span class="ripple"></span>
-                            </a>
-                        </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.cashClose')">
                             <a ui-sref="app.cashClose" title="Cuadre de caja">
                                 <em class="sidebar-item-icon"></em>
@@ -347,6 +340,20 @@
                             <a ui-sref="app.cashNoteCreditList" title="Notas de crédito">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Notas de crédito</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.taxReceiptList')">
+                            <a ui-sref="app.taxReceiptList" title="Comprobantes fiscales">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Comprobantes fiscales</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.cashNoteTaxReceiptCreditList')">
+                            <a ui-sref="app.cashNoteTaxReceiptCreditList" title="Notas de crédito fiscales">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Notas de crédito fiscales</span>
                                 <span class="ripple"></span>
                             </a>
                         </li>
@@ -694,6 +701,15 @@
                             <a ui-sref="app.AccountsReceivablesReportsExcel" title="Reportes de cuentas por cobrar a excel">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Ventas y pagos pendientes</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav sidebar-subnav">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.AccountsReceivablesCloseReportsExcel')">
+                            <a ui-sref="app.AccountsReceivablesCloseReportsExcel" title="Reportes de cierre por período a excel">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Cierre por período</span>
                                 <span class="ripple"></span>
                             </a>
                         </li>

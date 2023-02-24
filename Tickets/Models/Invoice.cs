@@ -21,6 +21,7 @@ namespace Tickets.Models
             this.InvoiceTickets = new HashSet<InvoiceTicket>();
             this.ReceiptPayments = new HashSet<ReceiptPayment>();
             this.ReceivablePayments = new HashSet<ReceivablePayment>();
+            this.TaxReceiptNumbersHistories = new HashSet<TaxReceiptNumbersHistory>();
         }
     
         public int Id { get; set; }
@@ -39,6 +40,7 @@ namespace Tickets.Models
         public decimal Discount { get; set; }
         public Nullable<int> DeleteUser { get; set; }
         public Nullable<int> TaxReceipt { get; set; }
+        public Nullable<System.DateTime> TaxReceiptAssignmentDate { get; set; }
     
         public virtual Agency Agency { get; set; }
         public virtual Client Client { get; set; }
@@ -49,5 +51,6 @@ namespace Tickets.Models
         public virtual ICollection<InvoiceTicket> InvoiceTickets { get; set; }
         public virtual ICollection<ReceiptPayment> ReceiptPayments { get; set; }
         public virtual ICollection<ReceivablePayment> ReceivablePayments { get; set; }
+        public virtual ICollection<TaxReceiptNumbersHistory> TaxReceiptNumbersHistories { get; set; }
     }
 }

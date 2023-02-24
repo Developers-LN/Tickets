@@ -258,7 +258,7 @@ namespace Tickets.Models.Ticket
                         };
                     }
 
-                    if (allocation.Client.GroupId != (int)ClientGroupEnum.DistribuidorElectronico)
+                    if (allocation.Client.GroupId != (int)ClientGroupEnum.DistribuidorXML || allocation.Client.GroupId != (int)ClientGroupEnum.DistribuidorElectronico)
                     {
                         if (allocationNumber.Any(a => a.Printed == false))
                         {
@@ -309,7 +309,9 @@ namespace Tickets.Models.Ticket
         internal RequestResponseModel AwardNumberDetails(int number, int raffleId, int fractionFrom, int fractionTo)
         {
             var context = new TicketsEntities();
-            var n = context.TicketAllocationNumbers.Where(tn => tn.TicketAllocation.RaffleId == raffleId && tn.Number == number).FirstOrDefault();
+            var n = context.TicketAllocationNumbers.Where(tn => tn.TicketAllocation.RaffleId == raffleId &&
+                                                          tn.Number == number &&
+                                                          tn.TicketType == (int)TicketsTypeEnum.AvailableTicket).FirstOrDefault();
             if (n == null)
             {
                 return new RequestResponseModel()
@@ -319,13 +321,15 @@ namespace Tickets.Models.Ticket
                 };
             }
 
-            var awards = context.RaffleAwards.Where(r => r.RaffleId == n.TicketAllocation.RaffleId && r.ControlNumber == n.Number && r.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived).ToList();
+            var awards = context.RaffleAwards.Where(r => r.RaffleId == n.TicketAllocation.RaffleId &&
+                                                    r.ControlNumber == n.Number &&
+                                                    r.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived).ToList();
             bool wfrac = true;
             var fFrom = fractionFrom;
             var fTo = fractionTo;
             foreach (var a in awards.Where(w => w.Award.ByFraction == (int)ByFractionEnum.S))
             {
-                for (int i = fFrom; i < fTo; i++)
+                for (int i = fFrom; i <= fTo; i++)
                 {
                     if (i == a.Fraction)
                     {
@@ -353,7 +357,6 @@ namespace Tickets.Models.Ticket
                 AwardValue = s.Award.ByFraction == (int)ByFractionEnum.S ? s.Award.Value : s.Award.Value / (n.TicketAllocation.Raffle.Prospect.LeafNumber * n.TicketAllocation.Raffle.Prospect.LeafFraction),
                 TotalValue = s.Award.ByFraction == (int)ByFractionEnum.S ? 1 * s.Award.Value : (fTo - fFrom + 1) * (s.Award.Value / (n.TicketAllocation.Raffle.Prospect.LeafNumber * n.TicketAllocation.Raffle.Prospect.LeafFraction)),
                 s.Id
-
             }).ToList();
 
             return new RequestResponseModel()
@@ -366,7 +369,9 @@ namespace Tickets.Models.Ticket
         internal RequestResponseModel AwardSellerNumberDetails(int number, int raffleId, int fractionFrom, int fractionTo)
         {
             var context = new TicketsEntities();
-            var n = context.TicketAllocationNumbers.Where(tn => tn.TicketAllocation.RaffleId == raffleId && tn.Number == number).FirstOrDefault();
+            var n = context.TicketAllocationNumbers.Where(tn => tn.TicketAllocation.RaffleId == raffleId &&
+                                                          tn.Number == number &&
+                                                          tn.TicketType == (int)TicketsTypeEnum.AvailableTicket).FirstOrDefault();
             if (n == null)
             {
                 return new RequestResponseModel()
@@ -376,14 +381,16 @@ namespace Tickets.Models.Ticket
                 };
             }
 
-            var awards = context.RaffleAwards.Where(r => r.RaffleId == n.TicketAllocation.RaffleId && r.ControlNumber == n.Number && r.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived).ToList();
+            var awards = context.RaffleAwards.Where(r => r.RaffleId == n.TicketAllocation.RaffleId &&
+                                                    r.ControlNumber == n.Number &&
+                                                    r.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived).ToList();
 
             bool wfrac = true;
             var fFrom = fractionFrom;
             var fTo = fractionTo;
             foreach (var a in awards.Where(w => w.Award.ByFraction == (int)ByFractionEnum.S))
             {
-                for (int i = fFrom; i < fTo; i++)
+                for (int i = fFrom; i <= fTo; i++)
                 {
                     if (i == a.Fraction)
                     {
@@ -411,7 +418,6 @@ namespace Tickets.Models.Ticket
                 AwardValue = s.Award.ByFraction == (int)ByFractionEnum.S ? s.Award.Value : s.Award.Value / (n.TicketAllocation.Raffle.Prospect.LeafNumber * n.TicketAllocation.Raffle.Prospect.LeafFraction),
                 TotalValue = s.Award.ByFraction == (int)ByFractionEnum.S ? 1 * s.Award.Value : (fTo - fFrom + 1) * (s.Award.Value / (n.TicketAllocation.Raffle.Prospect.LeafNumber * n.TicketAllocation.Raffle.Prospect.LeafFraction)),
                 s.Id
-
             }).ToList();
 
             return new RequestResponseModel()
@@ -564,7 +570,6 @@ namespace Tickets.Models.Ticket
                         UserDesc = context.Users.FirstOrDefault(u => u.Id == tn.CreateUser).Name,
                     }));
             }
-
             return transactions;
         }
     }

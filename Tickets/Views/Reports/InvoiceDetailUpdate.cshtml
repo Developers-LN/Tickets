@@ -14,22 +14,6 @@
     var TicketFractions = 0;
     var xpiredDate = Model.InvoiceDate.AddDays(Model.InvoiceExpredDay.Value);
     var InvoiceDiscount2 = 0.0m;
-
-    int taxReceiptTypeId = 0;
-    string taxReceiptTypeName = "";
-    string taxDenomination = "";
-    DateTime taxReceiptDueDate = DateTime.Now;
-    int TaxNumber = 0;
-
-    if (Model.TaxReceipt != 0 && Model.TaxReceipt != null)
-    {
-        var data = context.TaxReceiptNumbers.Where(w => w.Id == Model.TaxReceipt).FirstOrDefault();
-        taxReceiptTypeId = data.TaxReceipt.Type;
-        taxReceiptTypeName = context.Catalogs.Where(w => w.Id == taxReceiptTypeId).FirstOrDefault().NameDetail;
-        taxDenomination = context.Catalogs.Where(w => w.Id == taxReceiptTypeId).FirstOrDefault().Description2;
-        taxReceiptDueDate = data.TaxReceipt.DueDate;
-        TaxNumber = data.Number;
-    }
 }
 <style>
     .col-lg-12 {
@@ -82,27 +66,36 @@
                 <div class="col-lg-12 no-padder text-left">
                     <b>RNC:</b> 401007681
                 </div>
-                <div class="col-lg-12 no-padder text-left">
-                    <b>FECHA:</b> @Model.CreateDate.ToShortDateString()
-                </div>
+                @if (Model.TaxReceiptNumbersHistories.Any())
+                {
+                    <div class="col-lg-12 no-padder text-left">
+                        <b>FECHA:</b> @Model.TaxReceiptNumbersHistories.OrderByDescending(o => o.Id).FirstOrDefault().TaxReceiptAssignmentDate.Value.ToShortDateString()
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-12 no-padder text-left">
+                        <b>FECHA:</b> @Model.CreateDate.ToShortDateString()
+                    </div>
+                }
                 <div class="col-lg-12 no-padder text-left">
                     <b>FACTURA:</b> @Model.Id
                 </div>
             </div>
-            @if (Model.TaxReceiptNumbersHistories.Any() && Model.CreateDate.Date == Model.TaxReceiptNumbersHistories.FirstOrDefault().TaxReceiptAssignmentDate.Value.Date)
+            @if (Model.TaxReceiptNumbersHistories.Any())
             {
                 <div class="col-lg-6 no-padder text-right">
                     <div class="col-lg-12 no-padder text-right">
                         <b>FACTURA DE: </b>
                     </div>
                     <div class="col-lg-12 no-padder text-right">
-                        <b>@Model.TaxReceiptNumbersHistories.FirstOrDefault().TaxReceiptNumber.TaxReceipt.Catalog.NameDetail</b>
+                        <b>@Model.TaxReceiptNumbersHistories.OrderByDescending(o => o.Id).FirstOrDefault().TaxReceiptNumber.TaxReceipt.Catalog.NameDetail</b>
                     </div>
                     <div class="col-lg-12 no-padder text-right">
-                        <b>NCF:</b> @(Model.TaxReceiptNumbersHistories.FirstOrDefault().TaxReceiptNumber.TaxReceipt.Catalog.Description2)@(Model.TaxReceiptNumbersHistories.FirstOrDefault().TaxReceiptNumber.Number.ToString().PadLeft(8, '0'))
+                        <b>NCF:</b> @(Model.TaxReceiptNumbersHistories.OrderByDescending(o => o.Id).FirstOrDefault().TaxReceiptNumber.TaxReceipt.Catalog.Description2)@(Model.TaxReceiptNumbersHistories.OrderByDescending(o => o.Id).FirstOrDefault().TaxReceiptNumber.Number.ToString().PadLeft(8, '0'))
                     </div>
                     <div class="col-lg-12 no-padder text-right">
-                        <b>NCF VALIDO HASTA: </b> @Model.TaxReceiptNumbersHistories.FirstOrDefault().TaxReceiptNumber.TaxReceipt.DueDate.ToShortDateString()
+                        <b>NCF VALIDO HASTA: </b> @Model.TaxReceiptNumbersHistories.OrderByDescending(o => o.Id).FirstOrDefault().TaxReceiptNumber.TaxReceipt.DueDate.ToShortDateString()
                     </div>
                 </div>
             }
@@ -162,7 +155,7 @@
                         {
                             AllocationId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocationId,
                             TicketAllocationId = a.FirstOrDefault().TicketNumberAllocationId,
-                            InvoiceDate = a.FirstOrDefault().Invoice.CreateDate, 
+                            InvoiceDate = a.FirstOrDefault().Invoice.CreateDate,
                             Discount = a.FirstOrDefault().Invoice.Discount,
                             ClientId = a.FirstOrDefault().Invoice.ClientId,
                             RaffleId = a.FirstOrDefault().Invoice.RaffleId,
@@ -301,7 +294,7 @@
         <div>
             <p><b>Nota:</b> Estimado cliente, transcurridas 72 horas de su fecha límite de pago, si su factura no ha sido saldada al 100%, su credito será bloqueado automáticamente</p>
             <h4><b>Vías de pago</b></h4>
-            <p><b>Transferencia y/o Depósito:</b> Cuenta No. 9603498570 Banreservas (Favor incluir comentario de pago, Incluyendo nombre del cliente y número de sorteo).</p>
+            <p><b>Transferencia y/o Depósito:</b> Cuenta No. 9603498570 Banreservas (Favor incluir comentario de pago, Incluyendo nombre del cliente y numero de sorteo).</p>
             <p><b>Efectivo:</b> Caja General Oficina principal Lotería Nacional.</p>
             <p><b>Cheque:</b> Emitir cheque a nombre de Loteria Nacional Dominicana.</p>
         </div>

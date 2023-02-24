@@ -163,7 +163,7 @@ namespace Tickets.Models.Ticket
                     Agente = model.Agente,
                     Grupo = context.Clients.FirstOrDefault(c => c.Id == model.ClientId).GroupId,
                     AnyReturn = model.Statu,
-                    AllocationFractionQuantity = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == model.Id).Select(s => s.FractionTo - s.FractionFrom + 1).Sum(),
+                    AllocationFractionQuantity = context.TicketAllocationNumbers.Any(w => w.TicketAllocationId == model.Id && w.Statu != (int)TicketStatusEnum.Anulated) ? context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == model.Id && w.Statu != (int)TicketStatusEnum.Anulated).Select(s => s.FractionTo - s.FractionFrom + 1).Sum() : 0,
                     TotalRest = context.TicketAllocationNumbers.Any(w => w.TicketAllocationId == model.Id && w.Statu == (int)TicketStatusEnum.Anulated) ? context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == model.Id && w.Statu == (int)TicketStatusEnum.Anulated).Select(s => s.FractionTo - s.FractionFrom + 1).Sum() : 0
                 };
             }

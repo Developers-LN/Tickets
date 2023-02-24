@@ -302,28 +302,53 @@ namespace Tickets.Controllers
         //GET:  /Ticket/GetIdentifyData
         [Authorize]
         [HttpGet]
-        public JsonResult GetIdentifyData(int identifyId)
+        public JsonResult GetIdentifyData(int identifyId, int? typeIdentify)
         {
             var context = new TicketsEntities();
-            var IdentifyBach = context.IdentifyBaches.FirstOrDefault(f => f.Id == identifyId);
 
-            if (IdentifyBach.IdentifyType == (int)IdentifyBachTypeEnum.Gamers)
+            if (identifyId != 0)
             {
-                var respnse = new TicketIdentifyModel().GetIdentifyData(identifyId);
-                return new JsonResult()
+                var IdentifyBach = context.IdentifyBaches.FirstOrDefault(f => f.Id == identifyId);
+
+                if (IdentifyBach.IdentifyType == (int)IdentifyBachTypeEnum.Gamers)
                 {
-                    Data = respnse,
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
-                };
+                    var respnse = new TicketIdentifyModel().GetIdentifyData(identifyId);
+                    return new JsonResult()
+                    {
+                        Data = respnse,
+                        JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                    };
+                }
+                else
+                {
+                    var respnse = new TicketIdentifyModel().GetIdentifySellerData(identifyId);
+                    return new JsonResult()
+                    {
+                        Data = respnse,
+                        JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                    };
+                }
             }
             else
             {
-                var respnse = new TicketIdentifyModel().GetIdentifySellerData(identifyId);
-                return new JsonResult()
+                if (typeIdentify == (int)IdentifyBachTypeEnum.Gamers)
                 {
-                    Data = respnse,
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
-                };
+                    var respnse = new TicketIdentifyModel().GetIdentifyData(identifyId);
+                    return new JsonResult()
+                    {
+                        Data = respnse,
+                        JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                    };
+                }
+                else
+                {
+                    var respnse = new TicketIdentifyModel().GetIdentifySellerData(identifyId);
+                    return new JsonResult()
+                    {
+                        Data = respnse,
+                        JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                    };
+                }
             }
         }
 
