@@ -212,13 +212,6 @@
                                 <span class="ripple"></span>
                             </a>
                         </li>
-                        <li ui-sref-active="active" ng-show="verifyCanView('app.cashAdvance')">
-                            <a ui-sref="app.cashAdvance" title="Avances de efectivo">
-                                <em class="sidebar-item-icon"></em>
-                                <span>Avances de efectivo</span>
-                                <span class="ripple"></span>
-                            </a>
-                        </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.cashClose')">
                             <a ui-sref="app.cashClose" title="Cuadre de caja">
                                 <em class="sidebar-item-icon"></em>
@@ -354,6 +347,20 @@
                             <a ui-sref="app.cashNoteTaxReceiptCreditList" title="Notas de crédito fiscales">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Notas de crédito fiscales</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.cashAdvance')">
+                            <a ui-sref="app.cashAdvance" title="Avances de efectivo">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Avances de efectivo</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.positiveBalance')">
+                            <a ui-sref="app.positiveBalance" title="Saldo a favor">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Saldo a favor</span>
                                 <span class="ripple"></span>
                             </a>
                         </li>
@@ -655,7 +662,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="" title="Reportes y Estadisticas" ripple="">
+                    <a href="" title="Reportes Credito y Cobro" ripple="">
                         <em class="sidebar-item-icon icon-file"></em>
                         <em class="sidebar-item-caret fa pull-right fa-angle-right"></em>
                         <span>Reportes Credito y Cobro</span>
@@ -688,7 +695,40 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="" title="Reportes y Estadisticas" ripple="">
+                    <a href="" title="Reportes de cierre" ripple="">
+                        <em class="sidebar-item-icon icon-file"></em>
+                        <em class="sidebar-item-caret fa pull-right fa-angle-right"></em>
+                        <span>Reportes de cierre</span>
+                        <span class="ripple">
+                            <span class="angular-ripple" style="width: 240px; height: 240px; left: -58px; top: -97px;"></span>
+                        </span>
+                    </a>
+                    <ul class="nav sidebar-subnav">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.InvoiceByPeriod')">
+                            <a ui-sref="app.InvoiceByPeriod" title="Reportes facturas por período">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Facturas por período</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.AccountsReceivablesReportsByPeriod')">
+                            <a ui-sref="app.AccountsReceivablesReportsByPeriod" title="Cuentas por cobrar por período">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Cuentas por cobrar por período</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.payedAwardsByPeriod')">
+                            <a ui-sref="app.payedAwardsByPeriod" title="Premios pagados por período">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Premios pagados por período</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" title="Reportes en Excel" ripple="">
                         <em class="sidebar-item-icon icon-file"></em>
                         <em class="sidebar-item-caret fa pull-right fa-angle-right"></em>
                         <span>Reportes en Excel</span>

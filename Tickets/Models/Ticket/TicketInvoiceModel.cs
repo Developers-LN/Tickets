@@ -399,8 +399,10 @@ namespace Tickets.Models.Ticket
                                 OutstandingBalance = 0.0M,
                                 CreateUser = WebSecurity.CurrentUserId,
                                 CreateDate = DateTime.Now,
-                                TaxReceipt = taxReceiptNumber.Value
+                                TaxReceipt = taxReceiptNumber.Value,
+                                TaxReceiptAssignmentDate = DateTime.Now
                             };
+
                             if (model.Condition == (int)InvoiceConditionEnum.Credit)
                             {
                                 invoice.PaymentStatu = (int)InvoicePaymentStatuEnum.Pendient;
@@ -428,6 +430,16 @@ namespace Tickets.Models.Ticket
                             }
 
                             context.Invoices.Add(invoice);
+                            context.SaveChanges();
+
+                            var taxReceiptHistory = new TaxReceiptNumbersHistory()
+                            {
+                                InvoiceId = invoice.Id,
+                                TaxReceiptId = taxReceiptNumber.Value,
+                                TaxReceiptAssignmentDate = DateTime.Now
+                            };
+
+                            context.TaxReceiptNumbersHistories.Add(taxReceiptHistory);
                             context.SaveChanges();
 
                             var allocations = allocatList;//context.TicketAllocations.AsEnumerable().Where(a => allocation_ids.Contains( a.Id) ).ToList();

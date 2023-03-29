@@ -12,7 +12,8 @@
         DescuentoNomina = 5888,
         DescuentoPrestaciones = 5902,
         Otros = 5903,
-        TaxReceiptNoteCredit = 5905
-	}
+        TaxReceiptNoteCredit = 5905,
+        PositiveBalance = 5909
+    }
 
 }

@@ -89,16 +89,28 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "allocationId")]
         public int AllocationId { get; set; }
 
-        [JsonProperty(PropertyName = "fractionQuantity")]
+		[JsonProperty(PropertyName = "ticketsQuantity")]
+		public int TicketsQuantity { get; set; }
+
+		[JsonProperty(PropertyName = "fractionQuantity")]
         public int FractionQuantity { get; set; }
 
-        [JsonProperty(PropertyName = "allocationFractionQuantity")]
+		[JsonProperty(PropertyName = "prospectFraction")]
+		public int ProspectFraction { get; set; }
+
+		[JsonProperty(PropertyName = "allocationFractionQuantity")]
         public int AllocationFractionQuantity { get; set; }
 
-        [JsonProperty(PropertyName = "totalRest")]
+		[JsonProperty(PropertyName = "allocationTicketsQuantity")]
+		public int AllocationTicketsQuantity { get; set; }
+
+		[JsonProperty(PropertyName = "totalRest")]
         public int TotalRest { get; set; }
 
-        [JsonProperty(PropertyName = "anyReturn")]
+		[JsonProperty(PropertyName = "totalRestTickets")]
+		public int TotalRestTickets { get; set; }
+
+		[JsonProperty(PropertyName = "anyReturn")]
         public int AnyReturn { get; set; }
 
         #region Private Method

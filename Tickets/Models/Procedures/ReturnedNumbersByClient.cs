@@ -17,7 +17,7 @@ namespace Tickets.Models.Procedures
             {
                 SqlCommand sqlCommand = new SqlCommand("ReturnedNumbersByClient", sqlConnection);
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@Raffle", raffle);
+                sqlCommand.Parameters.AddWithValue("@RaffleId", raffle);
                 sqlConnection.Open();
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                 if (sqlDataReader.HasRows)

@@ -26,9 +26,9 @@
                             <tr>
                                 <th class="text-center">Asignación</th>
                                 <th>Cliente</th>
-                                <th class="text-center">Asignado</th>
-                                <th class="text-center">Vendido</th>
-                                <th class="text-center">Anulado/Devuelto</th>
+                                <th class="text-center">Billetes - Fracciones <br /> Asignados</th>
+                                <th class="text-center">Billetes - Fracciones <br /> Vendidos</th>
+                                <th class="text-center">Billetes - Fracciones <br /> Anulados</th>
                                 <th class="editColumm text-center">Acción</th>
                             </tr>
                         </thead>
@@ -36,9 +36,9 @@
                             <tr data-ng-repeat="allocation in ElectronicSales">
                                 <td class="text-center">{{allocation.allocationId}}</td>
                                 <td>{{allocation.clientDesc}}</td>
-                                <td class="text-center">{{allocation.fractionQuantity | number}}</td>
-                                <td class="text-center">{{allocation.allocationFractionQuantity | number}}</td>
-                                <td class="text-center">{{allocation.totalRest | number}}</td>
+                                <td class="text-center">{{allocation.ticketsQuantity | number}} - {{allocation.fractionQuantity | number}}</td>
+                                <td class="text-center">{{allocation.allocationTicketsQuantity | number}} - {{allocation.allocationFractionQuantity | number}}</td>
+                                <td class="text-center">{{allocation.totalRestTickets | number}} - {{allocation.totalRest | number}}</td>
                                 <td class="text-center">
                                     <a ng-show="verifyCanView('app.electronicSalesDetails')" href="#/electronic/electronicSales/{{allocation.allocationId}}" title="Ventas por día" class="{{moduleCanView}}"><i class="fa fa-calendar"></i></a>
                                     @*<a target="_blank" href="/Reports/ElectronicSaleDetails?allocationId={{allocation.id}}" title="Detalle de venta electrónica"><i class="fa fa-print"></i></a>*@

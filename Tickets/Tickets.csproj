@@ -360,6 +360,7 @@
     <Compile Include="Models\Enums\PrintTypeProspect.cs" />
     <Compile Include="Models\Enums\ProspectIdEnum.cs" />
     <Compile Include="Models\Enums\ProspectImpresionTypeEnum.cs" />
+    <Compile Include="Models\Enums\ReceiptPaymentAdd.cs" />
     <Compile Include="Models\Enums\ReportByEmailEnum.cs" />
     <Compile Include="Models\Enums\AwardCertificationStatuEnum.cs" />
     <Compile Include="Models\Enums\TaxReceiptNumberStatuEnum.cs" />
@@ -410,6 +411,7 @@
     <Compile Include="Models\ModelsProcedures\ModelSalesAndPendingPayments.cs" />
     <Compile Include="Models\ModelsProcedures\PayableAward\ModelPayableAwardSummary.cs" />
     <Compile Include="Models\ModelsProcedures\ReturnedByGroupModel.cs" />
+    <Compile Include="Models\ModelsProcedures\Returns\ReturnsSummary.cs" />
     <Compile Include="Models\ModelsProcedures\ValidateElectronicSale.cs" />
     <Compile Include="Models\Module.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
@@ -450,6 +452,7 @@
     <Compile Include="Models\Procedures\ReturnedNumbersByClient.cs" />
     <Compile Include="Models\Procedures\ReturnedTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\Receivables\SalesAndPendingPayments.cs" />
+    <Compile Include="Models\Procedures\Returns\ReturnsSummaryProcedure.cs" />
     <Compile Include="Models\Procedures\ValidateElectronicSalesProcedure.cs" />
     <Compile Include="Models\ProductionCost.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
@@ -806,6 +809,7 @@
     <Content Include="Scripts\modules\agency\agency.list.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\modules\cash\cash.positive.balance.list.controller.js" />
     <Content Include="Scripts\modules\cash\client.general.balance.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -832,6 +836,8 @@
     <Content Include="Scripts\modules\cash\credit.note.taxreceipt.list.controller.js" />
     <Content Include="Scripts\modules\cash\credit.note.taxreceipt.controller.js" />
     <Content Include="Scripts\modules\cash\account.receivable.close.reports.controller.js" />
+    <Content Include="Scripts\modules\cash\invoice.period.reports.controller.js" />
+    <Content Include="Scripts\modules\cash\payed.award.period.reports.controller.js" />
     <Content Include="Scripts\modules\cash\previous.debt.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -3211,6 +3217,16 @@
     <Content Include="Views\Reports\NoteCreditTaxReceiptDetail.cshtml" />
     <Content Include="Views\Cash\AccountsReceivablesCloseReportsExcel.cshtml" />
     <Content Include="Views\Reports\SpecificReturnedFractions.cshtml" />
+    <Content Include="Views\Reports\ReturnsSummary.cshtml" />
+    <Content Include="Views\Cash\InvoiceByPeriod.cshtml" />
+    <Content Include="Views\Reports\InvoiceByPeriod.cshtml" />
+    <Content Include="Views\Cash\AccountsReceivablesReportsByPeriod.cshtml" />
+    <Content Include="Scripts\modules\cash\account.receivable.close.reports.pdf.controller.js" />
+    <Content Include="Views\Reports\AccountsReceivablesByPeriod.cshtml" />
+    <Content Include="Views\Cash\PositiveBalanceList.cshtml" />
+    <Content Include="Views\Reports\PositiveBalanceReport.cshtml" />
+    <Content Include="Views\Cash\PayedAwardByPeriod.cshtml" />
+    <Content Include="Views\Reports\PayedAwardByPeriod.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -10,6 +10,8 @@
 
     int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
+
+    int ProspectFractions = RaffleData.Prospect.LeafFraction;
 }
 
 <style>
@@ -49,11 +51,11 @@
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
             <b>DEVOLUCION DE BILLETES DEL SORTEO @RaffleData.Id</b><br />
-            Desde @RaffleData.StartReturnDate.ToShortDateString() hasta @RaffleData.EndReturnDate.ToShortDateString()
+            DESDE @RaffleData.StartReturnDate.ToString("dd/MM/yyyy") HASTA @RaffleData.EndReturnDate.ToString("dd/MM/yyyy")
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>HORA: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
 
@@ -69,12 +71,12 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th class="text-center">CLIENTE</th>
+                        <th class="text-left">CLIENTE</th>
                         <th class="text-center">BILLETES</th>
                         <th class="text-center">FRACCIONES <br /> RESTANTES</th>
                         <th class="text-center">TOTAL DE <br /> FRACCIONES</th>
                         <th class="text-center">HOJAS</th>
-                        <th class="text-right">PRECIO <br /> FRACCIONES</th>
+                        <th class="text-center">PRECIO <br /> FRACCIONES</th>
                         <th class="text-right">TOTAL</th>
                     </tr>
                 </thead>
@@ -86,8 +88,8 @@
                             <td class="text-center">@item.Billetes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-center">@item.FraccionesRestantes</td>
                             <td class="text-center">@item.Fracciones.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
-                            <td class="text-center">@item.Hojas.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
-                            <td class="text-right">@item.PrecioFraccion.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-center">@item.Hojas.ToString("n1", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-center">@item.PrecioFraccion.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-right">@item.Total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
                         TotalBilletes += item.Billetes;
@@ -96,16 +98,34 @@
                         TotalHojas += item.Hojas;
                         TotalRestante += item.Total;
                     }
-                </tbody>
-                <tfoot>
                     <tr class="total">
                         <td class="text-center"></td>
                         <td class="text-center">@TotalBilletes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td class="text-center">@TotalFraccionesRestantes</td>
+                        <td class="text-center">@TotalFraccionesRestantes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td class="text-center">@FraccionesTotales.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
-                        <td class="text-center">@TotalHojas.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-center">@TotalHojas.ToString("n1", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td class="text-right"></td>
                         <td class="text-right">@TotalRestante.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr style="border-top: 4px double black">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right" style="font-weight:bold;">Billetes devueltos: @((FraccionesTotales / ProspectFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right" style="font-weight:bold;">Fracciones devueltas: @((FraccionesTotales % ProspectFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</td>
                     </tr>
                 </tfoot>
             </table>

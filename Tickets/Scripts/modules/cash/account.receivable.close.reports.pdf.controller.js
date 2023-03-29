@@ -1,5 +1,5 @@
-/**=========================================================
- * Module: AccountReceivableReportsController.js
+﻿/**=========================================================
+ * Module: AccountReceivableCloseReportsPdfController.js
  =========================================================*/
 
 (function () {
@@ -7,10 +7,10 @@
 
     angular
         .module('naut')
-        .controller('AccountReceivableReportsController', AccountReceivableReportsController);
+        .controller('AccountReceivableCloseReportsPdfController', AccountReceivableCloseReportsPdfController);
 
-    AccountReceivableReportsController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
-    function AccountReceivableReportsController($scope, $state, $rootScope, $stateParams) {
+    AccountReceivableCloseReportsPdfController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
+    function AccountReceivableCloseReportsPdfController($scope, $state, $rootScope, $stateParams) {
         $scope.cash = {
             EndDate: undefined,
             StartDate: undefined,
@@ -65,24 +65,18 @@
         function validateData(cash) {
             var error = '', isReq = ' es un campo requerido. <br>';
 
-            if (cash.StartDate !== undefined && $scope.cash.EndDate === undefined) {
-                $scope.required = true;
-                error += 'La Fecha Fin' + isReq;
-            }
-            if (cash.StartDate === undefined && $scope.cash.EndDate !== undefined) {
-                $scope.required = true;
+            if (cash.StartDate === undefined) {
                 error += 'La Fecha de Inicio' + isReq;
             }
-            if (cash.StartDate === undefined && cash.EndDate === undefined && cash.RaffleId === 0) {
-                $scope.required = true;
-                error += 'No ha introducido ningun dato';
+            if ($scope.cash.EndDate === undefined) {
+                error += 'La Fecha Fin' + isReq;
             }
             if (error !== '') {
                 alertify.showError('Alerta', error);
             }
             return error === '';
         }
-         
+
         $scope.printReport = function () {
             if (validateData($scope.cash) === false) {
                 return;
@@ -93,7 +87,7 @@
             }
             catch (e) { }
 
-            window.open('Reports/AccountsReceivables?startDate=' + $scope.cash.StartDate + '&endDate=' + $scope.cash.EndDate + '&clientId=' + $scope.cash.ClientId + '&raffleId=' + $scope.cash.RaffleId);
+            window.open('Reports/AccountsReceivablesByPeriod?startDate=' + $scope.cash.StartDate + '&endDate=' + $scope.cash.EndDate + '&raffleId=' + $scope.cash.RaffleId);
         }
 
         //NUEVO CODIGO PARA GENERAR EXCEL DE LAS VENTAS Y CUENTAS POR COBRAR
@@ -110,7 +104,7 @@
                     }
                     catch (err) { }
 
-                    window.open('Integration/ExportToExcel?FechaInicio=' + $scope.cash.StartDate + '&FechaFin=' + $scope.cash.EndDate + '&raffleId=' + $scope.cash.RaffleId);
+                    window.open('Integration/ExportReceivableCloseToExcel?FechaInicio=' + $scope.cash.StartDate + '&FechaFin=' + $scope.cash.EndDate + '&raffleId=' + $scope.cash.RaffleId);
                 }
             });
         }

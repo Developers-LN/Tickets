@@ -644,6 +644,18 @@
                 url: '/cash/accountsReceivablesReports',
                 templateUrl: Route.base('Cash/AccountsReceivablesReports')
             })
+            .state('app.AccountsReceivablesReportsByPeriod', {
+                url: '/cash/accountsReceivablesReportsByPeriod',
+                templateUrl: Route.base('Cash/AccountsReceivablesReportsByPeriod')
+            })
+            .state('app.payedAwardsByPeriod', {
+                url: '/cash/payedAwardByPeriod',
+                templateUrl: Route.base('Cash/PayedAwardByPeriod')
+            })
+            .state('app.InvoiceByPeriod', {
+                url: '/cash/invoiceByPeriod',
+                templateUrl: Route.base('Cash/InvoiceByPeriod')
+            })
             .state('app.AccountsReceivablesReportsExcel', {
                 url: '/cash/accountsReceivablesReportsExcel',
                 templateUrl: Route.base('Cash/AccountsReceivablesReportsExcel')
@@ -704,6 +716,10 @@
             .state('app.cashAdvance', {
                 url: '/cash/CashAdvances',
                 templateUrl: Route.base('Cash/CashAdvanceList')
+            })
+            .state('app.positiveBalance', {
+                url: '/cash/positiveBalance',
+                templateUrl: Route.base('Cash/PositiveBalanceList')
             })
             .state('app.taxReceiptList', {
                 url: '/taxReceipt/taxReceiptList',

@@ -101,6 +101,8 @@
                                         return p;
                                     }
                                 });
+                                $scope.typeCashAdvances = data.typeCashAdvances;
+                                $scope.positiveBalances = data.positiveBalances;
                                 $scope.cashAdvances = data.cashAdvances;
                                 $scope.creditNotes = data.creditNotes;
                                 $scope.payment = data.payment;

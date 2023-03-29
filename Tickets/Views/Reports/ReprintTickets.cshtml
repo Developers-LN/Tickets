@@ -54,7 +54,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var ticket in Model.TicketRePrintNumbers)
+                @foreach (var ticket in Model.TicketRePrintNumbers.OrderBy(o => o.TicketAllocationNumber.Number)) 
                 {
                     count++;
                     <tr>

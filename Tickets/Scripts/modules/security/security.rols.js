@@ -161,8 +161,23 @@
 				});
 			});
 
-			var test = moduleList;
-			var t1 = 0;
+			const chunkSize = 100;
+			var lista1 = [];
+			var lista2 = [];
+			var lista = 1;
+
+			for (let i = 0; i < moduleList.length; i += chunkSize) {
+				if (lista == 1) {
+					lista1 = moduleList.slice(i, i + chunkSize);
+				}
+				if (lista == 2) {
+					lista2 = moduleList.slice(i, i + chunkSize);
+				}
+				lista += 1;
+			}
+
+			console.log(lista1);
+			console.log(lista2);
 
 			$.ajax({
 				type: 'POST',

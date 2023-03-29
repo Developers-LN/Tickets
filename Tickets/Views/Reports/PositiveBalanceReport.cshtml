@@ -1,0 +1,212 @@
+﻿@model Tickets.Models.NoteCredit
+
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Saldo a favor No. " + Model.Id;
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.CajaGeneral : "";
+    string adminCargo = config != null ? config.CajaGeneralCargo : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+
+    var Cajero = context.Users.FirstOrDefault(f => f.Id == Model.CreateUser);
+}
+
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 35px;">
+            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        @if (Model.RaffleId != null)
+        {
+            <div class="col-lg-12 no-padder text-center" style="margin-bottom:35px;">
+                <b>RECIBO DE SALDO A FAVOR DEL SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
+            </div>
+        }
+        <div class="col-lg-6 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <b>Cliente: </b> #@Model.Client.Id - @Model.Client.Name
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Cajero: </b> #@Model.CreateUser - @Cajero.Employee.Name @Cajero.Employee.LastName
+            </div>
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <div class="col-lg-12 no-padder text-right">
+                <b>Recibo de avance de efectivo: </b>#@Model.Id
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Hora: </b> @Model.CreateDate.ToShortTimeString()
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">MONTO TOTAL</th>
+                    <th class="text-center">CONCEPTO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">@Model.TotalCash</td>
+                    <td class="text-center">@Model.Concepts</td>
+                </tr>
+        </table>
+    </div>
+
+    <div class="col-lg-12 no-padder text-center">
+        <br />
+        <br />
+        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma Del Cliente
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma cajera
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <b>@adminName</b>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <span>@adminCargo</span>
+    </div>
+</div>
+
+<div class="col-lg-12" style="margin-top:50px;">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 35px;">
+            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+        @if (Model.RaffleId != null)
+        {
+            <div class="col-lg-12 no-padder text-center" style="margin-bottom:35px;">
+                <b>RECIBO DE SALDO A FAVOR DEL SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
+            </div>
+        }
+        <div class="col-lg-6 no-padder">
+            <div class="col-lg-12 no-padder text-left">
+                <b>Cliente: </b> #@Model.Client.Id - @Model.Client.Name
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>Cajero: </b> #@Model.CreateUser - @Cajero.Employee.Name @Cajero.Employee.LastName
+            </div>
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <div class="col-lg-12 no-padder text-right">
+                <b>Recibo de avance de efectivo: </b>#@Model.Id
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>Hora: </b> @Model.CreateDate.ToShortTimeString()
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">MONTO TOTAL</th>
+                    <th class="text-center">CONCEPTO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">@Model.TotalCash</td>
+                    <td class="text-center">@Model.Concepts</td>
+                </tr>
+        </table>
+    </div>
+
+    <div class="col-lg-12 no-padder text-center">
+        <br />
+        <br />
+        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma Del Cliente
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            Firma cajera
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <b>@adminName</b>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <span>@adminCargo</span>
+    </div>
+</div>

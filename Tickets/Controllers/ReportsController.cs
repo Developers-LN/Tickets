@@ -13,8 +13,8 @@ using Tickets.Models.Enums;
 using Tickets.Models.Procedures;
 using Tickets.Models.Procedures.Allocations;
 using Tickets.Models.Procedures.PayableAward;
-using Tickets.Models.Prospects;
-using Tickets.Models.Raffles;
+using Tickets.Models.Procedures.Receivables;
+using Tickets.Models.Procedures.Returns;
 
 namespace Tickets.Controllers
 {
@@ -685,21 +685,21 @@ namespace Tickets.Controllers
             return View(raffle);
         }
 
-		//
-		//  GET: Reports/SpecificReturnedFractions
-		[Authorize]
-		[HttpGet]
-		public ActionResult SpecificReturnedFractions(int raffleId = 0, int clientId = 0)
-		{
-			var context = new TicketsEntities();
-			ViewBag.ClientId = clientId;
-			var raffle = context.Raffles.FirstOrDefault(r => raffleId == 0 || r.Id == raffleId);
-			return View(raffle);
-		}
+        //
+        //  GET: Reports/SpecificReturnedFractions
+        [Authorize]
+        [HttpGet]
+        public ActionResult SpecificReturnedFractions(int raffleId = 0, int clientId = 0)
+        {
+            var context = new TicketsEntities();
+            ViewBag.ClientId = clientId;
+            var raffle = context.Raffles.FirstOrDefault(r => raffleId == 0 || r.Id == raffleId);
+            return View(raffle);
+        }
 
-		//
-		//  GET: Reports/ReturnedNumbersGroup
-		[Authorize]
+        //
+        //  GET: Reports/ReturnedNumbersGroup
+        [Authorize]
         [HttpGet]
         public ActionResult ReturnedNumbersGroup(int raffleId = 0, int clientId = 0)
         {
@@ -740,6 +740,17 @@ namespace Tickets.Controllers
         {
             AllocationSummaryProcedure allocationSummaryProcedure = new AllocationSummaryProcedure();
             var Resultado = allocationSummaryProcedure.ConsultaAsignacionesSorteo(raffleId);
+            return View(Resultado);
+        }
+
+        //
+        //  GET: Reports/ReturnsSummary
+        [Authorize]
+        [HttpGet]
+        public ActionResult ReturnsSummary(int raffleId = 0)
+        {
+            ReturnsSummaryProcedure returnsSummaryProcedure = new ReturnsSummaryProcedure();
+            var Resultado = returnsSummaryProcedure.ReturnedSummary(raffleId);
             return View(Resultado);
         }
 
@@ -799,18 +810,18 @@ namespace Tickets.Controllers
             return View(invoice);
         }
 
-		//
-		//  GET: Reports/InvoiceDetail
-		[Authorize]
-		[HttpGet]
-		public ActionResult InvoiceDetailUpdate(int invoiceId)
-		{
-			var context = new TicketsEntities();
-			var invoice = context.Invoices.FirstOrDefault(r => r.Id == invoiceId);
-			return View(invoice);
-		}
+        //
+        //  GET: Reports/InvoiceDetail
+        [Authorize]
+        [HttpGet]
+        public ActionResult InvoiceDetailUpdate(int invoiceId)
+        {
+            var context = new TicketsEntities();
+            var invoice = context.Invoices.FirstOrDefault(r => r.Id == invoiceId);
+            return View(invoice);
+        }
 
-		[Authorize]
+        [Authorize]
         [HttpGet]
         public ActionResult InvoicePaymentInfo(int paymentId)
         {
@@ -825,6 +836,15 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var cash = context.NoteCredits.FirstOrDefault(f => f.Id == cashAdvance);
+            return View(cash);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult PositiveBalanceReport(int positiveBalance)
+        {
+            var context = new TicketsEntities();
+            var cash = context.NoteCredits.FirstOrDefault(f => f.Id == positiveBalance);
             return View(cash);
         }
 
@@ -846,18 +866,18 @@ namespace Tickets.Controllers
             return View(notecredit);
         }
 
-		[Authorize]
-		[HttpGet]
-		public ActionResult NoteCreditTaxReceiptDetail(int noteCreditId)
-		{
-			var context = new TicketsEntities();
-			var notecredit = context.NoteCredits.FirstOrDefault(r => r.Id == noteCreditId);
-			return View(notecredit);
-		}
+        [Authorize]
+        [HttpGet]
+        public ActionResult NoteCreditTaxReceiptDetail(int noteCreditId)
+        {
+            var context = new TicketsEntities();
+            var notecredit = context.NoteCredits.FirstOrDefault(r => r.Id == noteCreditId);
+            return View(notecredit);
+        }
 
-		//
-		//  GET: Reports/ReturnedDeatils
-		[Authorize]
+        //
+        //  GET: Reports/ReturnedDeatils
+        [Authorize]
         [HttpGet]
         public ActionResult ReturnedDeatils(int raffleId, string group = "", int clientId = 0, int statu = (int)TicketReturnedStatuEnum.Created)
         {
@@ -975,8 +995,8 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var invoiceDetail = context.InvoiceDetails.Where(i => i.Id == invoiceDetailId).FirstOrDefault();
 
-			var awards = context.RaffleAwards.Where(a => a.RaffleId == invoiceDetail.RaffleId).ToList();
-			List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
+            var awards = context.RaffleAwards.Where(a => a.RaffleId == invoiceDetail.RaffleId).ToList();
+            List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
             context.IdentifyBaches.AsEnumerable().Where(i =>
                 i.RaffleId == invoiceDetail.RaffleId &&
                 i.ClientId == invoiceDetail.ClientId &&
@@ -1123,6 +1143,90 @@ namespace Tickets.Controllers
                 }
                 return View(invoices);
             }
+        }
+
+        //
+        //GET: Reports/AccountsReceivablesByPeriod
+        [Authorize]
+        [HttpGet]
+        public ActionResult AccountsReceivablesByPeriod(string startDate = "undefined", string endDate = "undefined", int raffleId = 0)
+        {
+            ReceivableClose receivableClose = new ReceivableClose();
+            ViewBag.startDate = Convert.ToDateTime(startDate).ToString("dd/MM/yyyy");
+            ViewBag.endDate = Convert.ToDateTime(endDate).ToString("dd/MM/yyyy");
+            var Resultado = receivableClose.ConsultaVentasCierre(startDate, endDate, raffleId);
+            return View(Resultado);
+        }
+
+        //
+        //GET: Reports/InvoiceByPeriod
+        [Authorize]
+        [HttpGet]
+        public ActionResult InvoiceByPeriod(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
+        {
+            var context = new TicketsEntities();
+            if (startDate == "undefined" || endDate == "undefined")
+            {
+                var invoiceslist = context.Invoices.ToList();
+                var invoices = invoiceslist.Where(i =>
+                (i.RaffleId == raffleId || raffleId == 0)
+                && (i.ClientId == clientId || clientId == 0)).ToList();
+
+                if (invoices.Count == 0)
+                {
+                    return RedirectToAction("Error", new { message = "No se encontraron cuentas por cobrar para los criterios seleccionados." });
+                }
+                return View(invoices);
+            }
+            else
+            {
+                var startD = DateTime.Parse(startDate);
+                var endD = DateTime.Parse(endDate);
+                var invoices = context.Invoices.AsEnumerable().Where(i =>
+                (i.RaffleId == raffleId || raffleId == 0)
+                && (i.ClientId == clientId || clientId == 0)
+                && (i.InvoiceDate.Date >= startD.Date && i.InvoiceDate.Date <= endD.Date)).ToList();
+
+                var test = invoices;
+
+                if (invoices.Count == 0)
+                {
+                    return RedirectToAction("Error", new { message = "No se encontraron cuentas por cobrar para los criterios seleccionados." });
+                }
+                return View(invoices);
+            }
+        }
+
+        //
+        //GET: Reports/PayedAwardByPeriod
+        [Authorize]
+        [HttpGet]
+        public ActionResult PayedAwardByPeriod(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
+        {
+            var context = new TicketsEntities();
+            var startD = DateTime.Parse(startDate);
+            var endD = DateTime.Parse(endDate);
+            List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
+            var InvoiceDetails = context.InvoiceDetails.AsEnumerable().Where(i => (i.Id == raffleId || raffleId == 0) && (i.CreateDate.Date >= startD.Date && i.CreateDate.Date <= endD.Date)).ToList();
+
+            foreach(var item in InvoiceDetails)
+            {
+                var awards = context.RaffleAwards.Where(a => a.RaffleId == item.RaffleId).ToList();
+
+                context.IdentifyBaches.AsEnumerable().Where(i =>
+                    i.RaffleId == item.RaffleId && i.ClientId == item.ClientId &&
+                    (i.IdentifyBachPayments.Any(p => p.CreateDate.Date >= item.StartDate.Date && p.CreateDate.Date <= item.EndDate.Date) == true)
+                    && (Utils.IdentifyBachIsPayedMinor(i, awards) || Utils.IdentifyBachIsPayedMayor(i, awards))
+                ).ToList().ForEach(i => identifyNumbers.AddRange(i.IdentifyNumbers));
+
+                if (identifyNumbers.Count <= 0)
+                {
+                    return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo #" + item.RaffleId + "." });
+                }
+            }
+            var test = identifyNumbers;
+
+            return View(identifyNumbers);
         }
 
         //

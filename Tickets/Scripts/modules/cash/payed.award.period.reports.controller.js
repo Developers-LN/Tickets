@@ -1,5 +1,5 @@
-/**=========================================================
- * Module: AccountReceivableReportsController.js
+﻿/**=========================================================
+ * Module: PayedAwardPeriodReportsController.js
  =========================================================*/
 
 (function () {
@@ -7,10 +7,10 @@
 
     angular
         .module('naut')
-        .controller('AccountReceivableReportsController', AccountReceivableReportsController);
+        .controller('PayedAwardPeriodReportsController', PayedAwardPeriodReportsController);
 
-    AccountReceivableReportsController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
-    function AccountReceivableReportsController($scope, $state, $rootScope, $stateParams) {
+    PayedAwardPeriodReportsController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
+    function PayedAwardPeriodReportsController($scope, $state, $rootScope, $stateParams) {
         $scope.cash = {
             EndDate: undefined,
             StartDate: undefined,
@@ -82,7 +82,7 @@
             }
             return error === '';
         }
-         
+
         $scope.printReport = function () {
             if (validateData($scope.cash) === false) {
                 return;
@@ -93,7 +93,7 @@
             }
             catch (e) { }
 
-            window.open('Reports/AccountsReceivables?startDate=' + $scope.cash.StartDate + '&endDate=' + $scope.cash.EndDate + '&clientId=' + $scope.cash.ClientId + '&raffleId=' + $scope.cash.RaffleId);
+            window.open('Reports/PayedAwardByPeriod?startDate=' + $scope.cash.StartDate + '&endDate=' + $scope.cash.EndDate + '&clientId=' + $scope.cash.ClientId + '&raffleId=' + $scope.cash.RaffleId);
         }
 
         //NUEVO CODIGO PARA GENERAR EXCEL DE LAS VENTAS Y CUENTAS POR COBRAR

@@ -4,6 +4,7 @@
     {
         NoteCredit = 5863,
         CashAdvance = 5864,
-        NoteTaxReceipt = 5904
-	}
+        NoteTaxReceipt = 5904,
+        PositiveBalance = 5908
+    }
 }

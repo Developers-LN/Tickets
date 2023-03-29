@@ -61,7 +61,7 @@ namespace Tickets.Models.Procedures.Receivables
                             CashPayment = Convert.ToDecimal(sqlDataReader["Pagos_Efectivo"].ToString()),
                             NoteCreditPayment = Convert.ToDecimal(sqlDataReader["Pagos_Credito"].ToString()),
                             TotalPayed = Convert.ToDecimal(sqlDataReader["Total_Pagado"].ToString()),
-                            TotalPending = Convert.ToDecimal(sqlDataReader["Total_Faltante"].ToString()),
+                            TotalPending = Convert.ToDecimal(sqlDataReader["Total_Faltante"].ToString())
                         };
                         lista.Add(Devoluciones);
                     }
@@ -91,7 +91,7 @@ namespace Tickets.Models.Procedures.Receivables
                         CashPayment = 0,
                         NoteCreditPayment = 0,
                         TotalPayed = 0,
-                        TotalPending = 0,
+                        TotalPending = 0
                     };
                     lista.Add(Devoluciones);
                 }

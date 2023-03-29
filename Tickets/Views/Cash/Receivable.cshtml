@@ -48,7 +48,7 @@
                                 <label class="col-lg-12 control-label-left">Tipo de Pago: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
                                     <select ng-required="true" class="form-control" ng-model="receivable.ReceiptType">
-                                        <option selected="selected" disabled="disabled" value="0">Seleccione un tipo de pago</option>
+                                        <option selected="selected" value="0">Seleccione un tipo de pago</option>
                                         <option ng-repeat="paymentType in paymentTypes" value="{{paymentType.Id}}">{{paymentType.NameDetail}}</option>
                                     </select>
                                 </div>
@@ -89,11 +89,11 @@
                         <div class="col-lg-3 no-padder">
                             <fieldset>
                                 <div class="form-group">
-                                    <label class="col-lg-12 control-label-left">Incluye avance de efectivo:</label>
+                                    <label class="col-lg-12 control-label-left">Adicional al pago:</label>
                                     <div class="col-lg-12">
                                         <select class="form-control dropdown-select2" ng-model="receivable.IncludeCashAdvance">
-                                            <option selected="selected" value="0">No incluye avance de efectivo</option>
-                                            <option value="1">Incluye avance de efectivo</option>
+                                            <option selected="selected" value="0">Seleccione un tipo de pago</option>
+                                            <option ng-repeat="typeCashAdvance in typeCashAdvances" value="{{typeCashAdvance.Id}}">{{typeCashAdvance.NameDetail}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -101,8 +101,8 @@
                         </div>
                         <div class="col-lg-3 no-padder">
                             <fieldset>
-                                <div class="form-group" ng-show="receivable.IncludeCashAdvance == 1">
-                                    <label class="col-lg-12 control-label-left">Monto del avance de efectivo:  <span class="color-red">*</span></label>
+                                <div class="form-group" ng-show="receivable.IncludeCashAdvance == @((int)Tickets.Models.Enums.ReceiptPaymentAdd.PositiveBalance) || receivable.IncludeCashAdvance == @((int)Tickets.Models.Enums.ReceiptPaymentAdd.CashAdvance)">
+                                    <label class="col-lg-12 control-label-left">Monto: <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
                                         <input type="number"
                                                min="0"
@@ -115,8 +115,8 @@
                         </div>
                         <div class="col-lg-6 no-padder">
                             <fieldset>
-                                <div class="form-group" ng-show="receivable.IncludeCashAdvance == 1">
-                                    <label class="col-lg-12 control-label-left">Nota del avance de efectivo:  <span class="color-red">*</span></label>
+                                <div class="form-group" ng-show="receivable.IncludeCashAdvance == @((int)Tickets.Models.Enums.ReceiptPaymentAdd.PositiveBalance) || receivable.IncludeCashAdvance == @((int)Tickets.Models.Enums.ReceiptPaymentAdd.CashAdvance)"">
+                                    <label class="col-lg-12 control-label-left">Nota: <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
                                         <textarea class="form-control" rows="4" ng-model="receivable.CashAdvanceNote"></textarea>
                                     </div>
@@ -191,6 +191,34 @@
                                     </tr>
                                 </tbody>
                             </table>
+
+                            <table ng-show="receivable.ReceiptType == 5909" class="table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Código</th>
+                                        <th>Fecha</th>
+                                        <th>Cantidad Restante</th>
+                                        <th>Concepto</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="creditNote in positiveBalances">
+                                        <td>
+                                            <div class="checkbox c-checkbox needsclick">
+                                                <label class="needsclick m-r-xs">
+                                                    <input type="checkbox" class="needsclick" ng-checked="isreturn(creditNote) == true" ng-disabled="isreturn(creditNote) == true" ng-click="selectCreditNote($event, creditNote)" />
+                                                    <span class="fa fa-check"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>#{{creditNote.Id}}</td>
+                                        <td>{{creditNote.NoteDate}}</td>
+                                        <td>{{parseMoney(creditNote.TotalRest)}}</td>
+                                        <td>{{creditNote.Concepts}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="col-lg-4">
                             <div class="col-lg-8 no-padder text-right">Monto:</div>
@@ -207,8 +235,8 @@
                             <div class="col-lg-4 no-padder text-right"><b>{{parseMoney(payment.totalRestant)}}</b></div>
                             <div class="col-lg-8 no-padder text-right"><b>Prox. Monto Deudado:</b></div>
                             <div class="col-lg-4 no-padder text-right" style="color:indianred"><b>{{parseMoney(payment.totalRestant - receivable.TotalCash)}}</b></div>
-                            <div class="col-lg-8 no-padder text-right" ng-show="receivable.IncludeCashAdvance == 1"><b>Monto de avance de efectivo:</b></div>
-                            <div class="col-lg-4 no-padder text-right" style="color: #49AE6E" ng-show="receivable.IncludeCashAdvance == 1"><b>{{parseMoney(receivable.CashAdvance)}}</b></div>
+                            <div class="col-lg-8 no-padder text-right" ng-show="receivable.IncludeCashAdvance == @((int)Tickets.Models.Enums.ReceiptPaymentAdd.PositiveBalance) || receivable.IncludeCashAdvance == @((int)Tickets.Models.Enums.ReceiptPaymentAdd.CashAdvance)""><b>Monto de avance de efectivo:</b></div>
+                            <div class="col-lg-4 no-padder text-right" style="color: #49AE6E" ng-show="receivable.IncludeCashAdvance == @((int)Tickets.Models.Enums.ReceiptPaymentAdd.PositiveBalance) || receivable.IncludeCashAdvance == @((int)Tickets.Models.Enums.ReceiptPaymentAdd.CashAdvance)""><b>{{parseMoney(receivable.CashAdvance)}}</b></div>
                         </div>
                     </div>
                     <div class="col-lg-12 no-padder" ng-show="receivable.clientType == 5862">

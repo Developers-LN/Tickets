@@ -255,7 +255,7 @@
 
                     $("#ticketAllocationNumber").val('');
                     self.ticketReaderString = '';
-                    currentTicketNumber.clientDesc = $('#cliientIdDropdown option:selected').text();;
+                    currentTicketNumber.clientDesc = $('#cliientIdDropdown option:selected').text();
                     $scope.returned.ticketReturnedNumbers.push(currentTicketNumber);
 
                     setTimeout(function () {

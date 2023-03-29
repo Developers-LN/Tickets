@@ -1,6 +1,6 @@
 @{
     Layout = null;
-    ViewBag.Title = "Reportes de Devoluciones";
+    ViewBag.Title = "Reportes de devoluciones";
 }
 
 <div class="col-lg-12 no-padder" ng-controller="RafflePrintController" ng-init="app.title = '@(ViewBag.Title)'">
@@ -15,10 +15,11 @@
                             <tr>
                                 <th style="width:70px" class="text-center">ID</th>
                                 <th>Nombre de Sorteo</th>
-                                <th class="text-center">Devoluciones Por Numero</th>
-                                <th class="text-center">Resumen de Devoluciones</th>
-                                <th class="text-center">Devoluciones Por Cliente</th>
-                                <th class="text-center">Devoluciones Premiadas</th>
+                                <th class="text-center">DEVOLUCIONES POR NUMERO</th>
+                                <th class="text-center">RESUMEN DE DEVOLUCIONES</th>
+                                <th class="text-center">DEVOLUCIONES POR CLIENTE</th>
+                                <th class="text-center">DEVOLUCIONES PREMIADAS</th>
+                                <th class="text-center">CUADRE DE DEVOLUCION</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,6 +37,9 @@
                                 </td>
                                 <td class="text-center">
                                     <a target="_blank" href="/Reports/ReturnedNumbersAward?raffleId={{raffle.id}}" title="Imprimir: Devoluciones Premiadas"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/ReturnsSummary?raffleId={{raffle.id}}" target="_blank" title="Imprimir: Resumen Asignaciones"><i class="fa fa-print"></i></a>
                                 </td>
                             </tr>
                         </tbody>

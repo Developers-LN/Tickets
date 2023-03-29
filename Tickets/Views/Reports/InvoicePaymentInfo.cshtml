@@ -115,6 +115,9 @@
                     <b>Recibo: </b>#@Model.Id
                 </div>
                 <div class="col-lg-12 no-padder text-right">
+                    <b>Fecha de ingreso: </b>@Model.ReceiptDate.ToShortDateString()
+                </div>
+                <div class="col-lg-12 no-padder text-right">
                     <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
                 </div>
                 <div class="col-lg-12 no-padder text-right">
@@ -245,7 +248,14 @@
                 <div class="col-lg-6 no-padder"></div>
                 <div class="col-lg-6 no-padder">
                     <div class="col-lg-12 no-padder text-right">
-                        <b>Avance: </b>#@CashAdvance.Id
+                        @if (CashAdvance.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.CashAdvance)
+                        {
+                            <b>Avance No.: @CashAdvance.Id</b>
+                        }
+                        else if (CashAdvance.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.PositiveBalance)
+                        {
+                            <b>Saldo No.: @CashAdvance.Id</b>
+                        }
                     </div>
                 </div>
             </div>
@@ -253,12 +263,21 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th class="text-center" colspan="2">
-                                Avance de efectivo
-                            </th>
+                            @if (CashAdvance.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.CashAdvance)
+                            {
+                                <th class="text-center" colspan="2">
+                                    Avance de efectivo
+                                </th>
+                            }
+                            else if (CashAdvance.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.PositiveBalance)
+                            {
+                                <th class="text-center" colspan="2">
+                                    Saldo a favor
+                                </th>
+                            }
                         </tr>
                         <tr>
-                            <th class="text-center">Monto del avance</th>
+                            <th class="text-center">Monto</th>
                             <th class="text-left">Notas</th>
                         </tr>
                     </thead>
@@ -364,6 +383,9 @@
                     <b>Recibo: </b>#@Model.Id
                 </div>
                 <div class="col-lg-12 no-padder text-right">
+                    <b>Fecha de ingreso: </b>@Model.ReceiptDate.ToShortDateString()
+                </div>
+                <div class="col-lg-12 no-padder text-right">
                     <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
                 </div>
                 <div class="col-lg-12 no-padder text-right">
@@ -494,7 +516,14 @@
                 <div class="col-lg-6 no-padder"></div>
                 <div class="col-lg-6 no-padder">
                     <div class="col-lg-12 no-padder text-right">
-                        <b>Avance: </b>#@CashAdvance.Id
+                        @if (CashAdvance.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.CashAdvance)
+                        {
+                            <b>Avance No.: @CashAdvance.Id</b>
+                        }
+                        else if (CashAdvance.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.PositiveBalance)
+                        {
+                            <b>Saldo No.: @CashAdvance.Id</b>
+                        }
                     </div>
                 </div>
             </div>
@@ -502,12 +531,21 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th class="text-center" colspan="2">
-                                Avance de efectivo
-                            </th>
+                            @if (CashAdvance.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.CashAdvance)
+                            {
+                                <th class="text-center" colspan="2">
+                                    Avance de efectivo
+                                </th>
+                            }
+                            else if (CashAdvance.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.PositiveBalance)
+                            {
+                                <th class="text-center" colspan="2">
+                                    Saldo a favor
+                                </th>
+                            }
                         </tr>
                         <tr>
-                            <th class="text-center">Monto del avance</th>
+                            <th class="text-center">Monto</th>
                             <th class="text-left">Notas</th>
                         </tr>
                     </thead>
