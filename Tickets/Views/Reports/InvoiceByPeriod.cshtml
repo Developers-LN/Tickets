@@ -4,6 +4,15 @@
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     ViewBag.Title = "Reporte de facturación";
 
+    if (Model.AsEnumerable().GroupBy(r => r.RaffleId).Select(s => s.Key).ToList().Count() == 1)
+    {
+        ViewBag.Title = "REPORTE DE FACTURACION DEL PERIODO " + ViewBag.startDate + " Y " + ViewBag.endDate + " DEL SORTEO " + @Model.FirstOrDefault().RaffleId;
+    }
+    else
+    {
+        ViewBag.Title = "REPORTE DE COBROS REALIZADOS EN EL PERIODO " + ViewBag.startDate + " y " + ViewBag.endDate;
+    }
+
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.Facturacion : "";
@@ -64,7 +73,11 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
-            <b>REPORTE DE FACTURACION</b>
+            <b>REPORTE DE FACTURACION DEL PERIODO @ViewBag.startDate Y @ViewBag.endDate</b>
+            @if (Model.AsEnumerable().GroupBy(r => r.RaffleId).Select(s => s.Key).ToList().Count() == 1)
+            {
+                <b>DEL SORTEO NO. @Model.FirstOrDefault().RaffleId</b>
+            }
         </div>
         <div class="col-lg-12 no-padder">
             <div class="col-lg-6 no-padder text-left">

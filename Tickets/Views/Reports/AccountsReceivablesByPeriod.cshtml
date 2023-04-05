@@ -117,7 +117,8 @@
                                 totalToPay = c.FirstOrDefault().TotalToPay,
                                 totalCash = c.FirstOrDefault().CashPayment,
                                 totalNoteCredit = c.FirstOrDefault().NoteCreditPayment,
-                                totalPending = c.FirstOrDefault().TotalPending
+                                totalPending = c.FirstOrDefault().TotalPending,
+                                reportType = c.FirstOrDefault().ReportType
                             })
                         }).ToList();
 
@@ -130,63 +131,189 @@
                         decimal totalRestr = 0.0m;
                         decimal totalPaymentr = 0.0m;
 
-                        <tr>
-                            <th colspan="8" class="text-center">@raffle.raffleName</th>
-                        </tr>
-                        foreach (var client in raffle.invoiceByClients)
+                        if (raffle.invoiceByClients.Any(a => a.reportType == (int)Tickets.Models.Enums.ReceivableTypeEnum.Payed))
                         {
-                            decimal totalInvoicec = 0.0m;
-                            decimal totalDiscountc = 0.0m;
-                            decimal totalGeneralc = 0.0m;
-                            decimal totalRestc = 0.0m;
-                            decimal totalPaymentc = 0.0m;
-
-                            <tr>
-                                @*<th colspan="2" class="text-left"></th>*@
-                                <th colspan="8" class="text-center">@client.clientName - @client.clientType</th>
-                            </tr>
-                            <tr>
-                                <td class="text-center">@client.invoiceId</td>
-                                <td class="text-center">@client.invoiceDate</td>
-                                <td class="text-center">@client.invoiceStatus</td>
-                                <td class="text-right">@client.invoiceTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                <td class="text-right">@client.invoiceDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                <td class="text-right">@client.totalToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                <td class="text-right">@((client.totalCash + client.totalNoteCredit).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@client.totalPending.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                            </tr>
-                            totalInvoicec += client.invoiceTotal;
-                            totalDiscountc += client.invoiceDiscount;
-                            totalGeneralc += client.totalToPay;
-                            totalRestc += client.totalPending;
-                            totalPaymentc += (client.totalCash + client.totalNoteCredit);
-                            <tr class="sub-total" style="font-weight:bold">
-                                <td class="text-right" colspan="3">Total Cliente: </td>
-                                <td class="text-right">@(totalInvoicec.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@(totalDiscountc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@(totalGeneralc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@(totalPaymentc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                                <td class="text-right">@(totalRestc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                            </tr>
-                            totalInvoicer += totalInvoicec;
-                            totalDiscountr += totalDiscountc;
-                            totalGeneralr += totalGeneralc;
-                            totalRestr += totalRestc;
-                            totalPaymentr += totalPaymentc;
+                            foreach (var client in raffle.invoiceByClients.Where(w => w.totalPending == 0))
+                            {
+                                decimal totalInvoicec = 0.0m;
+                                decimal totalDiscountc = 0.0m;
+                                decimal totalGeneralc = 0.0m;
+                                decimal totalRestc = 0.0m;
+                                decimal totalPaymentc = 0.0m;
+                                <tr>
+                                    <th colspan="8" class="text-center">@raffle.raffleName</th>
+                                </tr>
+                                <tr>
+                                    @*<th colspan="2" class="text-left"></th>*@
+                                    <th colspan="8" class="text-center">@client.clientName - @client.clientType</th>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">@client.invoiceId</td>
+                                    <td class="text-center">@client.invoiceDate</td>
+                                    <td class="text-center">@client.invoiceStatus</td>
+                                    <td class="text-right">@client.invoiceTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right">@client.invoiceDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right">@client.totalToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right">@((client.totalCash + client.totalNoteCredit).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@client.totalPending.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                </tr>
+                                totalInvoicec += client.invoiceTotal;
+                                totalDiscountc += client.invoiceDiscount;
+                                totalGeneralc += client.totalToPay;
+                                totalRestc += client.totalPending;
+                                totalPaymentc += (client.totalCash + client.totalNoteCredit);
+                                <tr class="sub-total" style="font-weight:bold">
+                                    <td class="text-right" colspan="3">Total Cliente: </td>
+                                    <td class="text-right">@(totalInvoicec.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalDiscountc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalGeneralc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalPaymentc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalRestc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                </tr>
+                                totalInvoicer += totalInvoicec;
+                                totalDiscountr += totalDiscountc;
+                                totalGeneralr += totalGeneralc;
+                                totalRestr += totalRestc;
+                                totalPaymentr += totalPaymentc;
+                            }
+                            if (raffle.invoiceByClients.Any(a => a.totalPending == 0))
+                            {
+                                <tr class="sub-total" style="font-weight:bold">
+                                    <td class="text-right" colspan="3">Total Sorteo: </td>
+                                    <td class="text-right">@(totalInvoicer.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalDiscountr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalGeneralr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalPaymentr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalRestr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                </tr>
+                                totalInvoice += totalInvoicer;
+                                totalDiscount += totalDiscountr;
+                                totalGeneral += totalGeneralr;
+                                totalRest += totalRestr;
+                                totalPayment += totalPaymentr;
+                            }
                         }
-                        <tr class="sub-total" style="font-weight:bold">
-                            <td class="text-right" colspan="3">Total Sorteo: </td>
-                            <td class="text-right">@(totalInvoicer.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalDiscountr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalGeneralr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalPaymentr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                            <td class="text-right">@(totalRestr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
-                        </tr>
-                        totalInvoice += totalInvoicer;
-                        totalDiscount += totalDiscountr;
-                        totalGeneral += totalGeneralr;
-                        totalRest += totalRestr;
-                        totalPayment += totalPaymentr;
+                        else if (raffle.invoiceByClients.Any(a => a.reportType == (int)Tickets.Models.Enums.ReceivableTypeEnum.Pending))
+                        {
+                            foreach (var client in raffle.invoiceByClients.Where(w => w.totalPending > 0))
+                            {
+                                decimal totalInvoicec = 0.0m;
+                                decimal totalDiscountc = 0.0m;
+                                decimal totalGeneralc = 0.0m;
+                                decimal totalRestc = 0.0m;
+                                decimal totalPaymentc = 0.0m;
+                                <tr>
+                                    <th colspan="8" class="text-center">@raffle.raffleName</th>
+                                </tr>
+                                <tr>
+                                    @*<th colspan="2" class="text-left"></th>*@
+                                    <th colspan="8" class="text-center">@client.clientName - @client.clientType</th>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">@client.invoiceId</td>
+                                    <td class="text-center">@client.invoiceDate</td>
+                                    <td class="text-center">@client.invoiceStatus</td>
+                                    <td class="text-right">@client.invoiceTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right">@client.invoiceDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right">@client.totalToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right">@((client.totalCash + client.totalNoteCredit).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@client.totalPending.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                </tr>
+                                totalInvoicec += client.invoiceTotal;
+                                totalDiscountc += client.invoiceDiscount;
+                                totalGeneralc += client.totalToPay;
+                                totalRestc += client.totalPending;
+                                totalPaymentc += (client.totalCash + client.totalNoteCredit);
+                                <tr class="sub-total" style="font-weight:bold">
+                                    <td class="text-right" colspan="3">Total Cliente: </td>
+                                    <td class="text-right">@(totalInvoicec.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalDiscountc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalGeneralc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalPaymentc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalRestc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                </tr>
+                                totalInvoicer += totalInvoicec;
+                                totalDiscountr += totalDiscountc;
+                                totalGeneralr += totalGeneralc;
+                                totalRestr += totalRestc;
+                                totalPaymentr += totalPaymentc;
+                            }
+                            if (raffle.invoiceByClients.Any(a => a.totalPending > 0))
+                            {
+                                <tr class="sub-total" style="font-weight:bold">
+                                    <td class="text-right" colspan="3">Total Sorteo: </td>
+                                    <td class="text-right">@(totalInvoicer.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalDiscountr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalGeneralr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalPaymentr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalRestr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                </tr>
+                                totalInvoice += totalInvoicer;
+                                totalDiscount += totalDiscountr;
+                                totalGeneral += totalGeneralr;
+                                totalRest += totalRestr;
+                                totalPayment += totalPaymentr;
+                            }
+                        }
+                        else
+                        {
+                            foreach (var client in raffle.invoiceByClients)
+                            {
+                                decimal totalInvoicec = 0.0m;
+                                decimal totalDiscountc = 0.0m;
+                                decimal totalGeneralc = 0.0m;
+                                decimal totalRestc = 0.0m;
+                                decimal totalPaymentc = 0.0m;
+                                <tr>
+                                    <th colspan="8" class="text-center">@raffle.raffleName</th>
+                                </tr>
+                                <tr>
+                                    @*<th colspan="2" class="text-left"></th>*@
+                                    <th colspan="8" class="text-center">@client.clientName - @client.clientType</th>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">@client.invoiceId</td>
+                                    <td class="text-center">@client.invoiceDate</td>
+                                    <td class="text-center">@client.invoiceStatus</td>
+                                    <td class="text-right">@client.invoiceTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right">@client.invoiceDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right">@client.totalToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    <td class="text-right">@((client.totalCash + client.totalNoteCredit).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@client.totalPending.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                </tr>
+                                totalInvoicec += client.invoiceTotal;
+                                totalDiscountc += client.invoiceDiscount;
+                                totalGeneralc += client.totalToPay;
+                                totalRestc += client.totalPending;
+                                totalPaymentc += (client.totalCash + client.totalNoteCredit);
+                                <tr class="sub-total" style="font-weight:bold">
+                                    <td class="text-right" colspan="3">Total Cliente: </td>
+                                    <td class="text-right">@(totalInvoicec.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalDiscountc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalGeneralc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalPaymentc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                    <td class="text-right">@(totalRestc.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                </tr>
+                                totalInvoicer += totalInvoicec;
+                                totalDiscountr += totalDiscountc;
+                                totalGeneralr += totalGeneralc;
+                                totalRestr += totalRestc;
+                                totalPaymentr += totalPaymentc;
+                            }
+                            <tr class="sub-total" style="font-weight:bold">
+                                <td class="text-right" colspan="3">Total Sorteo: </td>
+                                <td class="text-right">@(totalInvoicer.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(totalDiscountr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(totalGeneralr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(totalPaymentr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                <td class="text-right">@(totalRestr.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                            </tr>
+                            totalInvoice += totalInvoicer;
+                            totalDiscount += totalDiscountr;
+                            totalGeneral += totalGeneralr;
+                            totalRest += totalRestr;
+                            totalPayment += totalPaymentr;
+                        }
                     }
                 </tbody>
                 <tfoot>
@@ -228,7 +355,7 @@
     </div>
 
     @*<div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-        <b>@adminName</b><br />
-        <span>@adminCargo</span>
-    </div>*@
+            <b>@adminName</b><br />
+            <span>@adminCargo</span>
+        </div>*@
 </div>

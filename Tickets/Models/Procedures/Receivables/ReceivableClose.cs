@@ -9,7 +9,7 @@ namespace Tickets.Models.Procedures.Receivables
 	{
 		public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-		public IEnumerable<ModelSalesAndPendingPayments> ConsultaVentasCierre(string FechaInicio, string FechaFin, int RaffleId)
+		public IEnumerable<ModelSalesAndPendingPayments> ConsultaVentasCierre(string FechaInicio, string FechaFin, int RaffleId, int ReportType)
 		{
 			var lista = new List<ModelSalesAndPendingPayments>();
 
@@ -17,9 +17,11 @@ namespace Tickets.Models.Procedures.Receivables
 
 			using (SqlConnection sqlConnection = new SqlConnection(ConDB))
 			{
-				SqlCommand sqlCommand = new SqlCommand("ReceivableClose", sqlConnection);
-				sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-				if (FechaInicio == "undefined" && FechaInicio == "undefined")
+                SqlCommand sqlCommand = new SqlCommand("ReceivableClose", sqlConnection)
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                };
+                if (FechaInicio == "undefined" && FechaInicio == "undefined")
 				{
 					sqlCommand.Parameters.AddWithValue("@FechaInicio", "");
 					sqlCommand.Parameters.AddWithValue("@FechaFin", "");
@@ -41,6 +43,7 @@ namespace Tickets.Models.Procedures.Receivables
 						var Devoluciones = new ModelSalesAndPendingPayments()
 						{
 							Data = true,
+							ReportType = ReportType,
 							IdClient = Convert.ToInt32(sqlDataReader["ID_Cliente"].ToString()),
 							NameClient = sqlDataReader["Nombre_Cliente"].ToString(),
 							TypeClient = sqlDataReader["Tipo_Cliente"].ToString(),
@@ -71,7 +74,8 @@ namespace Tickets.Models.Procedures.Receivables
 					var Devoluciones = new ModelSalesAndPendingPayments()
 					{
 						Data = false,
-						IdClient = 0,
+                        ReportType = ReportType,
+                        IdClient = 0,
 						NameClient = "",
 						TypeClient = "",
 						IdRaffle = 0,

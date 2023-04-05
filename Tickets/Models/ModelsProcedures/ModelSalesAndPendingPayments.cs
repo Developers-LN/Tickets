@@ -5,6 +5,7 @@ namespace Tickets.Models.ModelsProcedures
     public class ModelSalesAndPendingPayments
     {
         public bool Data { get; set; }
+        public int ReportType { get; set; }
         public int IdClient { get; set; }
         public string NameClient { get; set; }
         public string TypeClient { get; set; }

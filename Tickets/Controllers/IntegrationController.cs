@@ -20,7 +20,7 @@ namespace Tickets.Controllers
 {
     public class IntegrationController : Controller
     {
-        private static Random random = new Random();
+        //private static Random random = new Random();
 
         //GET: /Integration/ElectronicTicketXml
         [Authorize]
@@ -201,10 +201,10 @@ namespace Tickets.Controllers
 
 		[Authorize]
         [HttpGet]
-        public ActionResult ExportReceivableCloseToExcel(string FechaInicio = null, string FechaFin = null, int raffleId = 0)
+        public ActionResult ExportReceivableCloseToExcel(string FechaInicio = null, string FechaFin = null, int raffleId = 0, int reportType = 0)
         {
             ReceivableClose receivableClose = new ReceivableClose();
-            var Resultado = receivableClose.ConsultaVentasCierre(FechaInicio, FechaFin, raffleId);
+            var Resultado = receivableClose.ConsultaVentasCierre(FechaInicio, FechaFin, raffleId, reportType);
 
             using (var workBook = new XLWorkbook())
             {
@@ -339,7 +339,7 @@ namespace Tickets.Controllers
                          select new
                          {
                              TicketNumber = Utils.AddZeroToNumber((raffleData.Prospect.Production).ToString().Length, (int)a.ControlNumber),
-                             ControlNumber = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).ControlNumber,
+                             DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).ControlNumber,
                              Allocation = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).TaId,
                              IdNumber = DataPremios.FirstOrDefault(f => f.Number == a.ControlNumber).TanId,
                              FractionFrom = 1,

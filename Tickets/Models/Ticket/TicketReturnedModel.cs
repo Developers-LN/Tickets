@@ -253,13 +253,16 @@ namespace Tickets.Models.Ticket
                                         }
                                     }
 
-                                    if (allocationNumber.Statu == (int)TicketStatusEnum.Printed)
+                                    if (context.Clients.FirstOrDefault(f => f.Id == model.ClientId).GroupId != (int)ClientGroupEnum.CajasOficinaPrincipal)
                                     {
-                                        for (var fraction = ticketReturn.FractionFrom; fraction <= ticketReturn.FractionTo; fraction++)
+                                        if (allocationNumber.Statu == (int)TicketStatusEnum.Printed)
                                         {
-                                            if (fraction >= allocationNumber.FractionFrom && fraction <= allocationNumber.FractionTo)
+                                            for (var fraction = ticketReturn.FractionFrom; fraction <= ticketReturn.FractionTo; fraction++)
                                             {
-                                                messageList.Add("La fracción " + fraction + " del billete " + allocationNumber.Number + " fue impresa pero no fue entregado al cliente.");
+                                                if (fraction >= allocationNumber.FractionFrom && fraction <= allocationNumber.FractionTo)
+                                                {
+                                                    messageList.Add("La fracción " + fraction + " del billete " + allocationNumber.Number + " fue impresa pero no fue entregado al cliente.");
+                                                }
                                             }
                                         }
                                     }
@@ -315,6 +318,7 @@ namespace Tickets.Models.Ticket
         internal RequestResponseModel Save(TicketReturnedModel model)
         {
             bool notAllReturnet = false;
+            bool state = false;
             StringBuilder sb = new StringBuilder();
             List<string> messageList = new List<string>();
             var ticketNumberList = new List<TicketReturn>();
@@ -343,6 +347,7 @@ namespace Tickets.Models.Ticket
                             s.Prospect.MaxReturnTickets,
                             s.Statu,
                             s.EndReturnDate,
+                            Production = s.Prospect.Production.ToString().Length,
                             MaxFraction = s.Prospect.LeafNumber * s.Prospect.LeafFraction,
                             returnedOpens = s.ReturnedOpens.Select(r => r.EndReturnedDate)
                         }).FirstOrDefault();
@@ -352,15 +357,87 @@ namespace Tickets.Models.Ticket
 
                         var ticketAllocationNumbers = context.TicketAllocationNumbers
                             .Where(t => t.RaffleId == model.RaffleId &&
-                                   (t.TicketAllocation.Statu == (int)AllocationStatuEnum.Consigned || t.TicketAllocation.Statu == (int)AllocationStatuEnum.Invoiced) &&
                                    t.TicketAllocation.ClientId == clientId).Select(t => new
                                    {
                                        t.Id,
+                                       t.RaffleId,
+                                       t.TicketAllocation.Statu,
+                                       t.TicketAllocation.ClientId,
                                        t.FractionTo,
                                        t.FractionFrom,
                                        t.Number,
                                        clientDiscount = t.InvoiceTickets.Select(s => s.Invoice.Discount).FirstOrDefault()
                                    }).ToList();
+
+                        if (context.Clients.FirstOrDefault(f => f.Id == clientId).GroupId != (int)ClientGroupEnum.CajasOficinaPrincipal)
+                        {
+                            var NormalClient = ticketAllocationNumbers.Where(t => t.RaffleId == model.RaffleId &&
+                                   (t.Statu == (int)AllocationStatuEnum.Consigned || t.Statu == (int)AllocationStatuEnum.Invoiced) &&
+                                   t.ClientId == clientId).Select(t => new
+                                   {
+                                       t.Id,
+                                       t.RaffleId,
+                                       t.Statu,
+                                       t.ClientId,
+                                       t.FractionTo,
+                                       t.FractionFrom,
+                                       t.Number,
+                                       t.clientDiscount
+                                   }).ToList();
+
+                            ticketAllocationNumbers = NormalClient;
+                        }
+                        else if (context.Clients.FirstOrDefault(f => f.Id == clientId).GroupId == (int)ClientGroupEnum.CajasOficinaPrincipal)
+                        {
+                            var Oficial = ticketAllocationNumbers.Where(t => t.RaffleId == model.RaffleId &&
+                                   t.ClientId == clientId).Select(t => new
+                                   {
+                                       t.Id,
+                                       t.RaffleId,
+                                       t.Statu,
+                                       t.ClientId,
+                                       t.FractionTo,
+                                       t.FractionFrom,
+                                       t.Number,
+                                       t.clientDiscount
+                                   }).ToList();
+
+                            ticketAllocationNumbers = Oficial;
+                        }
+
+                        var TicketsFromOtherClient = model.TicketReturnedNumbers.Select(s => s.NumberId).Where(w => !ticketAllocationNumbers.Select(s => s.Number).Contains(w)).ToList();
+
+                        if (TicketsFromOtherClient.Any())
+                        {
+                            state = true;
+                            var DataFromOtherClients = context.TicketAllocationNumbers.Where(w => w.RaffleId == model.RaffleId && TicketsFromOtherClient.Contains((int)w.Number)).Select(S => new
+                            {
+                                S.Number,
+                                S.TicketAllocation.Client.Name
+                            }).ToList();
+
+                            var ClientGroup = DataFromOtherClients.GroupBy(g => g.Name).Select(s => s.Key).ToList();
+
+                            foreach (var client in ClientGroup)
+                            {
+                                messageList.Add("Los billetes No. ");
+                                foreach (var ticket in DataFromOtherClients.Where(w => w.Name == client))
+                                {
+                                    messageList.Add(ticket.Number.ToString().PadLeft(raffleData.Production, '0'));
+                                }
+                                messageList.Add("Pertenecen a " + client);
+                            }
+
+                        }
+                        if (state)
+                        {
+                            return new RequestResponseModel()
+                            {
+                                Result = false,
+                                Message = "",
+                                Object = messageList
+                            };
+                        }
 
                         var totalTickets = 0;
                         ticketAllocationNumbers.ForEach(t => totalTickets += (t.FractionTo - t.FractionFrom + 1));

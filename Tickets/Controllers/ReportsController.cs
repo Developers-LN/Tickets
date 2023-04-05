@@ -115,8 +115,6 @@ namespace Tickets.Controllers
                     Concept = n.Concepts
                 }).FirstOrDefault();
             }
-            var test = payment;
-            var t = 1;
             return View(payment);
         }
 
@@ -1149,12 +1147,12 @@ namespace Tickets.Controllers
         //GET: Reports/AccountsReceivablesByPeriod
         [Authorize]
         [HttpGet]
-        public ActionResult AccountsReceivablesByPeriod(string startDate = "undefined", string endDate = "undefined", int raffleId = 0)
+        public ActionResult AccountsReceivablesByPeriod(string startDate = "undefined", string endDate = "undefined", int raffleId = 0, int receivableType = 0)
         {
             ReceivableClose receivableClose = new ReceivableClose();
             ViewBag.startDate = Convert.ToDateTime(startDate).ToString("dd/MM/yyyy");
             ViewBag.endDate = Convert.ToDateTime(endDate).ToString("dd/MM/yyyy");
-            var Resultado = receivableClose.ConsultaVentasCierre(startDate, endDate, raffleId);
+            var Resultado = receivableClose.ConsultaVentasCierre(startDate, endDate, raffleId, receivableType);
             return View(Resultado);
         }
 
@@ -1180,6 +1178,8 @@ namespace Tickets.Controllers
             }
             else
             {
+                ViewBag.startDate = Convert.ToDateTime(startDate).ToString("dd/MM/yyyy");
+                ViewBag.endDate = Convert.ToDateTime(endDate).ToString("dd/MM/yyyy");
                 var startD = DateTime.Parse(startDate);
                 var endD = DateTime.Parse(endDate);
                 var invoices = context.Invoices.AsEnumerable().Where(i =>

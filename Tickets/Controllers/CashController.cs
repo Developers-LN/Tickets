@@ -284,13 +284,19 @@ namespace Tickets.Controllers
 
             }).ToList();
 
+            var accountReceivableTypes = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.AccountReceivableType && w.Statu == true).OrderBy(o => o.IdDetail).Select(s => new
+            {
+                value = s.Id,
+                text = s.NameDetail
+            });
+
             var raffles = context.Raffles.Select(r => new
             {
                 value = r.Id,
                 text = r.Name
             }).ToList();
 
-            return new JsonResult() { Data = new { clients, raffles, users }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new JsonResult() { Data = new { clients, raffles, users, accountReceivableTypes }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         //
@@ -872,7 +878,7 @@ namespace Tickets.Controllers
                     clientType = invoice.Client.GroupId,
                     invoiceDiscount = invoice.Discount,
                     invoiceDate = invoice.CreateDate.ToString("dd/MM/yyyy"),
-                    Agente = invoice.InvoiceTickets.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Agente,
+                    invoice.InvoiceTickets.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Agente,
                     paymentsHistory = invoice.ReceiptPayments.AsEnumerable()
                     .Where(w => w.InvoiceId == invoice.Id)
                     .Select(s => new
@@ -1452,12 +1458,14 @@ namespace Tickets.Controllers
                         if (creditNote.Id == 0)
                         {
                             var user = context.Users.AsEnumerable().Where(u => u.Id == WebSecurity.CurrentUserId).FirstOrDefault();
-                            var cashInfo = new Cash();
-                            cashInfo.CraeteDate = DateTime.Now;
-                            cashInfo.CreateUser = WebSecurity.CurrentUserId;
-                            cashInfo.AgencyId = user.Employee.AgencyId;
-                            cashInfo.Statu = (int)CashStatusEnum.Close;
-                            cashInfo.Name = DateTime.Now.Date.ToString();
+                            var cashInfo = new Cash
+                            {
+                                CraeteDate = DateTime.Now,
+                                CreateUser = WebSecurity.CurrentUserId,
+                                AgencyId = user.Employee.AgencyId,
+                                Statu = (int)CashStatusEnum.Close,
+                                Name = DateTime.Now.Date.ToString()
+                            };
 
                             context.Cashes.Add(cashInfo);
                             context.SaveChanges();
@@ -1493,24 +1501,28 @@ namespace Tickets.Controllers
                             context.NoteCredits.Add(creditNote);
                             context.SaveChanges();
 
-                            var receiptPayment = new ReceiptPayment();
-                            receiptPayment.CashId = cashInfo.Id;
-                            receiptPayment.ClientId = InvoiceInfo.ClientId;
-                            receiptPayment.InvoiceId = InvoiceInfo.Id;
-                            receiptPayment.ReceiptDate = DateTime.Now;
-                            receiptPayment.TotalCash = 0;
-                            receiptPayment.TotalCredit = 0;
-                            receiptPayment.TotalCheck = 0;
-                            receiptPayment.ReceiptType = (int)PaymentTypeEnum.TaxReceiptNoteCredit;
-                            receiptPayment.CreateDate = DateTime.Now;
-                            receiptPayment.CreateUser = WebSecurity.CurrentUserId;
+                            var receiptPayment = new ReceiptPayment
+                            {
+                                CashId = cashInfo.Id,
+                                ClientId = InvoiceInfo.ClientId,
+                                InvoiceId = InvoiceInfo.Id,
+                                ReceiptDate = DateTime.Now,
+                                TotalCash = 0,
+                                TotalCredit = 0,
+                                TotalCheck = 0,
+                                ReceiptType = (int)PaymentTypeEnum.TaxReceiptNoteCredit,
+                                CreateDate = DateTime.Now,
+                                CreateUser = WebSecurity.CurrentUserId
+                            };
                             context.ReceiptPayments.Add(receiptPayment);
                             context.SaveChanges();
 
-                            var noteCreditReceiptPayment = new NoteCreditReceiptPayment();
-                            noteCreditReceiptPayment.NoteCreditId = creditNote.Id;
-                            noteCreditReceiptPayment.ReceiptPaymentId = receiptPayment.Id;
-                            noteCreditReceiptPayment.TotalCash = TotalInvoice >= creditNote.TotalCash ? creditNote.TotalCash : creditNote.TotalCash - TotalInvoice;
+                            var noteCreditReceiptPayment = new NoteCreditReceiptPayment
+                            {
+                                NoteCreditId = creditNote.Id,
+                                ReceiptPaymentId = receiptPayment.Id,
+                                TotalCash = TotalInvoice >= creditNote.TotalCash ? creditNote.TotalCash : creditNote.TotalCash - TotalInvoice
+                            };
                             context.NoteCreditReceiptPayments.Add(noteCreditReceiptPayment);
                             context.SaveChanges();
 

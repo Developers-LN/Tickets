@@ -361,6 +361,7 @@
     <Compile Include="Models\Enums\ProspectIdEnum.cs" />
     <Compile Include="Models\Enums\ProspectImpresionTypeEnum.cs" />
     <Compile Include="Models\Enums\ReceiptPaymentAdd.cs" />
+    <Compile Include="Models\Enums\ReceivableTypeEnum.cs" />
     <Compile Include="Models\Enums\ReportByEmailEnum.cs" />
     <Compile Include="Models\Enums\AwardCertificationStatuEnum.cs" />
     <Compile Include="Models\Enums\TaxReceiptNumberStatuEnum.cs" />

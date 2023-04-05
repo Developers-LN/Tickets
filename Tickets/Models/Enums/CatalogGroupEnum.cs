@@ -43,6 +43,7 @@
         TaxReceiptType = 41,
         TaxReceiptStatu = 42,
         TaxReceiptNumberStatu = 43,
-        CashAdvances = 46
+        CashAdvances = 46,
+        AccountReceivableType = 47
     }
 }

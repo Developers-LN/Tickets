@@ -15,7 +15,8 @@
             EndDate: undefined,
             StartDate: undefined,
             RaffleId: 0,
-            ClientId: 0
+            ClientId: 0,
+            ReceivableType: 0
         };
 
         $scope.required = false;
@@ -51,6 +52,7 @@
                     window.loading.hide();
                     $scope.clients = data.clients;
                     $scope.raffles = data.raffles;
+                    $scope.accountReceivableTypes = data.accountReceivableTypes;
 
                     window.setTimeout(function () {
                         $scope.$apply();
@@ -87,7 +89,7 @@
             }
             catch (e) { }
 
-            window.open('Reports/AccountsReceivablesByPeriod?startDate=' + $scope.cash.StartDate + '&endDate=' + $scope.cash.EndDate + '&raffleId=' + $scope.cash.RaffleId);
+            window.open('Reports/AccountsReceivablesByPeriod?startDate=' + $scope.cash.StartDate + '&endDate=' + $scope.cash.EndDate + '&raffleId=' + $scope.cash.RaffleId + '&receivableType=' + $scope.cash.ReceivableType);
         }
 
         //NUEVO CODIGO PARA GENERAR EXCEL DE LAS VENTAS Y CUENTAS POR COBRAR
