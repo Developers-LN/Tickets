@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using AttributeRouting.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -399,7 +400,7 @@ namespace Tickets.Models.Ticket
                                 OutstandingBalance = 0.0M,
                                 CreateUser = WebSecurity.CurrentUserId,
                                 CreateDate = DateTime.Now,
-                                TaxReceipt = taxReceiptNumber.Value,
+                                TaxReceipt = taxReceiptNumber.Value.HasNoValue() ? 0 : taxReceiptNumber.Value,
                                 TaxReceiptAssignmentDate = DateTime.Now
                             };
 
@@ -432,15 +433,18 @@ namespace Tickets.Models.Ticket
                             context.Invoices.Add(invoice);
                             context.SaveChanges();
 
-                            var taxReceiptHistory = new TaxReceiptNumbersHistory()
+                            if (taxReceiptNumber.Value != 0 || taxReceiptNumber != 0 || taxReceiptNumber > 1 || taxReceiptNumber.Value > 1)
                             {
-                                InvoiceId = invoice.Id,
-                                TaxReceiptId = taxReceiptNumber.Value,
-                                TaxReceiptAssignmentDate = DateTime.Now
-                            };
+                                var taxReceiptHistory = new TaxReceiptNumbersHistory()
+                                {
+                                    InvoiceId = invoice.Id,
+                                    TaxReceiptId = taxReceiptNumber.Value,
+                                    TaxReceiptAssignmentDate = DateTime.Now
+                                };
 
-                            context.TaxReceiptNumbersHistories.Add(taxReceiptHistory);
-                            context.SaveChanges();
+                                context.TaxReceiptNumbersHistories.Add(taxReceiptHistory);
+                                context.SaveChanges();
+                            }
 
                             var allocations = allocatList;//context.TicketAllocations.AsEnumerable().Where(a => allocation_ids.Contains( a.Id) ).ToList();
 

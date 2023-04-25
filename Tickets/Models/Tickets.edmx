@@ -232,6 +232,11 @@
           <Property Name="Telefono" Type="varchar" MaxLength="50" />
           <Property Name="Notas" Type="text" />
           <Property Name="IdentifyType" Type="int" />
+          <Property Name="Cedula2" Type="varchar" MaxLength="50" />
+          <Property Name="Nombre2" Type="varchar" MaxLength="200" />
+          <Property Name="Telefono2" Type="varchar" MaxLength="50" />
+          <Property Name="Trabajado" Type="int" />
+          <Property Name="WinnerId" Type="int" />
         </EntityType>
         <EntityType Name="IdentifyBach_CreditNote">
           <Key>
@@ -599,19 +604,21 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <Property Name="TicketDesign" Type="int" Nullable="false" />
           <Property Name="RaffleXpiredTime" Type="int" Nullable="false" />
           <Property Name="LawDiscountPercentMayor" Type="int" />
-          <Property Name="Cargo" Type="varchar" MaxLength="50" />
-          <Property Name="ControlPremio" Type="varchar" MaxLength="50" />
-          <Property Name="ControlPremioCargo" Type="varchar" MaxLength="50" />
-          <Property Name="CajaGeneral" Type="varchar" MaxLength="50" />
-          <Property Name="CajaGeneralCargo" Type="varchar" MaxLength="50" />
-          <Property Name="Inspectoria" Type="varchar" MaxLength="50" />
-          <Property Name="InspectoriaCargo" Type="varchar" MaxLength="50" />
-          <Property Name="CreditosCobros" Type="varchar" MaxLength="50" />
-          <Property Name="CreditosCobrosCargo" Type="varchar" MaxLength="50" />
-          <Property Name="ProduccionSorteo" Type="varchar" MaxLength="50" />
-          <Property Name="ProduccionSorteoCargo" Type="varchar" MaxLength="50" />
-          <Property Name="Facturacion" Type="varchar" MaxLength="50" />
-          <Property Name="FacturacionCargo" Type="varchar" MaxLength="50" />
+          <Property Name="Cargo" Type="varchar" MaxLength="100" />
+          <Property Name="ControlPremio" Type="varchar" MaxLength="100" />
+          <Property Name="ControlPremioCargo" Type="varchar" MaxLength="100" />
+          <Property Name="CajaGeneral" Type="varchar" MaxLength="100" />
+          <Property Name="CajaGeneralCargo" Type="varchar" MaxLength="100" />
+          <Property Name="Inspectoria" Type="varchar" MaxLength="100" />
+          <Property Name="InspectoriaCargo" Type="varchar" MaxLength="100" />
+          <Property Name="CreditosCobros" Type="varchar" MaxLength="100" />
+          <Property Name="CreditosCobrosCargo" Type="varchar" MaxLength="100" />
+          <Property Name="ProduccionSorteo" Type="varchar" MaxLength="100" />
+          <Property Name="ProduccionSorteoCargo" Type="varchar" MaxLength="100" />
+          <Property Name="Facturacion" Type="varchar" MaxLength="100" />
+          <Property Name="FacturacionCargo" Type="varchar" MaxLength="100" />
+          <Property Name="Comercial" Type="varchar" MaxLength="100" />
+          <Property Name="ComercialCargo" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="TaxReceipt">
           <Key>
@@ -810,6 +817,16 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           </Key>
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="RoleId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Winners">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentType" Type="int" />
+          <Property Name="DocumentNumber" Type="varchar" MaxLength="250" />
+          <Property Name="WinnerName" Type="varchar" MaxLength="250" />
+          <Property Name="Phone" Type="varchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="Workflow">
           <Key>
@@ -2065,6 +2082,18 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Winner_Type_Document">
+          <End Role="Catalog" Type="Self.Catalog" Multiplicity="0..1" />
+          <End Role="Winners" Type="Self.Winners" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Winners">
+              <PropertyRef Name="DocumentType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Workflow_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="WorkflowType" Type="Self.WorkflowType" Multiplicity="*" />
@@ -2253,6 +2282,7 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <EntitySet Name="webpages_OAuthMembership" EntityType="Self.webpages_OAuthMembership" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="webpages_Roles" EntityType="Self.webpages_Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="webpages_UsersInRoles" EntityType="Self.webpages_UsersInRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Winners" EntityType="Self.Winners" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Workflow" EntityType="Self.Workflow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WorkflowProccess" EntityType="Self.WorkflowProccess" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WorkflowType" EntityType="Self.WorkflowType" Schema="dbo" store:Type="Tables" />
@@ -2662,6 +2692,10 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <AssociationSet Name="fk_UserId" Association="Self.fk_UserId">
             <End Role="User" EntitySet="User" />
             <End Role="webpages_UsersInRoles" EntitySet="webpages_UsersInRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Winner_Type_Document" Association="Self.FK_Winner_Type_Document">
+            <End Role="Catalog" EntitySet="Catalog" />
+            <End Role="Winners" EntitySet="Winners" />
           </AssociationSet>
           <AssociationSet Name="FK_Workflow_User" Association="Self.FK_Workflow_User">
             <End Role="User" EntitySet="User" />
@@ -3233,6 +3267,11 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             <End Role="TaxReceiptNumber" EntitySet="TaxReceiptNumbers" />
             <End Role="NoteCredit" EntitySet="NoteCredits" />
           </AssociationSet>
+          <EntitySet Name="Winners" EntityType="TicketsModel.Winner" />
+          <AssociationSet Name="FK_Winner_Type_Document" Association="TicketsModel.FK_Winner_Type_Document">
+            <End Role="Catalog" EntitySet="Catalogs" />
+            <End Role="Winner" EntitySet="Winners" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Agency">
           <Key>
@@ -3347,6 +3386,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="WorkflowTypes" Relationship="TicketsModel.FK_WorkflowType_Catalog" FromRole="Catalog" ToRole="WorkflowType" />
           <NavigationProperty Name="TaxReceipts" Relationship="TicketsModel.FK_TaxReceipt_Type_Catalog" FromRole="Catalog" ToRole="TaxReceipt" />
           <NavigationProperty Name="TaxReceiptNumbers" Relationship="TicketsModel.FK_TaxReceiptNumbers_Status" FromRole="Catalog" ToRole="TaxReceiptNumber" />
+          <NavigationProperty Name="Winners" Relationship="TicketsModel.FK_Winner_Type_Document" FromRole="Catalog" ToRole="Winner" />
         </EntityType>
         <EntityType Name="CertificationNumber">
           <Key>
@@ -3477,6 +3517,11 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Notas" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IdentifyType" Type="Int32" />
+          <Property Name="Cedula2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Nombre2" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Trabajado" Type="Int32" />
+          <Property Name="WinnerId" Type="Int32" />
         </EntityType>
         <EntityType Name="IdentifyBachPayment">
           <Key>
@@ -3877,19 +3922,21 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="TicketDesign" Type="Int32" Nullable="false" />
           <Property Name="RaffleXpiredTime" Type="Int32" Nullable="false" />
           <Property Name="LawDiscountPercentMayor" Type="Int32" />
-          <Property Name="Cargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ControlPremio" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ControlPremioCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CajaGeneral" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CajaGeneralCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Inspectoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InspectoriaCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CreditosCobrosCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ProduccionSorteo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ProduccionSorteoCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Facturacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FacturacionCargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CreditosCobros" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Cargo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ControlPremio" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ControlPremioCargo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CajaGeneral" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CajaGeneralCargo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Inspectoria" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InspectoriaCargo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreditosCobrosCargo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProduccionSorteo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProduccionSorteoCargo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Facturacion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FacturacionCargo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreditosCobros" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Comercial" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ComercialCargo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="TicketAllocation">
           <Key>
@@ -5631,6 +5678,29 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Winner">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentType" Type="Int32" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Catalog" Relationship="TicketsModel.FK_Winner_Type_Document" FromRole="Winner" ToRole="Catalog" />
+          <Property Name="WinnerName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_Winner_Type_Document">
+          <End Type="TicketsModel.Catalog" Role="Catalog" Multiplicity="0..1" />
+          <End Type="TicketsModel.Winner" Role="Winner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Winner">
+              <PropertyRef Name="DocumentType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5817,6 +5887,11 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="IdentifyBaches">
             <EntityTypeMapping TypeName="TicketsModel.IdentifyBach">
               <MappingFragment StoreEntitySet="IdentifyBach">
+                <ScalarProperty Name="WinnerId" ColumnName="WinnerId" />
+                <ScalarProperty Name="Trabajado" ColumnName="Trabajado" />
+                <ScalarProperty Name="Nombre2" ColumnName="Nombre2" />
+                <ScalarProperty Name="Telefono2" ColumnName="Telefono2" />
+                <ScalarProperty Name="Cedula2" ColumnName="Cedula2" />
                 <ScalarProperty Name="IdentifyType" ColumnName="IdentifyType" />
                 <ScalarProperty Name="Notas" ColumnName="Notas" />
                 <ScalarProperty Name="Telefono" ColumnName="Telefono" />
@@ -6170,6 +6245,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="SystemConfigs">
             <EntityTypeMapping TypeName="TicketsModel.SystemConfig">
               <MappingFragment StoreEntitySet="SystemConfig">
+                <ScalarProperty Name="ComercialCargo" ColumnName="ComercialCargo" />
+                <ScalarProperty Name="Comercial" ColumnName="Comercial" />
                 <ScalarProperty Name="CreditosCobros" ColumnName="CreditosCobros" />
                 <ScalarProperty Name="FacturacionCargo" ColumnName="FacturacionCargo" />
                 <ScalarProperty Name="Facturacion" ColumnName="Facturacion" />
@@ -6529,6 +6606,17 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
                 <ScalarProperty Name="TaxReceiptAssignmentDate" ColumnName="TaxReceiptAssignmentDate" />
                 <ScalarProperty Name="TaxReceiptId" ColumnName="TaxReceiptId" />
                 <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Winners">
+            <EntityTypeMapping TypeName="TicketsModel.Winner">
+              <MappingFragment StoreEntitySet="Winners">
+                <ScalarProperty Name="WinnerName" ColumnName="WinnerName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

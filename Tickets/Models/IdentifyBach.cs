@@ -33,6 +33,11 @@ namespace Tickets.Models
         public string Telefono { get; set; }
         public string Notas { get; set; }
         public Nullable<int> IdentifyType { get; set; }
+        public string Cedula2 { get; set; }
+        public string Telefono2 { get; set; }
+        public string Nombre2 { get; set; }
+        public Nullable<int> Trabajado { get; set; }
+        public Nullable<int> WinnerId { get; set; }
     
         public virtual Client Client { get; set; }
         public virtual Raffle Raffle { get; set; }

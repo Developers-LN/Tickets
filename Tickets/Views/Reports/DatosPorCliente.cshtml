@@ -2,25 +2,22 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Datos por cliente";
+    ViewBag.Title = "VENTAS POR CLIENTE DEL SORTEO NO. " + Model.FirstOrDefault().RaffleId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.ControlPremio : "";
-    string adminCargo = config != null ? config.ControlPremioCargo : "";
+    string adminName = config != null ? config.Comercial : "";
+    string adminCargo = config != null ? config.ComercialCargo : "";
 
-    int CantidadFraccionesDevueltas = 0;
-    int TotalConsignado = 0;
-    int TotalDevuelto = 0;
-    int TotalVendido = 0;
-    var VentaNeta = 0;
-    var CantidadFraccionesConsignadas = 0;
-    var PorcentajeDevolucion = 0.0m;
-    var ClientName = "";
+    decimal TotalConsignado = 0;
+    decimal TotalDevuelto = 0;
+    decimal TotalVendido = 0;
+    decimal TotalPorcentaje = 0.0m;
+    int Fila = 1;
 
-    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
-    var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
-    var Clientes = Model.Select(s => s.ClientId).Distinct().ToList();
+    var RaffleId = Model.FirstOrDefault().RaffleId;
+
+    var RaffleData = context.Raffles.Where(w => w.Id == RaffleId).FirstOrDefault();
 
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
@@ -37,7 +34,7 @@
             <br />
             <b>ADMINISTRACION LOTERIA NACIONAL</b>
             <br />
-            Fecha del sorteo: @RaffleData.DateSolteo.ToLongDateString()
+            FECHA DEL SORTEO: @RaffleData.DateSolteo.ToLongDateString().ToUpper()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>REPORTE DE BILLETES CONSIGNADOS VS DEVOLUCIONES</b>
@@ -55,12 +52,12 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th colspan="6" class="text-center">@RaffleData.Name</th>
+                        <th class="text-center">@RaffleData.Name</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-center" colspan="6">
+                        <td class="text-center">
                             <h1>ESTE SORTEO NO TUVO VENTAS</h1>
                         </td>
                     </tr>
@@ -72,79 +69,48 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th colspan="6" class="text-center">@RaffleData.Name</th>
+                        <th colspan="7" class="text-center">@RaffleData.Name</th>
                     </tr>
                     <tr>
-                        <th class="text-center">ID Cliente</th>
-                        <th class="text-center">Nombre del cliente</th>
-                        <th class="text-center">Cantidad de billetes consignados</th>
-                        <th class="text-center">Cantidad de billetes y fracciones devueltas</th>
-                        <th class="text-center">Ventas neta</th>
-                        <th class="text-center">Porcentaje de devolución aproximado</th>
+                        <th class="text-center">FILA</th>
+                        <th class="text-center">NO. CLIENTE</th>
+                        <th class="text-center">CLIENTE</th>
+                        <th class="text-center">BILLETES Y FRACCIONES <br /> CONSIGNADAS</th>
+                        <th class="text-center">BILLETES Y FRACCIONES <br /> DEVUELTAS</th>
+                        <th class="text-center">BILLETES Y FRACCIONES <br /> VENDIDOS</th>
+                        <th class="text-center">PORCENTAJE DE DEVOLUCION <br /> APROXIMADO</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Clientes)
+                    @foreach (var item in Model)
                     {
-                        ClientName = Model.Where(w => w.ClientId == item).Select(s => s.ClientName).FirstOrDefault();
-                        
-                        CantidadFraccionesConsignadas = Model.Where(w => w.ClientId == item).Count();
-
-                        TotalConsignado += CantidadFraccionesConsignadas;
-
-                        CantidadFraccionesDevueltas = Model.Where(w => w.ClientId == item).Sum(s => s.ReturnFractions);
-
-                        TotalDevuelto += CantidadFraccionesDevueltas;
-
-                        VentaNeta = (CantidadFraccionesConsignadas * Model.FirstOrDefault().TicketFractions) - CantidadFraccionesDevueltas;
-
-                        TotalVendido += VentaNeta;
-
-                        if (CantidadFraccionesDevueltas != 0)
-                        {
-                            PorcentajeDevolucion = (CantidadFraccionesDevueltas * 100) / (CantidadFraccionesConsignadas * Model.FirstOrDefault().TicketFractions);
-                        }
-                        else
-                        {
-                            PorcentajeDevolucion = 0;
-                        }
-
                         <tr>
-                            <td class="text-center">@item</td>
-                            <td class="text-center">@ClientName</td>
-                            <td class="text-center">@(CantidadFraccionesConsignadas.ToString("n0", new System.Globalization.CultureInfo("es-DO")))</td>
-                            @if (CantidadFraccionesDevueltas != 0 && CantidadFraccionesDevueltas % Model.FirstOrDefault().TicketFractions == 0)
-                            {
-                                <td class="text-center">@((CantidadFraccionesDevueltas / Model.FirstOrDefault().TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</td>
-                            }
-                            else if (CantidadFraccionesDevueltas != 0 && CantidadFraccionesDevueltas % Model.FirstOrDefault().TicketFractions != 0)
-                            {
-                                <td class="text-center">@((CantidadFraccionesDevueltas / Model.FirstOrDefault().TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))-@(CantidadFraccionesDevueltas % Model.FirstOrDefault().TicketFractions)</td>
-                            }
-                            else
-                            {
-                                <td class="text-center">0</td>
-                            }
-                            @if (VentaNeta % Model.FirstOrDefault().TicketFractions == 0)
-                            {
-                                <td class="text-center">@((VentaNeta / Model.FirstOrDefault().TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</td>
-                            }
-                            else
-                            {
-                                <td class="text-center">@((VentaNeta / Model.FirstOrDefault().TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))-@(VentaNeta % Model.FirstOrDefault().TicketFractions)</td>
-                            }
-                            <td class="text-center">@PorcentajeDevolucion%</td>
+                            <td class="text-center">@Fila</td>
+                            <td class="text-center">@item.ClientId</td>
+                            <td class="text-center">@item.ClientName</td>
+                            <td class="text-center">@item.ConsignedTickets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))-@item.ConsignedFractions.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-center">@item.ReturnedTickets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))-@item.ReturnedFractions.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-center">@item.AvailableTickets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))-@item.AvailableFractions.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                            <td class="text-center">@item.Percentage.ToString("n2", new System.Globalization.CultureInfo("es-DO"))%</td>
                         </tr>
+                        Fila++;
+                        TotalConsignado += item.TotalConsigned;
+                        TotalDevuelto += item.TotalReturned;
+                        TotalVendido += item.TotalAvailable;
                     }
                 </tbody>
+                @{ 
+                    TotalPorcentaje = (TotalDevuelto * 100) / TotalConsignado;
+                }
                 <thead>
                     <tr>
                         <th></th>
                         <th></th>
-                        <th class="text-center">Total consignado: <br /> @TotalConsignado.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
-                        <th class="text-center">Total devuelto: <br /> @((TotalDevuelto / Model.FirstOrDefault().TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))-@(TotalDevuelto % Model.FirstOrDefault().TicketFractions)</th>
-                        <th class="text-center">Total vendido: <br /> @((TotalVendido / Model.FirstOrDefault().TicketFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))-@(TotalVendido % Model.FirstOrDefault().TicketFractions)</th>
-                        <th class="text-center">Porcentage de devolución: <br /> @((TotalDevuelto * 100)/(TotalConsignado * Model.FirstOrDefault().TicketFractions))%</th>
+                        <th></th>
+                        <th class="text-center">TOTAL CONSIGNADO: <br /> @((TotalConsignado / Model.FirstOrDefault().ProspectFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))-@((TotalConsignado % Model.FirstOrDefault().ProspectFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</th>
+                        <th class="text-center">TOTAL DEVUELTO: <br /> @((TotalDevuelto / Model.FirstOrDefault().ProspectFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))-@((TotalDevuelto % Model.FirstOrDefault().ProspectFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</th>
+                        <th class="text-center">TOTAL VENDIDO: <br /> @((TotalVendido / Model.FirstOrDefault().ProspectFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))-@((TotalVendido % Model.FirstOrDefault().ProspectFractions).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</th>
+                        <th class="text-center">TOTAL DEVOLUCION: <br /> @TotalPorcentaje.ToString("n2", new System.Globalization.CultureInfo("es-DO"))% </th>
                     </tr>
                 </thead>
             </table>

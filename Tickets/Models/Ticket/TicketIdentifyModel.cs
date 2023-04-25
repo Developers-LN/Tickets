@@ -251,10 +251,18 @@ namespace Tickets.Models.Ticket
                 r.PriceId
             }).ToList();
 
+            var winners = context.Winners.Select(s => new
+            {
+                s.Id,
+                Document = s.DocumentNumber,
+                Name = s.WinnerName,
+                s.Phone,
+            }).ToList();
+
             var identifyBach = context.IdentifyBaches.Where(a => a.Id == identifyId).AsEnumerable()
                 .Select(t => this.IdentifyBachToObject(t)).ToList().FirstOrDefault();
 
-            return new { result = true, identifyBach, raffles, clients };
+            return new { result = true, identifyBach, raffles, clients, winners };
         }
 
         internal object GetIdentifySellerData(int identifyId)
@@ -293,10 +301,18 @@ namespace Tickets.Models.Ticket
                 r.PriceId
             }).ToList();
 
+            var winners = context.Winners.Select(s => new
+            {
+                s.Id,
+                Document = s.DocumentNumber,
+                Name = s.WinnerName,
+                s.Phone,
+            }).ToList();
+
             var identifyBach = context.IdentifyBaches.Where(a => a.Id == identifyId).AsEnumerable()
                 .Select(t => this.IdentifyBachSellerToObject(t)).ToList().FirstOrDefault();
 
-            return new { result = true, identifyBach, raffles, clients };
+            return new { result = true, identifyBach, raffles, clients, winners };
         }
 
         internal object CertificationAwardData(int iNumberId, int number, int fractionFrom, int fractionTo, int raffleAwardId, int fractions)
@@ -405,6 +421,7 @@ namespace Tickets.Models.Ticket
         internal object IdentifyAward(IdentifyBach identifyBach)
         {
             IdentifyBach newIdentifyBach;
+            Winner newWinner;
             object IdentifyObject;
             Raffle raffle;
             Client client;
@@ -416,6 +433,29 @@ namespace Tickets.Models.Ticket
                     {
                         if (identifyBach.Id <= 0)
                         {
+                            if (identifyBach.WinnerId == 0 || identifyBach.WinnerId == null)
+                            {
+                                if (context.Winners.Any(a => a.DocumentNumber == identifyBach.Cedula))
+                                {
+                                    newWinner = context.Winners.FirstOrDefault(w => w.DocumentNumber == identifyBach.Cedula);
+                                }
+                                else
+                                {
+                                    newWinner = new Winner
+                                    {
+                                        DocumentNumber = identifyBach.Cedula,
+                                        WinnerName = identifyBach.Nombre,
+                                        Phone = identifyBach.Telefono
+                                    };
+                                }
+                                context.Winners.Add(newWinner);
+                                context.SaveChanges();
+                            }
+                            else
+                            {
+                                newWinner = context.Winners.FirstOrDefault(f => f.Id == identifyBach.WinnerId);
+                            }
+
                             newIdentifyBach = new IdentifyBach
                             {
                                 RaffleId = identifyBach.RaffleId,
@@ -428,7 +468,8 @@ namespace Tickets.Models.Ticket
                                 Cedula = identifyBach.Cedula,
                                 Telefono = identifyBach.Telefono,
                                 Notas = identifyBach.Notas,
-                                IdentifyType = (int)IdentifyBachTypeEnum.Gamers
+                                IdentifyType = (int)IdentifyBachTypeEnum.Gamers,
+                                WinnerId = newWinner.Id
                             };
 
                             context.IdentifyBaches.Add(newIdentifyBach);
@@ -513,6 +554,7 @@ namespace Tickets.Models.Ticket
         internal object IdentifySellerAward(IdentifyBach identifyBach)
         {
             IdentifyBach newIdentifyBach;
+            Winner newWinner;
             object IdentifyObject;
             Raffle raffle;
             Client client;
@@ -524,6 +566,29 @@ namespace Tickets.Models.Ticket
                     {
                         if (identifyBach.Id <= 0)
                         {
+                            if (identifyBach.WinnerId == 0 || identifyBach.WinnerId == null)
+                            {
+                                if (context.Winners.Any(a => a.DocumentNumber == identifyBach.Cedula))
+                                {
+                                    newWinner = context.Winners.FirstOrDefault(w => w.DocumentNumber == identifyBach.Cedula);
+                                }
+                                else
+                                {
+                                    newWinner = new Winner
+                                    {
+                                        DocumentNumber = identifyBach.Cedula,
+                                        WinnerName = identifyBach.Nombre,
+                                        Phone = identifyBach.Telefono
+                                    };
+                                }
+                                context.Winners.Add(newWinner);
+                                context.SaveChanges();
+                            }
+                            else
+                            {
+                                newWinner = context.Winners.FirstOrDefault(f => f.Id == identifyBach.WinnerId);
+                            }
+
                             newIdentifyBach = new IdentifyBach
                             {
                                 RaffleId = identifyBach.RaffleId,

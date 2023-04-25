@@ -19,12 +19,16 @@
         $scope.totalGeneral = 0;
         $scope.pricePerFraction = 0;
 
+        $scope.WinnerDocument = "";
+        $scope.WinnerName = "";
+        $scope.WinnerPhone = "";
 
         this.clearIdentify = function () {
             $scope.identifyBach = {
                 Id: 0,
                 RaffleId: undefined,
                 ClientId: undefined,
+                WinnerId: undefined,
                 Cedula: undefined,
                 Nombre: undefined,
                 Notas: undefined,
@@ -175,6 +179,7 @@
                 success: function (data) {
                     $scope.clients = data.clients;
                     $scope.raffles = data.raffles;
+                    $scope.winners = data.winners;
 
                     if (data.identifyBach !== null) {
                         $scope.identifyBach = data.identifyBach;
@@ -507,6 +512,19 @@
                     $scope.$apply();
                 }
             });
+        }
+
+        $scope.changeValues = function () {
+            var WinnerId = $scope.identifyBach.WinnerId;
+            var Info = $scope.winners.find(({ Id }) => Id == WinnerId);
+
+            $scope.WinnerDocument = Info.Document;
+            $scope.WinnerName = Info.Name;
+            $scope.WinnerPhone = Info.Phone;
+
+            $scope.identifyBach.Cedula = $scope.WinnerDocument;
+            $scope.identifyBach.Nombre = $scope.WinnerName;
+            $scope.identifyBach.Telefono = $scope.WinnerPhone;
         }
 
         function GetAwardsObj(numberDetails) {

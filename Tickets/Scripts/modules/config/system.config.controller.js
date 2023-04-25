@@ -29,6 +29,9 @@
             if (config.LawDiscountPercentMayor === undefined) {
                 error += 'Tiempo de caducidad del sorteo' + isReq;
             }
+            if (config.Comercial === undefined) {
+                error += "El nombre del representante comercial" + isReq;
+            }
             if (config.ControlPremio === undefined) {
                 error += "El nombre del representante de control de premios" + isReq;
             }
@@ -43,6 +46,9 @@
             }
             if (config.ProduccionSorteo === undefined) {
                 error += "El nombre del representante de producción y sorteo" + isReq;
+            }
+            if (config.ComercialCargo === undefined) {
+                error += "El cargo del representante comercial" + isReq;
             }
             if (config.ControlPremioCargo === undefined) {
                 error += "El cargo del representante de control de premios" + isReq;
@@ -74,6 +80,8 @@
             LawDiscountPercentMayor: undefined,
             Cargo: undefined,
 
+            Comercial: undefined,
+            ComercialCargo: undefined,
             ControlPremio: undefined,
             ControlPremioCargo: undefined,
             CajaGeneral: undefined,

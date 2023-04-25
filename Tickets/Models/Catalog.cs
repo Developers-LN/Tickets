@@ -26,6 +26,7 @@ namespace Tickets.Models
             this.WorkflowTypes = new HashSet<WorkflowType>();
             this.TaxReceipts = new HashSet<TaxReceipt>();
             this.TaxReceiptNumbers = new HashSet<TaxReceiptNumber>();
+            this.Winners = new HashSet<Winner>();
         }
     
         public int Id { get; set; }
@@ -47,5 +48,6 @@ namespace Tickets.Models
         public virtual ICollection<WorkflowType> WorkflowTypes { get; set; }
         public virtual ICollection<TaxReceipt> TaxReceipts { get; set; }
         public virtual ICollection<TaxReceiptNumber> TaxReceiptNumbers { get; set; }
+        public virtual ICollection<Winner> Winners { get; set; }
     }
 }

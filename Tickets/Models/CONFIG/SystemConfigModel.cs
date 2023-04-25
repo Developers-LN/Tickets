@@ -61,6 +61,8 @@ namespace Tickets.Models
                         config.RaffleXpiredTime = systemConfig.RaffleXpiredTime;
                         config.LawDiscountPercentMayor = systemConfig.LawDiscountPercentMayor;
                         config.Cargo = systemConfig.Cargo;
+                        config.Comercial = systemConfig.Comercial;
+                        config.ComercialCargo = systemConfig.ComercialCargo;
                         config.ControlPremio = systemConfig.ControlPremio;
                         config.ControlPremioCargo = systemConfig.ControlPremioCargo;
                         config.CajaGeneral = systemConfig.CajaGeneral;

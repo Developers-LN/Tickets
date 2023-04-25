@@ -420,12 +420,19 @@ namespace Tickets.Models.Ticket
 
                             foreach (var client in ClientGroup)
                             {
-                                messageList.Add("Los billetes No. ");
+                                //messageList.Add("Los billetes No. ");
+                                sb.Append(" Los billetes");
                                 foreach (var ticket in DataFromOtherClients.Where(w => w.Name == client))
                                 {
-                                    messageList.Add(ticket.Number.ToString().PadLeft(raffleData.Production, '0'));
+                                    sb.Append(ticket.Number.ToString().PadLeft(raffleData.Production, '0'));
+                                    sb.Append(", ");
+                                    //messageList.Add(ticket.Number.ToString().PadLeft(raffleData.Production, '0'));
                                 }
-                                messageList.Add("Pertenecen a " + client);
+                                sb.Append(" pertenecen al cliente ");
+                                sb.Append(client);
+                                sb.Append(".");
+                                sb.AppendLine();
+                                //messageList.Add("Pertenecen a " + client);
                             }
 
                         }
@@ -434,8 +441,10 @@ namespace Tickets.Models.Ticket
                             return new RequestResponseModel()
                             {
                                 Result = false,
-                                Message = "",
-                                Object = messageList
+                                Message = sb.ToString()
+                                //Message = messageList.ToString()
+                                /*,
+                                Object = messageList.ToString()*/
                             };
                         }
 

@@ -28,17 +28,21 @@ namespace Tickets.Models.Procedures
                         {
                             Data = true,
                             ClientId = Convert.ToInt32(sqlDataReader["ClientId"].ToString()),
-                            ClientName = sqlDataReader["ClientName"].ToString(),
                             RaffleId = Convert.ToInt32(sqlDataReader["RaffleId"].ToString()),
                             ProspectId = Convert.ToInt32(sqlDataReader["ProspectId"].ToString()),
-                            TicketFractions = Convert.ToInt32(sqlDataReader["TicketFractions"].ToString()),
-                            TicketNumber = Convert.ToInt32(sqlDataReader["TicketNumber"].ToString()),
-                            FractionPrice = Convert.ToDecimal(sqlDataReader["FractionPrice"].ToString()),
-                            IdAllocationNumber = Convert.ToInt32(sqlDataReader["IdAllocationNumber"].ToString()),
-                            IdAllocation = Convert.ToInt32(sqlDataReader["IdAllocation"].ToString()),
+                            ProspectFractions = Convert.ToInt32(sqlDataReader["ProspectFractions"].ToString()),
+                            ClientName = sqlDataReader["ClientName"].ToString(),
+                            Id_Name = sqlDataReader["Id_Name"].ToString(),
+                            TotalConsigned = Convert.ToInt32(sqlDataReader["TotalConsigned"].ToString()),
+                            ConsignedTickets = Convert.ToInt32(sqlDataReader["ConsignedTickets"].ToString()),
+                            ConsignedFractions = Convert.ToInt32(sqlDataReader["ConsignedFractions"].ToString()),
+                            TotalReturned = Convert.ToInt32(sqlDataReader["TotalReturned"].ToString()),
+                            ReturnedTickets = Convert.ToInt32(sqlDataReader["ReturnedTickets"].ToString()),
+                            ReturnedFractions = Convert.ToInt32(sqlDataReader["ReturnedFractions"].ToString()),
+                            TotalAvailable = Convert.ToInt32(sqlDataReader["TotalAvailable"].ToString()),
+                            AvailableTickets = Convert.ToInt32(sqlDataReader["AvailableTickets"].ToString()),
                             AvailableFractions = Convert.ToInt32(sqlDataReader["AvailableFractions"].ToString()),
-                            ReturnFractions = Convert.ToInt32(sqlDataReader["ReturnFractions"].ToString()),
-                            NetSale = Convert.ToDecimal(sqlDataReader["NetSale"].ToString())
+                            Percentage = Convert.ToDecimal(sqlDataReader["Percentage"].ToString()),
                         };
                         lista.Add(Ventas);
                     }
@@ -49,17 +53,21 @@ namespace Tickets.Models.Procedures
                     {
                         Data = false,
                         ClientId = 0,
-                        ClientName = "N/A",
-                        RaffleId = raffle,
+                        RaffleId = 0,
                         ProspectId = 0,
-                        TicketFractions = 0,
-                        TicketNumber = 0,
-                        FractionPrice = 0,
-                        IdAllocationNumber = 0,
-                        IdAllocation = 0,
+                        ProspectFractions = 0,
+                        ClientName = "",
+                        Id_Name = "",
+                        TotalConsigned = 0,
+                        ConsignedTickets = 0,
+                        ConsignedFractions = 0,
+                        TotalReturned = 0,
+                        ReturnedTickets = 0,
+                        ReturnedFractions = 0,
+                        TotalAvailable = 0,
+                        AvailableTickets = 0,
                         AvailableFractions = 0,
-                        ReturnFractions = 0,
-                        NetSale = 0
+                        Percentage = 0.0m,
                     };
                     lista.Add(Ventas);
                 }

@@ -33,5 +33,7 @@ namespace Tickets.Models
         public string Facturacion { get; set; }
         public string FacturacionCargo { get; set; }
         public string CreditosCobros { get; set; }
+        public string Comercial { get; set; }
+        public string ComercialCargo { get; set; }
     }
 }

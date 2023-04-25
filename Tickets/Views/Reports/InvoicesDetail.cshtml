@@ -172,10 +172,14 @@
                                         taxReceiptDueDate = data.TaxReceipt.DueDate;
                                         TaxNumber = data.Number;
                                     }
+                                    else
+                                    {
+                                        taxDenomination = "";
+                                    }
 
                                     <tr>
                                         <td class="text-center">@invoice.Id</td>
-                                        <td class="text-center">@taxDenomination@TaxNumber.ToString().PadLeft(8, '0')</td>
+                                        <td class="text-center">@(taxDenomination != "" ? taxDenomination+TaxNumber.ToString().PadLeft(8, '0') : "")</td>
                                         <td class="text-center">@invoice.InvoiceDate.ToShortDateString()</td>
                                         <td class="text-center">@(isXpired? "Caducada" : context.Catalogs.FirstOrDefault(c=> c.Id == invoice.PaymentStatu).NameDetail)</td>
                                         <td class="text-right">@((payment.totalInvoice).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
