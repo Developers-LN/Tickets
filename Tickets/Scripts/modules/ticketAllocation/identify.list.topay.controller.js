@@ -6,12 +6,12 @@
     'use strict';
 
     angular
-        .module('naut')
-        .controller('IdentifyAwardListToPayController', IdentifyAwardListController);
+        .module('naut') 
+        .controller('IdentifyAwardListToPayController', IdentifyAwardListToPayController);
 
-    IdentifyAwardListController.$inject = ['$scope', '$state', '$rootScope'];
+    IdentifyAwardListToPayController.$inject = ['$scope', '$state', '$rootScope'];
 
-    function IdentifyAwardListController($scope, $state, $rootScope) {
+    function IdentifyAwardListToPayController($scope, $state, $rootScope) {
         var self = this;
 
         self.loadIdentifys = function (raffleId, clientId) {

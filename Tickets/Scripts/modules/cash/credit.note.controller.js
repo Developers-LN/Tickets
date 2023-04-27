@@ -122,7 +122,7 @@
 
         $scope.goBack = function () {
             if ($scope.raffleAwardId > 0) {
-                window.location.href = '#/ticket/identifybachdetail/' + $scope.raffleAwardId;
+                window.location.href = '#/ticket/identifybachtopaydetail/' + $scope.raffleAwardId;
             } else {
                 $state.go('app.cashNoteCreditList');
             }

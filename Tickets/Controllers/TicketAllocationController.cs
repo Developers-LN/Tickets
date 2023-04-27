@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
+using Tickets.Models.AuxModels;
 using Tickets.Models.Enums;
 using Tickets.Models.Ticket;
 
@@ -24,6 +25,20 @@ namespace Tickets.Controllers
         [Authorize]
         [HttpGet]
         public ActionResult TicketAllocationConsignmentList()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult TicketAllocationToDeliverList()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult AllocationDeliverDetails()
         {
             return View();
         }
@@ -421,6 +436,32 @@ namespace Tickets.Controllers
         public JsonResult IdentifyAward(IdentifyBach identifyBach)
         {
             var respnse = new TicketIdentifyModel().IdentifyAward(identifyBach);
+            return new JsonResult()
+            {
+                Data = respnse
+            };
+        }
+
+        //
+        // POST: /Ticket/IdentifyAwardLight
+        [Authorize]
+        [HttpPost]
+        public JsonResult IdentifyAwardLight(AuxIdentifyBach identifyBach)
+        {
+            var respnse = new TicketIdentifyModel().IdentifyAwardLight(identifyBach);
+            return new JsonResult()
+            {
+                Data = respnse
+            };
+        }
+
+        //
+        // POST: /Ticket/IdentifySellerAward
+        [Authorize]
+        [HttpPost]
+        public JsonResult IdentifySellerAwardLight(AuxIdentifyBach identifyBach)
+        {
+            var respnse = new TicketIdentifyModel().IdentifySellerAwardLight(identifyBach);
             return new JsonResult()
             {
                 Data = respnse

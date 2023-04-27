@@ -19,16 +19,22 @@
         $scope.totalGeneral = 0;
         $scope.pricePerFraction = 0;
 
+        $scope.WinnerDocument = "";
+        $scope.WinnerName = "";
+        $scope.WinnerPhone = "";
+        $scope.AddWinner = 0;
 
         this.clearIdentify = function () {
             $scope.identifyBach = {
                 Id: 0,
                 RaffleId: undefined,
                 ClientId: undefined,
-                Cedula: undefined,
-                Nombre: undefined,
-                Notas: undefined,
-                Telefono: undefined,
+                WinnerId: undefined,
+                DocumentType: undefined,
+                DocumentNumber: undefined,
+                WinnerName: undefined,
+                Notes: undefined,
+                WinnerPhone: undefined,
                 IdentifyNumbers: [],
                 Type: $rootScope.moduleCanDelete == '' ? 4007 : 4006
             };
@@ -175,6 +181,8 @@
                 success: function (data) {
                     $scope.clients = data.clients;
                     $scope.raffles = data.raffles;
+                    $scope.winners = data.winners;
+                    $scope.documentTypes = data.documentTypes;
 
                     if (data.identifyBach !== null) {
                         $scope.identifyBach = data.identifyBach;
@@ -204,14 +212,19 @@
             if (identifyBach.ClientId === undefined) {
                 error += 'Cliente' + isReq;
             }
-            if (identifyBach.Cedula === undefined) {
-                error += 'Cédula' + isReq;
+            if (identifyBach.WinnerId == 0 || identifyBach.WinnerId == undefined && $scope.AddWinner != 0) {
+                if (identifyBach.DocumentNumber === undefined) {
+                    error += 'Cédula' + isReq;
+                }
+                if (identifyBach.WinnerName === undefined) {
+                    error += 'Nombre' + isReq;
+                }
+                if (identifyBach.WinnerPhone === undefined) {
+                    error += 'Teléfono' + isReq;
+                }
             }
-            if (identifyBach.Nombre === undefined) {
-                error += 'Nombre' + isReq;
-            }
-            if (identifyBach.Telefono === undefined) {
-                error += 'Teléfono' + isReq;
+            if (identifyBach.WinnerId == 0 || identifyBach.WinnerId == undefined && $scope.AddWinner == 0) {
+                error += 'Ganador' + isReq;
             }
             if (error !== '') {
                 alertify.showError('Alerta', error);
@@ -416,7 +429,7 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: 'TicketAllocation/IdentifySellerAward',
+                url: 'TicketAllocation/IdentifySellerAwardLight',
                 data: $scope.identifyBach,
                 success: function (data) {
                     if (data.result === true) {
@@ -507,6 +520,15 @@
                     $scope.$apply();
                 }
             });
+        }
+
+        $scope.AddWinnerBTN = function () {
+            if ($scope.AddWinner == 0) {
+                $scope.AddWinner = 1;
+            }
+            else {
+                $scope.AddWinner = 0;
+            }
         }
 
         function GetAwardsObj(numberDetails) {

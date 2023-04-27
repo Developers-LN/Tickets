@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tickets.Models.AuxModels;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
 
@@ -259,10 +260,16 @@ namespace Tickets.Models.Ticket
                 s.Phone,
             }).ToList();
 
+            var documentTypes = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.DocumentType).Select(s => new
+            {
+                s.Id,
+                Name = s.NameDetail
+            }).ToList();
+
             var identifyBach = context.IdentifyBaches.Where(a => a.Id == identifyId).AsEnumerable()
                 .Select(t => this.IdentifyBachToObject(t)).ToList().FirstOrDefault();
 
-            return new { result = true, identifyBach, raffles, clients, winners };
+            return new { result = true, identifyBach, raffles, clients, winners, documentTypes };
         }
 
         internal object GetIdentifySellerData(int identifyId)
@@ -309,10 +316,16 @@ namespace Tickets.Models.Ticket
                 s.Phone,
             }).ToList();
 
+            var documentTypes = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.DocumentType).Select(s => new
+            {
+                s.Id,
+                Name = s.NameDetail
+            }).ToList();
+
             var identifyBach = context.IdentifyBaches.Where(a => a.Id == identifyId).AsEnumerable()
                 .Select(t => this.IdentifyBachSellerToObject(t)).ToList().FirstOrDefault();
 
-            return new { result = true, identifyBach, raffles, clients, winners };
+            return new { result = true, identifyBach, raffles, clients, winners, documentTypes };
         }
 
         internal object CertificationAwardData(int iNumberId, int number, int fractionFrom, int fractionTo, int raffleAwardId, int fractions)
@@ -496,8 +509,146 @@ namespace Tickets.Models.Ticket
                                 var nedit = context.IdentifyNumbers.FirstOrDefault(p => p.Id == number.Id);
                                 if (nedit == null)
                                 {
-                                    var Currentnumber = context.TicketAllocationNumbers.FirstOrDefault(n =>
-                                        n.TicketAllocation.RaffleId == newIdentifyBach.RaffleId
+                                    var Currentnumber = context.TicketAllocationNumbers.FirstOrDefault(n => n.TicketAllocation.RaffleId == newIdentifyBach.RaffleId
+                                    //&& n.TicketAllocation.ClientId == newIdentifyBach.ClientId
+                                    && n.Number == number.NumberId);
+                                    if (Currentnumber != null)
+                                    {
+                                        var identifyNumber = new IdentifyNumber()
+                                        {
+                                            IdentifyBachId = newIdentifyBach.Id,
+                                            NumberId = Currentnumber.Id,
+                                            FractionFrom = number.FractionFrom,
+                                            FractionTo = number.FractionTo,
+                                            Status = (int)AwardCertificationStatuEnum.Identified,
+                                            IdentifyBachNumberType = (int)IdentifyBachNumberTypeEnum.Gamer
+                                        };
+                                        identifyNumbers.Add(identifyNumber);
+                                    }
+                                }
+                            }
+                        }
+                        var distintNumbers = identifyNumbers.Distinct().ToList();
+                        context.IdentifyNumbers.AddRange(distintNumbers);
+                        context.SaveChanges();
+                        dbContextTransaction.Commit();
+                        raffle = context.Raffles.FirstOrDefault(r => r.Id == newIdentifyBach.RaffleId);
+                        client = context.Clients.FirstOrDefault(c => c.Id == newIdentifyBach.ClientId);
+                        IdentifyObject = IdentifyBachToObject(newIdentifyBach);
+                    }
+                    catch (Exception ex)
+                    {
+                        dbContextTransaction.Rollback();
+
+                        return new
+                        {
+                            result = false,
+                            message = ex.Message
+                        };
+                    }
+                }
+            }
+
+            Utils.SaveLog(WebSecurity.CurrentUserName, newIdentifyBach.Id > 0 ? LogActionsEnum.Update : LogActionsEnum.Insert, "Identificación de premios", IdentifyObject);
+
+            return new
+            {
+                result = true,
+                bachId = newIdentifyBach.Id,
+                RaffleDesc = raffle.Name,
+                RaffleId = raffle.Id,
+                RaffleDate = raffle.DateSolteo.ToUnixTime(),
+                ClientDesc = client.Name,
+                message = "Lote de numeros guardado correctamente."
+            };
+        }
+
+        internal object IdentifyAwardLight(AuxIdentifyBach identifyBach)
+        {
+            IdentifyBach newIdentifyBach;
+            Winner newWinner;
+            object IdentifyObject;
+            Raffle raffle;
+            Client client;
+            using (var context = new TicketsEntities())
+            {
+                using (var dbContextTransaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        if (identifyBach.WinnerId == 0 || identifyBach.WinnerId == null)
+                        {
+                            if (context.Winners.Any(a => a.DocumentNumber == identifyBach.DocumentNumber))
+                            {
+                                newWinner = context.Winners.FirstOrDefault(w => w.DocumentNumber == identifyBach.DocumentNumber);
+                            }
+                            else
+                            {
+                                newWinner = new Winner
+                                {
+                                    DocumentType = identifyBach.DocumentType,
+                                    DocumentNumber = identifyBach.DocumentNumber,
+                                    WinnerName = identifyBach.WinnerName,
+                                    Phone = identifyBach.WinnerPhone
+                                };
+                            }
+                            context.Winners.Add(newWinner);
+                            context.SaveChanges();
+                        }
+                        else
+                        {
+                            newWinner = context.Winners.FirstOrDefault(f => f.Id == identifyBach.WinnerId);
+                        }
+
+                        if (newWinner == null)
+                        {
+                            newWinner = context.Winners.FirstOrDefault(f => f.Id == (int)DefaultEnum.DefaultWinner);
+                        }
+
+                        if (identifyBach.Id <= 0)
+                        {
+                            newIdentifyBach = new IdentifyBach
+                            {
+                                RaffleId = identifyBach.RaffleId,
+                                ClientId = identifyBach.ClientId,
+                                Type = identifyBach.Type,
+                                Statu = (int)BachIdentifyStatuEnum.Inproces,
+                                CreateDate = DateTime.Now,
+                                CreateUser = WebSecurity.CurrentUserId,
+                                /*Nombre = newWinner.WinnerName,
+                                Cedula = newWinner.DocumentNumber,
+                                Telefono = newWinner.Phone,*/
+                                Notas = identifyBach.Notes,
+                                IdentifyType = (int)IdentifyBachTypeEnum.Gamers,
+                                WinnerId = newWinner.Id
+                            };
+
+                            context.IdentifyBaches.Add(newIdentifyBach);
+                        }
+                        else
+                        {
+                            newIdentifyBach = context.IdentifyBaches.FirstOrDefault(u => u.Id == identifyBach.Id);
+                            newIdentifyBach.RaffleId = identifyBach.RaffleId;
+                            newIdentifyBach.ClientId = identifyBach.ClientId;
+                            newIdentifyBach.Type = identifyBach.Type;
+                            /*newIdentifyBach.Nombre = identifyBach.WinnerName;
+                            newIdentifyBach.Cedula = identifyBach.DocumentNumber;
+                            newIdentifyBach.Telefono = identifyBach.WinnerPhone;*/
+                            newIdentifyBach.Notas = identifyBach.Notes;
+                            newIdentifyBach.WinnerId = newWinner.Id;
+                        }
+                        context.SaveChanges();
+                        newIdentifyBach.IdentifyNumbers = new List<IdentifyNumber>();
+
+                        var identifyNumbers = new List<IdentifyNumber>();
+                        foreach (var number in identifyBach.IdentifyNumbers)
+                        {
+                            if (identifyNumbers.Any(i => i.NumberId == number.NumberId && i.FractionFrom == number.FractionFrom && i.FractionTo == number.FractionTo) == false)
+                            {
+                                var nedit = context.IdentifyNumbers.FirstOrDefault(p => p.Id == number.Id);
+                                if (nedit == null)
+                                {
+                                    var Currentnumber = context.TicketAllocationNumbers.FirstOrDefault(n => n.TicketAllocation.RaffleId == newIdentifyBach.RaffleId
                                     //&& n.TicketAllocation.ClientId == newIdentifyBach.ClientId
                                     && n.Number == number.NumberId);
                                     if (Currentnumber != null)
@@ -628,8 +779,146 @@ namespace Tickets.Models.Ticket
                                 var nedit = context.IdentifyNumbers.FirstOrDefault(p => p.Id == number.Id);
                                 if (nedit == null)
                                 {
-                                    var Currentnumber = context.TicketAllocationNumbers.FirstOrDefault(n =>
-                                        n.TicketAllocation.RaffleId == newIdentifyBach.RaffleId
+                                    var Currentnumber = context.TicketAllocationNumbers.FirstOrDefault(n => n.TicketAllocation.RaffleId == newIdentifyBach.RaffleId
+                                    //&& n.TicketAllocation.ClientId == newIdentifyBach.ClientId
+                                    && n.Number == number.NumberId);
+                                    if (Currentnumber != null)
+                                    {
+                                        var identifyNumber = new IdentifyNumber()
+                                        {
+                                            IdentifyBachId = newIdentifyBach.Id,
+                                            NumberId = Currentnumber.Id,
+                                            FractionFrom = number.FractionFrom,
+                                            FractionTo = number.FractionTo,
+                                            Status = (int)AwardCertificationStatuEnum.Identified,
+                                            IdentifyBachNumberType = (int)IdentifyBachNumberTypeEnum.Seller
+                                        };
+                                        identifyNumbers.Add(identifyNumber);
+                                    }
+                                }
+                            }
+                        }
+                        var distintNumbers = identifyNumbers.Distinct().ToList();
+                        context.IdentifyNumbers.AddRange(distintNumbers);
+                        context.SaveChanges();
+                        dbContextTransaction.Commit();
+                        raffle = context.Raffles.FirstOrDefault(r => r.Id == newIdentifyBach.RaffleId);
+                        client = context.Clients.FirstOrDefault(c => c.Id == newIdentifyBach.ClientId);
+                        IdentifyObject = IdentifyBachSellerToObject(newIdentifyBach);
+                    }
+                    catch (Exception ex)
+                    {
+                        dbContextTransaction.Rollback();
+
+                        return new
+                        {
+                            result = false,
+                            message = ex.Message
+                        };
+                    }
+                }
+            }
+
+            Utils.SaveLog(WebSecurity.CurrentUserName, newIdentifyBach.Id > 0 ? LogActionsEnum.Update : LogActionsEnum.Insert, "Identificación de premios", IdentifyObject);
+
+            return new
+            {
+                result = true,
+                bachId = newIdentifyBach.Id,
+                RaffleDesc = raffle.Name,
+                RaffleId = raffle.Id,
+                RaffleDate = raffle.DateSolteo.ToUnixTime(),
+                ClientDesc = client.Name,
+                message = "Lote de numeros guardado correctamente."
+            };
+        }
+
+        internal object IdentifySellerAwardLight(AuxIdentifyBach identifyBach)
+        {
+            IdentifyBach newIdentifyBach;
+            Winner newWinner;
+            object IdentifyObject;
+            Raffle raffle;
+            Client client;
+            using (var context = new TicketsEntities())
+            {
+                using (var dbContextTransaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        if (identifyBach.WinnerId == 0 || identifyBach.WinnerId == null)
+                        {
+                            if (context.Winners.Any(a => a.DocumentNumber == identifyBach.DocumentNumber))
+                            {
+                                newWinner = context.Winners.FirstOrDefault(w => w.DocumentNumber == identifyBach.DocumentNumber);
+                            }
+                            else
+                            {
+                                newWinner = new Winner
+                                {
+                                    DocumentType = identifyBach.DocumentType,
+                                    DocumentNumber = identifyBach.DocumentNumber,
+                                    WinnerName = identifyBach.WinnerName,
+                                    Phone = identifyBach.WinnerPhone
+                                };
+                            }
+                            context.Winners.Add(newWinner);
+                            context.SaveChanges();
+                        }
+                        else
+                        {
+                            newWinner = context.Winners.FirstOrDefault(f => f.Id == identifyBach.WinnerId);
+                        }
+
+                        if (newWinner == null)
+                        {
+                            newWinner = context.Winners.FirstOrDefault(f => f.Id == (int)DefaultEnum.DefaultWinner);
+                        }
+
+                        if (identifyBach.Id <= 0)
+                        {
+                            newIdentifyBach = new IdentifyBach
+                            {
+                                RaffleId = identifyBach.RaffleId,
+                                ClientId = identifyBach.ClientId,
+                                Type = identifyBach.Type,
+                                Statu = (int)BachIdentifyStatuEnum.Inproces,
+                                CreateDate = DateTime.Now,
+                                CreateUser = WebSecurity.CurrentUserId,
+                                /*Nombre = newWinner.WinnerName,
+                                Cedula = newWinner.DocumentNumber,
+                                Telefono = newWinner.Phone,*/
+                                Notas = identifyBach.Notes,
+                                IdentifyType = (int)IdentifyBachTypeEnum.Gamers,
+                                WinnerId = newWinner.Id
+                            };
+
+                            context.IdentifyBaches.Add(newIdentifyBach);
+                        }
+                        else
+                        {
+                            newIdentifyBach = context.IdentifyBaches.FirstOrDefault(u => u.Id == identifyBach.Id);
+                            newIdentifyBach.RaffleId = identifyBach.RaffleId;
+                            newIdentifyBach.ClientId = identifyBach.ClientId;
+                            newIdentifyBach.Type = identifyBach.Type;
+                            /*newIdentifyBach.Nombre = identifyBach.WinnerName;
+                            newIdentifyBach.Cedula = identifyBach.DocumentNumber;
+                            newIdentifyBach.Telefono = identifyBach.WinnerPhone;*/
+                            newIdentifyBach.Notas = identifyBach.Notes;
+                            newIdentifyBach.WinnerId = newWinner.Id;
+                        }
+                        context.SaveChanges();
+                        newIdentifyBach.IdentifyNumbers = new List<IdentifyNumber>();
+
+                        var identifyNumbers = new List<IdentifyNumber>();
+                        foreach (var number in identifyBach.IdentifyNumbers)
+                        {
+                            if (identifyNumbers.Any(i => i.NumberId == number.NumberId && i.FractionFrom == number.FractionFrom && i.FractionTo == number.FractionTo) == false)
+                            {
+                                var nedit = context.IdentifyNumbers.FirstOrDefault(p => p.Id == number.Id);
+                                if (nedit == null)
+                                {
+                                    var Currentnumber = context.TicketAllocationNumbers.FirstOrDefault(n => n.TicketAllocation.RaffleId == newIdentifyBach.RaffleId
                                     //&& n.TicketAllocation.ClientId == newIdentifyBach.ClientId
                                     && n.Number == number.NumberId);
                                     if (Currentnumber != null)
@@ -1044,7 +1333,7 @@ namespace Tickets.Models.Ticket
                 ClientDesc = identifyBach.Client.Name,
                 identifyBach.RaffleId,
                 identifyBach.Statu,
-                Nombre = identifyBach.Nombre,
+                identifyBach.Winner.WinnerName,
                 hasPayment = (identifyBach.IdentifyBachPayments.Count > 0 || identifyBach.NoteCredits.Count > 0),
                 RaffleDesc = identifyBach.Raffle.Name
             };
@@ -1059,7 +1348,7 @@ namespace Tickets.Models.Ticket
                 ClientDesc = identifyBach.Client.Name,
                 identifyBach.RaffleId,
                 identifyBach.Statu,
-                Nombre = identifyBach.Nombre,
+                identifyBach.Winner.WinnerName,
                 hasPayment = (identifyBach.IdentifyBachPayments.Count > 0 || identifyBach.NoteCredits.Count > 0),
                 RaffleDesc = identifyBach.Raffle.Name
             };
@@ -1092,10 +1381,11 @@ namespace Tickets.Models.Ticket
                 identifyBach.ClientId,
                 percent = identifyBach.Client.GroupId == (int)ClientGroupEnum.Mayorista || identifyBach.Client.GroupId == (int)ClientGroupEnum.DistribuidorElectronico ? 2 : 0,
                 ClientDesc = context.Clients.FirstOrDefault(c => c.Id == identifyBach.ClientId).Name,
-                Cedula = identifyBach.Cedula,
-                Nombre = identifyBach.Nombre,
-                Telefono = identifyBach.Telefono,
-                Notas = identifyBach.Notas,
+                identifyBach.Winner.DocumentNumber,
+                identifyBach.Winner.WinnerName,
+                identifyBach.Winner.Phone,
+                identifyBach.Notas,
+                identifyBach.WinnerId,
                 identifyBach.RaffleId,
                 RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == identifyBach.RaffleId).Name,
                 RaffleDate = context.Raffles.FirstOrDefault(c => c.Id == identifyBach.RaffleId).DateSolteo.ToUnixTime(),
@@ -1137,10 +1427,11 @@ namespace Tickets.Models.Ticket
                 identifyBach.ClientId,
                 percent = identifyBach.Client.GroupId == (int)ClientGroupEnum.Mayorista || identifyBach.Client.GroupId == (int)ClientGroupEnum.DistribuidorElectronico ? 2 : 0,
                 ClientDesc = context.Clients.FirstOrDefault(c => c.Id == identifyBach.ClientId).Name,
-                Cedula = identifyBach.Cedula,
-                Nombre = identifyBach.Nombre,
-                Telefono = identifyBach.Telefono,
-                Notas = identifyBach.Notas,
+                identifyBach.Winner.DocumentNumber,
+                identifyBach.Winner.WinnerName,
+                identifyBach.Winner.Phone,
+                identifyBach.Notas,
+                identifyBach.WinnerId,
                 identifyBach.RaffleId,
                 RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == identifyBach.RaffleId).Name,
                 RaffleDate = context.Raffles.FirstOrDefault(c => c.Id == identifyBach.RaffleId).DateSolteo.ToUnixTime(),

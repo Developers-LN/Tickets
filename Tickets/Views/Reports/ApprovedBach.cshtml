@@ -1,7 +1,7 @@
 ﻿@model Tickets.Models.IdentifyBach
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Aprobación de pago a premio";
+    ViewBag.Title = "APROBACION DE PAGO A PREMIO DEL LOTE " + Model.Id + " DEL SORTEO " + Model.RaffleId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -62,14 +62,14 @@
     </div>
     <div class="col-lg-12 no-padder">
         <div class="col-lg-6 no-padder text-left">
-            <b>Cédula: </b> @Model.Cedula<br />
-            <b>Nombre: </b> @Model.Nombre<br />
-            <b>Teléfono: </b> @Model.Telefono<br />
+            <b>DOCUMENTO: </b> @Model.Winner.DocumentNumber<br />
+            <b>NOMBRE: </b> @Model.Winner.WinnerName<br />
+            <b>TELEFONO: </b> @Model.Winner.Phone<br />
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>Lote: </b> @Model.Id<br />
-            <b>Fecha: </b> @Model.CreateDate.ToShortDateString() <br />
-            <b>Hora: </b> @Model.CreateDate.ToShortTimeString() <br />
+            <b>LOTE: </b> @Model.Id<br />
+            <b>FECHA: </b> @Model.CreateDate.ToShortDateString() <br />
+            <b>HORA: </b> @Model.CreateDate.ToShortTimeString() <br />
         </div>
     </div>
     <div>

@@ -14,6 +14,11 @@ namespace Tickets.Models
     
     public partial class Winner
     {
+        public Winner()
+        {
+            this.IdentifyBaches = new HashSet<IdentifyBach>();
+        }
+    
         public int Id { get; set; }
         public Nullable<int> DocumentType { get; set; }
         public string DocumentNumber { get; set; }
@@ -21,5 +26,6 @@ namespace Tickets.Models
         public string WinnerName { get; set; }
     
         public virtual Catalog Catalog { get; set; }
+        public virtual ICollection<IdentifyBach> IdentifyBaches { get; set; }
     }
 }

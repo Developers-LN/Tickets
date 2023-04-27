@@ -463,6 +463,11 @@
                 templateUrl: Route.base('TicketAllocation/TicketAllocationConsignmentList'),
                 resolve: {}
             })
+            .state('app.ticketAllocationDeliverList', {
+                url: '/ticket/deliverAllocations',
+                templateUrl: Route.base('TicketAllocation/TicketAllocationToDeliverList'),
+                resolve: {}
+            })
             .state('app.electronicSales', {
                 url: '/ticket/electronicSales',
                 templateUrl: Route.base('ElectronicSales/ElectronicSalesList'),
@@ -496,6 +501,11 @@
             .state('app.ticketAllocationConsignedDetails', {
                 url: '/ticket/allocationConsignedDetails/:allocationId',
                 templateUrl: Route.base('TicketAllocation/AllocationConsignedDetails'),
+                resolve: {}
+            })
+            .state('app.ticketAllocationDeliverDetails', {
+                url: '/ticket/allocationDeliverDetails/:allocationId',
+                templateUrl: Route.base('TicketAllocation/AllocationDeliverDetails'),
                 resolve: {}
             })
             .state('app.invoicePaymentHistory', {

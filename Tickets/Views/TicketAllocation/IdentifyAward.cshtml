@@ -41,28 +41,55 @@
                 </div>
 
                 <div class="col-lg-12 well">
-                    <h4>Datos del ganador</h4>
-                    <div class="col-lg-12 no-padder">
+                    <div class="col-lg-8 no-padder">
+                        <h4>Datos del ganador</h4>
+                    </div>
+                    <div class="col-lg-4 no-padder" ng-show="AddWinner == 0">
+                        <fieldset class="text-right m-b-xs no-padder">
+                            <a ng-click="AddWinnerBTN()" class="btn btn-primary"><i class="fa fa-plus-square"></i> Agregar ganador</a>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-4 no-padder" ng-show="AddWinner == 1">
+                        <fieldset class="text-right m-b-xs no-padder">
+                            <a ng-click="AddWinnerBTN()" class="btn btn-success"><i class="fa fa-search"></i> Utilizar un ganador registrado</a>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 no-padder" ng-show="AddWinner == 0">
+                        <h4>Ganadores registrados</h4>
                         <fieldset>
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Ganador:  <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <select ng-required="true" class="form-control dropdown-select2" ng-change="changeValues()" ng-model="identifyBach.WinnerId">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="identifyBach.WinnerId">
                                         <option selected="selected" value="0">Seleccione un ganador</option>
-                                        <option ng-repeat="winner in winners" value="{{winner.Id}}" ng-selected="identifyBach.WinnerId == winner.Id">{{winner.Id}} - {{winner.Name}}</option>
+                                        <option ng-repeat="winner in winners" value="{{winner.Id}}" ng-selected="identifyBach.WinnerId == winner.Id">{{winner.Document}} - {{winner.Name}}</option>
                                     </select>
                                 </div>
                             </div>
                         </fieldset>
                     </div>
-                    <div class="col-lg-12 no-padder">
-                        <div class="col-lg-3 no-padder">
+                    <div class="col-lg-12 no-padder" ng-show="AddWinner == 1">
+                        <h4>Agregar datos del ganador</h4>
+                        <div class="col-lg-2 no-padder">
                             <fieldset>
                                 <div class="form-group">
-                                    <label class="col-lg-12 control-label-left">Cédula:  <span class="color-red">*</span></label>
+                                    <label class="col-lg-12 control-label-left">Tipo documento:  <span class="color-red">*</span></label>
+                                    <div class="col-lg-12">
+                                        <select ng-required="true" class="form-control dropdown-select2" ng-model="identifyBach.DocumentType">
+                                            <option selected="selected" value="0">Tipo de documento</option>
+                                            <option ng-repeat="documentType in documentTypes" value="{{documentType.Id}}" ng-selected="identifyBach.DocumentType == documentType.Id">{{documentType.Name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-2 no-padder">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-lg-12 control-label-left">Documento:  <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
                                         <input type="text"
-                                               ng-model="identifyBach.Cedula"
+                                               ng-model="identifyBach.DocumentNumber"
                                                value="{{WinnerDocument}}"
                                                class="form-control input-sm"
                                                ng-required="true" />
@@ -76,7 +103,7 @@
                                     <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
                                         <input type="text"
-                                               ng-model="identifyBach.Nombre"
+                                               ng-model="identifyBach.WinnerName"
                                                value="{{WinnerName}}"
                                                class="form-control input-sm"
                                                ng-required="true" />
@@ -84,13 +111,13 @@
                                 </div>
                             </fieldset>
                         </div>
-                        <div class="col-lg-3 no-padder">
+                        <div class="col-lg-2 no-padder">
                             <fieldset>
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Teléfono:  <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
                                         <input type="text"
-                                               ng-model="identifyBach.Telefono"
+                                               ng-model="identifyBach.WinnerPhone"
                                                value="{{WinnerPhone}}"
                                                class="form-control input-sm"
                                                ng-required="true" />
@@ -98,7 +125,6 @@
                                 </div>
                             </fieldset>
                         </div>
-
                     </div>
 
                     <div class="col-lg-12 no-padder">

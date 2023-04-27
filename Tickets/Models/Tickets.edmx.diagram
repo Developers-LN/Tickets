@@ -178,6 +178,7 @@
         <AssociationConnector Association="TicketsModel.FK_NoteCredit_TaxReceipt" />
         <EntityTypeShape EntityType="TicketsModel.Winner" Width="1.5" PointX="3" PointY="57.875" />
         <AssociationConnector Association="TicketsModel.FK_Winner_Type_Document" />
+        <AssociationConnector Association="TicketsModel.FK_Winner" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

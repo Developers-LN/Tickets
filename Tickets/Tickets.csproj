@@ -318,6 +318,7 @@
     <Compile Include="Models\Agency.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuxModels\AuxIdentifyBach.cs" />
     <Compile Include="Models\Award.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
@@ -351,6 +352,7 @@
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Enums\AllocationTypeEnum.cs" />
+    <Compile Include="Models\Enums\DefaultEnum.cs" />
     <Compile Include="Models\Enums\ElectronicSalesStatusEnum.cs" />
     <Compile Include="Models\Enums\GenderEnum.cs" />
     <Compile Include="Models\Enums\GeneralClientEnum.cs" />
@@ -3231,6 +3233,8 @@
     <Content Include="Views\Reports\PositiveBalanceReport.cshtml" />
     <Content Include="Views\Cash\PayedAwardByPeriod.cshtml" />
     <Content Include="Views\Reports\PayedAwardByPeriod.cshtml" />
+    <Content Include="Views\TicketAllocation\TicketAllocationToDeliverList.cshtml" />
+    <Content Include="Views\TicketAllocation\AllocationDeliverDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

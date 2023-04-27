@@ -66,6 +66,7 @@
                                 <th>Lote</th>
                                 <th>Sorteo</th>
                                 <th>Cliente</th>
+                                <th>Ganador</th>
                                 <th class="editColumm">Acción</th>
                             </tr>
                         </thead>
@@ -74,6 +75,7 @@
                                 <td>#{{identifyBach.Id}}</td>
                                 <td>{{identifyBach.RaffleId}} - {{identifyBach.RaffleDesc}}</td>
                                 <td>{{identifyBach.ClientId}} - {{identifyBach.ClientDesc}}</td>
+                                <td>{{identifyBach.WinnerName}}</td>
                                 <td>
                                     @*<a ng-if="identifyBach.hasPayment == false" href="/#/ticket/identifybach/{{identifyBach.Id}}" title="Modificar lote de identificación" class="{{moduleCanView}}"><i class="fa fa-pencil"></i></a>*@
                                     <a ng-if="identifyBach.hasPayment == false && identifyBach.Statu == 2077" href="/#/ticket/identifybach/{{identifyBach.Id}}" title="Modificar lote de identificación" class="{{moduleCanView}}"><i class="fa fa-pencil"></i></a>

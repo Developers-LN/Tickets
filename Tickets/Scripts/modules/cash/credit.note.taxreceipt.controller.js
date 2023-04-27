@@ -1,5 +1,5 @@
 ﻿/**=========================================================
- * Module: DeliveryController.js
+ * Module: NoteCreaditTaxReceiptController.js
  =========================================================*/
 
 (function () {
@@ -7,10 +7,10 @@
 
     angular
         .module('naut')
-        .controller('NoteCreaditTaxReceiptController', NoteCreaditController);
+        .controller('NoteCreaditTaxReceiptController', NoteCreaditTaxReceiptController);
 
-    NoteCreaditController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
-    function NoteCreaditController($scope, $state, $rootScope, $stateParams) {
+    NoteCreaditTaxReceiptController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
+    function NoteCreaditTaxReceiptController($scope, $state, $rootScope, $stateParams) {
         var self = this;
         $scope.identifyBachId = $stateParams.raffleAwardId;
         $scope.creditNote = {

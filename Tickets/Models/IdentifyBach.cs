@@ -45,5 +45,6 @@ namespace Tickets.Models
         public virtual ICollection<IdentifyNumber> IdentifyNumbers { get; set; }
         public virtual ICollection<IdentifyBachPayment> IdentifyBachPayments { get; set; }
         public virtual ICollection<NoteCredit> NoteCredits { get; set; }
+        public virtual Winner Winner { get; set; }
     }
 }
