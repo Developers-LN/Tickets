@@ -1209,7 +1209,7 @@ namespace Tickets.Controllers
             List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
             var InvoiceDetails = context.InvoiceDetails.AsEnumerable().Where(i => (i.Id == raffleId || raffleId == 0) && (i.CreateDate.Date >= startD.Date && i.CreateDate.Date <= endD.Date)).ToList();
 
-            foreach(var item in InvoiceDetails)
+            foreach (var item in InvoiceDetails)
             {
                 var awards = context.RaffleAwards.Where(a => a.RaffleId == item.RaffleId).ToList();
 
@@ -1526,6 +1526,24 @@ namespace Tickets.Controllers
                 i.RaffleId == raffleId
                 && (i.ClientId == clientId || clientId == 0)
             ).ToList();
+
+            if (allocations.Count == 0)
+            {
+                return RedirectToAction("Error", new { message = "No se encontraron asignaciones para los criterios seleccionados." });
+            }
+
+            return View(allocations);
+        }
+
+        //
+        //GET: Reports/DeliveredAllocation
+        [Authorize]
+        [HttpGet]
+        public ActionResult DeliveredAllocation(int clientId, int raffleId)
+        {
+            var context = new TicketsEntities();
+            var allocations = context.TicketAllocations.AsEnumerable().Where(i => i.RaffleId == raffleId
+                && (i.ClientId == clientId || clientId == 0) && i.Statu == (int)AllocationStatuEnum.Delivered).ToList();
 
             if (allocations.Count == 0)
             {

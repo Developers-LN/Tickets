@@ -1,6 +1,6 @@
 ﻿@{
     Layout = null;
-    ViewBag.Title = "Listado de consignaciones";
+    ViewBag.Title = "Listado de billetes entregados";
 }
 
 <div class="col-lg-12 no-padder" ng-controller="AllocationListController" ng-init="app.title = '@(ViewBag.Title)'">
@@ -12,7 +12,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Sorteo: </label>
                             <div class="col-lg-12">
-                                <select class="form-control dropdown-select2" ng-model="RaffleId" ng-change="changeValuesConsigned()">
+                                <select class="form-control dropdown-select2" ng-model="RaffleId" ng-change="changeValuesToDeliver()">
                                     <option selected="selected" value="0">Todos los sorteo</option>
                                     <option ng-repeat="raffle in rafflesConsignation" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
                                 </select>
@@ -25,13 +25,16 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Cliente: </label>
                             <div class="col-lg-12">
-                                <select class="form-control dropdown-select2" ng-model="ClientId" ng-change="changeValuesConsigned()">
+                                <select class="form-control dropdown-select2" ng-model="ClientId" ng-change="changeValuesToDeliver()">
                                     <option selected="selected" value="0">Todos los cliente</option>
                                     <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
                                 </select>
                             </div>
                         </div>
                     </fieldset>
+                </div>
+                <div class="col-lg-12 text-right m-b-xs no-padder" ng-show="printReportDeliverAvailable == 1">
+                    <a ng-click="printReportDeliver()" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Generar reporte de entregas</a>
                 </div>
                 <div class="row-border hover">
                     <table class="table dataTableGrid">
@@ -53,7 +56,7 @@
                                 <td class="text-center">
                                     <div ng-if="allocation.statuId != @((int)Tickets.Models.Enums.AllocationStatuEnum.Deleted)">
                                         <a ng-if="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Consigned) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Generated)" target="_blank" href="/Reports/AllocationConsigNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-print"></i></a>
-                                        <a href="/#/ticket/allocationConsignedDetails/{{allocation.id}}" title="Ver detalle de consignación" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
+                                        <a href="/#/ticket/allocationDeliverDetails/{{allocation.id}}" title="Ver detalle de asignación" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
                                         <a ng-click="xmlAllocationNumberDownload(allocation.id)" ng-if="allocation.grupo == @((int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico) && (allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Consigned) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Generated))" target="_blank" title="Descargar XML de la Asignación"><i class="fa fa-cloud-download"></i></a>
                                     </div>
                                 </td>

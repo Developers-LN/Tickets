@@ -17,6 +17,7 @@
             $state.go('app.ticketAllocationCreate');
         }
 
+        $scope.printReportDeliverAvailable = 0;
         $rootScope.globalReturnURL = '/#/ticket/allocations';
 
         this.loadData = function () {
@@ -121,6 +122,31 @@
             });
         }
 
+        $scope.changeValuesToDeliver = function () {
+            $scope.printReportDeliverAvailable = 1;
+            if ($scope.RaffleId == 0) {
+                return;
+            }
+
+            window.loading.show();
+            $.ajax({
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                url: 'ticket/ticketAllocationApi/getTicketAllocationToDeliverList?raffleId=' + $scope.RaffleId + '&clientId=' + $scope.ClientId,
+                success: function (response) {
+                    window.loading.hide();
+                    if (response.result == true) {
+                        $scope.allocations = response.object;
+                        $rootScope.destroyDataTable();
+                        $scope.$apply();
+                        $rootScope.dataTable();
+                    } else {
+                        alertify.alert(response.message);
+                    }
+                }
+            });
+        }
+
         $scope.sentAllocationToPrint = function (allocation) {
             // confirm dialog
             alertify.confirm("&iquest;Desea enviar esta asignacion a imprecion?", function (e) {
@@ -168,6 +194,10 @@
                     });
                 }
             });
+        }
+
+        $scope.printReportDeliver = function () {
+            window.open('Reports/DeliveredAllocation?clientId=' + $scope.ClientId + '&raffleId=' + $scope.RaffleId);
         }
 
         $scope.RaffleId = 0;

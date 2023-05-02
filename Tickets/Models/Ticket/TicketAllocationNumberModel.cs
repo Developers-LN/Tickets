@@ -306,6 +306,52 @@ namespace Tickets.Models.Ticket
             }
         }
 
+        internal RequestResponseModel DeliverAllocation(int id)
+        {
+            var context = new TicketsEntities();
+
+            using (var Trans = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var allocation = context.TicketAllocations.FirstOrDefault(n => n.Id == id);
+
+                    if (allocation == null)
+                    {
+                        Trans.Rollback();
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "El numero de asignación no fue encontrado!"
+                        };
+                    }
+
+                    allocation.Statu = (int)AllocationStatuEnum.Delivered;
+
+                    context.SaveChanges();
+
+                    Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Entrega de asignación", id);
+
+                    Trans.Commit();
+
+                    return new RequestResponseModel()
+                    {
+                        Result = true,
+                        Message = "La asingación fue entregada correctamente!"
+                    };
+                }
+                catch (Exception)
+                {
+                    Trans.Rollback();
+                    return new RequestResponseModel()
+                    {
+                        Result = false,
+                        Message = "Error al intentar realizar la entrega de la asignación!"
+                    };
+                }
+            }
+        }
+
         internal RequestResponseModel AwardNumberDetails(int number, int raffleId, int fractionFrom, int fractionTo)
         {
             var context = new TicketsEntities();

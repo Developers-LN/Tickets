@@ -429,6 +429,24 @@ namespace Tickets.Models.Ticket
             };
         }
 
+        internal RequestResponseModel GetTicketAllocationToDeliverList(int raffleId, int clientId = 0, int statu = 0, bool hasNumber = false)
+        {
+            var context = new TicketsEntities();
+            var allocation = context.TicketAllocations
+                .Where(a =>
+                    (a.Statu == (int)AllocationStatuEnum.Consigned || a.Statu == (int)AllocationStatuEnum.Delivered) &&
+                    (a.Statu == statu || statu == 0)
+                    && a.RaffleId == raffleId
+                    && (a.ClientId == clientId || clientId == 0)).AsEnumerable()
+                .Select(a => this.ListadoAsignaciones(a)).ToList();
+
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Object = allocation
+            };
+        }
+
         internal RequestResponseModel GetTicketAllocationConsignateList(int raffleId, int clientId = 0, int statu = 0, bool hasNumber = false)
         {
             var context = new TicketsEntities();

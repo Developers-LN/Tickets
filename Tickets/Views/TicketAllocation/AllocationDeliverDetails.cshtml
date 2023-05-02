@@ -1,6 +1,6 @@
 ﻿@{
     Layout = null;
-    ViewBag.Title = "Detalle de consignación";
+    ViewBag.Title = "Detalle de billetes a entregar";
 }
 
 <div class="col-lg-12 no-padder" ng-controller="AllocationDetailsController" ng-init="app.title = '@(ViewBag.Title)'">
@@ -25,8 +25,8 @@
                         </div>
                     </fieldset>
                     <br />
-                    <div ng-show="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Review) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Printed)" class="col-lg-12 no-padder text-center">
-                        <a ng-click="consignarAsignacion(allocation.id)" class="btn btn-success btn-sm"><i class="fa fa-check"></i> Consignar</a>
+                    <div ng-show="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Consigned)" class="col-lg-12 no-padder text-center">
+                        <a ng-click="deliverAllocation(allocation.id)" class="btn btn-success btn-sm"><i class="fa fa-check"></i> Entregar</a>
                     </div>
                 </div>
                 <div class="row-border hover">
@@ -42,7 +42,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="number in allocation.ticketAllocationNumbers">
-                                <td ng-bind="addZeroToNumber((allocation.production - 1), number.number)"></td>
+                                <td ng-bind="addZeroToNumber((allocation.production), number.number)"></td>
                                 <td ng-bind="(number.fractionTo - number.fractionFrom + 1)"></td>
                                 <td ng-bind="parseMoney(allocation.fractionPrice)"></td>
                                 <td class="text-right" ng-bind="parseMoney(showSubTotal(number))"></td>

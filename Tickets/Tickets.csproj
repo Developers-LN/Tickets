@@ -3235,6 +3235,7 @@
     <Content Include="Views\Reports\PayedAwardByPeriod.cshtml" />
     <Content Include="Views\TicketAllocation\TicketAllocationToDeliverList.cshtml" />
     <Content Include="Views\TicketAllocation\AllocationDeliverDetails.cshtml" />
+    <Content Include="Views\Reports\DeliveredAllocation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

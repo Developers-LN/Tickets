@@ -11,6 +11,7 @@
         Generated = 5860,
         Returned = 5869,
         ReturnsProcessed = 5870,
-        Deleted = 5871
+        Deleted = 5871,
+        Delivered = 5916
     }
 }
