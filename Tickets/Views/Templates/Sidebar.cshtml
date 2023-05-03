@@ -337,6 +337,13 @@
                                 <span class="ripple"></span>
                             </a>
                         </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.winnersList')">
+                            <a ui-sref="app.winnersList" title="Listado de Cliente">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Ganadores</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.cashNoteCreditList')">
                             <a ui-sref="app.cashNoteCreditList" title="Notas de crédito">
                                 <em class="sidebar-item-icon"></em>

@@ -1060,9 +1060,12 @@ namespace Tickets.Models.Ticket
                         string identifyError = "";
                         for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
                         {
-                            if (identifyNumbers.Where(r => awardTicket.FractionFrom >= r.FractionFrom && awardTicket.FractionTo <= r.FractionTo).Any())
+                            foreach (var identify in identifyNumbers)
                             {
-                                identifyError += fraction + (fraction == awardTicket.FractionTo ? "" : ", ");
+                                if (fraction >= identify.FractionFrom && fraction <= identify.FractionTo)
+                                {
+                                    identifyError += fraction + (fraction == awardTicket.FractionTo ? "" : ", ");
+                                }
                             }
                         }
                         if (identifyError != "")

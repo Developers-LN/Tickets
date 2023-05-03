@@ -266,6 +266,11 @@
                 templateUrl: Route.base('Client/List'),
                 resolve: {}
             })
+            .state('app.winnersList', {
+                url: '/winner/winners',
+                templateUrl: Route.base('Client/List'),
+                resolve: {}
+            })
             .state('app.ClientGeneralReport', {
                 url: '/client/clientGeneralReport',
                 templateUrl: Route.base('Client/ClientGeneralReport')

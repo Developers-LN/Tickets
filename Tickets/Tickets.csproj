@@ -310,6 +310,7 @@
     <Compile Include="Controllers\TypesAwardController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\WinnerController.cs" />
     <Compile Include="Controllers\WorkflowApiController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -1209,6 +1210,7 @@
     <Content Include="Scripts\modules\typesaward\awards.cert.workflow.list.contorller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\modules\winner\winner.list.controller.js" />
     <Content Include="Vendor\alertify\example\assets\css\main.css" />
     <Content Include="Vendor\alertify\example\assets\fonts\fontawesome-webfont.svg" />
     <Content Include="Vendor\alertify\example\assets\img\banner.jpg" />
@@ -3236,6 +3238,7 @@
     <Content Include="Views\TicketAllocation\TicketAllocationToDeliverList.cshtml" />
     <Content Include="Views\TicketAllocation\AllocationDeliverDetails.cshtml" />
     <Content Include="Views\Reports\DeliveredAllocation.cshtml" />
+    <Content Include="Views\Winner\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
