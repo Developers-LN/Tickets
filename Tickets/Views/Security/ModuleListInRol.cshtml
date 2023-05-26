@@ -5,80 +5,77 @@
 
 <div class="col-lg-12 no-padder" ng-controller="SecurityController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
-        <!-- START panel-->
-        <div class="col-lg-12 no-padder">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="app-view-header">Rol: <b>{{rol.RoleName}}</b></div>
-                    <!-- START table-responsive-->
-                    <div class="row-border hover ">
-                        <table class="table dataTableGrid">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Visualizar</th>
-                                    <th>Agregar</th>
-                                    <th>Modificar</th>
-                                    <th>Buscar</th>
-                                    <th>Borrar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr data-ng-repeat="module in modueList">
-                                    <td>{{module.Name}}</td>
-                                    <td>{{module.Description}}</td>
-                                    <td>
-                                        <div class="checkbox c-checkbox needsclick {{module.View === true? '': 'hide'}}">
-                                            <label class="needsclick m-r-xs">
-                                                <input id="RolModuleViewCheckBox{{module.Id}}" type="checkbox" class="needsclick" ng-checked="module.CanView" />
-                                                <span class="fa fa-check"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox c-checkbox needsclick {{module.Add === true? '': 'hide'}}">
-                                            <label class="needsclick m-r-xs">
-                                                <input id="RolModuleAddCheckBox{{module.Id}}" type="checkbox" class="needsclick" ng-checked="module.CanAdd" />
-                                                <span class="fa fa-check"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox c-checkbox needsclick {{module.Edit === true? '': 'hide'}}">
-                                            <label class="needsclick m-r-xs">
-                                                <input id="RolModuleEditCheckBox{{module.Id}}" type="checkbox" class="needsclick" ng-checked="module.CanEdit" />
-                                                <span class="fa fa-check"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox c-checkbox needsclick {{module.Search === true? '': 'hide'}}">
-                                            <label class="needsclick m-r-xs">
-                                                <input id="RolModuleSearchCheckBox{{module.Id}}" type="checkbox" class="needsclick" ng-checked="module.CanSearch" />
-                                                <span class="fa fa-check"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox c-checkbox needsclick {{module.Delete === true? '': 'hide'}}">
-                                            <label class="needsclick m-r-xs">
-                                                <input id="RolModuleDeleteCheckBox{{module.Id}}" type="checkbox" class="needsclick" ng-checked="module.CanDelete" />
-                                                <span class="fa fa-check"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- END table-responsive-->
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!-- START panel-->
+                <div class="app-view-header">Rol: <b>{{rol.RoleName}}</b></div>
+                <div class="row-border hover ">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Visualizar</th>
+                                <th>Agregar</th>
+                                <th>Modificar</th>
+                                <th>Buscar</th>
+                                <th>Borrar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="module in modueList">
+                                <td>{{module.Name}}</td>
+                                <td>{{module.Description}}</td>
+                                <td>
+                                    <div class="checkbox c-checkbox needsclick {{module.View === true? '': 'hide'}}">
+                                        <label class="needsclick m-r-xs">
+                                            <input id="RolModuleViewCheckBox{{module.Id}}" type="checkbox" class="needsclick" ng-checked="module.CanView" ng-click="updateModuleStatu(rol.RoleId, module.Id)" />
+                                            <span class="fa fa-check"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="checkbox c-checkbox needsclick {{module.Add === true? '': 'hide'}}">
+                                        <label class="needsclick m-r-xs">
+                                            <input id="RolModuleAddCheckBox{{module.Id}}" type="checkbox" class="needsclick" ng-checked="module.CanAdd" ng-click="updateModuleStatu(rol.RoleId, module.Id)" />
+                                            <span class="fa fa-check"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="checkbox c-checkbox needsclick {{module.Edit === true? '': 'hide'}}">
+                                        <label class="needsclick m-r-xs">
+                                            <input id="RolModuleEditCheckBox{{module.Id}}" type="checkbox" class="needsclick" ng-checked="module.CanEdit" ng-click="updateModuleStatu(rol.RoleId, module.Id)" />
+                                            <span class="fa fa-check"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="checkbox c-checkbox needsclick {{module.Search === true? '': 'hide'}}">
+                                        <label class="needsclick m-r-xs">
+                                            <input id="RolModuleSearchCheckBox{{module.Id}}" type="checkbox" class="needsclick" ng-checked="module.CanSearch" ng-click="updateModuleStatu(rol.RoleId, module.Id)" />
+                                            <span class="fa fa-check"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="checkbox c-checkbox needsclick {{module.Delete === true? '': 'hide'}}">
+                                        <label class="needsclick m-r-xs">
+                                            <input id="RolModuleDeleteCheckBox{{module.Id}}" type="checkbox" class="needsclick" ng-checked="module.CanDelete" ng-click="updateModuleStatu(rol.RoleId, module.Id)" />
+                                            <span class="fa fa-check"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+                <!-- END table-responsive-->
             </div>
         </div>
     </div>
     <div class="col-lg-12 no-padder text-left m-b-lg">
         <a ui-sref="app.securityRolList" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Regresar</a>
-        <a ng-click="manageModuleStatu(rol.RoleId)" class="mr btn btn-square btn-primary {{moduleCanEdit}}"><i class="fa fa-floppy-o"></i> Guardar</a>
+        @*<a ng-click="manageModuleStatu(rol.RoleId)" class="mr btn btn-square btn-primary {{moduleCanEdit}}"><i class="fa fa-floppy-o"></i> Guardar</a>*@
     </div>
 </div>

@@ -196,8 +196,7 @@ namespace Tickets.Models.Workflows
                 w.WorkflowTypeId == workFlowTypeId &&
                 w.Statu == (int)WorkflowStatusEnum.Active &&
                 usersApproveWorkflow.Any(u => u.UserId == userId
-                    && u.OrderApproval ==
-                    ((w.WorkflowProccesses.Where(wf => wf.Statu == (int)WorkflowProccessStatuEnum.Approved).Count()
+                    && u.OrderApproval == ((w.WorkflowProccesses.Where(wf => wf.Statu == (int)WorkflowProccessStatuEnum.Approved).Count()
                     - w.WorkflowProccesses.Where(wf => wf.Statu == (int)WorkflowProccessStatuEnum.Rejected).Count()) + 1))
                 ).Select(w => new WorkflowModel().ToObject(w, workFlowTypeId)).ToList();
 

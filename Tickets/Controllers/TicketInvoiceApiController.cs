@@ -44,7 +44,7 @@ namespace Tickets.Controllers
         }
 
         //
-        //  GET: ticket/ticketInvoiceApi/save
+        //  POST: ticket/ticketInvoiceApi/save
         [HttpPost]
         [Authorize]
         [ActionName("save")]

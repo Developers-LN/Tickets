@@ -13,6 +13,8 @@
     function IdentifyAwardController($scope, $state, $rootScope, $stateParams) {
         var self = this;
 
+        $('#phoneNumber').mask("(999) 999-9999");
+
         $scope.totalFraction = 0;
         $scope.showTotalValue = 0;
         $scope.totalNumber = 0;
@@ -23,6 +25,8 @@
         $scope.WinnerName = "";
         $scope.WinnerPhone = "";
         $scope.AddWinner = 0;
+        $scope.AddWinner = 0;
+        $scope.GenderId = 0;
 
         this.clearIdentify = function () {
             $scope.identifyBach = {
@@ -33,6 +37,7 @@
                 DocumentType: undefined,
                 DocumentNumber: undefined,
                 WinnerName: undefined,
+                GenderId: undefined,
                 Notes: undefined,
                 WinnerPhone: undefined,
                 IdentifyNumbers: [],
@@ -183,6 +188,7 @@
                     $scope.raffles = data.raffles;
                     $scope.winners = data.winners;
                     $scope.documentTypes = data.documentTypes;
+                    $scope.genders = data.genders;
 
                     if (data.identifyBach !== null) {
                         $scope.identifyBach = data.identifyBach;
@@ -218,6 +224,9 @@
                 }
                 if (identifyBach.WinnerName === undefined) {
                     error += 'Nombre' + isReq;
+                }
+                if (identifyBach.GenderId === undefined) {
+                    error += 'Género' + isReq;
                 }
                 if (identifyBach.WinnerPhone === undefined) {
                     error += 'Teléfono' + isReq;
@@ -525,6 +534,11 @@
         $scope.AddWinnerBTN = function () {
             if ($scope.AddWinner == 0) {
                 $scope.AddWinner = 1;
+                $scope.identifyBach.DocumentNumber = undefined;
+                $scope.identifyBach.DocumentType = undefined;
+                $scope.identifyBach.WinnerName = undefined;
+                $scope.identifyBach.WinnerPhone = undefined;
+                $scope.identifyBach.GenderId = undefined
             }
             else {
                 $scope.AddWinner = 0;
@@ -548,6 +562,25 @@
                 });
             }
             return nArray;
+        }
+
+        $scope.typeDocument = function () {
+            //CEDULA
+            if ($scope.identifyBach.DocumentType == 5913) {
+                $('#documentNumber').mask("999-9999999-9");
+                $scope.maxLenght = 13;
+            }
+            //RNC
+            else if ($scope.identifyBach.DocumentType == 5914) {
+                $('#documentNumber').mask("999-99999-9");
+                $scope.maxLenght = 11;
+            }
+            //PASAPORTE
+            else {
+                $('#documentNumber').unmask();
+                $scope.maxLenght = 20;
+            }
+            $scope.identifyBach.DocumentNumber = undefined;
         }
     }
 })();

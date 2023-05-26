@@ -300,3 +300,13 @@ table.table tr.sub-total {
 table.table thead {
     border-top: solid 4px gray;
 }
+
+table.table tr.row-header {
+    border-top: solid 2px gray;
+    font-weight: bold;
+}
+
+table.table tr.row-footer {
+    font-weight: bold;
+    border-bottom: solid 20px white;
+}

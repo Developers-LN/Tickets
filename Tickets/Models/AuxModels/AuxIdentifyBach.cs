@@ -14,6 +14,7 @@ namespace Tickets.Models.AuxModels
         public string WinnerPhone { get; set; }
         public string Notes { get; set; }
         public int Type { get; set; }
+        public int GenderId { get; set; }
         public Nullable<int> WinnerId { get; set; }
 
         public virtual ICollection<IdentifyNumber> IdentifyNumbers { get; set; }

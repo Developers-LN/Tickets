@@ -36,21 +36,29 @@
                 }
                 if (raffleResponse[1] == 'success') {
                     $scope.raffle = raffleResponse[0].object;
+                    console.log($scope.raffle);
                     if ($stateParams.raffleId > 0) {
                         $scope.raffle.raffleDate = new Date($scope.raffle.raffleDateLong);
                         $scope.raffle.startReturnDate = new Date($scope.raffle.startReturnDateLong);
                         $scope.raffle.endReturnDate = new Date($scope.raffle.endReturnDateLong);
                         $scope.raffle.endAllocationDate = new Date($scope.raffle.endAllocationDateLong);
+
+                        $scope.raffle.dueRaffleDate = new Date($scope.raffle.dueRaffleDateLong);
                         $scope.raffle.endElectronicSales = new Date($scope.raffle.endElectronicSalesLong);
+                        $scope.raffle.startElectronicSales = new Date($scope.raffle.startElectronicSalesLong);
 
                         $scope.raffle.startDate = $scope.raffle.startReturnDate;
                         $scope.raffle.startTime = $scope.raffle.startReturnDate;
-                        $scope.raffle.endElectronicSalesTime = $scope.raffle.endElectronicSales;
                         $scope.raffle.endDate = $scope.raffle.endReturnDate;
                         $scope.raffle.endTime = $scope.raffle.endReturnDate;
 
                         $scope.raffle.endAllocationDateOnly = $scope.raffle.endAllocationDate;
                         $scope.raffle.endAllocationTime = $scope.raffle.endAllocationDate;
+
+                        $scope.raffle.startElectronicSalesDateOnly = $scope.raffle.startElectronicSales;
+                        $scope.raffle.startElectronicSalesTime = $scope.raffle.startElectronicSales;
+                        $scope.raffle.endElectronicSalesTime = $scope.raffle.endElectronicSales;
+
                         $scope.changeRaffleDate();
                         $scope.prospectChange();
                     }
@@ -91,6 +99,9 @@
             if (raffle.raffleDate == undefined) {
                 error += 'Fecha del sorteo' + isReq;
             }
+            if (raffle.dueRaffleDate == undefined) {
+                error += 'Fecha de vencimiento del sorteo' + isReq;
+            }
             if (raffle.ticketProspectId == undefined || raffle.ticketProspectId <= 0) {
                 error += 'Prospecto de billetes' + isReq;
             }
@@ -98,7 +109,7 @@
                 error += 'Mercanc&iacute;a' + isReq;
             }
             if (raffle.startReturnDate == undefined) {
-                error += 'Fecha inicio devolucion' + isReq;
+                error += 'Fecha inicio devoluci&oacute;n' + isReq;
             }
             if (raffle.endReturnDate == undefined) {
                 error += 'Fecha fin devolucion' + isReq;
@@ -110,7 +121,10 @@
                 error += 'Status' + isReq;
             }
             if (raffle.endElectronicSales == undefined) {
-                error += "Hora de cierre de venta electrónica" + isReq;
+                error += "Hora de cierre de venta electr&oacute;nica" + isReq;
+            }
+            if (raffle.startElectronicSales == undefined) {
+                error += "Fecha y hora de inicio de la venta electr&oacute;nica" + isReq;
             }
             if (error !== '') {
                 alertify.showError('Alerta', error);
@@ -126,32 +140,50 @@
                 } else {
                     $scope.raffle.startReturnDate = $rootScope.parseDate($scope.raffle.startDate, $scope.raffle.startTime).toJSON();
                 }
+
                 if ($scope.raffle.endDate === undefined || $scope.raffle.endTime === undefined) {
                     $scope.raffle.endReturnDate = undefined;
                 } else {
                     $scope.raffle.endReturnDate = $rootScope.parseDate($scope.raffle.endDate, $scope.raffle.endTime).toJSON();
                 }
+
                 if ($scope.raffle.raffleDate === undefined) {
                     $scope.raffle.raffleDate = undefined;
                 } else {
                     DateSorteo = $scope.raffle.raffleDate;
                     $scope.raffle.raffleDate = $rootScope.parseDate($scope.raffle.raffleDate, $scope.raffle.raffleDate).toJSON();
                 }
+
+                if ($scope.raffle.dueRaffleDate === undefined) {
+                    $scope.raffle.dueRaffleDate = undefined;
+                } else {
+                    $scope.raffle.dueRaffleDate = $rootScope.parseDate($scope.raffle.dueRaffleDate, $scope.raffle.dueRaffleDate).toJSON();
+                }
+
                 if ($scope.raffle.endAllocationDateOnly === undefined || $scope.raffle.endAllocationTime === undefined) {
                     $scope.raffle.endAllocationDate = undefined;
                 } else {
                     $scope.raffle.endAllocationDate = $rootScope.parseDate($scope.raffle.endAllocationDateOnly, $scope.raffle.endAllocationTime).toJSON();
                 }
+
                 if ($scope.raffle.endElectronicSalesTime === undefined) {
-                    $scope.raffle.endElectronicSales = undefined
+                    $scope.raffle.endElectronicSales = undefined;
                 }
                 else {
                     $scope.raffle.endElectronicSales = $rootScope.parseDate(DateSorteo, $scope.raffle.endElectronicSalesTime).toJSON();
                 }
+
+                if ($scope.raffle.startElectronicSalesDateOnly === undefined || $scope.raffle.startElectronicSalesTime === undefined) {
+                    $scope.raffle.startElectronicSales = undefined;
+                } else {
+                    $scope.raffle.startElectronicSales = $rootScope.parseDate($scope.raffle.startElectronicSalesDateOnly, $scope.raffle.startElectronicSalesTime).toJSON();
+                }
+
             } catch (e) { }
             if (self.validate($scope.raffle) === false) {
                 return;
             }
+            
             window.loading.show();
             $.ajax({
                 type: 'POST',

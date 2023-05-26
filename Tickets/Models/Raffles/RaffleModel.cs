@@ -35,6 +35,24 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "raffleDateLong")]
         public long RaffleDateLong { get; set; }
 
+        [JsonProperty(PropertyName = "dueRaffleDate")]
+        public DateTime DueRaffleDate { get; set; }
+
+        [JsonProperty(PropertyName = "dueRaffleDateLong")]
+        public long DueRaffleDateLong { get; set; }
+
+        [JsonProperty(PropertyName = "endElectronicSales")]
+        public DateTime EndElectronicSales { get; set; }
+
+        [JsonProperty(PropertyName = "endElectronicSalesLong")]
+        public long EndElectronicSalesLong { get; set; }
+
+        [JsonProperty(PropertyName = "startElectronicSales")]
+        public DateTime StartElectronicSales { get; set; }
+
+        [JsonProperty(PropertyName = "startElectronicSalesLong")]
+        public long StartElectronicSalesLong { get; set; }
+
         [JsonProperty(PropertyName = "commodityId")]
         public int CommodityId { get; set; }
 
@@ -50,14 +68,8 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "startReturnDateLong")]
         public long StartReturnDateLong { get; set; }
 
-        [JsonProperty(PropertyName = "endElectronicSalesLong")]
-        public long EndElectronicSalesLong { get; set; }
-
         [JsonProperty(PropertyName = "endReturnDate")]
         public DateTime EndReturnDate { get; set; }
-
-        [JsonProperty(PropertyName = "endElectronicSales")]
-        public DateTime EndElectronicSales { get; set; }
 
         [JsonProperty(PropertyName = "endReturnDateLong")]
         public long EndReturnDateLong { get; set; }
@@ -121,8 +133,16 @@ namespace Tickets.Models.Raffles
                 RaffleDateLong = raffle.DateSolteo.ToUnixTime(),
                 StartReturnDate = raffle.StartReturnDate,
                 StartReturnDateLong = raffle.StartReturnDate.ToUnixTime(),
+
+                DueRaffleDate = raffle.DueRaffleDate ?? DateTime.Now,
+                DueRaffleDateLong = !raffle.DueRaffleDate.HasValue ? raffle.DateSolteo.ToUnixTime() : raffle.DueRaffleDate.Value.ToUnixTime(),
+
                 EndElectronicSales = raffle.EndElectronicSales ?? DateTime.Now,
                 EndElectronicSalesLong = !raffle.EndElectronicSales.HasValue ? raffle.DateSolteo.ToUnixTime() : raffle.EndElectronicSales.Value.ToUnixTime(),
+
+                StartElectronicSales = raffle.StartElectronicSales ?? DateTime.Now,
+                StartElectronicSalesLong = !raffle.StartElectronicSales.HasValue ? raffle.DateSolteo.ToUnixTime() : raffle.StartElectronicSales.Value.ToUnixTime(),
+
                 EndReturnDateLong = raffle.EndReturnDate.ToUnixTime(),
                 Statu = raffle.Statu,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == raffle.Statu).NameDetail,
@@ -304,6 +324,8 @@ namespace Tickets.Models.Raffles
                         raffle.EndAllocationDate = model.EndAllocationDate;
                         raffle.Note = string.IsNullOrEmpty(model.Note) ? "" : model.Note;
                         raffle.DateSolteo = model.RaffleDate;
+                        //raffle.DueRaffleDate = model.DueRaffleDate;
+                        //raffle.StartElectronicSales = model.StartElectronicSales;
 
                         if (model.Id == 0)
                         {
@@ -445,7 +467,7 @@ namespace Tickets.Models.Raffles
             var prospectModel = new ProspectModel();
             var raffles = context.Raffles.AsEnumerable()
                 .Where(s =>
-                    s.Statu == (int)RaffleStatusEnum.Active || 
+                    s.Statu == (int)RaffleStatusEnum.Active ||
                     s.Statu == (int)RaffleStatusEnum.Generated ||
                     s.Statu == (int)RaffleStatusEnum.Planned)
                 .OrderByDescending(r => r.Id)

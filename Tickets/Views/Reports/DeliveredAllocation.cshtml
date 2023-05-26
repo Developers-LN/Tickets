@@ -1,7 +1,7 @@
 ﻿@model List<Tickets.Models.TicketAllocation>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "RESUMEN DE ASIGNACIONES ENTREGADAS " + Model.FirstOrDefault().RaffleId;
+    ViewBag.Title = "RESUMEN DE ASIGNACIONES ENTREGADAS NO. " + Model.FirstOrDefault().RaffleId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -21,14 +21,14 @@
             <h3>
                 <b>
                     RESUMEN DE ASIGNACIONES ENTREGADAS DEL SORTEO NO. @Model.FirstOrDefault().RaffleId <br />
-                    Fecha del Sorteo @Model.FirstOrDefault().Raffle.DateSolteo.ToShortDateString()
+                    FECHA DEL SORTEO @Model.FirstOrDefault().Raffle.DateSolteo.ToShortDateString()
                 </b>
             </h3>
 
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>HORA: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12">

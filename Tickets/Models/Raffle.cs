@@ -48,6 +48,8 @@ namespace Tickets.Models
         public string Separator { get; set; }
         public Nullable<bool> Consignacion { get; set; }
         public Nullable<System.DateTime> EndElectronicSales { get; set; }
+        public Nullable<System.DateTime> DueRaffleDate { get; set; }
+        public Nullable<System.DateTime> StartElectronicSales { get; set; }
     
         public virtual ICollection<IdentifyBach> IdentifyBaches { get; set; }
         public virtual ICollection<Invoice> Invoices { get; set; }

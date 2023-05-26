@@ -89,28 +89,28 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "allocationId")]
         public int AllocationId { get; set; }
 
-		[JsonProperty(PropertyName = "ticketsQuantity")]
-		public int TicketsQuantity { get; set; }
+        [JsonProperty(PropertyName = "ticketsQuantity")]
+        public int TicketsQuantity { get; set; }
 
-		[JsonProperty(PropertyName = "fractionQuantity")]
+        [JsonProperty(PropertyName = "fractionQuantity")]
         public int FractionQuantity { get; set; }
 
-		[JsonProperty(PropertyName = "prospectFraction")]
-		public int ProspectFraction { get; set; }
+        [JsonProperty(PropertyName = "prospectFraction")]
+        public int ProspectFraction { get; set; }
 
-		[JsonProperty(PropertyName = "allocationFractionQuantity")]
+        [JsonProperty(PropertyName = "allocationFractionQuantity")]
         public int AllocationFractionQuantity { get; set; }
 
-		[JsonProperty(PropertyName = "allocationTicketsQuantity")]
-		public int AllocationTicketsQuantity { get; set; }
+        [JsonProperty(PropertyName = "allocationTicketsQuantity")]
+        public int AllocationTicketsQuantity { get; set; }
 
-		[JsonProperty(PropertyName = "totalRest")]
+        [JsonProperty(PropertyName = "totalRest")]
         public int TotalRest { get; set; }
 
-		[JsonProperty(PropertyName = "totalRestTickets")]
-		public int TotalRestTickets { get; set; }
+        [JsonProperty(PropertyName = "totalRestTickets")]
+        public int TotalRestTickets { get; set; }
 
-		[JsonProperty(PropertyName = "anyReturn")]
+        [JsonProperty(PropertyName = "anyReturn")]
         public int AnyReturn { get; set; }
 
         #region Private Method
@@ -400,7 +400,9 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
             var allocation = context.TicketAllocations
                 .Where(a =>
-                    (a.Statu == (int)AllocationStatuEnum.Consigned || a.Statu == (int)AllocationStatuEnum.Generated)
+                    (a.Statu == (int)AllocationStatuEnum.Consigned || 
+                     a.Statu == (int)AllocationStatuEnum.Generated ||
+                     a.Statu == (int)AllocationStatuEnum.Delivered)
                     && a.RaffleId == raffleId
                     && (a.ClientId == clientId || clientId == 0)).AsEnumerable()
                 .Select(a => this.InvoiceDetails(a)).ToList();
@@ -434,9 +436,10 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
             var allocation = context.TicketAllocations
                 .Where(a =>
-                    (a.Statu == (int)AllocationStatuEnum.Consigned || a.Statu == (int)AllocationStatuEnum.Delivered) &&
+                    (a.Statu == (int)AllocationStatuEnum.Consigned || a.Statu == (int)AllocationStatuEnum.Delivered || 
+                     a.Statu == (int)AllocationStatuEnum.Invoiced || a.Statu == (int)AllocationStatuEnum.Returned) &&
                     (a.Statu == statu || statu == 0)
-                    && a.RaffleId == raffleId
+                    && a.RaffleId == raffleId && (a.Client.GroupId != (int)ClientGroupEnum.DistribuidorElectronico || a.Client.GroupId != (int)ClientGroupEnum.DistribuidorXML) 
                     && (a.ClientId == clientId || clientId == 0)).AsEnumerable()
                 .Select(a => this.ListadoAsignaciones(a)).ToList();
 
@@ -451,7 +454,9 @@ namespace Tickets.Models.Ticket
         {
             var context = new TicketsEntities();
             var allocation = context.TicketAllocations
-                .Where(a => (a.Statu == (int)AllocationStatuEnum.Consigned || a.Statu == (int)AllocationStatuEnum.Review || a.Statu == (int)AllocationStatuEnum.Printed)
+                .Where(a => (a.Statu == (int)AllocationStatuEnum.Consigned || a.Statu == (int)AllocationStatuEnum.Review ||
+                       a.Statu == (int)AllocationStatuEnum.Printed || a.Statu == (int)AllocationStatuEnum.Delivered ||
+                       a.Statu == (int)AllocationStatuEnum.Invoiced || a.Statu == (int)AllocationStatuEnum.Returned)
                     && a.RaffleId == raffleId &&
                     (//a.Client.GroupId != (int)ClientGroupEnum.CajaDespachoExpress && a.Client.GroupId != (int)ClientGroupEnum.CajasOficinaPrincipal &&
                     a.Client.GroupId != (int)ClientGroupEnum.ContenedorElectronico)

@@ -736,6 +736,10 @@
                 url: '/cash/positiveBalance',
                 templateUrl: Route.base('Cash/PositiveBalanceList')
             })
+            .state('app.PositiveBalanceCreate', {
+                url: '/cash/positiveBalance/:noteCreditId/:raffleAwardId',
+                templateUrl: Route.base('Cash/PositiveBalance')
+            })
             .state('app.taxReceiptList', {
                 url: '/taxReceipt/taxReceiptList',
                 templateUrl: Route.base('TaxReceipt/TaxReceiptList')

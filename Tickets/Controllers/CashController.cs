@@ -1166,7 +1166,33 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult PositiveBalance()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
         public JsonResult GetCashAdvanceInfo()
+        {
+            var context = new TicketsEntities();
+            var clients = context.Clients.Where(w => w.Statu == (int)ClientStatuEnum.Approbed).Select(s => new { s.Id, s.Name }).ToList();
+            var raffles = context.Raffles.Where(w => w.Statu == (int)RaffleStatusEnum.Planned).Select(s => new { s.Id, s.Name }).ToList();
+
+            return new JsonResult()
+            {
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                Data = new
+                {
+                    clients,
+                    raffles
+                }
+            };
+        }
+
+        [Authorize]
+        [HttpGet]
+        public JsonResult GetPositiveBalanceInfo()
         {
             var context = new TicketsEntities();
             var clients = context.Clients.Where(w => w.Statu == (int)ClientStatuEnum.Approbed).Select(s => new { s.Id, s.Name }).ToList();
@@ -1364,9 +1390,76 @@ namespace Tickets.Controllers
                             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Nota de Credito Editada", mCreditNote);
                         }
                         tx.Commit();
-                        Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Nota de Credito Editada", creditNote);
+                        Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Avance de efectivo creada", creditNote);
 
-                        return new JsonResult() { Data = new { result = true, message = "Nota de Credito Completada.", cashAdvance = creditNote.Id } };
+                        return new JsonResult() { Data = new { result = true, message = "Avance de efectivo completado.", cashAdvance = creditNote.Id } };
+                    }
+                    catch (Exception e)
+                    {
+                        tx.Rollback();
+                        return new JsonResult() { Data = new { result = false, message = e.Message } };
+                    }
+                }
+            }
+        }
+
+        //
+        // POST: /Cash/PositiveBalance
+        [Authorize]
+        [HttpPost]
+        public JsonResult PositiveBalance(NoteCredit creditNote)
+        {
+            using (var context = new TicketsEntities())
+            {
+                using (var tx = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        if (creditNote.Id == 0)
+                        {
+                            var identifyBachId = 0;
+                            Client client;
+                            if (creditNote.IdentifyBaches.Where(r => r.Id > 0).Any())
+                            {
+                                identifyBachId = creditNote.IdentifyBaches.FirstOrDefault().Id;
+                                client = context.IdentifyBaches.FirstOrDefault(i => i.Id == identifyBachId).Client;
+                                creditNote.IdentifyBaches = new List<IdentifyBach>();
+                                creditNote.DiscountPercent = client.GroupId == (int)ClientGroupEnum.Mayorista ? 0 : 0;
+                            }
+                            else
+                            {
+                                creditNote.IdentifyBaches = new List<IdentifyBach>();
+                                creditNote.DiscountPercent = 0;
+                            }
+                            creditNote.NoteDate = DateTime.Now.Date;
+                            creditNote.TotalRest = creditNote.TotalCash;
+                            creditNote.CreateDate = DateTime.Now;
+                            creditNote.CreateUser = WebSecurity.CurrentUserId;
+                            creditNote.Statu = (int)GeneralStatusEnum.Active;
+                            creditNote.TypeNote = (int)NoteCreditEnum.PositiveBalance;
+                            context.NoteCredits.Add(creditNote);
+                            context.SaveChanges();
+                            if (identifyBachId > 0)
+                            {
+                                creditNote.IdentifyBaches.Add(context.IdentifyBaches.FirstOrDefault(r => r.Id == identifyBachId));
+                            }
+                            context.SaveChanges();
+                        }
+                        else
+                        {
+                            var mCreditNote = context.NoteCredits.FirstOrDefault(n => n.Id == creditNote.Id);
+                            mCreditNote.ClientId = creditNote.ClientId;
+                            mCreditNote.NoteDate = creditNote.CreateDate;
+                            mCreditNote.TotalCash = creditNote.TotalCash;
+                            mCreditNote.TotalRest = creditNote.TotalRest;
+                            mCreditNote.Concepts = creditNote.Concepts;
+                            context.SaveChanges();
+                            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Nota de Credito Editada", mCreditNote);
+                        }
+                        tx.Commit();
+                        Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Saldo a favor creado", creditNote);
+
+                        return new JsonResult() { Data = new { result = true, message = "Saldo a favor completado.", positiveBalance = creditNote.Id } };
                     }
                     catch (Exception e)
                     {

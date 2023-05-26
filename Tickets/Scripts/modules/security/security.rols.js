@@ -161,24 +161,6 @@
 				});
 			});
 
-			const chunkSize = 100;
-			var lista1 = [];
-			var lista2 = [];
-			var lista = 1;
-
-			for (let i = 0; i < moduleList.length; i += chunkSize) {
-				if (lista == 1) {
-					lista1 = moduleList.slice(i, i + chunkSize);
-				}
-				if (lista == 2) {
-					lista2 = moduleList.slice(i, i + chunkSize);
-				}
-				lista += 1;
-			}
-
-			console.log(lista1);
-			console.log(lista2);
-
 			$.ajax({
 				type: 'POST',
 				dataType: 'json',
@@ -192,6 +174,41 @@
 			});
 		}
 		/*End Manage ModuleList*/
+
+		this.updateModuleStatu = function (rolId, moduleId) {
+			var table = $('.dataTableGrid').DataTable();
+			table.search('')
+				.columns().search('')
+				.draw();
+			var moduleList = [];
+			$(self.$scope.modueList).each(function (i, module) {
+				moduleList.push({
+					RolId: rolId,
+					ModuleId: module.Id,
+					CanView: $('#RolModuleViewCheckBox' + module.Id)[0].checked,
+					CanEdit: $('#RolModuleEditCheckBox' + module.Id)[0].checked,
+					CanDelete: $('#RolModuleDeleteCheckBox' + module.Id)[0].checked,
+					CanAdd: $('#RolModuleAddCheckBox' + module.Id)[0].checked,
+					CanSearch: $('#RolModuleSearchCheckBox' + module.Id)[0].checked
+				});
+			});
+
+			moduleList = moduleList.filter(function (module) {
+				return (module.ModuleId == moduleId) == true;
+			});
+
+			$.ajax({
+				type: 'POST',
+				dataType: 'json',
+				contentType: 'application/json; charset=utf-8',
+				url: 'Security/SaveModuleForRol',
+				data: JSON.stringify({ 'models': moduleList }),
+				success: function (data) {
+					/*self.$state.go('app.securityRolList');*/
+					alertify.log('Permisos guardado correctamente!');
+				}
+			});
+		}
 
 		/*Start Manage OfficeList*/
 		this.getOfficeList = function () {
@@ -265,6 +282,7 @@
 				case 'app.securityModuleListInRol':
 					self.getModuleList();
 					$scope.manageModuleStatu = self.manageModuleStatu;
+					$scope.updateModuleStatu = self.updateModuleStatu;
 					break;
 				case 'app.securityOfficeListInRol':
 					self.getOfficeList();

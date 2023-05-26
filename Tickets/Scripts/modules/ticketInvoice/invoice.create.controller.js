@@ -22,7 +22,7 @@
             if (invoice.clientId == undefined) {
                 error += 'El Cliente' + isReq;
             }
-            if (invoice.condition == undefined) {
+            if (invoice.condition == undefined || invoice.condition == 0) {
                 error += 'El Condicion' + isReq;
             }
             if (invoice.taxReceipt == 0) {
@@ -224,7 +224,6 @@
             if (self.validateData($scope.invoice) === false) {
                 return;
             }
-            var t = $scope.invoice;
             window.loading.show();
             $.ajax({
                 type: 'POST',

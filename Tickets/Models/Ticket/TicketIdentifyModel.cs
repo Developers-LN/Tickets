@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tickets.Models.AuxModels;
@@ -260,7 +261,13 @@ namespace Tickets.Models.Ticket
                 s.Phone,
             }).ToList();
 
-            var documentTypes = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.DocumentType).Select(s => new
+            var documentTypes = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.DocumentType && w.Statu == true).Select(s => new
+            {
+                s.Id,
+                Name = s.NameDetail
+            }).ToList();
+
+            var genders = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.Gender && w.Statu == true).Select(s => new
             {
                 s.Id,
                 Name = s.NameDetail
@@ -269,7 +276,7 @@ namespace Tickets.Models.Ticket
             var identifyBach = context.IdentifyBaches.Where(a => a.Id == identifyId).AsEnumerable()
                 .Select(t => this.IdentifyBachToObject(t)).ToList().FirstOrDefault();
 
-            return new { result = true, identifyBach, raffles, clients, winners, documentTypes };
+            return new { result = true, identifyBach, raffles, clients, winners, documentTypes, genders };
         }
 
         internal object GetIdentifySellerData(int identifyId)
@@ -316,7 +323,13 @@ namespace Tickets.Models.Ticket
                 s.Phone,
             }).ToList();
 
-            var documentTypes = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.DocumentType).Select(s => new
+            var documentTypes = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.DocumentType && w.Statu == true).Select(s => new
+            {
+                s.Id,
+                Name = s.NameDetail
+            }).ToList();
+
+            var genders = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.Gender && w.Statu == true).Select(s => new
             {
                 s.Id,
                 Name = s.NameDetail
@@ -325,7 +338,7 @@ namespace Tickets.Models.Ticket
             var identifyBach = context.IdentifyBaches.Where(a => a.Id == identifyId).AsEnumerable()
                 .Select(t => this.IdentifyBachSellerToObject(t)).ToList().FirstOrDefault();
 
-            return new { result = true, identifyBach, raffles, clients, winners, documentTypes };
+            return new { result = true, identifyBach, raffles, clients, winners, documentTypes, genders };
         }
 
         internal object CertificationAwardData(int iNumberId, int number, int fractionFrom, int fractionTo, int raffleAwardId, int fractions)
@@ -356,7 +369,7 @@ namespace Tickets.Models.Ticket
                         tx.Commit();
                         certificateObject = new
                         {
-                            Id = certification.Id,
+                            certification.Id,
                             IdentifyNumberId = iNumberId,
                             Number = number,
                             FractionFrom = fractionFrom,
@@ -402,7 +415,7 @@ namespace Tickets.Models.Ticket
                         tx.Commit();
                         certificateObject = new
                         {
-                            Id = certification.Id,
+                            certification.Id,
                             Number = number,
                             RaffleAwardId = raffleAwardId,
                             CreateUser = WebSecurity.CurrentUserId,
@@ -589,7 +602,8 @@ namespace Tickets.Models.Ticket
                                     DocumentType = identifyBach.DocumentType,
                                     DocumentNumber = identifyBach.DocumentNumber,
                                     WinnerName = identifyBach.WinnerName,
-                                    Phone = identifyBach.WinnerPhone
+                                    Phone = identifyBach.WinnerPhone,
+                                    GenderId = identifyBach.GenderId
                                 };
                             }
                             context.Winners.Add(newWinner);
@@ -1060,12 +1074,9 @@ namespace Tickets.Models.Ticket
                         string identifyError = "";
                         for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
                         {
-                            foreach (var identify in identifyNumbers)
+                            if (identifyNumbers.Where(r => fraction >= r.FractionFrom && fraction <= r.FractionTo).Any())
                             {
-                                if (fraction >= identify.FractionFrom && fraction <= identify.FractionTo)
-                                {
-                                    identifyError += fraction + (fraction == awardTicket.FractionTo ? "" : ", ");
-                                }
+                                identifyError += fraction + (fraction == awardTicket.FractionTo ? "" : ", ");
                             }
                         }
                         if (identifyError != "")
@@ -1366,7 +1377,7 @@ namespace Tickets.Models.Ticket
                 ClientDesc = identifyBach.Client.Name,
                 identifyBach.Statu,
                 identifyBach.RaffleId,
-                Nombre = identifyBach.Nombre,
+                identifyBach.Nombre,
                 RaffleDesc = identifyBach.Raffle.Name,
                 hasPayment = (identifyBach.IdentifyBachPayments.Count > 0 || identifyBach.NoteCredits.Count > 0),
                 isPayed = Utils.IdentifyBachIsPayedMinor(identifyBach, awards)
@@ -1508,7 +1519,7 @@ namespace Tickets.Models.Ticket
                     AwardValue = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Award.Value : ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber),
                     FractionFrom = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionFrom,
                     FractionTo = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionTo,
-                    Id = ra.Id,
+                    ra.Id,
                     LawDiscount = ra.Award.ByFraction == (int)ByFractionEnum.S || ra.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor : 0,
                     Total = ra.Award.ByFraction == (int)ByFractionEnum.S || ra.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100) : (ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber) * (n.FractionTo - n.FractionFrom + 1)) * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100)) : (ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber)),
                 }).ToList()
@@ -1559,7 +1570,7 @@ namespace Tickets.Models.Ticket
                     AwardValue = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Award.Value : ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber),
                     FractionFrom = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionFrom,
                     FractionTo = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionTo,
-                    Id = ra.Id,
+                    ra.Id,
                     LawDiscount = ra.Award.ByFraction == (int)ByFractionEnum.S || ra.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor : 0,
                     Total = ra.Award.ByFraction == (int)ByFractionEnum.S || ra.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100) : (ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber) * (n.FractionTo - n.FractionFrom + 1)) * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100)) : (ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber)),
                 }).ToList()

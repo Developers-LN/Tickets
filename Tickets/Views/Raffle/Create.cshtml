@@ -51,9 +51,9 @@
                                     La fecha del sorteo no puede ser mayor a la fecha de expiración del prospecto ( {{(expirateDate | date:"dd/MM/yyyy")}} )
                                 </div>
                                 <div class="col-lg-6">
-                                    <label class="control-label-left">Hora de cierre de venta electrónica: <span class="color-red">*</span></label>
-                                    <input type="time"
-                                           ng-model="raffle.endElectronicSalesTime"
+                                    <label class="control-label-left">Fecha de caducidad del sorteo: <span class="color-red">*</span></label>
+                                    <input type="date"
+                                           ng-model="raffle.dueRaffleDate"
                                            class="form-control input-sm"
                                            ng-required="true" />
                                 </div>
@@ -97,6 +97,39 @@
                                     <label class="control-label-left">Hora de cierre de devolución: <span class="color-red">*</span></label>
                                     <input type="time"
                                            ng-model="raffle.endTime"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="col-lg-12 no-padder">
+                                <div class="col-lg-6">
+                                    <label class="control-label-left">Fecha de inicio de ventas electrónicas: <span class="color-red">*</span></label>
+                                    <input type="date"
+                                           ng-model="raffle.startElectronicSalesDateOnly"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                                <div class="col-lg-6">
+                                    <label class="control-label-left">Hora Inicio de ventas electrónicas: <span class="color-red">*</span></label>
+                                    <input type="time"
+                                           ng-model="raffle.startElectronicSalesTime"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="col-lg-12 no-padder">
+                                <div class="col-lg-6">
+                                    <label class="control-label-left">Hora de cierre de venta electrónica: <span class="color-red">*</span></label>
+                                    <input type="time"
+                                           ng-model="raffle.endElectronicSalesTime"
                                            class="form-control input-sm"
                                            ng-required="true" />
                                 </div>

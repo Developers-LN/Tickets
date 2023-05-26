@@ -729,6 +729,8 @@
     <Content Include="Images\user\06.jpg" />
     <Content Include="Images\user\07.jpg" />
     <Content Include="Images\user\08.jpg" />
+    <Content Include="lib\jquery.mask\jquery.mask.js" />
+    <Content Include="lib\jquery.mask\jquery.mask.min.js" />
     <Content Include="Manual\css\corporate.css" />
     <Content Include="Manual\css\prettyPhoto.css" />
     <Content Include="Manual\images\docs\manual-comercializacion-de-billetes\abrir-y-cuadrar-caja.png" />
@@ -813,9 +815,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\custom\tickestMain.js" />
+    <Content Include="Scripts\InputiMaskSettings.js" />
     <Content Include="Scripts\modules\agency\agency.list.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\modules\cash\positive.balance.controller.js" />
     <Content Include="Scripts\modules\cash\cash.positive.balance.list.controller.js" />
     <Content Include="Scripts\modules\cash\client.general.balance.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2510,6 +2514,7 @@
     </Content>
     <Content Include="Images\Sorting icons.psd" />
     <Content Include="packages.config" />
+    <Content Include="libman.json" />
     <None Include="Properties\PublishProfiles\Tickets IIS Express.pubxml" />
     <Content Include="Views\Agency\Create.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3239,6 +3244,8 @@
     <Content Include="Views\TicketAllocation\AllocationDeliverDetails.cshtml" />
     <Content Include="Views\Reports\DeliveredAllocation.cshtml" />
     <Content Include="Views\Winner\List.cshtml" />
+    <Content Include="Views\Cash\PositiveBalance.cshtml" />
+    <Content Include="Views\Reports\BilletesAnulados.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -13,10 +13,11 @@
                         <thead>
                             <tr>
                                 <th>Sorteo</th>
-                                <th class="text-center">Billetes <br /> facturados</th>
-                                <th class="text-center">Billetes <br /> devueltos</th>
-                                <th class="text-center">Billetes en <br /> circulación</th>
-                                <th class="text-center">Datos por <br /> cliente</th>
+                                <th class="text-center">Billetes facturados</th>
+                                <th class="text-center">Billetes devueltos</th>
+                                <th class="text-center">Billetes anulados</th>
+                                <th class="text-center">Billetes en circulación</th>
+                                <th class="text-center">Datos por cliente</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -27,6 +28,9 @@
                                 </td>
                                 <td class="text-center">
                                     <a href="/Reports/BilletesDevueltos?raffleId={{raffle.id}}" target="_blank" title="Imprimir Billetes devueltos"><i class="fa fa-print"></i></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reports/BilletesAnulados?raffleId={{raffle.id}}" target="_blank" title="Imprimir Billetes anulados"><i class="fa fa-print"></i></a>
                                 </td>
                                 <td class="text-center">
                                     <a href="/Reports/BilletesCirculacion?raffleId={{raffle.id}}" target="_blank" title="Numeros Billetes en circulación"><i class="fa fa-print"></i></a>

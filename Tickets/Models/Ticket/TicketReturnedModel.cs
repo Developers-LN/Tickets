@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Tickets.Models.Enums;
+using Tickets.Models.XML;
 using WebMatrix.WebData;
 
 namespace Tickets.Models.Ticket
@@ -147,8 +148,6 @@ namespace Tickets.Models.Ticket
 
         internal RequestResponseModel ValidateTicketReturned(TicketReturnedModel model)
         {
-            //int clientId = 0;
-            //string clientName = "";
             bool state = false;
             using (var context = new TicketsEntities())
             {
@@ -225,9 +224,6 @@ namespace Tickets.Models.Ticket
                                     Message = "El billete " + ticketReturn.NumberId + " no se ha asignado."
                                 };
                             }
-
-                            //clientId = ticketReturn.ClientId;
-                            //clientName = context.Clients.FirstOrDefault(r => r.Id == clientId).Name;
 
                             var messageList = new List<string>();
 
@@ -420,21 +416,17 @@ namespace Tickets.Models.Ticket
 
                             foreach (var client in ClientGroup)
                             {
-                                //messageList.Add("Los billetes No. ");
-                                sb.Append(" Los billetes");
+                                sb.Append(" Los billetes ");
                                 foreach (var ticket in DataFromOtherClients.Where(w => w.Name == client))
                                 {
-                                    sb.Append(ticket.Number.ToString().PadLeft(raffleData.Production, '0'));
+                                    sb.Append(ticket.Number.ToString().PadLeft((raffleData.Production - 1), '0'));
                                     sb.Append(", ");
-                                    //messageList.Add(ticket.Number.ToString().PadLeft(raffleData.Production, '0'));
                                 }
                                 sb.Append(" pertenecen al cliente ");
                                 sb.Append(client);
                                 sb.Append(".");
                                 sb.AppendLine();
-                                //messageList.Add("Pertenecen a " + client);
                             }
-
                         }
                         if (state)
                         {
@@ -442,9 +434,6 @@ namespace Tickets.Models.Ticket
                             {
                                 Result = false,
                                 Message = sb.ToString()
-                                //Message = messageList.ToString()
-                                /*,
-                                Object = messageList.ToString()*/
                             };
                         }
 
@@ -529,7 +518,6 @@ namespace Tickets.Models.Ticket
                                 {
                                     sb.Append("desde " + returnedTicket.FractionFrom);
                                     sb.Append(" hasta " + returnedTicket.FractionTo);
-                                    //sb.Append("del billete " + returnedTicket.);
                                     sb.Append(",");
                                     notAllReturnet = true;
                                 }

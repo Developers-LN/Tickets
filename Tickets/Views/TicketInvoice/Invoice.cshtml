@@ -12,7 +12,7 @@
                     <div class="col-lg-6 no-padder">
                         <fieldset>
                             <div class="form-group">
-                                <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
+                                <label class="col-lg-12 control-label-left">Sorteo: <span class="color-red">*</span></label>
                                 <div class="col-lg-12" ng-if="invoice.id == 0">
                                     <select ng-required="true" class="form-control dropdown-select2" ng-model="invoice.raffleId" ng-change="updateAllocations()">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
@@ -28,7 +28,7 @@
                     <div class="col-lg-6 no-padder">
                         <fieldset>
                             <div class="form-group">
-                                <label class="col-lg-12 control-label-left">Cliente:  <span class="color-red">*</span></label>
+                                <label class="col-lg-12 control-label-left">Cliente: <span class="color-red">*</span></label>
                                 <div class="col-lg-12" ng-if="invoice.id == 0">
                                     <select ng-required="true" class="form-control dropdown-select2" ng-model="invoice.clientId" ng-change="updateAllocations()">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione un cliente</option>
@@ -44,7 +44,7 @@
                     <div class="col-lg-6 no-padder">
                         <fieldset>
                             <div class="form-group">
-                                <label class="col-lg-12 control-label-left">Fecha de la factura:  <span class="color-red">*</span></label>
+                                <label class="col-lg-12 control-label-left">Fecha de la factura: <span class="color-red">*</span></label>
                                 <div class="col-lg-12" ng-if="invoice.id == 0">
                                     <input type="date"
                                            ng-model="invoice.invoiceDate"
@@ -60,22 +60,22 @@
                     <div class="col-lg-6 no-padder">
                         <fieldset>
                             <div class="form-group">
-                                <label class="col-lg-12 control-label-left">Condición:  <span class="color-red">*</span></label>
+                                <label class="col-lg-12 control-label-left">Condición: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <select ng-required="true" class="form-control" ng-model="invoice.condition">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="invoice.condition">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione una condición</option>
-                                        <option ng-repeat="condition in conditions" value="{{condition.id}}" ng-selected="condition.id == @((int)Tickets.Models.Enums.InvoiceConditionEnum.Credit)">{{condition.nameDetail}}</option>
+                                        <option ng-repeat="condition in conditions" value="{{condition.id}}">{{condition.nameDetail}}</option>
                                     </select>
                                 </div>
                             </div>
                         </fieldset>
                     </div>
-                    <div class="col-lg-6 no-padder">
-                        <fieldset ng-show="invoice.condition == @((int)Tickets.Models.Enums.InvoiceConditionEnum.Credit)">
+                    <div class="col-lg-6 no-padder" ng-show="invoice.condition == @((int)Tickets.Models.Enums.InvoiceConditionEnum.Credit)">
+                        <fieldset>
                             <div class="form-group">
-                                <label class="col-lg-12 control-label-left">Dias de expiración:  <span class="color-red">*</span></label>
+                                <label class="col-lg-12 control-label-left">Dias de expiración: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <select ng-required="true" class="form-control" ng-model="invoice.invoiceExpredDay">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="invoice.invoiceExpredDay">
                                         <option ng-repeat="xpireInvoiceTime in xpireInvoiceTimes" value="{{xpireInvoiceTime.description}}" ng-selected="xpireInvoiceTime.description == invoice.invoiceExpredDay">{{xpireInvoiceTime.nameDetail}}</option>
                                     </select>
                                 </div>
@@ -85,7 +85,7 @@
                     <div class="col-lg-6 no-padder">
                         <fieldset>
                             <div class="form-group">
-                                <label class="col-lg-12 control-label-left">Tipo de comprobante fiscal:  <span class="color-red">*</span></label>
+                                <label class="col-lg-12 control-label-left">Tipo de comprobante fiscal: <span class="color-red">*</span></label>
                                 <div class="col-lg-12" ng-if="invoice.id == 0">
                                     <select ng-required="true" class="form-control dropdown-select2" ng-model="invoice.taxReceipt">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione un tipo de comprobante fiscal</option>
@@ -102,7 +102,7 @@
                         <div class="col-lg-12 well">
                             <fieldset>
                                 <div class="form-group">
-                                    <label class="col-lg-12 control-label-left">Asignación de billetes:  <span class="color-red">*</span></label>
+                                    <label class="col-lg-12 control-label-left">Asignación de billetes: <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
                                         <div class="checkbox c-checkbox col-lg-4" style="margin-top:5px;" ng-repeat="allocation in ticketAllocations">
                                             <label>
@@ -123,7 +123,7 @@
                         <div class="col-lg-12 well">
                             <fieldset>
                                 <div class="form-group">
-                                    <label class="col-lg-12 control-label-left">Asignación de quinielas:  <span class="color-red">*</span></label>
+                                    <label class="col-lg-12 control-label-left">Asignación de quinielas: <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
                                         <div class="checkbox c-checkbox col-lg-4" style="margin-top:5px;" ng-repeat="allocation in poolAllocations">
                                             <label>
@@ -143,7 +143,7 @@
                     <div class="col-lg-6 no-padder hide">
                         <fieldset>
                             <div class="form-group">
-                                <label class="col-lg-12 control-label-left">Tipo de Pago:  <span class="color-red">*</span></label>
+                                <label class="col-lg-12 control-label-left">Tipo de Pago: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
                                     <select ng-required="true" class="form-control" ng-model="invoice.paymentType">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione una Tipo de Pago</option>

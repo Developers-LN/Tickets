@@ -1,12 +1,22 @@
 ﻿@model Tickets.Models.Raffle
 @{
+    var checkClientId = ViewBag.ClientId == null ? 0 : (int)ViewBag.ClientId;
+    var checkInvoiceId = ViewBag.invoiceId == null ? 0 : (int)ViewBag.invoiceId;
+
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Facturas por sorteo";
+    if (checkClientId == 0 && checkInvoiceId == 0)
+    {
+        ViewBag.Title = "NUMEROS FACTURADOS CORRESPONDIENTES AL SORTEO NO. " + Model.Id;
+    }
+    else
+    {
+        ViewBag.Title = "NUMEROS CORRESPONDIENTES A LA FACTURA NO. " + checkInvoiceId + " DEL SORTEO NO. " + Model.Id;
+    }
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.CajaGeneral : "";
-    string adminCargo = config != null ? config.CajaGeneralCargo : "";
+    string adminName = config != null ? config.Facturacion : "";
+    string adminCargo = config != null ? config.FacturacionCargo : "";
 }
 
 <style>
@@ -42,6 +52,7 @@
         padding-right: 5px;
     }
 </style>
+
 <div class="col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
@@ -54,22 +65,32 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <b>DETALLE DE FACTURAS SORTEO NO.@Model.Id DE FECHA @Model.DateSolteo.ToShortDateString()</b>
+            @if (checkClientId == 0 && checkInvoiceId == 0)
+            {
+                <b>DETALLE DE LA FACTURAS SORTEO NO. @Model.Id DE FECHA @Model.DateSolteo.ToShortDateString()</b>
+            }
+            else
+            {
+                <b>DETALLE DE LA FACTURA NO. @checkInvoiceId DE FECHA @Model.Invoices.FirstOrDefault(f => f.Id == checkInvoiceId).CreateDate.ToShortDateString()</b>
+            }
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @Model.TicketAllocations.Select(f => f.CreateDate.ToShortDateString()).FirstOrDefault() <br />
-            <b>Hora: </b> @Model.TicketAllocations.Select(h => h.CreateDate.ToShortTimeString()).FirstOrDefault() <br />
-            <b>Numero del Sorteo: </b> @Model.Id
+            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>HORA: </b> @DateTime.Now.ToShortTimeString() <br />
+            <b>NUMERO DEL SORTEO: </b> @Model.Id
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
         <table class="table">
             <thead>
                 <tr>
-                    <th class="text-left">FACTURA</th>
-                    <th class="text-right">NUMERO</th>
-                    <th class="text-right">FRACCIONES</th>
-                    <th class="text-right">CANTIDAD</th>
+                    @if (checkClientId == 0 && checkInvoiceId == 0)
+                    {
+                        <th class="text-center">FACTURA</th>
+                    }
+                    <th class="text-center">NUMERO</th>
+                    <th class="text-center">FRACCIONES</th>
+                    <th class="text-center">CANTIDAD</th>
                     <th class="text-right">PRECIO POR FRACCION</th>
                     <th class="text-right">TOTAL</th>
                 </tr>
@@ -95,7 +116,7 @@
                     int subTotalNumber = 0, subTotalFraction = 0;
                     decimal subTotalValue = 0.0m, clientDiscount = 0.00m;
                     <tr>
-                        <th colspan="6">@client.Client.Name</th>
+                        <th colspan="6" class="text-center">@client.Client.Id - @client.Client.Name</th>
                     </tr>
                     foreach (var invoice in client.Invoices)
                     {
@@ -104,43 +125,54 @@
                             subTotalNumber += 1;
                             subTotalFraction += number.Quantity;
                             var priceFraction = invoice.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == invoice.Client.PriceId).FactionPrice;
-                            var stringNumber = number.TicketAllocationNumber.Number.ToString();
                             var subTotal = number.Quantity * priceFraction;
                             <tr>
-                                <td class="text-left"><b>@invoice.Id</b></td>
-                                <td class="text-right">@stringNumber</td>
-                                <td class="text-right">@number.TicketAllocationNumber.FractionFrom - @number.TicketAllocationNumber.FractionTo</td>
-                                <td class="text-right">@number.Quantity</td>
+                                @if (checkClientId == 0 && checkInvoiceId == 0)
+                                {
+                                    <td class="text-center"><b>@invoice.Id</b></td>
+                                }
+                                <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(((Model.Prospect.Production - 1).ToString().Length), '0')</td>
+                                <td class="text-center">@number.TicketAllocationNumber.FractionFrom - @number.TicketAllocationNumber.FractionTo</td>
+                                <td class="text-center">@number.Quantity</td>
                                 <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                 <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             </tr>
                             subTotalValue += subTotal;
                         }
                     }
-                    clientDiscount = (subTotalValue * client.Client.Discount) / 100;
+                    clientDiscount = (subTotalValue * client.Invoices.FirstOrDefault().Discount) / 100;
                     <tr class="" style="border-top: 2px solid black">
+                        @if (checkClientId == 0 && checkInvoiceId == 0)
+                        {
+                            <td class="text-right"></td>
+                        }
+                        <td class="text-center">@subTotalNumber</td>
                         <td class="text-right"></td>
-                        <td class="text-right">@subTotalNumber</td>
+                        <td class="text-center">@subTotalFraction</td>
                         <td class="text-right"></td>
-                        <td class="text-right">@subTotalFraction</td>
-                        <td class="text-right"></td>
-                        <td class="text-right" style="font-weight:bold;">Sub Total: @subTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right" style="font-weight:bold;">SUB TOTAL: @subTotalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     <tr class="">
+                        @if (checkClientId == 0 && checkInvoiceId == 0)
+                        {
+                            <td class="text-right"></td>
+                        }
                         <td class="text-right"></td>
                         <td class="text-right"></td>
                         <td class="text-right"></td>
                         <td class="text-right"></td>
-                        <td class="text-right"></td>
-                        <td class="text-right" style="font-weight:bold;">@(client.Client.Discount)% Descuento del Cliente: @clientDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right" style="font-weight:bold;">@(client.Invoices.FirstOrDefault().Discount)% DESCUENTO: @clientDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
                     <tr class="">
+                        @if (checkClientId == 0 && checkInvoiceId == 0)
+                        {
+                            <td class="text-right"></td>
+                        }
                         <td class="text-right"></td>
                         <td class="text-right"></td>
                         <td class="text-right"></td>
                         <td class="text-right"></td>
-                        <td class="text-right"></td>
-                        <td class="text-right" style="font-weight:bold;">Total: @((subTotalValue - clientDiscount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-right" style="font-weight:bold;">TOTAL: @((subTotalValue - clientDiscount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
                     </tr>
                     totalNumber += subTotalNumber;
                     totalFraction += subTotalFraction;
@@ -150,28 +182,37 @@
             </tbody>
             <tfoot>
                 <tr class="" style="border-top: 4px double black">
+                    @if (checkClientId == 0 && checkInvoiceId == 0)
+                    {
+                        <td class="text-right"></td>
+                    }
+                    <td class="text-center">@totalNumber</td>
                     <td class="text-right"></td>
-                    <td class="text-right">@totalNumber</td>
+                    <td class="text-center">@totalFraction</td>
                     <td class="text-right"></td>
-                    <td class="text-right">@totalFraction</td>
-                    <td class="text-right"></td>
-                    <td class="text-right" style="font-weight:bold;"> Sub Total: @totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right" style="font-weight:bold;"> SUB TOTAL: @totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
                 <tr class="">
+                    @if (checkClientId == 0 && checkInvoiceId == 0)
+                    {
+                        <td class="text-right"></td>
+                    }
                     <td class="text-right"></td>
                     <td class="text-right"></td>
                     <td class="text-right"></td>
                     <td class="text-right"></td>
-                    <td class="text-right"></td>
-                    <td class="text-right" style="font-weight:bold;">Descuento: @totalClientDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right" style="font-weight:bold;">DESCUENTO: @totalClientDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
                 <tr class="">
+                    @if (checkClientId == 0 && checkInvoiceId == 0)
+                    {
+                        <td class="text-right"></td>
+                    }
                     <td class="text-right"></td>
                     <td class="text-right"></td>
                     <td class="text-right"></td>
                     <td class="text-right"></td>
-                    <td class="text-right"></td>
-                    <td class="text-right" style="font-weight:bold;">Total General: @((totalValue - totalClientDiscount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                    <td class="text-right" style="font-weight:bold;">TOTAL GENERAL: @((totalValue - totalClientDiscount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
                 </tr>
             </tfoot>
         </table>

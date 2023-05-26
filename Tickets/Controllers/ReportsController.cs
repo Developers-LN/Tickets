@@ -339,6 +339,17 @@ namespace Tickets.Controllers
         }
 
         //
+        //  GET: Reports/BilletesAnulados
+        [Authorize]
+        [HttpGet]
+        public ActionResult BilletesAnulados(int raffleId)
+        {
+            var context = new TicketsEntities();
+            var tickets = context.TicketAllocationNumbers.Where(w => w.RaffleId == raffleId && w.Statu == (int)TicketStatusEnum.Anulated);
+            return View(tickets);
+        }
+
+        //
         //  GET: Reports/PrintedNumbesForRaffle
         [Authorize]
         [HttpGet]
@@ -971,10 +982,16 @@ namespace Tickets.Controllers
 
             DateTime FechaConvert = DateTime.Parse(Fecha);
 
-            var receiptPayment = context.ReceiptPayments.Include(i => i.Invoice)
-                .Include(c => c.Client).AsEnumerable()
-                .Where(i => i.CreateUser == userId && i.CreateDate.Date == FechaConvert.Date)
-                .ToList();
+            List<ReceiptPayment> receiptPayment = new List<ReceiptPayment>();
+
+            if(userId == 0)
+            {
+                receiptPayment = context.ReceiptPayments.AsEnumerable().Where(i => i.CreateDate.Date == FechaConvert.Date).ToList();
+            }
+            else
+            {
+                receiptPayment = context.ReceiptPayments.AsEnumerable().Where(i => i.CreateUser == userId && i.CreateDate.Date == FechaConvert.Date).ToList();
+            }
 
             if (receiptPayment.Count <= 0)
             {
@@ -1206,6 +1223,7 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var startD = DateTime.Parse(startDate);
             var endD = DateTime.Parse(endDate);
+
             List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
             var InvoiceDetails = context.InvoiceDetails.AsEnumerable().Where(i => (i.Id == raffleId || raffleId == 0) && (i.CreateDate.Date >= startD.Date && i.CreateDate.Date <= endD.Date)).ToList();
 
@@ -1543,7 +1561,11 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var allocations = context.TicketAllocations.AsEnumerable().Where(i => i.RaffleId == raffleId
-                && (i.ClientId == clientId || clientId == 0) && i.Statu == (int)AllocationStatuEnum.Delivered).ToList();
+                && (i.ClientId == clientId || clientId == 0) &&
+                (i.Statu == (int)AllocationStatuEnum.Consigned || i.Statu == (int)AllocationStatuEnum.Delivered ||
+                 i.Statu == (int)AllocationStatuEnum.Invoiced || i.Statu == (int)AllocationStatuEnum.Returned)
+                 && (i.Client.GroupId != (int)ClientGroupEnum.DistribuidorElectronico || i.Client.GroupId != (int)ClientGroupEnum.DistribuidorXML))
+                .OrderBy(o => o.Id).ToList();
 
             if (allocations.Count == 0)
             {

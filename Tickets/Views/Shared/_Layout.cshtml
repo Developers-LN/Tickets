@@ -17,7 +17,7 @@
 </head>
 
 <body ng-clok="" ng-class="{ 'layout-fixed' : app.layout.isFixed, 'layout-boxed' : app.layout.isBoxed, 'layout-dock' : app.layout.isDocked, 'layout-material': app.layout.isMaterial, 'aside-offscreen' : app.sidebar.isOffscreen, 'footer-hidden': app.footer.hidden, 'in-app': !$state.includes('page')}">
-    
+
     <div ui-view class="app-container" ng-controller="CoreController">@RenderBody()</div>
 
     <!-- Settings-->
@@ -41,10 +41,12 @@
     @Scripts.Render("~/bundles/VendorScripts")
     @Scripts.Render("~/bundles/ApplicationScripts")
 
-    
+
     @RenderSection("scripts", required: false)
 
     <script src="~/Scripts/angular-ui-router.min.js"></script>
+    <script src="~/lib/jquery.mask/jquery.mask.min.js"></script>
+    <script src="~/Scripts/InputiMaskSettings.js"></script>
 
 </body>
 

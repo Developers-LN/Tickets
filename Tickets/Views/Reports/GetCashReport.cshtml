@@ -2,20 +2,16 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Reporte Caja";
+    ViewBag.Title = "REPORTE DE INGRESOS DE CAJA DE FECHA " + Model.FirstOrDefault().CreateDate.ToString("dd-MM-yyyy");
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.CajaGeneral : "";
     string adminCargo = config != null ? config.CajaGeneralCargo : "";
     decimal Total = 0.0m;
-    var user = Model.Count > 0 ? context.Users.AsEnumerable().FirstOrDefault(u => u.Id == Model.FirstOrDefault().CreateUser) : null;
-    var Genero = 0;
+    decimal TotalGeneral = 0.0m;
 
-    if (user != null)
-    {
-        Genero = context.Users.Where(w => w.Id == user.Id).Select(s => s.Employee.Gender).FirstOrDefault();
-    }
+    var countUsers = Model.GroupBy(g => g.CreateUser).Select(s => s.Key).ToList();
 
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 
@@ -76,112 +72,251 @@
         </div>
     </div>
     <div>
-        <div class="col-lg-12 no-padder">
-            @if (Genero == (int)Tickets.Models.Enums.GenderEnum.Femenino)
+        @if (countUsers.Count() > 1)
+        {
+            foreach (var user in countUsers)
             {
-                <strong>CAJERA: @(user.Employee.Name + " " + user.Employee.LastName)</strong>
-            }
-            else if (Genero == (int)Tickets.Models.Enums.GenderEnum.Masculino)
-            {
-                <strong>CAJERO: @(user.Employee.Name + " " + user.Employee.LastName)</strong>
-            }
-            @*else
-                {
-                    <strong>Usuario:@(user != null ? (user.Id + " - " + user.Name) : "")</strong>
-                }*@
-        </div>
-        <div class="col-lg-12 no-padder">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="text-center">FACTURA</th>
-                        <th class="text-center">RECIBO</th>
-                        <th>CLIENTE</th>
-                        <th>FECHA</th>
-                        <th class="text-center">SORTEO</th>
-                        <th>FORMA DE PAGO</th>
-                        @if (Model.Any(a => a.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect))
-                        {
-                            <th>REFERENCIA</th>
-                        }
-                        <th class="text-right">VALOR</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var receiptPayment in Model)
-                    {
-                        Total += (receiptPayment.TotalCash + receiptPayment.TotalCheck + receiptPayment.TotalCredit);
-                        <tr>
-                            <td class="text-center">
-                                @receiptPayment.Invoice.Id
-                            </td>
-                            <td class="text-center">
-                                @receiptPayment.Id
-                            </td>
-                            <td>
-                                @if (receiptPayment.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)
+                bool trans = false;
+                Total = 0;
+                <div class="col-lg-12 no-padder">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                @{
+                                    var Cajero = context.Users.Where(W => W.Id == user).Select(S => new { S.Employee.Name, S.Employee.LastName });
+                                }
+                                @if (Model.Any(a => a.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect))
                                 {
-                                    @(receiptPayment.Client.Id + " - " + receiptPayment.Client.Name)<br />@(receiptPayment.Nombre)
+                                    trans = true;
+                                    <th colspan="8" class="text-center">
+                                        @(Cajero.FirstOrDefault().Name + " " + Cajero.FirstOrDefault().LastName)
+                                    </th>
                                 }
                                 else
                                 {
-                                    @(receiptPayment.Client.Id + " - " + receiptPayment.Client.Name)
+                                    <th colspan="7" class="text-center">
+                                        @(Cajero.FirstOrDefault().Name + " " + Cajero.FirstOrDefault().LastName)
+                                    </th>
                                 }
-                            </td>
-                            <td>@receiptPayment.CreateDate.ToString()</td>
-                            <td class="text-center">@receiptPayment.Invoice.Raffle.Id</td>
-                            <td>
-                                @if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
+                            </tr>
+                            <tr>
+                                <th class="text-center">FACTURA</th>
+                                <th class="text-center">RECIBO</th>
+                                <th class="text-left">CLIENTE</th>
+                                <th class="text-left">FECHA</th>
+                                <th class="text-center">SORTEO</th>
+                                <th class="text-left">FORMA DE PAGO</th>
+                                @if (Model.Any(a => a.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect))
                                 {
-                                    @Efectivo;
+                                    <th>REFERENCIA</th>
                                 }
-                                else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
-                                {
-                                    @Cheque;
-                                }
-                                else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
-                                {
-                                    @TargetaCredito;
-                                }
-                                else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
-                                {
-                                    @NotaCredito;
-                                }
-                                else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
-                                {
-                                    @DepTransf;
-                                }
-                            </td>
+                                <th class="text-right">VALOR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var receiptPayment in Model.Where(w => w.CreateUser == user))
+                            {
+                                //Total += (receiptPayment.TotalCash + receiptPayment.TotalCheck + receiptPayment.TotalCredit);
+                                <tr>
+                                    <td class="text-center">
+                                        @receiptPayment.Invoice.Id
+                                    </td>
+                                    <td class="text-center">
+                                        @receiptPayment.Id
+                                    </td>
+                                    <td>
+                                        @if (receiptPayment.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)
+                                        {
+                                            @(receiptPayment.Client.Id + " - " + receiptPayment.Client.Name)<br />@(receiptPayment.Nombre)
+                                        }
+                                        else
+                                        {
+                                            @(receiptPayment.Client.Id + " - " + receiptPayment.Client.Name)
+                                        }
+                                    </td>
+                                    <td>@receiptPayment.CreateDate.ToString()</td>
+                                    <td class="text-center">@receiptPayment.Invoice.Raffle.Id</td>
+                                    <td>
+                                        @if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
+                                        {
+                                            @Efectivo;
+                                        }
+                                        else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
+                                        {
+                                            @Cheque;
+                                        }
+                                        else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
+                                        {
+                                            @TargetaCredito;
+                                        }
+                                        else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                                        {
+                                            @NotaCredito;
+                                        }
+                                        else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                                        {
+                                            @DepTransf;
+                                        }
+                                    </td>
+                                    @if (Model.Any(a => a.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect))
+                                    {
+                                        <td>
+                                            @receiptPayment.Recibo
+                                        </td>
+                                    }
+                                    <td class="text-right">
+                                        @if (receiptPayment.TotalCash > 0)
+                                        {
+                                            TotalGeneral += receiptPayment.TotalCash;
+                                            Total += receiptPayment.TotalCash;
+                                            @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                        }
+                                        else if (receiptPayment.TotalCredit > 0)
+                                        {
+                                            TotalGeneral += receiptPayment.TotalCredit;
+                                            Total += receiptPayment.TotalCredit;
+                                            @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                        }
+                                        else
+                                        {
+                                            TotalGeneral += receiptPayment.TotalCheck;
+                                            Total += receiptPayment.TotalCheck;
+                                            @(receiptPayment.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            @if (trans == true)
+                            {
+                                <tr class="total">
+                                    <td colspan="8" class="text-right">TOTAL: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr class="total">
+                                    <td colspan="7" class="text-right">TOTAL: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            <div class="col-lg-12 no-padder">
+                <table class="table">
+                    <tr>
+                        <th class="text-right">TOTAL GENERAL: @(TotalGeneral.ToString("c", new System.Globalization.CultureInfo("es-DO")))</th>
+                    </tr>
+                </table>
+            </div>
+        }
+        else
+        {
+            int UserId = Model.FirstOrDefault().CreateUser;
+            var UserData = context.Users.Where(f => f.Id == UserId).Select(s => new { s.Employee.Gender, s.Employee.Name, s.Employee.LastName });
+            <div class="col-lg-12 no-padder">
+                @if (UserData.FirstOrDefault().Gender == (int)Tickets.Models.Enums.GenderEnum.Femenino)
+                {
+                    <strong>CAJERA: @(UserData.FirstOrDefault().Name + " " + UserData.FirstOrDefault().LastName)</strong>
+                }
+                else if (UserData.FirstOrDefault().Gender == (int)Tickets.Models.Enums.GenderEnum.Masculino)
+                {
+                    <strong>CAJERA: @(UserData.FirstOrDefault().Name + " " + UserData.FirstOrDefault().LastName)</strong>
+                }
+            </div>
+            <div class="col-lg-12 no-padder">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">FACTURA</th>
+                            <th class="text-center">RECIBO</th>
+                            <th>CLIENTE</th>
+                            <th>FECHA</th>
+                            <th class="text-center">SORTEO</th>
+                            <th>FORMA DE PAGO</th>
                             @if (Model.Any(a => a.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect))
                             {
-                                <td>
-                                    @receiptPayment.Recibo
-                                </td>
+                                <th>REFERENCIA</th>
                             }
-                            <td class="text-right">
-                                @if (receiptPayment.TotalCash > 0)
-                                {
-                                    @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                }
-                                else if (receiptPayment.TotalCredit > 0)
-                                {
-                                    @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                }
-                                else
-                                {
-                                    @(receiptPayment.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                }
-                            </td>
+                            <th class="text-right">VALOR</th>
                         </tr>
-                    }
-                    <tr class="total">
-                        <td colspan="8" class="text-right">Total: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var receiptPayment in Model)
+                        {
+                            Total += (receiptPayment.TotalCash + receiptPayment.TotalCheck + receiptPayment.TotalCredit);
+                            <tr>
+                                <td class="text-center">
+                                    @receiptPayment.Invoice.Id
+                                </td>
+                                <td class="text-center">
+                                    @receiptPayment.Id
+                                </td>
+                                <td>
+                                    @if (receiptPayment.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)
+                                    {
+                                        @(receiptPayment.Client.Id + " - " + receiptPayment.Client.Name)<br />@(receiptPayment.Nombre)
+                                    }
+                                    else
+                                    {
+                                        @(receiptPayment.Client.Id + " - " + receiptPayment.Client.Name)
+                                    }
+                                </td>
+                                <td>@receiptPayment.CreateDate.ToString()</td>
+                                <td class="text-center">@receiptPayment.Invoice.Raffle.Id</td>
+                                <td>
+                                    @if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Cash)
+                                    {
+                                        @Efectivo;
+                                    }
+                                    else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Checks)
+                                    {
+                                        @Cheque;
+                                    }
+                                    else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditCard)
+                                    {
+                                        @TargetaCredito;
+                                    }
+                                    else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+                                    {
+                                        @NotaCredito;
+                                    }
+                                    else if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
+                                    {
+                                        @DepTransf;
+                                    }
+                                </td>
+                                @if (Model.Any(a => a.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect))
+                                {
+                                    <td>
+                                        @receiptPayment.Recibo
+                                    </td>
+                                }
+                                <td class="text-right">
+                                    @if (receiptPayment.TotalCash > 0)
+                                    {
+                                        @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                    }
+                                    else if (receiptPayment.TotalCredit > 0)
+                                    {
+                                        @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                    }
+                                    else
+                                    {
+                                        @(receiptPayment.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        <tr class="total">
+                            <td colspan="8" class="text-right">TOTAL: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
+
 
     <div class="col-lg-12 no-padder text-center">
         <b>@adminName</b>

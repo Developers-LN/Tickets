@@ -24,8 +24,12 @@ namespace Tickets.Models
         public string DocumentNumber { get; set; }
         public string Phone { get; set; }
         public string WinnerName { get; set; }
+        public Nullable<int> GenderId { get; set; }
+        public Nullable<int> CreateUser { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
     
         public virtual Catalog Catalog { get; set; }
         public virtual ICollection<IdentifyBach> IdentifyBaches { get; set; }
+        public virtual Catalog Catalog1 { get; set; }
     }
 }

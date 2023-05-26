@@ -27,6 +27,7 @@ namespace Tickets.Models
             this.TaxReceipts = new HashSet<TaxReceipt>();
             this.TaxReceiptNumbers = new HashSet<TaxReceiptNumber>();
             this.Winners = new HashSet<Winner>();
+            this.Winners1 = new HashSet<Winner>();
         }
     
         public int Id { get; set; }
@@ -49,5 +50,6 @@ namespace Tickets.Models
         public virtual ICollection<TaxReceipt> TaxReceipts { get; set; }
         public virtual ICollection<TaxReceiptNumber> TaxReceiptNumbers { get; set; }
         public virtual ICollection<Winner> Winners { get; set; }
+        public virtual ICollection<Winner> Winners1 { get; set; }
     }
 }

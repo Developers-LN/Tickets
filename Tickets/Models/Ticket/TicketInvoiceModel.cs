@@ -239,7 +239,7 @@ namespace Tickets.Models.Ticket
                 invoice = new TicketInvoiceModel()
                 {
                     Id = 0,
-                    Condition = (int)InvoiceConditionEnum.Credit,
+                    Condition = 0,
                     InvoiceExpredDay = 14,
                     InvoiceDateLong = DateTime.Now.ToUnixTime(),
                     TicketAllocations = new List<TicketAllocationModel>()
@@ -410,7 +410,8 @@ namespace Tickets.Models.Ticket
                             }
                             else
                             {
-                                invoice.PaymentStatu = (int)InvoicePaymentStatuEnum.Payed;
+                                invoice.PaymentStatu = (int)InvoicePaymentStatuEnum.Pendient;
+                                //invoice.PaymentStatu = (int)InvoicePaymentStatuEnum.Payed;
                             }
 
                             if (taxReceiptNumber.Value != 0 || taxReceiptNumber != 0 || taxReceiptNumber > 1 || taxReceiptNumber.Value > 1)
@@ -513,7 +514,8 @@ namespace Tickets.Models.Ticket
                             }
                             else
                             {
-                                invoice.PaymentStatu = (int)InvoicePaymentStatuEnum.Payed;
+                                invoice.PaymentStatu = (int)InvoicePaymentStatuEnum.Pendient;
+                                //invoice.PaymentStatu = (int)InvoicePaymentStatuEnum.Payed;
                             }
                         }
                         context.SaveChanges();

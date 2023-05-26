@@ -182,8 +182,8 @@ namespace Tickets.Controllers
                                  select new
                                  {
                                      Number = Utils.AddZeroToNumber((raffle.Prospect.Production - 1).ToString().Length, (int)n.Number),
-                                     FractionFrom = n.FractionFrom,
-                                     FractionTo = n.FractionTo,
+                                     n.FractionFrom,
+                                     n.FractionTo,
                                      Award = new
                                      {
                                          AwardId = a.Id,

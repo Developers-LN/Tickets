@@ -7,10 +7,10 @@
 
     angular
         .module('naut')
-        .controller('CashAdvanceController', CashAdvanceController);
+        .controller('PositiveBalanceController', PositiveBalanceController);
 
-    CashAdvanceController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
-    function CashAdvanceController($scope, $state, $rootScope, $stateParams) {
+    PositiveBalanceController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
+    function PositiveBalanceController($scope, $state, $rootScope, $stateParams) {
         var self = this;
         $scope.identifyBachId = $stateParams.raffleAwardId;
         $scope.creditNote = {
@@ -71,7 +71,7 @@
 
         this.loadCreaditNote = function () {
             window.loading.show();
-            $.when($.ajax('Cash/GetCashAdvanceInfo')).done(function (cashAdvanceInfo) {
+            $.when($.ajax('Cash/GetPositiveBalanceInfo')).done(function (cashAdvanceInfo) {
                 $scope.clients = cashAdvanceInfo.clients;
                 $scope.raffles = cashAdvanceInfo.raffles;
                 $scope.totalRestant = 100000000;
@@ -88,7 +88,7 @@
             if ($scope.raffleAwardId > 0) {
                 window.location.href = '#/ticket/identifybachdetail/' + $scope.raffleAwardId;
             } else {
-                $state.go('app.cashAdvance');
+                $state.go('app.positiveBalance');
             }
         }
 
@@ -103,12 +103,12 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: 'Cash/CashAdvance',
+                url: 'Cash/PositiveBalance',
                 data: $scope.creditNote,
                 success: function (data) {
                     window.loading.hide();
                     if (data.result === true) {
-                        window.open('/Reports/CashAdvanceReport?cashAdvance=' + data.cashAdvance);
+                        window.open('/Reports/PositiveBalanceReport?positiveBalance=' + data.positiveBalance);
                         alertify.success(data.message);
                         $scope.goBack();
                     } else {

@@ -233,8 +233,8 @@
           <Property Name="Notas" Type="text" />
           <Property Name="IdentifyType" Type="int" />
           <Property Name="Cedula2" Type="varchar" MaxLength="50" />
-          <Property Name="Nombre2" Type="varchar" MaxLength="200" />
           <Property Name="Telefono2" Type="varchar" MaxLength="50" />
+          <Property Name="Nombre2" Type="varchar" MaxLength="500" />
           <Property Name="Trabajado" Type="int" />
           <Property Name="WinnerId" Type="int" />
         </EntityType>
@@ -474,6 +474,8 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <Property Name="Separator" Type="char" MaxLength="1" />
           <Property Name="Consignacion" Type="bit" />
           <Property Name="EndElectronicSales" Type="datetime" />
+          <Property Name="DueRaffleDate" Type="datetime" />
+          <Property Name="StartElectronicSales" Type="datetime" />
         </EntityType>
         <EntityType Name="RaffleAward">
           <Key>
@@ -827,6 +829,9 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <Property Name="DocumentNumber" Type="varchar" MaxLength="250" />
           <Property Name="WinnerName" Type="varchar" MaxLength="250" />
           <Property Name="Phone" Type="varchar" MaxLength="250" />
+          <Property Name="GenderId" Type="int" />
+          <Property Name="CreateUser" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Workflow">
           <Key>
@@ -2094,6 +2099,18 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Winner_Genre">
+          <End Role="Catalog" Type="Self.Catalog" Multiplicity="0..1" />
+          <End Role="Winners" Type="Self.Winners" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Winners">
+              <PropertyRef Name="GenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Winner_Type_Document">
           <End Role="Catalog" Type="Self.Catalog" Multiplicity="0..1" />
           <End Role="Winners" Type="Self.Winners" Multiplicity="*" />
@@ -2709,6 +2726,10 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             <End Role="Winners" EntitySet="Winners" />
             <End Role="IdentifyBach" EntitySet="IdentifyBach" />
           </AssociationSet>
+          <AssociationSet Name="FK_Winner_Genre" Association="Self.FK_Winner_Genre">
+            <End Role="Catalog" EntitySet="Catalog" />
+            <End Role="Winners" EntitySet="Winners" />
+          </AssociationSet>
           <AssociationSet Name="FK_Winner_Type_Document" Association="Self.FK_Winner_Type_Document">
             <End Role="Catalog" EntitySet="Catalog" />
             <End Role="Winners" EntitySet="Winners" />
@@ -3292,6 +3313,10 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             <End Role="Winner" EntitySet="Winners" />
             <End Role="IdentifyBach" EntitySet="IdentifyBaches" />
           </AssociationSet>
+          <AssociationSet Name="FK_Winner_Genre" Association="TicketsModel.FK_Winner_Genre">
+            <End Role="Catalog" EntitySet="Catalogs" />
+            <End Role="Winner" EntitySet="Winners" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Agency">
           <Key>
@@ -3407,6 +3432,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="TaxReceipts" Relationship="TicketsModel.FK_TaxReceipt_Type_Catalog" FromRole="Catalog" ToRole="TaxReceipt" />
           <NavigationProperty Name="TaxReceiptNumbers" Relationship="TicketsModel.FK_TaxReceiptNumbers_Status" FromRole="Catalog" ToRole="TaxReceiptNumber" />
           <NavigationProperty Name="Winners" Relationship="TicketsModel.FK_Winner_Type_Document" FromRole="Catalog" ToRole="Winner" />
+          <NavigationProperty Name="Winners1" Relationship="TicketsModel.FK_Winner_Genre" FromRole="Catalog" ToRole="Winner" />
         </EntityType>
         <EntityType Name="CertificationNumber">
           <Key>
@@ -3539,7 +3565,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="IdentifyType" Type="Int32" />
           <Property Name="Cedula2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Telefono2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Nombre2" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Nombre2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="Trabajado" Type="Int32" />
           <Property Name="WinnerId" Type="Int32" />
           <NavigationProperty Name="Winner" Relationship="TicketsModel.FK_Winner" FromRole="IdentifyBach" ToRole="Winner" />
@@ -3826,6 +3852,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="Consignacion" Type="Boolean" />
           <NavigationProperty Name="ElectronicTicketSales" Relationship="TicketsModel.FK_ElectronicTicketSales_Raffle1" FromRole="Raffle" ToRole="ElectronicTicketSale" />
           <Property Name="EndElectronicSales" Type="DateTime" Precision="3" />
+          <Property Name="DueRaffleDate" Type="DateTime" Precision="3" />
+          <Property Name="StartElectronicSales" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="ReceiptPayment">
           <Key>
@@ -5710,6 +5738,10 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="Catalog" Relationship="TicketsModel.FK_Winner_Type_Document" FromRole="Winner" ToRole="Catalog" />
           <Property Name="WinnerName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="IdentifyBaches" Relationship="TicketsModel.FK_Winner" FromRole="Winner" ToRole="IdentifyBach" />
+          <Property Name="GenderId" Type="Int32" />
+          <Property Name="CreateUser" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Catalog1" Relationship="TicketsModel.FK_Winner_Genre" FromRole="Winner" ToRole="Catalog" />
         </EntityType>
         <Association Name="FK_Winner_Type_Document">
           <End Type="TicketsModel.Catalog" Role="Catalog" Multiplicity="0..1" />
@@ -5732,6 +5764,18 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             </Principal>
             <Dependent Role="IdentifyBach">
               <PropertyRef Name="WinnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Winner_Genre">
+          <End Type="TicketsModel.Catalog" Role="Catalog" Multiplicity="0..1" />
+          <End Type="TicketsModel.Winner" Role="Winner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Winner">
+              <PropertyRef Name="GenderId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6156,6 +6200,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="Raffles">
             <EntityTypeMapping TypeName="TicketsModel.Raffle">
               <MappingFragment StoreEntitySet="Raffle">
+                <ScalarProperty Name="StartElectronicSales" ColumnName="StartElectronicSales" />
+                <ScalarProperty Name="DueRaffleDate" ColumnName="DueRaffleDate" />
                 <ScalarProperty Name="EndElectronicSales" ColumnName="EndElectronicSales" />
                 <ScalarProperty Name="Consignacion" ColumnName="Consignacion" />
                 <ScalarProperty Name="Separator" ColumnName="Separator" />
@@ -6647,6 +6693,9 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="Winners">
             <EntityTypeMapping TypeName="TicketsModel.Winner">
               <MappingFragment StoreEntitySet="Winners">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="GenderId" ColumnName="GenderId" />
                 <ScalarProperty Name="WinnerName" ColumnName="WinnerName" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
