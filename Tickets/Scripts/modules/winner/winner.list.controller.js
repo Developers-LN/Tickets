@@ -17,10 +17,10 @@
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                url: 'Client/GetList',
+                url: 'Winner/GetList',
                 success: function (data) {
                     window.loading.hide();
-                    $scope.clientList = data.clients;
+                    $scope.winnersList = data.winners;
 
                     $rootScope.destroyDataTable();
                     $scope.$apply();

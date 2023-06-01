@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Tickets.Models.Enums;
-using Tickets.Models.XML;
 using WebMatrix.WebData;
 
 namespace Tickets.Models.Ticket
@@ -353,6 +352,12 @@ namespace Tickets.Models.Ticket
 
                         var ticketAllocationNumbers = context.TicketAllocationNumbers
                             .Where(t => t.RaffleId == model.RaffleId &&
+                                  (t.TicketAllocation.Statu == (int)AllocationStatuEnum.Consigned ||
+                                   t.TicketAllocation.Statu == (int)AllocationStatuEnum.Invoiced ||
+                                   t.TicketAllocation.Statu == (int)AllocationStatuEnum.Printed ||
+                                   t.TicketAllocation.Statu == (int)AllocationStatuEnum.Review ||
+                                   t.TicketAllocation.Statu == (int)AllocationStatuEnum.Returned ||
+                                   t.TicketAllocation.Statu == (int)AllocationStatuEnum.Delivered) &&
                                    t.TicketAllocation.ClientId == clientId).Select(t => new
                                    {
                                        t.Id,
@@ -364,42 +369,6 @@ namespace Tickets.Models.Ticket
                                        t.Number,
                                        clientDiscount = t.InvoiceTickets.Select(s => s.Invoice.Discount).FirstOrDefault()
                                    }).ToList();
-
-                        if (context.Clients.FirstOrDefault(f => f.Id == clientId).GroupId != (int)ClientGroupEnum.CajasOficinaPrincipal)
-                        {
-                            var NormalClient = ticketAllocationNumbers.Where(t => t.RaffleId == model.RaffleId &&
-                                   (t.Statu == (int)AllocationStatuEnum.Consigned || t.Statu == (int)AllocationStatuEnum.Invoiced) &&
-                                   t.ClientId == clientId).Select(t => new
-                                   {
-                                       t.Id,
-                                       t.RaffleId,
-                                       t.Statu,
-                                       t.ClientId,
-                                       t.FractionTo,
-                                       t.FractionFrom,
-                                       t.Number,
-                                       t.clientDiscount
-                                   }).ToList();
-
-                            ticketAllocationNumbers = NormalClient;
-                        }
-                        else if (context.Clients.FirstOrDefault(f => f.Id == clientId).GroupId == (int)ClientGroupEnum.CajasOficinaPrincipal)
-                        {
-                            var Oficial = ticketAllocationNumbers.Where(t => t.RaffleId == model.RaffleId &&
-                                   t.ClientId == clientId).Select(t => new
-                                   {
-                                       t.Id,
-                                       t.RaffleId,
-                                       t.Statu,
-                                       t.ClientId,
-                                       t.FractionTo,
-                                       t.FractionFrom,
-                                       t.Number,
-                                       t.clientDiscount
-                                   }).ToList();
-
-                            ticketAllocationNumbers = Oficial;
-                        }
 
                         var TicketsFromOtherClient = model.TicketReturnedNumbers.Select(s => s.NumberId).Where(w => !ticketAllocationNumbers.Select(s => s.Number).Contains(w)).ToList();
 

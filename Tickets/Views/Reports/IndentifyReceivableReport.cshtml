@@ -1,7 +1,7 @@
 ﻿@model Tickets.Models.PaymentReceivableReportModel
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Pago a premio";
+    ViewBag.Title = "RECIBO DE PAGO A PREMIO NO. " + Model.Id + " DEL SORTEO NO. " + Model.RaffleId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -149,7 +149,7 @@
                                     //totalFraction += 1;
                                     <tr>
                                         <td class="text-center">@number.IdentifyBachId</td>
-                                        <td class="text-center">@number.TicketAllocationNumber.Number</td>
+                                        <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Production.ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
                                         <td class="text-center">1</td>
@@ -162,7 +162,7 @@
                                     //totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                     <tr>
                                         <td class="text-center">@number.IdentifyBachId</td>
-                                        <td class="text-center">@number.TicketAllocationNumber.Number</td>
+                                        <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Production.ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
                                         <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
@@ -261,7 +261,7 @@
                                     //totalFraction += 1;
                                     <tr>
                                         <td class="text-center">@number.IdentifyBachId</td>
-                                        <td class="text-center">@number.TicketAllocationNumber.Number</td>
+                                        <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Production.ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
                                         <td class="text-center">1</td>
@@ -274,7 +274,7 @@
                                     //totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                     <tr>
                                         <td class="text-center">@number.IdentifyBachId</td>
-                                        <td class="text-center">@number.TicketAllocationNumber.Number</td>
+                                        <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Production.ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
                                         <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>

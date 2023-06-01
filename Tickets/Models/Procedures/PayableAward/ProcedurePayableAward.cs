@@ -5,11 +5,11 @@ using Tickets.Models.ModelsProcedures;
 
 namespace Tickets.Models.Procedures.PayableAward
 {
-    public class PayableAwardByClientProcedure
+    public class ProcedurePayableAward
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ModelPayableAwardByClient> ConsultaBilletesPagablesPorCliente(int raffle)
+        public IEnumerable<ModelPayableAwardByClient> ConsultaBilletesPagables(int raffle)
         {
             var lista = new List<ModelPayableAwardByClient>();
 

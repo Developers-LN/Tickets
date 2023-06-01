@@ -95,7 +95,8 @@ namespace Tickets.Controllers
                     RaffleId = p.IdentifyBach.RaffleId,
                     CreateDate = p.CreateDate,
                     IdentifyBach = p.IdentifyBach,
-                    ReceivablePercent = p.DiscountPercent
+                    ReceivablePercent = p.DiscountPercent,
+                    Production = p.IdentifyBach.Raffle.Prospect.Production - 1
                 }).FirstOrDefault();
             }
             else
@@ -112,7 +113,8 @@ namespace Tickets.Controllers
                     IdentifyBach = n.IdentifyBaches.FirstOrDefault(),
                     ReceivablePercent = n.DiscountPercent,
                     CreditNoteId = creditNoteId,
-                    Concept = n.Concepts
+                    Concept = n.Concepts,
+                    Production = n.Raffle.Prospect.Production - 1
                 }).FirstOrDefault();
             }
             return View(payment);
@@ -422,8 +424,8 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult PayableAwardsByClient(int raffleId)
         {
-            PayableAwardByClientProcedure payableAwardByClientProcedure = new PayableAwardByClientProcedure();
-            var Resultado = payableAwardByClientProcedure.ConsultaBilletesPagablesPorCliente(raffleId);
+            ProcedurePayableAward payableAwardProcedure = new ProcedurePayableAward();
+            var Resultado = payableAwardProcedure.ConsultaBilletesPagables(raffleId);
             return View(Resultado);
         }
 
@@ -440,7 +442,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult AllPayableAwards(int raffleId)
         {
-            AllPatyableAwardsProcedure allPatyableAwardsProcedure = new AllPatyableAwardsProcedure();
+            ProcedureAllPayableAwards allPatyableAwardsProcedure = new ProcedureAllPayableAwards();
             var Resultado = allPatyableAwardsProcedure.ConsultaTodosBilletesPagables(raffleId);
             return View(Resultado);
         }
@@ -984,7 +986,7 @@ namespace Tickets.Controllers
 
             List<ReceiptPayment> receiptPayment = new List<ReceiptPayment>();
 
-            if(userId == 0)
+            if (userId == 0)
             {
                 receiptPayment = context.ReceiptPayments.AsEnumerable().Where(i => i.CreateDate.Date == FechaConvert.Date).ToList();
             }

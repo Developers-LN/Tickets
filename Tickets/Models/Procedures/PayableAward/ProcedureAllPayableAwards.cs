@@ -5,7 +5,7 @@ using Tickets.Models.ModelsProcedures;
 
 namespace Tickets.Models.Procedures.PayableAward
 {
-    public class AllPatyableAwardsProcedure
+    public class ProcedureAllPayableAwards
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 

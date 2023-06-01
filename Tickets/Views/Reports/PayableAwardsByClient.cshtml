@@ -4,7 +4,7 @@
     int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
 
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Billetes pagables por cliente del sorteo " + raffleid;
+    ViewBag.Title = "BILLETES PAGABLES POR CLIENTE DEL SORTEO NO. " + raffleid;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -44,9 +44,9 @@
             <br />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+            <b>EFCHA: </b> @DateTime.Now.ToShortDateString()
             <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+            <b>HORA: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
     <div class="col-lg-12 col-md-12 no-padder col-sm-12">
@@ -84,15 +84,15 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th colspan="6" class="text-center">Resumen de premios</th>
+                            <th colspan="6" class="text-center">RESUMEN DE PREMIOS</th>
                         </tr>
                         <tr>
-                            <th class="text-center">Fila</th>
-                            <th class="text-center">Premios</th>
-                            <th class="text-center">Valor del premio</th>
-                            <th class="text-center">Cantidad</th>
-                            <th class="text-center">Monto en premios</th>
-                            <th class="text-center">Monto a pagar</th>
+                            <th class="text-center">FILA</th>
+                            <th class="text-center">PREMIO</th>
+                            <th class="text-center">VALOR DEL PREMIO</th>
+                            <th class="text-center">CANTIDAD</th>
+                            <th class="text-center">MONTO EN PREMIOS</th>
+                            <th class="text-center">MONTO A PAGAR</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -129,9 +129,9 @@
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
-                            <th class="text-center">Cantidad de premios: @totalPremios.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
-                            <th class="text-center">Total en premios: @resumenValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
-                            <th class="text-center">Total a pagar: @resumenMontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">CANTIDAD DE PREMIOS: @totalPremios.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">TOTAL EN PREMIOS: @resumenValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">TOTAL A PAGAR: @resumenMontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
                         </tr>
                     </tbody>
                 </table>
@@ -139,14 +139,14 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th colspan="5" class="text-center">Resumen de clientes</th>
+                            <th colspan="5" class="text-center">RESUMEN DE CLIENTES</th>
                         </tr>
                         <tr>
-                            <th class="text-center">Fila</th>
-                            <th class="text-center">Cliente</th>
-                            <th class="text-center">Cantidad</th>
-                            <th class="text-center">Monto en premios</th>
-                            <th class="text-center">Monto a pagar</th>
+                            <th class="text-center">FILA</th>
+                            <th class="text-center">CLIENTE</th>
+                            <th class="text-center">CANTIDAD</th>
+                            <th class="text-center">MONTO EN PREMIOS</th>
+                            <th class="text-center">MONTO A PAGAR</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -181,9 +181,9 @@
                         <tr>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
-                            <th class="text-center">Cantidad de premios: @totalPremios2.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
-                            <th class="text-center">Total en premios: @resumenValorPremios2.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
-                            <th class="text-center">Total a pagar: @resumenMontoApagarSorteo2.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">CANTIDAD EN PREMIOS: @totalPremios2.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">TOTAL EN PREMIOS: @resumenValorPremios2.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">TOTAL A PAGAR: @resumenMontoApagarSorteo2.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
                         </tr>
                     </tbody>
                 </table>
@@ -221,14 +221,14 @@
                                 <th colspan="8" class="text-center">@context.Clients.Where(w => w.Id == client).Select(s => s.Name).FirstOrDefault()</th>
                             </tr>
                             <tr>
-                                <th class="text-center">Fila</th>
-                                <th class="text-center">Billete</th>
-                                <th class="text-center">Estatus de pago</th>
-                                <th class="text-center">Premio</th>
-                                <th class="text-center">Fracciones</th>
-                                <th class="text-center">Tipo de premio</th>
-                                <th class="text-center">Monto del premio</th>
-                                <th class="text-center">Monto a pagar</th>
+                                <th class="text-center">FILA</th>
+                                <th class="text-center">BILLETE</th>
+                                <th class="text-center">ESTADO DE PAGO</th>
+                                <th class="text-center">PREMIO</th>
+                                <th class="text-center">FRACCIONES</th>
+                                <th class="text-center">TIPO DE PREMIO</th>
+                                <th class="text-center">MONTO DEL PREMIO</th>
+                                <th class="text-center">MONTO A PAGAR</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -261,10 +261,10 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <th class="text-center">Fracciones: @totalFractions.Count().ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
+                                <th class="text-center">FRACCIONES: @totalFractions.Count().ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
                                 <td></td>
-                                <th class="text-center">Total: @ValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
-                                <th class="text-center">Total: @TotalPagarCliente.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                                <th class="text-center">TOTAL: @ValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                                <th class="text-center">TOTAL: @TotalPagarCliente.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
                             </tr>
                         </tbody>
                     </table>

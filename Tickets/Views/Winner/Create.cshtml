@@ -1,0 +1,100 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Creación de ganador";
+
+    var context = new Tickets.Models.TicketsEntities();
+}
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="WinnerCreateController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 no-padder">
+                    <input type="hidden" ng-model="winner.Id" />
+                    <div class="col-lg-4 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Tipo documento: <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="identifyBach.DocumentType" ng-change="typeDocument()">
+                                        <option selected="selected" disabled="disabled" value="0">Tipo de documento</option>
+                                        <option ng-repeat="documentType in documentTypes" value="{{documentType.Id}}" ng-selected="identifyBach.DocumentType == documentType.Id">{{documentType.Name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-4 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Documento: <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="text" id="documentNumber" style="text-transform:uppercase"
+                                           ng-model="winner.DocumentNumber"
+                                           value="{{WinnerDocument}}"
+                                           ng-minlength="{{maxLenght}}"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-4 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Género: <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <select ng-required="true" class="form-control dropdown-select2" ng-model="winner.GenderId">
+                                        <option selected="selected" disabled="disabled" value="0">Género</option>
+                                        <option ng-repeat="gender in genders" value="{{gender.Id}}">{{gender.Name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-8 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Nombre: <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="text" style="text-transform:uppercase"
+                                           ng-model="winner.WinnerName"
+                                           value="{{WinnerName}}"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-4 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Teléfono: <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="text" id="phoneNumber"
+                                           ng-model="winner.WinnerPhone"
+                                           value="{{WinnerPhone}}"
+                                           ng-minlength="14"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="control-label-left">Notas:</label>
+                                <textarea class="form-control input-sm" rows="5" ng-model="identifyBach.Notas"></textarea>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ui-sref="app.clientList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
+        <a ng-click="saveWinnerForm()" class="mr btn btn-square btn-primary {{winner.Id > 0? moduleCanEdit: moduleCanAdd }}"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

@@ -324,8 +324,8 @@ namespace Tickets.Models.Raffles
                         raffle.EndAllocationDate = model.EndAllocationDate;
                         raffle.Note = string.IsNullOrEmpty(model.Note) ? "" : model.Note;
                         raffle.DateSolteo = model.RaffleDate;
-                        //raffle.DueRaffleDate = model.DueRaffleDate;
-                        //raffle.StartElectronicSales = model.StartElectronicSales;
+                        raffle.DueRaffleDate = model.DueRaffleDate;
+                        raffle.StartElectronicSales = model.StartElectronicSales;
 
                         if (model.Id == 0)
                         {

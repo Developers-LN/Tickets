@@ -268,7 +268,12 @@
             })
             .state('app.winnersList', {
                 url: '/winner/winners',
-                templateUrl: Route.base('Client/List'),
+                templateUrl: Route.base('Winner/List'),
+                resolve: {}
+            })
+            .state('app.winnerCreate', {
+                url: '/winner/winner/:winnerId',
+                templateUrl: Route.base('Winner/Create'),
                 resolve: {}
             })
             .state('app.ClientGeneralReport', {

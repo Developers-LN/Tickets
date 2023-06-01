@@ -7,8 +7,8 @@
     var context = new Tickets.Models.TicketsEntities();
 
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.Facturacion : "";
-    string adminCargo = config != null ? config.FacturacionCargo : "";
+    string adminName = config != null ? config.Inspectoria : "";
+    string adminCargo = config != null ? config.InspectoriaCargo : "";
 }
 
 <style>
@@ -138,7 +138,7 @@
         </div>
     </div>
 
-    <div class="col-lg-12 no-padder text-center">
+    @*<div class="col-lg-12 no-padder text-center">
         <br />
         <br />
         <br />
@@ -154,7 +154,7 @@
             </div>
             Firma del Cajero
         </div>
-    </div>
+    </div>*@
     <div class="col-lg-12 no-padder text-center">
         <b>@adminName</b>
     </div>

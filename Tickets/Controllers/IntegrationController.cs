@@ -34,7 +34,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult PayableAwardsToExcel(int raffleId)
         {
-            AllPatyableAwardsProcedure allPatyableAwardsProcedure = new AllPatyableAwardsProcedure();
+            ProcedureAllPayableAwards allPatyableAwardsProcedure = new ProcedureAllPayableAwards();
             var Resultado = allPatyableAwardsProcedure.ConsultaTodosBilletesPagables(raffleId);
 
             var context = new TicketsEntities();
@@ -93,7 +93,73 @@ namespace Tickets.Controllers
             }
         }
 
-		[Authorize]
+        [Authorize]
+        [HttpGet]
+        public ActionResult PayableAwardsByClientToExcel(int ClientId, int RaffleId)
+        {
+            ProcedurePayableAwardByClient payableAwardByClientProcedure = new ProcedurePayableAwardByClient();
+            var Resultado = payableAwardByClientProcedure.ConsultaBilletesPagablesPorCliente(RaffleId, ClientId);
+
+            var context = new TicketsEntities();
+
+            var Production = (context.Raffles.FirstOrDefault(f => f.Id == RaffleId).Prospect.Production - 1).ToString().Length;
+
+            using (var workBook = new XLWorkbook())
+            {
+                var workSheet = workBook.Worksheets.Add("Billetes pagables");
+                var curretRow = 1;
+
+                workSheet.Cell(curretRow, 1).Value = "Billete";
+                workSheet.Cell(curretRow, 2).Value = "Estatus_De_Pago";
+                workSheet.Cell(curretRow, 3).Value = "Cliente";
+                workSheet.Cell(curretRow, 4).Value = "Fracciones";
+                workSheet.Cell(curretRow, 5).Value = "Tipo_De_Premio";
+                workSheet.Cell(curretRow, 6).Value = "Monto_Del_Premio";
+                workSheet.Cell(curretRow, 7).Value = "Monto_A_Pagar";
+
+                var IdentifyTickets = context.IdentifyBaches.Where(w => w.RaffleId == RaffleId).Select(s => new { s.IdentifyNumbers }).ToList();
+
+                foreach (var item in Resultado)
+                {
+                    curretRow++;
+                    workSheet.Cell(curretRow, 1).Value = item.Number.ToString().PadLeft(Production, '0');
+
+                    if (IdentifyTickets.Any(a => a.IdentifyNumbers.Any(a2 => a2.NumberId == item.TanId)))
+                    {
+                        workSheet.Cell(curretRow, 2).Value = "Pagado";
+                    }
+                    else
+                    {
+                        workSheet.Cell(curretRow, 2).Value = "Pendiente";
+                    }
+                    workSheet.Cell(curretRow, 3).Value = item.Id_Name;
+                    workSheet.Cell(curretRow, 4).Value = item.Fracciones;
+                    workSheet.Cell(curretRow, 5).Value = item.NameAward;
+                    workSheet.Cell(curretRow, 6).Value = item.Value;
+                    workSheet.Cell(curretRow, 7).Value = item.ValorPagar;
+                }
+
+                var range = workSheet.RangeUsed();
+                var table = range.CreateTable();
+                table.Theme = XLTableTheme.TableStyleLight9;
+                workSheet.Columns().AdjustToContents();
+                workSheet.Column(1).Style.NumberFormat.Format = "@";
+                workSheet.Column(6).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(7).Style.NumberFormat.Format = "$ #,##0.00";
+
+                using (var stream = new MemoryStream())
+                {
+                    workBook.SaveAs(stream);
+                    var content = stream.ToArray();
+
+                    string Nombre = ("Billetes pagables del sorteo " + RaffleId + ".xlsx").ToString();
+
+                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Nombre);
+                }
+            }
+        }
+
+        [Authorize]
 		[HttpGet]
 		public ActionResult ExportToExcel(string FechaInicio = null, string FechaFin = null, int raffleId = 0)
 		{
@@ -317,8 +383,8 @@ namespace Tickets.Controllers
                 {
                     try
                     {
-                        PayableAwardByClientProcedure payableAwardByClientProcedure = new PayableAwardByClientProcedure();
-                        var Resultado = payableAwardByClientProcedure.ConsultaBilletesPagablesPorCliente(RaffleId);
+                        ProcedurePayableAward payableAwardProcedure = new ProcedurePayableAward();
+                        var Resultado = payableAwardProcedure.ConsultaBilletesPagables(RaffleId);
 
                         var DataPremios = Resultado.Where(w => w.ClientId == ClientId).ToList();
                         var PremiosCliente = Resultado.Where(w => w.ClientId == ClientId).Select(s => s.Number).ToList();

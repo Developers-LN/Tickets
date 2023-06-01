@@ -413,6 +413,7 @@
     <Compile Include="Models\ModelsProcedures\ModelReturnedNumbersByClient.cs" />
     <Compile Include="Models\ModelsProcedures\ModelReturnedTickets.cs" />
     <Compile Include="Models\ModelsProcedures\ModelSalesAndPendingPayments.cs" />
+    <Compile Include="Models\ModelsProcedures\PayableAward\ModelIdentifyAwardPayedByClientProcedure.cs" />
     <Compile Include="Models\ModelsProcedures\PayableAward\ModelPayableAwardSummary.cs" />
     <Compile Include="Models\ModelsProcedures\ReturnedByGroupModel.cs" />
     <Compile Include="Models\ModelsProcedures\Returns\ReturnsSummary.cs" />
@@ -435,7 +436,7 @@
     <Compile Include="Models\Procedures\AllocatedByDayProcedure.cs" />
     <Compile Include="Models\Procedures\AllocationSummaryProcedure.cs" />
     <Compile Include="Models\Procedures\Allocations\AllocatedSummaryProcedure.cs" />
-    <Compile Include="Models\Procedures\PayableAward\AllPatyableAwardsProcedure.cs" />
+    <Compile Include="Models\Procedures\PayableAward\ProcedureAllPayableAwards.cs" />
     <Compile Include="Models\Procedures\AvailableTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\AvailableTicketToInvoice.cs" />
     <Compile Include="Models\Procedures\CuadreSorteoResumidoProcedure.cs" />
@@ -448,8 +449,10 @@
     <Compile Include="Models\Procedures\InvoiceListProcedure.cs" />
     <Compile Include="Models\Procedures\InvoiceListProcedureByList.cs" />
     <Compile Include="Models\Procedures\NetSalesByClientProcedure.cs" />
-    <Compile Include="Models\Procedures\PayableAward\PayableAwardByClientProcedure.cs" />
+    <Compile Include="Models\Procedures\PayableAward\ProcedureIdentifyAwardPayedByClient.cs" />
+    <Compile Include="Models\Procedures\PayableAward\ProcedurePayableAwardByClient.cs" />
     <Compile Include="Models\Procedures\PayableAwardsProcedure.cs" />
+    <Compile Include="Models\Procedures\PayableAward\ProcedurePayableAward.cs" />
     <Compile Include="Models\Procedures\PayableAward\ProcedurePayableAwardSummary.cs" />
     <Compile Include="Models\Procedures\Receivables\ReceivableClose.cs" />
     <Compile Include="Models\Procedures\ReturnedByGroupProcedure.cs" />
@@ -3246,6 +3249,8 @@
     <Content Include="Views\Winner\List.cshtml" />
     <Content Include="Views\Cash\PositiveBalance.cshtml" />
     <Content Include="Views\Reports\BilletesAnulados.cshtml" />
+    <Content Include="Views\Winner\Create.cshtml" />
+    <Content Include="Scripts\modules\winner\winner.create.controller.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

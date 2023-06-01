@@ -15,7 +15,9 @@ namespace Tickets.Models
         public int UserId { get; set; }
         
         public int RaffleId { get; set; }
-        
+
+        public int Production { get; set; }
+
         public DateTime CreateDate { get; set; }
         
         public IdentifyBach IdentifyBach { get; set; }

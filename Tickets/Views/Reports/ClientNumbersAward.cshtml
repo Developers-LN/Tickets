@@ -5,7 +5,7 @@
     var Client = context.Clients.FirstOrDefault(f => f.Id == ClientId);
 
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "NUMEROS PREMIADOS DEL CLIENTE " + Client.Id + "-" + Client.Name;
+    ViewBag.Title = "NUMEROS PREMIADOS DEL CLIENTE " + Client.Id + "-" + Client.Name + " DEL SORTEO NO. " + Model.Id;
 
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.ControlPremio : "";

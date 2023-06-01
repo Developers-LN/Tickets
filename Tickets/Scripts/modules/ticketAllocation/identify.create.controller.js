@@ -25,7 +25,6 @@
         $scope.WinnerName = "";
         $scope.WinnerPhone = "";
         $scope.AddWinner = 0;
-        $scope.AddWinner = 0;
         $scope.GenderId = 0;
 
         this.clearIdentify = function () {

@@ -230,10 +230,10 @@ namespace Tickets.Models.Ticket
                     xpiredDays = int.Parse(xpired.Description);
                 }
             }*/
-            var date = DateTime.Now.AddDays(-89);
+            var date = DateTime.Now;
             var raffles = context.Raffles.Where(s =>
                 s.Statu == (int)RaffleStatusEnum.Generated
-                && date <= s.DateSolteo
+                && date <= s.DueRaffleDate
                 ).Select(r => new
                 {
                     r.Id,
@@ -292,10 +292,10 @@ namespace Tickets.Models.Ticket
                     xpiredDays = int.Parse(xpired.Description);
                 }
             }*/
-            var date = DateTime.Now.AddDays(-90);
+            var date = DateTime.Now;
             var raffles = context.Raffles.Where(s =>
                 s.Statu == (int)RaffleStatusEnum.Generated
-                && date <= s.DateSolteo
+                && date <= s.DueRaffleDate
                 ).Select(r => new
                 {
                     r.Id,
@@ -600,10 +600,12 @@ namespace Tickets.Models.Ticket
                                 newWinner = new Winner
                                 {
                                     DocumentType = identifyBach.DocumentType,
-                                    DocumentNumber = identifyBach.DocumentNumber,
+                                    DocumentNumber = identifyBach.DocumentNumber.ToUpper(),
                                     WinnerName = identifyBach.WinnerName,
                                     Phone = identifyBach.WinnerPhone,
-                                    GenderId = identifyBach.GenderId
+                                    GenderId = identifyBach.GenderId,
+                                    CreateUser = WebSecurity.CurrentUserId,
+                                    CreateDate = DateTime.Now
                                 };
                             }
                             context.Winners.Add(newWinner);

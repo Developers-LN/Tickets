@@ -5,6 +5,7 @@
         public bool Data { get; set; }
         public int TanId { get; set; }
         public int TaId { get; set; }
+        public string Id_Name { get; set; }
         public string ControlNumber { get; set; }
         public string ClientName { get; set; }
         public int ClientId { get; set; }
