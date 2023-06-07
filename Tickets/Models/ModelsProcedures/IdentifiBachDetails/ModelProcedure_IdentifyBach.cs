@@ -2,7 +2,7 @@
 
 namespace Tickets.Models.ModelsProcedures.IdentifiBachDetails
 {
-    public class ModelProcedureIdentifyBach
+    public class ModelProcedure_IdentifyBach
     {
         public bool Data { get; set; }
         public int IdLote { get; set; }
@@ -24,6 +24,6 @@ namespace Tickets.Models.ModelsProcedures.IdentifiBachDetails
         public int PagoNotaCredito { get; set; }
         public int PagoEfectivo { get; set; }
 
-        public virtual ICollection<ModeProcedureIdentifyBachNumbers> IdentifyBachNumbers { get; set; }
+        public virtual ICollection<ModelProcedure_IdentifyBachNumbers> IdentifyBachNumbers { get; set; }
     }
 }

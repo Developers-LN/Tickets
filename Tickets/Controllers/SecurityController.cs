@@ -306,7 +306,8 @@ namespace Tickets.Controllers
                 e.Id,
                 Name = e.Name + " " + e.LastName
             });
-            context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Usuario");
+            context.SaveChanges(); 
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Usuario");
             return new JsonResult() { Data = new { users, employes }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -331,7 +332,8 @@ namespace Tickets.Controllers
                 Statu = r.Users.Any(u => u.Id == userId) ? "Asignado" : "No asignado",
                 Id = r.RoleId
             }).ToList();
-            context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de roles para un usuario");
+            context.SaveChanges(); 
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de roles para un usuario");
             return new JsonResult() { Data = rols, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -352,7 +354,8 @@ namespace Tickets.Controllers
                 user.webpages_Roles.Remove(rol);
             }
             context.SaveChanges();
-            context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Roles a un usuario");
+            //context.SaveChanges(); 
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Roles a un usuario");
             return new JsonResult() { Data = model.Statu };
         }
 
@@ -389,7 +392,6 @@ namespace Tickets.Controllers
                 modifyUser.EmpleadoId = user.EmpleadoId;
             }
             context.SaveChanges();
-
             Utils.SaveLog(WebSecurity.CurrentUserName, user.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Usuarios");
             return new JsonResult() { Data = true };
         }
@@ -417,7 +419,8 @@ namespace Tickets.Controllers
                 u.Description,
                 u.RoleId
             }).ToList();
-            context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Roles");
+            context.SaveChanges(); 
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Roles");
             return new JsonResult() { Data = users, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -446,7 +449,8 @@ namespace Tickets.Controllers
                 modifyrol.Description = rol.Description;
             }
             context.SaveChanges();
-            context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, rol.RoleId == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Roles");
+            //context.SaveChanges(); 
+            Utils.SaveLog(WebSecurity.CurrentUserName, rol.RoleId == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Roles");
             return new JsonResult() { Data = true };
         }
 
@@ -470,7 +474,8 @@ namespace Tickets.Controllers
                 Statu = u.webpages_Roles.Any(r => r.RoleId == rolId) ? "Asignado" : "No asignado",
                 u.Id
             }).ToList();
-            context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de usuario para un rol");
+            context.SaveChanges(); 
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de usuario para un rol");
             return new JsonResult() { Data = users, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -566,7 +571,8 @@ namespace Tickets.Controllers
                 o.Description,
                 Statu = o.webpages_Roles.Any(r => r.RoleId == rolId) ? "Asignada" : "No asignada"
             }).ToList();
-            context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de sucursales para un rol");
+            context.SaveChanges(); 
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de sucursales para un rol");
             return new JsonResult() { Data = offices, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -587,7 +593,8 @@ namespace Tickets.Controllers
                 office.webpages_Roles.Remove(rol);
             }
             context.SaveChanges();
-            context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Sucursales a un usuario");
+            //context.SaveChanges(); 
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Sucursales a un usuario");
             return new JsonResult() { Data = model.Statu };
         }
         #endregion
@@ -659,8 +666,8 @@ namespace Tickets.Controllers
                 u.CanSearch,
                 u.Id
             }).ToList();
-            context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de modulo");
-
+            context.SaveChanges(); 
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de modulo");
             return new JsonResult() { Data = modules, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -694,7 +701,8 @@ namespace Tickets.Controllers
                 modifyModule.CanView = module.CanView;
             }
             context.SaveChanges();
-            context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, module.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Modulo");
+            //context.SaveChanges(); 
+            Utils.SaveLog(WebSecurity.CurrentUserName, module.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Modulo");
             return new JsonResult() { Data = true };
         }
 
@@ -708,7 +716,8 @@ namespace Tickets.Controllers
             if (module != null)
             {
                 context.Modules.Remove(module);
-                context.SaveChanges(); Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Delete, "Modulo");
+                context.SaveChanges(); 
+                Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Delete, "Modulo");
             }
             return new JsonResult();
         }

@@ -26,10 +26,10 @@
             }
             if (client.MaritalStatus === undefined) {
                 error += 'Estado civil' + isReq;
-            }/*
+            }
             if (client.Gender === undefined) {
                 error += 'Sexo' + isReq;
-            }*/
+            }
             if (client.Province === undefined) {
                 error += 'Provincia' + isReq;
             }

@@ -139,7 +139,7 @@
 				success: function (data) {
 					self.$scope.modueList = data;
 					self.$scope.$apply();
-					self.$rootScope.dataTable(false);
+					self.$rootScope.dataTable();
 				}
 			});
 		}
@@ -176,12 +176,10 @@
 		/*End Manage ModuleList*/
 
 		this.updateModuleStatu = function (rolId, moduleId) {
-			var table = $('.dataTableGrid').DataTable();
-			table.search('')
-				.columns().search('')
-				.draw();
+			//var table = $('.dataTableGrid').DataTable();
+			//table.search('').columns().search('').draw();
 			var moduleList = [];
-			$(self.$scope.modueList).each(function (i, module) {
+			/*$(self.$scope.modueList).each(function (i, module) {
 				moduleList.push({
 					RolId: rolId,
 					ModuleId: module.Id,
@@ -195,6 +193,16 @@
 
 			moduleList = moduleList.filter(function (module) {
 				return (module.ModuleId == moduleId) == true;
+			});*/
+
+			moduleList.push({
+				RolId: rolId,
+				ModuleId: moduleId,
+				CanView: $('#RolModuleViewCheckBox' + moduleId).is(':checked'),
+				CanEdit: $('#RolModuleEditCheckBox' + moduleId).is(':checked'),
+				CanDelete: $('#RolModuleDeleteCheckBox' + moduleId).is(':checked'),
+				CanAdd: $('#RolModuleAddCheckBox' + moduleId).is(':checked'),
+				CanSearch: $('#RolModuleSearchCheckBox' + moduleId).is(':checked')
 			});
 
 			$.ajax({

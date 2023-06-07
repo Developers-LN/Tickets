@@ -1,6 +1,6 @@
 ﻿namespace Tickets.Models.ModelsProcedures
 {
-    public class ModelReturnedNumbersByClient
+    public class ModelProcedure_ReturnedNumbersByClient
     {
         public bool Datos { get; set; }
         public int RaffleId { get; set; }

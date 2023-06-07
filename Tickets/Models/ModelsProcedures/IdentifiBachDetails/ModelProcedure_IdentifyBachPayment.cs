@@ -1,6 +1,6 @@
 ﻿namespace Tickets.Models.ModelsProcedures.IdentifiBachDetails
 {
-    public class ModelProcedureIdentifyBachPayment
+    public class ModelProcedure_IdentifyBachPayment
     {
         public bool Data { get; set; }
 

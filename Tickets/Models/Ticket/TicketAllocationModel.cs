@@ -414,6 +414,17 @@ namespace Tickets.Models.Ticket
             };
         }
 
+        internal RequestResponseModel GetReturnedByGroup(int raffleId)
+        {
+            ReturnedByGroupProcedure returnedByGroupProcedure = new ReturnedByGroupProcedure();
+            var Resultado = returnedByGroupProcedure.ConsultarBilletesDevueltosPorGrupo(raffleId);
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Object = Resultado
+            };
+        }
+
         internal RequestResponseModel GetTicketAllocationList(int raffleId, int clientId = 0, int statu = 0, bool hasNumber = false)
         {
             var context = new TicketsEntities();

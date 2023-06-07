@@ -1,13 +1,15 @@
 ﻿@model List<Tickets.Models.TicketReturn>
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "RECIBO DE DEVOLUCION DEL SORTEO NO. " + Model.FirstOrDefault().RaffleId + ", GRUPO " + Model.FirstOrDefault().ReturnedGroup + " DEL CLIENTE " + Model.FirstOrDefault().Client.Name;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.ProduccionSorteo : "";
     string adminCargo = config != null ? config.ProduccionSorteoCargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+
     var datas = Model.GroupBy(d => d.ReturnedGroup).Select(g => new
     {
         RaffleId = g.FirstOrDefault().RaffleId,

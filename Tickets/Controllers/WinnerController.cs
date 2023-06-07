@@ -30,7 +30,7 @@ namespace Tickets.Controllers
             var winners = context.Winners.AsEnumerable().Select(c => new
             {
                 c.Id,
-                Name = c.WinnerName,
+                c.WinnerName,
                 c.DocumentNumber,
                 c.Phone,
                 Gender = WinnerData.FirstOrDefault(f => f.Id == c.GenderId).NameDetail,
@@ -51,7 +51,7 @@ namespace Tickets.Controllers
             return View();
         }
 
-        // POST: Client/Create
+        // POST: Winner/Create
         [HttpPost]
         [Authorize]
         public JsonResult Create(Winner winner)
@@ -64,15 +64,31 @@ namespace Tickets.Controllers
                     {
                         try
                         {
-                            winner.DocumentType = winner.DocumentType;
-                            winner.DocumentNumber = winner.DocumentNumber;
-                            winner.WinnerName = winner.WinnerName.ToUpper();
-                            winner.Phone = winner.Phone;
-                            winner.GenderId = winner.GenderId;
-                            winner.CreateDate = DateTime.Now;
-                            winner.CreateUser = WebSecurity.CurrentUserId;
-                            context.Winners.Add(winner);
-                            context.SaveChanges();
+                            var ExistWinner = context.Winners.FirstOrDefault(f => f.DocumentNumber == winner.DocumentNumber);
+                            if (ExistWinner == null)
+                            {
+                                winner.DocumentType = winner.DocumentType;
+                                winner.DocumentNumber = winner.DocumentNumber;
+                                winner.WinnerName = winner.WinnerName.ToUpper();
+                                winner.Phone = winner.Phone;
+                                winner.GenderId = winner.GenderId;
+                                winner.CreateDate = DateTime.Now;
+                                winner.CreateUser = WebSecurity.CurrentUserId;
+                                context.Winners.Add(winner);
+                                context.SaveChanges();
+                            }
+                            else
+                            {
+                                tx.Rollback();
+                                return new JsonResult()
+                                {
+                                    Data = new
+                                    {
+                                        result = false,
+                                        message = "El ganador ya estaba registrado"
+                                    }
+                                };
+                            }
                         }
                         catch (Exception e)
                         {
@@ -122,11 +138,13 @@ namespace Tickets.Controllers
             return new
             {
                 c.Id,
-                DocumentType = catalogs.FirstOrDefault(f => f.Id == c.DocumentType).NameDetail,
+                c.DocumentType, 
+                DocumentTypeName = catalogs.FirstOrDefault(f => f.Id == c.DocumentType).NameDetail,
                 c.DocumentNumber,
-                Name = c.WinnerName,
+                c.WinnerName,
                 c.Phone,
-                GenderId = catalogs.FirstOrDefault(f => f.Id == c.GenderId).NameDetail,
+                c.GenderId,
+                GenderName = catalogs.FirstOrDefault(f => f.Id == c.GenderId).NameDetail,
                 c.CreateUser,
                 c.CreateDate
             };
@@ -139,6 +157,7 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             object winner = null;
+            object awardsHistory = null;
             if (winnerId > 0)
             {
                 winner = context.Winners.AsEnumerable().Where(a => a.Id == winnerId).Select(e => WinnerToObject(e)).FirstOrDefault();
@@ -154,7 +173,28 @@ namespace Tickets.Controllers
                 g.Id,
                 Name = g.NameDetail
             });
-            return new JsonResult() { Data = new { winner, genders, documentType }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+            if (winnerId > 0)
+            {
+                awardsHistory = context.IdentifyBaches.AsEnumerable().Where(w => w.WinnerId == winnerId).Select(s => new
+                {
+                    s.Id,
+                    CreateDate = s.CreateDate.ToString("dd/MM/yyyy"),
+                    s.RaffleId,
+                    RaffleName = s.Raffle.Name
+                }).ToList();
+            }
+
+            return new JsonResult() { Data = new { winner, genders, documentType, awardsHistory }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        //
+        // GET: /Winner/AwardsHistory
+        [HttpGet]
+        [Authorize]
+        public ActionResult AwardsHistory()
+        {
+            return View();
         }
     }
 }

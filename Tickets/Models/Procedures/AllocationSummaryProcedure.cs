@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<AllocationSummary> ConsultaAsignacionesSorteo(int raffle)
+        public IEnumerable<ModelProcedure_AllocationSummary> ConsultaAsignacionesSorteo(int raffle)
         {
-            var lista = new List<AllocationSummary>();
+            var lista = new List<ModelProcedure_AllocationSummary>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures
                 {
                     while (sqlDataReader.Read())
                     {
-                        var pagables = new AllocationSummary()
+                        var pagables = new ModelProcedure_AllocationSummary()
                         {
                             Data = true,
                             AsignacionId = Convert.ToInt32(sqlDataReader["AsignacionId"].ToString()),
@@ -44,7 +44,7 @@ namespace Tickets.Models.Procedures
                 }
                 else
                 {
-                    var pagables = new AllocationSummary()
+                    var pagables = new ModelProcedure_AllocationSummary()
                     {
                         Data = false,
                         AsignacionId = 0,

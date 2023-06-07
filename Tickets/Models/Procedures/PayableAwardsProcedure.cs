@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ModelPayableAwards> ConsultaBilletesPagables(int raffle)
+        public IEnumerable<ModelProcedure_PayableAwards> ConsultaBilletesPagables(int raffle)
         {
-            var lista = new List<ModelPayableAwards>();
+            var lista = new List<ModelProcedure_PayableAwards>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures
                 {
                     while (sqlDataReader.Read())
                     {
-                        var pagables = new ModelPayableAwards()
+                        var pagables = new ModelProcedure_PayableAwards()
                         {
                             premios = true,
                             number = Convert.ToInt32(sqlDataReader["number"].ToString()),
@@ -42,7 +42,7 @@ namespace Tickets.Models.Procedures
                 }
                 else
                 {
-                    var pagables = new ModelPayableAwards()
+                    var pagables = new ModelProcedure_PayableAwards()
                     {
                         premios = false,
                         number = 0,

@@ -102,10 +102,10 @@
                                 <td>{{returned.raffleDesc}}</td>
                                 <td>{{returned.clientDesc}}</td>
                                 <td>{{returned.returnedGroup}}</td>
-                                <td>{{returned.fractionQuantity}}</td>
+                                <td>{{returned.fractionQuantity | number}}</td>
                                 <td>{{(returned.returnedDate | date:"dd/MM/yyyy") }}</td>
                                 <td class="text-center">
-                                    <a class="{{modulecanview}}" href="#/ticket/returnedGroupDetails/{{returned.returnedGroup}}/{{returned.raffleId}}" title="ver detalles del grupo"><i class="fa fa-eye"></i></a>
+                                    <a class="{{modulecanview}}" target="_blank" href="#/ticket/returnedGroupDetails/{{returned.returnedGroup}}/{{returned.raffleId}}" title="ver detalles del grupo"><i class="fa fa-eye"></i></a>
                                     <a class="{{moduleCanEdit}}" ng-if="returned.statusId != @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Invoiced)" ng-click="showMoveGroupModal(returned)" title="Mover Grupo"><i class="fa fa-external-link"></i></a>
                                     <a ng-if="returned.statusId != @((int)Tickets.Models.Enums.TicketReturnedStatuEnum.Invoiced)" ng-click="deleteReturnedGroup(returned)" title="Borrar Grupo de devoluciones" class="{{moduleCanDelete}}"><i class="fa fa-times"></i></a>
                                 </td>

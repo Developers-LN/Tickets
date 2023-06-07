@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ModelNetSalesByClient> ConsultaVentaNetaPorCliente(int raffle)
+        public IEnumerable<ModelProcedure_NetSalesByClient> ConsultaVentaNetaPorCliente(int raffle)
         {
-            var lista = new List<ModelNetSalesByClient>();
+            var lista = new List<ModelProcedure_NetSalesByClient>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures
                 {
                     while (sqlDataReader.Read())
                     {
-                        var Ventas = new ModelNetSalesByClient()
+                        var Ventas = new ModelProcedure_NetSalesByClient()
                         {
                             Data = true,
                             ClientId = Convert.ToInt32(sqlDataReader["ClientId"].ToString()),
@@ -49,7 +49,7 @@ namespace Tickets.Models.Procedures
                 }
                 else
                 {
-                    var Ventas = new ModelNetSalesByClient()
+                    var Ventas = new ModelProcedure_NetSalesByClient()
                     {
                         Data = false,
                         ClientId = 0,

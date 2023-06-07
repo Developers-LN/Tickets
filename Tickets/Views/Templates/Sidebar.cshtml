@@ -409,13 +409,6 @@
                                 <span class="ripple"></span>
                             </a>
                         </li>
-                        <li ui-sref-active="active" ng-show="verifyCanView('app.winnersList')">
-                            <a ui-sref="app.winnersList" title="Ganadores">
-                                <em class="sidebar-item-icon"></em>
-                                <span>Ganadores</span>
-                                <span class="ripple"></span>
-                            </a>
-                        </li>
                         <li ui-sref-active="active" ng-show="false">
                             <a ui-sref="app-fh.columns" title="Full Height" ripple="" href="#/fh/columns">
                                 <em class="sidebar-item-icon"></em>
@@ -581,6 +574,13 @@
                             <a ui-sref="app.ticketReturnedAwardPrint" title="Devoluciones">
                                 <em class="sidebar-item-icon"></em>
                                 <span>Devoluciones</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.ticketReturnedByGroup')">
+                            <a ui-sref="app.ticketReturnedByGroup" title="Devoluciones">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Devoluciones por grupo</span>
                                 <span class="ripple"></span>
                             </a>
                         </li>

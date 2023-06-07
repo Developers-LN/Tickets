@@ -22,6 +22,17 @@ namespace Tickets.Controllers
         }
 
         //
+        //  GET: ticket/ticketAllocationApi/getReturnedByGroup
+        [HttpGet]
+        [Authorize]
+        [ActionName("getReturnedByGroup")]
+        public RequestResponseModel getReturnedByGroup(int raffleId)
+        {
+            var response = new TicketAllocationModel().GetReturnedByGroup(raffleId);
+            return response;
+        }
+
+        //
         //  GET: ticket/ticketAllocationApi/getTicketAllocationToDeliverList
         [HttpGet]
         [Authorize]

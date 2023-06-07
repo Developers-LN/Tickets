@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures.IdentifyBachDetails
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public List<ModelProcedureIdentifyBach> GetIdentifyBachInfo(int bach)
+        public List<ModelProcedure_IdentifyBach> GetIdentifyBachInfo(int bach)
         {
-            var DetalleLote = new List<ModelProcedureIdentifyBach>();
+            var DetalleLote = new List<ModelProcedure_IdentifyBach>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures.IdentifyBachDetails
                 {
                     while (sqlDataReader.Read())
                     {
-                        var Lote = new ModelProcedureIdentifyBach()
+                        var Lote = new ModelProcedure_IdentifyBach()
                         {
                             Data = true,
                             IdLote = Convert.ToInt32(sqlDataReader["IdLote"].ToString()),
@@ -51,7 +51,7 @@ namespace Tickets.Models.Procedures.IdentifyBachDetails
                 }
                 else
                 {
-                    var Lote = new ModelProcedureIdentifyBach()
+                    var Lote = new ModelProcedure_IdentifyBach()
                     {
                         Data = false,
                         IdLote = 0,

@@ -96,7 +96,7 @@ namespace Tickets.Controllers
                     CreateDate = p.CreateDate,
                     IdentifyBach = p.IdentifyBach,
                     ReceivablePercent = p.DiscountPercent,
-                    Production = p.IdentifyBach.Raffle.Prospect.Production - 1
+                    Production = p.IdentifyBach.Raffle.Prospect.Production - 1,
                 }).FirstOrDefault();
             }
             else
@@ -114,7 +114,7 @@ namespace Tickets.Controllers
                     ReceivablePercent = n.DiscountPercent,
                     CreditNoteId = creditNoteId,
                     Concept = n.Concepts,
-                    Production = n.Raffle.Prospect.Production - 1
+                    Production = n.IdentifyBaches.FirstOrDefault().Raffle.Prospect.Production - 1,
                 }).FirstOrDefault();
             }
             return View(payment);
@@ -975,6 +975,17 @@ namespace Tickets.Controllers
         }
 
         //
+        //  GET: Reports/ReturnedGroupClientDetails
+        [Authorize]
+        [HttpGet]
+        public ActionResult ReturnedGroupClientDetails(int raffleId, int clientId, string group)
+        {
+            Procedure_ReturnedGroupByClient procedure_ReturnedGroupByClient = new Procedure_ReturnedGroupByClient();
+            var Resultado = procedure_ReturnedGroupByClient.ReturnedGroupByClient(raffleId, clientId, group);
+            return View(Resultado);
+        }
+
+        //
         //  GET: Reports/GetCashReport
         [Authorize]
         [HttpGet]
@@ -988,11 +999,11 @@ namespace Tickets.Controllers
 
             if (userId == 0)
             {
-                receiptPayment = context.ReceiptPayments.AsEnumerable().Where(i => i.CreateDate.Date == FechaConvert.Date).ToList();
+                receiptPayment = context.ReceiptPayments.AsEnumerable().Where(i => i.ReceiptDate.Date == FechaConvert.Date).ToList();
             }
             else
             {
-                receiptPayment = context.ReceiptPayments.AsEnumerable().Where(i => i.CreateUser == userId && i.CreateDate.Date == FechaConvert.Date).ToList();
+                receiptPayment = context.ReceiptPayments.AsEnumerable().Where(i => i.CreateUser == userId && i.ReceiptDate.Date == FechaConvert.Date).ToList();
             }
 
             if (receiptPayment.Count <= 0)

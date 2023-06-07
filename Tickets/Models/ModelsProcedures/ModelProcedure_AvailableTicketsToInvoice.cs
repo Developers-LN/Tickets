@@ -1,6 +1,6 @@
 ﻿namespace Tickets.Models.ModelsProcedures
 {
-    public class ModelAvailableTicketsToInvoice
+    public class ModelProcedure_AvailableTicketsToInvoice
     {
         public bool Data { get; set; }
         public int AllocationId { get; set; }

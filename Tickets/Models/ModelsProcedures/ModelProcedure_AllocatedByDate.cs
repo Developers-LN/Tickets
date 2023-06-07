@@ -1,6 +1,6 @@
 ﻿namespace Tickets.Models.ModelsProcedures
 {
-    public class AllocatedByDate
+    public class ModelProcedure_AllocatedByDate
     {
         public bool Data { get; set; }
         public string AllocateDate { get; set; }

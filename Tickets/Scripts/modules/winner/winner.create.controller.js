@@ -15,15 +15,9 @@
 
         $('#phoneNumber').mask("(999) 999-9999");
 
-        $scope.WinnerDocument = "";
-        $scope.WinnerName = "";
-        $scope.WinnerPhone = "";
-        $scope.AddWinner = 0;
-        $scope.GenderId = 0;
-
         this.validateWinnerData = function (winner) {
             var error = '', isReq = ' es un campo requerido. <br>';
-            if (winner.Name === undefined) {
+            if (winner.WinnerName === undefined) {
                 error += 'Nombre' + isReq;
             }
             if (winner.DocumentType === undefined) {
@@ -32,11 +26,8 @@
             if (winner.DocumentNumber === undefined) {
                 error += 'Número de documento' + isReq;
             }
-            if (winner.WinnerName === undefined) {
-                error += 'Nombre' + isReq;
-            }
             if (winner.GenderId === undefined) {
-                error += 'Género' + isReq;
+                error += 'Sexo' + isReq;
             }
             if (winner.Phone === undefined) {
                 error += 'Teléfono' + isReq;
@@ -54,8 +45,8 @@
                 DocumentNumber: undefined,
                 WinnerName: undefined,
                 Phone: undefined,
-                GenderId: undefined,
-                Notes: undefined
+                GenderId: undefined/*,
+                Notes: undefined*/
             };
         }
 
@@ -91,6 +82,7 @@
                     window.loading.hide();
                     $scope.documentTypes = data.documentType;
                     $scope.genders = data.genders;
+                    $scope.awardsHistory = data.awardsHistory;
 
                     if ($stateParams.winnerId == 0) {
                         self.clearWinner();
@@ -102,8 +94,30 @@
                             $scope.$apply();
                         }, 0);
                     }
+                    $rootScope.destroyDataTable();
+                    $scope.$apply();
+                    $rootScope.dataTable();
                 }
             });
+        }
+
+        $scope.typeDocument = function () {
+            //CEDULA
+            if ($scope.winner.DocumentType == 5913) {
+                $('#documentNumber').mask("999-9999999-9");
+                $scope.maxLenght = 13;
+            }
+            //RNC
+            else if ($scope.winner.DocumentType == 5914) {
+                $('#documentNumber').mask("999-99999-9");
+                $scope.maxLenght = 11;
+            }
+            //PASAPORTE
+            else {
+                $('#documentNumber').unmask();
+                $scope.maxLenght = 20;
+            }
+            $scope.winner.DocumentNumber = undefined;
         }
 
         this.loadWinnerData();

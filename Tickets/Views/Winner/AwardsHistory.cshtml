@@ -1,0 +1,59 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Historial de premios pagados";
+}
+
+<div class="col-lg-12 no-padder" ng-controller="WinnerCreateController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div class="col-lg-12 well no-padder">
+                    <fieldset>
+                        <div class="col-lg-12 no-padder">
+                            <div class="col-lg-4">Documento <b>{{winner.DocumentNumber}}</b></div>
+                            <div class="col-lg-4">Tipo de documento: <b>{{winner.DocumentTypeName}}</b></div>
+                            <div class="col-lg-4">Ganador: <b>{{winner.WinnerName}}</b></div>
+                        </div>
+                    </fieldset>
+                    <br />
+                    <fieldset>
+                        <div class="col-lg-12 no-padder">
+                            <div class="col-lg-4">Télefono: <b>{{winner.WinnerName}}</b></div>
+                            <div class="col-lg-4">Sexo: <b>{{winner.GenderName}}</b></div>
+                        </div>
+                    </fieldset>
+                    <br />
+                </div>
+
+                <div class="row-border hover">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Lote</th>
+                                <th class="text-center">Creación</th>
+                                <th class="text-center">Sorteo</th>
+                                <th class="text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="award in awardsHistory">
+                                <td class="text-center">{{award.Id}}</td>
+                                <td class="text-center">{{award.CreateDate}}</td>
+                                <td class="text-center">{{award.RaffleId}} - {{award.RaffleName}}</td>
+                                <td class="text-center">
+                                    <a href="/#/ticket/identifybachdetail/{{award.Id}}" target="_blank" title="Ver detalles del lote" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg">
+    <a ui-sref="app.winnersList" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

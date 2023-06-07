@@ -394,30 +394,31 @@
     <Compile Include="Models\Log.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ModelsProcedures\AllocatedByDate.cs" />
-    <Compile Include="Models\ModelsProcedures\AllocationSummary.cs" />
-    <Compile Include="Models\ModelsProcedures\Allocations\AllocatedSummary.cs" />
-    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedureIdentifyBachPayment.cs" />
-    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedureIdentifyBachPaymentNoteCredit.cs" />
-    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedureIdentifyBach.cs" />
-    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModeProcedureIdentifyBachNumbers.cs" />
-    <Compile Include="Models\ModelsProcedures\InvoiceListModel.cs" />
-    <Compile Include="Models\ModelsProcedures\ModelAvailableTickets.cs" />
-    <Compile Include="Models\ModelsProcedures\ModelAvailableTicketsToInvoice.cs" />
-    <Compile Include="Models\ModelsProcedures\ModelCuadreSorteo.cs" />
-    <Compile Include="Models\ModelsProcedures\ModelDevolucionesPremiadas.cs" />
-    <Compile Include="Models\ModelsProcedures\ModelInvoicedTickets.cs" />
-    <Compile Include="Models\ModelsProcedures\ModelNetSalesByClient.cs" />
-    <Compile Include="Models\ModelsProcedures\ModelPayableAwardByClient.cs" />
-    <Compile Include="Models\ModelsProcedures\ModelPayableAwards.cs" />
-    <Compile Include="Models\ModelsProcedures\ModelReturnedNumbersByClient.cs" />
-    <Compile Include="Models\ModelsProcedures\ModelReturnedTickets.cs" />
-    <Compile Include="Models\ModelsProcedures\ModelSalesAndPendingPayments.cs" />
-    <Compile Include="Models\ModelsProcedures\PayableAward\ModelIdentifyAwardPayedByClientProcedure.cs" />
-    <Compile Include="Models\ModelsProcedures\PayableAward\ModelPayableAwardSummary.cs" />
-    <Compile Include="Models\ModelsProcedures\ReturnedByGroupModel.cs" />
-    <Compile Include="Models\ModelsProcedures\Returns\ReturnsSummary.cs" />
-    <Compile Include="Models\ModelsProcedures\ValidateElectronicSale.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_AllocatedByDate.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_AllocationSummary.cs" />
+    <Compile Include="Models\ModelsProcedures\Allocations\ModelProcedure_AllocatedSummary.cs" />
+    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedure_IdentifyBachPayment.cs" />
+    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedure_IdentifyBachPaymentNoteCredit.cs" />
+    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedure_IdentifyBach.cs" />
+    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedure_IdentifyBachNumbers.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_InvoiceListModel.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_AvailableTickets.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_AvailableTicketsToInvoice.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_CuadreSorteo.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_DevolucionesPremiadas.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_InvoicedTickets.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_NetSalesByClient.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_PayableAwardByClient.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_PayableAwards.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_ReturnedNumbersByClient.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_ReturnedTickets.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_SalesAndPendingPayments.cs" />
+    <Compile Include="Models\ModelsProcedures\PayableAward\ModelProcedure_IdentifyAwardPayedByClient.cs" />
+    <Compile Include="Models\ModelsProcedures\PayableAward\ModelProcedure_PayableAwardSummary.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_ReturnedByGroupModel.cs" />
+    <Compile Include="Models\ModelsProcedures\Returns\ModelProcedure_ReturnedGroupByClient.cs" />
+    <Compile Include="Models\ModelsProcedures\Returns\ModelProcedure_ReturnsSummary.cs" />
+    <Compile Include="Models\ModelsProcedures\ModelProcedure_ValidateElectronicSale.cs" />
     <Compile Include="Models\Module.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
@@ -459,6 +460,7 @@
     <Compile Include="Models\Procedures\ReturnedNumbersByClient.cs" />
     <Compile Include="Models\Procedures\ReturnedTicketsProcedure.cs" />
     <Compile Include="Models\Procedures\Receivables\SalesAndPendingPayments.cs" />
+    <Compile Include="Models\Procedures\Returns\Procedure_ReturnedGroupByClient.cs" />
     <Compile Include="Models\Procedures\Returns\ReturnsSummaryProcedure.cs" />
     <Compile Include="Models\Procedures\ValidateElectronicSalesProcedure.cs" />
     <Compile Include="Models\ProductionCost.cs">
@@ -1013,6 +1015,7 @@
     <Content Include="Scripts\modules\ticketAllocation\ticket.reassign.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\modules\ticketReturned\returned.by.group.controller.js" />
     <Content Include="Scripts\modules\ticketSuscriber\suscriber.details.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -3251,6 +3254,11 @@
     <Content Include="Views\Reports\BilletesAnulados.cshtml" />
     <Content Include="Views\Winner\Create.cshtml" />
     <Content Include="Scripts\modules\winner\winner.create.controller.js" />
+    <Content Include="Views\Winner\AwardsHistory.cshtml" />
+    <Content Include="Views\TicketReturned\PrintReturnedByGroup.cshtml" />
+    <Content Include="Views\Reports\ReturnedGroupClientDetails.cshtml" />
+    <Content Include="Views\TicketReturned\ReturnedGroupClientDetails.cshtml" />
+    <Content Include="Scripts\modules\ticketReturned\returned.group.details.client.controller.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

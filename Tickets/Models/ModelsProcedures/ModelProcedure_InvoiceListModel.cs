@@ -2,7 +2,7 @@
 
 namespace Tickets.Models.ModelsProcedures
 {
-    public class InvoiceListModel
+    public class ModelProcedure_InvoiceListModel
     {
         public bool Data { get; set; }
         public int Id { get; set; }

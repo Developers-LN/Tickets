@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ModelDevolucionesPremiadas> ConsultaDevolucionesPremiadas(int raffle, string grupo)
+        public IEnumerable<ModelProcedure_DevolucionesPremiadas> ConsultaDevolucionesPremiadas(int raffle, string grupo)
         {
-            var lista = new List<ModelDevolucionesPremiadas>();
+            var lista = new List<ModelProcedure_DevolucionesPremiadas>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -25,7 +25,7 @@ namespace Tickets.Models.Procedures
                 {
                     while (sqlDataReader.Read())
                     {
-                        var devolucion = new ModelDevolucionesPremiadas()
+                        var devolucion = new ModelProcedure_DevolucionesPremiadas()
                         {
                             Data = true,
                             RaffleId = raffle,
@@ -43,7 +43,7 @@ namespace Tickets.Models.Procedures
                 }
                 else
                 {
-                    var devolucion = new ModelDevolucionesPremiadas()
+                    var devolucion = new ModelProcedure_DevolucionesPremiadas()
                     {
                         Data = false,
                         RaffleId = raffle,

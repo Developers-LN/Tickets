@@ -27,6 +27,15 @@ namespace Tickets.Controllers
         }
 
         //
+        //  GET: /TicketReturned/PrintReturnedByGroup
+        [Authorize]
+        [HttpGet]
+        public ActionResult PrintReturnedByGroup()
+        {
+            return View();
+        }
+
+        //
         //  GET: /TicketReturned/ReturnedValidation
         [Authorize]
         [HttpGet]
@@ -85,6 +94,15 @@ namespace Tickets.Controllers
         [Authorize]
         [HttpGet]
         public ActionResult ReturnedGroupDetails()
+        {
+            return View();
+        }
+
+        //
+        //  GET: /TicketReturned/ReturnedGroupDetails
+        [Authorize]
+        [HttpGet]
+        public ActionResult ReturnedGroupClientDetails()
         {
             return View();
         }

@@ -389,6 +389,10 @@
                 url: '/ticket/returnedGroupDetails/:group/:raffleId',
                 templateUrl: Route.base('TicketReturned/ReturnedGroupDetails')
             })
+            .state('app.ticketReturnGroupClientDetails', {
+                url: '/ticket/returnedGroupClientDetails/:group/:clientId/:raffleId',
+                templateUrl: Route.base('TicketReturned/ReturnedGroupClientDetails')
+            })
             .state('app.ticketElectronicSalesDetails', {
                 url: '/ticket/electronicSalesGroupDetails/:allocationId',
                 templateUrl: Route.base('ElectronicSales/ElectronicSalesGroupDetails')
@@ -523,6 +527,11 @@
                 templateUrl: Route.base('Cash/InvoicePaymentHistory'),
                 resolve: {}
             })
+            .state('app.AwardsHistory', {
+                url: '/winner/awardsHistory/:winnerId',
+                templateUrl: Route.base('Winner/AwardsHistory'),
+                resolve: {}
+            })
             .state('app.electronicSalesDetails', {
                 url: '/electronic/electronicSales/:allocationId',
                 templateUrl: Route.base('ElectronicSales/ElectronicSalesDetails'),
@@ -603,6 +612,11 @@
             .state('app.ticketReturnedAwardPrint', {
                 url: '/ticket/returnedPrint',
                 templateUrl: Route.base('TicketReturned/PrintReturnedList'),
+                resolve: {}
+            })
+            .state('app.ticketReturnedByGroup', {
+                url: '/ticket/returnedByGroup',
+                templateUrl: Route.base('TicketReturned/PrintReturnedByGroup'),
                 resolve: {}
             })
             .state('app.returnedAwardReports', {

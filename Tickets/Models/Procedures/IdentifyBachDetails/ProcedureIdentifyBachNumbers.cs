@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures.IdentifyBachDetails
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ModeProcedureIdentifyBachNumbers> GetIdentifyBachNumbers(int Bach)
+        public IEnumerable<ModelProcedure_IdentifyBachNumbers> GetIdentifyBachNumbers(int Bach)
         {
-            var IdentifyBachNumbers = new List<ModeProcedureIdentifyBachNumbers>();
+            var IdentifyBachNumbers = new List<ModelProcedure_IdentifyBachNumbers>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures.IdentifyBachDetails
                 {
                     while (sqlDataReader.Read())
                     {
-                        var bachPayment = new ModeProcedureIdentifyBachNumbers()
+                        var bachPayment = new ModelProcedure_IdentifyBachNumbers()
                         {
                             Data = true,
                             Id = Convert.ToInt32(sqlDataReader["Id"].ToString()),

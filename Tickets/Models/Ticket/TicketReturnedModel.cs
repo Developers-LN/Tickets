@@ -103,10 +103,7 @@ namespace Tickets.Models.Ticket
         {
             var context = new TicketsEntities();
 
-            var returneds = context.TicketReturns.Where(d =>
-                    (d.RaffleId == raffleId)
-                    && (d.ClientId == clientId || clientId == 0)
-                    && (d.Statu == status || status == 0)
+            var returneds = context.TicketReturns.Where(d => (d.RaffleId == raffleId) && (d.ClientId == clientId || clientId == 0) && (d.Statu == status || status == 0)
                 ).ToList()
                 .GroupBy(d => d.ReturnedGroup)
                 .Select(r => this.ToObject(r.ToList()))
@@ -532,9 +529,23 @@ namespace Tickets.Models.Ticket
         {
             var context = new TicketsEntities();
 
-            var returneds = context.TicketReturns.Where(d =>
-                    (d.RaffleId == raffleId)
-                    && (d.ReturnedGroup == group)
+            var returneds = context.TicketReturns.Where(d => (d.RaffleId == raffleId) && (d.ReturnedGroup == group)
+                ).ToList()
+                .GroupBy(d => d.ReturnedGroup)
+                .Select(r => this.ToObject(r.ToList(), true))
+                .ToList();
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Object = returneds
+            };
+        }
+
+        internal RequestResponseModel GetListByClient(int raffleId, int clientId, string group)
+        {
+            var context = new TicketsEntities();
+
+            var returneds = context.TicketReturns.Where(d => (d.RaffleId == raffleId) && (d.ReturnedGroup == group) && (d.ClientId == clientId)
                 ).ToList()
                 .GroupBy(d => d.ReturnedGroup)
                 .Select(r => this.ToObject(r.ToList(), true))

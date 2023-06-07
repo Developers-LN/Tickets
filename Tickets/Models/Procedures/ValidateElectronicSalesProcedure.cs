@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ValidateElectronicSale> ValidateElectronicSales(int AllocationId, int CreateUser)
+        public IEnumerable<ModelProcedure_ValidateElectronicSale> ValidateElectronicSales(int AllocationId, int CreateUser)
         {
-            var resultado = new List<ValidateElectronicSale>();
+            var resultado = new List<ModelProcedure_ValidateElectronicSale>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -26,7 +26,7 @@ namespace Tickets.Models.Procedures
                 {
                     while (sqlDataReader.Read())
                     {
-                        var Validate = new ValidateElectronicSale()
+                        var Validate = new ModelProcedure_ValidateElectronicSale()
                         {
                             Statu = Convert.ToInt32(sqlDataReader["Statu"].ToString()),
                             Mensaje = sqlDataReader["Mensaje"].ToString()
@@ -36,7 +36,7 @@ namespace Tickets.Models.Procedures
                 }
                 else
                 {
-                    var Validate = new ValidateElectronicSale()
+                    var Validate = new ModelProcedure_ValidateElectronicSale()
                     {
                         Statu = 0,
                         Mensaje = "Error al intentar validar la venta electrónica"

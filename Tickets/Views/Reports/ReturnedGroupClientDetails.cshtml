@@ -1,0 +1,177 @@
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.Returns.ModelProcedure_ReturnedGroupByClient>
+
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "REPORTE DE DEVOLUCION DEL GRUPO " + Model.FirstOrDefault().Grupo + " DEL SORTEO " + Model.FirstOrDefault().RaffleId;
+
+    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.ProduccionSorteo : "";
+    string adminCargo = config != null ? config.ProduccionSorteoCargo : "";
+    //var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+    int TotalRegistros = 0;
+    int TotalFracciones = 0;
+}
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-8 {
+        width: 66.666%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACIÓN DE LA LOTERIA NACIONAL</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>"REPORTE DE DEVOLUCION DEL GRUPO @Model.FirstOrDefault().Grupo DEL SORTEO NO. @Model.FirstOrDefault().RaffleId</b>
+        </div>
+
+        <div class="col-lg-12 no-padder text-right">
+            <div class="col-lg-12 no-padder text-right">
+                <b>FECHA: </b> @DateTime.Now.ToShortDateString()
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>SORTEO: </b> @Model.FirstOrDefault().RaffleId
+            </div>
+        </div>
+        <div class="col-lg-12 no-padder text-right">
+            <div class="col-lg-12">
+                <div class="col-lg-12 no-padder text-left">
+                    <b>CLIENTE: </b> @Model.FirstOrDefault().ClientId - @Model.FirstOrDefault().ClientName
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">FILA</th>
+                    <th class="text-center">COL 1</th>
+                    <th class="text-center">COL 2</th>
+                    <th class="text-center">COL 3</th>
+                    <th class="text-center">COL 4</th>
+                    <th class="text-center">COL 5</th>
+                    <th class="text-center">COL 6</th>
+                    <th class="text-center">COL 7</th>
+                    <th class="text-center">COL 8</th>
+                    <th class="text-center">COL 9</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.FirstOrDefault().TicketFraction == 1)
+                {
+                    int line = 1;
+                    int forIndex = 0;
+                    int NumberCount = 0;
+                    int ColumnCount = 0;
+                    var Billetes = Model.Select(s => new { s.TicketNumber, s.FractionFrom, s.FractionTo }).OrderBy(o => o.TicketNumber).ToArray();
+                    TotalFracciones = Model.Sum(s => (s.FractionTo - s.FractionFrom + 1));
+                    TotalRegistros = Billetes.Count();
+                    var LimitRow = TotalRegistros / 9;
+
+                    while (NumberCount <= LimitRow)
+                    {
+                        ColumnCount = 1;
+                        <tr>
+                            <td class="text-center" style="color:red; font-weight:bold; font-size:10pt;">@line</td>
+                            @while (ColumnCount <= 9)
+                            {
+                                if (forIndex <= (TotalRegistros - 1))
+                                {
+                                    <td class="text-center" style="font-size:10pt;">@(Billetes[forIndex].TicketNumber)</td>
+                                    forIndex++;
+                                }
+                                ColumnCount++;
+                            }
+                        </tr>
+                        line++;
+                        NumberCount++;
+                    }
+                }
+                else
+                {
+                    int line = 1;
+                    int forIndex = 0;
+                    int NumberCount = 0;
+                    int ColumnCount = 0;
+                    var Billetes = Model.Select(s => new { s.TicketNumber, s.FractionFrom, s.FractionTo }).OrderBy(o => o.TicketNumber).ToArray();
+                    TotalFracciones = Model.Sum(s => (s.FractionTo - s.FractionFrom + 1));
+                    TotalRegistros = Billetes.Count();
+                    var LimitRow = TotalRegistros / 9;
+
+                    while (NumberCount <= LimitRow)
+                    {
+                        ColumnCount = 1;
+                        <tr>
+                            <td class="text-center" style="color:red; font-weight:bold; font-size:10pt;">@line</td>
+                            @while (ColumnCount <= 9)
+                            {
+                                if (forIndex <= (TotalRegistros - 1))
+                                {
+                                    <td class="text-center" style="font-size:10pt;">@(Billetes[forIndex].TicketNumber) | @(Billetes[forIndex].FractionFrom + " - " + Billetes[forIndex].FractionTo)</td>
+                                    forIndex++;
+                                }
+                                ColumnCount++;
+                            }
+                        </tr>
+                        line++;
+                        NumberCount++;
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr class="total">
+                    <td class="text-right" colspan="10">TOTAL BILLETES..: @((TotalFracciones / Model.FirstOrDefault().TicketFraction).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+                <tr class="total">
+                    <td class="text-right" colspan="10">TOTAL FRACCIONES..: @((TotalFracciones % Model.FirstOrDefault().TicketFraction).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="col-lg-12 no-padder text-center" style="margin-top:25px">
+        <b>@adminName</b>
+    </div>
+    <div class="col-lg-12 no-padder text-center">
+        <span>@adminCargo</span>
+    </div>
+</div>

@@ -225,7 +225,7 @@
                     error += 'Nombre' + isReq;
                 }
                 if (identifyBach.GenderId === undefined) {
-                    error += 'Género' + isReq;
+                    error += 'Sexo' + isReq;
                 }
                 if (identifyBach.WinnerPhone === undefined) {
                     error += 'Teléfono' + isReq;

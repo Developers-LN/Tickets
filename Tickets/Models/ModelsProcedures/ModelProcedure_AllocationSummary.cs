@@ -2,7 +2,7 @@
 
 namespace Tickets.Models.ModelsProcedures
 {
-    public class AllocationSummary
+    public class ModelProcedure_AllocationSummary
     {
         public bool Data { get; set; }
         public int AsignacionId { get; set; }

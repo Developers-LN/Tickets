@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ReturnedByGroupModel> ConsultarBilletesDevueltosPorGrupo(int raffle)
+        public IEnumerable<ModelProcedure_ReturnedByGroupModel> ConsultarBilletesDevueltosPorGrupo(int raffle)
         {
-            var lista = new List<ReturnedByGroupModel>();
+            var lista = new List<ModelProcedure_ReturnedByGroupModel>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures
                 {
                     while (sqlDataReader.Read())
                     {
-                        var pagables = new ReturnedByGroupModel()
+                        var pagables = new ModelProcedure_ReturnedByGroupModel()
                         {
                             Datos = true,
                             RaffleId = raffle,
@@ -42,7 +42,7 @@ namespace Tickets.Models.Procedures
                 }
                 else
                 {
-                    var pagables = new ReturnedByGroupModel()
+                    var pagables = new ModelProcedure_ReturnedByGroupModel()
                     {
                         Datos = false,
                         RaffleId = raffle,

@@ -2,7 +2,7 @@
 
 namespace Tickets.Models.ModelsProcedures
 {
-    public class ModelSalesAndPendingPayments
+    public class ModelProcedure_SalesAndPendingPayments
     {
         public bool Data { get; set; }
         public int ReportType { get; set; }

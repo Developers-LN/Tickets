@@ -39,7 +39,7 @@
                                 <td>{{client.StatuDesc}}</td>
                                 <td>
                                     <a ng-click="startWorkflowProspect(client)" ng-show="client.Statu == @((int)Tickets.Models.Enums.ClientStatuEnum.Created)" title="Enviar client a aprobación" class="{{moduleCanAdd}}"><i class="fa fa-external-link"></i></a>
-                                    <a href="#/client/client/{{client.Id}}" title="Modificar Cliente" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
+                                    <a href="#/client/client/{{client.Id}}" title="Modificar cliente" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
                                     <a ng-click="deleteClient(client)" title="Suspender Cliente" class="hide {{moduleCanDelete}}"><i class="fa fa-ban"></i></a>
                                     <a href="/Reports/ClientDetails?ClientId={{client.Id}}" target="_blank" title="Detalles de cliente" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
                                     @*<a href="/Reports/ShowDocument?clientId={{client.Id}}&type=admin" target="_blank" title="Ver Documento Administrativo"><i class="fa fa-file-o"></i></a>*@

@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tickets.Models.AuxModels;
@@ -607,9 +606,9 @@ namespace Tickets.Models.Ticket
                                     CreateUser = WebSecurity.CurrentUserId,
                                     CreateDate = DateTime.Now
                                 };
+                                context.Winners.Add(newWinner);
+                                context.SaveChanges();
                             }
-                            context.Winners.Add(newWinner);
-                            context.SaveChanges();
                         }
                         else
                         {
@@ -873,13 +872,16 @@ namespace Tickets.Models.Ticket
                                 newWinner = new Winner
                                 {
                                     DocumentType = identifyBach.DocumentType,
-                                    DocumentNumber = identifyBach.DocumentNumber,
+                                    DocumentNumber = identifyBach.DocumentNumber.ToUpper(),
                                     WinnerName = identifyBach.WinnerName,
-                                    Phone = identifyBach.WinnerPhone
+                                    Phone = identifyBach.WinnerPhone,
+                                    GenderId = identifyBach.GenderId,
+                                    CreateUser = WebSecurity.CurrentUserId,
+                                    CreateDate = DateTime.Now
                                 };
+                                context.Winners.Add(newWinner);
+                                context.SaveChanges();
                             }
-                            context.Winners.Add(newWinner);
-                            context.SaveChanges();
                         }
                         else
                         {
@@ -993,12 +995,13 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
             List<string> messageList = new List<string>();
             var message = "";
-            var raffleAwards = context.RaffleAwards.Where(r => r.RaffleId == awardTicket.RaffleId && r.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived).ToList();
+            var raffleAwards = context.RaffleAwards.Where(r => r.RaffleId == awardTicket.RaffleId).ToList();
             var clientGroup = 0;
             if (clientId != 0)
             {
                 clientGroup = context.Clients.Where(c => c.Id == clientId).FirstOrDefault().GroupId;
             }
+
             var allocationNumbers = context.TicketAllocationNumbers.Where(t => t.Number == awardTicket.NumberId &&
                                                                           t.TicketAllocation.RaffleId == awardTicket.RaffleId &&
                                                                           t.TicketType == (int)TicketsTypeEnum.AvailableTicket).ToList();
@@ -1009,120 +1012,129 @@ namespace Tickets.Models.Ticket
             }
             else
             {
-                var SellerAward = context.RaffleAwards.Where(r => r.RaffleId == awardTicket.RaffleId && r.ControlNumber == awardTicket.NumberId).ToList();
+                var SellerAward = raffleAwards.Where(r => r.RaffleId == awardTicket.RaffleId && r.ControlNumber == awardTicket.NumberId).ToList();
 
-                if (SellerAward.Any(a => a.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived))
+                if (SellerAward.Any())
                 {
-                    string noAllocateFractions = "";
-                    for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
+                    if (SellerAward.Any(a => a.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived))
                     {
-                        if (allocationNumbers.Where(a => fraction >= a.FractionFrom && fraction <= a.FractionTo).Any() == false)
-                        {
-                            noAllocateFractions += fraction + (fraction != awardTicket.FractionTo ? ", " : "");
-                        }
-                    }
-                    if (noAllocateFractions != "")
-                    {
-                        messageList.Add("Las fracciones ( " + noAllocateFractions + " ) del billete " + awardTicket.NumberId + " no fueron asignada.");
-
-                        return new
-                        {
-                            result = false,
-                            messages = messageList
-                        };
-                    }
-
-                    for (int i = 0; i < allocationNumbers.Count(); i++)
-                    {
-                        var allocationNumber = allocationNumbers[i];
-
-                        if (allocationNumber.Statu == (int)TicketStatusEnum.Alloated)
-                        {
-                            if (awardTicket.FractionFrom >= allocationNumber.FractionFrom && awardTicket.FractionTo <= allocationNumber.FractionTo)
-                            {
-                                messageList.Add("La fracción " + allocationNumber.FractionFrom + " hasta " + allocationNumber.FractionTo + " del billete " + allocationNumber.Number + " fue asignada pero no impresa.");
-                            }
-                            continue;
-                        }
-                        else if (allocationNumber.Statu == (int)TicketStatusEnum.Printed)
-                        {
-                            if (awardTicket.FractionFrom >= allocationNumber.FractionFrom && awardTicket.FractionTo <= allocationNumber.FractionTo)
-                            {
-                                messageList.Add("La fracción " + allocationNumber.FractionFrom + " hasta " + allocationNumber.FractionTo + " del billete " + allocationNumber.Number + " fue impresa pero no facturada.");
-                            }
-                            continue;
-                        }
-                        var returneds = context.TicketReturns.Where(r => r.RaffleId == allocationNumber.TicketAllocation.RaffleId && r.TicketAllocationNumber.Number == allocationNumber.Number).ToList();
-                        string returnedError = "";
+                        string noAllocateFractions = "";
                         for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
                         {
-                            if (returneds.Where(r => fraction >= r.FractionFrom && fraction <= r.FractionTo).Any())
+                            if (allocationNumbers.Where(a => fraction >= a.FractionFrom && fraction <= a.FractionTo).Any() == false)
                             {
-                                returnedError += fraction + (fraction == awardTicket.FractionTo ? "" : ", ");
+                                noAllocateFractions += fraction + (fraction != awardTicket.FractionTo ? ", " : "");
                             }
                         }
-                        if (returnedError != "")
+                        if (noAllocateFractions != "")
                         {
-                            messageList.Add("La fracciones ( " + returnedError + " ) del billete " + allocationNumber.Number + " fue devuelta.");
-                            continue;
+                            messageList.Add("Las fracciones ( " + noAllocateFractions + " ) del billete " + awardTicket.NumberId + " no fueron asignada.");
+
+                            return new
+                            {
+                                result = false,
+                                messages = messageList
+                            };
                         }
 
-                        var identifyNumbers = context.IdentifyNumbers.Where(r =>
-                            r.IdentifyBach.RaffleId == allocationNumber.TicketAllocation.RaffleId &&
-                            r.TicketAllocationNumber.Number == allocationNumber.Number &&
-                            r.IdentifyBachNumberType == (int)IdentifyBachNumberTypeEnum.Gamer
-                            /*&& r.IdentifyBach.Type == awardTicket.Type*/).ToList();
-
-                        string identifyError = "";
-                        for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
+                        for (int i = 0; i < allocationNumbers.Count(); i++)
                         {
-                            if (identifyNumbers.Where(r => fraction >= r.FractionFrom && fraction <= r.FractionTo).Any())
+                            var allocationNumber = allocationNumbers[i];
+
+                            if (allocationNumber.Statu == (int)TicketStatusEnum.Alloated)
                             {
-                                identifyError += fraction + (fraction == awardTicket.FractionTo ? "" : ", ");
+                                if (awardTicket.FractionFrom >= allocationNumber.FractionFrom && awardTicket.FractionTo <= allocationNumber.FractionTo)
+                                {
+                                    messageList.Add("La fracción " + allocationNumber.FractionFrom + " hasta " + allocationNumber.FractionTo + " del billete " + allocationNumber.Number + " fue asignada pero no impresa.");
+                                }
+                                continue;
+                            }
+                            else if (allocationNumber.Statu == (int)TicketStatusEnum.Printed)
+                            {
+                                if (awardTicket.FractionFrom >= allocationNumber.FractionFrom && awardTicket.FractionTo <= allocationNumber.FractionTo)
+                                {
+                                    messageList.Add("La fracción " + allocationNumber.FractionFrom + " hasta " + allocationNumber.FractionTo + " del billete " + allocationNumber.Number + " fue impresa pero no facturada.");
+                                }
+                                continue;
+                            }
+                            var returneds = context.TicketReturns.Where(r => r.RaffleId == allocationNumber.TicketAllocation.RaffleId && r.TicketAllocationNumber.Number == allocationNumber.Number).ToList();
+                            string returnedError = "";
+                            for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
+                            {
+                                if (returneds.Where(r => fraction >= r.FractionFrom && fraction <= r.FractionTo).Any())
+                                {
+                                    returnedError += fraction + (fraction == awardTicket.FractionTo ? "" : ", ");
+                                }
+                            }
+                            if (returnedError != "")
+                            {
+                                messageList.Add("La fracciones ( " + returnedError + " ) del billete " + allocationNumber.Number + " fue devuelta.");
+                                continue;
+                            }
+
+                            var identifyNumbers = context.IdentifyNumbers.Where(r =>
+                                r.IdentifyBach.RaffleId == allocationNumber.TicketAllocation.RaffleId &&
+                                r.TicketAllocationNumber.Number == allocationNumber.Number &&
+                                r.IdentifyBachNumberType == (int)IdentifyBachNumberTypeEnum.Gamer
+                                /*&& r.IdentifyBach.Type == awardTicket.Type*/).ToList();
+
+                            string identifyError = "";
+                            for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
+                            {
+                                if (identifyNumbers.Where(r => fraction >= r.FractionFrom && fraction <= r.FractionTo).Any())
+                                {
+                                    identifyError += fraction + (fraction == awardTicket.FractionTo ? "" : ", ");
+                                }
+                            }
+                            if (identifyError != "")
+                            {
+                                var isPayed = Utils.IdentifyBachIsPayedMinor(identifyNumbers.FirstOrDefault().IdentifyBach, raffleAwards) || Utils.IdentifyBachIsPayedMayor(identifyNumbers.FirstOrDefault().IdentifyBach, raffleAwards);
+                                if (isPayed == true)
+                                {
+                                    messageList.Add("La fracciones ( " + identifyError + " ) del billete " + allocationNumber.Number + " fue pagada.");
+                                }
+                                else
+                                {
+                                    messageList.Add("La fracciones ( " + identifyError + " ) del billete " + allocationNumber.Number + " fue identificada.");
+                                }
+                                continue;
                             }
                         }
-                        if (identifyError != "")
+
+                        if (message == "")
                         {
-                            var isPayed = Utils.IdentifyBachIsPayedMinor(identifyNumbers.FirstOrDefault().IdentifyBach, raffleAwards) || Utils.IdentifyBachIsPayedMayor(identifyNumbers.FirstOrDefault().IdentifyBach, raffleAwards);
-                            if (isPayed == true)
+                            if (raffleAwards.Where(r =>
+                                r.ControlNumber == awardTicket.NumberId
+                                && r.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived
+                                ).Any() == false)
                             {
-                                messageList.Add("La fracciones ( " + identifyError + " ) del billete " + allocationNumber.Number + " fue pagada.");
+                                messageList.Add("Las fracciones " + awardTicket.FractionFrom + " hasta " + awardTicket.FractionTo + " del billete " + awardTicket.NumberId + " no tienen premios menores.");
                             }
                             else
                             {
-                                messageList.Add("La fracciones ( " + identifyError + " ) del billete " + allocationNumber.Number + " fue identificada.");
-                            }
-                            continue;
-                        }
-                    }
-
-                    if (message == "")
-                    {
-                        if (raffleAwards.Where(r =>
-                            r.ControlNumber == awardTicket.NumberId
-                            ).Any() == false)
-                        {
-                            messageList.Add("Las fracciones " + awardTicket.FractionFrom + " hasta " + awardTicket.FractionTo + " del billete " + awardTicket.NumberId + " no tienen premios menores.");
-                        }
-                        else
-                        {
-                            if (clientId != 0)
-                            {
-                                if (raffleAwards.Where(r =>
-                                r.ControlNumber == awardTicket.NumberId
-                                && (r.Award.TypesAwardId == 1 || r.Award.TypesAwardId == 6)
-                                && clientGroup == 36
-                                ).Any() == true)
+                                if (clientId != 0)
                                 {
-                                    messageList.Add("Los clientes mayoristas no pueden pagar premios mayores." + awardTicket.NumberId);
+                                    if (raffleAwards.Where(r =>
+                                    r.ControlNumber == awardTicket.NumberId
+                                    && (r.Award.TypesAwardId == 1 || r.Award.TypesAwardId == 6)
+                                    && r.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived
+                                    && clientGroup == 36
+                                    ).Any() == true)
+                                    {
+                                        messageList.Add("Los clientes mayoristas no pueden pagar premios mayores." + awardTicket.NumberId);
+                                    }
                                 }
                             }
                         }
                     }
+                    else
+                    {
+                        message = "El billete " + awardTicket.NumberId + " pertenece a los premios al vendedor.";
+                    }
                 }
                 else
                 {
-                    message = "El billete " + awardTicket.NumberId + " pertenece a los premios al vendedor.";
+                    message = "El billete " + awardTicket.NumberId + " no contiene premios.";
                 }
             }
 
@@ -1143,7 +1155,7 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
             List<string> messageList = new List<string>();
             var message = "";
-            var raffleAwards = context.RaffleAwards.Where(r => r.RaffleId == awardTicket.RaffleId && r.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived).ToList();
+            var raffleAwards = context.RaffleAwards.Where(r => r.RaffleId == awardTicket.RaffleId).ToList();
             var clientGroup = 0;
             if (clientId != 0)
             {
@@ -1159,120 +1171,129 @@ namespace Tickets.Models.Ticket
             }
             else
             {
-                var SellerAward = context.RaffleAwards.Where(r => r.RaffleId == awardTicket.RaffleId && r.ControlNumber == awardTicket.NumberId && r.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived).ToList();
+                var SellerAward = raffleAwards.Where(r => r.RaffleId == awardTicket.RaffleId && r.ControlNumber == awardTicket.NumberId).ToList();
 
-                if (SellerAward.Any() == true)
+                if (SellerAward.Any())
                 {
-                    string noAllocateFractions = "";
-                    for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
+                    if (SellerAward.Any(a => a.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived))
                     {
-                        if (allocationNumbers.Where(a => fraction >= a.FractionFrom && fraction <= a.FractionTo).Any() == false)
-                        {
-                            noAllocateFractions += fraction + (fraction != awardTicket.FractionTo ? ", " : "");
-                        }
-                    }
-                    if (noAllocateFractions != "")
-                    {
-                        messageList.Add("Las fracciones ( " + noAllocateFractions + " ) del billete " + awardTicket.NumberId + " no fueron asignada.");
-
-                        return new
-                        {
-                            result = false,
-                            messages = messageList
-                        };
-                    }
-
-                    for (int i = 0; i < allocationNumbers.Count(); i++)
-                    {
-                        var allocationNumber = allocationNumbers[i];
-
-                        if (allocationNumber.Statu == (int)TicketStatusEnum.Alloated)
-                        {
-                            if (awardTicket.FractionFrom >= allocationNumber.FractionFrom && awardTicket.FractionTo <= allocationNumber.FractionTo)
-                            {
-                                messageList.Add("La fracción " + allocationNumber.FractionFrom + " hasta " + allocationNumber.FractionTo + " del billete " + allocationNumber.Number + " fue asignada pero no impresa.");
-                            }
-                            continue;
-                        }
-                        else if (allocationNumber.Statu == (int)TicketStatusEnum.Printed)
-                        {
-                            if (awardTicket.FractionFrom >= allocationNumber.FractionFrom && awardTicket.FractionTo <= allocationNumber.FractionTo)
-                            {
-                                messageList.Add("La fracción " + allocationNumber.FractionFrom + " hasta " + allocationNumber.FractionTo + " del billete " + allocationNumber.Number + " fue impresa pero no facturada.");
-                            }
-                            continue;
-                        }
-                        var returneds = context.TicketReturns.Where(r => r.RaffleId == allocationNumber.TicketAllocation.RaffleId && r.TicketAllocationNumber.Number == allocationNumber.Number).ToList();
-                        string returnedError = "";
+                        string noAllocateFractions = "";
                         for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
                         {
-                            if (returneds.Where(r => fraction >= r.FractionFrom && fraction <= r.FractionTo).Any())
+                            if (allocationNumbers.Where(a => fraction >= a.FractionFrom && fraction <= a.FractionTo).Any() == false)
                             {
-                                returnedError += fraction + (fraction == awardTicket.FractionTo ? "" : ", ");
+                                noAllocateFractions += fraction + (fraction != awardTicket.FractionTo ? ", " : "");
                             }
                         }
-                        if (returnedError != "")
+                        if (noAllocateFractions != "")
                         {
-                            messageList.Add("La fracciones ( " + returnedError + " ) del billete " + allocationNumber.Number + " fue devuelta.");
-                            continue;
+                            messageList.Add("Las fracciones ( " + noAllocateFractions + " ) del billete " + awardTicket.NumberId + " no fueron asignada.");
+
+                            return new
+                            {
+                                result = false,
+                                messages = messageList
+                            };
                         }
 
-                        var identifyNumbers = context.IdentifyNumbers.Where(r =>
-                            r.IdentifyBach.RaffleId == allocationNumber.TicketAllocation.RaffleId &&
-                            r.TicketAllocationNumber.Number == allocationNumber.Number &&
-                            r.IdentifyBachNumberType == (int)IdentifyBachNumberTypeEnum.Seller
-                            /*&& r.IdentifyBach.Type == awardTicket.Type*/).ToList();
-
-                        string identifyError = "";
-                        for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
+                        for (int i = 0; i < allocationNumbers.Count(); i++)
                         {
-                            if (identifyNumbers.Where(r => awardTicket.FractionFrom >= r.FractionFrom && awardTicket.FractionTo <= r.FractionTo).Any())
+                            var allocationNumber = allocationNumbers[i];
+
+                            if (allocationNumber.Statu == (int)TicketStatusEnum.Alloated)
                             {
-                                identifyError += fraction + (fraction == awardTicket.FractionTo ? "" : ", ");
+                                if (awardTicket.FractionFrom >= allocationNumber.FractionFrom && awardTicket.FractionTo <= allocationNumber.FractionTo)
+                                {
+                                    messageList.Add("La fracción " + allocationNumber.FractionFrom + " hasta " + allocationNumber.FractionTo + " del billete " + allocationNumber.Number + " fue asignada pero no impresa.");
+                                }
+                                continue;
+                            }
+                            else if (allocationNumber.Statu == (int)TicketStatusEnum.Printed)
+                            {
+                                if (awardTicket.FractionFrom >= allocationNumber.FractionFrom && awardTicket.FractionTo <= allocationNumber.FractionTo)
+                                {
+                                    messageList.Add("La fracción " + allocationNumber.FractionFrom + " hasta " + allocationNumber.FractionTo + " del billete " + allocationNumber.Number + " fue impresa pero no facturada.");
+                                }
+                                continue;
+                            }
+                            var returneds = context.TicketReturns.Where(r => r.RaffleId == allocationNumber.TicketAllocation.RaffleId && r.TicketAllocationNumber.Number == allocationNumber.Number).ToList();
+                            string returnedError = "";
+                            for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
+                            {
+                                if (returneds.Where(r => fraction >= r.FractionFrom && fraction <= r.FractionTo).Any())
+                                {
+                                    returnedError += fraction + (fraction == awardTicket.FractionTo ? "" : ", ");
+                                }
+                            }
+                            if (returnedError != "")
+                            {
+                                messageList.Add("La fracciones ( " + returnedError + " ) del billete " + allocationNumber.Number + " fue devuelta.");
+                                continue;
+                            }
+
+                            var identifyNumbers = context.IdentifyNumbers.Where(r =>
+                                r.IdentifyBach.RaffleId == allocationNumber.TicketAllocation.RaffleId &&
+                                r.TicketAllocationNumber.Number == allocationNumber.Number &&
+                                r.IdentifyBachNumberType == (int)IdentifyBachNumberTypeEnum.Seller
+                                /*&& r.IdentifyBach.Type == awardTicket.Type*/).ToList();
+
+                            string identifyError = "";
+                            for (var fraction = awardTicket.FractionFrom; fraction <= awardTicket.FractionTo; fraction++)
+                            {
+                                if (identifyNumbers.Where(r => awardTicket.FractionFrom >= r.FractionFrom && awardTicket.FractionTo <= r.FractionTo).Any())
+                                {
+                                    identifyError += fraction + (fraction == awardTicket.FractionTo ? "" : ", ");
+                                }
+                            }
+                            if (identifyError != "")
+                            {
+                                var isPayed = Utils.IdentifyBachSellerIsPayedMinor(identifyNumbers.FirstOrDefault().IdentifyBach, raffleAwards) || Utils.IdentifyBachSellerIsPayedMayor(identifyNumbers.FirstOrDefault().IdentifyBach, raffleAwards);
+                                if (isPayed == true)
+                                {
+                                    messageList.Add("La fracciones ( " + identifyError + " ) del billete " + allocationNumber.Number + " fue pagada.");
+                                }
+                                else
+                                {
+                                    messageList.Add("La fracciones ( " + identifyError + " ) del billete " + allocationNumber.Number + " fue identificada.");
+                                }
+                                continue;
                             }
                         }
-                        if (identifyError != "")
+
+                        if (message == "")
                         {
-                            var isPayed = Utils.IdentifyBachSellerIsPayedMinor(identifyNumbers.FirstOrDefault().IdentifyBach, raffleAwards) || Utils.IdentifyBachSellerIsPayedMayor(identifyNumbers.FirstOrDefault().IdentifyBach, raffleAwards);
-                            if (isPayed == true)
+                            if (raffleAwards.Where(r =>
+                                r.ControlNumber == awardTicket.NumberId
+                                && r.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived
+                                ).Any() == false)
                             {
-                                messageList.Add("La fracciones ( " + identifyError + " ) del billete " + allocationNumber.Number + " fue pagada.");
+                                messageList.Add("Las fracciones " + awardTicket.FractionFrom + " hasta " + awardTicket.FractionTo + " del billete " + awardTicket.NumberId + " no tienen premios menores.");
                             }
                             else
                             {
-                                messageList.Add("La fracciones ( " + identifyError + " ) del billete " + allocationNumber.Number + " fue identificada.");
-                            }
-                            continue;
-                        }
-                    }
-
-                    if (message == "")
-                    {
-                        if (raffleAwards.Where(r =>
-                            r.ControlNumber == awardTicket.NumberId
-                            ).Any() == false)
-                        {
-                            messageList.Add("Las fracciones " + awardTicket.FractionFrom + " hasta " + awardTicket.FractionTo + " del billete " + awardTicket.NumberId + " no tienen premios menores.");
-                        }
-                        else
-                        {
-                            if (clientId != 0)
-                            {
-                                if (raffleAwards.Where(r =>
-                                r.ControlNumber == awardTicket.NumberId
-                                && (r.Award.TypesAwardId == 1 || r.Award.TypesAwardId == 6)
-                                && clientGroup == 36
-                                ).Any() == true)
+                                if (clientId != 0)
                                 {
-                                    messageList.Add("Los clientes mayoristas no pueden pagar premios mayores." + awardTicket.NumberId);
+                                    if (raffleAwards.Where(r =>
+                                    r.ControlNumber == awardTicket.NumberId
+                                    && (r.Award.TypesAwardId == 1 || r.Award.TypesAwardId == 6)
+                                    && r.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived
+                                    && clientGroup == 36
+                                    ).Any() == true)
+                                    {
+                                        messageList.Add("Los clientes mayoristas no pueden pagar premios mayores." + awardTicket.NumberId);
+                                    }
                                 }
                             }
                         }
                     }
+                    else
+                    {
+                        message = "El billete " + awardTicket.NumberId + " no pertenece a los premios al vendedor.";
+                    }
                 }
                 else
                 {
-                    message = "El billete " + awardTicket.NumberId + " no pertenece a los premios al vendedor.";
+                    message = "El billete " + awardTicket.NumberId + " no contiene premios.";
                 }
             }
 

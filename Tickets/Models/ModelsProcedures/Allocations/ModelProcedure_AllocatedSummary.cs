@@ -1,6 +1,6 @@
 ﻿namespace Tickets.Models.ModelsProcedures.Allocations
 {
-    public class AllocatedSummary
+    public class ModelProcedure_AllocatedSummary
     {
         public bool Data { get; set; }
         public int RaffleId { get; set; }

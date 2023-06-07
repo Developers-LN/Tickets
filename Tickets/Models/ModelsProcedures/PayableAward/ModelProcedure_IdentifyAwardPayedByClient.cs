@@ -1,6 +1,6 @@
 ﻿namespace Tickets.Models.ModelsProcedures.PayableAward
 {
-    public class ModelIdentifyAwardPayedByClientProcedure
+    public class ModelProcedure_IdentifyAwardPayedByClient
     {
         public bool Data { get; set; }
         public int RaffleId { get; set; }

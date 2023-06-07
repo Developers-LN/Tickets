@@ -1,6 +1,6 @@
 ﻿namespace Tickets.Models.ModelsProcedures
 {
-    public class ModelCuadreSorteo
+    public class ModelProcedure_CuadreSorteo
     {
         public bool Data { get; set; }
         public int RaffleId { get; set; }

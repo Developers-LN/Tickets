@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ModelAvailableTickets> ConsultaBilletesDisponible(int raffle)
+        public IEnumerable<ModelProcedure_AvailableTickets> ConsultaBilletesDisponible(int raffle)
         {
-            var lista = new List<ModelAvailableTickets>();
+            var lista = new List<ModelProcedure_AvailableTickets>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures
                 {
                     while (sqlDataReader.Read())
                     {
-                        var Disponibles = new ModelAvailableTickets()
+                        var Disponibles = new ModelProcedure_AvailableTickets()
                         {
                             Data = true,
                             RaffleId = raffle,
@@ -36,7 +36,7 @@ namespace Tickets.Models.Procedures
                 }
                 else
                 {
-                    var Disponibles = new ModelAvailableTickets()
+                    var Disponibles = new ModelProcedure_AvailableTickets()
                     {
                         Data = false,
                         RaffleId = raffle,

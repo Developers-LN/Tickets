@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ModelReturnedNumbersByClient> ConsultarBilletesDevueltosPorCliente(int raffle)
+        public IEnumerable<ModelProcedure_ReturnedNumbersByClient> ConsultarBilletesDevueltosPorCliente(int raffle)
         {
-            var lista = new List<ModelReturnedNumbersByClient>();
+            var lista = new List<ModelProcedure_ReturnedNumbersByClient>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures
                 {
                     while (sqlDataReader.Read())
                     {
-                        var pagables = new ModelReturnedNumbersByClient()
+                        var pagables = new ModelProcedure_ReturnedNumbersByClient()
                         {
                             Datos = true,
                             RaffleId = raffle,
@@ -42,7 +42,7 @@ namespace Tickets.Models.Procedures
                 }
                 else
                 {
-                    var pagables = new ModelReturnedNumbersByClient()
+                    var pagables = new ModelProcedure_ReturnedNumbersByClient()
                     {
                         Datos = false,
                         RaffleId = raffle,

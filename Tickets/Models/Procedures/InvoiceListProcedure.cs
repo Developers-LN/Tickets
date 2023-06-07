@@ -25,7 +25,7 @@ namespace Tickets.Models.Procedures
                 {
                     while (sqlDataReader.Read())
                     {
-                        var facturas = new InvoiceListModel()
+                        var facturas = new ModelProcedure_InvoiceListModel()
                         {
                             Data = true,
                             Id = Convert.ToInt32(sqlDataReader["IdFactura"].ToString()),
@@ -46,7 +46,7 @@ namespace Tickets.Models.Procedures
                 }
                 else
                 {
-                    var facturas = new InvoiceListModel()
+                    var facturas = new ModelProcedure_InvoiceListModel()
                     {
                         Data = false,
                         Id = 0,

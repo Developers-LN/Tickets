@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures.Allocations
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<AllocatedSummary> AllocatedSummary(int raffle)
+        public IEnumerable<ModelProcedure_AllocatedSummary> AllocatedSummary(int raffle)
         {
-            var lista = new List<AllocatedSummary>();
+            var lista = new List<ModelProcedure_AllocatedSummary>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures.Allocations
                 {
                     while (sqlDataReader.Read())
                     {
-                        var Allocation = new AllocatedSummary()
+                        var Allocation = new ModelProcedure_AllocatedSummary()
                         {
                             Data = true,
                             RaffleId = raffle,
@@ -42,7 +42,7 @@ namespace Tickets.Models.Procedures.Allocations
                 }
                 else
                 {
-                    var Allocation = new AllocatedSummary()
+                    var Allocation = new ModelProcedure_AllocatedSummary()
                     {
                         Data = false,
                         RaffleId = raffle,

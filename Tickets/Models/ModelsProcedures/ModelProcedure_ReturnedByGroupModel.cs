@@ -1,6 +1,6 @@
 ﻿namespace Tickets.Models.ModelsProcedures
 {
-    public class ReturnedByGroupModel
+    public class ModelProcedure_ReturnedByGroupModel
     {
         public bool Datos { get; set; }
         public int RaffleId { get; set; }

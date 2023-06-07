@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures.Receivables
 	{
 		public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-		public IEnumerable<ModelSalesAndPendingPayments> ConsultaVentasCierre(string FechaInicio, string FechaFin, int RaffleId, int ReportType)
+		public IEnumerable<ModelProcedure_SalesAndPendingPayments> ConsultaVentasCierre(string FechaInicio, string FechaFin, int RaffleId, int ReportType)
 		{
-			var lista = new List<ModelSalesAndPendingPayments>();
+			var lista = new List<ModelProcedure_SalesAndPendingPayments>();
 
 			DateTime FI, FF;
 
@@ -40,7 +40,7 @@ namespace Tickets.Models.Procedures.Receivables
 				{
 					while (sqlDataReader.Read())
 					{
-						var Devoluciones = new ModelSalesAndPendingPayments()
+						var Devoluciones = new ModelProcedure_SalesAndPendingPayments()
 						{
 							Data = true,
 							ReportType = ReportType,
@@ -71,7 +71,7 @@ namespace Tickets.Models.Procedures.Receivables
 				}
 				else
 				{
-					var Devoluciones = new ModelSalesAndPendingPayments()
+					var Devoluciones = new ModelProcedure_SalesAndPendingPayments()
 					{
 						Data = false,
                         ReportType = ReportType,

@@ -1,6 +1,6 @@
 ﻿namespace Tickets.Models.ModelsProcedures
 {
-    public class ModelNetSalesByClient
+    public class ModelProcedure_NetSalesByClient
     {
         public bool Data { get; set; }
         public int ClientId { get; set; }

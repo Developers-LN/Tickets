@@ -9,9 +9,9 @@ namespace Tickets.Models.Procedures.Returns
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public IEnumerable<ReturnsSummary> ReturnedSummary(int raffle)
+        public IEnumerable<ModelProcedure_ReturnsSummary> ReturnedSummary(int raffle)
         {
-            var lista = new List<ReturnsSummary>();
+            var lista = new List<ModelProcedure_ReturnsSummary>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
             {
@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures.Returns
                 {
                     while (sqlDataReader.Read())
                     {
-                        var Allocation = new ReturnsSummary()
+                        var Allocation = new ModelProcedure_ReturnsSummary()
                         {
                             Data = true,
                             RaffleId = raffle,
@@ -45,7 +45,7 @@ namespace Tickets.Models.Procedures.Returns
                 }
                 else
                 {
-                    var Allocation = new ReturnsSummary()
+                    var Allocation = new ModelProcedure_ReturnsSummary()
                     {
                         Data = false,
                         RaffleId = raffle,

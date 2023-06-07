@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures.IdentifyBachDetails
                 {
                     while (sqlDataReader.Read())
                     {
-                        var bachPayment = new ModelProcedureIdentifyBachPayment()
+                        var bachPayment = new ModelProcedure_IdentifyBachPayment()
                         {
                             Data = true,
                             Id = Convert.ToInt32(sqlDataReader["Id"].ToString()),
@@ -37,7 +37,7 @@ namespace Tickets.Models.Procedures.IdentifyBachDetails
                 }
                 else
                 {
-                    var bachPayment = new ModelProcedureIdentifyBachPayment()
+                    var bachPayment = new ModelProcedure_IdentifyBachPayment()
                     {
                         Data = false,
                         Id = 0,

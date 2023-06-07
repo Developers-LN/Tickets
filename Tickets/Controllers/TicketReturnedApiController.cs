@@ -66,6 +66,17 @@ namespace Tickets.Controllers
         }
 
         //
+        //  GET: ticket/ticketReturnedApi/detailsClient
+        [HttpGet]
+        [Authorize]
+        [ActionName("detailsClient")]
+        public RequestResponseModel DetailsClient(string group, int clientId, int raffleId)
+        {
+            var response = new TicketReturnedModel().GetListByClient(raffleId, clientId, group);
+            return response;
+        }
+
+        //
         //  GET: ticket/ticketReturnedApi/verify
         [HttpPost]
         [Authorize]

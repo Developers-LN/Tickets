@@ -1,0 +1,53 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Listado de grupos de devoluciones";
+}
+
+<div class="col-lg-12 no-padder" ng-controller="ReturnetByGroupController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Sorteo: </label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="RaffleId" ng-change="changeValues()">
+                                    <option selected="selected" value="0">Todos los sorteo</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row-border hover">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Grupo</th>
+                                <th>Fracciones</th>
+                                <th class="editColumm text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="retunedGroup in retunedGroups">
+                                <td>{{retunedGroup.ClientId}} - {{retunedGroup.ClientName}}</td>
+                                <td>{{retunedGroup.Grupo}}</td>
+                                <td>{{retunedGroup.Fracciones | number}}</td>
+                                <td class="text-center">
+                                    <a target="_blank" href="#/ticket/returnedGroupClientDetails/{{retunedGroup.Grupo}}/{{retunedGroup.ClientId}}/{{retunedGroup.RaffleId}}" title="ver detalles del grupo"><i class="fa fa-eye"></i></a>
+                                    <a target="_blank" href="/Reports/ReturnedGroupClientDetails?raffleId={{retunedGroup.RaffleId}}&clientId={{retunedGroup.ClientId}}&group={{retunedGroup.Grupo}}" title="Detalle del grupo"><i class="fa fa-print"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg">
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

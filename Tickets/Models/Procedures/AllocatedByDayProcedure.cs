@@ -24,7 +24,7 @@ namespace Tickets.Models.Procedures
                 {
                     while (sqlDataReader.Read())
                     {
-                        var Allocated = new AllocatedByDate()
+                        var Allocated = new ModelProcedure_AllocatedByDate()
                         {
                             Data = true,
                             AllocateDate = sqlDataReader["PrintDate"].ToString(),
@@ -40,7 +40,7 @@ namespace Tickets.Models.Procedures
                 }
                 else
                 {
-                    var Allocated = new AllocatedByDate()
+                    var Allocated = new ModelProcedure_AllocatedByDate()
                     {
                         Data = true,
                         AllocateDate = "",
