@@ -770,6 +770,15 @@
                         </li>
                     </ul>
                     <ul class="nav sidebar-subnav">
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.PayedBachByPeriodExcel')">
+                            <a ui-sref="app.PayedBachByPeriodExcel" title="Reportes de cuentas por cobrar a excel">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Lotes pagados por fecha</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav sidebar-subnav">
                         <li ui-sref-active="active" ng-show="verifyCanView('app.AccountsReceivablesCloseReportsExcel')">
                             <a ui-sref="app.AccountsReceivablesCloseReportsExcel" title="Reportes de cierre por período a excel">
                                 <em class="sidebar-item-icon"></em>

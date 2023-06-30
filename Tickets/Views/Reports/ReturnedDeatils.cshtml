@@ -73,21 +73,21 @@
 
         <div class="col-lg-12 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+                <b>FECHA: </b> @DateTime.Now.ToShortDateString()
             </div>
             <div class="col-lg-12 no-padder text-right">
-                <b>Sorteo: </b> #@datas.FirstOrDefault().RaffleId
+                <b>SORTEO: </b> #@datas.FirstOrDefault().RaffleId
             </div>
         </div>
         <div class="col-lg-12 no-padder text-right">
             <div class="col-lg-4">
                 <div class="col-lg-12 no-padder text-left">
-                    <b>Cliente: </b> @datas.FirstOrDefault().ClientName
+                    <b>CLIENTE: </b> @datas.FirstOrDefault().ClientName
                 </div>
                 @if (creditNote.Count > 0)
                 {
                     <div class="col-lg-12 no-padder text-left">
-                        <b>Nota de Credito: </b> #@creditNote.LastOrDefault().Id
+                        <b>NOTA DE CREDITO: </b> #@creditNote.LastOrDefault().Id
                     </div>
                 }
             </div>
@@ -98,10 +98,10 @@
             </div>
             <div class="col-lg-4 no-padder">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Cedula.:</b> ___________________
+                    <b>CEDULA.:</b> ___________________
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Tel.:</b> ___________________
+                    <b>TEL.:</b> ___________________
                 </div>
             </div>
         </div>
@@ -132,9 +132,9 @@
                             totals += total;
                         }
                         <td class="text-center">@data.Group</td>
-                        <td class="text-center">Billetes</td>
+                        <td class="text-center">BILLETE</td>
                         <td class="text-center">@data.Quantity</td>
-                        <td class="text-center">Fraccion</td>
+                        <td class="text-center">FRACCION</td>
                         <td class="text-right">@data.Price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                     </tr>
@@ -151,7 +151,7 @@
                     <td class="text-center">@totalFraction</td>
                     <td class="text-right"></td>
                     <td class="text-right"></td>
-                    <td class="text-right">Sub Total..: @totals.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right">SUB TOTAL..: @totals.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
                 <tr>
                     <td class="text-center"></td>
@@ -159,7 +159,7 @@
                     <td class="text-center"></td>
                     <td class="text-right"></td>
                     <td class="text-right"></td>
-                    <td class="text-right">Descuento..: @discount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right">DESCUENTO..: @discount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
                 <tr>
                     <td class="text-center"></td>
@@ -167,7 +167,7 @@
                     <td class="text-center"></td>
                     <td class="text-right"></td>
                     <td class="text-right"></td>
-                    <td class="text-right">Total..: @totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right">TOTAL..: @totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                 </tr>
             </tfoot>
         </table>

@@ -277,7 +277,7 @@ namespace Tickets.Models.Ticket
         {
             var context = new TicketsEntities();
 
-            AvailableTicketToInvoice availableTicketToInvoice = new AvailableTicketToInvoice();
+            Procedure_AvailableTicketToInvoice availableTicketToInvoice = new Procedure_AvailableTicketToInvoice();
             var Resultado = availableTicketToInvoice.AvailableTicketsToInvoice(model.RaffleId, model.Id);
 
             var TotalFracciones = Resultado.Select(s => s.AvailableFractions).Sum();
@@ -416,7 +416,7 @@ namespace Tickets.Models.Ticket
 
         internal RequestResponseModel GetReturnedByGroup(int raffleId)
         {
-            ReturnedByGroupProcedure returnedByGroupProcedure = new ReturnedByGroupProcedure();
+            Procedure_ReturnedByGroup returnedByGroupProcedure = new Procedure_ReturnedByGroup();
             var Resultado = returnedByGroupProcedure.ConsultarBilletesDevueltosPorGrupo(raffleId);
             return new RequestResponseModel()
             {

@@ -394,13 +394,14 @@
     <Compile Include="Models\Log.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ModelsProcedures\IdentifiBach\ModelProcedure_IdentifyBachPaymentByPeriod.cs" />
     <Compile Include="Models\ModelsProcedures\ModelProcedure_AllocatedByDate.cs" />
     <Compile Include="Models\ModelsProcedures\ModelProcedure_AllocationSummary.cs" />
     <Compile Include="Models\ModelsProcedures\Allocations\ModelProcedure_AllocatedSummary.cs" />
-    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedure_IdentifyBachPayment.cs" />
-    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedure_IdentifyBachPaymentNoteCredit.cs" />
-    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedure_IdentifyBach.cs" />
-    <Compile Include="Models\ModelsProcedures\IdentifiBachDetails\ModelProcedure_IdentifyBachNumbers.cs" />
+    <Compile Include="Models\ModelsProcedures\IdentifiBach\ModelProcedure_IdentifyBachPayment.cs" />
+    <Compile Include="Models\ModelsProcedures\IdentifiBach\ModelProcedure_IdentifyBachPaymentNoteCredit.cs" />
+    <Compile Include="Models\ModelsProcedures\IdentifiBach\ModelProcedure_IdentifyBach.cs" />
+    <Compile Include="Models\ModelsProcedures\IdentifiBach\ModelProcedure_IdentifyBachNumbers.cs" />
     <Compile Include="Models\ModelsProcedures\ModelProcedure_InvoiceListModel.cs" />
     <Compile Include="Models\ModelsProcedures\ModelProcedure_AvailableTickets.cs" />
     <Compile Include="Models\ModelsProcedures\ModelProcedure_AvailableTicketsToInvoice.cs" />
@@ -434,35 +435,36 @@
     <Compile Include="Models\PreviousDebtPayment.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Procedures\AllocatedByDayProcedure.cs" />
-    <Compile Include="Models\Procedures\AllocationSummaryProcedure.cs" />
-    <Compile Include="Models\Procedures\Allocations\AllocatedSummaryProcedure.cs" />
-    <Compile Include="Models\Procedures\PayableAward\ProcedureAllPayableAwards.cs" />
-    <Compile Include="Models\Procedures\AvailableTicketsProcedure.cs" />
-    <Compile Include="Models\Procedures\AvailableTicketToInvoice.cs" />
-    <Compile Include="Models\Procedures\CuadreSorteoResumidoProcedure.cs" />
-    <Compile Include="Models\Procedures\DevolucionesPremiadasProcedure.cs" />
-    <Compile Include="Models\Procedures\IdentifyBachDetails\ProcedureIdentifyBachDetails.cs" />
-    <Compile Include="Models\Procedures\IdentifyBachDetails\ProcedureIdentifyBachNoteCreditPayment.cs" />
-    <Compile Include="Models\Procedures\IdentifyBachDetails\ProcedureIdentifyBachNumbers.cs" />
-    <Compile Include="Models\Procedures\IdentifyBachDetails\ProcedureIdentifyBachPayent.cs" />
-    <Compile Include="Models\Procedures\InvoicedTicketsProcedure.cs" />
-    <Compile Include="Models\Procedures\InvoiceListProcedure.cs" />
-    <Compile Include="Models\Procedures\InvoiceListProcedureByList.cs" />
-    <Compile Include="Models\Procedures\NetSalesByClientProcedure.cs" />
-    <Compile Include="Models\Procedures\PayableAward\ProcedureIdentifyAwardPayedByClient.cs" />
-    <Compile Include="Models\Procedures\PayableAward\ProcedurePayableAwardByClient.cs" />
-    <Compile Include="Models\Procedures\PayableAwardsProcedure.cs" />
-    <Compile Include="Models\Procedures\PayableAward\ProcedurePayableAward.cs" />
-    <Compile Include="Models\Procedures\PayableAward\ProcedurePayableAwardSummary.cs" />
-    <Compile Include="Models\Procedures\Receivables\ReceivableClose.cs" />
-    <Compile Include="Models\Procedures\ReturnedByGroupProcedure.cs" />
-    <Compile Include="Models\Procedures\ReturnedNumbersByClient.cs" />
-    <Compile Include="Models\Procedures\ReturnedTicketsProcedure.cs" />
-    <Compile Include="Models\Procedures\Receivables\SalesAndPendingPayments.cs" />
+    <Compile Include="Models\Procedures\Procedure_AllocatedByDay.cs" />
+    <Compile Include="Models\Procedures\Procedure_AllocationSummary.cs" />
+    <Compile Include="Models\Procedures\Allocations\Procedure_AllocatedSummary.cs" />
+    <Compile Include="Models\Procedures\IdentifyBach\Procedure_IdentifyBachPaymentByPeriod.cs" />
+    <Compile Include="Models\Procedures\PayableAward\Procedure_AllPayableAwards.cs" />
+    <Compile Include="Models\Procedures\Procedure_AvailableTickets.cs" />
+    <Compile Include="Models\Procedures\Procedure_AvailableTicketToInvoice.cs" />
+    <Compile Include="Models\Procedures\Procedure_CuadreSorteoResumido.cs" />
+    <Compile Include="Models\Procedures\Procedure_DevolucionesPremiadas.cs" />
+    <Compile Include="Models\Procedures\IdentifyBach\Procedure_IdentifyBachDetails.cs" />
+    <Compile Include="Models\Procedures\IdentifyBach\Procedure_IdentifyBachNoteCreditPayment.cs" />
+    <Compile Include="Models\Procedures\IdentifyBach\Procedure_IdentifyBachNumbers.cs" />
+    <Compile Include="Models\Procedures\IdentifyBach\Procedure_IdentifyBachPayent.cs" />
+    <Compile Include="Models\Procedures\Procedure_InvoicedTickets.cs" />
+    <Compile Include="Models\Procedures\Procedure_InvoiceList.cs" />
+    <Compile Include="Models\Procedures\Procedure_InvoiceListProcedureByList.cs" />
+    <Compile Include="Models\Procedures\Procedure_NetSalesByClient.cs" />
+    <Compile Include="Models\Procedures\PayableAward\Procedure_IdentifyAwardPayedByClient.cs" />
+    <Compile Include="Models\Procedures\PayableAward\Procedure_PayableAwardByClient.cs" />
+    <Compile Include="Models\Procedures\Procedure_PayableAwards.cs" />
+    <Compile Include="Models\Procedures\PayableAward\Procedure_PayableAward.cs" />
+    <Compile Include="Models\Procedures\PayableAward\Procedure_PayableAwardSummary.cs" />
+    <Compile Include="Models\Procedures\Receivables\Procedure_ReceivableClose.cs" />
+    <Compile Include="Models\Procedures\Procedure_ReturnedByGroup.cs" />
+    <Compile Include="Models\Procedures\Procedure_ReturnedNumbersByClient.cs" />
+    <Compile Include="Models\Procedures\Procedure_ReturnedTickets.cs" />
+    <Compile Include="Models\Procedures\Receivables\Procedure_SalesAndPendingPayments.cs" />
     <Compile Include="Models\Procedures\Returns\Procedure_ReturnedGroupByClient.cs" />
-    <Compile Include="Models\Procedures\Returns\ReturnsSummaryProcedure.cs" />
-    <Compile Include="Models\Procedures\ValidateElectronicSalesProcedure.cs" />
+    <Compile Include="Models\Procedures\Returns\Procedure_ReturnsSummary.cs" />
+    <Compile Include="Models\Procedures\Procedure_ValidateElectronicSales.cs" />
     <Compile Include="Models\ProductionCost.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
@@ -881,6 +883,7 @@
     </Content>
     <Content Include="Scripts\modules\electronicSales\electronicsales.list.controller.js" />
     <Content Include="Scripts\modules\electronicSales\electronicsales.details.controller.js" />
+    <Content Include="Scripts\modules\identifyBach\bach.payed.by.period.controller.js" />
     <Content Include="Scripts\modules\integration\electronic.ticket.xml.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -3259,6 +3262,7 @@
     <Content Include="Views\Reports\ReturnedGroupClientDetails.cshtml" />
     <Content Include="Views\TicketReturned\ReturnedGroupClientDetails.cshtml" />
     <Content Include="Scripts\modules\ticketReturned\returned.group.details.client.controller.js" />
+    <Content Include="Views\Cash\PayedBachByPeriodExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

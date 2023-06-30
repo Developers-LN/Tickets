@@ -1,4 +1,5 @@
 ﻿@model List<Tickets.Models.Raffle>
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     ViewBag.Title = "";
@@ -64,8 +65,8 @@
         <div class="col-lg-6 no-padder text-left">
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>HORA: </b> @DateTime.Now.ToShortTimeString() <br />
         </div>
     </div>
     <div>
@@ -73,14 +74,14 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th class="text-center">Mayorista</th>
-                        <th class="text-right">Valor facturado</th>
-                        <th class="text-right">Descuento</th>
-                        <th class="text-right">Devoluciones</th>
-                        <th class="text-right">Pagos por Premios</th>
-                        <th class="text-right">Ajustes</th>
-                        <th class="text-right">Pagos en Efectivo</th>
-                        <th class="text-right">Cantidad Restante</th>
+                        <th class="text-center">MAYORISTA</th>
+                        <th class="text-right">VALOR FACTURADO</th>
+                        <th class="text-right">DESCUENTO</th>
+                        <th class="text-right">DEVOLUCIONES</th>
+                        <th class="text-right">PAGOS POR PREMIOS</th>
+                        <th class="text-right">AJUSTES</th>
+                        <th class="text-right">PAGOS EN EFECTIVO</th>
+                        <th class="text-right">CANTIDAD RESTANTE</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -156,7 +157,7 @@
                         }
 
                         <tr class="sub-total" style="font-weight:bold">
-                            <td class="text-right">Total sorteo...:</td>
+                            <td class="text-right">TOTAL SORTEO...:</td>
                             <td class="text-right">@(totalInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                             <td class="text-right">@(totalDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                             <td class="text-right">@(totalReturnedPayments.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
@@ -177,7 +178,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="total" style="font-weight:bold">
-                        <td class="text-right">Total General...:</td>
+                        <td class="text-right">TOTAL GENERAL...:</td>
                         <td class="text-right">@(totalGeneralInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                         <td class="text-right">@(totalGeneralDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                         <td class="text-right">@(totalGeneralReturnedPayments.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>

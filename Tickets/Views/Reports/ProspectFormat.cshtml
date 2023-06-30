@@ -1,7 +1,8 @@
 ﻿@model Tickets.Models.Prospect
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Formato de Prospecto";
+    ViewBag.Title = "FORMATO DEL PROSPECTO";
 
     var awards = Model.Awards.OrderByDescending(a => a.Value).GroupBy(a => a.TypesAward.Name).Select(a => new
     {
@@ -27,8 +28,9 @@
             <span>@Model.Production BILLETES DIVIDIDOS EN @Model.LeafFraction SERIES DE @Model.LeafNumber <br /> FRACCIONES CADA UNA, PARTICIPANDO DESDE EL 00000 AL @(Model.Production -1)</span>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() </br>
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+            <b>FECHA: </b> @DateTime.Now.ToShortDateString() 
+            </br>
+            <b>HORA: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder">

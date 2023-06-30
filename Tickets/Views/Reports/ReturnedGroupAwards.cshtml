@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelDevolucionesPremiadas>
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelProcedure_DevolucionesPremiadas>
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
@@ -52,11 +52,11 @@
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACIÓN DE LA LOTERÍA NACIONAL</b><br />
             <b>LISTADO DE NÚMEROS PREMIADOS DEVUELTOS PARA EL SORTEO No. @Model.FirstOrDefault().RaffleId</b><br />
-            Fecha del sorteo: @RaffleData.DateSolteo.ToLongDateString()
+            FECHA DEL SORTEO: @RaffleData.DateSolteo.ToLongDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>HORA: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder">

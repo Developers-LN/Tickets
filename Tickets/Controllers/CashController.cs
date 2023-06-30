@@ -102,6 +102,15 @@ namespace Tickets.Controllers
         }
 
         //
+        // GET: /Cash/PayedBachByPeriodExcel
+        [Authorize]
+        [HttpGet]
+        public ActionResult PayedBachByPeriodExcel()
+        {
+            return View();
+        }
+
+        //
         // GET: /Cash/AccountsReceivablesCloseReportsExcel
         [Authorize]
         [HttpGet]
@@ -951,7 +960,7 @@ namespace Tickets.Controllers
             var invoices = new List<object>();
             if (raffleId != 0 || clientId != 0)
             {
-                InvoiceListProcedure invoiceListProcedure = new InvoiceListProcedure();
+                Procedure_InvoiceList invoiceListProcedure = new Procedure_InvoiceList();
                 invoices = invoiceListProcedure.ListaFacturas(raffleId, clientId);
 
                 /*invoices = context.Invoices.AsEnumerable().Where(i =>
@@ -985,7 +994,7 @@ namespace Tickets.Controllers
             var totalReturned = 0.0M;
             var totalCreditNote = 0.0M;
 
-            InvoiceListProcedureByList invoiceListProcedureByList = new InvoiceListProcedureByList();
+            Procedure_InvoiceListProcedureByList invoiceListProcedureByList = new Procedure_InvoiceListProcedureByList();
             var Payments = invoiceListProcedureByList.ListaFacturas(invoice.RaffleId, invoice.ClientId);
 
             return new InvoicePaymentModel

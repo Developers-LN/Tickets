@@ -1,8 +1,8 @@
-﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelCuadreSorteo>
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelProcedure_CuadreSorteo>
 
     @{
         Layout = "~/Views/Shared/_ReportLayout.cshtml";
-        ViewBag.Title = "Reporte resumido del sorteo número" + Model.FirstOrDefault().RaffleId;
+        ViewBag.Title = "REPORTE RESUMIDO DEL SORTEO NO. " + Model.FirstOrDefault().RaffleId;
 
         var context = new Tickets.Models.TicketsEntities();
         var config = context.SystemConfigs.FirstOrDefault();
@@ -94,16 +94,16 @@
                     <tr>
                         <th style="border-right: solid #8C8C8C 2px;"> </th>
                         <th>Cantidad frac.</th>
-                        <th style="border-right: solid #8C8C8C 1px;">Monto RD$</th>
+                        <th style="border-right: solid #8C8C8C 1px;">MONTO RD$</th>
 
                         <th>Cantidad frac.</th>
-                        <th style="border-right: solid #8C8C8C 1px;">Monto RD$</th>
+                        <th style="border-right: solid #8C8C8C 1px;">MONTO RD$</th>
 
                         <th>Cantidad frac.</th>
-                        <th style="border-right: solid #8C8C8C 1px;">Monto RD$</th>
+                        <th style="border-right: solid #8C8C8C 1px;">MONTO RD$</th>
 
                         <th>Cantidad frac.</th>
-                        <th style="border-right: solid #8C8C8C 1px;">Monto RD$</th>
+                        <th style="border-right: solid #8C8C8C 1px;">MONTO RD$</th>
                     </tr>
                 </thead>
                 <tbody>

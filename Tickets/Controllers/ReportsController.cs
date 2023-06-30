@@ -388,7 +388,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult BilletesVendidos(int raffleId)
         {
-            InvoicedTicketsProcedure invoicedTicketsProcedure = new InvoicedTicketsProcedure();
+            Procedure_InvoicedTickets invoicedTicketsProcedure = new Procedure_InvoicedTickets();
             var Resultado = invoicedTicketsProcedure.ConsultaBilletesVendidos(raffleId);
             return View(Resultado);
         }
@@ -397,7 +397,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult BilletesDevueltos(int raffleId)
         {
-            ReturnedTicketsProcedure returnedTicketsProcedure = new ReturnedTicketsProcedure();
+            Procedure_ReturnedTickets returnedTicketsProcedure = new Procedure_ReturnedTickets();
             var Resultado = returnedTicketsProcedure.ConsultaBilletesDevueltos(raffleId);
             return View(Resultado);
         }
@@ -415,7 +415,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult DatosPorCliente(int raffleId)
         {
-            NetSalesByClientProcedure netSalesByClientProcedure = new NetSalesByClientProcedure();
+            Procedure_NetSalesByClient netSalesByClientProcedure = new Procedure_NetSalesByClient();
             var Resultado = netSalesByClientProcedure.ConsultaVentaNetaPorCliente(raffleId);
             return View(Resultado);
         }
@@ -424,7 +424,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult PayableAwardsByClient(int raffleId)
         {
-            ProcedurePayableAward payableAwardProcedure = new ProcedurePayableAward();
+            Procedure_PayableAward payableAwardProcedure = new Procedure_PayableAward();
             var Resultado = payableAwardProcedure.ConsultaBilletesPagables(raffleId);
             return View(Resultado);
         }
@@ -433,7 +433,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult PayableAwards(int raffleId)
         {
-            PayableAwardsProcedure payableAwardsProcedure = new PayableAwardsProcedure();
+            Procedure_PayableAwards payableAwardsProcedure = new Procedure_PayableAwards();
             var Resultado = payableAwardsProcedure.ConsultaBilletesPagables(raffleId);
             return View(Resultado);
         }
@@ -442,7 +442,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult AllPayableAwards(int raffleId)
         {
-            ProcedureAllPayableAwards allPatyableAwardsProcedure = new ProcedureAllPayableAwards();
+            Procedure_AllPayableAwards allPatyableAwardsProcedure = new Procedure_AllPayableAwards();
             var Resultado = allPatyableAwardsProcedure.ConsultaTodosBilletesPagables(raffleId);
             return View(Resultado);
         }
@@ -451,14 +451,14 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult PayNotPay(int raffleId)
         {
-            ProcedurePayableAwardSummary procedurePayableAwardSummary = new ProcedurePayableAwardSummary();
+            Procedure_PayableAwardSummary procedurePayableAwardSummary = new Procedure_PayableAwardSummary();
             var Resultado = procedurePayableAwardSummary.payableAwardSummary(raffleId);
             return View(Resultado);
         }
 
         public ActionResult AllocatedSummary(int raffleId)
         {
-            AllocatedSummaryProcedure allocatedSummaryProcedure = new AllocatedSummaryProcedure();
+            Procedure_AllocatedSummary allocatedSummaryProcedure = new Procedure_AllocatedSummary();
             var Resultado = allocatedSummaryProcedure.AllocatedSummary(raffleId);
             return View(Resultado);
         }
@@ -494,7 +494,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult ElectronicSaleDetails(int allocationId)
         {
-            AvailableTicketsProcedure availableTicketsProcedure = new AvailableTicketsProcedure();
+            Procedure_AvailableTickets availableTicketsProcedure = new Procedure_AvailableTickets();
             var Resultado = availableTicketsProcedure.ConsultaBilletesDisponible(allocationId);
             return View(Resultado);
         }
@@ -503,7 +503,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult BilletesCirculacion(int raffleId)
         {
-            AvailableTicketsProcedure availableTicketsProcedure = new AvailableTicketsProcedure();
+            Procedure_AvailableTickets availableTicketsProcedure = new Procedure_AvailableTickets();
             var Resultado = availableTicketsProcedure.ConsultaBilletesDisponible(raffleId);
             return View(Resultado);
         }
@@ -556,7 +556,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult ReturnedGroupAwards(int raffleId, string groupId = "")
         {
-            DevolucionesPremiadasProcedure devolucionesPremiadasProcedure = new DevolucionesPremiadasProcedure();
+            Procedure_DevolucionesPremiadas devolucionesPremiadasProcedure = new Procedure_DevolucionesPremiadas();
             var Resultado = devolucionesPremiadasProcedure.ConsultaDevolucionesPremiadas(raffleId, groupId);
             return View(Resultado);
 
@@ -639,7 +639,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult RaffleGeneralOver(int raffleId)
         {
-            CuadreSorteoResumidoProcedure cuadreSorteoResumidoProcedure = new CuadreSorteoResumidoProcedure();
+            Procedure_CuadreSorteoResumido cuadreSorteoResumidoProcedure = new Procedure_CuadreSorteoResumido();
             var resultado = cuadreSorteoResumidoProcedure.CuadreSorteo(raffleId);
             return View(resultado);
 
@@ -665,7 +665,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult RaffleGeneralOverR(int raffleId)
         {
-            CuadreSorteoResumidoProcedure cuadreSorteoResumidoProcedure = new CuadreSorteoResumidoProcedure();
+            Procedure_CuadreSorteoResumido cuadreSorteoResumidoProcedure = new Procedure_CuadreSorteoResumido();
             var resultado = cuadreSorteoResumidoProcedure.CuadreSorteo(raffleId);
             return View(resultado);
 
@@ -714,7 +714,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult ReturnedNumbersGroup(int raffleId = 0, int clientId = 0)
         {
-            ReturnedByGroupProcedure returnedByGroupProcedure = new ReturnedByGroupProcedure();
+            Procedure_ReturnedByGroup returnedByGroupProcedure = new Procedure_ReturnedByGroup();
             var Resultado = returnedByGroupProcedure.ConsultarBilletesDevueltosPorGrupo(raffleId);
             return View(Resultado);
         }
@@ -725,7 +725,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult ReturnedNumbersClient(int raffleId)
         {
-            ReturnedNumbersByClient returnedNumbersByClient = new ReturnedNumbersByClient();
+            Procedure_ReturnedNumbersByClient returnedNumbersByClient = new Procedure_ReturnedNumbersByClient();
             var Resultado = returnedNumbersByClient.ConsultarBilletesDevueltosPorCliente(raffleId);
             return View(Resultado);
         }
@@ -749,7 +749,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult AllocationSummary(int raffleId = 0)
         {
-            AllocationSummaryProcedure allocationSummaryProcedure = new AllocationSummaryProcedure();
+            Procedure_AllocationSummary allocationSummaryProcedure = new Procedure_AllocationSummary();
             var Resultado = allocationSummaryProcedure.ConsultaAsignacionesSorteo(raffleId);
             return View(Resultado);
         }
@@ -760,7 +760,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult ReturnsSummary(int raffleId = 0)
         {
-            ReturnsSummaryProcedure returnsSummaryProcedure = new ReturnsSummaryProcedure();
+            Procedure_ReturnsSummary returnsSummaryProcedure = new Procedure_ReturnsSummary();
             var Resultado = returnsSummaryProcedure.ReturnedSummary(raffleId);
             return View(Resultado);
         }
@@ -1179,7 +1179,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult AccountsReceivablesByPeriod(string startDate = "undefined", string endDate = "undefined", int raffleId = 0, int receivableType = 0)
         {
-            ReceivableClose receivableClose = new ReceivableClose();
+            Procedure_ReceivableClose receivableClose = new Procedure_ReceivableClose();
             ViewBag.startDate = Convert.ToDateTime(startDate).ToString("dd/MM/yyyy");
             ViewBag.endDate = Convert.ToDateTime(endDate).ToString("dd/MM/yyyy");
             var Resultado = receivableClose.ConsultaVentasCierre(startDate, endDate, raffleId, receivableType);

@@ -1,7 +1,8 @@
 ﻿@model Tickets.Models.Raffle
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Numeros Re-Impresos";
+    ViewBag.Title = "BILLETES RE-IMPRESOS";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();

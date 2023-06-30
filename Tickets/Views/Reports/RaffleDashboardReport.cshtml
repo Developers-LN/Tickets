@@ -63,8 +63,8 @@
         <div class="col-lg-6 no-padder text-left">
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>HORA: </b> @DateTime.Now.ToShortTimeString() <br />
         </div>
     </div>
     <div>
@@ -79,10 +79,8 @@
                     @{
                         var infoRaffle = Model.AsEnumerable().GroupBy(r => r.Id).Select(i => new
                         {
-                            raffleName = i.FirstOrDefault().Id + " - " + i.FirstOrDefault().Name,
-
+                            raffleName = i.FirstOrDefault().Id + " - " + i.FirstOrDefault().Name
                         });
-
                     }
 
                     @foreach (var raffle in infoRaffle)

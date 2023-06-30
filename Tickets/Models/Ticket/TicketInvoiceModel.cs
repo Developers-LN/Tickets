@@ -452,7 +452,7 @@ namespace Tickets.Models.Ticket
                             List<InvoiceTicket> invoiceTicketList = new List<InvoiceTicket>();
                             foreach (var allocation in allocations)
                             {
-                                AvailableTicketToInvoice availableTicketToInvoice = new AvailableTicketToInvoice();
+                                Procedure_AvailableTicketToInvoice availableTicketToInvoice = new Procedure_AvailableTicketToInvoice();
                                 var Resultado = availableTicketToInvoice.AvailableTicketsToInvoice(model.RaffleId, allocation.Id);
 
                                 var clientType = context.TicketAllocations.Where(w => w.Id == allocation.Id).Select(s => s.Client.GroupId).FirstOrDefault();

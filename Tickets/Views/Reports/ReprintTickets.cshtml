@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     //Layout = "~/Views/Shared/_TicketsLayout.cshtml";
-    ViewBag.Title = "Lote de reimpreción No. " + Model.Id;
+    ViewBag.Title = "LOTE DE REIMPRECION NO. " + Model.Id;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -62,7 +62,7 @@
                             @count
                         </td>
                         <td class="text-center">
-                            @ticket.TicketAllocationNumber.Number
+                            @ticket.TicketAllocationNumber.Number.ToString().PadLeft((Model.Raffle.Prospect.Production - 1).ToString().Length, '0')
                         </td>
                         <td class="text-center">
                             @if (ticket.Serie == "S1")

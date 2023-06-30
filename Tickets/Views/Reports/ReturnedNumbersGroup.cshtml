@@ -1,7 +1,8 @@
-﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ReturnedByGroupModel>
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelProcedure_ReturnedByGroupModel>
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Resumen de devoluciones del sorteo " + Model.FirstOrDefault().RaffleId;
+    ViewBag.Title = "RESUMEN DE DEVOLUCIONES DEL SORTEO NO. " + Model.FirstOrDefault().RaffleId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();

@@ -1,7 +1,8 @@
-﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelReturnedNumbersByClient>
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelProcedure_ReturnedNumbersByClient>
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Devoluciones por cliente del sorteo número" + Model.FirstOrDefault().RaffleId;
+    ViewBag.Title = "DEVOLUCIONES POR CLIENTE DEL SORTEO NO. " + Model.FirstOrDefault().RaffleId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -84,7 +85,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.ClientName</td>
+                            <td>@item.ClientId - @item.ClientName</td>
                             <td class="text-center">@item.Billetes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-center">@item.FraccionesRestantes</td>
                             <td class="text-center">@item.Fracciones.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>

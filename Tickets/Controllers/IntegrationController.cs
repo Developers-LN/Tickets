@@ -10,11 +10,12 @@ using System.Xml;
 using System.Xml.Serialization;
 using Tickets.Models;
 using Tickets.Models.Enums;
+using Tickets.Models.Procedures.IdentifyBach;
+using Tickets.Models.Procedures.PayableAward;
 using Tickets.Models.Procedures.Receivables;
 using Tickets.Models.Ticket;
 using Tickets.Models.XML;
 using WebMatrix.WebData;
-using Tickets.Models.Procedures.PayableAward;
 
 namespace Tickets.Controllers
 {
@@ -34,7 +35,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult PayableAwardsToExcel(int raffleId)
         {
-            ProcedureAllPayableAwards allPatyableAwardsProcedure = new ProcedureAllPayableAwards();
+            Procedure_AllPayableAwards allPatyableAwardsProcedure = new Procedure_AllPayableAwards();
             var Resultado = allPatyableAwardsProcedure.ConsultaTodosBilletesPagables(raffleId);
 
             var context = new TicketsEntities();
@@ -97,7 +98,7 @@ namespace Tickets.Controllers
         [HttpGet]
         public ActionResult PayableAwardsByClientToExcel(int ClientId, int RaffleId)
         {
-            ProcedurePayableAwardByClient payableAwardByClientProcedure = new ProcedurePayableAwardByClient();
+            Procedure_PayableAwardByClient payableAwardByClientProcedure = new Procedure_PayableAwardByClient();
             var Resultado = payableAwardByClientProcedure.ConsultaBilletesPagablesPorCliente(RaffleId, ClientId);
 
             var context = new TicketsEntities();
@@ -160,116 +161,240 @@ namespace Tickets.Controllers
         }
 
         [Authorize]
-		[HttpGet]
-		public ActionResult ExportToExcel(string FechaInicio = null, string FechaFin = null, int raffleId = 0)
-		{
-			SalesAndPendingPayments salesAndPendingPayments = new SalesAndPendingPayments();
-			var Resultado = salesAndPendingPayments.ConsultaVentasCuentasPendientes(FechaInicio, FechaFin, raffleId);
+        [HttpGet]
+        public ActionResult ExportToExcel(string FechaInicio = null, string FechaFin = null, int raffleId = 0)
+        {
+            Procedure_SalesAndPendingPayments salesAndPendingPayments = new Procedure_SalesAndPendingPayments();
+            var Resultado = salesAndPendingPayments.ConsultaVentasCuentasPendientes(FechaInicio, FechaFin, raffleId);
 
-			using (var workBook = new XLWorkbook())
-			{
-				var workSheet = workBook.Worksheets.Add("Cuentas");
-				var curretRow = 1;
+            using (var workBook = new XLWorkbook())
+            {
+                var workSheet = workBook.Worksheets.Add("Cuentas");
+                var curretRow = 1;
 
-				workSheet.Cell(curretRow, 1).Value = "ID_Cliente";
-				workSheet.Cell(curretRow, 2).Value = "Nombre_Cliente";
-				workSheet.Cell(curretRow, 3).Value = "Tipo_Cliente";
-				workSheet.Cell(curretRow, 4).Value = "ID_Sorteo";
-				workSheet.Cell(curretRow, 5).Value = "Nombre_Sorteo";
-				workSheet.Cell(curretRow, 6).Value = "ID_Factura";
-				workSheet.Cell(curretRow, 7).Value = "Fecha_Factura";
-				workSheet.Cell(curretRow, 8).Value = "Estado_Factura";
-				workSheet.Cell(curretRow, 9).Value = "Total_Billetes";
-				workSheet.Cell(curretRow, 10).Value = "Total_Fracciones";
-				workSheet.Cell(curretRow, 11).Value = "Precio_Billete";
-				workSheet.Cell(curretRow, 12).Value = "Total_Factura";
-				workSheet.Cell(curretRow, 13).Value = "Descuento";
-				workSheet.Cell(curretRow, 14).Value = "Total_Descuento";
-				workSheet.Cell(curretRow, 15).Value = "Total_A_Pagar";
-				workSheet.Cell(curretRow, 16).Value = "Pagos_Efectivo";
-				workSheet.Cell(curretRow, 17).Value = "Pagos_Nota_Credito";
-				//workSheet.Cell(curretRow, 17).Value = "Billetes_Devueltos";
-				//workSheet.Cell(curretRow, 18).Value = "Fracciones_Devueltas";
-				workSheet.Cell(curretRow, 18).Value = "Total_Pagado";
-				workSheet.Cell(curretRow, 19).Value = "Total_Faltante";
+                workSheet.Cell(curretRow, 1).Value = "ID_Cliente";
+                workSheet.Cell(curretRow, 2).Value = "Nombre_Cliente";
+                workSheet.Cell(curretRow, 3).Value = "Tipo_Cliente";
+                workSheet.Cell(curretRow, 4).Value = "ID_Sorteo";
+                workSheet.Cell(curretRow, 5).Value = "Nombre_Sorteo";
+                workSheet.Cell(curretRow, 6).Value = "ID_Factura";
+                workSheet.Cell(curretRow, 7).Value = "Fecha_Factura";
+                workSheet.Cell(curretRow, 8).Value = "Estado_Factura";
+                workSheet.Cell(curretRow, 9).Value = "Total_Billetes";
+                workSheet.Cell(curretRow, 10).Value = "Total_Fracciones";
+                workSheet.Cell(curretRow, 11).Value = "Precio_Billete";
+                workSheet.Cell(curretRow, 12).Value = "Total_Factura";
+                workSheet.Cell(curretRow, 13).Value = "Descuento";
+                workSheet.Cell(curretRow, 14).Value = "Total_Descuento";
+                workSheet.Cell(curretRow, 15).Value = "Total_A_Pagar";
+                workSheet.Cell(curretRow, 16).Value = "Pagos_Efectivo";
+                workSheet.Cell(curretRow, 17).Value = "Pagos_Nota_Credito";
+                workSheet.Cell(curretRow, 18).Value = "Total_Pagado";
+                workSheet.Cell(curretRow, 19).Value = "Total_Faltante";
 
-				foreach (var item in Resultado)
-				{
-					curretRow++;
-					workSheet.Cell(curretRow, 1).Value = item.IdClient;
-					workSheet.Cell(curretRow, 2).Value = item.NameClient;
-					workSheet.Cell(curretRow, 3).Value = item.TypeClient;
-					workSheet.Cell(curretRow, 4).Value = item.IdRaffle;
-					workSheet.Cell(curretRow, 5).Value = item.NameRaffle;
-					workSheet.Cell(curretRow, 6).Value = item.IdInvoice;
-					workSheet.Cell(curretRow, 7).Value = item.DateInvoice;
-					workSheet.Cell(curretRow, 8).Value = item.StatusInvoice;
-					workSheet.Cell(curretRow, 9).Value = item.TotalTickets;
-					workSheet.Cell(curretRow, 10).Value = item.TotalFractions;
-					workSheet.Cell(curretRow, 11).Value = item.PriceTicket;
-					workSheet.Cell(curretRow, 12).Value = item.TotalInvoice;
-					workSheet.Cell(curretRow, 13).Value = item.DiscountPercent;
-					workSheet.Cell(curretRow, 14).Value = item.TotalDiscount;
-					workSheet.Cell(curretRow, 15).Value = item.TotalToPay;
-					workSheet.Cell(curretRow, 16).Value = item.CashPayment;
-					workSheet.Cell(curretRow, 17).Value = item.NoteCreditPayment;
-					//workSheet.Cell(curretRow, 17).Value = item.TicketReturn;
-					//workSheet.Cell(curretRow, 18).Value = item.FractionReturn;
-					workSheet.Cell(curretRow, 18).Value = item.TotalPayed;
-					workSheet.Cell(curretRow, 19).Value = item.TotalPending;
-				}
+                foreach (var item in Resultado)
+                {
+                    curretRow++;
+                    workSheet.Cell(curretRow, 1).Value = item.IdClient;
+                    workSheet.Cell(curretRow, 2).Value = item.NameClient;
+                    workSheet.Cell(curretRow, 3).Value = item.TypeClient;
+                    workSheet.Cell(curretRow, 4).Value = item.IdRaffle;
+                    workSheet.Cell(curretRow, 5).Value = item.NameRaffle;
+                    workSheet.Cell(curretRow, 6).Value = item.IdInvoice;
+                    workSheet.Cell(curretRow, 7).Value = item.DateInvoice;
+                    workSheet.Cell(curretRow, 8).Value = item.StatusInvoice;
+                    workSheet.Cell(curretRow, 9).Value = item.TotalTickets;
+                    workSheet.Cell(curretRow, 10).Value = item.TotalFractions;
+                    workSheet.Cell(curretRow, 11).Value = item.PriceTicket;
+                    workSheet.Cell(curretRow, 12).Value = item.TotalInvoice;
+                    workSheet.Cell(curretRow, 13).Value = item.DiscountPercent;
+                    workSheet.Cell(curretRow, 14).Value = item.TotalDiscount;
+                    workSheet.Cell(curretRow, 15).Value = item.TotalToPay;
+                    workSheet.Cell(curretRow, 16).Value = item.CashPayment;
+                    workSheet.Cell(curretRow, 17).Value = item.NoteCreditPayment;
+                    workSheet.Cell(curretRow, 18).Value = item.TotalPayed;
+                    workSheet.Cell(curretRow, 19).Value = item.TotalPending;
+                }
 
-				var range = workSheet.RangeUsed();
-				var table = range.CreateTable();
-				table.Theme = XLTableTheme.TableStyleLight9;
-				workSheet.Columns().AdjustToContents();
-				workSheet.Column(9).Style.NumberFormat.Format = "#,##0";
-				workSheet.Column(11).Style.NumberFormat.Format = "$ #,##0.00";
-				workSheet.Column(12).Style.NumberFormat.Format = "$ #,##0.00";
-				workSheet.Column(14).Style.NumberFormat.Format = "$ #,##0.00";
-				workSheet.Column(15).Style.NumberFormat.Format = "$ #,##0.00";
-				workSheet.Column(16).Style.NumberFormat.Format = "$ #,##0.00";
-				workSheet.Column(17).Style.NumberFormat.Format = "$ #,##0.00";
-				//workSheet.Column(17).Style.NumberFormat.Format = "#,##0";
-				workSheet.Column(18).Style.NumberFormat.Format = "$ #,##0.00";
-				workSheet.Column(19).Style.NumberFormat.Format = "$ #,##0.00";
+                var range = workSheet.RangeUsed();
+                var table = range.CreateTable();
+                table.Theme = XLTableTheme.TableStyleLight9;
+                workSheet.Columns().AdjustToContents();
+                workSheet.Column(9).Style.NumberFormat.Format = "#,##0";
+                workSheet.Column(11).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(12).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(14).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(15).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(16).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(17).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(18).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(19).Style.NumberFormat.Format = "$ #,##0.00";
 
-				using (var stream = new MemoryStream())
-				{
-					workBook.SaveAs(stream);
-					var content = stream.ToArray();
+                using (var stream = new MemoryStream())
+                {
+                    workBook.SaveAs(stream);
+                    var content = stream.ToArray();
 
-					string Nombre;
+                    string Nombre;
 
-					if (FechaInicio == "undefined" && FechaInicio == "undefined")
-					{
-						Nombre = ("Ventas y cuentas por cobrar del sorteo " + raffleId + ".xlsx").ToString();
-					}
-					else if (FechaInicio != "undefined" && FechaInicio != "undefined" && raffleId != 0)
-					{
-						DateTime FI = Convert.ToDateTime(FechaInicio);
-						DateTime FF = Convert.ToDateTime(FechaFin);
+                    if (FechaInicio == "undefined" && FechaInicio == "undefined")
+                    {
+                        Nombre = ("VENTAS Y CUENTAS POR COBRAR DEL SORTEO " + raffleId + ".xlsx").ToString();
+                    }
+                    else if (FechaInicio != "undefined" && FechaInicio != "undefined" && raffleId != 0)
+                    {
+                        DateTime FI = Convert.ToDateTime(FechaInicio);
+                        DateTime FF = Convert.ToDateTime(FechaFin);
 
-						Nombre = ("Ventas y cuentas por cobrar del sorteo " + raffleId + " desde " + FI.ToString("dd-MM-yyyy") + " hasta " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
-					}
-					else
-					{
-						DateTime FI = Convert.ToDateTime(FechaInicio);
-						DateTime FF = Convert.ToDateTime(FechaFin);
+                        Nombre = ("VENTAS Y CUENTAS POR COBRAR DEL SORTEO " + raffleId + " DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
+                    }
+                    else
+                    {
+                        DateTime FI = Convert.ToDateTime(FechaInicio);
+                        DateTime FF = Convert.ToDateTime(FechaFin);
 
-						Nombre = ("Ventas y cuentas por cobrar desde " + FI.ToString("dd-MM-yyyy") + " hasta " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
-					}
+                        Nombre = ("VENTAS Y CUENTAS POR COBRAR DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
+                    }
 
-					return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Nombre);
-				}
-			}
-		}
+                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Nombre);
+                }
+            }
+        }
 
-		[Authorize]
+        [Authorize]
+        [HttpGet]
+        public ActionResult BachPayedByPeriod(string FechaInicio = null, string FechaFin = null, int raffleId = 0)
+        {
+            Procedure_IdentifyBachPaymentByPeriod procedure_IdentifyBachPaymentByPeriod = new Procedure_IdentifyBachPaymentByPeriod();
+            var Resultado = procedure_IdentifyBachPaymentByPeriod.IdentifyBachPaymentByPeriod(raffleId, FechaInicio, FechaFin);
+
+            using (var workBook = new XLWorkbook())
+            {
+                var workSheet = workBook.Worksheets.Add("DETALLE");
+                var curretRow = 1;
+
+                workSheet.Cell(curretRow, 1).Value = "NUMERO DE DOCUMENTO";
+                workSheet.Cell(curretRow, 2).Value = "TIPO DE DOCUMENTO";
+                workSheet.Cell(curretRow, 3).Value = "NOMBRE DEL GANADOR";
+                workSheet.Cell(curretRow, 4).Value = "GENERO";
+                workSheet.Cell(curretRow, 5).Value = "NO. SORTEO";
+                workSheet.Cell(curretRow, 6).Value = "NO. LOTE";
+                workSheet.Cell(curretRow, 7).Value = "FECHA DE PAGO";
+                workSheet.Cell(curretRow, 8).Value = "TIPO DE PAGO";
+                workSheet.Cell(curretRow, 9).Value = "DIA";
+                workSheet.Cell(curretRow, 10).Value = "MES";
+                workSheet.Cell(curretRow, 11).Value = "AÑO";
+                workSheet.Cell(curretRow, 12).Value = "TOTAL PAGADO";
+                workSheet.Cell(curretRow, 13).Value = "FRACCIONES PAGADAS";
+
+                foreach (var item in Resultado)
+                {
+                    curretRow++;
+                    workSheet.Cell(curretRow, 1).Value = item.DocumentNumber;
+                    workSheet.Cell(curretRow, 2).Value = item.DocumentType;
+                    workSheet.Cell(curretRow, 3).Value = item.Winner;
+                    workSheet.Cell(curretRow, 4).Value = item.Genre;
+                    workSheet.Cell(curretRow, 5).Value = item.RaffleId;
+                    workSheet.Cell(curretRow, 6).Value = item.BachId;
+                    workSheet.Cell(curretRow, 7).Value = item.PaymentDate;
+                    workSheet.Cell(curretRow, 8).Value = item.PaymentType;
+                    workSheet.Cell(curretRow, 9).Value = item.Day;
+                    workSheet.Cell(curretRow, 10).Value = item.Month;
+                    workSheet.Cell(curretRow, 11).Value = item.Year;
+                    workSheet.Cell(curretRow, 12).Value = item.TotalPayed;
+                    workSheet.Cell(curretRow, 13).Value = item.PayedFractions;
+                }
+
+                var range = workSheet.RangeUsed();
+                var table = range.CreateTable();
+                table.Theme = XLTableTheme.TableStyleLight9;
+                workSheet.Columns().AdjustToContents();
+                workSheet.Column(12).Style.NumberFormat.Format = "$ #,##0.00";
+
+                var workSheet2 = workBook.Worksheets.Add("RESUMEN");
+                var curretRow2 = 1;
+
+                workSheet2.Cell(curretRow2, 1).Value = "AÑO";
+                workSheet2.Cell(curretRow2, 2).Value = "MES";
+                workSheet2.Cell(curretRow2, 3).Value = "CANTIDAD MASCULINO";
+                workSheet2.Cell(curretRow2, 4).Value = "CANTIDAD FEMENINO";
+                workSheet2.Cell(curretRow2, 5).Value = "CANTIDAD GANADORES";
+                workSheet2.Cell(curretRow2, 6).Value = "TOTAL PAGADO";
+                workSheet2.Cell(curretRow2, 7).Value = "FRACCIONES PAGADAS";
+
+                var Details2 = Resultado.GroupBy(g => new
+                {
+                    g.Year,
+                    g.Month
+                }).Select(s => new
+                {
+                    s.Key.Year,
+                    s.Key.Month,
+                    TotalPayed = s.Sum(ss => ss.TotalPayed),
+                    PayedFraction = s.Sum(ss => ss.PayedFractions)
+                }).ToList();
+
+                var totalWinners = Resultado.GroupBy(g => new
+                {
+                    g.Winner,
+                    g.Genre
+                }).Select(s => new
+                {
+                    s.Key.Winner,
+                    s.Key.Genre
+                }).ToList();
+
+                curretRow2++;
+                workSheet2.Cell(curretRow2, 1).Value = Details2.FirstOrDefault().Year;
+                workSheet2.Cell(curretRow2, 2).Value = Details2.FirstOrDefault().Month;
+                workSheet2.Cell(curretRow2, 3).Value = totalWinners.Where(w => w.Genre == "MASCULINO").Count();
+                workSheet2.Cell(curretRow2, 4).Value = totalWinners.Where(w => w.Genre == "FEMENINO").Count();
+                workSheet2.Cell(curretRow2, 5).Value = totalWinners.Count();
+                workSheet2.Cell(curretRow2, 6).Value = Details2.FirstOrDefault().TotalPayed;
+                workSheet2.Cell(curretRow2, 7).Value = Details2.FirstOrDefault().PayedFraction;
+
+                var range2 = workSheet2.RangeUsed();
+                var table2 = range2.CreateTable();
+                table2.Theme = XLTableTheme.TableStyleLight9;
+                workSheet2.Columns().AdjustToContents();
+                workSheet2.Column(6).Style.NumberFormat.Format = "$ #,##0.00";
+
+                using (var stream = new MemoryStream())
+                {
+                    workBook.SaveAs(stream);
+                    var content = stream.ToArray();
+
+                    string Nombre;
+
+                    if (FechaInicio == "undefined" && FechaInicio == "undefined")
+                    {
+                        Nombre = ("LOTES DE PREMIOS PAGADOS DEL SORTEO NO. " + raffleId + ".xlsx").ToString();
+                    }
+                    else if (FechaInicio != "undefined" && FechaInicio != "undefined" && raffleId != 0)
+                    {
+                        DateTime FI = Convert.ToDateTime(FechaInicio);
+                        DateTime FF = Convert.ToDateTime(FechaFin);
+
+                        Nombre = ("LOTES DE PREMIOS PAGADOS DEL SORTEO NO. " + raffleId + " DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
+                    }
+                    else
+                    {
+                        DateTime FI = Convert.ToDateTime(FechaInicio);
+                        DateTime FF = Convert.ToDateTime(FechaFin);
+
+                        Nombre = ("LOTES DE PREMIOS PAGADOS DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
+                    }
+
+                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Nombre);
+                }
+            }
+        }
+
+        [Authorize]
         [HttpGet]
         public ActionResult ExportReceivableCloseToExcel(string FechaInicio = null, string FechaFin = null, int raffleId = 0, int reportType = 0)
         {
-            ReceivableClose receivableClose = new ReceivableClose();
+            Procedure_ReceivableClose receivableClose = new Procedure_ReceivableClose();
             var Resultado = receivableClose.ConsultaVentasCierre(FechaInicio, FechaFin, raffleId, reportType);
 
             using (var workBook = new XLWorkbook())
@@ -294,8 +419,6 @@ namespace Tickets.Controllers
                 workSheet.Cell(curretRow, 15).Value = "Total_A_Pagar";
                 workSheet.Cell(curretRow, 16).Value = "Pagos_Efectivo";
                 workSheet.Cell(curretRow, 17).Value = "Pagos_Nota_Credito";
-                //workSheet.Cell(curretRow, 17).Value = "Billetes_Devueltos";
-                //workSheet.Cell(curretRow, 18).Value = "Fracciones_Devueltas";
                 workSheet.Cell(curretRow, 18).Value = "Total_Pagado";
                 workSheet.Cell(curretRow, 19).Value = "Total_Faltante";
 
@@ -319,8 +442,6 @@ namespace Tickets.Controllers
                     workSheet.Cell(curretRow, 15).Value = item.TotalToPay;
                     workSheet.Cell(curretRow, 16).Value = item.CashPayment;
                     workSheet.Cell(curretRow, 17).Value = item.NoteCreditPayment;
-                    //workSheet.Cell(curretRow, 17).Value = item.TicketReturn;
-                    //workSheet.Cell(curretRow, 18).Value = item.FractionReturn;
                     workSheet.Cell(curretRow, 18).Value = item.TotalPayed;
                     workSheet.Cell(curretRow, 19).Value = item.TotalPending;
                 }
@@ -336,7 +457,6 @@ namespace Tickets.Controllers
                 workSheet.Column(15).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(16).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(17).Style.NumberFormat.Format = "$ #,##0.00";
-                //workSheet.Column(17).Style.NumberFormat.Format = "#,##0";
                 workSheet.Column(18).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(19).Style.NumberFormat.Format = "$ #,##0.00";
 
@@ -383,7 +503,7 @@ namespace Tickets.Controllers
                 {
                     try
                     {
-                        ProcedurePayableAward payableAwardProcedure = new ProcedurePayableAward();
+                        Procedure_PayableAward payableAwardProcedure = new Procedure_PayableAward();
                         var Resultado = payableAwardProcedure.ConsultaBilletesPagables(RaffleId);
 
                         var DataPremios = Resultado.Where(w => w.ClientId == ClientId).ToList();

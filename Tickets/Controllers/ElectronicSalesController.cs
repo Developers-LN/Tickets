@@ -129,7 +129,7 @@ namespace Tickets.Controllers
                     try
                     {
                         var CurrentUser = WebSecurity.CurrentUserId;
-                        ValidateElectronicSalesProcedure validateElectronicSalesProcedure = new ValidateElectronicSalesProcedure();
+                        Procedure_ValidateElectronicSales validateElectronicSalesProcedure = new Procedure_ValidateElectronicSales();
                         var Resultado = validateElectronicSalesProcedure.ValidateElectronicSales(AllocationId, CurrentUser);
 
                         if (Resultado.FirstOrDefault().Statu == 1)
