@@ -5,7 +5,7 @@
     ViewBag.Title = "DETALLES DE FACTURA NO. " + Model.Id;
 
     var context = new Tickets.Models.TicketsEntities();
-    var availableTicketsToInvoice = new Tickets.Models.Procedures.AvailableTicketToInvoice();
+    var availableTicketsToInvoice = new Tickets.Models.Procedures.Procedure_AvailableTicketToInvoice();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.Facturacion : "";
     string adminCargo = config != null ? config.FacturacionCargo : "";

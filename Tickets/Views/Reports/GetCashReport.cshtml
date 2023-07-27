@@ -158,32 +158,35 @@
                                             @receiptPayment.Recibo
                                         </td>
                                     }
-                                    <td class="text-right">
-                                        @if (receiptPayment.TotalCash > 0)
-                                        {
-                                            TotalGeneralEnCaja += receiptPayment.TotalCash;
-                                            Total += receiptPayment.TotalCash;
-                                            @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                        }
-                                        else if (receiptPayment.TotalCredit > 0)
-                                        {
-                                            TotalGeneralEnCaja += receiptPayment.TotalCredit;
-                                            Total += receiptPayment.TotalCredit;
-                                            @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                        }
-                                        else if (receiptPayment.TotalCheck > 0)
-                                        {
-                                            TotalGeneralEnCaja += receiptPayment.TotalCheck;
-                                            Total += receiptPayment.TotalCheck;
-                                            @(receiptPayment.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                        }
-                                        else
+                                <td class="text-right">
+                                    @if (receiptPayment.TotalCash > 0)
+                                    {
+                                        TotalGeneralEnCaja += receiptPayment.TotalCash;
+                                        Total += receiptPayment.TotalCash;
+                                        @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                    }
+                                    else if (receiptPayment.TotalCredit > 0)
+                                    {
+                                        TotalGeneralEnCaja += receiptPayment.TotalCredit;
+                                        Total += receiptPayment.TotalCredit;
+                                        @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                    }
+                                    else if (receiptPayment.TotalCheck > 0)
+                                    {
+                                        TotalGeneralEnCaja += receiptPayment.TotalCheck;
+                                        Total += receiptPayment.TotalCheck;
+                                        @(receiptPayment.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                    }
+                                    else
+                                    {
+                                        if (receiptPayment.NoteCreditReceiptPayments.Any(a => a.ReceiptPaymentId == receiptPayment.Id))
                                         {
                                             TotalGeneralFueraCaja += receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash;
                                             Total += receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash;
                                             @(receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                                         }
-                                    </td>
+                                    }
+                                </td>
                                 </tr>
                             }
                             @if (trans == true)
@@ -286,28 +289,31 @@
                                         @receiptPayment.Recibo
                                     </td>
                                 }
-                                <td class="text-right">
-                                    @if (receiptPayment.TotalCash > 0)
-                                    {
-                                        Total += receiptPayment.TotalCash;
-                                        @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                    }
-                                    else if (receiptPayment.TotalCredit > 0)
-                                    {
-                                        Total += receiptPayment.TotalCredit;
-                                        @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                    }
-                                    else if (receiptPayment.TotalCheck > 0)
-                                    {
-                                        Total += receiptPayment.TotalCheck;
-                                        @(receiptPayment.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                    }
-                                    else
+                            <td class="text-right">
+                                @if (receiptPayment.TotalCash > 0)
+                                {
+                                    Total += receiptPayment.TotalCash;
+                                    @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                }
+                                else if (receiptPayment.TotalCredit > 0)
+                                {
+                                    Total += receiptPayment.TotalCredit;
+                                    @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                }
+                                else if (receiptPayment.TotalCheck > 0)
+                                {
+                                    Total += receiptPayment.TotalCheck;
+                                    @(receiptPayment.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                }
+                                else
+                                {
+                                    if (receiptPayment.NoteCreditReceiptPayments.Any(a => a.ReceiptPaymentId == receiptPayment.Id))
                                     {
                                         Total += receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash;
                                         @(receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                                     }
-                                </td>
+                                }
+                            </td>
                             </tr>
                         }
                         <tr class="total">
