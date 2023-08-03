@@ -30,6 +30,7 @@ namespace Tickets.Models
             this.TicketReturns = new HashSet<TicketReturn>();
             this.RaffleAwards = new HashSet<RaffleAward>();
             this.ElectronicTicketSales = new HashSet<ElectronicTicketSale>();
+            this.TicketAllocationNumber_Delete = new HashSet<TicketAllocationNumber_Delete>();
         }
     
         public int Id { get; set; }
@@ -67,5 +68,6 @@ namespace Tickets.Models
         public virtual ICollection<TicketReturn> TicketReturns { get; set; }
         public virtual ICollection<RaffleAward> RaffleAwards { get; set; }
         public virtual ICollection<ElectronicTicketSale> ElectronicTicketSales { get; set; }
+        public virtual ICollection<TicketAllocationNumber_Delete> TicketAllocationNumber_Delete { get; set; }
     }
 }

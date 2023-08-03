@@ -6,8 +6,20 @@
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.CajaGeneral : "";
-    string adminCargo = config != null ? config.CajaGeneralCargo : "";
+    string adminName = null;
+    string adminCargo = null;
+
+    if(Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
+    {
+        adminName = config != null ? config.CreditosCobros : "";
+        adminCargo = config != null ? config.CreditosCobrosCargo : "";
+    }
+    else
+    {
+        adminName = config != null ? config.CajaGeneral : "";
+        adminCargo = config != null ? config.CajaGeneralCargo : "";
+    }
+
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 
     var Efectivo = Tickets.Models.Enums.PaymentTypeTextEnum.Efectivo;
@@ -169,6 +181,10 @@
                         {
                             @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
+                        {
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
                     </td>
                 </tr>
             </tbody>
@@ -264,7 +280,7 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
-            <b>DETALLE DE FACTURAS SORTEO NO.@Model.Invoice.Raffle.Id DE FECHA @Model.Invoice.Raffle.DateSolteo.ToShortDateString()</b>
+            <b>DETALLE DE RECIBO DE PAGO A FACTURA DEL SORTEO NO.@Model.Invoice.Raffle.Id DE FECHA @Model.Invoice.Raffle.DateSolteo.ToShortDateString()</b>
         </div>
         <div class="col-lg-6 no-padder">
             <div class="col-lg-12 no-padder text-left">
@@ -366,6 +382,10 @@
                             @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.Otros)
+                        {
+                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
                         {
                             @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }

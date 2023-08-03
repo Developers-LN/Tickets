@@ -180,6 +180,10 @@
         <AssociationConnector Association="TicketsModel.FK_Winner_Type_Document" />
         <AssociationConnector Association="TicketsModel.FK_Winner" />
         <AssociationConnector Association="TicketsModel.FK_Winner_Genre" />
+        <EntityTypeShape EntityType="TicketsModel.TicketAllocationNumber_Delete" Width="1.5" PointX="15.75" PointY="39.5" />
+        <AssociationConnector Association="TicketsModel.FK_TicketAllocationNumber_Delete_Catalog_Statu" />
+        <AssociationConnector Association="TicketsModel.FK_TicketAllocationNumber_Delete_Raffle" />
+        <AssociationConnector Association="TicketsModel.FK_TicketAllocationNumber_Delete" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

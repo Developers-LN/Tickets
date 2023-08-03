@@ -366,12 +366,19 @@ namespace Tickets.Models.Ticket
                 CanAllocate = DateTime.Now <= raffle.EndAllocationDate,
                 NumberCount = model.TicketAllocationNumbers.Count,
                 Agente = model.Agente,
-                FractionCount = model.TicketAllocationNumbers.Sum(s => (s.FractionTo - s.FractionFrom) + 1)
+                FractionCount = model.Statu == (int)AllocationStatuEnum.Deleted ? model.TicketAllocationNumber_Delete.Sum(s => (s.FractionTo - s.FractionFrom) + 1) : model.TicketAllocationNumbers.Sum(s => (s.FractionTo - s.FractionFrom) + 1)
             };
             if (hasNumber)
             {
                 var numberModel = new TicketAllocationNumberModel();
-                allocation.TicketAllocationNumbers = model.TicketAllocationNumbers.Select(n => numberModel.ToObject(n)).ToList();
+                if (allocation.StatuId == (int)AllocationStatuEnum.Deleted)
+                {
+                    allocation.TicketAllocationNumbers = model.TicketAllocationNumber_Delete.Select(s => numberModel.ToObjectDelete(s)).ToList();
+                }
+                else
+                {
+                    allocation.TicketAllocationNumbers = model.TicketAllocationNumbers.Select(n => numberModel.ToObject(n)).ToList();
+                }
             }
             if (hasProspectProperty)
             {
@@ -400,7 +407,7 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
             var allocation = context.TicketAllocations
                 .Where(a =>
-                    (a.Statu == (int)AllocationStatuEnum.Consigned || 
+                    (a.Statu == (int)AllocationStatuEnum.Consigned ||
                      a.Statu == (int)AllocationStatuEnum.Generated ||
                      a.Statu == (int)AllocationStatuEnum.Delivered)
                     && a.RaffleId == raffleId
@@ -447,10 +454,10 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
             var allocation = context.TicketAllocations
                 .Where(a =>
-                    (a.Statu == (int)AllocationStatuEnum.Consigned || a.Statu == (int)AllocationStatuEnum.Delivered || 
+                    (a.Statu == (int)AllocationStatuEnum.Consigned || a.Statu == (int)AllocationStatuEnum.Delivered ||
                      a.Statu == (int)AllocationStatuEnum.Invoiced || a.Statu == (int)AllocationStatuEnum.Returned) &&
                     (a.Statu == statu || statu == 0)
-                    && a.RaffleId == raffleId && (a.Client.GroupId != (int)ClientGroupEnum.DistribuidorElectronico || a.Client.GroupId != (int)ClientGroupEnum.DistribuidorXML) 
+                    && a.RaffleId == raffleId && (a.Client.GroupId != (int)ClientGroupEnum.DistribuidorElectronico || a.Client.GroupId != (int)ClientGroupEnum.DistribuidorXML)
                     && (a.ClientId == clientId || clientId == 0)).AsEnumerable()
                 .Select(a => this.ListadoAsignaciones(a)).ToList();
 

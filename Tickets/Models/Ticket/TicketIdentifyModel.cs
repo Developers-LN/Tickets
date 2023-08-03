@@ -600,7 +600,7 @@ namespace Tickets.Models.Ticket
                                 {
                                     DocumentType = identifyBach.DocumentType,
                                     DocumentNumber = identifyBach.DocumentNumber.ToUpper(),
-                                    WinnerName = identifyBach.WinnerName,
+                                    WinnerName = identifyBach.WinnerName.ToUpper(),
                                     Phone = identifyBach.WinnerPhone,
                                     GenderId = identifyBach.GenderId,
                                     CreateUser = WebSecurity.CurrentUserId,
@@ -873,7 +873,7 @@ namespace Tickets.Models.Ticket
                                 {
                                     DocumentType = identifyBach.DocumentType,
                                     DocumentNumber = identifyBach.DocumentNumber.ToUpper(),
-                                    WinnerName = identifyBach.WinnerName,
+                                    WinnerName = identifyBach.WinnerName.ToUpper(),
                                     Phone = identifyBach.WinnerPhone,
                                     GenderId = identifyBach.GenderId,
                                     CreateUser = WebSecurity.CurrentUserId,

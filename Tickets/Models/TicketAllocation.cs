@@ -17,6 +17,7 @@ namespace Tickets.Models
         public TicketAllocation()
         {
             this.TicketAllocationNumbers = new HashSet<TicketAllocationNumber>();
+            this.TicketAllocationNumber_Delete = new HashSet<TicketAllocationNumber_Delete>();
         }
     
         public int Id { get; set; }
@@ -32,5 +33,6 @@ namespace Tickets.Models
         public virtual Raffle Raffle { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<TicketAllocationNumber> TicketAllocationNumbers { get; set; }
+        public virtual ICollection<TicketAllocationNumber_Delete> TicketAllocationNumber_Delete { get; set; }
     }
 }

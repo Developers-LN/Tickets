@@ -523,6 +523,9 @@
     <Compile Include="Models\TicketAllocationNumber.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TicketAllocationNumber_Delete.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TicketRePrint.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>

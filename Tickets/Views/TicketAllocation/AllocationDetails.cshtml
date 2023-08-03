@@ -1,7 +1,8 @@
 ﻿@{
     Layout = null;
-    ViewBag.Title = "Detalle de Asignación";
+    ViewBag.Title = "Detalle de asignación";
 }
+
 <div class="col-lg-12 no-padder" ng-controller="AllocationDetailsController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
@@ -15,7 +16,6 @@
                             <div class="col-lg-4">Cliente: <b>{{allocation.clientDesc}} {{allocation.Agente}}</b></div>
                         </div>
                     </fieldset>
-
                     <br />
                     <fieldset>
                         <div class="col-lg-12no-padder">
@@ -24,6 +24,10 @@
                             <div class="col-lg-4">Tipo de Asignación: <b>{{allocation.typeDesc}}</b></div>
                         </div>
                     </fieldset>
+                    <br />
+                    <div ng-show="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Created)" class="col-lg-12 no-padder text-center">
+                        <a ng-click="anularAsignacion(allocation.id)" class="btn btn-warning btn-sm"><i class="fa fa-trash-o"></i> Anular</a>
+                    </div>
                 </div>
                 <div class="col-lg-12 no-padder text-right m-b-xs">
                     <a href="/#/ticket/allocation/{{allocation.id}}" class="btn btn-oval btn-success btn-sm {{moduleCanAdd}}" ng-if="(allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Created) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.PendientPrint)) && allocation.canAllocate == true"><i class="fa fa fa-plus"></i> Agregar</a>

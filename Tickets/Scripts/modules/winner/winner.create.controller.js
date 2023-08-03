@@ -45,8 +45,8 @@
                 DocumentNumber: undefined,
                 WinnerName: undefined,
                 Phone: undefined,
-                GenderId: undefined/*,
-                Notes: undefined*/
+                GenderId: undefined,
+                Notes: undefined
             };
         }
 

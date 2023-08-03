@@ -176,13 +176,24 @@ namespace Tickets.Controllers
         }
 
         //
-        //  POST: ticket/ticketAllocationApi/deleteAllocationNumber
+        //  POST: ticket/ticketAllocationApi/unConsignateNumber
         [HttpPost]
         [Authorize]
         [ActionName("unConsignateNumber")]
         public RequestResponseModel UnConsignateNumber(TicketAllocationNumberModel model)
         {
             var response = new TicketAllocationNumberModel().UnConsignateNumber(model);
+            return response;
+        }
+
+        //
+        //  POST: ticket/ticketAllocationApi/removeAllocation
+        [HttpPost]
+        [Authorize]
+        [ActionName("removeAllocation")]
+        public RequestResponseModel RemoveAllocation(int id)
+        {
+            var response = new TicketAllocationNumberModel().RemoveAllocation(id);
             return response;
         }
 

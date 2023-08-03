@@ -65,11 +65,25 @@
         function validateData(cash) {
             var error = '', isReq = ' es un campo requerido. <br>';
 
-            if (cash.StartDate === undefined) {
+            if (cash.StartDate === undefined && cash.EndDate === undefined && cash.RaffleId == 0) {
+                $scope.required = true;
+                error += 'No ha introducido ningun dato';
+            }
+            if (cash.StartDate !== undefined && cash.EndDate === undefined && cash.RaffleId == 0) {
+                $scope.required = true;
+                error += 'La Fecha Fin' + isReq;
+            }
+            if (cash.StartDate === undefined && cash.EndDate !== undefined && cash.RaffleId == 0) {
+                $scope.required = true;
                 error += 'La Fecha de Inicio' + isReq;
             }
-            if ($scope.cash.EndDate === undefined) {
+            if (cash.StartDate !== undefined && cash.EndDate === undefined && cash.RaffleId != 0) {
+                $scope.required = true;
                 error += 'La Fecha Fin' + isReq;
+            }
+            if (cash.StartDate === undefined && cash.EndDate !== undefined && cash.RaffleId != 0) {
+                $scope.required = true;
+                error += 'La Fecha de Inicio' + isReq;
             }
             if (error !== '') {
                 alertify.showError('Alerta', error);
@@ -103,7 +117,6 @@
                         $scope.cash.StartDate = $rootScope.parseDate($scope.cash.StartDate, $scope.cash.StartDate).toJSON();
                     }
                     catch (err) { }
-
                     window.open('Integration/ExportReceivableCloseToExcel?FechaInicio=' + $scope.cash.StartDate + '&FechaFin=' + $scope.cash.EndDate + '&raffleId=' + $scope.cash.RaffleId);
                 }
             });

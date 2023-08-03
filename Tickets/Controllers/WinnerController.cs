@@ -73,6 +73,7 @@ namespace Tickets.Controllers
                                 winner.Phone = winner.Phone;
                                 winner.GenderId = winner.GenderId;
                                 winner.CreateDate = DateTime.Now;
+                                winner.Notes = winner.Notes;
                                 winner.CreateUser = WebSecurity.CurrentUserId;
                                 context.Winners.Add(winner);
                                 context.SaveChanges();
@@ -120,6 +121,7 @@ namespace Tickets.Controllers
                         dWinner.WinnerName = winner.WinnerName.ToUpper();
                         dWinner.Phone = winner.Phone;
                         dWinner.GenderId = winner.GenderId;
+                        dWinner.Notes = winner.Notes;
                         context.Entry(dWinner).State = System.Data.Entity.EntityState.Modified;
                         context.SaveChanges();
                     }
@@ -146,7 +148,8 @@ namespace Tickets.Controllers
                 c.GenderId,
                 GenderName = catalogs.FirstOrDefault(f => f.Id == c.GenderId).NameDetail,
                 c.CreateUser,
-                c.CreateDate
+                c.CreateDate,
+                c.Notes
             };
         }
 

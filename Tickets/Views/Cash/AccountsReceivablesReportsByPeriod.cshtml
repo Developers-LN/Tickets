@@ -25,10 +25,10 @@
                     <div class="col-lg-6 no-padder">
                         <fieldset>
                             <div class="form-group">
-                                <label class="col-lg-12 control-label-left">Sorteo: </label>
+                                <label class="col-lg-12 control-label-left">Estado de cuenta: </label>
                                 <div class="col-lg-12">
                                     <select class="form-control dropdown-select2" ng-model="cash.ReceivableType">
-                                        <option selected="selected" value="0">Todos los tipos de cuenta</option>
+                                        <option selected="selected" value="0">Todos los tipos de estado</option>
                                         <option ng-repeat="accountType in accountReceivableTypes" value="{{accountType.value}}">{{accountType.text}}</option>
                                     </select>
                                 </div>

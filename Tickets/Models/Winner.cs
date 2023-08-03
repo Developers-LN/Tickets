@@ -27,6 +27,7 @@ namespace Tickets.Models
         public Nullable<int> GenderId { get; set; }
         public Nullable<int> CreateUser { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
+        public string Notes { get; set; }
     
         public virtual Catalog Catalog { get; set; }
         public virtual ICollection<IdentifyBach> IdentifyBaches { get; set; }

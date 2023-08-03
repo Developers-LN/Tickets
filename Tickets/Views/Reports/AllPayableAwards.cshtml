@@ -18,6 +18,8 @@
 
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
 
+    int TicketFractions = (RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction);
+
     var Pendiente = "Pendiente";
     var Pagado = "Pagado";
 
@@ -85,43 +87,45 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th colspan="6" class="text-center">Resumen de premios</th>
+                            <th colspan="6" class="text-center">RESUMEN DE PREMIOS</th>
                         </tr>
                         <tr>
-                            <th class="text-center">Fila</th>
-                            <th class="text-center">Premios</th>
-                            <th class="text-center">Valor del premio</th>
-                            <th class="text-center">Cantidad</th>
-                            <th class="text-center">Monto en premios</th>
-                            <th class="text-center">Monto a pagar</th>
+                            <th class="text-center">FILA</th>
+                            <th class="text-center">PREMIOS</th>
+                            <th class="text-center">VALOR POR FRACCION</th>
+                            <th class="text-center">CANTIDAD DE FRACCIONES</th>
+                            @*<th class="text-center">Monto en premios</th>*@
+                            <th class="text-center">MONTO A PAGAR</th>
                         </tr>
                     </thead>
                     <tbody>
                         @{
-                            var totalPremios = 0;
+                            //var totalPremios = 0;
+                            var totalFracciones = 0;
                             var TotalPremios = 1;
                             decimal resumenValorPremios = 0, resumenMontoApagarSorteo = 0;
                             var resumenPremios = Model.GroupBy(g => g.nameaward)
                                 .Select(s => new
                                 {
                                     name = s.Key,
-                                    monto = s.FirstOrDefault().value,
-                                    cantidad = s.Count(),
+                                    monto = s.FirstOrDefault().value / TicketFractions,
+                                    cantidadFracciones = s.Sum(s1 => s1.fracciones),
                                     totalPremio = s.Sum(s1 => s1.value),
                                     totalPagar = s.Sum(s2 => s2.valorpagar)
                                 });
                         }
                         @foreach (var item in resumenPremios)
                         {
-                            totalPremios += item.cantidad;
+                            //totalPremios += item.cantidad;
+                            totalFracciones += item.cantidadFracciones;
                             resumenValorPremios += item.totalPremio;
                             resumenMontoApagarSorteo += item.totalPagar;
                             <tr>
                                 <td class="text-center">@TotalPremios</td>
                                 <td class="text-center">@item.name</td>
                                 <td class="text-center">@item.monto.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                <td class="text-center">@item.cantidad.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
-                                <td class="text-center">@item.totalPremio.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-center">@item.cantidadFracciones.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                                @*<td class="text-center">@item.totalPremio.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>*@
                                 <td class="text-center">@item.totalPagar.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             </tr>
                             TotalPremios++;
@@ -130,9 +134,9 @@
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
-                            <th class="text-center">Cantidad de premios: @totalPremios.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
-                            <th class="text-center">Total en premios: @resumenValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
-                            <th class="text-center">Total a pagar: @resumenMontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                            @*<th class="text-center">Cantidad de premios: @totalPremios.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>*@
+                            <th class="text-center">TOTAL EN FRACCIONES: @totalFracciones.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">TOTAL A PAGAR: @resumenMontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
                         </tr>
                     </tbody>
                 </table>
@@ -143,14 +147,14 @@
                             <th colspan="8" class="text-center">@RaffleData.Name</th>
                         </tr>
                         <tr>
-                            <th class="text-center">Fila</th>
-                            <th class="text-center">Billete</th>
-                            <th class="text-center">Estatus de pago</th>
-                            <th class="text-center">Premio</th>
-                            <th class="text-center">Fracción</th>
-                            <th class="text-center">Tipo de premio</th>
-                            <th class="text-center">Monto del premio</th>
-                            <th class="text-center">Monto a pagar</th>
+                            <th class="text-center">FILA</th>
+                            <th class="text-center">BILLETE</th>
+                            <th class="text-center">ESTATUS DE PAGO</th>
+                            <th class="text-center">PREMIO</th>
+                            <th class="text-center">FRACCIONES</th>
+                            <th class="text-center">TIPO DE PREMIO</th>
+                            <th class="text-center">VALOR POR FRACCION</th>
+                            <th class="text-center">MONTO A PAGAR</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -191,7 +195,7 @@
                                 }
                                 <td class="text-center">@item.fracciones</td>
                                 <td class="text-center">@item.nameaward</td>
-                                <td class="text-center">@item.value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                <td class="text-center">@((item.value / TicketFractions).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                                 <td class="text-center">@item.valorpagar.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             </tr>
                         }
@@ -200,10 +204,10 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <th class="text-center">Fracciones: @totalFractions.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">BILLETES PREMIADOS: @totalFractions.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</th>
                             <td></td>
-                            <th class="text-center">Total en valor de premios: @ValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
-                            <th class="text-center">Total en premios: @MontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">TOTAL VALOR POR FRACCION: @ValorPremios.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
+                            <th class="text-center">TOTAL A PAGAR: @MontoApagarSorteo.ToString("c", new System.Globalization.CultureInfo("es-DO"))</th>
                         </tr>
                     </tbody>
                 </table>

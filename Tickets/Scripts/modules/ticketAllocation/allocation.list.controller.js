@@ -19,6 +19,7 @@
 
         $scope.printReportDeliverAvailable = 0;
         $rootScope.globalReturnURL = '/#/ticket/allocations';
+        $rootScope.globalReturnURL2 = '/#/ticket/ConsignmentAllocations';
 
         this.loadData = function () {
             window.loading.show();

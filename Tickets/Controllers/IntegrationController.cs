@@ -469,21 +469,21 @@ namespace Tickets.Controllers
 
                     if (FechaInicio == "undefined" && FechaInicio == "undefined")
                     {
-                        Nombre = ("Estados de cuenta del sorteo " + raffleId + ".xlsx").ToString();
+                        Nombre = ("FACTURAS DEL SORTEO NO. " + raffleId + ".xlsx").ToString();
                     }
                     else if (FechaInicio != "undefined" && FechaInicio != "undefined" && raffleId != 0)
                     {
                         DateTime FI = Convert.ToDateTime(FechaInicio);
                         DateTime FF = Convert.ToDateTime(FechaFin);
 
-                        Nombre = ("Estados de cuenta del sorteo " + raffleId + " desde " + FI.ToString("dd-MM-yyyy") + " hasta " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
+                        Nombre = ("FACTURAS DEL SORTEO NO. " + raffleId + " DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
                     }
                     else
                     {
                         DateTime FI = Convert.ToDateTime(FechaInicio);
                         DateTime FF = Convert.ToDateTime(FechaFin);
 
-                        Nombre = ("Estados de cuenta desde " + FI.ToString("dd-MM-yyyy") + " hasta " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
+                        Nombre = ("FACTURAS DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
                     }
 
                     return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Nombre);

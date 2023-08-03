@@ -7,16 +7,16 @@
 
     if(context.Raffles.FirstOrDefault(f=>f.Id == raffleid).Prospect.ImpresionType == (int)Tickets.Models.Enums.PrintTypeProspect.Ordinario)
     {
-        ViewBag.Title = "Billetes vendidos del sorteo No. " + Model.FirstOrDefault().RaffleId;
+        ViewBag.Title = "BILLETES VENDIDOS DEL SORTEO NO. " + Model.FirstOrDefault().RaffleId;
     }
     else
     {
-        ViewBag.Title = "Boletos vendidos del sorteo No. " + Model.FirstOrDefault().RaffleId;
+        ViewBag.Title = "BOLETOS VENDIDOS DEL SORTEO NO. " + Model.FirstOrDefault().RaffleId;
     }
 
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.ProduccionSorteo : "";
-    string adminCargo = config != null ? config.ProduccionSorteoCargo : "";
+    string adminName = config != null ? config.Comercial : "";
+    string adminCargo = config != null ? config.ComercialCargo : "";
 
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
 

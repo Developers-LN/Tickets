@@ -58,6 +58,25 @@ namespace Tickets.Models.Ticket
             return number;
         }
 
+        internal TicketAllocationNumberModel ToObjectDelete(TicketAllocationNumber_Delete model)
+        {
+            var number = new TicketAllocationNumberModel()
+            {
+                Id = model.Id,
+                ControlNumber = model.ControlNumber,
+                FractionFrom = model.FractionFrom,
+                FractionTo = model.FractionTo,
+                Invoiced = model.Invoiced,
+                Number = model.Number,
+                Printed = model.Printed,
+                Statu = model.Statu,
+                TicketAllocationId = model.TicketAllocationId,
+                Serie = null
+            };
+
+            return number;
+        }
+
         internal RequestResponseModel DeleteAllocationNumber(TicketAllocationNumberModel model)
         {
             var context = new TicketsEntities();
@@ -163,6 +182,90 @@ namespace Tickets.Models.Ticket
                     {
                         Result = true,
                         Message = "Ocurrio un error al intentar eliminar el billete"
+                    };
+                }
+            }
+        }
+
+        internal RequestResponseModel RemoveAllocation(int id)
+        {
+            var context = new TicketsEntities();
+
+            using (var Trans = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var allocation = context.TicketAllocations.FirstOrDefault(n => n.Id == id && n.Statu == (int)AllocationStatuEnum.Created);
+
+                    if (allocation == null)
+                    {
+                        Trans.Rollback();
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "El numero de asignación no fue encontrado!"
+                        };
+                    }
+
+                    var allocationNumber = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == id);
+
+                    if (allocation.Client.GroupId != (int)ClientGroupEnum.DistribuidorXML || allocation.Client.GroupId != (int)ClientGroupEnum.DistribuidorElectronico)
+                    {
+                        if (allocationNumber.Any(a => a.Printed == true))
+                        {
+                            Trans.Rollback();
+                            return new RequestResponseModel()
+                            {
+                                Result = false,
+                                Message = "Hay billetes impresos!"
+                            };
+                        }
+                    }
+
+                    List<TicketAllocationNumber_Delete> ticketAllocations_delete = new List<TicketAllocationNumber_Delete>();
+
+                    foreach (var number in allocationNumber)
+                    {
+                        var ticket = new TicketAllocationNumber_Delete()
+                        {
+                            Id_Origin = number.Id,
+                            Number = number.Number,
+                            Printed = number.Printed,
+                            ControlNumber = number.ControlNumber,
+                            FractionFrom = number.FractionFrom,
+                            FractionTo = number.FractionTo,
+                            RaffleId = number.RaffleId,
+                            TicketAllocationId = number.TicketAllocationId,
+                            CreateUser = number.CreateUser,
+                            CreateDate = number.CreateDate,
+                            Statu = number.Statu
+                        };
+                        ticketAllocations_delete.Add(ticket);
+                    }
+                    context.TicketAllocationNumber_Delete.AddRange(ticketAllocations_delete);
+                    context.SaveChanges();
+
+                    context.TicketAllocationNumbers.RemoveRange(allocation.TicketAllocationNumbers);
+                    allocation.Statu = (int)AllocationStatuEnum.Deleted;
+                    context.SaveChanges();
+
+                    Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Asignación eliminada", id);
+
+                    Trans.Commit();
+
+                    return new RequestResponseModel()
+                    {
+                        Result = true,
+                        Message = "La asingación fue eliminada correctamente!"
+                    };
+                }
+                catch (Exception)
+                {
+                    Trans.Rollback();
+                    return new RequestResponseModel()
+                    {
+                        Result = false,
+                        Message = "Error al intentar realizar la eliminación de la asignación!"
                     };
                 }
             }
@@ -574,7 +677,7 @@ namespace Tickets.Models.Ticket
                             ClientDesc = tn.TicketAllocation.ClientId + " - " + tn.TicketAllocation.Client.Name,
                             Date = tn.TicketAllocation.CreateDate.ToUnixTime(),
                             FractionFrom = tn.FractionFrom,
-                            UserDesc = context.Users.FirstOrDefault(u => u.Id == tn.CreateUser).Name,
+                            UserDesc = tn.TicketAllocation.User.Name,
                             FractionTo = tn.FractionTo,
                             Group = "No hay datos"
                         });
@@ -589,11 +692,12 @@ namespace Tickets.Models.Ticket
                                 FractionFrom = tn.FractionFrom,
                                 FractionTo = tn.FractionTo,
                                 Group = "No hay datos",
-                                UserDesc = context.Users.FirstOrDefault(u => u.Id == tn.CreateUser).Name,
+                                UserDesc = tn.TicketAllocation.User.Name,
                             });
                         }
                     });
-                context.InvoiceTickets.Where(a => a.TicketNumberAllocationId == n.Id && a.Invoice.RaffleId == n.TicketAllocation.RaffleId).ToList().ForEach(
+                var tickets = context.TicketAllocationNumbers.Where(w => w.Number == n.Number && w.RaffleId == n.RaffleId && w.TicketType == (int)TicketsTypeEnum.AvailableTicket).Select(s => s.Id).ToList();
+                context.InvoiceTickets.Where(a => tickets.Contains(a.TicketNumberAllocationId) && a.Invoice.RaffleId == n.TicketAllocation.RaffleId).ToList().ForEach(
                     tn => transactions.Add(new NumberTransactionModel
                     {
                         Description = "Facturación",
@@ -602,7 +706,7 @@ namespace Tickets.Models.Ticket
                         FractionFrom = n.FractionFrom,
                         FractionTo = n.FractionTo,
                         Group = "No hay datos",
-                        UserDesc = context.Users.FirstOrDefault(u => u.Id == tn.Invoice.CreateUser).Name,
+                        UserDesc = tn.Invoice.User.Name,
                     }));
                 context.TicketReturns.Where(a => a.TicketAllocationNimberId == n.Id).ToList().ForEach(
                     tn => transactions.Add(new NumberTransactionModel
@@ -613,7 +717,19 @@ namespace Tickets.Models.Ticket
                         FractionFrom = tn.FractionFrom,
                         FractionTo = tn.FractionTo,
                         Group = tn.ReturnedGroup,
-                        UserDesc = context.Users.FirstOrDefault(u => u.Id == tn.CreateUser).Name,
+                        UserDesc = tn.User.Name,
+                    }));
+                context.TicketAllocationNumbers.Where(w => w.Number == n.Number && w.RaffleId == n.RaffleId && w.TicketType == (int)TicketsTypeEnum.AvailableTicket && n.Statu == (int)TicketStatusEnum.Anulated)
+                    .ToList().ForEach(
+                    tn => transactions.Add(new NumberTransactionModel
+                    {
+                        Description = "Anulación",
+                        ClientDesc = tn.InvoiceTickets.FirstOrDefault().Invoice.Client.Id + " - " + tn.InvoiceTickets.FirstOrDefault().Invoice.Client.Name,
+                        Date = tn.CreateDate.ToUnixTime(),
+                        FractionFrom = tn.FractionFrom,
+                        FractionTo = tn.FractionTo,
+                        Group = "No hay datos",
+                        UserDesc = tn.User.Name,
                     }));
             }
             return transactions;

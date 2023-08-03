@@ -422,7 +422,7 @@ namespace Tickets.Models.Raffles
             var context = new TicketsEntities();
             var prospectModel = new ProspectModel();
             var raffles = context.Raffles.AsEnumerable()
-                .Where(s => s.Statu == (int)RaffleStatusEnum.Active || s.Statu == (int)RaffleStatusEnum.Planned)
+                .Where(s => s.Statu == (int)RaffleStatusEnum.Active || s.Statu == (int)RaffleStatusEnum.Planned || s.Statu == (int)RaffleStatusEnum.Generated)
                 .OrderByDescending(r => r.Id)
                 .Select(r => new
                 {
