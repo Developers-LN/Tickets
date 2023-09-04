@@ -6,8 +6,8 @@
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.LoteryAdmin : "";
-    string adminCargo = config != null ? config.Cargo : "";
+    string adminName = config != null ? config.ControlPremio : "";
+    string adminCargo = config != null ? config.ControlPremioCargo : "";
 
     int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();

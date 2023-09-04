@@ -33,9 +33,11 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th colspan="10" class="text-center"><b>ASIGNACIONES TRADICIONALES</b></th>
+                </tr>
+                <tr>
                     <th class="text-center"><b>ASIGNACION</b></th>
                     <th class="text-left"><b>FECHA</b></th>
-                    <th class="text-left"><b>TIPO</b></th>
                     <th class="text-left"><b>ESTADO</b></th>
                     <th class="text-left"><b>NOMBRE</b></th>
                     <th class="text-right"><b>FRACCIONES</b></th>
@@ -53,21 +55,23 @@
                     int totalFraction = 0;
                     int totalNumber = 0;
                     int totalSheets = 0;
+
+                    var Electronico = Model.Where(w => w.GrupoCliente == (int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorXML ||
+                                                       w.GrupoCliente == (int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico).ToList();
+
+                    var ContenedorElectronico = Model.Where(w => w.GrupoCliente == (int)Tickets.Models.Enums.ClientGroupEnum.ContenedorElectronico).ToList();
+
+                    var Tradicional = Model.Where(w => w.GrupoCliente != (int)Tickets.Models.Enums.ClientGroupEnum.ContenedorElectronico &&
+                                                               w.GrupoCliente != (int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorXML &&
+                                                               w.GrupoCliente != (int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico).ToList();
+
                 }
 
-                @foreach (var allocation in Model)
+                @foreach (var allocation in Tradicional)
                 {
                     <tr>
                         <td class="text-center">@allocation.AsignacionId</td>
                         <td class="text-left">@allocation.Fecha</td>
-                        @if (context.Clients.FirstOrDefault(w => w.Id == allocation.ClientId).GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)
-                        {
-                            <td class="text-left">Electrónica</td>
-                        }
-                        else
-                        {
-                            <td class="text-left">Tradicional</td>
-                        }
                         <td class="text-left">@allocation.EstadoAsignacion</td>
                         <td class="text-left">@allocation.Cliente</td>
                         <td class="text-right">@allocation.Fracciones.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
@@ -88,6 +92,107 @@
                     <td class="text-left"></td>
                     <td class="text-left"></td>
                     <td class="text-left"></td>
+                    <td class="text-left"><b>Total...:</b></td>
+                    <td class="text-right"><b>@totalFraction.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-right"><b>@totalSheets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-right"><b>@totalNumber.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-right"><b>@totalValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td></td>
+                    <td class="text-right"><b>@totalValueToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th colspan="10" class="text-center"><b>ASIGNACIONES ELECTRONICAS</b></th>
+                </tr>
+                <tr>
+                    <th colspan="10" class="text-center"><b>CONTENEDOR DE ASIGNACIONES ELECTRONICAS</b></th>
+                </tr>
+                <tr>
+                    <th class="text-center"><b>ASIGNACION</b></th>
+                    <th class="text-left"><b>FECHA</b></th>
+                    <th class="text-left"><b>ESTADO</b></th>
+                    <th class="text-left"><b>NOMBRE</b></th>
+                    <th class="text-right"><b>FRACCIONES <br /> ASIGNADAS</b></th>
+                    <th class="text-right"><b>NUMEROS</b></th>
+                    <th class="text-right"><b>MONTO</b></th>
+                    <th class="text-right"><b>FRACCIONES <br /> NO VENDIDAS</b></th>
+                    <th class="text-right"><b>NUMEROS</b></th>
+                    <th class="text-right"><b>MONTO</b></th>
+                </tr>
+                @foreach (var item in ContenedorElectronico)
+                {
+                    var Fracciones = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == item.AsignacionId).Select(s => s.Number).ToList();
+                    var FraccionesRestantes = context.TicketAllocationNumbers.Where(w => Fracciones.Contains(w.Number) && w.RaffleId == RaffleData.Id && w.TicketType == (int)Tickets.Models.Enums.TicketsTypeEnum.AvailableTicket).Sum(s => s.FractionTo - s.FractionFrom + 1);
+
+                    var FraccionesDisponibles = item.Fracciones - FraccionesRestantes;
+
+                    <tr>
+                        <td class="text-center">@item.AsignacionId</td>
+                        <td class="text-left">@item.Fecha</td>
+                        <td class="text-left">@item.EstadoAsignacion</td>
+                        <td class="text-left">@item.Cliente</td>
+                        <td class="text-right">@item.Fracciones.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@item.Billetes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@item.Monto.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@FraccionesDisponibles.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@((FraccionesDisponibles / (RaffleData.Prospect.LeafFraction * RaffleData.Prospect.LeafNumber)).ToString("n0", new System.Globalization.CultureInfo("es-DO"))) - @(FraccionesDisponibles % (RaffleData.Prospect.LeafFraction * RaffleData.Prospect.LeafNumber))</td>
+                        <td class="text-right">@((FraccionesDisponibles * RaffleData.Prospect.Price).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                    </tr>
+                }
+                <tr>
+                    <th colspan="10" class="text-center"><b>ASIGNACIONES ELECTRONICAS</b></th>
+                </tr>
+                <tr>
+                    <th class="text-center"><b>ASIGNACION</b></th>
+                    <th class="text-left"><b>FECHA</b></th>
+                    <th class="text-left"><b>ESTADO</b></th>
+                    <th class="text-left"><b>NOMBRE</b></th>
+                    <th class="text-right"><b>FRACCIONES</b></th>
+                    <th class="text-right"><b>HOJAS</b></th>
+                    <th class="text-right"><b>NUMEROS</b></th>
+                    <th class="text-right"><b>MONTO</b></th>
+                    <th class="text-right"><b>DESCUENTO</b></th>
+                    <th class="text-right"><b>MONTO A <br /> PAGAR</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ 
+                     totalValue = 0.0m;
+                     totalValueToPay = 0.0m;
+                     totalFraction = 0;
+                     totalNumber = 0;
+                     totalSheets = 0;
+                }
+                @foreach (var allocation in Electronico)
+                {
+                    <tr>
+                        <td class="text-center">@allocation.AsignacionId</td>
+                        <td class="text-left">@allocation.Fecha</td>
+                        <td class="text-left">@allocation.EstadoAsignacion</td>
+                        <td class="text-left">@allocation.Cliente</td>
+                        <td class="text-right">@allocation.Fracciones.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@allocation.Hojas.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@allocation.Billetes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@allocation.Monto.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                        <td class="text-right">@allocation.Descuento%</td>
+                        <td class="text-right">@allocation.MontoAPagar.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    </tr>
+
+                    totalNumber += allocation.Billetes;
+                    totalFraction += allocation.Fracciones;
+                    totalValue += allocation.Monto;
+                    totalSheets += allocation.Hojas;
+                    totalValueToPay += allocation.MontoAPagar;
+                }
+                <tr class="total">
+                    <td class="text-left"></td>
+                    <td class="text-left"></td>
                     <td class="text-left"></td>
                     <td class="text-left"><b>Total...:</b></td>
                     <td class="text-right"><b>@totalFraction.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
@@ -98,7 +203,6 @@
                     <td class="text-right"><b>@totalValueToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
                 </tr>
             </tbody>
-
         </table>
     </div>
 

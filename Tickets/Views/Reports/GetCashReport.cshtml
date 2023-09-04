@@ -10,6 +10,7 @@
     string adminName = config != null ? config.CajaGeneral : "";
     string adminCargo = config != null ? config.CajaGeneralCargo : "";
     decimal Total = 0.0m;
+    decimal TotalGeneralIngresado = 0.0m;
     decimal TotalGeneralEnCaja = 0.0m;
     decimal TotalGeneralFueraCaja = 0.0m;
 
@@ -120,6 +121,13 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @{
+                                TotalGeneralFueraCaja = Model.Where(w => w.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoNomina ||
+                                                                         w.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoPrestaciones).Sum(s => s.TotalCash + s.TotalCredit + s.TotalCheck);
+
+                                TotalGeneralEnCaja = Model.Where(w => w.ReceiptType != (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoNomina &&
+                                                                      w.ReceiptType != (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoPrestaciones).Sum(s => s.TotalCash + s.TotalCredit + s.TotalCheck);
+                            }
                             @foreach (var receiptPayment in Model.Where(w => w.CreateUser == user))
                             {
                                 //Total += (receiptPayment.TotalCash + receiptPayment.TotalCheck + receiptPayment.TotalCredit);
@@ -158,35 +166,32 @@
                                             @receiptPayment.Recibo
                                         </td>
                                     }
-                                <td class="text-right">
-                                    @if (receiptPayment.TotalCash > 0)
-                                    {
-                                        TotalGeneralEnCaja += receiptPayment.TotalCash;
-                                        Total += receiptPayment.TotalCash;
-                                        @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                    }
-                                    else if (receiptPayment.TotalCredit > 0)
-                                    {
-                                        TotalGeneralEnCaja += receiptPayment.TotalCredit;
-                                        Total += receiptPayment.TotalCredit;
-                                        @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                    }
-                                    else if (receiptPayment.TotalCheck > 0)
-                                    {
-                                        TotalGeneralEnCaja += receiptPayment.TotalCheck;
-                                        Total += receiptPayment.TotalCheck;
-                                        @(receiptPayment.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                    }
-                                    else
-                                    {
-                                        if (receiptPayment.NoteCreditReceiptPayments.Any(a => a.ReceiptPaymentId == receiptPayment.Id))
+                                    <td class="text-right">
+                                        @if (receiptPayment.TotalCash > 0)
                                         {
-                                            TotalGeneralFueraCaja += receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash;
-                                            Total += receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash;
-                                            @(receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                            Total += receiptPayment.TotalCash;
+                                            @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                                         }
-                                    }
-                                </td>
+                                        else if (receiptPayment.TotalCredit > 0)
+                                        {
+                                            Total += receiptPayment.TotalCredit;
+                                            @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                        }
+                                        else if (receiptPayment.TotalCheck > 0)
+                                        {
+                                            Total += receiptPayment.TotalCheck;
+                                            @(receiptPayment.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                        }
+                                        else
+                                        {
+                                            if (receiptPayment.NoteCreditReceiptPayments.Any(a => a.ReceiptPaymentId == receiptPayment.Id))
+                                            {
+                                                TotalGeneralFueraCaja += receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash;
+                                                Total += receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash;
+                                                @(receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                            }
+                                        }
+                                    </td>
                                 </tr>
                             }
                             @if (trans == true)
@@ -204,6 +209,7 @@
                         </tbody>
                     </table>
                 </div>
+                TotalGeneralIngresado += Total;
             }
             <div class="col-lg-12 no-padder">
                 <table class="table">
@@ -214,7 +220,7 @@
                         <th class="text-right">TOTAL GENERAL INGRESADO FUERA DE CAJA: @(TotalGeneralFueraCaja.ToString("c", new System.Globalization.CultureInfo("es-DO")))</th>
                     </tr>
                     <tr>
-                        <th class="text-right">TOTAL GENERAL DE INGRESADO: @((TotalGeneralFueraCaja + TotalGeneralEnCaja).ToString("c", new System.Globalization.CultureInfo("es-DO")))</th>
+                        <th class="text-right">TOTAL GENERAL DE INGRESADO: @((TotalGeneralIngresado).ToString("c", new System.Globalization.CultureInfo("es-DO")))</th>
                     </tr>
                 </table>
             </div>
@@ -251,6 +257,13 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @{
+                            TotalGeneralFueraCaja = Model.Where(w => w.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoNomina ||
+                                                                     w.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoPrestaciones).Sum(s => s.TotalCash + s.TotalCredit + s.TotalCheck);
+
+                            TotalGeneralEnCaja = Model.Where(w => w.ReceiptType != (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoNomina &&
+                                                                  w.ReceiptType != (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoPrestaciones).Sum(s => s.TotalCash + s.TotalCredit + s.TotalCheck);
+                        }
                         @foreach (var receiptPayment in Model)
                         {
                             //Total += (receiptPayment.TotalCash + receiptPayment.TotalCheck + receiptPayment.TotalCredit);
@@ -289,32 +302,34 @@
                                         @receiptPayment.Recibo
                                     </td>
                                 }
-                            <td class="text-right">
-                                @if (receiptPayment.TotalCash > 0)
-                                {
-                                    Total += receiptPayment.TotalCash;
-                                    @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                }
-                                else if (receiptPayment.TotalCredit > 0)
-                                {
-                                    Total += receiptPayment.TotalCredit;
-                                    @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                }
-                                else if (receiptPayment.TotalCheck > 0)
-                                {
-                                    Total += receiptPayment.TotalCheck;
-                                    @(receiptPayment.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                                }
-                                else
-                                {
-                                    if (receiptPayment.NoteCreditReceiptPayments.Any(a => a.ReceiptPaymentId == receiptPayment.Id))
+                                <td class="text-right">
+                                    @if (receiptPayment.TotalCash > 0)
                                     {
-                                        Total += receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash;
-                                        @(receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                        Total += receiptPayment.TotalCash;
+                                        @(receiptPayment.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
                                     }
-                                }
-                            </td>
+                                    else if (receiptPayment.TotalCredit > 0)
+                                    {
+                                        Total += receiptPayment.TotalCredit;
+                                        @(receiptPayment.TotalCredit.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                    }
+                                    else if (receiptPayment.TotalCheck > 0)
+                                    {
+                                        Total += receiptPayment.TotalCheck;
+                                        @(receiptPayment.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                    }
+                                    else
+                                    {
+                                        if (receiptPayment.NoteCreditReceiptPayments.Any(a => a.ReceiptPaymentId == receiptPayment.Id))
+                                        {
+                                            TotalGeneralFueraCaja += receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash;
+                                            Total += receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash;
+                                            @(receiptPayment.NoteCreditReceiptPayments.FirstOrDefault(f => f.ReceiptPaymentId == receiptPayment.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                                        }
+                                    }
+                                </td>
                             </tr>
+                            TotalGeneralIngresado += Total;
                         }
                         <tr class="total">
                             <td colspan="8" class="text-right">TOTAL: <strong>@(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
@@ -322,10 +337,21 @@
                     </tbody>
                 </table>
             </div>
+            <div class="col-lg-12 no-padder">
+                <table class="table">
+                    <tr>
+                        <th class="text-right">TOTAL GENERAL INGRESADO POR CAJA: @((TotalGeneralEnCaja - TotalGeneralFueraCaja).ToString("c", new System.Globalization.CultureInfo("es-DO")))</th>
+                    </tr>
+                    <tr>
+                        <th class="text-right">TOTAL GENERAL INGRESADO FUERA DE CAJA: @(TotalGeneralFueraCaja.ToString("c", new System.Globalization.CultureInfo("es-DO")))</th>
+                    </tr>
+                    <tr>
+                        <th class="text-right">TOTAL GENERAL DE INGRESADO: @((TotalGeneralIngresado).ToString("c", new System.Globalization.CultureInfo("es-DO")))</th>
+                    </tr>
+                </table>
+            </div>
         }
     </div>
-
-
     <div class="col-lg-12 no-padder text-center">
         <b>@adminName</b>
     </div>

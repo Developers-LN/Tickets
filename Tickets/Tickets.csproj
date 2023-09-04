@@ -435,6 +435,9 @@
     <Compile Include="Models\PreviousDebtPayment.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Procedures\Accounting\Procedure_Accounting_Invoice.cs" />
+    <Compile Include="Models\Procedures\Accounting\Procedure_Accounting_PaymentAwardNoteCredit.cs" />
+    <Compile Include="Models\Procedures\Accounting\Procedure_Accounting_ReceiptPayment.cs" />
     <Compile Include="Models\Procedures\Procedure_AllocatedByDay.cs" />
     <Compile Include="Models\Procedures\Procedure_AllocationSummary.cs" />
     <Compile Include="Models\Procedures\Allocations\Procedure_AllocatedSummary.cs" />

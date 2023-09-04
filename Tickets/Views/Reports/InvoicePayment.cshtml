@@ -183,7 +183,11 @@
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
                         {
-                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                            @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.PositiveBalance)
+                        {
+                            @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                     </td>
                 </tr>
@@ -387,7 +391,11 @@
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
                         {
-                            @(Model.TotalCheck.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                            @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        }
+                        else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.PositiveBalance)
+                        {
+                            @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                     </td>
                 </tr>

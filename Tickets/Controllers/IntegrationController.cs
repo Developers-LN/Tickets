@@ -279,13 +279,20 @@ namespace Tickets.Controllers
                 workSheet.Cell(curretRow, 4).Value = "GENERO";
                 workSheet.Cell(curretRow, 5).Value = "NO. SORTEO";
                 workSheet.Cell(curretRow, 6).Value = "NO. LOTE";
-                workSheet.Cell(curretRow, 7).Value = "FECHA DE PAGO";
-                workSheet.Cell(curretRow, 8).Value = "TIPO DE PAGO";
-                workSheet.Cell(curretRow, 9).Value = "DIA";
-                workSheet.Cell(curretRow, 10).Value = "MES";
-                workSheet.Cell(curretRow, 11).Value = "AÑO";
-                workSheet.Cell(curretRow, 12).Value = "TOTAL PAGADO";
-                workSheet.Cell(curretRow, 13).Value = "FRACCIONES PAGADAS";
+                workSheet.Cell(curretRow, 7).Value = "NO. TICKET";
+                workSheet.Cell(curretRow, 8).Value = "PREMIO";
+                workSheet.Cell(curretRow, 9).Value = "VALOR POR FRACCION";
+                workSheet.Cell(curretRow, 10).Value = "FRACCION DESDE";
+                workSheet.Cell(curretRow, 11).Value = "FRACCION HASTA";
+                workSheet.Cell(curretRow, 12).Value = "FECHA DE PAGO";
+                workSheet.Cell(curretRow, 13).Value = "TIPO DE PAGO";
+                workSheet.Cell(curretRow, 14).Value = "DIA";
+                workSheet.Cell(curretRow, 15).Value = "MES";
+                workSheet.Cell(curretRow, 16).Value = "AÑO";
+                workSheet.Cell(curretRow, 17).Value = "TOTAL PAGADO";
+                workSheet.Cell(curretRow, 18).Value = "FRACCIONES PAGADAS";
+
+                workSheet.Column(7).Style.NumberFormat.Format = "@";
 
                 foreach (var item in Resultado)
                 {
@@ -296,20 +303,26 @@ namespace Tickets.Controllers
                     workSheet.Cell(curretRow, 4).Value = item.Genre;
                     workSheet.Cell(curretRow, 5).Value = item.RaffleId;
                     workSheet.Cell(curretRow, 6).Value = item.BachId;
-                    workSheet.Cell(curretRow, 7).Value = item.PaymentDate;
-                    workSheet.Cell(curretRow, 8).Value = item.PaymentType;
-                    workSheet.Cell(curretRow, 9).Value = item.Day;
-                    workSheet.Cell(curretRow, 10).Value = item.Month;
-                    workSheet.Cell(curretRow, 11).Value = item.Year;
-                    workSheet.Cell(curretRow, 12).Value = item.TotalPayed;
-                    workSheet.Cell(curretRow, 13).Value = item.PayedFractions;
+                    workSheet.Cell(curretRow, 7).Value = item.TicketNumber;
+                    workSheet.Cell(curretRow, 8).Value = item.AwardName;
+                    workSheet.Cell(curretRow, 9).Value = item.AwardByFraction;
+                    workSheet.Cell(curretRow, 10).Value = item.FractionFrom;
+                    workSheet.Cell(curretRow, 11).Value = item.FractionTo;
+                    workSheet.Cell(curretRow, 12).Value = item.PaymentDate;
+                    workSheet.Cell(curretRow, 13).Value = item.PaymentType;
+                    workSheet.Cell(curretRow, 14).Value = item.Day;
+                    workSheet.Cell(curretRow, 15).Value = item.Month;
+                    workSheet.Cell(curretRow, 16).Value = item.Year;
+                    workSheet.Cell(curretRow, 17).Value = item.TotalPayed;
+                    workSheet.Cell(curretRow, 18).Value = item.PayedFractions;
                 }
 
                 var range = workSheet.RangeUsed();
                 var table = range.CreateTable();
                 table.Theme = XLTableTheme.TableStyleLight9;
                 workSheet.Columns().AdjustToContents();
-                workSheet.Column(12).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(9).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(17).Style.NumberFormat.Format = "$ #,##0.00";
 
                 var workSheet2 = workBook.Worksheets.Add("RESUMEN");
                 var curretRow2 = 1;

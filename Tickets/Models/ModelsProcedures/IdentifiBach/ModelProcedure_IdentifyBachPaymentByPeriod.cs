@@ -17,7 +17,17 @@
         public int RaffleId { get; set; }
         
         public int BachId { get; set; }
-        
+
+        public string TicketNumber { get; set; }
+
+        public string AwardName { get; set; }
+
+        public decimal AwardByFraction { get; set; }
+
+        public int FractionFrom { get; set; }
+
+        public int FractionTo { get; set; }
+
         public string PaymentDate { get; set; }
 
         public string PaymentType { get; set; }

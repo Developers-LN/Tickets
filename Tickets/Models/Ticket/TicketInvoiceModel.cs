@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Tickets.Models.Enums;
 using Tickets.Models.Procedures;
+using Tickets.Models.Procedures.Accounting;
 using WebMatrix.WebData;
 
 namespace Tickets.Models.Ticket
@@ -521,6 +522,23 @@ namespace Tickets.Models.Ticket
                         context.SaveChanges();
                         tx.Commit();
                         model.Id = invoice.Id;
+
+                        /*try
+                        {
+                            Procedure_Accounting_Invoice procedure_Accounting_Invoice = new Procedure_Accounting_Invoice();
+                            var Upload_Data = procedure_Accounting_Invoice.Upload_Accounting_Invoice(invoice.Id);
+                        }
+                        catch (Exception e)
+                        {
+                            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Creación de Factura", model);
+
+                            return new RequestResponseModel()
+                            {
+                                Result = true,
+                                Message = "Entrega de Billetes Completada.",
+                                Object = model
+                            };
+                        }*/
                     }
                     catch (Exception e)
                     {

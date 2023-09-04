@@ -12,6 +12,8 @@ namespace Tickets.Models.ModelsProcedures
 
         public int ClientId { get; set; }
 
+        public int GrupoCliente { get; set; }
+
         public int RaffleId { get; set; }
 
         public DateTime Fecha { get; set; }

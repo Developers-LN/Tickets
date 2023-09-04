@@ -6,6 +6,7 @@ using Tickets.Filters;
 using Tickets.Models;
 using Tickets.Models.Enums;
 using Tickets.Models.Procedures;
+using Tickets.Models.Procedures.Accounting;
 using Tickets.Models.Ticket;
 using WebMatrix.WebData;
 
@@ -833,6 +834,17 @@ namespace Tickets.Controllers
                         }
 
                         tx.Commit();
+
+                        /*try
+                        {
+                            Procedure_Accounting_ReceiptPayment procedure_Accounting_ReceiptPayment = new Procedure_Accounting_ReceiptPayment();
+                            var Upload = procedure_Accounting_ReceiptPayment.Upload_Accounting_ReceiptPayment(receiptPayment.Id);
+                        }
+                        catch (Exception e)
+                        {
+                            return new JsonResult() { Data = new { result = true, message = "Recibo de Efectivo Guardado.", Pago = receiptPayment.Id, clientType = ClientType } };
+                        }*/
+
                         return new JsonResult() { Data = new { result = true, message = "Recibo de Efectivo Guardado.", Pago = receiptPayment.Id, clientType = ClientType } };
                     }
                     catch (Exception e)
