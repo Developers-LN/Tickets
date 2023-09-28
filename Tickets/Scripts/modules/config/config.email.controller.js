@@ -108,7 +108,7 @@
 		self.clearSelection = function () {
 		    $scope.Module = [];
 		    $scope.nameSelected = $scope.Names[0].Id;
-		    console.log("log:", $scope.Names[0].Name);
+		    //console.log("log:", $scope.Names[0].Name);
 		    $("#selectEmailMultiple").select2('val', 'All');
 		    $scope.recipients = "";
 		    $scope.subject = "";

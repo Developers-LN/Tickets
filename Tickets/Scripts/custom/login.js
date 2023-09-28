@@ -21,7 +21,7 @@
 	        url: '/Security/Login',
 	        data: user,
 	        success: function (_data) {
-	            console.log(_data);
+	            //console.log(_data);
 	            data = JSON.parse(_data.Data);
 
 	            if (data.result === true) {

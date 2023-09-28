@@ -48,6 +48,7 @@ namespace Tickets.Models.Ticket
                                 returned.FractionFrom,
                                 returned.FractionTo,
                                 returned.RaffleId,
+                                returned.Raffle.RaffleSequence,
                                 returned.ReturnedGroup,
                                 returned.Statu,
                                 returned.TicketAllocationNimberId
@@ -68,6 +69,7 @@ namespace Tickets.Models.Ticket
                                 g.FractionFrom,
                                 g.FractionTo,
                                 g.RaffleId,
+                                g.Raffle.RaffleSequence,
                                 g.ReturnedGroup,
                                 g.Statu,
                                 g.TicketAllocationNimberId

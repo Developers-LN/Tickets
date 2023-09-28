@@ -37,6 +37,9 @@ namespace Tickets.Models.Ticket
 		[JsonProperty(PropertyName = "statusId")]
 		public int StatusId { get; set; }
 
+		[JsonProperty(PropertyName = "raffleSequence")]
+		public int? RaffleSequence { get; set; }
+
 		internal RequestResponseModel GetElectronicSalesDetails(int AllocationId)
 		{
 			var context = new TicketsEntities();
@@ -216,6 +219,7 @@ namespace Tickets.Models.Ticket
 				ClientDesc = electronicTicketSale.Client.Name,
 				RaffleDesc = electronicTicketSale.Raffle.Name,
 				RaffleId = electronicTicketSale.Raffle.Id,
+				RaffleSequence = electronicTicketSale.Raffle.RaffleSequence,
 				AllocationId = (int)electronicTicketSale.TicketAllocationId
 			};
 			if (hasNumber)

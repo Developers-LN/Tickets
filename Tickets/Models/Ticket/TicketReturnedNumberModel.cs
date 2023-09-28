@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.EMMA;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -143,6 +144,7 @@ namespace Tickets.Models.Ticket
                                  FractionTo = r.FractionTo,
                                  Production = r.Raffle.Prospect.Production,
                                  RaffleId = r.Raffle.Id,
+                                 RaffleSequence = r.Raffle.RaffleSequence,
                                  RaffleDesc = a.Raffle.Name,
                                  ReturnedDate = r.ReturnedDate.ToString()
                              }).GroupBy(r => r.Number)
@@ -176,6 +178,7 @@ namespace Tickets.Models.Ticket
                 ).Select(r => new
                 {
                     r.Id,
+                    r.RaffleSequence,
                     r.Name
                 }).ToList();
 
@@ -226,6 +229,7 @@ namespace Tickets.Models.Ticket
             var raffles = context.Raffles.Select(r => new
             {
                 value = r.Id,
+                raffleSequence = r.RaffleSequence,
                 text = r.Name
             }).ToList();
 

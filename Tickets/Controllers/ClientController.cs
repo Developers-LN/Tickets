@@ -60,6 +60,7 @@ namespace Tickets.Controllers
             var raffles = context.Raffles.Select(r => new
             {
                 r.Id,
+                r.RaffleSequence,
                 r.Name
             }).ToList();
 

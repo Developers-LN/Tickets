@@ -190,14 +190,14 @@ namespace Tickets.Models.Workflows
         {
             var context = new TicketsEntities();
             int userId = WebSecurity.CurrentUserId;
-            var usersApproveWorkflow = context.WorkflowTypes.FirstOrDefault(w => w.Id == workFlowTypeId).WorkflowType_User.Where(wu => wu.Statu != (int)GeneralStatusEnum.Delete);
+            var usersApproveWorkflow = context.WorkflowTypes.FirstOrDefault(w => w.Id == workFlowTypeId).WorkflowType_User.Where(wu => wu.Statu != (int)GeneralStatusEnum.Delete).ToList();
 
             var workflowList = context.Workflows.AsEnumerable().Where(w =>
                 w.WorkflowTypeId == workFlowTypeId &&
                 w.Statu == (int)WorkflowStatusEnum.Active &&
-                usersApproveWorkflow.Any(u => u.UserId == userId
-                    && u.OrderApproval == ((w.WorkflowProccesses.Where(wf => wf.Statu == (int)WorkflowProccessStatuEnum.Approved).Count()
-                    - w.WorkflowProccesses.Where(wf => wf.Statu == (int)WorkflowProccessStatuEnum.Rejected).Count()) + 1))
+                usersApproveWorkflow.Any(u => u.UserId == userId 
+                    //&& u.OrderApproval == ((w.WorkflowProccesses.Where(wf => wf.Statu == (int)WorkflowProccessStatuEnum.Approved).Count() - w.WorkflowProccesses.Where(wf => wf.Statu == (int)WorkflowProccessStatuEnum.Rejected).Count()) + 1)
+                    )
                 ).Select(w => new WorkflowModel().ToObject(w, workFlowTypeId)).ToList();
 
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Proceso de Aprobación tipo " + workFlowTypeId);

@@ -5,13 +5,12 @@
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
 
     var context = new Tickets.Models.TicketsEntities();
-    var PayedAwards = new Tickets.Models.Procedures.PayableAward.ProcedureIdentifyAwardPayedByClient();
+    var PayedAwards = new Tickets.Models.Procedures.PayableAward.Procedure_IdentifyAwardPayedByClient();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
     int clientId = (int)ViewBag.clientId;
 }
-
 
 <style>
     .col-lg-12 {
@@ -47,7 +46,6 @@
     }
 </style>
 
-
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
         <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
@@ -77,19 +75,22 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th class="text-center">CANTIDAD DE FRACCIONES</th>
-                        <th class="text-right" style="width:30%">TOTAL</th>
+                        <th class="text-center">FRACCIONES PAGADAS</th>
+                        <th class="text-center">MONTO EN PREMIOS</th>
+                        <th class="text-center">COMISION</th>
+                        <th class="text-right">TOTAL</th>
                     </tr>
                 </thead>
                 <tbody>
                     @{
                         decimal totalidad = 0;
                         int totalidadfraccion = 0;
+                        decimal totalAwardFinal = 0;
+                        decimal totalBonoFinal = 0;
                     }
 
                     @foreach (var raffle in Model.Where(w => w.Statu == (int)Tickets.Models.Enums.RaffleStatusEnum.Generated))
                     {
-
                         var clients = context.Clients.Where(w => (w.Statu == (int)Tickets.Models.Enums.ClientStatuEnum.Approbed && w.IdentifyBaches.Count() > 0) && (clientId == 0 || w.Id == clientId)).ToList();
                         var raffleName = raffle.Id + " - " + raffle.Name;
                         <tr>
@@ -99,6 +100,8 @@
                         {
                             int totalFraction = 0;
                             decimal totalGeneral = 0;
+                            decimal totalAward = 0;
+                            decimal totalBono = 0;
 
                             //var identifyNumbers = context.IdentifyNumbers.Where(w => w.IdentifyBach.RaffleId == raffle.Id && (w.IdentifyBach.ClientId == c.Id)).OrderBy(i => i.IdentifyBachId);
                             var identifyNumbers = PayedAwards.ConsultaBilletesPagablesPorCliente(raffle.Id, c.Id);
@@ -129,23 +132,31 @@
                                         totalGeneral += total;
                                     }*/
                                     totalFraction += number.Fracciones;
+                                    totalAward += number.TotalAward;
+                                    totalBono += number.Bono;
                                     totalGeneral += number.Monto;
                                 }
 
                                 <tr>
                                     <td class="text-left">@clientDesc</td>
-                                    <td class="text-center"><strong>@totalFraction</strong></td>
+                                    <td class="text-center"><strong>@((totalFraction).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                                    <td class="text-center"> <strong>@((totalAward).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                                    <td class="text-center"> <strong>@((totalBono).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
                                     <td class="text-right"> <strong>@((totalGeneral).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
                                 </tr>
                                 totalidadfraccion += totalFraction;
                                 totalidad += totalGeneral;
+                                totalAwardFinal += totalAward;
+                                totalBonoFinal += totalBono;
                             }
                         }
                     }
                     <tr>
-                        <th></th>
-                        <th class="text-center">TOTAL FRACCION: <strong>@(totalidadfraccion)</strong></th>
-                        <th class="text-right">TOTAL: <strong>@((totalidad).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong> </th>
+                        <th class="text-right">TOTAL:</th>
+                        <th class="text-center"><strong>@((totalidadfraccion).ToString("n0", new System.Globalization.CultureInfo("es-DO")))</strong></th>
+                        <th class="text-center"><strong>@((totalAwardFinal).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></th>
+                        <th class="text-center"><strong>@((totalBonoFinal).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></th>
+                        <th class="text-right"><strong>@((totalidad).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></th>
                     </tr>
                 </tbody>
             </table>

@@ -6,7 +6,6 @@ using Tickets.Filters;
 using Tickets.Models;
 using Tickets.Models.Enums;
 using Tickets.Models.Procedures;
-using Tickets.Models.Procedures.Accounting;
 using Tickets.Models.Ticket;
 using WebMatrix.WebData;
 
@@ -167,6 +166,7 @@ namespace Tickets.Controllers
                 raffles = context.Raffles.Select(r => new
                 {
                     r.Id,
+                    r.RaffleSequence,
                     r.Name
                 }).ToList<object>();
             }
@@ -303,6 +303,7 @@ namespace Tickets.Controllers
             var raffles = context.Raffles.Select(r => new
             {
                 value = r.Id,
+                raffleSequence = r.RaffleSequence,
                 text = r.Name
             }).ToList();
 
@@ -895,6 +896,7 @@ namespace Tickets.Controllers
                 {
                     paymentTypes,
                     clientName = invoice.Client.Name,
+                    invoiceId = invoice.InvoiceSequence,
                     clientId = invoice.ClientId,
                     clientType = invoice.Client.GroupId,
                     invoiceDiscount = invoice.Discount,
@@ -905,6 +907,7 @@ namespace Tickets.Controllers
                     .Select(s => new
                     {
                         s.Id,
+                        s.ReceiptSequence,
                         s.Nombre,
                         s.Observaciones,
                         receiptType = context.Catalogs.Where(w => w.Id == s.ReceiptType).Select(f => f.NameDetail).FirstOrDefault(),
@@ -957,6 +960,7 @@ namespace Tickets.Controllers
                 raffles = context.Raffles.OrderByDescending(s => s.Id).Where(s => s.Statu != (int)RaffleStatusEnum.Suspended).Select(r => new
                 {
                     r.Id,
+                    r.RaffleSequence,
                     r.Name
                 }).ToList<object>();
             }
@@ -1112,6 +1116,7 @@ namespace Tickets.Controllers
             return new
             {
                 invoice.Id,
+                invoice.InvoiceSequence,
                 invoice.RaffleId,
                 ClientDesc = ClientData.Name,
                 InvoiceDate = invoice.InvoiceDate.ToUnixTime(),
@@ -1198,7 +1203,7 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var clients = context.Clients.Where(w => w.Statu == (int)ClientStatuEnum.Approbed).Select(s => new { s.Id, s.Name }).ToList();
-            var raffles = context.Raffles.Where(w => w.Statu == (int)RaffleStatusEnum.Planned).Select(s => new { s.Id, s.Name }).ToList();
+            var raffles = context.Raffles.Where(w => w.Statu == (int)RaffleStatusEnum.Planned).Select(s => new { s.Id, s.RaffleSequence, s.Name }).ToList();
 
             return new JsonResult()
             {
@@ -1217,7 +1222,7 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var clients = context.Clients.Where(w => w.Statu == (int)ClientStatuEnum.Approbed).Select(s => new { s.Id, s.Name }).ToList();
-            var raffles = context.Raffles.Where(w => w.Statu == (int)RaffleStatusEnum.Planned).Select(s => new { s.Id, s.Name }).ToList();
+            var raffles = context.Raffles.Where(w => w.Statu == (int)RaffleStatusEnum.Planned).Select(s => new { s.Id, s.RaffleSequence, s.Name }).ToList();
 
             return new JsonResult()
             {
@@ -1295,6 +1300,7 @@ namespace Tickets.Controllers
                 .Select(s => new
                 {
                     s.InvoiceId,
+                    s.Invoice.InvoiceSequence,
                     s.Invoice.Client.Name,
                     s.TaxReceiptNumber.TaxReceipt.Catalog.Description2,
                     s.TaxReceiptNumber.Number,

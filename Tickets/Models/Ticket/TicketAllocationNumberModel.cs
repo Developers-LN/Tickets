@@ -37,7 +37,7 @@ namespace Tickets.Models.Ticket
         public int TicketAllocationId { get; set; }
 
         [JsonProperty(PropertyName = "serie")]
-        public string Serie { get; set; }
+        public List<TicketAllocationSerieModel> Serie { get; set; }
 
         internal TicketAllocationNumberModel ToObject(TicketAllocationNumber model)
         {
@@ -52,7 +52,7 @@ namespace Tickets.Models.Ticket
                 Printed = model.Printed,
                 Statu = model.Statu,
                 TicketAllocationId = model.TicketAllocationId,
-                Serie = null
+                Serie = new List<TicketAllocationSerieModel>()
             };
 
             return number;
@@ -71,7 +71,7 @@ namespace Tickets.Models.Ticket
                 Printed = model.Printed,
                 Statu = model.Statu,
                 TicketAllocationId = model.TicketAllocationId,
-                Serie = null
+                Serie = new List<TicketAllocationSerieModel>()
             };
 
             return number;
@@ -594,6 +594,7 @@ namespace Tickets.Models.Ticket
             {
                 n.Id,
                 n.TicketAllocationId,
+                n.TicketAllocation.AllocationSequence,
                 n.ControlNumber,
                 n.Invoiced,
                 MaxFaction = n.TicketAllocation.Raffle.Prospect.LeafFraction * n.TicketAllocation.Raffle.Prospect.LeafNumber,
@@ -602,7 +603,8 @@ namespace Tickets.Models.Ticket
                 n.Printed,
                 n.Statu,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == n.Statu).NameDetail,
-                Caducado = n.TicketAllocation.Raffle.DateSolteo.AddDays(90) < DateTime.Now ? true : false,
+                Caducado = n.TicketAllocation.Raffle.DueRaffleDate < DateTime.Now ? true : false,
+                //Caducado = n.TicketAllocation.Raffle.DateSolteo.AddDays(90) < DateTime.Now ? true : false,
                 Allocation = new
                 {
                     n.TicketAllocation.Id,
@@ -611,6 +613,7 @@ namespace Tickets.Models.Ticket
                     n.TicketAllocation.ClientId,
                     ClientDesc = context.Clients.FirstOrDefault(c => c.Id == n.TicketAllocation.ClientId).Name,
                     n.TicketAllocation.RaffleId,
+                    n.TicketAllocation.Raffle.RaffleSequence,
                     RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == n.TicketAllocation.RaffleId).Name,
                     Cedula = n.ElectronicTicketSales.Any(a => a.TicketAllocationNimberId == n.Id) ? n.ElectronicTicketSales.FirstOrDefault().Cedula : null,
                     Telefono = n.ElectronicTicketSales.Any(a => a.TicketAllocationNimberId == n.Id) ? n.ElectronicTicketSales.FirstOrDefault().PhoneNumber : null

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Tickets.Models.Ticket
@@ -18,8 +19,9 @@ namespace Tickets.Models.Ticket
         public int TicketReprintId { get; set; }
 
         [JsonProperty(PropertyName = "serie")]
-        public string Serie { get; set; }
+        public List<TicketAllocationSerieModel> Serie { get; set; }
 
+        /*
         internal TicketReprintNumberModel ToObject(TicketRePrintNumber model)
         {
             var context = new TicketsEntities();
@@ -33,6 +35,6 @@ namespace Tickets.Models.Ticket
             };
 
             return number;
-        }
+        }*/
     }
 }

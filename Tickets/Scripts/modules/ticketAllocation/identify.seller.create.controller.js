@@ -74,7 +74,7 @@
                 var currentPrice = self.getPrice(currentSorteo.Prices, currentClient.PriceId);
                 $scope.clientFractionPrice = currentPrice;
                 $scope.identifyBach.IdentifyNumbers.currentPrice = currentPrice;
-                console.log(currentPrice);
+                //console.log(currentPrice);
             }
         }
 
@@ -118,7 +118,7 @@
                         Type: $rootScope.moduleCanDelete == '' ? 4007 : 4006,
                         IdentityAwards: [],
                     };
-                    console.log(number);
+                    //console.log(number);
                     number.RaffleId = Number(codeReadSplit[0]);
 
                     var error = '';

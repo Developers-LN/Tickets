@@ -49,6 +49,9 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "statuDesc")]
         public string StatuDesc { get; set; }
 
+        [JsonProperty(PropertyName = "raffleSequence")]
+        public int? RaffleSequence { get; set; }
+
         internal object GetTicketReprintList(int raffleId = 0)
         {
             var context = new TicketsEntities();
@@ -67,6 +70,7 @@ namespace Tickets.Models.Raffles
                     .Select(r => new
                     {
                         r.Name,
+                        r.RaffleSequence,
                         r.Id
                     }).ToList<object>();
             }
@@ -115,6 +119,7 @@ namespace Tickets.Models.Raffles
                 Id = reprint.Id,
                 Note = reprint.Note,
                 RaffleId = reprint.RaffleId,
+                RaffleSequence = context.Raffles.FirstOrDefault(r => r.Id == reprint.RaffleId).RaffleSequence,
                 RaffleDesc = context.Raffles.FirstOrDefault(r => r.Id == reprint.RaffleId).Name,
                 IsPrint = false,
                 CreateDate = reprint.CreateDate,
@@ -128,7 +133,7 @@ namespace Tickets.Models.Raffles
             if (hasNumbers == true)
             {
                 var reprintNumberModel = new TicketReprintNumberModel();
-                model.TicketReprintNumbers = reprint.TicketRePrintNumbers.Select(r => reprintNumberModel.ToObject(r)).ToList();
+                //model.TicketReprintNumbers = reprint.TicketRePrintNumbers.Select(r => reprintNumberModel.ToObject(r)).ToList();
             }
             return model;
         }
@@ -198,18 +203,32 @@ namespace Tickets.Models.Raffles
                             context.SaveChanges();
 
                             List<TicketRePrintNumber> ticketAllocations = new List<TicketRePrintNumber>();
+                            var tickets = new TicketRePrintNumber();
                             foreach (var number in model.TicketReprintNumbers)
                             {
-                                /*var allocationNumber = context.TicketAllocationNumbers
-                                    .FirstOrDefault(a => a.TicketAllocation.RaffleId == model.RaffleId && (int)a.Number == number.Number);*/
-                                var ticket = new TicketRePrintNumber()
+                                if (number.Serie != null)
                                 {
-                                    //TicketAllocationNumberId = allocationNumber.Id,
-                                    TicketAllocationNumberId = number.Id,
-                                    TicketRePrintId = ticketRePrint.Id,
-                                    Serie = number.Serie == null ? "SS" : number.Serie
-                                };
-                                ticketAllocations.Add(ticket);
+                                    foreach (var serie in number.Serie)
+                                    {
+                                        tickets = new TicketRePrintNumber()
+                                        {
+                                            TicketAllocationNumberId = number.Id,
+                                            TicketRePrintId = ticketRePrint.Id,
+                                            Serie = serie.Id
+                                        };
+                                        ticketAllocations.Add(tickets);
+                                    }
+                                }
+                                else
+                                {
+                                    tickets = new TicketRePrintNumber()
+                                    {
+                                        TicketAllocationNumberId = number.Id,
+                                        TicketRePrintId = ticketRePrint.Id,
+                                        Serie = "SS"
+                                    };
+                                    ticketAllocations.Add(tickets);
+                                }
                             }
                             context.TicketRePrintNumbers.AddRange(ticketAllocations);
                             context.SaveChanges();
@@ -226,8 +245,8 @@ namespace Tickets.Models.Raffles
                                 {
                                     //TicketAllocationNumberId = allocationNumber.Id,
                                     TicketAllocationNumberId = number.Id,
-                                    TicketRePrintId = model.Id,
-                                    Serie = number.Serie == null ? "SS" : number.Serie
+                                    TicketRePrintId = model.Id//,
+                                    //Serie = number.Serie == null ? "SS" : number.Serie
                                 };
                                 ticketAllocations.Add(ticket);
                             }

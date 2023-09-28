@@ -11,5 +11,7 @@
         public string Id_Name_Client { get; set; }
         public int Fracciones { get; set; }
         public decimal Monto { get; set; }
+        public decimal TotalAward { get; set; }
+        public decimal Bono { get; set; }
     }
 }

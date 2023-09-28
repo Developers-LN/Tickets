@@ -131,6 +131,7 @@ namespace Tickets.Controllers
             var raffles = context.Raffles.Where(r => r.Statu != (int)RaffleStatusEnum.Suspended).Select(r => new
             {
                 r.Id,
+                r.RaffleSequence,
                 r.Name,
             }).OrderByDescending(r => r.Id);
 

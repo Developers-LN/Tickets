@@ -34,6 +34,7 @@ namespace Tickets.Models
         public Nullable<int> TypeNote { get; set; }
         public Nullable<int> ReceiptPaymentId { get; set; }
         public Nullable<int> TaxReceiptNumberId { get; set; }
+        public Nullable<int> NoteCreditSequence { get; set; }
     
         public virtual Client Client { get; set; }
         public virtual Raffle Raffle { get; set; }

@@ -52,6 +52,7 @@ namespace Tickets.Controllers
                 {
                     r.Name,
                     r.Id,
+                    r.RaffleSequence,
                     DateSolteo = r.DateSolteo.ToUnixTime()
                 }).OrderByDescending(r => r.Id).ToList();
             return new JsonResult()

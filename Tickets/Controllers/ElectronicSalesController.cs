@@ -55,6 +55,7 @@ namespace Tickets.Controllers
                         Data = new
                         {
                             allocationId = allocationId,
+                            allocationSequence = Allocation.AllocationSequence,
                             clientName = Allocation.Client.Name,
                             clientId = Allocation.Client.Id,
                             clientType = context.Catalogs.FirstOrDefault(f => f.Id == Allocation.Client.GroupId).NameDetail,
@@ -79,6 +80,7 @@ namespace Tickets.Controllers
                         Data = new
                         {
                             allocationId = allocationId,
+                            allocationSequence = Allocation.AllocationSequence,
                             clientName = Allocation.Client.Name,
                             clientId = Allocation.Client.Id,
                             clientType = context.Catalogs.FirstOrDefault(f => f.Id == Allocation.Client.GroupId).NameDetail,
@@ -101,6 +103,7 @@ namespace Tickets.Controllers
                     Data = new
                     {
                         allocationId = allocationId,
+                        allocationSequence = Allocation.AllocationSequence,
                         clientName = Allocation.Client.Name,
                         clientId = Allocation.Client.Id,
                         clientType = context.Catalogs.FirstOrDefault(f => f.Id == Allocation.Client.GroupId).NameDetail,

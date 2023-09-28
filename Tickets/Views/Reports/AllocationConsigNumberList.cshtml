@@ -50,32 +50,47 @@
 
 <div class="col-lg-12">
     <div class="col-lg-12 no-padder text-center">
-        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
-            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
-        </div>
-        <div class="col-lg-12 no-padder text-center">
-            <b>MINISTERIO DE HACIENDA</b>
-        </div>
-        <div class="col-lg-12 no-padder text-center">
-            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
-        </div>
-        <div class="col-lg-12 no-padder text-center" style="margin-bottom:20px;">
-            <b>DETALLE DE CONSIGNACION DEL SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
-        </div>
         <div class="col-lg-6 no-padder">
             <div class="col-lg-12 no-padder text-left">
-                <b>CONSIGNATARIO: </b> @Model.Client.Name @Model.Agente
+                <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
             </div>
             <div class="col-lg-12 no-padder text-left">
-                <b>CONSIGNADO POR: </b> @Consignador.Consignador
+                <b>LOTERIA NACIONAL DOMINICANA</b>
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>SUCURSAL SANTO DOMINGO</b>
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>RNC:</b> 401007681
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>FECHA:</b> @Model.CreateDate.ToShortDateString()
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>CONSIGNACION:</b> @Model.Id
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>SORTEO:</b> @Model.RaffleId
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>FECHA SORTEO:</b> @Model.Raffle.DateSolteo.ToString("dd/MM/yyyy")
             </div>
         </div>
         <div class="col-lg-6 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>CONSIGNACION: </b> #@Model.Id
+                <b>CODIGO: </b> @Model.ClientId
             </div>
             <div class="col-lg-12 no-padder text-right">
-                <b>FECHA: </b> @Model.CreateDate.ToShortDateString()
+                <b>CEDULA/RNC: </b> @Model.Client.DocumentNumber
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>RAZON SOCIAL/NOMBRE: </b> <br /> @Model.Client.Name
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>DIRECCION: </b> @Model.Client.Addres
+            </div>
+            <div class="col-lg-12 no-padder text-right">
+                <b>TELEFONO: </b> @Model.Client.Phone
             </div>
         </div>
     </div>
@@ -93,7 +108,6 @@
                     <th class="text-center">COL 7</th>
                     <th class="text-center">COL 8</th>
                     <th class="text-center">COL 9</th>
-                    <th class="text-center">COL 10</th>
                 </tr>
             </thead>
             <tbody>
@@ -115,7 +129,7 @@
                         int countTen = 1;
                         <tr>
                             <td class="text-center" style="color:red; font-weight:bold; font-size:12pt;">@line</td>
-                            @while (countTen <= 10 && numberCount <= MaxNumber)
+                            @while (countTen <= 9 && numberCount <= MaxNumber)
                             {
                                 NextBiggerNumber = BilletesOrdenados.FirstOrDefault(f => f > numberCount);
                                 numberCount = NextBiggerNumber;
@@ -166,29 +180,120 @@
         </table>
     </div>
 
-    <div class="col-lg-12 no-padder text-center">
-        <div class="col-lg-12 col-md-6 col-sm-6 text-center">
-            <div class="col-lg-12 no-padder text-center">
-                TOTAL DE BILLETES: @TotalBilletes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))
-            </div>
-        </div>
+    <div class="col-lg-12 no-padder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">FRACCIONES</th>
+                    <th class="text-center">BILLETES-FRACCIONES</th>
+                    <th class="text-center">PRECIO</th>
+                    <th class="text-center">SUBTOTAL</th>
+                    <th class="text-center">DESCUENTO</th>
+                    <th class="text-right">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var TotalFractions = Model.TicketAllocationNumbers.Sum(s => s.FractionTo - s.FractionFrom + 1);
+                    var fractionsByTicket = Model.Raffle.Prospect.LeafNumber * Model.Raffle.Prospect.LeafFraction;
+                    var ticketPrice = Model.Raffle.Prospect.Price;
+                    var subTotal = ticketPrice * TotalFractions;
+                    var Discount = (TotalFractions * ticketPrice) * (Model.Client.Discount / 100);
+                    var Total = subTotal - Discount;
+                }
+                <tr>
+                    <td class="text-center">@TotalFractions.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-center">@((TotalFractions / fractionsByTicket).ToString("n0", new System.Globalization.CultureInfo("es-DO")))-@(TotalFractions % fractionsByTicket) </td>
+                    <td class="text-center">@(ticketPrice.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                    <td class="text-center">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-center">@Discount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                    <td class="text-right">@Total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr style="border-top: 4px double black">
+                    <td class="text-center"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right" style="font-weight:bold;">Sub Total: @subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right" style="font-weight:bold;">Descuento: @(Discount.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right"></td>
+                    <td class="text-right" style="font-weight:bold;">Total a pagar: @(Total.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div>
+        <b>NOTAS:</b> <br />
+        <ul>
+            <li>
+                El total a pagar está sujeto a variación, luego de aplicada la devolución.
+            </li>
+            <li>
+                La Lotería Nacional no se responsabiliza de intercambios de billetes/boletos entre distribuidores, debido a que el Sistema registra la devolución a nombre del distribuidor al cual se le consignó el producto.
+            </li>
+            <li>
+                En caso de no existir devolución por parte del consignatario, este reporte de consignación será considerado como factura final al cliente.
+            </li>
+        </ul>
+        <p>
+            <b>Con la firma del presente documento el consignatario se adhiere voluntariamente a todas las notas plasmadas que forman parte integral de éste.</b>
+        </p>
     </div>
 
     <div class="col-lg-12 no-padder text-center">
-        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
-            <div class="col-lg-12 no-padder text-center">
-                ______________________________
-            </div>
-            FIRMA DEL CONSIGNATARIO
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-6 text-center">
+        <br />
+        <br />
+        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
             <div class="col-lg-12 no-padder text-center">
                 ______________________________
             </div>
             FIRMA DEL CONSIGNADOR
         </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            FIRMA DEL CONSIGNATARIO
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+            <div class="col-lg-12 no-padder text-center">
+                ______________________________
+            </div>
+            FIRMA DE DESPACHO
+        </div>
     </div>
+
     <div class="col-lg-12 no-padder text-center">
+        <br />
+        <br />
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
         <b>@adminName</b>
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 text-center">

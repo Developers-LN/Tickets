@@ -11,9 +11,6 @@
     string adminCargo = config != null ? config.ProduccionSorteoCargo : "";
 
     var count = 0;
-    var SS = "Serie 1 y 2";
-    var S1 = "Serie 1";
-    var S2 = "Serie 2";
 }
 
 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -65,18 +62,7 @@
                             @ticket.TicketAllocationNumber.Number.ToString().PadLeft((Model.Raffle.Prospect.Production - 1).ToString().Length, '0')
                         </td>
                         <td class="text-center">
-                            @if (ticket.Serie == "S1")
-                            {
-                                @S1
-                            }
-                            else if (ticket.Serie == "S2")
-                            {
-                                @S2
-                            }
-                            else
-                            {
-                                @SS
-                            }
+                            @ticket.Serie
                         </td>
                     </tr>
                 }

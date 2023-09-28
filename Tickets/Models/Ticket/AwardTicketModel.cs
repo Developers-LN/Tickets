@@ -40,6 +40,7 @@ namespace Tickets.Models.Ticket
                               Fractions = a.Award.ByFraction == (int)ByFractionEnum.S ? 1 : r.FractionTo - r.FractionFrom + 1,
                               Production = r.IdentifyBach.Raffle.Prospect.Production,
                               RaffleId = r.IdentifyBach.Raffle.Id,
+                              RaffleSequence = r.IdentifyBach.Raffle.RaffleSequence,
                               RaffleDesc = a.Raffle.Name,
                               IdentifyBachId = r.IdentifyBachId,
                               IdentifyDate = r.IdentifyBach.CreateDate.ToString(),

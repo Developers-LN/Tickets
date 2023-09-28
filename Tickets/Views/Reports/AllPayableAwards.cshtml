@@ -19,6 +19,7 @@
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
 
     int TicketFractions = (RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction);
+    var clients = context.Clients.Select(s => new {s.Id, s.GroupId}).ToList();
 
     var Pendiente = "Pendiente";
     var Pagado = "Pagado";
@@ -176,7 +177,7 @@
 
                             <tr>
                                 <td class="text-center">@Contador</td>
-                                <td class="text-center">@item.number</td>
+                                <td class="text-center">@item.number.ToString().PadLeft((RaffleData.Prospect.Production - 1).ToString().Length, '0')</td>
                                 @if (IdentifyTickets.Any(a => a.IdentifyNumbers.Any(a2 => a2.NumberId == item.tanId)))
                                 {
                                     <td class="text-center">@Pagado</td>
@@ -185,7 +186,7 @@
                                 {
                                     <td class="text-center">@Pendiente</td>
                                 }
-                                @if (context.Clients.FirstOrDefault(w => w.Id == item.ClientId).GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)
+                                @if (clients.FirstOrDefault(w => w.Id == item.ClientId).GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)
                                 {
                                     <td class="text-center">Electrónico</td>
                                 }

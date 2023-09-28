@@ -21,6 +21,7 @@ namespace Tickets.Models.Ticket
                 raffles = context.Raffles.Where(s => s.Statu == (int)RaffleStatusEnum.Generated).Select(r => new
                 {
                     r.Id,
+                    r.RaffleSequence,
                     r.Name
                 }).ToList<object>();
 
@@ -57,6 +58,7 @@ namespace Tickets.Models.Ticket
                 raffles = context.Raffles.Where(s => s.Statu == (int)RaffleStatusEnum.Generated).Select(r => new
                 {
                     r.Id,
+                    r.RaffleSequence,
                     r.Name
                 }).ToList<object>();
 
@@ -94,6 +96,7 @@ namespace Tickets.Models.Ticket
                 raffles = context.Raffles.Where(s => s.Statu == (int)RaffleStatusEnum.Generated).Select(r => new
                 {
                     r.Id,
+                    r.RaffleSequence,
                     r.Name
                 }).ToList<object>();
 
@@ -131,6 +134,7 @@ namespace Tickets.Models.Ticket
                 raffles = context.Raffles.Where(s => s.Statu == (int)RaffleStatusEnum.Generated).Select(r => new
                 {
                     r.Id,
+                    r.RaffleSequence,
                     r.Name,
                     Prices = r.Prospect.Prospect_Price.Select(p => new
                     {
@@ -236,6 +240,7 @@ namespace Tickets.Models.Ticket
                 ).Select(r => new
                 {
                     r.Id,
+                    r.RaffleSequence,
                     r.Name,
                     production = r.Prospect.Production,
                     Prices = r.Prospect.Prospect_Price.Select(p => new
@@ -298,6 +303,7 @@ namespace Tickets.Models.Ticket
                 ).Select(r => new
                 {
                     r.Id,
+                    r.RaffleSequence,
                     r.Name,
                     production = r.Prospect.Production,
                     Prices = r.Prospect.Prospect_Price.Select(p => new
@@ -1424,6 +1430,7 @@ namespace Tickets.Models.Ticket
                 identifyBach.Notas,
                 identifyBach.WinnerId,
                 identifyBach.RaffleId,
+                raffleSequence = context.Raffles.FirstOrDefault(c => c.Id == identifyBach.RaffleId).RaffleSequence,
                 RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == identifyBach.RaffleId).Name,
                 RaffleDate = context.Raffles.FirstOrDefault(c => c.Id == identifyBach.RaffleId).DateSolteo.ToUnixTime(),
                 CreateDate = identifyBach.CreateDate.ToUnixTime(),
@@ -1432,6 +1439,7 @@ namespace Tickets.Models.Ticket
                 hasPayment = (identifyBach.IdentifyBachPayments.Count > 0 || identifyBach.NoteCredits.Count > 0),
                 isPayed = identifyBach.Type == (int)IdentifyBachTypeEnum.Menor ? Utils.IdentifyBachIsPayedMinor(identifyBach, awards) : Utils.IdentifyBachIsPayedMayor(identifyBach, awards),
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == identifyBach.Statu).NameDetail,
+                productionLength = identifyBach.Raffle.Prospect.Production,
                 NoteCredits = creditNote.Select(c => new
                 {
                     c.Id,
@@ -1470,6 +1478,7 @@ namespace Tickets.Models.Ticket
                 identifyBach.Notas,
                 identifyBach.WinnerId,
                 identifyBach.RaffleId,
+                raffleSequence = context.Raffles.FirstOrDefault(c => c.Id == identifyBach.RaffleId).RaffleSequence,
                 RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == identifyBach.RaffleId).Name,
                 RaffleDate = context.Raffles.FirstOrDefault(c => c.Id == identifyBach.RaffleId).DateSolteo.ToUnixTime(),
                 CreateDate = identifyBach.CreateDate.ToUnixTime(),
@@ -1478,6 +1487,7 @@ namespace Tickets.Models.Ticket
                 hasPayment = (identifyBach.IdentifyBachPayments.Count > 0 || identifyBach.NoteCredits.Count > 0),
                 isPayed = identifyBach.Type == (int)IdentifyBachTypeEnum.Menor ? Utils.IdentifyBachSellerIsPayedMinor(identifyBach, awards) : Utils.IdentifyBachSellerIsPayedMayor(identifyBach, awards),
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == identifyBach.Statu).NameDetail,
+                productionLength = identifyBach.Raffle.Prospect.Production,
                 NoteCredits = creditNote.Select(c => new
                 {
                     c.Id,
@@ -1513,7 +1523,6 @@ namespace Tickets.Models.Ticket
                 n.IdentifyBachNumberType,
                 Fractions = (n.FractionTo - n.FractionFrom) + 1,
                 n.Status,
-
                 AwardName = context.RaffleAwards.Where(ra =>
                 ra.RaffleId == n.IdentifyBach.RaffleId
                 && ra.ControlNumber == n.TicketAllocationNumber.Number

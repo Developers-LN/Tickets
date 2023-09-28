@@ -1,7 +1,7 @@
 ﻿@model Tickets.Models.CertificationNumber
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "CERTIFICACION NO. " + Model.Id;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -66,11 +66,17 @@
                 <p>Certificación <b>NO. @Model.Id</b></p>
             </div>
             <div class="col-lg-6">
-                <p>Después de haber sometido el chequeo general el billete <span style="text-decoration:underline"><b>No. @Tickets.Models.Utils.AddZeroToNumber((Model.RaffleAward.Raffle.Prospect.Production.ToString().Length - 1), Model.Number)</b></span></p>
+                <p>
+                    Después de haber sometido el chequeo general el billete
+                    <span style="text-decoration:underline">
+                        <b>No. @Model.Number.ToString().PadLeft((Model.RaffleAward.Raffle.Prospect.Production - 1).ToString().Length, '0')</b>
+                    </span>
+                </p>
             </div>
             <div class="col-lg-6">
                 <p>
-                    Fecha de impresión <span style="text-decoration:underline">
+                    Fecha de impresión
+                    <span style="text-decoration:underline">
                         <b>
                             @allocations.FirstOrDefault().TicketAllocationNumber.PrintedDate.ToString()
                         </b>
@@ -85,8 +91,8 @@
                     <tr>
                         <th>PREMIO</th>
                         <th>CONTROL</th>
-                        <th>DESDE</th>
-                        <th>HASTA</th>
+                        <th class="text-right">DESDE</th>
+                        <th class="text-right">HASTA</th>
                         <th class="text-right" style="width:15%">VALOR</th>
                         <th class="text-right" style="width:15%">TOTAL</th>
                     </tr>
@@ -103,8 +109,8 @@
                         <tr>
                             <td>@Model.RaffleAward.Award.Name</td>
                             <td>@allocation.TicketAllocationNumber.ControlNumber</td>
-                            <td>@allocation.FractionFrom</td>
-                            <td>@allocation.FractionTo</td>
+                            <td class="text-right">@allocation.FractionFrom</td>
+                            <td class="text-right">@allocation.FractionTo</td>
                             <td class="text-right" style="width:15%">@value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-right" style="width:15%">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
@@ -144,7 +150,7 @@
             <div class="col-lg-12 text-center">
                 ______________________________
             </div>
-            DIR. PRODUCCIÓN Y SORTEOS
+            DIR. PRODUCCIÓN
         </div>
         <div class="col-lg-4 col-md-4 col-sm-4 text-center">
             <div class="col-lg-12 text-center">

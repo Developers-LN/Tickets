@@ -659,6 +659,7 @@ namespace Tickets.Controllers
                             StopSales = allocation.Raffle.EndReturnDate.AddHours(-1).ToString(),
                             CreateDate = DateTime.Now.ToString(),
                             Allocation = id,
+                            AllocationSequence = allocation.AllocationSequence,
                             TicketAllocationNumbers = new List<Models.XML.TicketAllocationNumber>()
                         };
 

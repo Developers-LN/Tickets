@@ -16,6 +16,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "id")]
         public int Id { get; set; }
 
+        [JsonProperty(PropertyName = "invoiceSequence")]
+        public int? InvoiceSequence { get; set; }
+
         [JsonProperty(PropertyName = "agencyId")]
         public int AgencyId { get; set; }
 
@@ -113,6 +116,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "invoiceStatusProv")]
         public string InvoiceStatusProv { get; set; }
 
+        [JsonProperty(PropertyName = "raffleSequence")]
+        public int? RaffleSequence { get; set; }
+
         internal TicketInvoiceModel InvoiceDetails(Invoice model, bool hasAllocaation = false, bool hasNumber = false)
         {
             var context = new TicketsEntities();
@@ -123,12 +129,14 @@ namespace Tickets.Models.Ticket
             var invoice = new TicketInvoiceModel()
             {
                 Id = model.Id,
+                InvoiceSequence = model.InvoiceSequence,
                 AgencyId = model.AgencyId,
                 AgencyDesc = context.Agencies.Where(r => r.Id == model.AgencyId).Select(c => c.Name).FirstOrDefault(),
                 ClientId = model.ClientId,
                 ClientDesc = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.Name).FirstOrDefault(),
                 Agente = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.TicketAllocations.Select(a => a.Agente).FirstOrDefault()).FirstOrDefault(),
                 RaffleId = model.RaffleId,
+                RaffleSequence = model.Raffle.RaffleSequence,
                 RaffleDesc = context.Raffles.Where(r => r.Id == model.RaffleId).Select(c => c.Name).FirstOrDefault(),
                 PaymentType = model.PaymentType,
                 PaymentTypeDesc = context.Catalogs.Where(r => r.Id == model.PaymentType).Select(c => c.NameDetail).FirstOrDefault(),
@@ -171,12 +179,14 @@ namespace Tickets.Models.Ticket
             var invoice = new TicketInvoiceModel()
             {
                 Id = model.Id,
+                InvoiceSequence = model.InvoiceSequence,
                 AgencyId = model.AgencyId,
                 AgencyDesc = context.Agencies.Where(r => r.Id == model.AgencyId).Select(c => c.Name).FirstOrDefault(),
                 ClientId = model.ClientId,
                 ClientDesc = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.Name).FirstOrDefault(),
                 Agente = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.TicketAllocations.Select(a => a.Agente).FirstOrDefault()).FirstOrDefault(),
                 RaffleId = model.RaffleId,
+                RaffleSequence = model.Raffle.RaffleSequence,
                 RaffleDesc = context.Raffles.Where(r => r.Id == model.RaffleId).Select(c => c.Name).FirstOrDefault(),
                 PaymentType = model.PaymentType,
                 PaymentTypeDesc = context.Catalogs.Where(r => r.Id == model.PaymentType).Select(c => c.NameDetail).FirstOrDefault(),
@@ -317,6 +327,7 @@ namespace Tickets.Models.Ticket
                                             select new
                                             {
                                                 rp.Id,
+                                                rp.ReceiptSequence,
                                                 rp.InvoiceId,
                                                 rp.TotalCash,
                                                 rp.TotalCheck,

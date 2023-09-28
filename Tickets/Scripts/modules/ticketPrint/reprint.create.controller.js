@@ -59,6 +59,8 @@
                     window.loading.hide();
                     if (response.result == true) {
                         $scope.allocations = response.object;
+                        $scope.productionLength = response.object[0].production;
+                        $scope.series = response.object[0].ticketAllocationSeries;
                     } else {
                         alertify.alert(response.message);
                     }
@@ -118,9 +120,19 @@
         $scope.serieNumber = function (e, number, serie) {
             $scope.reprint.ticketReprintNumbers.forEach(function (n, i) {
                 if (n.id == number.id) {
-                    $scope.reprint.ticketReprintNumbers[i].serie = serie;
-                    var y = $scope.reprint.ticketReprintNumbers[i];
-                    var t = $scope.reprint.ticketReprintNumbers;
+                    if (e.target.checked) {
+                        var serieArray = {
+                            id: undefined,
+                            serie: undefined
+                        };
+                        serieArray.id = serie;
+                        serieArray.serie = serie;
+                        $scope.reprint.ticketReprintNumbers[i].serie.push(serieArray);
+                    }
+                    else {
+                        var element = $scope.reprint.ticketReprintNumbers[i].serie.indexOf(serie);
+                        $scope.reprint.ticketReprintNumbers[i].serie.splice(element, 1);
+                    }
                 }
             });
         }
@@ -134,7 +146,6 @@
                 numbers.push(t);
                 return t.selected == true;
             });
-            var r = $scope.reprint;
             window.loading.show();
             $.ajax({
                 type: 'POST',

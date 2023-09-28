@@ -36,6 +36,8 @@ namespace Tickets.Models.Procedures.PayableAward
                             Id_Name_Client = sqlDataReader["Id_Name_Client"].ToString(),
                             Fracciones = Convert.ToInt32(sqlDataReader["Fracciones"].ToString()),
                             Monto = Convert.ToDecimal(sqlDataReader["Monto"].ToString()),
+                            TotalAward = Convert.ToDecimal(sqlDataReader["TotalAward"].ToString()),
+                            Bono = Convert.ToDecimal(sqlDataReader["Bono"].ToString()),
                         };
                         lista.Add(pagados);
                     }
@@ -53,6 +55,8 @@ namespace Tickets.Models.Procedures.PayableAward
                         Id_Name_Client = "",
                         Fracciones = 0,
                         Monto = 0.0m,
+                        TotalAward = 0.0m,
+                        Bono = 0.0m
                     };
                     lista.Add(pagados);
                 }

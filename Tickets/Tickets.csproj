@@ -546,6 +546,7 @@
     </Compile>
     <Compile Include="Models\Ticket\ElectronicSalesModel.cs" />
     <Compile Include="Models\Ticket\ElectronicSalesNumberModel.cs" />
+    <Compile Include="Models\Ticket\TicketAllocationSerieModel.cs" />
     <Compile Include="Models\Ticket\TicketReturnedModel.cs" />
     <Compile Include="Models\Ticket\TicketInvoiceNumberModel.cs" />
     <Compile Include="Models\Ticket\TicketSuscriberNumberModel.cs" />

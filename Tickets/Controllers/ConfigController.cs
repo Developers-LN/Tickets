@@ -184,7 +184,7 @@ namespace Tickets.Controllers
                 var RaffleList = context.Raffles.Select(r => new
                 {
                     id = r.Id,
-                    text = r.Id + " - " + r.Name
+                    text = r.RaffleSequence + " - " + r.Name
                 }).ToList();
                 return new JsonResult
                 {

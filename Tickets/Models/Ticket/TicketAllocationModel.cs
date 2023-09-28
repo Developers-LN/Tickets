@@ -59,6 +59,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "ticketAllocationNumbers")]
         public List<TicketAllocationNumberModel> TicketAllocationNumbers { get; set; }
 
+        [JsonProperty(PropertyName = "ticketAllocationSeries")]
+        public List<TicketAllocationSerieModel> TicketAllocationSeries { get; set; }
+
         [JsonProperty(PropertyName = "numberCount")]
         public int NumberCount { get; set; }
 
@@ -112,6 +115,12 @@ namespace Tickets.Models.Ticket
 
         [JsonProperty(PropertyName = "anyReturn")]
         public int AnyReturn { get; set; }
+
+        [JsonProperty(PropertyName = "raffleSequence")]
+        public int? RaffleSequence { get; set; }
+
+        [JsonProperty(PropertyName = "allocationSequence")]
+        public int? AllocationSequence { get; set; }
 
         #region Private Method
         private static List<TicketAllocation> CopyTicketAllocation(TicketsEntities context, int sourceId, int targetId, int type)
@@ -216,6 +225,7 @@ namespace Tickets.Models.Ticket
             {
                 ticket.Id,
                 ticket.RaffleId,
+                raffleSequence = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).RaffleSequence,
                 RaffleDesc = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).Name,
                 RaffleDate = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).DateSolteo.ToUnixTime(),
                 ticket.ClientId,
@@ -262,6 +272,7 @@ namespace Tickets.Models.Ticket
             var allocation = new TicketAllocationModel()
             {
                 Id = model.Id,
+                AllocationSequence = model.AllocationSequence,
                 ClientId = model.ClientId,
                 ClientDesc = model.Client.Name,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
@@ -287,6 +298,8 @@ namespace Tickets.Models.Ticket
                 Id = model.Id,
                 ClientId = model.ClientId,
                 RaffleId = model.RaffleId,
+                AllocationSequence = model.AllocationSequence,
+                RaffleSequence = model.Raffle.RaffleSequence,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
                 StatuId = model.Statu,
                 TypeId = model.Type,
@@ -353,10 +366,12 @@ namespace Tickets.Models.Ticket
             var allocation = new TicketAllocationModel()
             {
                 Id = model.Id,
+                AllocationSequence = model.AllocationSequence,
                 ClientId = model.ClientId,
                 ClientDesc = client.Name,
-                RaffleDesc = model.RaffleId + " - " + raffle.Name,
+                RaffleDesc = model.Raffle.Id + " - " + raffle.Name,
                 RaffleId = model.RaffleId,
+                RaffleSequence = model.Raffle.RaffleSequence,
                 StatuDesc = context.Catalogs.Where(c => c.Id == model.Statu).Select(s => s.NameDetail).FirstOrDefault(),
                 StatuId = model.Statu,
                 TypeDesc = context.Catalogs.Where(c => c.Id == model.Type).Select(s => s.NameDetail).FirstOrDefault(),
@@ -388,6 +403,19 @@ namespace Tickets.Models.Ticket
                 {
                     //prospect = context.Prospects.FirstOrDefault(p => p.Id == raffle.PoolsProspectId);
                 }*/
+
+                var ticketAllocationSerieModel = new List<TicketAllocationSerieModel>();
+                for (int i = 1; i <= prospect.LeafNumber; i++)
+                {
+                    var serie = new TicketAllocationSerieModel()
+                    {
+                        Id = String.Concat("S", i),
+                        Serie = String.Concat("S-", i)
+                    };
+                    ticketAllocationSerieModel.Add(serie);
+                }
+                allocation.TicketAllocationSeries = ticketAllocationSerieModel;
+
                 var price = prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.PriceId);
                 if (price == null)
                 {
