@@ -417,6 +417,7 @@
     <Compile Include="Models\ModelsProcedures\PayableAward\ModelProcedure_IdentifyAwardPayedByClient.cs" />
     <Compile Include="Models\ModelsProcedures\PayableAward\ModelProcedure_PayableAwardSummary.cs" />
     <Compile Include="Models\ModelsProcedures\ModelProcedure_ReturnedByGroupModel.cs" />
+    <Compile Include="Models\ModelsProcedures\Raffle\ModelProcedure_RaffleSales.cs" />
     <Compile Include="Models\ModelsProcedures\Returns\ModelProcedure_ReturnedGroupByClient.cs" />
     <Compile Include="Models\ModelsProcedures\Returns\ModelProcedure_ReturnsSummary.cs" />
     <Compile Include="Models\ModelsProcedures\ModelProcedure_ValidateElectronicSale.cs" />
@@ -460,6 +461,7 @@
     <Compile Include="Models\Procedures\Procedure_PayableAwards.cs" />
     <Compile Include="Models\Procedures\PayableAward\Procedure_PayableAward.cs" />
     <Compile Include="Models\Procedures\PayableAward\Procedure_PayableAwardSummary.cs" />
+    <Compile Include="Models\Procedures\Raffle\Procedure_RaffleSales.cs" />
     <Compile Include="Models\Procedures\Receivables\Procedure_ReceivableClose.cs" />
     <Compile Include="Models\Procedures\Procedure_ReturnedByGroup.cs" />
     <Compile Include="Models\Procedures\Procedure_ReturnedNumbersByClient.cs" />

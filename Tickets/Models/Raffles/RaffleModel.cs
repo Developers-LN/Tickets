@@ -495,7 +495,7 @@ namespace Tickets.Models.Raffles
             var context = new TicketsEntities();
             var prospectModel = new ProspectModel();
             var raffles = context.Raffles.AsEnumerable()
-                .Where(s => ((s.Statu == (int)RaffleStatusEnum.Active || s.Statu == (int)RaffleStatusEnum.Planned) && s.EndReturnDate >= DateTime.Now) || s.ReturnedOpens.Any(r => r.EndReturnedDate >= DateTime.Now))
+                .Where(s => ((s.Statu == (int)RaffleStatusEnum.Active || s.Statu == (int)RaffleStatusEnum.Planned) && s.StartReturnDate <= DateTime.Now && s.EndReturnDate >= DateTime.Now) || s.ReturnedOpens.Any(r => r.EndReturnedDate >= DateTime.Now))
                 .OrderByDescending(r => r.Id)
                 .Select(r => new
                 {

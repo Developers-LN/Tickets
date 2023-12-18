@@ -174,7 +174,7 @@ namespace Tickets.Models.Prospects
 
                         if (statu == 0)
                         {
-                            var prospects = context.Prospects.AsEnumerable().Where(p => p.Statu != 2074)
+                            var prospects = context.Prospects.AsEnumerable()//.Where(p => p.Statu != 2074)
                                 .Select(p => this.ListadoProspecto(p)).ToList();
 
                             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Prospectos");

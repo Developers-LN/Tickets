@@ -208,6 +208,8 @@ namespace Tickets.Models.Raffles
                         /*Changing Virtual Raffle*/
 
                         transManager.Commit();
+                        //GUARDADO DE DATOS GENERADOS
+                        //Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Generacion de Sorteo", raffleAwardList);
                         return new RequestResponseModel()
                         {
                             Result = true,

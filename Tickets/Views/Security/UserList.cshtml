@@ -15,6 +15,7 @@
                         <thead>
                             <tr>
                                 <th>Nombre</th>
+                                <th>Empleado</th>
                                 <th>Estado</th>
                                 <th class="editColumm"></th>
                             </tr>
@@ -22,6 +23,7 @@
                         <tbody>
                             <tr data-ng-repeat="user in userList">
                                 <td>{{user.Name}}</td>
+                                <td>{{user.EmpleadoDesc}}</td>
                                 <td>{{user.StatuDesc}}</td>
                                 <td>
                                     <a ng-click="editUser(user)" title="Moificar" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>

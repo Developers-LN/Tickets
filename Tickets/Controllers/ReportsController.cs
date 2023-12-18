@@ -10,9 +10,11 @@ using System.Web.Mvc;
 using Tickets.Filters;
 using Tickets.Models;
 using Tickets.Models.Enums;
+using Tickets.Models.ModelsProcedures.Raffle;
 using Tickets.Models.Procedures;
 using Tickets.Models.Procedures.Allocations;
 using Tickets.Models.Procedures.PayableAward;
+using Tickets.Models.Procedures.Raffle;
 using Tickets.Models.Procedures.Receivables;
 using Tickets.Models.Procedures.Returns;
 
@@ -1311,23 +1313,39 @@ namespace Tickets.Controllers
                 var startD = DateTime.Parse(startDate);
                 var endD = DateTime.Parse(endDate);
 
-                var raffles = context.Raffles.AsEnumerable()
-                                     .Where(r => r.DateSolteo.Date >= startD.Date && r.DateSolteo.Date <= endD.Date &&
-                                     r.Prospect.ImpresionType != (int)ProspectImpresionTypeEnum.Extraordinario /*&&
-                                     (r.ProspectId != (int)ProspectIdEnum.Electronico &&
-                                      r.ProspectId != (int)ProspectIdEnum.Electronico2018 &&
-                                      r.ProspectId != (int)ProspectIdEnum.Electronico2019 &&
-                                      r.ProspectId != (int)ProspectIdEnum.Electronico2020)*/).ToList();
+                var raffles = context.Raffles.AsEnumerable().Where(r => r.DateSolteo.Date >= startD.Date && r.DateSolteo.Date <= endD.Date).ToList();
 
                 if (raffles.Count == 0)
                 {
                     return RedirectToAction("Error", new { message = "No se encontraron datos para las fechas seleccionadas." });
                 }
 
+                List<ModelProcedure_RaffleSales> modelProcedure_RaffleSales = new List<ModelProcedure_RaffleSales>();
+
+                foreach(var raffle in raffles)
+                {
+                    Procedure_RaffleSales procedure_RaffleSales = new Procedure_RaffleSales();
+                    var results = procedure_RaffleSales.RaffleSales(raffle.Id);
+                    foreach(var result in results)
+                    {
+                        var data = new ModelProcedure_RaffleSales()
+                        {
+                            RaffleId = result.RaffleId,
+                            RaffleDate = result.RaffleDate,
+                            RaffleName = result.RaffleName,
+                            Award = result.Award,
+                            GrossSales = result.GrossSales,
+                            NetSales = result.NetSales,
+                            Order = result.Order
+                        };
+                        modelProcedure_RaffleSales.Add(data);
+                    }
+                }
+
                 ViewBag.StartDate = startD.ToShortDateString();
                 ViewBag.EndDate = endD.ToShortDateString();
 
-                return View(raffles);
+                return View(modelProcedure_RaffleSales);
             }
         }
 

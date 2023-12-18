@@ -662,9 +662,10 @@ namespace Tickets.Models.Ticket
                         newIdentifyBach.IdentifyNumbers = new List<IdentifyNumber>();
 
                         var identifyNumbers = new List<IdentifyNumber>();
+                        //var test = context.IdentifyNumbers.Where(w => w.IdentifyBach.RaffleId == identifyBach.RaffleId).Select(s => new { s.NumberId, s.FractionFrom, s.FractionTo }).ToList();
                         foreach (var number in identifyBach.IdentifyNumbers)
                         {
-                            if (identifyNumbers.Any(i => i.NumberId == number.NumberId && i.FractionFrom == number.FractionFrom && i.FractionTo == number.FractionTo) == false)
+                            if (identifyNumbers.Any(i => i.NumberId == number.NumberId && i.FractionFrom == number.FractionFrom && i.FractionTo == number.FractionTo /*&& (i.FractionFrom >= number.FractionFrom && i.FractionFrom <= number.FractionTo) && (i.FractionTo >= number.FractionFrom && i.FractionTo <= number.FractionTo)*/) == false)
                             {
                                 var nedit = context.IdentifyNumbers.FirstOrDefault(p => p.Id == number.Id);
                                 if (nedit == null)
@@ -1350,6 +1351,7 @@ namespace Tickets.Models.Ticket
                         context.SaveChanges();
 
                         context.IdentifyBaches.Remove(identifyBach);
+                        //identifyBach.Statu = (int)BachIdentifyStatuEnum.Suspended;
                         context.SaveChanges();
                         tx.Commit();
                     }
@@ -1369,6 +1371,7 @@ namespace Tickets.Models.Ticket
         #region Public Method
         public object ListaIdentificacionPremios(IdentifyBach identifyBach)
         {
+            var context = new TicketsEntities();
             return new
             {
                 identifyBach.Id,
@@ -1377,6 +1380,7 @@ namespace Tickets.Models.Ticket
                 identifyBach.RaffleId,
                 identifyBach.Statu,
                 identifyBach.Winner.WinnerName,
+                Status = context.Catalogs.Find(identifyBach.Statu).NameDetail,
                 hasPayment = (identifyBach.IdentifyBachPayments.Count > 0 || identifyBach.NoteCredits.Count > 0),
                 RaffleDesc = identifyBach.Raffle.Name
             };
@@ -1384,6 +1388,7 @@ namespace Tickets.Models.Ticket
 
         public object ListaIdentificacionPremiosVendedor(IdentifyBach identifyBach)
         {
+            var context = new TicketsEntities();
             return new
             {
                 identifyBach.Id,
@@ -1392,6 +1397,7 @@ namespace Tickets.Models.Ticket
                 identifyBach.RaffleId,
                 identifyBach.Statu,
                 identifyBach.Winner.WinnerName,
+                Status = context.Catalogs.Find(identifyBach.Statu).NameDetail,
                 hasPayment = (identifyBach.IdentifyBachPayments.Count > 0 || identifyBach.NoteCredits.Count > 0),
                 RaffleDesc = identifyBach.Raffle.Name
             };

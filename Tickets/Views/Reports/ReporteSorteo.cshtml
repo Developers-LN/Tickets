@@ -1,35 +1,29 @@
-﻿@model IEnumerable<Tickets.Models.Raffle>
+﻿@model IEnumerable<Tickets.Models.ModelsProcedures.Raffle.ModelProcedure_RaffleSales>
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "REPORTE DE VENTAS DESDE " + ViewBag.StartDate + " HASTA" + ViewBag.EndDate;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
     string adminCargo = config != null ? config.Cargo : "";
 
-    var menor = Model.Min(m => m.Id);
-    var mayor = Model.Max(m => m.Id);
-
-    var ticketReturn = context.TicketReturns
-                    .Join(context.TicketAllocationNumbers,
-                    tr => tr.TicketAllocationNimberId,
-                    ta => ta.Id,
-                    (tr, ta) => new
-                    {
-                        ta.RaffleId,
-                        ta.Number
-                    })
-                    .Where(r => r.RaffleId >= menor && r.RaffleId <= mayor);
-
-    var ticketAllocationNumbers = context.TicketAllocationNumbers.Where(r => r.RaffleId >= menor && r.RaffleId <= mayor)
-                     .Select(s => new
-                     {
-                         s.Number,
-                         s.RaffleId,
-                         s.Statu
-                     });
+    var Raffles = Model.GroupBy(g => new
+    {
+        g.RaffleId,
+        g.RaffleName,
+        g.RaffleDate,
+        g.GrossSales,
+        g.NetSales
+    }).Select(s => new
+    {
+        s.Key.RaffleId,
+        s.Key.RaffleName,
+        s.Key.RaffleDate,
+        s.Key.GrossSales,
+        s.Key.NetSales
+    }).ToList();
 
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 }
@@ -100,6 +94,7 @@
                         <th colspan="3" class="text-center">GANADORES</th>
                     </tr>
                     <tr>
+                        <th class="text-center">FILA</th>
                         <th class="text-center">SORTEO</th>
                         <th class="text-center">FECHA DEL SORTEO</th>
                         <th class="text-right">VENTA BRUTA</th>
@@ -111,103 +106,37 @@
                 </thead>
                 <tbody>
                     @{
-                        decimal totalGeneralInvoice = 0.0m;
-                        decimal totalGeneralDiscount = 0.0m;
-                        decimal totalGeneralReturnedPayments = 0.0m;
-                        decimal totalGeneralPayment = 0.0m;
-                        decimal totalGeneralCredit = 0.0m;
-                        decimal totalGeneralOther = 0.0m;
-                        decimal totalGeneralRest = 0.0m;
+                        decimal totalGrossSales = 0.0m;
+                        decimal totalNetSales = 0.0m;
+                        int row = 1;
                     }
 
-                    @foreach (var raffle in Model)
+                    @foreach (var raffle in Raffles)
                     {
-                        decimal totalInvoice = 0.0m;
-                        decimal totalDiscount = 0.0m;
-                        decimal totalReturnedPayments = 0.0m;
-                        decimal totalRest = 0.0m;
-                        decimal totalPayment = 0.0m;
-                        decimal totalCredit = 0.0m;
-                        decimal totalOther = 0.0m;
+                        var raffleAwards = Model.Where(w => w.RaffleId == raffle.RaffleId).ToArray();
 
-                        var raffleName = raffle.Id + "-" + raffle.Name;
-                        var raffleDate = raffle.DateSolteo.ToShortDateString();
+                        <tr>
+                            <td class="text-center">@row</td>
+                            <td class="text-left">@raffle.RaffleId - @raffle.RaffleName</td>
+                            <td class="text-center">@raffle.RaffleDate</td>
+                            <td class="text-right">@(raffle.GrossSales.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            <td class="text-right">@(raffle.NetSales.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            <td class="text-center">@raffleAwards[0].Award</td>
+                            <td class="text-center">@raffleAwards[1].Award</td>
+                            <td class="text-center">@raffleAwards[2].Award</td>
+                        </tr>
 
-                        var raffleAwards = raffle.RaffleAwards.Where(a => a.RaffleId == raffle.Id).OrderBy(o => o.Award.Id)
-                                                 .Select(s => new
-                                                 {
-                                                     controlNumber = s.ControlNumber,
-                                                     status =
-                                                     (ticketAllocationNumbers.Where(w => w.RaffleId == raffle.Id && w.Number == s.ControlNumber).Select(se => se.Statu).Contains(61) ? "NF" :
-                                                     ticketReturn.Where(w => w.RaffleId == raffle.Id).Select(sr => sr.Number).Contains(s.ControlNumber) ? "D" :
-                                                     !ticketAllocationNumbers.Where(w => w.RaffleId == raffle.Id).Select(stan => stan.Number).Contains(s.ControlNumber) ? "NA" :
-                                                     "C")
-                                                 }).Take(3).ToList();
-
-                        var invoices = raffle.Invoices.Where(i => i.PaymentStatu != (int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Suspended).AsEnumerable()
-                            .GroupBy(g => g.RaffleId)
-                            .Select(i => new
-                            {
-                                raffleName = i.FirstOrDefault().Raffle.Id + "-" + i.FirstOrDefault().Raffle.Name,
-                                raffleDate = i.FirstOrDefault().Raffle.DateSolteo.ToShortDateString(),
-
-                                invoiceValue = i.Select(iv => iv.InvoiceTickets.Select(it => it.Quantity * it.PricePerFraction).Aggregate((x, y) => x + y)).Aggregate((x, y) => x + y),
-
-                                discountValue = i.Select(iv => (iv.Discount * iv.InvoiceTickets.Select(it => it.Quantity * it.PricePerFraction).Aggregate((x, y) => x + y)) / 100).Aggregate((x, y) => x + y),
-
-                                returnedValue = i.Select(p => p.ReceiptPayments.Select(rp => rp.NoteCreditReceiptPayments.Where(nc => nc.NoteCredit.RaffleId.HasValue)
-                                                 .Select(nc => nc.TotalCash).Sum()).Sum()).Sum(),
-
-                            }).ToList();
-
-                        if (invoices.Count != 0)
-                        {
-                            foreach (var client in invoices)
-                            {
-                                var restant = client.invoiceValue - (client.returnedValue + client.discountValue /*+ client.paymentValue + client.paymentIdentify + client.otherPayment*/);
-
-                                <tr>
-                                    <td class="text-left">@client.raffleName</td>
-                                    <td class="text-center">@client.raffleDate</td>
-                                    <td class="text-right">@((client.invoiceValue).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                    <td class="text-right">@((restant).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                    <td class="text-center">@((string)(raffleAwards.Count > 0 ? raffleAwards[0].controlNumber+"-"+raffleAwards[0].status : "N/A"))</td>
-                                    <td class="text-center">@((string)(raffleAwards.Count > 0 ? raffleAwards[1].controlNumber+"-"+raffleAwards[1].status : "N/A"))</td>
-                                    <td class="text-center">@((string)(raffleAwards.Count > 0 ? raffleAwards[2].controlNumber+"-"+raffleAwards[2].status : "N/A"))</td>
-                                </tr>
-
-                                totalInvoice += client.invoiceValue;
-                                totalReturnedPayments += client.returnedValue;
-                                totalRest += restant;
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td class="text-left">@raffleName</td>
-                                <td class="text-center">@raffleDate</td>
-                                <td class="text-right">0</td>
-                                <td class="text-right">0</td>
-                                <td class="text-center">@((string)(raffleAwards.Count > 0 ? raffleAwards[0].controlNumber+"-"+raffleAwards[0].status : "N/A"))</td>
-                                <td class="text-center">@((string)(raffleAwards.Count > 0 ? raffleAwards[1].controlNumber+"-"+raffleAwards[1].status : "N/A"))</td>
-                                <td class="text-center">@((string)(raffleAwards.Count > 0 ? raffleAwards[2].controlNumber+"-"+raffleAwards[2].status : "N/A"))</td>
-                            </tr>
-                        }
-
-                        totalGeneralInvoice += totalInvoice;
-                        totalGeneralDiscount += totalDiscount;
-                        totalGeneralReturnedPayments += totalReturnedPayments;
-                        totalGeneralPayment += totalPayment;
-                        totalGeneralCredit += totalCredit;
-                        totalGeneralOther += totalOther;
-                        totalGeneralRest += totalRest;
+                        row += 1;
+                        totalGrossSales += raffle.GrossSales;
+                        totalNetSales += raffle.NetSales;
                     }
                 </tbody>
                 <tfoot>
                     <tr class="total" style="font-weight:bold">
+                        <td class="text-center"></td>
                         <td colspan="2" class="text-right">Total General...:</td>
-                        <td class="text-right">@(totalGeneralInvoice.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                        <td class="text-right">@(totalGeneralRest.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-right">@(totalGrossSales.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                        <td class="text-right">@(totalNetSales.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                         <td class="text-center"></td>
                         <td class="text-center"></td>
                         <td class="text-center"></td>
