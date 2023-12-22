@@ -23,7 +23,12 @@
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
-            <h3><b>CUADRE DE DEVOLUCIONES DEL SORTEO No. @RaffleData.Id</b></h3><br />
+            <h3>
+                <b>
+                    CUADRE DE DEVOLUCIONES DEL SORTEO <br />
+                    @RaffleData.Symbol @RaffleData.Separator @RaffleData.Id @RaffleData.Name
+                </b>
+            </h3><br />
             FECHA DE SORTEO @RaffleData.DateSolteo.ToShortDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 text-center">
@@ -131,7 +136,6 @@
             </tfoot>
         </table>
     </div>
-
     <div class="col-lg-12 col-md-12 col-sm-12 text-center">
         <b>@adminName</b><br />
         <span>@adminCargo</span>

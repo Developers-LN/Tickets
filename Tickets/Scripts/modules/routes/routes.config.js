@@ -686,6 +686,10 @@
                 url: '/cash/payedAwardByPeriod',
                 templateUrl: Route.base('Cash/PayedAwardByPeriod')
             })
+            .state('app.electronicAwardPayed', {
+                url: '/cash/ElectronicAwardPayed',
+                templateUrl: Route.base('Cash/ElectronicAwardPayed')
+            })
             .state('app.InvoiceByPeriod', {
                 url: '/cash/invoiceByPeriod',
                 templateUrl: Route.base('Cash/InvoiceByPeriod')

@@ -8,6 +8,7 @@
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
     string adminName = config != null ? config.ProduccionSorteo : "";
     string adminCargo = config != null ? config.ProduccionSorteoCargo : "";
+    var RaffleData = context.Raffles.Where(w => w.Id == Model.FirstOrDefault().RaffleId).FirstOrDefault();
 }
 
 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -20,8 +21,8 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
             <h3>
                 <b>
-                    RESUMEN DE ASIGNACIONES ENTREGADAS DEL SORTEO NO. @Model.FirstOrDefault().RaffleId <br />
-                    FECHA DEL SORTEO @Model.FirstOrDefault().Raffle.DateSolteo.ToShortDateString()
+                    RESUMEN DE ASIGNACIONES ENTREGADAS DEL SORTEO <br />
+                    @RaffleData.Symbol @RaffleData.Separator @RaffleData.Id @RaffleData.Name @RaffleData.DateSolteo.ToShortDateString()
                 </b>
             </h3>
 

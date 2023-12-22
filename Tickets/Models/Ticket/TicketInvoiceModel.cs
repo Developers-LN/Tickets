@@ -40,6 +40,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "raffleDesc")]
         public string RaffleDesc { get; set; }
 
+        [JsonProperty(PropertyName = "raffleNomenclature")]
+        public string RaffleNomenclature { get; set; }
+
         [JsonProperty(PropertyName = "condition")]
         public int Condition { get; set; }
 
@@ -137,7 +140,9 @@ namespace Tickets.Models.Ticket
                 Agente = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.TicketAllocations.Select(a => a.Agente).FirstOrDefault()).FirstOrDefault(),
                 RaffleId = model.RaffleId,
                 RaffleSequence = model.Raffle.RaffleSequence,
-                RaffleDesc = context.Raffles.Where(r => r.Id == model.RaffleId).Select(c => c.Name).FirstOrDefault(),
+                //RaffleDesc = context.Raffles.Where(r => r.Id == model.RaffleId).Select(c => c.Name).FirstOrDefault(),
+                RaffleNomenclature = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.Id,
+                RaffleDesc = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.Id + " " + model.Raffle.Name + " " + model.Raffle.DateSolteo.ToShortDateString(),
                 PaymentType = model.PaymentType,
                 PaymentTypeDesc = context.Catalogs.Where(r => r.Id == model.PaymentType).Select(c => c.NameDetail).FirstOrDefault(),
                 InvoiceExpredDay = expiredDay,
@@ -187,7 +192,9 @@ namespace Tickets.Models.Ticket
                 Agente = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.TicketAllocations.Select(a => a.Agente).FirstOrDefault()).FirstOrDefault(),
                 RaffleId = model.RaffleId,
                 RaffleSequence = model.Raffle.RaffleSequence,
-                RaffleDesc = context.Raffles.Where(r => r.Id == model.RaffleId).Select(c => c.Name).FirstOrDefault(),
+                //RaffleDesc = context.Raffles.Where(r => r.Id == model.RaffleId).Select(c => c.Name).FirstOrDefault(),
+                RaffleNomenclature = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.Id,
+                RaffleDesc = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.Id + " " + model.Raffle.Name + " " + model.Raffle.DateSolteo.ToShortDateString(),
                 PaymentType = model.PaymentType,
                 PaymentTypeDesc = context.Catalogs.Where(r => r.Id == model.PaymentType).Select(c => c.NameDetail).FirstOrDefault(),
                 InvoiceExpredDay = expiredDay,

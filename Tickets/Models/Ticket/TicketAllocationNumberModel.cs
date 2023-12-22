@@ -614,7 +614,9 @@ namespace Tickets.Models.Ticket
                     ClientDesc = context.Clients.FirstOrDefault(c => c.Id == n.TicketAllocation.ClientId).Name,
                     n.TicketAllocation.RaffleId,
                     n.TicketAllocation.Raffle.RaffleSequence,
-                    RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == n.TicketAllocation.RaffleId).Name,
+                    //RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == n.TicketAllocation.RaffleId).Name,
+                    RaffleNomenclature = n.TicketAllocation.Raffle.Symbol + n.TicketAllocation.Raffle.Separator + n.TicketAllocation.Raffle.Id,
+                    RaffleDesc = n.TicketAllocation.Raffle.Symbol + n.TicketAllocation.Raffle.Separator + n.TicketAllocation.Raffle.Id + " " + n.TicketAllocation.Raffle.Name + " " + n.TicketAllocation.Raffle.DateSolteo.ToShortDateString(),
                     Cedula = n.ElectronicTicketSales.Any(a => a.TicketAllocationNimberId == n.Id) ? n.ElectronicTicketSales.FirstOrDefault().Cedula : null,
                     Telefono = n.ElectronicTicketSales.Any(a => a.TicketAllocationNimberId == n.Id) ? n.ElectronicTicketSales.FirstOrDefault().PhoneNumber : null
                 },

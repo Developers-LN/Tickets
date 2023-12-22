@@ -13,7 +13,7 @@
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
-                                <th style="width:70px" class="text-center">ID</th>
+                                @*<th style="width:70px" class="text-center">ID</th>*@
                                 <th>Nombre de Sorteo</th>
                                 <th class="text-center">DEVOLUCIONES POR NUMERO</th>
                                 <th class="text-center">RESUMEN DE DEVOLUCIONES</th>
@@ -24,7 +24,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="raffle in raffles">
-                                <td class="text-center">{{raffle.id}}</td>
+                                @*<td class="text-center">{{raffle.id}}</td>*@
                                 <td>{{raffle.name}}</td>
                                 <td class="text-center">
                                     <a target="_blank" href="/Reports/ReturnedNumbers?raffleId={{raffle.id}}" title="Imprimir: Devoluciones por Numero"><i class="fa fa-print"></i></a>

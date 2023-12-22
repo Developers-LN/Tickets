@@ -14,7 +14,7 @@
                             <div class="col-lg-12">
                                 <select ng-required="true" class="form-control dropdown-select2" ng-model="RaffleId" ng-change="updateInvoiceDetails()">
                                     <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
-                                    <option ng-repeat="raffle in raffles" value="{{raffle.Id}}">{{raffle.Id}} - {{raffle.Name}}</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.Id}}">{{raffle.text}}</option>
                                 </select>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                         <tbody>
                             <tr data-ng-repeat="invoiceDetail in invoiceDetails">
                                 <td class="text-center">{{invoiceDetail.Id}}</td>
-                                <td>{{invoiceDetail.RaffleId}} - {{invoiceDetail.RaffleDesc}}</td>
+                                <td>{{invoiceDetail.RaffleDesc}}</td>
                                 <td>{{invoiceDetail.ClientId}} - {{invoiceDetail.ClientDesc}}</td>
                                 <td>{{(invoiceDetail.StartDate | date:"dd/MM/yyyy")}}</td>
                                 <td>{{(invoiceDetail.EndDate | date:"dd/MM/yyyy")}}</td>

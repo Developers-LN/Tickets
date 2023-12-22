@@ -1,10 +1,10 @@
 ﻿@{
     Layout = null;
-    ViewBag.Title = "Premios pagados por período";
+    ViewBag.Title = "Premios pagados de manera electrónica";
 }
 
 <!-- START panel-->
-<div class="col-lg-12 no-padder" ng-controller="PayedAwardPeriodReportsController" ng-init="app.title = '@(ViewBag.Title)'">
+<div class="col-lg-12 no-padder" ng-controller="PayedElectronicAwardController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
             <div class="panel-body">
@@ -68,5 +68,6 @@
     <div class="col-lg-12 no-padder text-left m-b-lg">
         <a href="#/report/invoiceDetailList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Salir</a>
         <a ng-click="printReport()" class="mr btn btn-square btn-primary"><i class="fa fa-print"></i> Generar Reporte</a>
+        <a ng-click="GenerateExcelReport()" class="mr btn btn-square btn-primary"><i class="fa fa-file-excel-o"></i> Generar Reporte en Excel</a>
     </div>
 </div>

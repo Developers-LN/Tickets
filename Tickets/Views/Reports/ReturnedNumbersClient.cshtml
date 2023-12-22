@@ -20,23 +20,29 @@
         width: 100%;
         float: left;
     }
+
     .col-lg-4 {
         width: 33.333%;
         float: left;
     }
+
     .col-lg-6 {
         width: 50%;
         float: left;
     }
+
     .text-center {
         text-align: center;
     }
+
     .text-right {
         text-align: right;
     }
+
     .text-left {
         text-align: left;
     }
+
     .no-padder {
         padding-left: 5px;
         padding-right: 5px;
@@ -51,7 +57,10 @@
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
-            <b>DEVOLUCION DE BILLETES DEL SORTEO @RaffleData.Id</b><br />
+            <b>
+                DEVOLUCION DE BILLETES DEL SORTEO <br />
+                @RaffleData.Symbol @RaffleData.Separator @RaffleData.Id @RaffleData.Name
+            </b><br />
             DESDE @RaffleData.StartReturnDate.ToString("dd/MM/yyyy") HASTA @RaffleData.EndReturnDate.ToString("dd/MM/yyyy")
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">

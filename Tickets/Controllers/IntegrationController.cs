@@ -504,6 +504,95 @@ namespace Tickets.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult PayedElectronicAwardExcel(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
+        {
+            var context = new TicketsEntities();
+            var startD = DateTime.Parse(startDate);
+            var endD = DateTime.Parse(endDate);
+
+            var electronicAwards = context.ElectronicAwardPayeds.AsEnumerable().Where(i =>
+                (i.RaffleId == raffleId || raffleId == 0)
+                && (i.ClientId == clientId || clientId == 0)
+                && (i.PayedDate.Value.Date >= startD.Date && i.PayedDate.Value.Date <= endD.Date)
+                ).ToList();
+
+            using (var workBook = new XLWorkbook())
+            {
+                var workSheet = workBook.Worksheets.Add("Cuentas");
+                var curretRow = 1;
+
+                workSheet.Cell(curretRow, 1).Value = "ID_Cliente";
+                workSheet.Cell(curretRow, 2).Value = "Nombre_Cliente";
+                workSheet.Cell(curretRow, 3).Value = "ID_Sorteo";
+                workSheet.Cell(curretRow, 4).Value = "Nombre_Sorteo";
+                workSheet.Cell(curretRow, 5).Value = "Numero";
+                workSheet.Cell(curretRow, 6).Value = "No_Control";
+                workSheet.Cell(curretRow, 7).Value = "Desde";
+                workSheet.Cell(curretRow, 8).Value = "Hasta";
+                workSheet.Cell(curretRow, 9).Value = "No_ticket";
+                workSheet.Cell(curretRow, 10).Value = "Premio";
+                workSheet.Cell(curretRow, 11).Value = "Pagado";
+                workSheet.Cell(curretRow, 12).Value = "Fecha_Pago";
+
+                foreach (var item in electronicAwards)
+                {
+                    curretRow++;
+                    workSheet.Cell(curretRow, 1).Value = item.ClientId;
+                    workSheet.Cell(curretRow, 2).Value = item.Client.Name;
+                    workSheet.Cell(curretRow, 3).Value = item.RaffleId;
+                    workSheet.Cell(curretRow, 4).Value = item.Raffle.Name;
+                    workSheet.Cell(curretRow, 5).Value = item.Number;
+                    workSheet.Cell(curretRow, 6).Value = item.ControlNumber;
+                    workSheet.Cell(curretRow, 7).Value = item.FractionFrom;
+                    workSheet.Cell(curretRow, 8).Value = item.FractionTo;
+                    workSheet.Cell(curretRow, 9).Value = item.NoTicket;
+                    workSheet.Cell(curretRow, 10).Value = item.AwardName;
+                    workSheet.Cell(curretRow, 11).Value = item.Payed;
+                    workSheet.Cell(curretRow, 12).Value = item.PayedDate.Value.ToString("dd/MM/yyyy hh:mm:ss tt");
+                }
+
+                var range = workSheet.RangeUsed();
+                var table = range.CreateTable();
+                table.Theme = XLTableTheme.TableStyleLight9;
+                workSheet.Columns().AdjustToContents();
+                workSheet.Column(5).Style.NumberFormat.Format = "@";
+                workSheet.Column(11).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(12).Style.NumberFormat.Format = "@";
+
+                using (var stream = new MemoryStream())
+                {
+                    workBook.SaveAs(stream);
+                    var content = stream.ToArray();
+
+                    string Nombre;
+
+                    DateTime FI = Convert.ToDateTime(startD);
+                    DateTime FF = Convert.ToDateTime(endD);
+
+                    if (raffleId != 0 && clientId == 0)
+                    {
+                        Nombre = ("PREMIOS PAGADOS DE MANERA ELECTRONICA DEL SORTEO NO. " + raffleId + " DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
+                    }
+                    else if (raffleId == 0 && clientId != 0)
+                    {
+                        Nombre = ("PREMIOS PAGADOS DE MANERA ELECTRONICA POR EL CLIENTE " + electronicAwards.FirstOrDefault().Client.Name + " DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
+                    }
+                    else if (raffleId != 0 && clientId != 0)
+                    {
+                        Nombre = ("PREMIOS PAGADOS DE MANERA ELECTRONICA POR EL CLIENTE " + electronicAwards.FirstOrDefault().Client.Name + " DEL SORTEO NO. " + raffleId + " DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
+                    }
+                    else
+                    {
+                        Nombre = ("PREMIOS PAGADOS DE MANERA ELECTRONICA" + " DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + ".xlsx").ToString();
+                    }
+
+                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Nombre);
+                }
+            }
+        }
+
         //NUEVO CODIGO PARA GENERAR XML DE LOS PREMIOS
         //GET: /Integration/AllocationNumbers
         [Authorize]
@@ -652,7 +741,9 @@ namespace Tickets.Controllers
                         allocationXML = new Models.XML.TicketAllocateXML()
                         {
                             RaffleId = allocation.RaffleId,
-                            RaffleName = allocation.Raffle.Name,
+                            //RaffleName = allocation.Raffle.Name,
+                            RaffleNomenclature = allocation.Raffle.Symbol + allocation.Raffle.Separator + allocation.Raffle.Id,
+                            RaffleName = allocation.Raffle.Symbol + allocation.Raffle.Separator + allocation.Raffle.Id + " " + allocation.Raffle.Name + " " + allocation.Raffle.DateSolteo.ToShortDateString(),
                             FractionPrice = allocation.Raffle.Prospect.Price,
                             TicketPrice = ((allocation.Raffle.Prospect.LeafFraction * allocation.Raffle.Prospect.LeafNumber) * allocation.Raffle.Prospect.Price),
                             RaffleDate = allocation.Raffle.DateSolteo.ToShortDateString(),
@@ -779,6 +870,8 @@ namespace Tickets.Controllers
                         {
                             RaffleDate = raffle.DateSolteo.ToShortDateString(),
                             RaffleId = raffle.Id,
+                            RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.Id,
+                            RaffleName = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
                             User = WebSecurity.CurrentUserName,
                             CreateDate = DateTime.Now.ToString(),
                             TicketAllocationNumbers = new List<Models.XML.TicketAllocationNumber>()
@@ -965,6 +1058,8 @@ namespace Tickets.Controllers
                         {
                             RaffleDate = raffle.DateSolteo.ToShortDateString(),
                             RaffleId = raffle.Id,
+                            RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.Id,
+                            RaffleName = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
                             User = WebSecurity.CurrentUserName,
                             CreateDate = DateTime.Now.ToString(),
                             TicketNumbers = new List<Models.XML.AwardTicketNumber>()

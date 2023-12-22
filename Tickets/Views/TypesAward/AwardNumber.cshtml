@@ -16,7 +16,7 @@
                                 <div class="col-lg-12">
                                     <select ng-required="true" class="form-control dropdown-select2" ng-model="awardNumber.RaffleId">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
-                                        <option ng-repeat="raffle in raffles" value="{{raffle.Id}}">{{raffle.Id}} - {{raffle.Name}}</option>
+                                        <option ng-repeat="raffle in raffles" value="{{raffle.Id}}">{{raffle.text}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -138,7 +138,7 @@
                                 <div class="form-group m-t-xs">
                                     <span class="col-lg-4 control-label">Sorteo:</span>
                                     <span class="col-lg-8">
-                                        <b>{{number.Allocation.RaffleId}} - {{number.Allocation.RaffleDesc}}</b>
+                                        <b>{{number.Allocation.RaffleDesc}}</b>
                                     </span>
                                 </div>
                             </fieldset>

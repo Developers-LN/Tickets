@@ -184,7 +184,9 @@ namespace Tickets.Controllers
                     s.Id,
                     CreateDate = s.CreateDate.ToString("dd/MM/yyyy"),
                     s.RaffleId,
-                    RaffleName = s.Raffle.Name
+                    raffleNomenclature = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.Id,
+                    //RaffleName = s.Raffle.Name
+                    RaffleName = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.Id + " " + s.Raffle.Name + " " + s.Raffle.DateSolteo.ToShortDateString()
                 }).ToList();
             }
 

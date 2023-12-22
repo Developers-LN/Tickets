@@ -20,8 +20,8 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
             <h3>
                 <b>
-                    RESUMEN DE ASIGNACIONES DEL SORTEO No. @Model.FirstOrDefault().RaffleId <br />
-                    Fecha del Sorteo @Model.FirstOrDefault().Raffle.DateSolteo.ToShortDateString()
+                    RESUMEN DE ASIGNACIONES DEL SORTEO <br />
+                    @Model.FirstOrDefault().Raffle.Symbol @Model.FirstOrDefault().Raffle.Separator @Model.FirstOrDefault().Raffle.Id @Model.FirstOrDefault().Raffle.Name @Model.FirstOrDefault().Raffle.DateSolteo.ToShortDateString()
                 </b>
             </h3>
 

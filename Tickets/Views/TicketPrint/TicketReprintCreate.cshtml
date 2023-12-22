@@ -17,7 +17,7 @@
                         <div class="col-lg-12">
                             <select ng-required="true" class="form-control dropdown-select2" ng-model="reprint.raffleId" ng-change="updateAllocations()" ng-if="allocationId == 0">
                                 <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
-                                <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.text}}</option>
                             </select>
                             <h4 ng-if="allocationId != 0"><label class="label label-lg label-info">{{allocation.raffleDesc}}</label></h4>
                         </div>

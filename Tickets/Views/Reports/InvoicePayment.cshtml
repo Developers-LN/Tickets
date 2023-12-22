@@ -75,22 +75,25 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
-            <b>DETALLE DE RECIBO DE PAGO A FACTURA DEL SORTEO NO.@Model.Invoice.Raffle.Id DE FECHA @Model.Invoice.Raffle.DateSolteo.ToShortDateString()</b>
+            <b>
+                DETALLE DE RECIBO DE PAGO A FACTURA DEL SORTEO <br />
+                @Model.Invoice.Raffle.Symbol @Model.Invoice.Raffle.Separator @Model.Invoice.Raffle.Id @Model.Invoice.Raffle.Name @Model.Invoice.Raffle.DateSolteo.ToShortDateString()
+            </b>
         </div>
         <div class="col-lg-6 no-padder">
             <div class="col-lg-12 no-padder text-left">
-                <b>Cliente: </b> #@Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+                <b>Cliente: </b> @Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
             </div>
             <div class="col-lg-12 no-padder text-left">
                 <b>Estado: </b> @context.Catalogs.FirstOrDefault(c => c.Id == Model.Invoice.PaymentStatu).NameDetail
             </div>
             <div class="col-lg-12 no-padder text-left">
-                <b>Factura: </b> #@Model.InvoiceId
+                <b>Factura: </b> @Model.InvoiceId
             </div>
         </div>
         <div class="col-lg-6 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>Recibo: </b>#@Model.Id
+                <b>Recibo: </b>@Model.Id
             </div>
             <div class="col-lg-12 no-padder text-right">
                 <b>Fecha de ingreso: </b>@Model.ReceiptDate.ToShortDateString()
@@ -284,22 +287,25 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
-            <b>DETALLE DE RECIBO DE PAGO A FACTURA DEL SORTEO NO.@Model.Invoice.Raffle.Id DE FECHA @Model.Invoice.Raffle.DateSolteo.ToShortDateString()</b>
+            <b>
+                DETALLE DE RECIBO DE PAGO A FACTURA DEL SORTEO <br />
+                @Model.Invoice.Raffle.Symbol @Model.Invoice.Raffle.Separator @Model.Invoice.Raffle.Id @Model.Invoice.Raffle.Name @Model.Invoice.Raffle.DateSolteo.ToShortDateString()
+            </b>
         </div>
         <div class="col-lg-6 no-padder">
             <div class="col-lg-12 no-padder text-left">
-                <b>Cliente: </b> #@Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+                <b>Cliente: </b> @Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
             </div>
             <div class="col-lg-12 no-padder text-left">
                 <b>Estado: </b> @context.Catalogs.FirstOrDefault(c => c.Id == Model.Invoice.PaymentStatu).NameDetail
             </div>
             <div class="col-lg-12 no-padder text-left">
-                <b>Factura: </b> #@Model.InvoiceId
+                <b>Factura: </b> @Model.InvoiceId
             </div>
         </div>
         <div class="col-lg-6 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>Recibo: </b>#@Model.Id
+                <b>Recibo: </b>@Model.Id
             </div>
             <div class="col-lg-12 no-padder text-right">
                 <b>Fecha de ingreso: </b>@Model.ReceiptDate.ToShortDateString()

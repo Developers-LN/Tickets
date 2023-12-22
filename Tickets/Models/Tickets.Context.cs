@@ -88,6 +88,7 @@ namespace Tickets.Models
         public DbSet<TaxReceiptNumbersHistory> TaxReceiptNumbersHistories { get; set; }
         public DbSet<Winner> Winners { get; set; }
         public DbSet<TicketAllocationNumber_Delete> TicketAllocationNumber_Delete { get; set; }
+        public DbSet<ElectronicAwardPayed> ElectronicAwardPayeds { get; set; }
     
         public virtual int procDelOverduelBill()
         {

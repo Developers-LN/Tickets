@@ -37,6 +37,7 @@ namespace Tickets.Models.XML
     {
         public int RaffleId { get; set; }
         public string RaffleDate { get; set; }
+        public string RaffleNomenclature { get; set; }
         public string RaffleName { get; set; }
         public decimal FractionPrice { get; set; }
         public decimal TicketPrice { get; set; }
@@ -86,6 +87,7 @@ namespace Tickets.Models.XML
     public class AwardNumbesXML
     {
         public int RaffleId { get; set; }
+        public string RaffleNomenclature { get; set; }
         public string RaffleName { get; set; }
         public string RaffleDate { get; set; }
         public string CreateDate { get; set; }

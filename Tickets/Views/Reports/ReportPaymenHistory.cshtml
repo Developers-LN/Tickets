@@ -9,11 +9,11 @@
     string adminName = config != null ? config.CreditosCobros : "";
     string adminCargo = config != null ? config.CreditosCobrosCargo : "";
 
-    var Efectivo = Tickets.Models.Enums.PaymentTypeTextEnum.Efectivo;
-    var Cheque = Tickets.Models.Enums.PaymentTypeTextEnum.Cheques;
-    var TargetaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.TarjetaDeCredito;
-    var NotaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.NotaDeCredito;
-    var DepTransf = Tickets.Models.Enums.PaymentTypeTextEnum.DepTransf;
+    //var Efectivo = Tickets.Models.Enums.PaymentTypeTextEnum.Efectivo;
+    //var Cheque = Tickets.Models.Enums.PaymentTypeTextEnum.Cheques;
+    //var TargetaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.TarjetaDeCredito;
+    //var NotaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.NotaDeCredito;
+    //var DepTransf = Tickets.Models.Enums.PaymentTypeTextEnum.DepTransf;
 }
 
 <style>
@@ -87,7 +87,7 @@
                 @{
                     var invoices = Model.GroupBy(i => i.RaffleId).Select(i => new
                     {
-                        raffelName = i.FirstOrDefault().RaffleId + " - " + i.FirstOrDefault().Raffle.Name,
+                        raffleName = i.FirstOrDefault().Raffle.Symbol + i.FirstOrDefault().Raffle.Separator + i.FirstOrDefault().Raffle.Id + "  " + i.FirstOrDefault().Raffle.Name,
                         clients = i.GroupBy(c => c.ClientId).Select(c => new
                         {
                             clientName = c.FirstOrDefault().ClientId + " - " + c.FirstOrDefault().Client.Name,
@@ -101,7 +101,7 @@
                 {
                     decimal totalRaffle = 0;
                     <tr>
-                        <th class="text-left" colspan="8">@raffle.raffelName</th>
+                        <th class="text-left" colspan="8">@raffle.raffleName</th>
                     </tr>
 
                     foreach (var client in raffle.clients.Where(i => i.invoices.Count() > 0))

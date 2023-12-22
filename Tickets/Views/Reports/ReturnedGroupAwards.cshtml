@@ -51,7 +51,10 @@
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACIÓN DE LA LOTERÍA NACIONAL</b><br />
-            <b>LISTADO DE NÚMEROS PREMIADOS DEVUELTOS PARA EL SORTEO No. @Model.FirstOrDefault().RaffleId</b><br />
+            <b>
+                LISTADO DE NÚMEROS PREMIADOS DEVUELTOS PARA EL SORTEO<br />
+                @RaffleData.Symbol @RaffleData.Separator @RaffleData.Id @RaffleData.Name
+            </b><br />
             FECHA DEL SORTEO: @RaffleData.DateSolteo.ToLongDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
@@ -116,7 +119,6 @@
             </tfoot>
         </table>
     </div>
-
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
         <b>@adminName</b><br />
         <span>@adminCargo</span>

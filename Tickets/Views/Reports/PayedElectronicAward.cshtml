@@ -1,0 +1,175 @@
+﻿@model List<Tickets.Models.ElectronicAwardPayed>
+@{
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "Premios pagados de manera electrónica";
+
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
+    string adminName = config != null ? config.LoteryAdmin : "";
+    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+    var first = Model.FirstOrDefault();
+}
+
+<style>
+    .col-lg-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .col-lg-4 {
+        width: 33.333%;
+        float: left;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .no-padder {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+</style>
+
+<div class="col-lg-12">
+    <div class="col-lg-12 no-padder text-center">
+        <div class="col-lg-12 no-padder text-center" style="margin-top: 50px;">
+            <img style="height:65px; width:auto; margin-bottom:5px;" src="~/Images/logo.png" />
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>MINISTERIO DE HACIENDA</b>
+        </div>
+        <div class="col-lg-12 no-padder text-center">
+            <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder">
+        <div class="col-lg-6 no-padder text-left">
+
+        </div>
+        <div class="col-lg-6 no-padder text-right">
+            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+        </div>
+    </div>
+    <div>
+        <div class="col-lg-12 no-padder">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">NO. SORTEO</th>
+                        <th class="text-center">NUMERO</th>
+                        <th class="text-center">NUMERO DE CONTROL</th>
+                        <th class="text-center">FRACCIONES DESDE</th>
+                        <th class="text-center">FRACCIONES HASTA</th>
+                        <th class="text-center">NO. TICKET</th>
+                        <th class="text-center">PREMIO</th>
+                        <th class="text-center">TOTAL PAGADO</th>
+                        <th class="text-center">FECHA DE PAGO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        decimal totalGeneral = 0;
+                        var clients = Model.GroupBy(i => i.ClientId).Select(s => s.Key);
+                    }
+                    @foreach (var client in clients)
+                    {
+                        var payedAward = Model.AsEnumerable().Where(w => w.ClientId == client).ToList();
+                        decimal totalPayedByClient = 0;
+
+                        foreach (var item in payedAward)
+                        {
+                            totalPayedByClient += item.Payed.Value;
+                            totalGeneral += item.Payed.Value;
+                            <tr>
+                                <td class="text-center">@item.RaffleId</td>
+                                <td class="text-center">@item.Number</td>
+                                <td class="text-center">@item.ControlNumber</td>
+                                <td class="text-center">@item.FractionFrom</td>
+                                <td class="text-center">@item.FractionTo</td>
+                                <td class="text-center">@item.NoTicket</td>
+                                <td class="text-center">@item.AwardName</td>
+                                <td class="text-center">@item.Payed</td>
+                                <td class="text-center">@item.PayedDate.Value.ToString("dd/MM/yyyy hh:mm:ss tt")</td>
+                            </tr>
+                        }
+                        <tr class="total">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right" colspan="2">Total pagado: <strong> @((totalPayedByClient).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                            <td></td>
+                        </tr>
+                    }
+                    <tr class="total">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right" colspan="2">Total general pagado: <strong> @((totalGeneral).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-center">
+    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Firma cajero
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Recibido por Btes. Pdos.
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Perforado
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-center" style="margin-top:15px;">
+    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Firma enc. de caja
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Revisado por
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+        <div class="col-lg-12 no-padder text-center">
+            ______________________________
+        </div>
+        Autorizado por
+    </div>
+</div>

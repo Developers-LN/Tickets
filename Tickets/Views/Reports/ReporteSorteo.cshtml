@@ -25,6 +25,9 @@
         s.Key.NetSales
     }).ToList();
 
+    var listRaffles = Raffles.Select(s => s.RaffleId).ToList();
+    var RaffleData = context.Raffles.Where(w => listRaffles.Contains(w.Id)).ToList();
+
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 }
 
@@ -117,7 +120,7 @@
 
                         <tr>
                             <td class="text-center">@row</td>
-                            <td class="text-left">@raffle.RaffleId - @raffle.RaffleName</td>
+                            <td class="text-left">@RaffleData.FirstOrDefault(f => f.Id == raffle.RaffleId).Symbol @RaffleData.FirstOrDefault(f => f.Id == raffle.RaffleId).Separator @RaffleData.FirstOrDefault(f => f.Id == raffle.RaffleId).Id @RaffleData.FirstOrDefault(f => f.Id == raffle.RaffleId).Name</td>
                             <td class="text-center">@raffle.RaffleDate</td>
                             <td class="text-right">@(raffle.GrossSales.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                             <td class="text-right">@(raffle.NetSales.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>

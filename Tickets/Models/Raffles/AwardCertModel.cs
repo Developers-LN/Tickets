@@ -14,6 +14,9 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "raffleId")]
         public int RaffleId { get; set; }
 
+        [JsonProperty(PropertyName = "raffleNomenclature")]
+        public string RaffleNomenclature { get; set; }
+
         [JsonProperty(PropertyName = "controlNumber")]
         public long ControlNumber { get; set; }
 

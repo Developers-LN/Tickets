@@ -53,6 +53,14 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "startElectronicSalesLong")]
         public long StartElectronicSalesLong { get; set; }
 
+        [JsonProperty(PropertyName = "symbol")]
+        public string Symbol { get; set; }
+
+        public string RaffleNomenclature { get; set; }
+
+        [JsonProperty(PropertyName = "raffleDesc")]
+        public string RaffleDesc { get; set; }
+
         [JsonProperty(PropertyName = "commodityId")]
         public int CommodityId { get; set; }
 
@@ -107,7 +115,9 @@ namespace Tickets.Models.Raffles
                 RaffleSequence = raffle.RaffleSequence,
                 EndAllocationDate = raffle.EndAllocationDate.Value,
                 EndReturnDate = raffle.EndReturnDate,
-                Name = raffle.Name,
+                //Name = raffle.Name,
+                RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.Id,
+                Name = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
                 RaffleDate = raffle.DateSolteo,
                 StartReturnDate = raffle.StartReturnDate,
                 Statu = raffle.Statu,
@@ -152,7 +162,11 @@ namespace Tickets.Models.Raffles
                 Statu = raffle.Statu,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == raffle.Statu).NameDetail,
                 TicketProspectId = raffle.ProspectId,
-                TicketProspectDesc = context.Prospects.FirstOrDefault(p => p.Id == raffle.ProspectId).Name
+                TicketProspectDesc = context.Prospects.FirstOrDefault(p => p.Id == raffle.ProspectId).Name,
+
+                Symbol = raffle.Symbol,
+                RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.Id,
+                RaffleDesc = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString()
             };
             var prospectModel = new ProspectModel();
             if (hasTicketProspect == true)
@@ -229,6 +243,8 @@ namespace Tickets.Models.Raffles
                 r.RaffleSequence,
                 r.Name,
                 r.Prospect.Production,
+                RaffleNomenclature = r.Symbol + r.Separator + r.Id,
+                RaffleDesc = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                 ProspectName = r.Prospect.Name,
                 FractionCount = r.Prospect.LeafFraction * r.Prospect.LeafNumber
             }).ToList();
@@ -274,7 +290,9 @@ namespace Tickets.Models.Raffles
             {
                 awardList = raffle.Prospect.Awards.Where(a => typesAwardCreation.HasValue == false || a.TypesAward.Creation == (int)typesAwardCreation.Value).Select(a => new { a.Id, a.Name }),
                 RaffleId = raffle.Id,
-                RaffleName = raffle.Name,
+                //RaffleName = raffle.Name,
+                RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.Id,
+                RaffleName = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
                 ProspectName = raffle.Prospect.Name,
                 raffleAwards = raffle.RaffleAwards.Where(ra => raffleAwardType.HasValue == false || ra.RaffleAwardType == (int)raffleAwardType.Value).Select(r => new
                 {
@@ -332,6 +350,8 @@ namespace Tickets.Models.Raffles
                         raffle.DateSolteo = model.RaffleDate;
                         raffle.DueRaffleDate = model.DueRaffleDate;
                         raffle.StartElectronicSales = model.StartElectronicSales;
+                        raffle.Symbol = model.Symbol != null ? model.Symbol : null;
+                        raffle.Separator = model.Symbol != null ? "-" : null;
 
                         if (model.Id == 0)
                         {
@@ -434,7 +454,8 @@ namespace Tickets.Models.Raffles
                 {
                     value = r.Id,
                     raffleSequence = r.RaffleSequence,
-                    text = r.Name
+                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                    text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString()
                 }).ToList();
 
             return new RequestResponseModel()
@@ -455,11 +476,11 @@ namespace Tickets.Models.Raffles
                 {
                     value = r.Id,
                     raffleSequence = r.RaffleSequence,
-                    text = r.Name + " " + r.DateSolteo.ToShortDateString(),
+                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                    text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                     ticketProspectId = r.ProspectId,
                     //poolProspectId = r.PoolsProspectId,
                     isActive = DateTime.Now <= r.EndAllocationDate
-
                 }).ToList();
 
             return new RequestResponseModel()
@@ -480,7 +501,9 @@ namespace Tickets.Models.Raffles
                 {
                     value = r.Id,
                     raffleSequence = r.RaffleSequence,
-                    text = r.Name
+                    //text = r.Name
+                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                    text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                 }).ToList();
 
             return new RequestResponseModel()
@@ -501,7 +524,7 @@ namespace Tickets.Models.Raffles
                 {
                     value = r.Id,
                     raffleSequence = r.RaffleSequence,
-                    text = r.Name + " " + r.DateSolteo.ToShortDateString(),
+                    text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                     maxFraction = r.Prospect.LeafFraction * r.Prospect.LeafNumber,
                     production = r.Prospect.Production
                 }).ToList();
@@ -524,7 +547,8 @@ namespace Tickets.Models.Raffles
                 {
                     value = r.Id,
                     raffleSequence = r.RaffleSequence,
-                    text = r.Name + " " + r.DateSolteo.ToShortDateString(),
+                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                    text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                     maxFraction = r.Prospect.LeafFraction * r.Prospect.LeafNumber,
                     production = r.Prospect.Production
                 }).ToList();

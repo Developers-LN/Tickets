@@ -62,7 +62,8 @@ namespace Tickets.Controllers
                             clientDiscount = Allocation.Client.Discount,
                             allocateDate = Allocation.CreateDate.ToString("dd/MM/yyyy"),
                             raffleId = Allocation.Raffle.Id,
-                            raffleName = Allocation.Raffle.Name,
+                            //raffleName = Allocation.Raffle.Name,
+                            raffleName = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.Id + " " + Allocation.Raffle.Name + " " + Allocation.Raffle.DateSolteo.ToShortDateString(),
                             electronicSalesByDate = ElectronicTicketsList.GroupBy(g => g.SaleDate.ToShortDateString()).Select(s => new
                             {
                                 date = s.Key,
@@ -87,7 +88,9 @@ namespace Tickets.Controllers
                             clientDiscount = Allocation.Client.Discount,
                             allocateDate = Allocation.CreateDate.ToString("dd/MM/yyyy"),
                             raffleId = Allocation.Raffle.Id,
-                            raffleName = Allocation.Raffle.Name,
+                            raffleNomenclature = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.Id,
+                            //raffleName = Allocation.Raffle.Name,
+                            raffleName = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.Id + " " + Allocation.Raffle.Name + " " + Allocation.Raffle.DateSolteo.ToShortDateString(),
                             electronicSalesByDate = 0
                         }
                     };
@@ -110,7 +113,9 @@ namespace Tickets.Controllers
                         clientDiscount = Allocation.Client.Discount,
                         allocateDate = Allocation.CreateDate.ToString("dd/MM/yyyy"),
                         raffleId = Allocation.Raffle.Id,
-                        raffleName = Allocation.Raffle.Name,
+                        //raffleName = Allocation.Raffle.Name,
+                        raffleNomenclature = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.Id,
+                        raffleName = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.Id + " " + Allocation.Raffle.Name + " " + Allocation.Raffle.DateSolteo.ToShortDateString(),
                         electronicSalesByDate = ElectronicTicketsList.GroupBy(g => g.PrintedDate.Value.ToShortDateString()).Select(s => new
                         {
                             date = s.Key,

@@ -36,7 +36,6 @@
                 }
                 if (raffleResponse[1] == 'success') {
                     $scope.raffle = raffleResponse[0].object;
-                    //console.log($scope.raffle);
                     if ($stateParams.raffleId > 0) {
                         $scope.raffle.raffleDate = new Date($scope.raffle.raffleDateLong);
                         $scope.raffle.startReturnDate = new Date($scope.raffle.startReturnDateLong);

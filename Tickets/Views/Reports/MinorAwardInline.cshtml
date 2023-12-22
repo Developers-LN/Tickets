@@ -87,29 +87,30 @@
     <div class="col-lg-12 no-padder " style="text-align:center">
         MINISTERIO DE HACIENDA<br />
         ADMINSTRACION DE LA LOTERIA NACIONAL<br />
-        LISTA DE PREMIOS MENORES DEL SORTEO @Model.Id EN FECHA @Model.DateSolteo.ToLongDateString()<br />
+        LISTA DE PREMIOS MENORES DEL SORTEO @Model.Symbol @Model.Separator @Model.Id EN FECHA @Model.DateSolteo.ToLongDateString()<br />
         ORDENADOS EN ORDEN ASCENDENTE<br />
     </div>
     <!-- PREMIOS MENORES DE 500.00 C/U-->
-    <div class="col-lg-12 no-padder min-award" style="width:99%;">
-        @{
-            var minAward = context.TypesAwards.FirstOrDefault(t => t.Id == (int)Tickets.Models.Enums.AwardTypeEnum.Minors);
-            var lastUnit = "";
-            var lastBall = context.RaffleAwards.FirstOrDefault(r => r.RaffleId == Model.Id && r.Award.TypesAwardId == (int)Tickets.Models.Enums.AwardTypeEnum.LastBall);
-        }
-        <div class="col-lg-12 no-padder title color">
-            @*ERROR EN ESTA LINEA*@
-            @minAward.Name DE @Model.Prospect.Awards.Where(p => p.TypesAwardId == (int)Tickets.Models.Enums.AwardTypeEnum.Minors).FirstOrDefault().Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))
-        </div>
-        <div class="col-lg-12 no-padder">
-            <ul class="column">
-                @foreach (var award in Model.RaffleAwards.Where(a => a.Award.TypesAward.Id == minAward.Id && a.ControlNumber != lastBall.ControlNumber).OrderBy(a => a.ControlNumber))
-                {
-                    var currentUnit = Tickets.Models.Utils.GetNumberUnit(award.ControlNumber);
-                    if (currentUnit != lastUnit && currentUnit != "")
+    @if (Model.Prospect.Awards.Any(p => p.TypesAwardId == (int)Tickets.Models.Enums.AwardTypeEnum.Minors))
+    {
+        <div class="col-lg-12 no-padder min-award" style="width:99%;">
+            @{
+                var minAward = context.TypesAwards.FirstOrDefault(t => t.Id == (int)Tickets.Models.Enums.AwardTypeEnum.Minors);
+                var lastUnit = "";
+                var lastBall = context.RaffleAwards.FirstOrDefault(r => r.RaffleId == Model.Id && r.Award.TypesAwardId == (int)Tickets.Models.Enums.AwardTypeEnum.LastBall);
+            }
+            <div class="col-lg-12 no-padder title color">
+                @minAward.Name DE @Model.Prospect.Awards.Where(p => p.TypesAwardId == (int)Tickets.Models.Enums.AwardTypeEnum.Minors).FirstOrDefault().Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))
+            </div>
+            <div class="col-lg-12 no-padder">
+                <ul class="column">
+                    @foreach (var award in Model.RaffleAwards.Where(a => a.Award.TypesAward.Id == minAward.Id && a.ControlNumber != lastBall.ControlNumber).OrderBy(a => a.ControlNumber))
                     {
-                        lastUnit = currentUnit;
-                        <li style="border-top: black 2px dotted;
+                        var currentUnit = Tickets.Models.Utils.GetNumberUnit(award.ControlNumber);
+                        if (currentUnit != lastUnit && currentUnit != "")
+                        {
+                            lastUnit = currentUnit;
+                            <li style="border-top: black 2px dotted;
                         border-bottom: black 2px dotted;
                         /*padding-top: 7px;
                         padding-bottom: 5px;*/
@@ -118,7 +119,8 @@
                     }
                     <li>@award.ControlNumber</li>
                 }
-            </ul>
+                </ul>
+            </div>
         </div>
-    </div>
+    }
 </div>

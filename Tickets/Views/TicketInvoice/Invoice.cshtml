@@ -16,7 +16,7 @@
                                 <div class="col-lg-12" ng-if="invoice.id == 0">
                                     <select ng-required="true" class="form-control dropdown-select2" ng-model="invoice.raffleId" ng-change="updateAllocations()">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
-                                        <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.value}} - {{raffle.text}}</option>
+                                        <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.text}}</option>
                                     </select>
                                 </div>
                                 <div class="col-lg-12" ng-if="invoice.id > 0">

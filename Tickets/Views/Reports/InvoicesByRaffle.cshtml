@@ -4,7 +4,7 @@
     var checkInvoiceId = ViewBag.invoiceId == null ? 0 : (int)ViewBag.invoiceId;
 
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    if (checkClientId == 0 && checkInvoiceId == 0)
+    if (checkClientId == 0 || checkInvoiceId == 0)
     {
         ViewBag.Title = "NUMEROS FACTURADOS CORRESPONDIENTES AL SORTEO NO. " + Model.Id;
     }
@@ -65,9 +65,12 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            @if (checkClientId == 0 && checkInvoiceId == 0)
+            @if (checkClientId == 0 || checkInvoiceId == 0)
             {
-                <b>DETALLE DE LA FACTURAS SORTEO NO. @Model.Id DE FECHA @Model.DateSolteo.ToShortDateString()</b>
+                <b>
+                    DETALLE DE LA FACTURAS SORTEO <br />
+                    @Model.Symbol @Model.Separator @Model.Id @Model.Name @Model.DateSolteo.ToShortDateString()
+                </b>
             }
             else
             {
@@ -77,7 +80,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
             <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
             <b>HORA: </b> @DateTime.Now.ToShortTimeString() <br />
-            <b>NUMERO DEL SORTEO: </b> @Model.Id
+            <b>NUMERO DEL SORTEO: </b> @Model.Symbol @Model.Separator @Model.Id
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder">

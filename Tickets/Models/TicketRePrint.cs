@@ -25,6 +25,7 @@ namespace Tickets.Models
         public int Statu { get; set; }
         public System.DateTime CreateDate { get; set; }
         public int CreateUser { get; set; }
+        public Nullable<int> TicketRePrintSequence { get; set; }
     
         public virtual Raffle Raffle { get; set; }
         public virtual ICollection<TicketRePrintNumber> TicketRePrintNumbers { get; set; }

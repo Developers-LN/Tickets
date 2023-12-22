@@ -181,11 +181,22 @@ namespace Tickets.Controllers
                 //    Id = r.Id,
                 //    RaffleName = r.Name
                 //}).ToList();
-                var RaffleList = context.Raffles.Select(r => new
+                var RaffleList1 = context.Raffles.Select(r => new
                 {
                     id = r.Id,
-                    text = r.RaffleSequence + " - " + r.Name
+                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                    text = r.Symbol + r.Separator + r.Id + " " + r.Name,
+                    r.DateSolteo
+                    //text = r.RaffleSequence + " - " + r.Name
                 }).ToList();
+
+                var RaffleList = RaffleList1.Select(s => new
+                {
+                    s.id,
+                    s.raffleNomenclature,
+                    text = s.text + " " + s.DateSolteo.ToShortDateString()
+                }).ToList();
+
                 return new JsonResult
                 {
                     Data = RaffleList,
@@ -193,7 +204,6 @@ namespace Tickets.Controllers
                 };
             }
         }
-
 
         private object GetCatalogObject(Catalog catalog)
         {

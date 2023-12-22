@@ -1,6 +1,6 @@
 @{
     Layout = null;
-    ViewBag.Title = "Certificación de Devoluciones Premiadas";
+    ViewBag.Title = "Certificación de devoluciones premiadas";
 }
 
 <div class="col-lg-12 no-padder" ng-controller="ReturnedAwardController" ng-init="app.title = '@(ViewBag.Title)'">
@@ -14,7 +14,7 @@
                             <div class="col-lg-12">
                                 <select class="form-control dropdown-select2" ng-model="RaffleId" ng-change="updateDelivered()">
                                     <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
-                                    <option ng-repeat="raffle in raffles" value="{{raffle.id}}">{{raffle.id}} - {{raffle.name}}</option>
+                                    <option ng-repeat="raffle in raffles" value="{{raffle.id}}">{{raffle.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="returned in returneds">
-                                <td>{{returned.RaffleId}} - {{returned.RaffleDesc}}</td>
+                                <td>{{returned.RaffleDesc}}</td>
                                 <td>{{returned.ClientDesc}}</td>
                                 <td>{{addZeroToNumber((returned.Production - 1), returned.Number)}}</td>
                                 <td>{{returned.Fractions}}</td>

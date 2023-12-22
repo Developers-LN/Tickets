@@ -11,7 +11,7 @@
                 <div class="col-lg-12 well no-padder">
                     <fieldset>
                         <div class="col-lg-12 no-padder">
-                            <div class="col-lg-4">Número de factura: <b>#{{invoiceId}}</b></div>
+                            <div class="col-lg-4">Número de factura: <b>{{invoiceId}}</b></div>
                             <div class="col-lg-4">Fecha de creación: <b>{{invoiceDate}}</b></div>
                             <div class="col-lg-4">Cliente: <b>{{clientId}} - {{clientName}}</b></div>
                         </div>
@@ -38,7 +38,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="payments in paymentsHistory">
-                                <td class="text-center">#{{payments.Id}}</td>
+                                <td class="text-center">{{payments.Id}}</td>
                                 <td class="text-center">{{payments.receiptType}}</td>
                                 <td class="text-center">{{payments.paymentDate}}</td>
                                 <td class="text-center">

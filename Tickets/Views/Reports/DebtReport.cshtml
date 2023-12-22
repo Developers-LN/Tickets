@@ -7,7 +7,7 @@
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.CreditosCobros : "";
     string adminCargo = config != null ? config.CreditosCobrosCargo : "";
-    var raffleId = Model.FirstOrDefault().RaffleId;
+    var RaffleData = context.Raffles.Where(w => w.Id == Model.FirstOrDefault().RaffleId).FirstOrDefault();
 }
 
 <style>
@@ -55,7 +55,10 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <b>REPORTE DE DEUDAS PARA EL SORTEO NO. @raffleId</b>
+            <b>
+                REPORTE DE DEUDAS PARA EL SORTEO <br />
+                @RaffleData.Symbol @RaffleData.Separator @RaffleData.Id @RaffleData.Name @RaffleData.DateSolteo.ToShortDateString()
+            </b>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
             <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
@@ -68,7 +71,7 @@
                 <tr>
                     <th class="text-center">CLIENTE</th>
                     <th class="text-center">LOTE</th>
-                    <th class="text-center">PAGADAS ?</th>
+                    <th class="text-center">PAGADAS</th>
                     <th class="text-center">FRACCIONES PREMIADAS</th>
                     <th class="text-right">TOTAL</th>
                 </tr>

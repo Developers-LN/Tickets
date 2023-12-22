@@ -19,7 +19,10 @@ namespace Tickets.Models.Ticket
 		[JsonProperty(PropertyName = "clientDesc")]
 		public string ClientDesc { get; set; }
 
-		[JsonProperty(PropertyName = "fractionQuantity")]
+        [JsonProperty(PropertyName = "raffleNomenclature")]
+        public string RaffleNomenclature { get; set; }
+
+        [JsonProperty(PropertyName = "fractionQuantity")]
 		public int FractionQuantity { get; set; }
 
 		[JsonProperty(PropertyName = "allocationFractionQuantity")]
@@ -217,8 +220,10 @@ namespace Tickets.Models.Ticket
 			{
 				ClientId = electronicTicketSale.ClientId,
 				ClientDesc = electronicTicketSale.Client.Name,
-				RaffleDesc = electronicTicketSale.Raffle.Name,
-				RaffleId = electronicTicketSale.Raffle.Id,
+                //RaffleDesc = electronicTicketSale.Raffle.Name,
+                RaffleNomenclature = electronicTicketSale.Raffle.Symbol + electronicTicketSale.Raffle.Separator + electronicTicketSale.Raffle.Id,
+                RaffleDesc = electronicTicketSale.Raffle.Symbol + electronicTicketSale.Raffle.Separator + electronicTicketSale.Raffle.Id + " " + electronicTicketSale.Raffle.Name + " " + electronicTicketSale.Raffle.DateSolteo.ToShortDateString(),
+                RaffleId = electronicTicketSale.Raffle.Id,
 				RaffleSequence = electronicTicketSale.Raffle.RaffleSequence,
 				AllocationId = (int)electronicTicketSale.TicketAllocationId
 			};

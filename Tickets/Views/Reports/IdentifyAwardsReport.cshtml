@@ -84,13 +84,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @{
-
-                    }
                     @foreach (var raffle in Model.Where(w => w.Statu == (int)Tickets.Models.Enums.RaffleStatusEnum.Generated))
                     {
                         var clients = context.Clients.Where(w => (w.Statu == (int)Tickets.Models.Enums.ClientStatuEnum.Approbed && w.IdentifyBaches.Count() > 0) && (clientId == 0 || w.Id == clientId)).ToList();
-                        var raffleName = raffle.Id + " - " + raffle.Name;
+                        var raffleName = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString();
                         <tr>
                             <th colspan="8" class="text-left">@raffleName</th>
                         </tr>
@@ -134,7 +131,6 @@
                                             price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
                                             total = (number.FractionTo - number.FractionFrom + 1) * price;
                                         }
-
                                         //var total = (number.FractionTo - number.FractionFrom + 1) * price;
                                         //totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                         <tr>
@@ -162,8 +158,6 @@
                             }
                         }
                     }
-
-
                 </tbody>
             </table>
         </div>

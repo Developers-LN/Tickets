@@ -169,6 +169,23 @@
           <Property Name="TownId" Type="int" Nullable="false" />
           <Property Name="ProvinceId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="ElectronicAwardPayed">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Number" Type="varchar" MaxLength="50" />
+          <Property Name="ControlNumber" Type="varchar" MaxLength="50" />
+          <Property Name="FractionFrom" Type="int" />
+          <Property Name="NoTicket" Type="int" />
+          <Property Name="RaffleId" Type="int" />
+          <Property Name="AwardName" Type="varchar" MaxLength="100" />
+          <Property Name="Payed" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ClientId" Type="int" />
+          <Property Name="PayedDate" Type="datetime" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="FractionTo" Type="int" />
+        </EntityType>
         <EntityType Name="ElectronicTicketSales">
           <Key>
             <PropertyRef Name="Id" />
@@ -731,6 +748,7 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <Property Name="Statu" Type="int" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="CreateUser" Type="int" Nullable="false" />
+          <Property Name="TicketRePrintSequence" Type="int" />
         </EntityType>
         <EntityType Name="TicketRePrintNumber">
           <Key>
@@ -1265,6 +1283,18 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ClientId">
+          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="ElectronicAwardPayed" Type="Self.ElectronicAwardPayed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ElectronicAwardPayed">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_DistTown_Town">
           <End Role="Town" Type="Self.Town" Multiplicity="1" />
           <End Role="DistTown" Type="Self.DistTown" Multiplicity="*" />
@@ -1684,6 +1714,18 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
             </Principal>
             <Dependent Role="IdentifyBachPayment">
               <PropertyRef Name="IdentifyBachId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RaffleId">
+          <End Role="Raffle" Type="Self.Raffle" Multiplicity="0..1" />
+          <End Role="ElectronicAwardPayed" Type="Self.ElectronicAwardPayed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Raffle">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ElectronicAwardPayed">
+              <PropertyRef Name="RaffleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2309,6 +2351,7 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Costos" EntityType="Self.Costos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DistTown" EntityType="Self.DistTown" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ElectronicAwardPayed" EntityType="Self.ElectronicAwardPayed" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ElectronicTicketSales" EntityType="Self.ElectronicTicketSales" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IdentifyBach" EntityType="Self.IdentifyBach" Schema="dbo" store:Type="Tables" />
@@ -2483,6 +2526,10 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             <End Role="User" EntitySet="User" />
             <End Role="Client" EntitySet="Client" />
           </AssociationSet>
+          <AssociationSet Name="FK_ClientId" Association="Self.FK_ClientId">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ElectronicAwardPayed" EntitySet="ElectronicAwardPayed" />
+          </AssociationSet>
           <AssociationSet Name="FK_DistTown_Town" Association="Self.FK_DistTown_Town">
             <End Role="Town" EntitySet="Town" />
             <End Role="DistTown" EntitySet="DistTown" />
@@ -2622,6 +2669,10 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <AssociationSet Name="FK_RaffleAwardPayment_IdentifyBach" Association="Self.FK_RaffleAwardPayment_IdentifyBach">
             <End Role="IdentifyBach" EntitySet="IdentifyBach" />
             <End Role="IdentifyBachPayment" EntitySet="IdentifyBachPayment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RaffleId" Association="Self.FK_RaffleId">
+            <End Role="Raffle" EntitySet="Raffle" />
+            <End Role="ElectronicAwardPayed" EntitySet="ElectronicAwardPayed" />
           </AssociationSet>
           <AssociationSet Name="FK_ReceiptPayment_Cash" Association="Self.FK_ReceiptPayment_Cash">
             <End Role="Cash" EntitySet="Cash" />
@@ -3379,6 +3430,15 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             <End Role="TicketAllocation" EntitySet="TicketAllocations" />
             <End Role="TicketAllocationNumber_Delete" EntitySet="TicketAllocationNumber_Delete" />
           </AssociationSet>
+          <EntitySet Name="ElectronicAwardPayeds" EntityType="TicketsModel.ElectronicAwardPayed" />
+          <AssociationSet Name="FK_ClientId" Association="TicketsModel.FK_ClientId">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="ElectronicAwardPayed" EntitySet="ElectronicAwardPayeds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RaffleId" Association="TicketsModel.FK_RaffleId">
+            <End Role="Raffle" EntitySet="Raffles" />
+            <End Role="ElectronicAwardPayed" EntitySet="ElectronicAwardPayeds" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Agency">
           <Key>
@@ -3562,6 +3622,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="ControlNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ElectronicTicketSales" Relationship="TicketsModel.FK_ElectronicTicketSales_Client" FromRole="Client" ToRole="ElectronicTicketSale" />
           <Property Name="Catalogo_Id" Type="Int32" />
+          <NavigationProperty Name="ElectronicAwardPayeds" Relationship="TicketsModel.FK_ClientId" FromRole="Client" ToRole="ElectronicAwardPayed" />
         </EntityType>
         <EntityType Name="DistTown">
           <Key>
@@ -3923,6 +3984,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="StartElectronicSales" Type="DateTime" Precision="3" />
           <NavigationProperty Name="TicketAllocationNumber_Delete" Relationship="TicketsModel.FK_TicketAllocationNumber_Delete_Raffle" FromRole="Raffle" ToRole="TicketAllocationNumber_Delete" />
           <Property Name="RaffleSequence" Type="Int32" />
+          <NavigationProperty Name="ElectronicAwardPayeds" Relationship="TicketsModel.FK_RaffleId" FromRole="Raffle" ToRole="ElectronicAwardPayed" />
         </EntityType>
         <EntityType Name="ReceiptPayment">
           <Key>
@@ -4118,6 +4180,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="CreateUser" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Raffle" Relationship="TicketsModel.FK_TicketRePrint_Raffle" FromRole="TicketRePrint" ToRole="Raffle" />
           <NavigationProperty Name="TicketRePrintNumbers" Relationship="TicketsModel.FK_TicketRePrintNumber_TicketRePrint" FromRole="TicketRePrint" ToRole="TicketRePrintNumber" />
+          <Property Name="TicketRePrintSequence" Type="Int32" />
         </EntityType>
         <EntityType Name="TicketRePrintNumber">
           <Key>
@@ -5915,6 +5978,49 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ElectronicAwardPayed">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ControlNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FractionFrom" Type="Int32" />
+          <Property Name="NoTicket" Type="Int32" />
+          <Property Name="RaffleId" Type="Int32" />
+          <Property Name="AwardName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Payed" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ClientId" Type="Int32" />
+          <NavigationProperty Name="Client" Relationship="TicketsModel.FK_ClientId" FromRole="ElectronicAwardPayed" ToRole="Client" />
+          <NavigationProperty Name="Raffle" Relationship="TicketsModel.FK_RaffleId" FromRole="ElectronicAwardPayed" ToRole="Raffle" />
+          <Property Name="PayedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="FractionTo" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_ClientId">
+          <End Type="TicketsModel.Client" Role="Client" Multiplicity="0..1" />
+          <End Type="TicketsModel.ElectronicAwardPayed" Role="ElectronicAwardPayed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ElectronicAwardPayed">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RaffleId">
+          <End Type="TicketsModel.Raffle" Role="Raffle" Multiplicity="0..1" />
+          <End Type="TicketsModel.ElectronicAwardPayed" Role="ElectronicAwardPayed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Raffle">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ElectronicAwardPayed">
+              <PropertyRef Name="RaffleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -6533,6 +6639,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="TicketRePrints">
             <EntityTypeMapping TypeName="TicketsModel.TicketRePrint">
               <MappingFragment StoreEntitySet="TicketRePrint">
+                <ScalarProperty Name="TicketRePrintSequence" ColumnName="TicketRePrintSequence" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Statu" ColumnName="Statu" />
@@ -6869,6 +6976,24 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
                 <ScalarProperty Name="Invoiced" ColumnName="Invoiced" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
                 <ScalarProperty Name="Id_Origin" ColumnName="Id_Origin" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ElectronicAwardPayeds">
+            <EntityTypeMapping TypeName="TicketsModel.ElectronicAwardPayed">
+              <MappingFragment StoreEntitySet="ElectronicAwardPayed">
+                <ScalarProperty Name="FractionTo" ColumnName="FractionTo" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="PayedDate" ColumnName="PayedDate" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="Payed" ColumnName="Payed" />
+                <ScalarProperty Name="AwardName" ColumnName="AwardName" />
+                <ScalarProperty Name="RaffleId" ColumnName="RaffleId" />
+                <ScalarProperty Name="NoTicket" ColumnName="NoTicket" />
+                <ScalarProperty Name="FractionFrom" ColumnName="FractionFrom" />
+                <ScalarProperty Name="ControlNumber" ColumnName="ControlNumber" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

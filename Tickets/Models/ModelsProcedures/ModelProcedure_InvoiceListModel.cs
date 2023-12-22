@@ -16,6 +16,7 @@ namespace Tickets.Models.ModelsProcedures
         public decimal totalPayer { get; set; }
         public int PaymentStatu { get; set; }
         public string InvoiceDate { get; set; }
+        public string Nomenclatura { get; set; }
         public string xpiredDate { get; set; }
         public string PaymentStatuDesc { get; set; }
 	}

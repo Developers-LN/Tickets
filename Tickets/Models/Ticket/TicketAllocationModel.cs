@@ -29,6 +29,8 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "raffleDesc")]
         public string RaffleDesc { get; set; }
 
+        public string RaffleNomenclature { get; set; }
+
         [JsonProperty(PropertyName = "typeId")]
         public int TypeId { get; set; }
 
@@ -226,7 +228,9 @@ namespace Tickets.Models.Ticket
                 ticket.Id,
                 ticket.RaffleId,
                 raffleSequence = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).RaffleSequence,
-                RaffleDesc = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).Name,
+                //RaffleDesc = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).Name,
+                RaffleNomenclature = ticket.Raffle.Symbol + ticket.Raffle.Separator + ticket.Raffle.Id,
+                RaffleDesc = ticket.Raffle.Symbol + ticket.Raffle.Separator + ticket.Raffle.Id + " " + ticket.Raffle.Name + " " + ticket.Raffle.DateSolteo.ToShortDateString(),
                 RaffleDate = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).DateSolteo.ToUnixTime(),
                 ticket.ClientId,
                 ClientDesc = context.Clients.FirstOrDefault(c => c.Id == ticket.ClientId).Name,
@@ -369,7 +373,9 @@ namespace Tickets.Models.Ticket
                 AllocationSequence = model.AllocationSequence,
                 ClientId = model.ClientId,
                 ClientDesc = client.Name,
-                RaffleDesc = model.Raffle.Id + " - " + raffle.Name,
+                //RaffleDesc = model.Raffle.Id + " - " + raffle.Name,
+                RaffleNomenclature = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.Id,
+                RaffleDesc = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.Id + " " + model.Raffle.Name + " " + model.Raffle.DateSolteo.ToShortDateString(),
                 RaffleId = model.RaffleId,
                 RaffleSequence = model.Raffle.RaffleSequence,
                 StatuDesc = context.Catalogs.Where(c => c.Id == model.Statu).Select(s => s.NameDetail).FirstOrDefault(),

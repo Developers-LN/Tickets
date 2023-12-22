@@ -1219,8 +1219,6 @@ namespace Tickets.Controllers
                 && (i.ClientId == clientId || clientId == 0)
                 && (i.InvoiceDate.Date >= startD.Date && i.InvoiceDate.Date <= endD.Date)).ToList();
 
-                var test = invoices;
-
                 if (invoices.Count == 0)
                 {
                     return RedirectToAction("Error", new { message = "No se encontraron cuentas por cobrar para los criterios seleccionados." });
@@ -1257,9 +1255,32 @@ namespace Tickets.Controllers
                     return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo #" + item.RaffleId + "." });
                 }
             }
-            var test = identifyNumbers;
 
             return View(identifyNumbers);
+        }
+
+        //
+        //GET: Reports/PayedElectronicAward
+        [Authorize]
+        [HttpGet]
+        public ActionResult PayedElectronicAward(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
+        {
+            var context = new TicketsEntities();
+            var startD = DateTime.Parse(startDate);
+            var endD = DateTime.Parse(endDate);
+
+            var electronicAwards = context.ElectronicAwardPayeds.AsEnumerable().Where(i =>
+                (i.RaffleId == raffleId || raffleId == 0)
+                && (i.ClientId == clientId || clientId == 0)
+                && (i.PayedDate.Value.Date >= startD.Date && i.PayedDate.Value.Date <= endD.Date)
+                ).ToList();
+
+            if (electronicAwards.Count == 0)
+            {
+                return RedirectToAction("Error", new { message = "No se encontraron premios pagados para los criterios seleccionados." });
+            }
+
+            return View(electronicAwards);
         }
 
         //

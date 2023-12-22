@@ -113,7 +113,7 @@
                         decimal totalCredit = 0.0m;
                         decimal totalOther = 0.0m;
 
-                        var raffleName = raffle.Name + " - " + raffle.Id;
+                        var raffleName = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString();
                         var invoices = raffle.Invoices.Where(i => (i.ClientId == clientId || clientId == 0) && i.PaymentStatu != (int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Suspended).AsEnumerable()
                             .GroupBy(g => g.ClientId)
                             .Select(i => new
@@ -253,7 +253,6 @@
                         <td class="text-right">@(totalGeneralPayment.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                         <td class="text-right">@(totalGeneralRest.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                     </tr>
-
                 </tfoot>
             </table>
         </div>

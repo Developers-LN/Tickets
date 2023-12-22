@@ -57,11 +57,23 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var clients = context.Clients.AsEnumerable().Where(c => c.Statu != (int)GeneralStatusEnum.Suspended).Select(c => ListaClientes(c)).ToList();
 
-            var raffles = context.Raffles.Select(r => new
+            var raffles1 = context.Raffles.Select(r => new
             {
                 r.Id,
                 r.RaffleSequence,
-                r.Name
+                r.Name,
+                raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                text = r.Symbol + r.Separator + r.Id + " " + r.Name, 
+                r.DateSolteo
+            }).ToList();
+
+            var raffles = raffles1.Select(s => new
+            {
+                s.Id,
+                s.RaffleSequence,
+                s.Name,
+                s.raffleNomenclature,
+                text = s.text + " " + s.DateSolteo.ToShortDateString()
             }).ToList();
 
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de Clientes");

@@ -2,13 +2,14 @@
     Layout = null;
     ViewBag.Title = "Generación de sorteo";
 }
+
 <div class="col-lg-12 no-padder" ng-controller="ActiveRaffleController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-lg-12 well no-padder">
                     <div class="col-lg-12 text-center">
-                        <h2>SORTEO #{{raffle.id}}</h2>
+                        <h2>Sorteo {{raffle.id}}</h2>
                     </div>
                     <div class="col-lg-6 no-padder">
                         <fieldset>

@@ -5,7 +5,7 @@
     ViewBag.Title = "Detalle de factura No. " + Model.Id;
 
     var context = new Tickets.Models.TicketsEntities();
-    var availableTicketsToInvoice = new Tickets.Models.Procedures.AvailableTicketToInvoice();
+    var availableTicketsToInvoice = new Tickets.Models.Procedures.Procedure_AvailableTicketToInvoice();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.Facturacion : "";
     string adminCargo = config != null ? config.FacturacionCargo : "";
@@ -120,7 +120,7 @@
             </div>
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>SORTEO: </b> @Model.RaffleId
+                    <b>SORTEO: </b> @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>FECHA DE SORTEO: </b> @Model.Raffle.DateSolteo.ToShortDateString()
@@ -314,14 +314,17 @@ else
                 <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
             </div>
             <div class="col-lg-12 no-padder text-center">
-                <b>DETALLE DE FACTURAS SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
+                <b>
+                    DETALLE DE FACTURAS SORTEO <br />
+                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+                </b>
             </div>
             <div class="col-lg-6 no-padder">
                 <div class="col-lg-12 no-padder text-left">
-                    <b>Cliente: </b> #@Model.Client.Name @Model.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+                    <b>Cliente: </b> @Model.Client.Name @Model.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
                 </div>
                 <div class="col-lg-12 no-padder text-left">
-                    <b>Cajero: </b> #@Model.CreateUser
+                    <b>Cajero: </b> @Model.CreateUser
                 </div>
                 <div class="col-lg-12 no-padder text-left">
                     <b>Fecha de Expiración: </b> @xpiredDate.ToShortDateString()
@@ -329,7 +332,7 @@ else
             </div>
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Factura: </b> #@Model.Id
+                    <b>Factura: </b> @Model.Id
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
@@ -454,14 +457,17 @@ else
                 <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
             </div>
             <div class="col-lg-12 no-padder text-center">
-                <b>DETALLE DE FACTURAS SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
+                <b>
+                    DETALLE DE FACTURAS SORTEO <br />
+                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+                </b>
             </div>
             <div class="col-lg-6 no-padder">
                 <div class="col-lg-12 no-padder text-left">
-                    <b>Cliente: </b> #@Model.Client.Name @Model.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+                    <b>Cliente: </b> @Model.Client.Name @Model.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
                 </div>
                 <div class="col-lg-12 no-padder text-left">
-                    <b>Cajero: </b> #@Model.CreateUser
+                    <b>Cajero: </b> @Model.CreateUser
                 </div>
                 <div class="col-lg-12 no-padder text-left">
                     <b>Fecha de Expiración: </b> @xpiredDate.ToShortDateString()
@@ -469,7 +475,7 @@ else
             </div>
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Factura: </b> #@Model.Id
+                    <b>Factura: </b> @Model.Id
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha: </b> @Model.CreateDate.ToShortDateString()

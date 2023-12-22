@@ -63,7 +63,7 @@
                 <b>Cliente: </b> @Model.Client.Id - @Model.Client.Name
             </div>
             <div class="col-lg-12 no-padder text-left">
-                <b>Cajero: </b> #@Model.CreateUser
+                <b>Cajero: </b> @Model.CreateUser
             </div>
             <div class="col-lg-12 no-padder text-left">
                 <b>Fecha de Creación: </b> @Model.NoteDate.ToShortDateString()
@@ -71,7 +71,7 @@
         </div>
         <div class="col-lg-6 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>Nota de crédito: </b> #@Model.Id
+                <b>Nota de crédito: </b> @Model.Id
             </div>
             <div class="col-lg-12 no-padder text-right">
                 <b>Fecha: </b> @DateTime.Now.ToShortDateString()

@@ -57,7 +57,10 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
-            <b>AUTORIZACION DE PAGO DE PREMIO DEL SORTEO #@Model.RaffleId</b>
+            <b>
+                AUTORIZACION DE PAGO DE PREMIO DEL SORTEO <br />
+                @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+            </b>
         </div>
     </div>
     <div class="col-lg-12 no-padder">

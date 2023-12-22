@@ -92,7 +92,7 @@
                     @foreach (var raffle in Model.Where(w => w.Statu == (int)Tickets.Models.Enums.RaffleStatusEnum.Generated))
                     {
                         var clients = context.Clients.Where(w => (w.Statu == (int)Tickets.Models.Enums.ClientStatuEnum.Approbed && w.IdentifyBaches.Count() > 0) && (clientId == 0 || w.Id == clientId)).ToList();
-                        var raffleName = raffle.Id + " - " + raffle.Name;
+                        var raffleName = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString();
                         <tr>
                             <th colspan="3" class="text-left">@raffleName</th>
                         </tr>

@@ -11,7 +11,7 @@
                     <div class="col-lg-6 text-left no-padder"><h4>Producción de Billetes por Sorteo</h4></div>
                     <div class="col-lg-6 text-right no-padder">
                         <select class="form-control" ng-model="RaffleId" ng-change="updateProduction()">
-                            <option ng-repeat="raffle in raffles" value="{{raffle.value}}" ng-selected="raffle.value == RaffleId">{{raffle.value}} - {{raffle.text}}</option>
+                            <option ng-repeat="raffle in raffles" value="{{raffle.value}}" ng-selected="raffle.value == RaffleId">{{raffle.text}}</option>
                         </select>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                     <div class="col-lg-6 text-left no-padder"><h4>Asignaciones por Sorteo</h4></div>
                     <div class="col-lg-6 text-right no-padder">
                         <select class="form-control " ng-model="AllocateRaffleId" ng-change="updateAllocate()">
-                            <option ng-repeat="raffle in raffles" value="{{raffle.value}}" ng-selected="raffle.value == AllocateRaffleId">{{raffle.value}} - {{raffle.text}}</option>
+                            <option ng-repeat="raffle in raffles" value="{{raffle.value}}" ng-selected="raffle.value == AllocateRaffleId">{{raffle.text}}</option>
                         </select>
                     </div>
                 </div>

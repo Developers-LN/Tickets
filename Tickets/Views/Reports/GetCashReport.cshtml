@@ -141,7 +141,9 @@
                                         }
                                     </td>
                                     <td>@receiptPayment.ReceiptDate.ToString()</td>
-                                    <td class="text-center">@receiptPayment.Invoice.Raffle.Id</td>
+                                    <td class="text-center">
+                                        @receiptPayment.Invoice.Raffle.Symbol @receiptPayment.Invoice.Raffle.Separator @receiptPayment.Invoice.Raffle.Id @receiptPayment.Invoice.Raffle.Name
+                                    </td>
                                     <td>
                                         @if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
                                         {

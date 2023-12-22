@@ -114,7 +114,7 @@
                                            ng-required="true" />
                                 </div>
                                 <div class="col-lg-6">
-                                    <label class="control-label-left">Hora Inicio de ventas electrónicas: <span class="color-red">*</span></label>
+                                    <label class="control-label-left">Hora de inicio de ventas electrónicas: <span class="color-red">*</span></label>
                                     <input type="time"
                                            ng-model="raffle.startElectronicSalesTime"
                                            class="form-control input-sm"
@@ -132,6 +132,12 @@
                                            ng-model="raffle.endElectronicSalesTime"
                                            class="form-control input-sm"
                                            ng-required="true" />
+                                </div>
+                                <div class="col-lg-6">
+                                    <label class="control-label-left">Nomenclatura de sorteo: </label>
+                                    <input type="text"
+                                           ng-model="raffle.symbol"
+                                           class="form-control input-sm" />
                                 </div>
                             </div>
                         </div>

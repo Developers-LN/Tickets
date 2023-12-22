@@ -223,7 +223,9 @@ namespace Tickets.Controllers
                 {
                     b.Id,
                     b.RaffleId,
-                    RaffleDesc = b.Raffle.Name,
+                    raffleNomenclature = b.Raffle.Symbol + b.Raffle.Separator + b.Raffle.Id,
+                    //RaffleDesc = b.Raffle.Name,
+                    RaffleDesc = b.Raffle.Symbol + b.Raffle.Separator + b.Raffle.Id + " " + b.Raffle.Name + " " + b.Raffle.DateSolteo.ToShortDateString(),
                     ClientId = b.RaffleId,
                     ClientDesc = b.Client.Name,
                     hasPayment = (b.IdentifyBachPayments.Count > 0 || b.NoteCredits.Count > 0)

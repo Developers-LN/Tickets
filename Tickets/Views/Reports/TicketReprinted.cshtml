@@ -20,7 +20,11 @@
             <b>REPUBLICA DOMINICANA</b><br />
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION LOTERIA NACIONAL</b><br />
-            <b>NUMEROS REIMPRESOS DEL SORTEO #@Model.Id EN FECHA @Model.DateSolteo.ToShortDateString() </b>
+            <b>
+                NUMEROS REIMPRESOS DEL SORTEO <br />
+                @Model.Symbol @Model.Separator @Model.Id @Model.Name
+                EN FECHA @Model.DateSolteo.ToShortDateString()
+            </b>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
             <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />

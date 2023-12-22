@@ -75,7 +75,7 @@
                                 @payment.Id
                             </td>
                             <td>
-                                @payment.IdentifyBach.RaffleId
+                                @payment.IdentifyBach.Raffle.Symbol @payment.IdentifyBach.Raffle.Separator @payment.IdentifyBach.Raffle.Id
                             </td>
                             <td class="text-right" style="width:15%">
                                 @(payment.Value.ToString("c",  new System.Globalization.CultureInfo("es-DO")))

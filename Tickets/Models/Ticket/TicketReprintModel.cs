@@ -19,6 +19,8 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "raffleDesc")]
         public string RaffleDesc { get; set; }
 
+        public string RaffleNomenclature { get; set; }
+
         [JsonProperty(PropertyName = "ticketReprintNumbers")]
         public List<TicketReprintNumberModel> TicketReprintNumbers { get; set; }
 
@@ -71,7 +73,9 @@ namespace Tickets.Models.Raffles
                     {
                         r.Name,
                         r.RaffleSequence,
-                        r.Id
+                        r.Id,
+                        raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                        text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                     }).ToList<object>();
             }
             return new { ticketReprints, raffles };
@@ -120,7 +124,9 @@ namespace Tickets.Models.Raffles
                 Note = reprint.Note,
                 RaffleId = reprint.RaffleId,
                 RaffleSequence = context.Raffles.FirstOrDefault(r => r.Id == reprint.RaffleId).RaffleSequence,
-                RaffleDesc = context.Raffles.FirstOrDefault(r => r.Id == reprint.RaffleId).Name,
+                //RaffleDesc = context.Raffles.FirstOrDefault(r => r.Id == reprint.RaffleId).Name,
+                RaffleNomenclature = reprint.Raffle.Symbol + reprint.Raffle.Separator + reprint.Raffle.Id,
+                RaffleDesc = reprint.Raffle.Symbol + reprint.Raffle.Separator + reprint.Raffle.Id + " " + reprint.Raffle.Name + " " + reprint.Raffle.DateSolteo.ToShortDateString(),
                 IsPrint = false,
                 CreateDate = reprint.CreateDate,
                 CreateDateLong = reprint.CreateDate.ToUnixTime(),

@@ -46,9 +46,16 @@
             padding-left: 0px;
             padding-right: 0px;
         }
+
+        .content-panel {
+            padding-left: 50px;
+            padding-right: 50px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
     </style>
 
-    <div class="col-lg-12">
+    <div class="col-lg-12 content-panel">
         <div class="col-lg-12 no-padder text-center">
             <div class="col-lg-6 no-padder">
                 <div class="col-lg-12 no-padder text-left">
@@ -70,7 +77,7 @@
                     <b>CONSIGNACION:</b> @Model.Id
                 </div>
                 <div class="col-lg-12 no-padder text-left">
-                    <b>SORTEO:</b> @Model.RaffleId
+                    <b>SORTEO:</b> @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id
                 </div>
                 <div class="col-lg-12 no-padder text-left">
                     <b>FECHA SORTEO:</b> @Model.Raffle.DateSolteo.ToString("dd/MM/yyyy")

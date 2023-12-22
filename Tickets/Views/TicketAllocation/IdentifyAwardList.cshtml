@@ -33,7 +33,7 @@
                                 <div class="col-lg-12">
                                     <select ng-required="true" class="form-control dropdown-select2" ng-model="RaffleId" ng-change="updateDelivered()">
                                         <option selected="selected" value="0">Seleccione un sorteo</option>
-                                        <option ng-repeat="raffle in raffles" value="{{raffle.Id}}">{{raffle.Id}} - {{raffle.Name}}</option>
+                                        <option ng-repeat="raffle in raffles" value="{{raffle.Id}}">{{raffle.text}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -73,8 +73,8 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="identifyBach in identifyBachs">
-                                <td>#{{identifyBach.Id}}</td>
-                                <td>{{identifyBach.RaffleId}} - {{identifyBach.RaffleDesc}}</td>
+                                <td>{{identifyBach.Id}}</td>
+                                <td>{{identifyBach.RaffleDesc}}</td>
                                 <td>{{identifyBach.ClientId}} - {{identifyBach.ClientDesc}}</td>
                                 <td>{{identifyBach.WinnerName}}</td>
                                 <td>{{identifyBach.Status}}</td>
@@ -82,6 +82,8 @@
                                     @*<a ng-if="identifyBach.hasPayment == false" href="/#/ticket/identifybach/{{identifyBach.Id}}" title="Modificar lote de identificación" class="{{moduleCanView}}"><i class="fa fa-pencil"></i></a>*@
                                     <a ng-if="identifyBach.hasPayment == false && identifyBach.Statu == 2077" href="/#/ticket/identifybach/{{identifyBach.Id}}" title="Modificar lote de identificación" class="{{moduleCanView}}"><i class="fa fa-pencil"></i></a>
                                     <a href="/#/ticket/identifybachdetail/{{identifyBach.Id}}" title="Ver detalles del lote" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
+                                    <a href="/Reports/ApprovedBach?bachId={{identifyBach.Id}}" target="_blank" title="Detalles del lote"><i class="fa fa-print"></i></a>
+                                    <a href="/Reports/ApprovedBach?bachId={{identifyBach.Id}}" target="_blank" title="Detalles del lote"><i class="fa fa-file-excel-o"></i></a>
                                     <a ng-if="identifyBach.hasPayment == false && identifyBach.Statu == 2077" ng-click="deleteIdentifyBach(identifyBach)" title="Borrar Identificacion de Numeros"><i class="fa fa-times"></i></a>
                                     @*<a ng-if="identifyBach.hasPayment == false" ng-click="deleteIdentifyBach(identifyBach)" title="Borrar Identificacion de Numeros"><i class="fa fa-times"></i></a>*@
                                 </td>

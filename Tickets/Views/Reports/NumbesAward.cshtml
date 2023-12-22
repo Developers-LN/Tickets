@@ -21,7 +21,11 @@
             <b>ADMINISTRACION LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
-            <b>NUMEROS PREMIADOS PARA EL SORTEO NO. @Model.Id</b><br />
+            <b>
+                NUMEROS PREMIADOS PARA EL SORTEO <br />
+                @Model.Symbol @Model.Separator @Model.Id @Model.Name
+            </b>
+            <br />
             Fecha del Sorteo: @Model.DateSolteo.ToLongDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">

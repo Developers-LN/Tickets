@@ -128,12 +128,33 @@ namespace Tickets.Controllers
         public JsonResult GetAwardNumberData()
         {
             var context = new TicketsEntities();
-            var raffles = context.Raffles.Where(r => r.Statu != (int)RaffleStatusEnum.Suspended).Select(r => new
+            var raffles1 = context.Raffles.Where(r => r.Statu != (int)RaffleStatusEnum.Suspended).Select(r => new
             {
                 r.Id,
                 r.RaffleSequence,
                 r.Name,
-            }).OrderByDescending(r => r.Id);
+                raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                text = r.Symbol + r.Separator + r.Id + " " + r.Name,
+                r.DateSolteo
+            }).OrderByDescending(r => r.Id).ToList();
+
+            var raffles2 = raffles1.Select(s => new
+            {
+                s.Id,
+                s.RaffleSequence,
+                s.Name,
+                s.raffleNomenclature,
+                text = s.text + " " + s.DateSolteo.ToShortDateString()
+            }).ToList();
+
+            var raffles = raffles2.Select(s => new
+            {
+                s.Id,
+                s.RaffleSequence,
+                s.Name,
+                s.raffleNomenclature,
+                s.text
+            }).OrderByDescending(o => o.Id);
 
             return new JsonResult() { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { raffles } };
         }

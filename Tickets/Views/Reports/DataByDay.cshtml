@@ -11,8 +11,8 @@
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 
     int ExtraordinaryTicketsCount = 0;
-    int OrdinaryFractionsCount = 0;
-    int TicketFractios = 0;
+    //int OrdinaryFractionsCount = 0;
+    //int TicketFractios = 0;
     int TotalBilletes = 0;
 }
 <style>
@@ -61,7 +61,10 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center" style="margin-bottom:20px;">
-            <b>DETALLE DE VENTA DEL SORTEO NO.@Model.RaffleId DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
+            <b>
+                DETALLE DE VENTA DEL SORTEO <br />
+                @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+            </b>
         </div>
         <div class="col-lg-6 no-padder">
             <div class="col-lg-12 no-padder text-left">
@@ -73,7 +76,7 @@
         </div>
         <div class="col-lg-6 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>Consignación: </b> #@Model.Id
+                <b>Consignación: </b> @Model.Id
             </div>
             <div class="col-lg-12 no-padder text-right">
                 <b>Fecha: </b> @Model.CreateDate.ToShortDateString()

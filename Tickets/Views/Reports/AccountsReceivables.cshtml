@@ -92,7 +92,7 @@
 
                         var invoiceByRaffle = Model.AsEnumerable().GroupBy(r => r.RaffleId).Select(i => new
                         {
-                            raffleName = i.FirstOrDefault().RaffleId + " - " + i.FirstOrDefault().Raffle.Name,
+                            raffleName = i.FirstOrDefault().Raffle.Symbol + i.FirstOrDefault().Raffle.Separator + i.FirstOrDefault().RaffleId + " " + i.FirstOrDefault().Raffle.Name,
                             invoiceByClients = i.GroupBy(c => c.ClientId).Select(c => new
                             {
                                 clientName = c.FirstOrDefault().ClientId + " - " + c.FirstOrDefault().Client.Name,

@@ -77,10 +77,12 @@ namespace Tickets.Models.Ticket
             //string group = Regex.Match(ticketReturneds.FirstOrDefault().ReturnedGroup, @"\d+").Value.ToString();
             var subGroups = "";
             ticketReturneds.GroupBy(r => r.ReturnedGroup).AsEnumerable().Select(r => Regex.Replace(r.FirstOrDefault().ReturnedGroup, @"[\d-]", string.Empty).ToString()).ToList().ForEach(r => subGroups += r + ", ");
+            var raffleData = ticketReturneds.FirstOrDefault().Raffle;
             var model = new TicketReturnedModel()
             {
                 RaffleId = ticketReturneds.FirstOrDefault().RaffleId,
-                RaffleDesc = ticketReturneds.FirstOrDefault().Raffle.Name,
+                //RaffleDesc = ticketReturneds.FirstOrDefault().Raffle.Name,
+                RaffleDesc = raffleData.Symbol + raffleData.Separator + raffleData.Id + " " + raffleData.Name + " " + raffleData.DateSolteo.ToShortDateString(),
                 ReturnedGroup = ticketReturneds.FirstOrDefault().ReturnedGroup,
                 ReturnedSubGroup = ticketReturneds.Count() == 1 ? ticketReturneds.FirstOrDefault().ReturnedGroup : ticketReturneds.Select(e => e.ReturnedGroup).Distinct().Aggregate((s, e) => s + ", " + e),
                 ReturnedDate = ticketReturneds.FirstOrDefault().ReturnedDate,

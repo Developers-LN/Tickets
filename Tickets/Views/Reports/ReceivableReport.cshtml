@@ -70,14 +70,17 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
-            <b>DETALLE DE PAGOS A FACTURA SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
+            <b>
+                DETALLE DE PAGOS A FACTURA SORTEO <br /> 
+                @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+            </b>
         </div>
         <div class="col-lg-6 no-padder">
             <div class="col-lg-12 no-padder text-left">
-                <b>CLIENTE: </b> #@Model.Client.Name @Model.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
+                <b>CLIENTE: </b> @Model.Client.Name @Model.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
             </div>
             <div class="col-lg-12 no-padder text-left">
-                <b>FACTURA: </b> #@Model.Id
+                <b>FACTURA: </b> @Model.Id
             </div>
             @if (lastReceivable != null)
             {
@@ -168,7 +171,7 @@
                             <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
                             <td style="vertical-align:middle;" class="text-center">@payment.Recibo</td>
                             <td style="vertical-align:middle;" class="text-center">
-                                @payment.Notas 
+                                @payment.Notas
                             </td>
                             <td style="vertical-align:middle;" class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
                             <td style="vertical-align:middle;" class="text-right">@(((decimal)totalCash).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>

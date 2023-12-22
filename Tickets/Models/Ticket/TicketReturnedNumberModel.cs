@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.EMMA;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -145,7 +144,9 @@ namespace Tickets.Models.Ticket
                                  Production = r.Raffle.Prospect.Production,
                                  RaffleId = r.Raffle.Id,
                                  RaffleSequence = r.Raffle.RaffleSequence,
-                                 RaffleDesc = a.Raffle.Name,
+                                 //RaffleDesc = a.Raffle.Name,
+                                 RaffleNomenclature = a.Raffle.Symbol + a.Raffle.Separator + a.Raffle.Id,
+                                 RaffleDesc = a.Raffle.Symbol + a.Raffle.Separator + a.Raffle.Id + " " + a.Raffle.Name + " " + a.Raffle.DateSolteo.ToShortDateString(),
                                  ReturnedDate = r.ReturnedDate.ToString()
                              }).GroupBy(r => r.Number)
                                 .Select(n => new
@@ -179,7 +180,9 @@ namespace Tickets.Models.Ticket
                 {
                     r.Id,
                     r.RaffleSequence,
-                    r.Name
+                    r.Name,
+                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                    text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                 }).ToList();
 
             var clients = context.Clients.Where(s => s.Statu == (int)ClientStatuEnum.Approbed).Select(r => new
@@ -199,7 +202,8 @@ namespace Tickets.Models.Ticket
                 || d.Raffle.ReturnedOpens.Any(r => r.EndReturnedDate >= DateTime.Now))
                 ).GroupBy(d => d.ReturnedGroup).Select(d => new
                 {
-                    RaffleName = d.FirstOrDefault().Raffle.Id + " - " + d.FirstOrDefault().Raffle.Name,
+                    //RaffleName = d.FirstOrDefault().Raffle.Id + " - " + d.FirstOrDefault().Raffle.Name,
+                    RaffleName = d.FirstOrDefault().Raffle.Symbol + d.FirstOrDefault().Raffle.Separator + d.FirstOrDefault().Raffle.Id + " " + d.FirstOrDefault().Raffle.Name + " " + d.FirstOrDefault().Raffle.DateSolteo.ToShortDateString(),
                     ClientName = d.FirstOrDefault().ClientId + " - " + d.FirstOrDefault().Client.Name,
                     ClientId = d.FirstOrDefault().ClientId,
                     Group = d.FirstOrDefault().ReturnedGroup,
@@ -207,6 +211,7 @@ namespace Tickets.Models.Ticket
                     FractionPerSheet = d.FirstOrDefault().Raffle.Prospect.LeafFraction,
                     ReturnedDate = d.FirstOrDefault().ReturnedDate.ToUnixTime(),
                     RaffleId = d.FirstOrDefault().Raffle.Id,
+                    RaffleNomenclature = d.FirstOrDefault().Raffle.Symbol + d.FirstOrDefault().Raffle.Separator + d.FirstOrDefault().Raffle.Id,
                     isValidated = d.FirstOrDefault().Statu == (int)TicketReturnedStatuEnum.Invoiced
                 });
             return new { returneds, clients, raffles };
@@ -226,11 +231,21 @@ namespace Tickets.Models.Ticket
         {
             var context = new TicketsEntities();
 
-            var raffles = context.Raffles.Select(r => new
+            var raffles1 = context.Raffles.Select(r => new
             {
                 value = r.Id,
                 raffleSequence = r.RaffleSequence,
-                text = r.Name
+                raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                text = r.Symbol + r.Separator + r.Id + " " + r.Name,
+                r.DateSolteo
+            }).ToList();
+
+            var raffles = raffles1.Select(s => new
+            {
+                s.value,
+                s.raffleSequence,
+                s.raffleNomenclature,
+                text = s.text + " " + s.DateSolteo.ToShortDateString()
             }).ToList();
 
             /*var groups = context.TicketReturns.Where(w => w.RaffleId == raffleId).AsEnumerable().Select(o => int.Parse(Regex.Match(o.ReturnedGroup, @"\d+").Value))

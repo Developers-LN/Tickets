@@ -17,8 +17,11 @@
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
-            <b>Asignación de Billetes del sorteo @Model.Name No.@Model.Id</b><br />
-            Fecha del Sorteo @Model.DateSolteo.ToShortDateString()
+            <b>
+                ASIGNACION DE BILLETES DEL SORTEO <br />
+                @Model.Symbol @Model.Separator @Model.Id @Model.Name
+            </b><br />
+            FECHA DEL SORTEO @Model.DateSolteo.ToShortDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
             <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />

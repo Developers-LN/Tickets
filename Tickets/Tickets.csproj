@@ -345,6 +345,9 @@
     <Compile Include="Models\DistTown.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ElectronicAwardPayed.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ElectronicTicketSale.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
@@ -835,6 +838,7 @@
     <Content Include="Scripts\modules\agency\agency.list.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\modules\cash\payed.award.electronic.controller.js" />
     <Content Include="Scripts\modules\cash\positive.balance.controller.js" />
     <Content Include="Scripts\modules\cash\cash.positive.balance.list.controller.js" />
     <Content Include="Scripts\modules\cash\client.general.balance.controller.js">
@@ -3272,6 +3276,8 @@
     <Content Include="Views\TicketReturned\ReturnedGroupClientDetails.cshtml" />
     <Content Include="Scripts\modules\ticketReturned\returned.group.details.client.controller.js" />
     <Content Include="Views\Cash\PayedBachByPeriodExcel.cshtml" />
+    <Content Include="Views\Cash\ElectronicAwardPayed.cshtml" />
+    <Content Include="Views\Reports\PayedElectronicAward.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

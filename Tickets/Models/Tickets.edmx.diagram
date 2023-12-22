@@ -184,6 +184,9 @@
         <AssociationConnector Association="TicketsModel.FK_TicketAllocationNumber_Delete_Catalog_Statu" />
         <AssociationConnector Association="TicketsModel.FK_TicketAllocationNumber_Delete_Raffle" />
         <AssociationConnector Association="TicketsModel.FK_TicketAllocationNumber_Delete" />
+        <EntityTypeShape EntityType="TicketsModel.ElectronicAwardPayed" Width="1.5" PointX="18.5" PointY="44.75" />
+        <AssociationConnector Association="TicketsModel.FK_ClientId" />
+        <AssociationConnector Association="TicketsModel.FK_RaffleId" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

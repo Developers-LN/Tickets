@@ -98,6 +98,7 @@ namespace Tickets.Models.Workflows
                         Fraction = s.Fraction,
                         Id = s.Id,
                         RaffleId = s.RaffleId,
+                        RaffleNomenclature = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.Id,
                         RaffleAwardType = s.RaffleAwardType
 
                     }).ToList();
@@ -132,7 +133,8 @@ namespace Tickets.Models.Workflows
                     Fractions = number.FractionTo - number.FractionFrom + 1,
                     IdentifyBachId = number.IdentifyBach.Id,
                     ClientName = number.IdentifyBach.Client.Name,
-                    RaffleDesc = (number.IdentifyBach.RaffleId + " - " + number.IdentifyBach.Raffle.Name).ToString(),
+                    //RaffleDesc = (number.IdentifyBach.RaffleId + " - " + number.IdentifyBach.Raffle.Name).ToString(),
+                    RaffleDesc = number.IdentifyBach.Raffle.Symbol + number.IdentifyBach.Raffle.Separator + number.IdentifyBach.Raffle.Id + " " + number.IdentifyBach.Raffle.Name + " " + number.IdentifyBach.Raffle.DateSolteo.ToShortDateString(),
                     Number = number.TicketAllocationNumber.Number,
                     Awards = awards
                 };
@@ -195,7 +197,7 @@ namespace Tickets.Models.Workflows
             var workflowList = context.Workflows.AsEnumerable().Where(w =>
                 w.WorkflowTypeId == workFlowTypeId &&
                 w.Statu == (int)WorkflowStatusEnum.Active &&
-                usersApproveWorkflow.Any(u => u.UserId == userId 
+                usersApproveWorkflow.Any(u => u.UserId == userId
                     //&& u.OrderApproval == ((w.WorkflowProccesses.Where(wf => wf.Statu == (int)WorkflowProccessStatuEnum.Approved).Count() - w.WorkflowProccesses.Where(wf => wf.Statu == (int)WorkflowProccessStatuEnum.Rejected).Count()) + 1)
                     )
                 ).Select(w => new WorkflowModel().ToObject(w, workFlowTypeId)).ToList();

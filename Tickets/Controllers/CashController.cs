@@ -84,6 +84,15 @@ namespace Tickets.Controllers
         }
 
         //
+        // GET: /Cash/ElectronicAwardPayed
+        [Authorize]
+        [HttpGet]
+        public ActionResult ElectronicAwardPayed()
+        {
+            return View();
+        }
+
+        //
         // GET: /Cash/InvoiceByPeriod
         [Authorize]
         [HttpGet]
@@ -160,14 +169,25 @@ namespace Tickets.Controllers
                 {
                     r.Id,
                     r.Name
-
                 }).ToList<object>();
 
-                raffles = context.Raffles.Select(r => new
+                var raffles1 = context.Raffles.Select(r => new
                 {
                     r.Id,
                     r.RaffleSequence,
-                    r.Name
+                    r.Name,
+                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                    text = r.Symbol + r.Separator + r.Id + " " + r.Name,
+                    r.DateSolteo
+                }).ToList();
+
+                raffles = raffles1.Select(s => new
+                {
+                    s.Id,
+                    s.RaffleSequence,
+                    s.Name,
+                    s.raffleNomenclature,
+                    text = s.text + " " + s.DateSolteo.ToShortDateString()
                 }).ToList<object>();
             }
             else
@@ -190,7 +210,8 @@ namespace Tickets.Controllers
                 EndDate = invoiceDetail.EndDate.ToUnixTime(),
                 StartDate = invoiceDetail.StartDate.ToUnixTime(),
                 invoiceDetail.RaffleId,
-                RaffleDesc = invoiceDetail.Raffle.Name,
+                //RaffleDesc = invoiceDetail.Raffle.Name,
+                RaffleDesc = invoiceDetail.Raffle.Symbol + invoiceDetail.Raffle.Separator + invoiceDetail.Raffle.Id + " " + invoiceDetail.Raffle.Name + " " + invoiceDetail.Raffle.DateSolteo.ToShortDateString(),
                 invoiceDetail.ClientId,
                 ClientDesc = invoiceDetail.Client.Name,
                 UserDesc = invoiceDetail.User.Name,
@@ -300,11 +321,21 @@ namespace Tickets.Controllers
                 text = s.NameDetail
             });
 
-            var raffles = context.Raffles.Select(r => new
+            var raffles1 = context.Raffles.Select(r => new
             {
                 value = r.Id,
                 raffleSequence = r.RaffleSequence,
-                text = r.Name
+                raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                text = r.Symbol + r.Separator + r.Id + " " + r.Name, 
+                r.DateSolteo
+            }).ToList();
+
+            var raffles = raffles1.Select(s => new
+            {
+                s.value,
+                s.raffleSequence,
+                s.raffleNomenclature,
+                text = s.text + " " + s.DateSolteo.ToShortDateString()
             }).ToList();
 
             return new JsonResult() { Data = new { clients, raffles, users, accountReceivableTypes }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -932,7 +963,8 @@ namespace Tickets.Controllers
                     }),
                     payment = GetPaymentCashByProcedure(invoice),
                     raffleId = invoice.RaffleId,
-                    raffleName = invoice.Raffle.Name
+                    //raffleName = invoice.Raffle.Name
+                    raffleName = invoice.Raffle.Symbol + invoice.Raffle.Separator + invoice.Raffle.Id + " " + invoice.Raffle.Name + " " + invoice.Raffle.DateSolteo.ToShortDateString()
                 }
             };
         }
@@ -957,12 +989,24 @@ namespace Tickets.Controllers
             var raffles = new List<object>();
             if (raffleId == 0)
             {
-                raffles = context.Raffles.OrderByDescending(s => s.Id).Where(s => s.Statu != (int)RaffleStatusEnum.Suspended).Select(r => new
+                var raffles1 = context.Raffles.OrderByDescending(s => s.Id).Where(s => s.Statu != (int)RaffleStatusEnum.Suspended).Select(r => new
                 {
                     r.Id,
                     r.RaffleSequence,
-                    r.Name
-                }).ToList<object>();
+                    r.Name,
+                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
+                    text = r.Symbol + r.Separator + r.Id + " " + r.Name,
+                    r.DateSolteo
+                }).ToList();
+
+                raffles = raffles1.Select(s => new
+                {
+                    s.Id,
+                    s.RaffleSequence,
+                    s.Name,
+                    s.raffleNomenclature,
+                    text = s.text + " " + s.DateSolteo.ToShortDateString()
+                }).ToList<object>(); 
             }
             var clients = new List<object>();
             if (clientId == 0)
@@ -1203,7 +1247,25 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var clients = context.Clients.Where(w => w.Statu == (int)ClientStatuEnum.Approbed).Select(s => new { s.Id, s.Name }).ToList();
-            var raffles = context.Raffles.Where(w => w.Statu == (int)RaffleStatusEnum.Planned).Select(s => new { s.Id, s.RaffleSequence, s.Name }).ToList();
+            var raffles1 = context.Raffles.Where(w => w.Statu == (int)RaffleStatusEnum.Planned)
+                .Select(s => new
+                {
+                    s.Id,
+                    s.RaffleSequence,
+                    s.Name,
+                    raffleNomenclature = s.Symbol + s.Separator + s.Id,
+                    text = s.Symbol + s.Separator + s.Id + " " + s.Name, 
+                    s.DateSolteo
+                }).ToList();
+
+            var raffles = raffles1.Select(s => new
+            {
+                s.Id,
+                s.RaffleSequence,
+                s.Name,
+                s.raffleNomenclature,
+                text = s.text + " " + s.DateSolteo.ToShortDateString()
+            }).ToList();
 
             return new JsonResult()
             {
@@ -1222,7 +1284,15 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var clients = context.Clients.Where(w => w.Statu == (int)ClientStatuEnum.Approbed).Select(s => new { s.Id, s.Name }).ToList();
-            var raffles = context.Raffles.Where(w => w.Statu == (int)RaffleStatusEnum.Planned).Select(s => new { s.Id, s.RaffleSequence, s.Name }).ToList();
+            var raffles = context.Raffles.Where(w => w.Statu == (int)RaffleStatusEnum.Planned)
+                .Select(s => new 
+                { 
+                    s.Id, 
+                    s.RaffleSequence, 
+                    s.Name,
+                    raffleNomenclature = s.Symbol + s.Separator + s.Id,
+                    text = s.Symbol + s.Separator + s.Id + " " + s.Name + " " + s.DateSolteo.ToShortDateString() 
+                }).ToList();
 
             return new JsonResult()
             {

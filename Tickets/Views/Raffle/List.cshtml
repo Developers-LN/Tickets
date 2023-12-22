@@ -2,6 +2,7 @@
     Layout = null;
     ViewBag.Title = "Listado de sorteos";
 }
+
 <div class="col-lg-12 no-padder" ng-controller="RaffleListController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
@@ -25,7 +26,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="raffle in raffles">
-                                <td>{{raffle.id}}</td>
+                                <td>{{raffle.RaffleNomenclature}}</td>
                                 <td>{{raffle.ticketProspectDesc}}</td>
                                 <td>{{(raffle.raffleDate | date:"dd/MM/yyyy")}}</td>
                                 <td>{{(raffle.startReturnDate | date:"dd/MM/yyyy h:mm:ss a")}}</td>
