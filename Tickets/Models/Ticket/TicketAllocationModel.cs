@@ -29,6 +29,7 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "raffleDesc")]
         public string RaffleDesc { get; set; }
 
+        [JsonProperty(PropertyName = "raffleNomenclature")]
         public string RaffleNomenclature { get; set; }
 
         [JsonProperty(PropertyName = "typeId")]
@@ -118,11 +119,11 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "anyReturn")]
         public int AnyReturn { get; set; }
 
-        [JsonProperty(PropertyName = "raffleSequence")]
-        public int? RaffleSequence { get; set; }
+        [JsonProperty(PropertyName = "sequenceNumberRaffle")]
+        public int? SequenceNumberRaffle { get; set; }
 
-        [JsonProperty(PropertyName = "allocationSequence")]
-        public int? AllocationSequence { get; set; }
+        [JsonProperty(PropertyName = "sequenceNumberTicketAllocation")]
+        public int? SequenceNumberTicketAllocation { get; set; }
 
         #region Private Method
         private static List<TicketAllocation> CopyTicketAllocation(TicketsEntities context, int sourceId, int targetId, int type)
@@ -226,21 +227,22 @@ namespace Tickets.Models.Ticket
             return new
             {
                 ticket.Id,
+                sequenceNumberTicketAllocation = ticket.SequenceNumber,
                 ticket.RaffleId,
-                raffleSequence = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).RaffleSequence,
+                sequenceNumberRaffle = ticket.Raffle.SequenceNumber,
                 //RaffleDesc = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).Name,
-                RaffleNomenclature = ticket.Raffle.Symbol + ticket.Raffle.Separator + ticket.Raffle.Id,
-                RaffleDesc = ticket.Raffle.Symbol + ticket.Raffle.Separator + ticket.Raffle.Id + " " + ticket.Raffle.Name + " " + ticket.Raffle.DateSolteo.ToShortDateString(),
-                RaffleDate = context.Raffles.FirstOrDefault(s => s.Id == ticket.RaffleId).DateSolteo.ToUnixTime(),
+                RaffleNomenclature = ticket.Raffle.Symbol + ticket.Raffle.Separator + ticket.Raffle.SequenceNumber,
+                RaffleDesc = ticket.Raffle.Symbol + ticket.Raffle.Separator + ticket.Raffle.SequenceNumber + " " + ticket.Raffle.Name + " " + ticket.Raffle.DateSolteo.ToShortDateString(),
+                RaffleDate = ticket.Raffle.DateSolteo.ToUnixTime(),
                 ticket.ClientId,
-                ClientDesc = context.Clients.FirstOrDefault(c => c.Id == ticket.ClientId).Name,
+                ClientDesc = ticket.Client.Name,
                 FractionFrom = ticket.TicketAllocationNumbers.Count > 0 ? ticket.TicketAllocationNumbers.FirstOrDefault().FractionFrom : 0,
                 FractionTo = ticket.TicketAllocationNumbers.Count > 0 ? ticket.TicketAllocationNumbers.FirstOrDefault().FractionTo : 0,
                 CreateDate = ticket.CreateDate.ToUnixTime(),
                 ticket.CreateUser,
                 ticket.Statu,
                 isActive = (ticket.Raffle.Statu == (int)RaffleStatusEnum.Active || ticket.Raffle.Statu == (int)RaffleStatusEnum.Planned) && DateTime.Now <= ticket.Raffle.EndAllocationDate,
-                CraeteuserDesc = context.Users.FirstOrDefault(u => u.Id == ticket.CreateUser).Name,
+                CraeteuserDesc = ticket.User.Name,
                 Price = ticket.Raffle.Prospect.Prospect_Price.AsEnumerable().Where(p => p.PriceId == ticket.Client.PriceId).Select(p => new
                 {
                     p.FactionPrice,
@@ -257,7 +259,7 @@ namespace Tickets.Models.Ticket
                     StatuDec = context.Catalogs.FirstOrDefault(c => c.Id == t.Statu).NameDetail,
                     CreateDate = t.CreateDate.ToString(),
                     t.CreateUser,
-                    CraeteuserDesc = context.Users.FirstOrDefault(u => u.Id == t.CreateUser).Name,
+                    CraeteuserDesc = t.User.Name,
                     t.Invoiced,
                     t.FractionFrom,
                     t.FractionTo,
@@ -276,7 +278,7 @@ namespace Tickets.Models.Ticket
             var allocation = new TicketAllocationModel()
             {
                 Id = model.Id,
-                AllocationSequence = model.AllocationSequence,
+                SequenceNumberTicketAllocation = model.SequenceNumber,
                 ClientId = model.ClientId,
                 ClientDesc = model.Client.Name,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
@@ -302,8 +304,8 @@ namespace Tickets.Models.Ticket
                 Id = model.Id,
                 ClientId = model.ClientId,
                 RaffleId = model.RaffleId,
-                AllocationSequence = model.AllocationSequence,
-                RaffleSequence = model.Raffle.RaffleSequence,
+                SequenceNumberTicketAllocation = model.SequenceNumber,
+                SequenceNumberRaffle = model.Raffle.SequenceNumber,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
                 StatuId = model.Statu,
                 TypeId = model.Type,
@@ -370,14 +372,14 @@ namespace Tickets.Models.Ticket
             var allocation = new TicketAllocationModel()
             {
                 Id = model.Id,
-                AllocationSequence = model.AllocationSequence,
+                SequenceNumberTicketAllocation = model.SequenceNumber,
                 ClientId = model.ClientId,
                 ClientDesc = client.Name,
                 //RaffleDesc = model.Raffle.Id + " - " + raffle.Name,
-                RaffleNomenclature = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.Id,
-                RaffleDesc = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.Id + " " + model.Raffle.Name + " " + model.Raffle.DateSolteo.ToShortDateString(),
+                SequenceNumberRaffle = model.Raffle.SequenceNumber,
+                RaffleNomenclature = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.SequenceNumber,
+                RaffleDesc = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.SequenceNumber + " " + model.Raffle.Name + " " + model.Raffle.DateSolteo.ToShortDateString(),
                 RaffleId = model.RaffleId,
-                RaffleSequence = model.Raffle.RaffleSequence,
                 StatuDesc = context.Catalogs.Where(c => c.Id == model.Statu).Select(s => s.NameDetail).FirstOrDefault(),
                 StatuId = model.Statu,
                 TypeDesc = context.Catalogs.Where(c => c.Id == model.Type).Select(s => s.NameDetail).FirstOrDefault(),

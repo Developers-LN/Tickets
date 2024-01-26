@@ -27,5 +27,9 @@ namespace Tickets.Models
         public int CreditNoteId { get; set; }
         
         public string Concept { get; set; }
+
+        public int? SequenceNumberPayment { get; set; }
+
+        public string Nomenclature { get; set; }
     }
 }

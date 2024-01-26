@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "REPORTE DE IDENTIFICACION DE PREMIOS";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -87,7 +87,7 @@
                     @foreach (var raffle in Model.Where(w => w.Statu == (int)Tickets.Models.Enums.RaffleStatusEnum.Generated))
                     {
                         var clients = context.Clients.Where(w => (w.Statu == (int)Tickets.Models.Enums.ClientStatuEnum.Approbed && w.IdentifyBaches.Count() > 0) && (clientId == 0 || w.Id == clientId)).ToList();
-                        var raffleName = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString();
+                        var raffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString();
                         <tr>
                             <th colspan="8" class="text-left">@raffleName</th>
                         </tr>
@@ -134,9 +134,9 @@
                                         //var total = (number.FractionTo - number.FractionFrom + 1) * price;
                                         //totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                         <tr>
-                                            <td class="text-center">@number.IdentifyBachId</td>
+                                            <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
                                             <td class="text-center">@number.IdentifyBach.CreateDate</td>
-                                            <td class="text-center">@number.TicketAllocationNumber.Number</td>
+                                            <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((raffle.Prospect.Production - 1).ToString().Length, '0')</td>
                                             <td class="text-center">@raffleAward.Award.Name</td>
                                             <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction : number.FractionFrom)  - @(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction : number.FractionTo)</td>
                                             <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? 1 : (number.FractionTo - number.FractionFrom + 1))</td>

@@ -46,7 +46,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="invoice in invoices">
-                                <td>#{{invoice.id}}</td>
+                                <td>{{invoice.id}}</td>
                                 <td>{{invoice.clientDesc}}</td>
                                 <td>
                                     <span ng-if="invoice.ticketAllocations.length > 0">{{invoice.ticketAllocations}}</span>

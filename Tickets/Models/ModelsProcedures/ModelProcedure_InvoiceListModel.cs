@@ -6,6 +6,7 @@ namespace Tickets.Models.ModelsProcedures
     {
         public bool Data { get; set; }
         public int Id { get; set; }
+        public int SequenceNumberInvoice { get; set; }
         public int ClientId { get; set; }
         public string ClientDesc { get; set; }
         public int RaffleId { get; set; }

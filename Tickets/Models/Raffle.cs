@@ -52,7 +52,7 @@ namespace Tickets.Models
         public Nullable<System.DateTime> EndElectronicSales { get; set; }
         public Nullable<System.DateTime> DueRaffleDate { get; set; }
         public Nullable<System.DateTime> StartElectronicSales { get; set; }
-        public Nullable<int> RaffleSequence { get; set; }
+        public Nullable<int> SequenceNumber { get; set; }
     
         public virtual ICollection<IdentifyBach> IdentifyBaches { get; set; }
         public virtual ICollection<Invoice> Invoices { get; set; }

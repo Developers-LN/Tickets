@@ -6,7 +6,7 @@
 
     if (Model.AsEnumerable().GroupBy(r => r.RaffleId).Select(s => s.Key).ToList().Count() == 1)
     {
-        ViewBag.Title = "REPORTE DE FACTURACION DEL PERIODO " + ViewBag.startDate + " Y " + ViewBag.endDate + " DEL SORTEO " + @Model.FirstOrDefault().RaffleId;
+        ViewBag.Title = "REPORTE DE FACTURACION DEL PERIODO " + ViewBag.startDate + " Y " + ViewBag.endDate + " DEL SORTEO " + @Model.FirstOrDefault().Raffle.SequenceNumber;
     }
     else
     {
@@ -76,7 +76,7 @@
             <b>REPORTE DE FACTURACION DEL PERIODO @ViewBag.startDate Y @ViewBag.endDate</b>
             @if (Model.AsEnumerable().GroupBy(r => r.RaffleId).Select(s => s.Key).ToList().Count() == 1)
             {
-                <b>DEL SORTEO @Model.FirstOrDefault().Raffle.Symbol @Model.FirstOrDefault().Raffle.Separator @Model.FirstOrDefault().Raffle.Id</b>
+                <b>DEL SORTEO @Model.FirstOrDefault().Raffle.Symbol @Model.FirstOrDefault().Raffle.Separator @Model.FirstOrDefault().Raffle.SequenceNumber</b>
             }
         </div>
         <div class="col-lg-12 no-padder">
@@ -112,7 +112,7 @@
 
                             var invoiceByRaffle = Model.AsEnumerable().GroupBy(r => r.RaffleId).Select(i => new
                             {
-                                raffleName = i.FirstOrDefault().Raffle.Symbol + i.FirstOrDefault().Raffle.Separator + i.FirstOrDefault().Raffle.Id + "  " + i.FirstOrDefault().Raffle.Name,
+                                raffleName = i.FirstOrDefault().Raffle.Symbol + i.FirstOrDefault().Raffle.Separator + i.FirstOrDefault().Raffle.SequenceNumber + "  " + i.FirstOrDefault().Raffle.Name,
                                 invoiceByClients = i.GroupBy(c => c.ClientId).Select(c => new
                                 {
                                     clientName = c.FirstOrDefault().ClientId + " - " + c.FirstOrDefault().Client.Name,
@@ -185,7 +185,7 @@
                                     }
 
                                     <tr>
-                                        <td class="text-center">@invoice.Id</td>
+                                        <td class="text-center">@invoice.SequenceNumber</td>
                                         <td class="text-center">@(taxDenomination != "" ? taxDenomination+TaxNumber.ToString().PadLeft(8, '0') : "")</td>
                                         <td class="text-center">@invoice.InvoiceDate.ToShortDateString()</td>
                                         <td class="text-center">@(isXpired? "Caducada" : context.Catalogs.FirstOrDefault(c=> c.Id == invoice.PaymentStatu).NameDetail)</td>
@@ -255,7 +255,7 @@
 
                             var invoiceByRaffle = Model.AsEnumerable().GroupBy(r => r.RaffleId).Select(i => new
                             {
-                                raffleName = i.FirstOrDefault().Raffle.Symbol + i.FirstOrDefault().Raffle.Separator + i.FirstOrDefault().Raffle.Id + "  " + i.FirstOrDefault().Raffle.Name,
+                                raffleName = i.FirstOrDefault().Raffle.Symbol + i.FirstOrDefault().Raffle.Separator + i.FirstOrDefault().Raffle.SequenceNumber + "  " + i.FirstOrDefault().Raffle.Name,
                                 invoiceByClients = i.GroupBy(c => c.ClientId).Select(c => new
                                 {
                                     clientName = c.FirstOrDefault().ClientId + " - " + c.FirstOrDefault().Client.Name,
@@ -314,7 +314,7 @@
                                     };
 
                                     <tr>
-                                        <td class="text-center">@invoice.Id</td>
+                                        <td class="text-center">@invoice.SequenceNumber</td>
                                         <td class="text-center">@invoice.InvoiceDate.ToShortDateString()</td>
                                         <td class="text-center">@(isXpired? "Caducada" : context.Catalogs.FirstOrDefault(c=> c.Id == invoice.PaymentStatu).NameDetail)</td>
                                         <td class="text-right">@((payment.totalInvoice).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>

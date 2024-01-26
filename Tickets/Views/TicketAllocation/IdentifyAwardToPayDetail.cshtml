@@ -2,6 +2,7 @@
     Layout = null;
     ViewBag.Title = "Detalles de la identificación de premio a pagar";
 }
+
 <div class="col-lg-12 no-padder" ng-controller="IdentifyAwardToPayDetailController" ng-init="app.title = '@(ViewBag.Title)'">
     <!-- START panel-->
     <div class="col-lg-12 no-padder">
@@ -13,7 +14,7 @@
                             <div class="form-group m-t-xs">
                                 <span class="col-lg-2 control-label">Lote:</span>
                                 <span class="col-lg-10">
-                                    <b>#{{identifyBach.Id}}</b>
+                                    <b>{{identifyBach.SequenceNumberIdentifyBach}}</b>
                                 </span>
                             </div>
                         </fieldset>

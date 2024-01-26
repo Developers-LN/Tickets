@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "RECIBO DE DEVOLUCION DEL SORTEO NO. " + Model.FirstOrDefault().RaffleId + ", GRUPO " + Model.FirstOrDefault().ReturnedGroup + " DEL CLIENTE " + Model.FirstOrDefault().Client.Name;
+    ViewBag.Title = "RECIBO DE DEVOLUCION DEL SORTEO NO. " + Model.FirstOrDefault().Raffle.Symbol + Model.FirstOrDefault().Raffle.Separator + Model.FirstOrDefault().Raffle.SequenceNumber + ", GRUPO " + Model.FirstOrDefault().ReturnedGroup + " DEL CLIENTE " + Model.FirstOrDefault().Client.Name;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();

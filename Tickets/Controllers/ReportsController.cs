@@ -91,6 +91,7 @@ namespace Tickets.Controllers
                 {
                     ClientName = p.ClientId + " - " + p.Client.Name,
                     PaymentType = "PAGO EN EFECTIVO ",// + p.Id,
+                    SequenceNumberPayment = p.SequenceNumber,
                     Value = p.Value,
                     Id = p.Id,
                     UserId = p.CreateUser,
@@ -106,9 +107,11 @@ namespace Tickets.Controllers
                 payment = context.NoteCredits.AsEnumerable().Where(c => c.Id == creditNoteId).Select(n => new PaymentReceivableReportModel
                 {
                     ClientName = n.ClientId + " - " + n.Client.Name,
-                    PaymentType = "PAGO CON NOTA DE CREDITO #" + n.Id,
+                    PaymentType = "PAGO CON NOTA DE CREDITO " + n.Nomenclature == null ? n.SequenceNumber.Value.ToString() : string.Concat(n.Nomenclature, "-", n.SequenceNumber.Value.ToString().PadLeft(5, '0')),
+                    SequenceNumberPayment = n.SequenceNumber,
                     Value = n.TotalCash,
                     Id = n.Id,
+                    Nomenclature = n.Nomenclature,
                     UserId = n.CreateUser,
                     RaffleId = n.IdentifyBaches.FirstOrDefault().RaffleId,
                     CreateDate = n.CreateDate,
@@ -786,7 +789,7 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             ViewBag.ClientId = clientId;
-            ViewBag.invoiceId = invoiceId;
+            ViewBag.invoiceId = context.Invoices.Any(a => a.Id == invoiceId) ? context.Invoices.Find(invoiceId).SequenceNumber : invoiceId;
             var raffle = context.Raffles.FirstOrDefault(r => raffleId == 0 || r.Id == raffleId);
             return View(raffle);
         }
@@ -1237,23 +1240,18 @@ namespace Tickets.Controllers
             var startD = DateTime.Parse(startDate);
             var endD = DateTime.Parse(endDate);
 
+            var raffleData = context.Raffles.Find(raffleId);
+
             List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
-            var InvoiceDetails = context.InvoiceDetails.AsEnumerable().Where(i => (i.Id == raffleId || raffleId == 0) && (i.CreateDate.Date >= startD.Date && i.CreateDate.Date <= endD.Date)).ToList();
 
-            foreach (var item in InvoiceDetails)
+            context.IdentifyBaches.AsEnumerable().Where(i =>
+                (i.RaffleId == raffleId || raffleId == 0) && (i.ClientId == clientId || clientId == 0) &&
+                ((i.IdentifyBachPayments.Any(p => p.CreateDate.Date >= startD.Date && p.CreateDate.Date <= endD.Date) == true) || (i.NoteCredits.Any(a => a.IdentifyBaches.Any(a2 => a2.Id == i.Id) && a.CreateDate.Date >= startD.Date && a.CreateDate.Date <= endD.Date) == true))
+             ).ToList().ForEach(i => identifyNumbers.AddRange(i.IdentifyNumbers));
+
+            if (identifyNumbers.Count <= 0)
             {
-                var awards = context.RaffleAwards.Where(a => a.RaffleId == item.RaffleId).ToList();
-
-                context.IdentifyBaches.AsEnumerable().Where(i =>
-                    i.RaffleId == item.RaffleId && i.ClientId == item.ClientId &&
-                    (i.IdentifyBachPayments.Any(p => p.CreateDate.Date >= item.StartDate.Date && p.CreateDate.Date <= item.EndDate.Date) == true)
-                    && (Utils.IdentifyBachIsPayedMinor(i, awards) || Utils.IdentifyBachIsPayedMayor(i, awards))
-                ).ToList().ForEach(i => identifyNumbers.AddRange(i.IdentifyNumbers));
-
-                if (identifyNumbers.Count <= 0)
-                {
-                    return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo #" + item.RaffleId + "." });
-                }
+                return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo " + raffleData.SequenceNumber + "." });
             }
 
             return View(identifyNumbers);
@@ -1343,11 +1341,11 @@ namespace Tickets.Controllers
 
                 List<ModelProcedure_RaffleSales> modelProcedure_RaffleSales = new List<ModelProcedure_RaffleSales>();
 
-                foreach(var raffle in raffles)
+                foreach (var raffle in raffles)
                 {
                     Procedure_RaffleSales procedure_RaffleSales = new Procedure_RaffleSales();
                     var results = procedure_RaffleSales.RaffleSales(raffle.Id);
-                    foreach(var result in results)
+                    foreach (var result in results)
                     {
                         var data = new ModelProcedure_RaffleSales()
                         {

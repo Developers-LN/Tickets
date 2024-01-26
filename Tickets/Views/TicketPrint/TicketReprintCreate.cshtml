@@ -48,12 +48,12 @@
 
                 <fieldset>
                     <div class="form-group">
-                        <label class="col-lg-12 control-label-left">Asignación:  <span class="color-red">*</span></label>
+                        <label class="col-lg-12 control-label-left">Asignación: <span class="color-red">*</span></label>
                         <div class="col-lg-12" ng-if="allocationId == 0">
                             <div class="checkbox c-checkbox col-lg-4" style="margin-top:5px;" ng-repeat="allocation in allocations">
                                 <label>
                                     <input type="checkbox" id="allocation-{{allocation.id}}" ng-click="updateAllocationNumbers()">
-                                    <span class="fa fa-check"></span>#{{allocation.id}}
+                                    <span class="fa fa-check"></span>{{allocation.sequenceNumberTicketAllocation}}
                                     <a target="_blank" href="/Reports/AllocatinosNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-eye"></i></a>
                                 </label>
                             </div>
@@ -63,7 +63,7 @@
                         </div>
                         <div class="col-lg-12" ng-if="allocationId != 0">
                             <h4>
-                                <label class="label label-lg label-info">#{{allocation.id}}</label>
+                                <label class="label label-lg label-info">{{allocation.sequenceNumberTicketAllocation}}</label>
                                 <a target="_blank" href="/Reports/AllocatinosNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-eye"></i></a>
                             </h4>
                         </div>

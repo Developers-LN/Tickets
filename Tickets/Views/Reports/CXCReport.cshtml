@@ -1,7 +1,7 @@
 ﻿@model Tickets.Models.Raffle
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "REPORTE CXC";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -50,13 +50,13 @@
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>
                 DETALLE DE FACTURAS SORTEO <br />
-                @Model.Symbol @Model.Separator @Model.Id @Model.Name @Model.DateSolteo.ToShortDateString()
+                @Model.Symbol @Model.Separator @Model.SequenceNumber @Model.Name @Model.DateSolteo.ToShortDateString()
             </b>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
             <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
             <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
-            <b>NUMERO DEL SORTEO: </b> @Model.Symbol @Model.Separator @Model.Id
+            <b>NUMERO DEL SORTEO: </b> @Model.Symbol @Model.Separator @Model.SequenceNumber
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder">
@@ -104,7 +104,7 @@
                             var stringNumber = number.TicketAllocationNumber.Number.ToString();
                             var subTotal = number.Quantity * priceFraction;
                             <tr>
-                                <td class="text-left"><b>@invoice.Id</b></td>
+                                <td class="text-left"><b>@invoice.SequenceNumber</b></td>
                                 <td class="text-right">@stringNumber</td>
                                 <td class="text-right">@number.TicketAllocationNumber.FractionFrom - @number.TicketAllocationNumber.FractionTo</td>
                                 <td class="text-right">@number.Quantity</td>

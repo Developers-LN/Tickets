@@ -54,7 +54,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="invoice in invoices">
-                                <td>{{invoice.Id}}</td>
+                                <td>{{invoice.SequenceNumberInvoice}}</td>
                                 <td>{{invoice.Nomenclatura}}</td>
                                 <td>{{invoice.ClientId}} - {{invoice.ClientDesc}} {{invoice.Agente}}</td>
                                 <td>{{parseMoney(invoice.totalInvoice)}}</td>

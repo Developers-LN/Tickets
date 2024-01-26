@@ -31,7 +31,10 @@ namespace Tickets.Models.Ticket
 		[JsonProperty(PropertyName = "allocationId")]
 		public int AllocationId { get; set; }
 
-		[JsonProperty(PropertyName = "totalRest")]
+        [JsonProperty(PropertyName = "sequenceNumberTicketAllocation")]
+        public int? SequenceNumberTicketAllocation { get; set; }
+
+        [JsonProperty(PropertyName = "totalRest")]
 		public int TotalRest { get; set; }
 
 		[JsonProperty(PropertyName = "electronicTickets")]
@@ -40,8 +43,8 @@ namespace Tickets.Models.Ticket
 		[JsonProperty(PropertyName = "statusId")]
 		public int StatusId { get; set; }
 
-		[JsonProperty(PropertyName = "raffleSequence")]
-		public int? RaffleSequence { get; set; }
+		[JsonProperty(PropertyName = "sequenceNumberRaffle")]
+		public int? SequenceNumberRaffle { get; set; }
 
 		internal RequestResponseModel GetElectronicSalesDetails(int AllocationId)
 		{
@@ -132,6 +135,7 @@ namespace Tickets.Models.Ticket
 				{
 					ClientId = model.ClientId,
 					AllocationId = model.Id,
+					SequenceNumberTicketAllocation = model.SequenceNumber,
 					ClientDesc = model.Client.Name,
 					StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
 					CreateDate = model.CreateDate,
@@ -164,6 +168,7 @@ namespace Tickets.Models.Ticket
 				{
 					ClientId = model.ClientId,
 					AllocationId = model.Id,
+					SequenceNumberTicketAllocation = model.SequenceNumber,
 					ClientDesc = model.Client.Name,
 					StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == model.Statu).NameDetail,
 					CreateDate = model.CreateDate,
@@ -221,11 +226,12 @@ namespace Tickets.Models.Ticket
 				ClientId = electronicTicketSale.ClientId,
 				ClientDesc = electronicTicketSale.Client.Name,
                 //RaffleDesc = electronicTicketSale.Raffle.Name,
-                RaffleNomenclature = electronicTicketSale.Raffle.Symbol + electronicTicketSale.Raffle.Separator + electronicTicketSale.Raffle.Id,
-                RaffleDesc = electronicTicketSale.Raffle.Symbol + electronicTicketSale.Raffle.Separator + electronicTicketSale.Raffle.Id + " " + electronicTicketSale.Raffle.Name + " " + electronicTicketSale.Raffle.DateSolteo.ToShortDateString(),
+                RaffleNomenclature = electronicTicketSale.Raffle.Symbol + electronicTicketSale.Raffle.Separator + electronicTicketSale.Raffle.SequenceNumber,
+                RaffleDesc = electronicTicketSale.Raffle.Symbol + electronicTicketSale.Raffle.Separator + electronicTicketSale.Raffle.SequenceNumber + " " + electronicTicketSale.Raffle.Name + " " + electronicTicketSale.Raffle.DateSolteo.ToShortDateString(),
                 RaffleId = electronicTicketSale.Raffle.Id,
-				RaffleSequence = electronicTicketSale.Raffle.RaffleSequence,
-				AllocationId = (int)electronicTicketSale.TicketAllocationId
+				SequenceNumberRaffle = electronicTicketSale.Raffle.SequenceNumber,
+				AllocationId = (int)electronicTicketSale.TicketAllocationId,
+                SequenceNumberTicketAllocation = electronicTicketSale.TicketAllocationNumber.TicketAllocation.SequenceNumber.Value
 			};
 			if (hasNumber)
 			{

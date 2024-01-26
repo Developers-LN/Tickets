@@ -28,6 +28,7 @@ namespace Tickets.Models.Procedures
                         {
                             Data = true,
                             AsignacionId = Convert.ToInt32(sqlDataReader["AsignacionId"].ToString()),
+                            SequenceNumberTicketAllocation = Convert.ToInt32(sqlDataReader["SequenceNumberTicketAllocation"].ToString()),
                             RaffleId = raffle,
                             EstadoAsignacion = sqlDataReader["EstadoAsignacion"].ToString(),
                             Fecha = Convert.ToDateTime(sqlDataReader["Fecha"].ToString()),
@@ -50,6 +51,7 @@ namespace Tickets.Models.Procedures
                     {
                         Data = false,
                         AsignacionId = 0,
+                        SequenceNumberTicketAllocation = 0,
                         RaffleId = raffle,
                         EstadoAsignacion = "",
                         Fecha = DateTime.Now,

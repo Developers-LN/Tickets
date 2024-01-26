@@ -96,7 +96,7 @@
                             totalPayedByClient += item.Payed.Value;
                             totalGeneral += item.Payed.Value;
                             <tr>
-                                <td class="text-center">@item.RaffleId</td>
+                                <td class="text-center">@item.Raffle.Symbol @item.Raffle.Separator @item.Raffle.SequenceNumber</td>
                                 <td class="text-center">@item.Number</td>
                                 <td class="text-center">@item.ControlNumber</td>
                                 <td class="text-center">@item.FractionFrom</td>

@@ -174,17 +174,17 @@ namespace Tickets.Controllers
                 var raffles1 = context.Raffles.Select(r => new
                 {
                     r.Id,
-                    r.RaffleSequence,
+                    r.SequenceNumber,
                     r.Name,
-                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
-                    text = r.Symbol + r.Separator + r.Id + " " + r.Name,
+                    raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
+                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name,
                     r.DateSolteo
                 }).ToList();
 
                 raffles = raffles1.Select(s => new
                 {
                     s.Id,
-                    s.RaffleSequence,
+                    s.SequenceNumber,
                     s.Name,
                     s.raffleNomenclature,
                     text = s.text + " " + s.DateSolteo.ToShortDateString()
@@ -211,7 +211,7 @@ namespace Tickets.Controllers
                 StartDate = invoiceDetail.StartDate.ToUnixTime(),
                 invoiceDetail.RaffleId,
                 //RaffleDesc = invoiceDetail.Raffle.Name,
-                RaffleDesc = invoiceDetail.Raffle.Symbol + invoiceDetail.Raffle.Separator + invoiceDetail.Raffle.Id + " " + invoiceDetail.Raffle.Name + " " + invoiceDetail.Raffle.DateSolteo.ToShortDateString(),
+                RaffleDesc = invoiceDetail.Raffle.Symbol + invoiceDetail.Raffle.Separator + invoiceDetail.Raffle.SequenceNumber + " " + invoiceDetail.Raffle.Name + " " + invoiceDetail.Raffle.DateSolteo.ToShortDateString(),
                 invoiceDetail.ClientId,
                 ClientDesc = invoiceDetail.Client.Name,
                 UserDesc = invoiceDetail.User.Name,
@@ -324,9 +324,9 @@ namespace Tickets.Controllers
             var raffles1 = context.Raffles.Select(r => new
             {
                 value = r.Id,
-                raffleSequence = r.RaffleSequence,
-                raffleNomenclature = r.Symbol + r.Separator + r.Id,
-                text = r.Symbol + r.Separator + r.Id + " " + r.Name, 
+                raffleSequence = r.SequenceNumber,
+                raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
+                text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name,
                 r.DateSolteo
             }).ToList();
 
@@ -927,7 +927,8 @@ namespace Tickets.Controllers
                 {
                     paymentTypes,
                     clientName = invoice.Client.Name,
-                    invoiceId = invoice.InvoiceSequence,
+                    invoiceId = invoice.Id,
+                    sequenceNumberInvoice = invoice.SequenceNumber,
                     clientId = invoice.ClientId,
                     clientType = invoice.Client.GroupId,
                     invoiceDiscount = invoice.Discount,
@@ -938,13 +939,15 @@ namespace Tickets.Controllers
                     .Select(s => new
                     {
                         s.Id,
-                        s.ReceiptSequence,
+                        SequenceNumberReceiptPaymnet = s.Nomenclature == null ? s.SequenceNumber.Value.ToString() : string.Concat(s.Nomenclature, s.SequenceNumber.Value.ToString().PadLeft(5, '0')),
+                        SequenceNumberInvoice = s.Invoice.SequenceNumber,
+                        s.Nomenclature,
                         s.Nombre,
                         s.Observaciones,
                         receiptType = context.Catalogs.Where(w => w.Id == s.ReceiptType).Select(f => f.NameDetail).FirstOrDefault(),
                         paymentDate = s.CreateDate.ToString("dd/MM/yy")
                     }).ToList(),
-                    creditNotes = invoice.Client.NoteCredits.AsEnumerable().Where(c => (c.TypeNote == (int)NoteCreditEnum.NoteCredit || c.TypeNote == null)
+                    creditNotes = invoice.Client.NoteCredits.AsEnumerable().Where(c => c.TypeNote == (int)NoteCreditEnum.NoteCredit
                        && c.Statu == (int)GeneralStatusEnum.Active
                        && (c.RaffleId.HasValue == false || c.RaffleId.Value == invoice.RaffleId)
                        && c.TotalRest > 0).Select(c => CreditNoteToObject(c)).ToList(),
@@ -963,8 +966,9 @@ namespace Tickets.Controllers
                     }),
                     payment = GetPaymentCashByProcedure(invoice),
                     raffleId = invoice.RaffleId,
+                    sequenceNumberRaffle = invoice.Raffle.SequenceNumber,
                     //raffleName = invoice.Raffle.Name
-                    raffleName = invoice.Raffle.Symbol + invoice.Raffle.Separator + invoice.Raffle.Id + " " + invoice.Raffle.Name + " " + invoice.Raffle.DateSolteo.ToShortDateString()
+                    raffleName = invoice.Raffle.Symbol + invoice.Raffle.Separator + invoice.Raffle.SequenceNumber + " " + invoice.Raffle.Name + " " + invoice.Raffle.DateSolteo.ToShortDateString()
                 }
             };
         }
@@ -992,21 +996,21 @@ namespace Tickets.Controllers
                 var raffles1 = context.Raffles.OrderByDescending(s => s.Id).Where(s => s.Statu != (int)RaffleStatusEnum.Suspended).Select(r => new
                 {
                     r.Id,
-                    r.RaffleSequence,
+                    r.SequenceNumber,
                     r.Name,
-                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
-                    text = r.Symbol + r.Separator + r.Id + " " + r.Name,
+                    raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
+                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name,
                     r.DateSolteo
                 }).ToList();
 
                 raffles = raffles1.Select(s => new
                 {
                     s.Id,
-                    s.RaffleSequence,
+                    s.SequenceNumber,
                     s.Name,
                     s.raffleNomenclature,
                     text = s.text + " " + s.DateSolteo.ToShortDateString()
-                }).ToList<object>(); 
+                }).ToList<object>();
             }
             var clients = new List<object>();
             if (clientId == 0)
@@ -1160,7 +1164,8 @@ namespace Tickets.Controllers
             return new
             {
                 invoice.Id,
-                invoice.InvoiceSequence,
+                SequenceNumberInvoice = invoice.SequenceNumber,
+                SequenceNumberRaffle = invoice.Raffle.SequenceNumber,
                 invoice.RaffleId,
                 ClientDesc = ClientData.Name,
                 InvoiceDate = invoice.InvoiceDate.ToUnixTime(),
@@ -1251,17 +1256,17 @@ namespace Tickets.Controllers
                 .Select(s => new
                 {
                     s.Id,
-                    s.RaffleSequence,
+                    s.SequenceNumber,
                     s.Name,
-                    raffleNomenclature = s.Symbol + s.Separator + s.Id,
-                    text = s.Symbol + s.Separator + s.Id + " " + s.Name, 
+                    raffleNomenclature = s.Symbol + s.Separator + s.SequenceNumber,
+                    text = s.Symbol + s.Separator + s.SequenceNumber + " " + s.Name,
                     s.DateSolteo
                 }).ToList();
 
             var raffles = raffles1.Select(s => new
             {
                 s.Id,
-                s.RaffleSequence,
+                s.SequenceNumber,
                 s.Name,
                 s.raffleNomenclature,
                 text = s.text + " " + s.DateSolteo.ToShortDateString()
@@ -1284,15 +1289,24 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var clients = context.Clients.Where(w => w.Statu == (int)ClientStatuEnum.Approbed).Select(s => new { s.Id, s.Name }).ToList();
-            var raffles = context.Raffles.Where(w => w.Statu == (int)RaffleStatusEnum.Planned)
-                .Select(s => new 
-                { 
-                    s.Id, 
-                    s.RaffleSequence, 
+            var raffles1 = context.Raffles.Where(w => w.Statu == (int)RaffleStatusEnum.Planned)
+                .Select(s => new
+                {
+                    s.Id,
+                    s.SequenceNumber,
                     s.Name,
-                    raffleNomenclature = s.Symbol + s.Separator + s.Id,
-                    text = s.Symbol + s.Separator + s.Id + " " + s.Name + " " + s.DateSolteo.ToShortDateString() 
+                    raffleNomenclature = s.Symbol + s.Separator + s.SequenceNumber,
+                    text = s.Symbol + s.Separator + s.SequenceNumber + " " + s.Name,
+                    s.DateSolteo
                 }).ToList();
+
+            var raffles = raffles1.Select(s => new
+            {
+                s.Id,
+                s.SequenceNumber,
+                s.Name,
+                text = s.text + " " + s.DateSolteo.ToShortDateString()
+            }).ToList();
 
             return new JsonResult()
             {
@@ -1370,7 +1384,7 @@ namespace Tickets.Controllers
                 .Select(s => new
                 {
                     s.InvoiceId,
-                    s.Invoice.InvoiceSequence,
+                    s.Invoice.SequenceNumber,
                     s.Invoice.Client.Name,
                     s.TaxReceiptNumber.TaxReceipt.Catalog.Description2,
                     s.TaxReceiptNumber.Number,
@@ -1421,6 +1435,8 @@ namespace Tickets.Controllers
             return new
             {
                 noteCredit.Id,
+                noteCredit.SequenceNumber,
+                noteCredit.Nomenclature,
                 noteCredit.ClientId,
                 CreateDate = noteCredit.CreateDate.ToShortDateString(),
                 noteCredit.CreateUser,
@@ -1428,8 +1444,8 @@ namespace Tickets.Controllers
                 noteCredit.Statu,
                 noteCredit.TotalCash,
                 noteCredit.TotalRest,
-                Concepts = noteCredit.IdentifyBaches.Count > 0 ? noteCredit.Concepts + " Lote #" + noteCredit.IdentifyBaches.FirstOrDefault().Id :
-                noteCredit.RaffleId.HasValue ? noteCredit.Concepts + " del Sorteo #" + noteCredit.RaffleId.Value : noteCredit.Concepts
+                Concepts = noteCredit.IdentifyBaches.Count > 0 ? noteCredit.Concepts + " Lote " + noteCredit.IdentifyBaches.FirstOrDefault().SequenceNumber :
+                noteCredit.RaffleId.HasValue ? noteCredit.Concepts + " del Sorteo " + (noteCredit.Raffle.Symbol + noteCredit.Raffle.Separator + noteCredit.Raffle.SequenceNumber) : noteCredit.Concepts
             };
         }
 
@@ -1600,6 +1616,7 @@ namespace Tickets.Controllers
                             creditNote.CreateDate = DateTime.Now;
                             creditNote.CreateUser = WebSecurity.CurrentUserId;
                             creditNote.Statu = (int)GeneralStatusEnum.Active;
+                            creditNote.TypeNote = (int)NoteCreditEnum.NoteCredit;
                             context.NoteCredits.Add(creditNote);
                             context.SaveChanges();
                             if (identifyBachId > 0)
@@ -1783,11 +1800,12 @@ namespace Tickets.Controllers
                     c.Name
                 }).ToList<object>();
 
-                creditNotes = context.NoteCredits.Where(w => w.TypeNote == (int)NoteCreditEnum.NoteCredit || w.TypeNote == null)
+                creditNotes = context.NoteCredits.Where(w => w.TypeNote == (int)NoteCreditEnum.NoteCredit)
                     .AsEnumerable().OrderByDescending(n => n.Id).Select(c => new
                     {
                         c.Id,
                         c.ClientId,
+                        SequenceNumberNoteCredit = c.Nomenclature == null ? c.SequenceNumber.Value.ToString() : string.Concat(c.Nomenclature, "-", c.SequenceNumber.Value.ToString().PadLeft(5, '0')),
                         ClientDesc = c.Client.Name,
                         NoteDate = c.NoteDate.ToShortDateString(),
                         c.Concepts,
@@ -1798,10 +1816,11 @@ namespace Tickets.Controllers
             else
             {
                 creditNotes = context.NoteCredits.AsEnumerable().OrderByDescending(n => n.Id)
-                    .Where(c => c.ClientId == clientId && (c.TypeNote == (int)NoteCreditEnum.NoteCredit || c.TypeNote == null)).Select(c => new
+                    .Where(c => c.ClientId == clientId && c.TypeNote == (int)NoteCreditEnum.NoteCredit).Select(c => new
                     {
                         c.Id,
                         c.ClientId,
+                        SequenceNumberNoteCredit = c.Nomenclature == null ? c.SequenceNumber.Value.ToString() : string.Concat(c.Nomenclature, "-", c.SequenceNumber.Value.ToString().PadLeft(5, '0')),
                         ClientDesc = c.Client.Name,
                         NoteDate = c.NoteDate.ToShortDateString(),
                         c.TotalCash,
@@ -1834,6 +1853,7 @@ namespace Tickets.Controllers
                     {
                         c.Id,
                         c.ClientId,
+                        SequenceNumberNoteCredit = c.Nomenclature == null ? c.SequenceNumber.Value.ToString() : string.Concat(c.Nomenclature, "-", c.SequenceNumber.Value.ToString().PadLeft(5, '0')),
                         ClientDesc = c.Client.Name,
                         NoteDate = c.NoteDate.ToShortDateString(),
                         c.Concepts,
@@ -1848,6 +1868,7 @@ namespace Tickets.Controllers
                     {
                         c.Id,
                         c.ClientId,
+                        SequenceNumberNoteCredit = c.Nomenclature == null ? c.SequenceNumber.Value.ToString() : string.Concat(c.Nomenclature, "-", c.SequenceNumber.Value.ToString().PadLeft(5, '0')),
                         ClientDesc = c.Client.Name,
                         NoteDate = c.NoteDate.ToShortDateString(),
                         c.TotalCash,
@@ -1877,6 +1898,7 @@ namespace Tickets.Controllers
                 {
                     c.Id,
                     c.ClientId,
+                    SequenceNumberNoteCredit = c.Nomenclature == null ? c.SequenceNumber.Value.ToString() : string.Concat(c.Nomenclature, "-", c.SequenceNumber.Value.ToString().PadLeft(5, '0')),
                     ClientDesc = c.Client.Name,
                     NoteDate = c.NoteDate.ToShortDateString(),
                     c.Concepts,
@@ -1891,6 +1913,7 @@ namespace Tickets.Controllers
                     {
                         c.Id,
                         c.ClientId,
+                        SequenceNumberNoteCredit = c.Nomenclature == null ? c.SequenceNumber.Value.ToString() : string.Concat(c.Nomenclature, "-", c.SequenceNumber.Value.ToString().PadLeft(5, '0')),
                         ClientDesc = c.Client.Name,
                         NoteDate = c.NoteDate.ToShortDateString(),
                         c.TotalCash,
@@ -1920,6 +1943,7 @@ namespace Tickets.Controllers
                 {
                     c.Id,
                     c.ClientId,
+                    SequenceNumberNoteCredit = c.Nomenclature == null ? c.SequenceNumber.Value.ToString() : string.Concat(c.Nomenclature, "-", c.SequenceNumber.Value.ToString().PadLeft(5, '0')),
                     ClientDesc = c.Client.Name,
                     NoteDate = c.NoteDate.ToShortDateString(),
                     c.Concepts,
@@ -1934,6 +1958,7 @@ namespace Tickets.Controllers
                     {
                         c.Id,
                         c.ClientId,
+                        SequenceNumberNoteCredit = c.Nomenclature == null ? c.SequenceNumber.Value.ToString() : string.Concat(c.Nomenclature, "-", c.SequenceNumber.Value.ToString().PadLeft(5, '0')),
                         ClientDesc = c.Client.Name,
                         NoteDate = c.NoteDate.ToShortDateString(),
                         c.TotalCash,

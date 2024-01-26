@@ -35,5 +35,7 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "award")]
         public AwardModel Award { get; set; }
 
+        [JsonProperty(PropertyName = "sequenceNumberRaffle")]
+        public int? SequenceNumberRaffle { get; set; }
     }
 }

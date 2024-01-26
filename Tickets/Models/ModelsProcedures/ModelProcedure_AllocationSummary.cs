@@ -8,6 +8,8 @@ namespace Tickets.Models.ModelsProcedures
 
         public int AsignacionId { get; set; }
 
+        public int SequenceNumberTicketAllocation { get; set; }
+
         public string EstadoAsignacion { get; set; }
 
         public int ClientId { get; set; }

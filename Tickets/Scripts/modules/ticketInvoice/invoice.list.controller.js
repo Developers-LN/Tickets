@@ -40,7 +40,7 @@
         this.showAllocations = function (ticketAllocations) {
             var string = '';
             ticketAllocations.forEach(function (allocation, i) {
-                string += allocation.id;
+                string += allocation.sequenceNumberTicketAllocation;
                 if ((i + 1) < ticketAllocations.length) {
                     string += ', '
                 }

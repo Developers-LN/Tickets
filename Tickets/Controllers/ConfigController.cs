@@ -184,15 +184,17 @@ namespace Tickets.Controllers
                 var RaffleList1 = context.Raffles.Select(r => new
                 {
                     id = r.Id,
-                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
-                    text = r.Symbol + r.Separator + r.Id + " " + r.Name,
+                    sequenceNumber = r.SequenceNumber,
+                    raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
+                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name,
                     r.DateSolteo
-                    //text = r.RaffleSequence + " - " + r.Name
+                    //text = r.SequenceNumber + " - " + r.Name
                 }).ToList();
 
                 var RaffleList = RaffleList1.Select(s => new
                 {
                     s.id,
+                    s.sequenceNumber,
                     s.raffleNomenclature,
                     text = s.text + " " + s.DateSolteo.ToShortDateString()
                 }).ToList();

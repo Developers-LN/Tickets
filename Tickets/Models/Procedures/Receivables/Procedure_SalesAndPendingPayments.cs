@@ -48,6 +48,7 @@ namespace Tickets.Models.Procedures.Receivables
                             IdRaffle = Convert.ToInt32(sqlDataReader["ID_Sorteo"].ToString()),
                             NameRaffle = sqlDataReader["Nombre_Sorteo"].ToString(),
                             IdInvoice = Convert.ToInt32(sqlDataReader["ID_Factura"].ToString()),
+                            InvoiceType = sqlDataReader["InvoiceType"].ToString(),
                             DateInvoice = Convert.ToDateTime(sqlDataReader["Fecha_Factura"].ToString()),
                             StatusInvoice = sqlDataReader["Estado_Factura"].ToString(),
                             TotalFractions = Convert.ToInt32(sqlDataReader["Total_Fracciones"].ToString()),
@@ -60,7 +61,10 @@ namespace Tickets.Models.Procedures.Receivables
                             CashPayment = Convert.ToDecimal(sqlDataReader["Pagos_Efectivo"].ToString()),
                             NoteCreditPayment = Convert.ToDecimal(sqlDataReader["Pagos_Credito"].ToString()),
                             TotalPayed = Convert.ToDecimal(sqlDataReader["Total_Pagado"].ToString()),
-                            TotalPending = Convert.ToDecimal(sqlDataReader["Total_Faltante"].ToString())
+                            TotalPending = Convert.ToDecimal(sqlDataReader["Total_Faltante"].ToString()),
+                            SequenceNumberInvoice = Convert.ToInt32(sqlDataReader["SequenceNumberInvoice"].ToString()),
+                            NomenclatureRaffle = sqlDataReader["NomenclatureRaffle"].ToString(),
+                            SequenceNumberRaffle = Convert.ToInt32(sqlDataReader["SequenceNumberRaffle"].ToString())
                         };
                         lista.Add(Devoluciones);
                     }
@@ -74,6 +78,7 @@ namespace Tickets.Models.Procedures.Receivables
                         NameClient = "",
                         TypeClient = "",
                         IdRaffle = 0,
+                        InvoiceType = "",
                         ReceivableStatusId = 0,
                         NameRaffle = "",
                         IdInvoice = 0,
@@ -89,7 +94,10 @@ namespace Tickets.Models.Procedures.Receivables
                         CashPayment = 0,
                         NoteCreditPayment = 0,
                         TotalPayed = 0,
-                        TotalPending = 0
+                        TotalPending = 0,
+                        SequenceNumberInvoice = 0,
+                        NomenclatureRaffle = "",
+                        SequenceNumberRaffle = 0
                     };
                     lista.Add(Devoluciones);
                 }

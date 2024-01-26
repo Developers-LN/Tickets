@@ -52,10 +52,10 @@ namespace Tickets.Controllers
                 {
                     r.Name,
                     r.Id,
-                    r.RaffleSequence,
+                    r.SequenceNumber,
                     DateSolteo = r.DateSolteo.ToUnixTime(),
-                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
-                    text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString()
+                    raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
+                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToShortDateString()
                 }).OrderByDescending(r => r.Id).ToList();
             return new JsonResult()
             {

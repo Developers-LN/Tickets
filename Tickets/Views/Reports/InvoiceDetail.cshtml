@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "DETALLES DE FACTURA NO. " + Model.Id;
+    ViewBag.Title = "DETALLES DE FACTURA NO. " + Model.SequenceNumber;
 
     var context = new Tickets.Models.TicketsEntities();
     var availableTicketsToInvoice = new Tickets.Models.Procedures.Procedure_AvailableTicketToInvoice();
@@ -86,7 +86,7 @@
                     <b>FECHA:</b> @Model.CreateDate.ToShortDateString()
                 </div>
                 <div class="col-lg-12 no-padder text-left">
-                    <b>FACTURA:</b> @Model.Id
+                    <b>FACTURA:</b> @Model.SequenceNumber
                 </div>
             </div>
             @if (Model.TaxReceiptNumbersHistories.Any() && Model.CreateDate.Date == Model.TaxReceiptNumbersHistories.FirstOrDefault().TaxReceiptAssignmentDate.Value.Date)
@@ -127,7 +127,7 @@
             </div>
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>SORTEO: </b> @Model.Raffle.Symbol @Model.Raffle.Separator @Model.RaffleId
+                    <b>SORTEO: </b> @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>FECHA DE SORTEO: </b> @Model.Raffle.DateSolteo.ToShortDateString()
@@ -161,11 +161,13 @@
                         var allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select(a => new
                         {
                             AllocationId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocationId,
+                            SequenceNumberTicketAllocation = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.SequenceNumber,
                             TicketAllocationId = a.FirstOrDefault().TicketNumberAllocationId,
                             InvoiceDate = a.FirstOrDefault().Invoice.CreateDate, 
                             Discount = a.FirstOrDefault().Invoice.Discount,
                             ClientId = a.FirstOrDefault().Invoice.ClientId,
                             RaffleId = a.FirstOrDefault().Invoice.RaffleId,
+                            SequenceNumberRaffle = a.FirstOrDefault().Invoice.Raffle.SequenceNumber,
                             PriceFraction = a.FirstOrDefault().Invoice.InvoiceTickets.FirstOrDefault().PricePerFraction,
                             TicketFractions = (a.FirstOrDefault().Invoice.Raffle.Prospect.LeafFraction * a.FirstOrDefault().Invoice.Raffle.Prospect.LeafNumber),
                             Quantity = a.FirstOrDefault().Quantity * a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers.Count(),
@@ -188,7 +190,7 @@
                             discount = subTotal * number.Discount / 100;
                             total = subTotal - discount;
                             <tr>
-                                <td class="text-center">@number.AllocationId</td>
+                                <td class="text-center">@number.SequenceNumberTicketAllocation</td>
                                 <td class="text-center">@number.Numbers.Count</td>
                                 <td class="text-center">@(number.Numbers.Count)-@(number.Quantity % number.TicketFractions) </td>
                                 <td class="text-center">@number.PriceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
@@ -213,7 +215,7 @@
                             discount = (subTotal * number.ClientDiscount) / 100;
                             total = subTotal - discount;
                             <tr>
-                                <td class="text-center">@number.AllocationId</td>
+                                <td class="text-center">@number.SequenceNumberTicketAllocation</td>
                                 <td class="text-center">@TotalFracciones</td>
                                 <td class="text-center">@(TotalFracciones / Resultado.FirstOrDefault().TicketFraction)-@(TotalFracciones % Resultado.FirstOrDefault().TicketFraction) </td>
                                 <td class="text-center">@number.PriceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
@@ -323,7 +325,7 @@ else
             <div class="col-lg-12 no-padder text-center">
                 <b>
                     DETALLE DE FACTURAS SORTEO <br />
-                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
                 </b>
             </div>
             <div class="col-lg-6 no-padder">
@@ -339,7 +341,7 @@ else
             </div>
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Factura: </b> @Model.Id
+                    <b>Factura: </b> @Model.SequenceNumber
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
@@ -368,6 +370,7 @@ else
                         var allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select(a => new
                         {
                             AllocationId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocationId,
+                            SequenceNumberTicketAllocation = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.SequenceNumber,
                             Quantity = a.FirstOrDefault().Quantity * a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers.Count(),
                             Numbers = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers,
                             FractionFrom = a.FirstOrDefault().TicketAllocationNumber.FractionFrom,
@@ -385,7 +388,7 @@ else
                         var subTotal = number.Quantity * priceFraction;
                         subtotalBilletes += number.Numbers.Count;
                         <tr>
-                            <td class="text-center">@number.AllocationId</td>
+                            <td class="text-center">@number.SequenceNumberTicketAllocation</td>
                             <td class="text-center">@number.Numbers.Count </td>
                             <td class="text-center">@number.Quantity</td>
                             <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
@@ -466,7 +469,7 @@ else
             <div class="col-lg-12 no-padder text-center">
                 <b>
                     DETALLE DE FACTURAS SORTEO <br />
-                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
                 </b>
             </div>
             <div class="col-lg-6 no-padder">
@@ -511,6 +514,7 @@ else
                         allocations = Model.InvoiceTickets.GroupBy(a => a.TicketAllocationNumber.TicketAllocationId).Select(a => new
                         {
                             AllocationId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocationId,
+                            SequenceNumberTicketAllocation = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.SequenceNumber,
                             Quantity = a.FirstOrDefault().Quantity * a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers.Count(),
                             Numbers = a.FirstOrDefault().TicketAllocationNumber.TicketAllocation.TicketAllocationNumbers,
                             FractionFrom = a.FirstOrDefault().TicketAllocationNumber.FractionFrom,
@@ -526,7 +530,7 @@ else
                         var subTotal = number.Quantity * priceFraction;
                         subtotalBilletes += number.Numbers.Count;
                         <tr>
-                            <td class="text-center">@number.AllocationId</td>
+                            <td class="text-center">@number.SequenceNumberTicketAllocation</td>
                             <td class="text-center">@number.Numbers.Count </td>
                             <td class="text-center">@number.Quantity</td>
                             <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>

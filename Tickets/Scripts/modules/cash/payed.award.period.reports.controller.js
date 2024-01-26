@@ -65,17 +65,13 @@
         function validateData(cash) {
             var error = '', isReq = ' es un campo requerido. <br>';
 
-            if (cash.StartDate !== undefined && $scope.cash.EndDate === undefined) {
+            if ($scope.cash.EndDate === undefined) {
                 $scope.required = true;
                 error += 'La Fecha Fin' + isReq;
             }
-            if (cash.StartDate === undefined && $scope.cash.EndDate !== undefined) {
+            if (cash.StartDate === undefined) {
                 $scope.required = true;
                 error += 'La Fecha de Inicio' + isReq;
-            }
-            if (cash.StartDate === undefined && cash.EndDate === undefined && cash.RaffleId === 0) {
-                $scope.required = true;
-                error += 'No ha introducido ningun dato';
             }
             if (error !== '') {
                 alertify.showError('Alerta', error);

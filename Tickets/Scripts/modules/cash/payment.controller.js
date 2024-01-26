@@ -63,7 +63,7 @@
                                 if (paymentData[1] == 'success') {
                                     if (paymentData[0].result === false) {
                                         alertify.alert(paymentData[0].message);
-                                        window.location.href = '#/ticket/identifybachdetail/' + $stateParams.identifyBachId;
+                                        window.location.href = '#/ticket/identifybachtopaydetail/' + $stateParams.identifyBachId;
                                     } else {
                                         if (identifyBach[1] == 'success') {
                                             var identifyNumbers = [];
@@ -141,7 +141,7 @@
                     window.loading.hide();
                     if (data.result === true) {
                         alertify.success(data.message);
-                        window.location.href = '#/ticket/identifybachdetail/' + $stateParams.identifyBachId;
+                        window.location.href = '#/ticket/identifybachtopaydetail/' + $stateParams.identifyBachId;
                     } else {
                         alertify.alert(data.message);
                     }

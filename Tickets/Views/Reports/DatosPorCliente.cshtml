@@ -1,11 +1,13 @@
 ﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelProcedure_NetSalesByClient>
 
 @{
-    Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "VENTAS POR CLIENTE DEL SORTEO NO. " + Model.FirstOrDefault().RaffleId;
-
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
+    var RaffleId = Model.FirstOrDefault().RaffleId;
+    var RaffleData = context.Raffles.Where(w => w.Id == RaffleId).FirstOrDefault();
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "VENTAS POR CLIENTE DEL SORTEO NO. " + RaffleData.Symbol + RaffleData.Separator + RaffleData.SequenceNumber;
+
     string adminName = config != null ? config.Comercial : "";
     string adminCargo = config != null ? config.ComercialCargo : "";
 
@@ -14,10 +16,6 @@
     decimal TotalVendido = 0;
     decimal TotalPorcentaje = 0.0m;
     int Fila = 1;
-
-    var RaffleId = Model.FirstOrDefault().RaffleId;
-
-    var RaffleData = context.Raffles.Where(w => w.Id == RaffleId).FirstOrDefault();
 
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
 }
@@ -69,7 +67,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th colspan="7" class="text-center">@RaffleData.Symbol @RaffleData.Separator @RaffleData.Id @RaffleData.Name</th>
+                        <th colspan="7" class="text-center">@RaffleData.Symbol @RaffleData.Separator @RaffleData.SequenceNumber @RaffleData.Name</th>
                     </tr>
                     <tr>
                         <th class="text-center">FILA</th>

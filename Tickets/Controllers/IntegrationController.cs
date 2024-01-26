@@ -120,6 +120,8 @@ namespace Tickets.Controllers
 
                 var IdentifyTickets = context.IdentifyBaches.Where(w => w.RaffleId == RaffleId).Select(s => new { s.IdentifyNumbers }).ToList();
 
+                workSheet.Column(1).Style.NumberFormat.Format = "@";
+
                 foreach (var item in Resultado)
                 {
                     curretRow++;
@@ -144,7 +146,6 @@ namespace Tickets.Controllers
                 var table = range.CreateTable();
                 table.Theme = XLTableTheme.TableStyleLight9;
                 workSheet.Columns().AdjustToContents();
-                workSheet.Column(1).Style.NumberFormat.Format = "@";
                 workSheet.Column(6).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(7).Style.NumberFormat.Format = "$ #,##0.00";
 
@@ -175,22 +176,23 @@ namespace Tickets.Controllers
                 workSheet.Cell(curretRow, 1).Value = "ID_Cliente";
                 workSheet.Cell(curretRow, 2).Value = "Nombre_Cliente";
                 workSheet.Cell(curretRow, 3).Value = "Tipo_Cliente";
-                workSheet.Cell(curretRow, 4).Value = "ID_Sorteo";
+                workSheet.Cell(curretRow, 4).Value = "Sorteo";
                 workSheet.Cell(curretRow, 5).Value = "Nombre_Sorteo";
-                workSheet.Cell(curretRow, 6).Value = "ID_Factura";
-                workSheet.Cell(curretRow, 7).Value = "Fecha_Factura";
-                workSheet.Cell(curretRow, 8).Value = "Estado_Factura";
-                workSheet.Cell(curretRow, 9).Value = "Total_Billetes";
-                workSheet.Cell(curretRow, 10).Value = "Total_Fracciones";
-                workSheet.Cell(curretRow, 11).Value = "Precio_Billete";
-                workSheet.Cell(curretRow, 12).Value = "Total_Factura";
-                workSheet.Cell(curretRow, 13).Value = "Descuento";
-                workSheet.Cell(curretRow, 14).Value = "Total_Descuento";
-                workSheet.Cell(curretRow, 15).Value = "Total_A_Pagar";
-                workSheet.Cell(curretRow, 16).Value = "Pagos_Efectivo";
-                workSheet.Cell(curretRow, 17).Value = "Pagos_Nota_Credito";
-                workSheet.Cell(curretRow, 18).Value = "Total_Pagado";
-                workSheet.Cell(curretRow, 19).Value = "Total_Faltante";
+                workSheet.Cell(curretRow, 6).Value = "Factura";
+                workSheet.Cell(curretRow, 7).Value = "Tipo_Factura";
+                workSheet.Cell(curretRow, 8).Value = "Fecha_Factura";
+                workSheet.Cell(curretRow, 9).Value = "Estado_Factura";
+                workSheet.Cell(curretRow, 10).Value = "Total_Billetes";
+                workSheet.Cell(curretRow, 11).Value = "Total_Fracciones";
+                workSheet.Cell(curretRow, 12).Value = "Precio_Billete";
+                workSheet.Cell(curretRow, 13).Value = "Total_Factura";
+                workSheet.Cell(curretRow, 14).Value = "Descuento";
+                workSheet.Cell(curretRow, 15).Value = "Total_Descuento";
+                workSheet.Cell(curretRow, 16).Value = "Total_A_Pagar";
+                workSheet.Cell(curretRow, 17).Value = "Pagos_Efectivo";
+                workSheet.Cell(curretRow, 18).Value = "Pagos_Nota_Credito";
+                workSheet.Cell(curretRow, 19).Value = "Total_Pagado";
+                workSheet.Cell(curretRow, 20).Value = "Total_Faltante";
 
                 foreach (var item in Resultado)
                 {
@@ -198,31 +200,32 @@ namespace Tickets.Controllers
                     workSheet.Cell(curretRow, 1).Value = item.IdClient;
                     workSheet.Cell(curretRow, 2).Value = item.NameClient;
                     workSheet.Cell(curretRow, 3).Value = item.TypeClient;
-                    workSheet.Cell(curretRow, 4).Value = item.IdRaffle;
+                    workSheet.Cell(curretRow, 4).Value = item.NomenclatureRaffle;
                     workSheet.Cell(curretRow, 5).Value = item.NameRaffle;
-                    workSheet.Cell(curretRow, 6).Value = item.IdInvoice;
-                    workSheet.Cell(curretRow, 7).Value = item.DateInvoice;
-                    workSheet.Cell(curretRow, 8).Value = item.StatusInvoice;
-                    workSheet.Cell(curretRow, 9).Value = item.TotalTickets;
-                    workSheet.Cell(curretRow, 10).Value = item.TotalFractions;
-                    workSheet.Cell(curretRow, 11).Value = item.PriceTicket;
-                    workSheet.Cell(curretRow, 12).Value = item.TotalInvoice;
-                    workSheet.Cell(curretRow, 13).Value = item.DiscountPercent;
-                    workSheet.Cell(curretRow, 14).Value = item.TotalDiscount;
-                    workSheet.Cell(curretRow, 15).Value = item.TotalToPay;
-                    workSheet.Cell(curretRow, 16).Value = item.CashPayment;
-                    workSheet.Cell(curretRow, 17).Value = item.NoteCreditPayment;
-                    workSheet.Cell(curretRow, 18).Value = item.TotalPayed;
-                    workSheet.Cell(curretRow, 19).Value = item.TotalPending;
+                    workSheet.Cell(curretRow, 6).Value = item.SequenceNumberInvoice;
+                    workSheet.Cell(curretRow, 7).Value = item.InvoiceType;
+                    workSheet.Cell(curretRow, 8).Value = item.DateInvoice;
+                    workSheet.Cell(curretRow, 9).Value = item.StatusInvoice;
+                    workSheet.Cell(curretRow, 10).Value = item.TotalTickets;
+                    workSheet.Cell(curretRow, 11).Value = item.TotalFractions;
+                    workSheet.Cell(curretRow, 12).Value = item.PriceTicket;
+                    workSheet.Cell(curretRow, 13).Value = item.TotalInvoice;
+                    workSheet.Cell(curretRow, 14).Value = item.DiscountPercent;
+                    workSheet.Cell(curretRow, 15).Value = item.TotalDiscount;
+                    workSheet.Cell(curretRow, 16).Value = item.TotalToPay;
+                    workSheet.Cell(curretRow, 17).Value = item.CashPayment;
+                    workSheet.Cell(curretRow, 18).Value = item.NoteCreditPayment;
+                    workSheet.Cell(curretRow, 19).Value = item.TotalPayed;
+                    workSheet.Cell(curretRow, 20).Value = item.TotalPending;
                 }
 
                 var range = workSheet.RangeUsed();
                 var table = range.CreateTable();
                 table.Theme = XLTableTheme.TableStyleLight9;
                 workSheet.Columns().AdjustToContents();
-                workSheet.Column(9).Style.NumberFormat.Format = "#,##0";
-                workSheet.Column(11).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(10).Style.NumberFormat.Format = "#,##0";
                 workSheet.Column(12).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(13).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(14).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(15).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(16).Style.NumberFormat.Format = "$ #,##0.00";
@@ -277,9 +280,9 @@ namespace Tickets.Controllers
                 workSheet.Cell(curretRow, 2).Value = "TIPO DE DOCUMENTO";
                 workSheet.Cell(curretRow, 3).Value = "NOMBRE DEL GANADOR";
                 workSheet.Cell(curretRow, 4).Value = "GENERO";
-                workSheet.Cell(curretRow, 5).Value = "NO. SORTEO";
-                workSheet.Cell(curretRow, 6).Value = "NO. LOTE";
-                workSheet.Cell(curretRow, 7).Value = "NO. TICKET";
+                workSheet.Cell(curretRow, 5).Value = "SORTEO";
+                workSheet.Cell(curretRow, 6).Value = "LOTE";
+                workSheet.Cell(curretRow, 7).Value = "TICKET";
                 workSheet.Cell(curretRow, 8).Value = "PREMIO";
                 workSheet.Cell(curretRow, 9).Value = "VALOR POR FRACCION";
                 workSheet.Cell(curretRow, 10).Value = "FRACCION DESDE";
@@ -301,8 +304,8 @@ namespace Tickets.Controllers
                     workSheet.Cell(curretRow, 2).Value = item.DocumentType;
                     workSheet.Cell(curretRow, 3).Value = item.Winner;
                     workSheet.Cell(curretRow, 4).Value = item.Genre;
-                    workSheet.Cell(curretRow, 5).Value = item.RaffleId;
-                    workSheet.Cell(curretRow, 6).Value = item.BachId;
+                    workSheet.Cell(curretRow, 5).Value = item.NomenclatureRaffle;
+                    workSheet.Cell(curretRow, 6).Value = item.SequenceNumberIdentifyBach;
                     workSheet.Cell(curretRow, 7).Value = item.TicketNumber;
                     workSheet.Cell(curretRow, 8).Value = item.AwardName;
                     workSheet.Cell(curretRow, 9).Value = item.AwardByFraction;
@@ -418,9 +421,9 @@ namespace Tickets.Controllers
                 workSheet.Cell(curretRow, 1).Value = "ID_Cliente";
                 workSheet.Cell(curretRow, 2).Value = "Nombre_Cliente";
                 workSheet.Cell(curretRow, 3).Value = "Tipo_Cliente";
-                workSheet.Cell(curretRow, 4).Value = "ID_Sorteo";
+                workSheet.Cell(curretRow, 4).Value = "Sorteo";
                 workSheet.Cell(curretRow, 5).Value = "Nombre_Sorteo";
-                workSheet.Cell(curretRow, 6).Value = "ID_Factura";
+                workSheet.Cell(curretRow, 6).Value = "Factura";
                 workSheet.Cell(curretRow, 7).Value = "Fecha_Factura";
                 workSheet.Cell(curretRow, 8).Value = "Estado_Factura";
                 workSheet.Cell(curretRow, 9).Value = "Total_Billetes";
@@ -441,9 +444,9 @@ namespace Tickets.Controllers
                     workSheet.Cell(curretRow, 1).Value = item.IdClient;
                     workSheet.Cell(curretRow, 2).Value = item.NameClient;
                     workSheet.Cell(curretRow, 3).Value = item.TypeClient;
-                    workSheet.Cell(curretRow, 4).Value = item.IdRaffle;
+                    workSheet.Cell(curretRow, 4).Value = item.NomenclatureRaffle;
                     workSheet.Cell(curretRow, 5).Value = item.NameRaffle;
-                    workSheet.Cell(curretRow, 6).Value = item.IdInvoice;
+                    workSheet.Cell(curretRow, 6).Value = item.SequenceNumberInvoice;
                     workSheet.Cell(curretRow, 7).Value = item.DateInvoice;
                     workSheet.Cell(curretRow, 8).Value = item.StatusInvoice;
                     workSheet.Cell(curretRow, 9).Value = item.TotalTickets;
@@ -523,43 +526,43 @@ namespace Tickets.Controllers
                 var workSheet = workBook.Worksheets.Add("Cuentas");
                 var curretRow = 1;
 
-                workSheet.Cell(curretRow, 1).Value = "ID_Cliente";
-                workSheet.Cell(curretRow, 2).Value = "Nombre_Cliente";
-                workSheet.Cell(curretRow, 3).Value = "ID_Sorteo";
-                workSheet.Cell(curretRow, 4).Value = "Nombre_Sorteo";
-                workSheet.Cell(curretRow, 5).Value = "Numero";
-                workSheet.Cell(curretRow, 6).Value = "No_Control";
-                workSheet.Cell(curretRow, 7).Value = "Desde";
-                workSheet.Cell(curretRow, 8).Value = "Hasta";
-                workSheet.Cell(curretRow, 9).Value = "No_ticket";
-                workSheet.Cell(curretRow, 10).Value = "Premio";
-                workSheet.Cell(curretRow, 11).Value = "Pagado";
-                workSheet.Cell(curretRow, 12).Value = "Fecha_Pago";
+                workSheet.Cell(curretRow, 1).Value = "Sorteo";
+                workSheet.Cell(curretRow, 2).Value = "Fecha_Pago";
+                workSheet.Cell(curretRow, 3).Value = "No_Control";
+                workSheet.Cell(curretRow, 4).Value = "Numero";
+                workSheet.Cell(curretRow, 5).Value = "Desde";
+                workSheet.Cell(curretRow, 6).Value = "Hasta";
+                workSheet.Cell(curretRow, 7).Value = "Pagado";
+                workSheet.Cell(curretRow, 8).Value = "ID_Cliente";
+                workSheet.Cell(curretRow, 9).Value = "Nombre_Cliente";
+                workSheet.Cell(curretRow, 10).Value = "No_Ticket";
+                workSheet.Cell(curretRow, 11).Value = "Premio";
+
+                workSheet.Column(2).Style.NumberFormat.Format = "@";
+                workSheet.Column(3).Style.NumberFormat.Format = "@";
+                workSheet.Column(4).Style.NumberFormat.Format = "@";
 
                 foreach (var item in electronicAwards)
                 {
                     curretRow++;
-                    workSheet.Cell(curretRow, 1).Value = item.ClientId;
-                    workSheet.Cell(curretRow, 2).Value = item.Client.Name;
-                    workSheet.Cell(curretRow, 3).Value = item.RaffleId;
-                    workSheet.Cell(curretRow, 4).Value = item.Raffle.Name;
-                    workSheet.Cell(curretRow, 5).Value = item.Number;
-                    workSheet.Cell(curretRow, 6).Value = item.ControlNumber;
-                    workSheet.Cell(curretRow, 7).Value = item.FractionFrom;
-                    workSheet.Cell(curretRow, 8).Value = item.FractionTo;
-                    workSheet.Cell(curretRow, 9).Value = item.NoTicket;
-                    workSheet.Cell(curretRow, 10).Value = item.AwardName;
-                    workSheet.Cell(curretRow, 11).Value = item.Payed;
-                    workSheet.Cell(curretRow, 12).Value = item.PayedDate.Value.ToString("dd/MM/yyyy hh:mm:ss tt");
+                    workSheet.Cell(curretRow, 1).Value = (item.Raffle.Symbol + item.Raffle.Separator + item.Raffle.SequenceNumber);
+                    workSheet.Cell(curretRow, 2).Value = item.PayedDate.Value.ToString("dd/MM/yyyy");
+                    workSheet.Cell(curretRow, 3).Value = item.ControlNumber;
+                    workSheet.Cell(curretRow, 4).Value = item.Number;
+                    workSheet.Cell(curretRow, 5).Value = item.FractionFrom;
+                    workSheet.Cell(curretRow, 6).Value = item.FractionTo;
+                    workSheet.Cell(curretRow, 7).Value = item.Payed;
+                    workSheet.Cell(curretRow, 8).Value = item.ClientId;
+                    workSheet.Cell(curretRow, 9).Value = item.Client.Name;
+                    workSheet.Cell(curretRow, 10).Value = item.NoTicket;
+                    workSheet.Cell(curretRow, 11).Value = item.AwardName;
                 }
 
                 var range = workSheet.RangeUsed();
                 var table = range.CreateTable();
                 table.Theme = XLTableTheme.TableStyleLight9;
                 workSheet.Columns().AdjustToContents();
-                workSheet.Column(5).Style.NumberFormat.Format = "@";
-                workSheet.Column(11).Style.NumberFormat.Format = "$ #,##0.00";
-                workSheet.Column(12).Style.NumberFormat.Format = "@";
+                workSheet.Column(7).Style.NumberFormat.Format = "$ #,##0.00";
 
                 using (var stream = new MemoryStream())
                 {
@@ -740,17 +743,17 @@ namespace Tickets.Controllers
 
                         allocationXML = new Models.XML.TicketAllocateXML()
                         {
-                            RaffleId = allocation.RaffleId,
+                            RaffleId = allocation.Raffle.SequenceNumber.Value,
                             //RaffleName = allocation.Raffle.Name,
-                            RaffleNomenclature = allocation.Raffle.Symbol + allocation.Raffle.Separator + allocation.Raffle.Id,
-                            RaffleName = allocation.Raffle.Symbol + allocation.Raffle.Separator + allocation.Raffle.Id + " " + allocation.Raffle.Name + " " + allocation.Raffle.DateSolteo.ToShortDateString(),
+                            RaffleNomenclature = allocation.Raffle.Symbol + allocation.Raffle.Separator + allocation.Raffle.SequenceNumber,
+                            RaffleName = allocation.Raffle.Symbol + allocation.Raffle.Separator + allocation.Raffle.SequenceNumber + " " + allocation.Raffle.Name + " " + allocation.Raffle.DateSolteo.ToShortDateString(),
                             FractionPrice = allocation.Raffle.Prospect.Price,
                             TicketPrice = ((allocation.Raffle.Prospect.LeafFraction * allocation.Raffle.Prospect.LeafNumber) * allocation.Raffle.Prospect.Price),
                             RaffleDate = allocation.Raffle.DateSolteo.ToShortDateString(),
                             StopSales = allocation.Raffle.EndReturnDate.AddHours(-1).ToString(),
                             CreateDate = DateTime.Now.ToString(),
                             Allocation = id,
-                            AllocationSequence = allocation.AllocationSequence,
+                            SequenceNumber = allocation.SequenceNumber,
                             TicketAllocationNumbers = new List<Models.XML.TicketAllocationNumber>()
                         };
 

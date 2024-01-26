@@ -36,6 +36,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "ticketAllocationId")]
         public int TicketAllocationId { get; set; }
 
+        [JsonProperty(PropertyName = "sequenceNumberTicketAllocation")]
+        public int? SequenceNumberTicketAllocation {  get; set; }
+
         [JsonProperty(PropertyName = "serie")]
         public List<TicketAllocationSerieModel> Serie { get; set; }
 
@@ -52,6 +55,7 @@ namespace Tickets.Models.Ticket
                 Printed = model.Printed,
                 Statu = model.Statu,
                 TicketAllocationId = model.TicketAllocationId,
+                SequenceNumberTicketAllocation = model.TicketAllocation.SequenceNumber.Value,
                 Serie = new List<TicketAllocationSerieModel>()
             };
 
@@ -71,6 +75,7 @@ namespace Tickets.Models.Ticket
                 Printed = model.Printed,
                 Statu = model.Statu,
                 TicketAllocationId = model.TicketAllocationId,
+                SequenceNumberTicketAllocation = model.TicketAllocation.SequenceNumber.Value,
                 Serie = new List<TicketAllocationSerieModel>()
             };
 
@@ -594,7 +599,7 @@ namespace Tickets.Models.Ticket
             {
                 n.Id,
                 n.TicketAllocationId,
-                n.TicketAllocation.AllocationSequence,
+                SequenceNumberTicketAllocation = n.TicketAllocation.SequenceNumber,
                 n.ControlNumber,
                 n.Invoiced,
                 MaxFaction = n.TicketAllocation.Raffle.Prospect.LeafFraction * n.TicketAllocation.Raffle.Prospect.LeafNumber,
@@ -613,10 +618,11 @@ namespace Tickets.Models.Ticket
                     n.TicketAllocation.ClientId,
                     ClientDesc = context.Clients.FirstOrDefault(c => c.Id == n.TicketAllocation.ClientId).Name,
                     n.TicketAllocation.RaffleId,
-                    n.TicketAllocation.Raffle.RaffleSequence,
+                    SequenceNumberTicketAllocation = n.TicketAllocation.SequenceNumber,
+                    SequenceNumberRaffle = n.TicketAllocation.Raffle.SequenceNumber,
                     //RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == n.TicketAllocation.RaffleId).Name,
-                    RaffleNomenclature = n.TicketAllocation.Raffle.Symbol + n.TicketAllocation.Raffle.Separator + n.TicketAllocation.Raffle.Id,
-                    RaffleDesc = n.TicketAllocation.Raffle.Symbol + n.TicketAllocation.Raffle.Separator + n.TicketAllocation.Raffle.Id + " " + n.TicketAllocation.Raffle.Name + " " + n.TicketAllocation.Raffle.DateSolteo.ToShortDateString(),
+                    RaffleNomenclature = n.TicketAllocation.Raffle.Symbol + n.TicketAllocation.Raffle.Separator + n.TicketAllocation.Raffle.SequenceNumber,
+                    RaffleDesc = n.TicketAllocation.Raffle.Symbol + n.TicketAllocation.Raffle.Separator + n.TicketAllocation.Raffle.SequenceNumber + " " + n.TicketAllocation.Raffle.Name + " " + n.TicketAllocation.Raffle.DateSolteo.ToShortDateString(),
                     Cedula = n.ElectronicTicketSales.Any(a => a.TicketAllocationNimberId == n.Id) ? n.ElectronicTicketSales.FirstOrDefault().Cedula : null,
                     Telefono = n.ElectronicTicketSales.Any(a => a.TicketAllocationNimberId == n.Id) ? n.ElectronicTicketSales.FirstOrDefault().PhoneNumber : null
                 },

@@ -63,14 +63,23 @@
             if (award.name == '') {
                 error += 'Nombre' + isReq;
             }
-
+            if (award.name != award.nameAux && award.nameAux != '') {
+                $($scope.awards).each(function (i) {
+                    if ($scope.awards[i].sourceAwardDescription == award.nameAux) {
+                        $scope.awards[i].sourceAwardDescription = award.name;
+                    }
+                });
+                $scope.award.nameAux = $scope.award.name;
+            }
+            else {
+                $scope.award.nameAux = $scope.award.name;
+            }
             if (award.orderAward == undefined) {
                 error += 'Orden' + isReq;
             }
             if (award.quantity == undefined) {
                 error += 'Cantidad' + isReq;
             }
-
             if (award.byFraction == undefined) {
                 error += 'Por Fracci&#243;n' + isReq;
             }
@@ -79,6 +88,18 @@
             }
             if (award.value == undefined) {
                 error += 'Valor' + isReq;
+            }
+            if (award.sourceAwardDescription != "") {
+                if (award.sourceAwardDescription == award.name) {
+                    error += 'El premio no puede ser derivado de si mismo';
+                }
+                else {
+                    let index = $scope.awards.findIndex(i => i.name == award.sourceAwardDescription);
+                    let sourceAwardOrder = $scope.awards[index].orderAward;
+                    if (award.orderAward < sourceAwardOrder) {
+                        error += 'El premio de origen no puede estar despues de este premio';
+                    }
+                }
             }
             var editing = $scope.editingAward || {};
             if ($scope.awards.some(function (item) { return item.orderAward === award.orderAward && item.$$hashKey !== editing.$$hashKey; }) == true) {
@@ -143,6 +164,7 @@
         }
 
         $scope.saveAwardForm = function () {
+            $scope.award.sourceAwardDescription = $('#sourceAwardDropdown option:selected').text();
             if (self.validateAwardData($scope.award) === true) {
                 if ($scope.editingAward === null) {
                     $rootScope.destroyDataTable('awardDatatable');
@@ -162,6 +184,7 @@
                     $scope.award.byFractionDescription = $('#byFractionDropdown option:selected').text();
                     $scope.award.typesAwardDesc = $('#typesAwardIdDropdown option:selected').text();
                     $scope.awards.push($scope.award);
+                    console.log($scope.awards);
                 }
 
                 setTimeout(function () {
@@ -177,6 +200,7 @@
             return {
                 id: award.id || null,
                 name: award.name || '',
+                nameAux: award.name || '',
                 description: award.description || '',
                 sourceAward: award.sourceAward || '',
                 sourceAwardDescription: award.sourceAwardDescription || '',

@@ -223,10 +223,12 @@ namespace Tickets.Controllers
                 {
                     b.Id,
                     b.RaffleId,
-                    raffleNomenclature = b.Raffle.Symbol + b.Raffle.Separator + b.Raffle.Id,
+                    sequenceNumberIdentifyBach = b.SequenceNumber,
+                    sequenceNumberRaffle = b.Raffle.SequenceNumber,
+                    raffleNomenclature = b.Raffle.Symbol + b.Raffle.Separator + b.Raffle.SequenceNumber,
                     //RaffleDesc = b.Raffle.Name,
-                    RaffleDesc = b.Raffle.Symbol + b.Raffle.Separator + b.Raffle.Id + " " + b.Raffle.Name + " " + b.Raffle.DateSolteo.ToShortDateString(),
-                    ClientId = b.RaffleId,
+                    RaffleDesc = b.Raffle.Symbol + b.Raffle.Separator + b.Raffle.SequenceNumber + " " + b.Raffle.Name + " " + b.Raffle.DateSolteo.ToShortDateString(),
+                    b.ClientId,
                     ClientDesc = b.Client.Name,
                     hasPayment = (b.IdentifyBachPayments.Count > 0 || b.NoteCredits.Count > 0)
                 }).ToList();
@@ -277,7 +279,7 @@ namespace Tickets.Controllers
         {
             using (var context = new TicketsEntities())
             {
-                var data = context.IdentifyBaches.Select(b => b.Id).ToList();
+                var data = context.IdentifyBaches.Select(b => new { b.Id, SequenceNumberIdentifyBach = b.SequenceNumber }).ToList();
                 return new JsonResult
                 {
                     Data = data,

@@ -48,6 +48,8 @@ namespace Tickets.Models.Procedures.IdentifyBach
                             TotalPayed = Convert.ToDecimal(sqlDataReader["TotalPayed"].ToString()),
                             PayedFractions = Convert.ToInt32(sqlDataReader["PayedFractions"].ToString()),
                             GenreId = Convert.ToInt32(sqlDataReader["GenreId"].ToString()),
+                            NomenclatureRaffle = sqlDataReader["NomenclatureRaffle"].ToString(),
+                            SequenceNumberIdentifyBach = Convert.ToInt32(sqlDataReader["SequenceNumberIdentifyBach"].ToString())
                         };
                         IdentifyBachPayment.Add(bachPayment);
                     }
@@ -75,7 +77,9 @@ namespace Tickets.Models.Procedures.IdentifyBach
                         Year = 0,
                         TotalPayed = 0.0m,
                         PayedFractions = 0,
-                        GenreId = 0
+                        GenreId = 0,
+                        NomenclatureRaffle = "",
+                        SequenceNumberIdentifyBach = 0
                     };
                     IdentifyBachPayment.Add(bachPayment);
                 }

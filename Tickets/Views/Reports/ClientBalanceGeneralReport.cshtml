@@ -1,7 +1,7 @@
 ﻿@model List<Tickets.Models.Raffle>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "REPORTE DE BALANCE GENERAL DE CLIENTE";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -113,7 +113,7 @@
                         decimal totalCredit = 0.0m;
                         decimal totalOther = 0.0m;
 
-                        var raffleName = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString();
+                        var raffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString();
                         var invoices = raffle.Invoices.Where(i => (i.ClientId == clientId || clientId == 0) && i.PaymentStatu != (int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Suspended).AsEnumerable()
                             .GroupBy(g => g.ClientId)
                             .Select(i => new
@@ -127,7 +127,7 @@
                                     createDate = s.CreateDate,
                                     client = s.Client.Name,
                                     clientId = s.ClientId,
-                                    fractions = s.TicketAllocationNumbers.FirstOrDefault().FractionTo - s.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1,
+                                    fractions = s.TicketAllocationNumbers.Any() ? s.TicketAllocationNumbers.FirstOrDefault().FractionTo - s.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1 : 0,
                                     numbers = s.TicketAllocationNumbers.Count,
                                     amount = s.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == s.Client.PriceId).FactionPrice,
                                     sheets = s.Raffle.Prospect.LeafNumber

@@ -64,7 +64,10 @@ namespace Tickets.Models.Procedures.Receivables
 							NoteCreditPayment = Convert.ToDecimal(sqlDataReader["Pagos_Credito"].ToString()),
 							TotalPayed = Convert.ToDecimal(sqlDataReader["Total_Pagado"].ToString()),
 							TotalPending = Convert.ToDecimal(sqlDataReader["Total_Faltante"].ToString()),
-						};
+                            SequenceNumberInvoice = Convert.ToInt32(sqlDataReader["SequenceNumberInvoice"].ToString()),
+                            NomenclatureRaffle = sqlDataReader["NomenclatureRaffle"].ToString(),
+                            SequenceNumberRaffle = Convert.ToInt32(sqlDataReader["SequenceNumberRaffle"].ToString())
+                        };
 						lista.Add(Devoluciones);
 					}
 				}
@@ -94,6 +97,9 @@ namespace Tickets.Models.Procedures.Receivables
 						NoteCreditPayment = 0,
 						TotalPayed = 0,
 						TotalPending = 0,
+						SequenceNumberInvoice = 0,
+						NomenclatureRaffle = "",
+						SequenceNumberRaffle = 0
 					};
 					lista.Add(Devoluciones);
 				}

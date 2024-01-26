@@ -63,7 +63,7 @@
             <div class="col-lg-12 no-padder text-center" style="margin-bottom:35px;">
                 <b>
                     RECIBO DE SALDO A FAVOR DEL SORTEO <br />
-                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
                 </b>
             </div>
         }
@@ -77,7 +77,7 @@
         </div>
         <div class="col-lg-6 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>Recibo de saldo a favor: </b>#@Model.Id
+                <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
             </div>
             <div class="col-lg-12 no-padder text-right">
                 <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
@@ -148,7 +148,7 @@
             <div class="col-lg-12 no-padder text-center" style="margin-bottom:35px;">
                 <b>
                     RECIBO DE SALDO A FAVOR DEL SORTEO <br />
-                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
                 </b>
             </div>
         }
@@ -162,7 +162,7 @@
         </div>
         <div class="col-lg-6 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>Recibo de saldo a favor: </b>@Model.Id
+                <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
             </div>
             <div class="col-lg-12 no-padder text-right">
                 <b>Fecha: </b> @Model.CreateDate.ToShortDateString()

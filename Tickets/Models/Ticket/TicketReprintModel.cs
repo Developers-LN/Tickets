@@ -19,6 +19,7 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "raffleDesc")]
         public string RaffleDesc { get; set; }
 
+        [JsonProperty(PropertyName = "raffleNomenclature")]
         public string RaffleNomenclature { get; set; }
 
         [JsonProperty(PropertyName = "ticketReprintNumbers")]
@@ -51,8 +52,11 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "statuDesc")]
         public string StatuDesc { get; set; }
 
-        [JsonProperty(PropertyName = "raffleSequence")]
-        public int? RaffleSequence { get; set; }
+        [JsonProperty(PropertyName = "sequenceNumberRaffle")]
+        public int? SequenceNumberRaffle { get; set; }
+
+        [JsonProperty(PropertyName = "sequenceNumberTicketRePrint")]
+        public int? SequenceNumberTicketRePrint { get; set; }
 
         internal object GetTicketReprintList(int raffleId = 0)
         {
@@ -72,10 +76,10 @@ namespace Tickets.Models.Raffles
                     .Select(r => new
                     {
                         r.Name,
-                        r.RaffleSequence,
+                        r.SequenceNumber,
                         r.Id,
-                        raffleNomenclature = r.Symbol + r.Separator + r.Id,
-                        text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
+                        raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
+                        text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                     }).ToList<object>();
             }
             return new { ticketReprints, raffles };
@@ -123,10 +127,11 @@ namespace Tickets.Models.Raffles
                 Id = reprint.Id,
                 Note = reprint.Note,
                 RaffleId = reprint.RaffleId,
-                RaffleSequence = context.Raffles.FirstOrDefault(r => r.Id == reprint.RaffleId).RaffleSequence,
+                SequenceNumberRaffle = reprint.Raffle.SequenceNumber,
+                SequenceNumberTicketRePrint = reprint.SequenceNumber.Value,
                 //RaffleDesc = context.Raffles.FirstOrDefault(r => r.Id == reprint.RaffleId).Name,
-                RaffleNomenclature = reprint.Raffle.Symbol + reprint.Raffle.Separator + reprint.Raffle.Id,
-                RaffleDesc = reprint.Raffle.Symbol + reprint.Raffle.Separator + reprint.Raffle.Id + " " + reprint.Raffle.Name + " " + reprint.Raffle.DateSolteo.ToShortDateString(),
+                RaffleNomenclature = reprint.Raffle.Symbol + reprint.Raffle.Separator + reprint.Raffle.SequenceNumber,
+                RaffleDesc = reprint.Raffle.Symbol + reprint.Raffle.Separator + reprint.Raffle.SequenceNumber + " " + reprint.Raffle.Name + " " + reprint.Raffle.DateSolteo.ToShortDateString(),
                 IsPrint = false,
                 CreateDate = reprint.CreateDate,
                 CreateDateLong = reprint.CreateDate.ToUnixTime(),

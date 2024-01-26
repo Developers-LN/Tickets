@@ -2,7 +2,7 @@
 
     @{
         Layout = "~/Views/Shared/_ReportLayout.cshtml";
-        ViewBag.Title = "REPORTE DE CONSIGNACION NO. " + Model.Id;
+        ViewBag.Title = "REPORTE DE CONSIGNACION NO. " + Model.SequenceNumber;
 
         var context = new Tickets.Models.TicketsEntities();
         var config = context.SystemConfigs.FirstOrDefault();
@@ -74,10 +74,10 @@
                     <b>FECHA:</b> @Model.CreateDate.ToShortDateString()
                 </div>
                 <div class="col-lg-12 no-padder text-left">
-                    <b>CONSIGNACION:</b> @Model.Id
+                    <b>CONSIGNACION:</b> @Model.SequenceNumber
                 </div>
                 <div class="col-lg-12 no-padder text-left">
-                    <b>SORTEO:</b> @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id
+                    <b>SORTEO:</b> @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber
                 </div>
                 <div class="col-lg-12 no-padder text-left">
                     <b>FECHA SORTEO:</b> @Model.Raffle.DateSolteo.ToString("dd/MM/yyyy")

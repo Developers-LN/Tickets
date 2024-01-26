@@ -1,7 +1,7 @@
 ﻿@model Tickets.Models.Invoice
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "DETALLE DE PAGOS A FACTURA NO. " + Model.Id;
+    ViewBag.Title = "DETALLE DE PAGOS A FACTURA NO. " + Model.SequenceNumber;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -14,13 +14,6 @@
     {
         AllocationId = a.FirstOrDefault().TicketAllocationNumber.TicketAllocationId
     });
-
-    /*var Efectivo = Tickets.Models.Enums.PaymentTypeTextEnum.Efectivo;
-    var Cheque = Tickets.Models.Enums.PaymentTypeTextEnum.Cheques;
-    var TargetaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.TarjetaDeCredito;
-    var NotaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.NotaDeCredito;
-    var DepTransf = Tickets.Models.Enums.PaymentTypeTextEnum.DepTransf;
-    var CashAdvance = Tickets.Models.Enums.PaymentTypeTextEnum.CashAdvance;*/
 }
 
 <style>
@@ -72,7 +65,7 @@
         <div class="col-lg-12 no-padder text-center">
             <b>
                 DETALLE DE PAGOS A FACTURA SORTEO <br /> 
-                @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+                @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
             </b>
         </div>
         <div class="col-lg-6 no-padder">
@@ -80,7 +73,7 @@
                 <b>CLIENTE: </b> @Model.Client.Name @Model.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
             </div>
             <div class="col-lg-12 no-padder text-left">
-                <b>FACTURA: </b> @Model.Id
+                <b>FACTURA: </b> @Model.SequenceNumber
             </div>
             @if (lastReceivable != null)
             {
@@ -130,9 +123,9 @@
                             totalPayment += creditNote.TotalCash;
                             <tr>
                                 <td style="vertical-align:middle;" class="text-center">
-                                    @payment.Id
+                                    @(payment.Nomenclature == null ? payment.SequenceNumber.Value.ToString() : string.Concat(payment.Nomenclature, payment.SequenceNumber.Value.ToString().PadLeft(5, '0')))
                                 </td>
-                                <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
+                                <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
                                 <td style="vertical-align:middle;">@payment.Recibo</td>
                                 <td style="vertical-align:middle;" class="text-center">
                                     @payment.Notas
@@ -149,9 +142,28 @@
                             totalPayment += creditNote.TotalCash;
                             <tr>
                                 <td style="vertical-align:middle;" class="text-center">
-                                    @payment.Id
+                                    @(payment.Nomenclature == null ? payment.SequenceNumber.Value.ToString() : string.Concat(payment.Nomenclature, payment.SequenceNumber.Value.ToString().PadLeft(5, '0')))
                                 </td>
-                                <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail #@creditNote.NoteCreditId</td>
+                                <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
+                                <td style="vertical-align:middle;">@payment.Recibo</td>
+                                <td style="vertical-align:middle;" class="text-center">
+                                    @creditNote.NoteCredit.Concepts
+                                </td>
+                                <td style="vertical-align:middle;" class="text-center">@payment.ReceiptDate.ToLongDateString() </td>
+                                <td style="vertical-align:middle;" class="text-right">@(creditNote.TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                            </tr>
+                        }
+                    }
+                    else if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.PositiveBalance)
+                    {
+                        foreach (var creditNote in payment.NoteCreditReceiptPayments)
+                        {
+                            totalPayment += creditNote.TotalCash;
+                            <tr>
+                                <td style="vertical-align:middle;" class="text-center">
+                                    @(payment.Nomenclature == null ? payment.SequenceNumber.Value.ToString() : string.Concat(payment.Nomenclature, payment.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                                </td>
+                                <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
                                 <td style="vertical-align:middle;">@payment.Recibo</td>
                                 <td style="vertical-align:middle;" class="text-center">
                                     @creditNote.NoteCredit.Concepts
@@ -166,7 +178,7 @@
                         totalPayment += totalCash;
                         <tr>
                             <td style="vertical-align:middle;" class="text-center">
-                                @payment.Id
+                                @(payment.Nomenclature == null ? payment.SequenceNumber.Value.ToString() : string.Concat(payment.Nomenclature, payment.SequenceNumber.Value.ToString().PadLeft(5, '0')))
                             </td>
                             <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
                             <td style="vertical-align:middle;" class="text-center">@payment.Recibo</td>

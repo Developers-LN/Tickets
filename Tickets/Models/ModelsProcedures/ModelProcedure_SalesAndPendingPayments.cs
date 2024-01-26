@@ -13,6 +13,10 @@ namespace Tickets.Models.ModelsProcedures
         public int IdRaffle { get; set; }
         public string NameRaffle { get; set; }
         public int IdInvoice { get; set; }
+        public string InvoiceType { get; set; }
+        public int SequenceNumberInvoice { get; set; }
+        public string NomenclatureRaffle { get; set; }
+        public int SequenceNumberRaffle { get; set; }
         public DateTime DateInvoice { get; set; }
         public string StatusInvoice { get; set; }
         public int TotalTickets { get; set; }

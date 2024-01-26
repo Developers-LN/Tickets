@@ -87,7 +87,7 @@
                 @{
                     var invoices = Model.GroupBy(i => i.RaffleId).Select(i => new
                     {
-                        raffleName = i.FirstOrDefault().Raffle.Symbol + i.FirstOrDefault().Raffle.Separator + i.FirstOrDefault().Raffle.Id + "  " + i.FirstOrDefault().Raffle.Name,
+                        raffleName = i.FirstOrDefault().Raffle.Symbol + i.FirstOrDefault().Raffle.Separator + i.FirstOrDefault().Raffle.SequenceNumber + "  " + i.FirstOrDefault().Raffle.Name,
                         clients = i.GroupBy(c => c.ClientId).Select(c => new
                         {
                             clientName = c.FirstOrDefault().ClientId + " - " + c.FirstOrDefault().Client.Name,
@@ -121,12 +121,10 @@
                                     totalClient += value;
                                     <tr>
                                         <td class="text-center">@invoice.Client.Name @invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()</td>
-                                        <td class="text-center">@invoice.Id</td>
+                                        <td class="text-center">@invoice.SequenceNumber</td>
                                         <td class="text-center">@receipt.ReceiptDate.ToString()</td>
                                         <td class="text-center">@receipt.Recibo</td>
-                                        <td class="text-center">
-                                            @receipt.Notas
-                                        </td>
+                                        <td class="text-center">@receipt.Notas</td>
                                         <td class="text-center">@receipt.Id</td>
                                         <td class="text-center"></td>
                                         <td class="text-right" style="font-weight:bold;">@(value.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
@@ -138,7 +136,7 @@
                                     totalClient += value;
                                     <tr>
                                         <td class="text-center">@invoice.Client.Name @invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()</td>
-                                        <td class="text-center">@invoice.Id</td>
+                                        <td class="text-center">@invoice.SequenceNumber</td>
                                         <td class="text-center">@receipt.ReceiptDate.ToString()</td>
                                         <td class="text-center">@receipt.Recibo</td>
                                         <td class="text-center">Nota de Credito No. @(receipt.NoteCreditReceiptPayments.Count == 0 ? 0 : receipt.NoteCreditReceiptPayments.FirstOrDefault().NoteCredit.Id)</td>

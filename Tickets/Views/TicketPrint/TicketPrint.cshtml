@@ -47,8 +47,8 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="allocation in allocations">
-                                <td>{{allocation.id}}</td>
-                                <td>{{allocation.clientDesc}}</td>
+                                <td>{{allocation.sequenceNumberTicketAllocation}}</td>
+                                <td>{{allocation.clientId}} - {{allocation.clientDesc}}</td>
                                 <td>{{(allocation.createDate | date:"dd/MM/yyyy")}}</td>
                                 <td class="text-center">
                                     <a href="/#/ticket/allocationDetails/{{allocation.id}}" title="Ver Detalle de asignación" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>

@@ -1,7 +1,7 @@
 ﻿@model List<Tickets.Models.TicketAllocation>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Resumen de asignaciones por cliente del sorteo " + Model.FirstOrDefault().RaffleId;
+    ViewBag.Title = "Resumen de asignaciones por cliente del sorteo " + Model.FirstOrDefault().Raffle.SequenceNumber;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -21,7 +21,7 @@
             <h3>
                 <b>
                     RESUMEN DE ASIGNACIONES DEL SORTEO <br />
-                    @Model.FirstOrDefault().Raffle.Symbol @Model.FirstOrDefault().Raffle.Separator @Model.FirstOrDefault().Raffle.Id @Model.FirstOrDefault().Raffle.Name @Model.FirstOrDefault().Raffle.DateSolteo.ToShortDateString()
+                    @Model.FirstOrDefault().Raffle.Symbol @Model.FirstOrDefault().Raffle.Separator @Model.FirstOrDefault().Raffle.SequenceNumber @Model.FirstOrDefault().Raffle.Name @Model.FirstOrDefault().Raffle.DateSolteo.ToShortDateString()
                 </b>
             </h3>
 
@@ -53,6 +53,7 @@
                         allocations = c.Where(W => W.Statu != (int)Tickets.Models.Enums.AllocationStatuEnum.Deleted).Select(s => new
                         {
                             id = s.Id,
+                            SequenceNumberTicketAllocation = s.SequenceNumber,
                             createDate = s.CreateDate,
                             client = s.Client.Name,
                             clientId = s.ClientId,
@@ -90,7 +91,7 @@
                         var discountTotal = Value - ((Value * allocation.discount) / 100);
 
                         <tr>
-                            <td class="text-left">@allocation.id</td>
+                            <td class="text-left">@allocation.SequenceNumberTicketAllocation</td>
                             <td class="text-left">@allocation.createDate</td>
                             <td class="text-right">@Fractions.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-right">@Sheets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>

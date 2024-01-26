@@ -182,11 +182,13 @@ namespace Tickets.Controllers
                 awardsHistory = context.IdentifyBaches.AsEnumerable().Where(w => w.WinnerId == winnerId).Select(s => new
                 {
                     s.Id,
+                    sequenceNumberIdentifyBach = s.SequenceNumber,
                     CreateDate = s.CreateDate.ToString("dd/MM/yyyy"),
                     s.RaffleId,
-                    raffleNomenclature = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.Id,
+                    sequenceNumberRaffle = s.Raffle.SequenceNumber,
+                    raffleNomenclature = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.SequenceNumber,
                     //RaffleName = s.Raffle.Name
-                    RaffleName = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.Id + " " + s.Raffle.Name + " " + s.Raffle.DateSolteo.ToShortDateString()
+                    RaffleName = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.SequenceNumber + " " + s.Raffle.Name + " " + s.Raffle.DateSolteo.ToShortDateString()
                 }).ToList();
             }
 

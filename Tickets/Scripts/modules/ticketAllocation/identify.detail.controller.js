@@ -31,7 +31,6 @@
                 contentType: 'application/json; charset=utf-8',
                 url: 'TicketAllocation/GetIdentifyDetilsData?identifyId=' + $stateParams.identifyId,
                 success: function (data) {
-                    console.log(data);
                     var identifyNumbers = [];
                     data.identifyBach.IdentifyNumbers.forEach(function (identifyNumber) {
                         identifyNumber.RaffleAwards.forEach(function (award) {

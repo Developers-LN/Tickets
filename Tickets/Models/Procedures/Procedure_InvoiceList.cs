@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using Tickets.Models.ModelsProcedures;
 
 namespace Tickets.Models.Procedures
@@ -29,6 +31,7 @@ namespace Tickets.Models.Procedures
                         {
                             Data = true,
                             Id = Convert.ToInt32(sqlDataReader["IdFactura"].ToString()),
+                            SequenceNumberInvoice = Convert.ToInt32(sqlDataReader["SequenceNumberInvoice"].ToString()),
                             RaffleId = Convert.ToInt32(sqlDataReader["IdSorteo"].ToString()),
                             Nomenclatura = sqlDataReader["Nomenclatura"].ToString(),
                             ClientId = Convert.ToInt32(sqlDataReader["IdCliente"].ToString()),
@@ -41,7 +44,7 @@ namespace Tickets.Models.Procedures
                             InvoiceDate = sqlDataReader["FechaFactura"].ToString(),
                             xpiredDate = sqlDataReader["FechaExpiracion"].ToString(),
                             PaymentStatuDesc = sqlDataReader["EstadoFactura"].ToString()
-						};
+                        };
                         lista.Add(facturas);
                     }
                 }
@@ -51,6 +54,7 @@ namespace Tickets.Models.Procedures
                     {
                         Data = false,
                         Id = 0,
+                        SequenceNumberInvoice = 0,
                         RaffleId = raffle,
                         ClientId = 0,
                         Nomenclatura = "",

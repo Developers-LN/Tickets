@@ -34,7 +34,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="allocation in ElectronicSales">
-                                <td class="text-center">{{allocation.allocationId}}</td>
+                                <td class="text-center">{{allocation.sequenceNumberTicketAllocation}}</td>
                                 <td>{{allocation.clientDesc}}</td>
                                 <td class="text-center">{{allocation.ticketsQuantity | number}} - {{allocation.fractionQuantity | number}}</td>
                                 <td class="text-center">{{allocation.allocationTicketsQuantity | number}} - {{allocation.allocationFractionQuantity | number}}</td>

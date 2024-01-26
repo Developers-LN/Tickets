@@ -18,7 +18,7 @@
                                 <div class="col-lg-12">
                                     <select ng-required="true" class="form-control dropdown-select2" ng-model="batchId" ng-change="updateDelivered1()">
                                         <option selected="selected" value="0">Seleccione un lote</option>
-                                        <option ng-repeat="Id in batchNumbers" value="{{Id}}">Lote de no.{{Id}}</option>
+                                        <option ng-repeat="Id in batchNumbers" value="{{Id.Id}}">Lote de no. {{Id.SequenceNumberIdentifyBach}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -73,7 +73,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="identifyBach in identifyBachs">
-                                <td>{{identifyBach.Id}}</td>
+                                <td>{{identifyBach.SequenceNumberIdentifyBach}}</td>
                                 <td>{{identifyBach.RaffleDesc}}</td>
                                 <td>{{identifyBach.ClientId}} - {{identifyBach.ClientDesc}}</td>
                                 <td>{{identifyBach.WinnerName}}</td>

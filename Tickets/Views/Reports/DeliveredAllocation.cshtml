@@ -1,7 +1,7 @@
 ﻿@model List<Tickets.Models.TicketAllocation>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "RESUMEN DE ASIGNACIONES ENTREGADAS NO. " + Model.FirstOrDefault().RaffleId;
+    ViewBag.Title = "RESUMEN DE ASIGNACIONES ENTREGADAS NO. " + Model.FirstOrDefault().Raffle.SequenceNumber;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -22,7 +22,7 @@
             <h3>
                 <b>
                     RESUMEN DE ASIGNACIONES ENTREGADAS DEL SORTEO <br />
-                    @RaffleData.Symbol @RaffleData.Separator @RaffleData.Id @RaffleData.Name @RaffleData.DateSolteo.ToShortDateString()
+                    @RaffleData.Symbol @RaffleData.Separator @RaffleData.SequenceNumber @RaffleData.Name @RaffleData.DateSolteo.ToShortDateString()
                 </b>
             </h3>
 
@@ -54,6 +54,7 @@
                         allocations = c.Where(W => W.Statu != (int)Tickets.Models.Enums.AllocationStatuEnum.Deleted).Select(s => new
                         {
                             id = s.Id,
+                            SequenceNumberTicketAllocation = s.SequenceNumber,
                             createDate = s.CreateDate,
                             client = s.Client.Name,
                             clientId = s.ClientId,
@@ -91,7 +92,7 @@
                         var discountTotal = Value - ((Value * allocation.discount) / 100);
 
                         <tr>
-                            <td class="text-left">@allocation.id</td>
+                            <td class="text-left">@allocation.SequenceNumberTicketAllocation</td>
                             <td class="text-left">@allocation.createDate</td>
                             <td class="text-right">@Fractions.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-right">@Sheets.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</td>

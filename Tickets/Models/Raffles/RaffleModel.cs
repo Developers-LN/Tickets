@@ -56,6 +56,7 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "symbol")]
         public string Symbol { get; set; }
 
+        [JsonProperty(PropertyName = "raffleNomenclature")]
         public string RaffleNomenclature { get; set; }
 
         [JsonProperty(PropertyName = "raffleDesc")]
@@ -103,8 +104,8 @@ namespace Tickets.Models.Raffles
         [JsonProperty(PropertyName = "raffleAwards")]
         public List<RaffleAwardModel> RaffleAwards { get; set; }
 
-        [JsonProperty(PropertyName = "raffleSequence")]
-        public int? RaffleSequence { get; set; }
+        [JsonProperty(PropertyName = "sequenceNumberRaffle")]
+        public int? SequenceNumberRaffle { get; set; }
 
         internal RaffleModel ListaSorteosGenerados(Raffle raffle, bool hasTicketProspect = false, bool hasPoolProspect = false, bool hasAwards = false)
         {
@@ -112,17 +113,17 @@ namespace Tickets.Models.Raffles
             var raffleModel = new RaffleModel()
             {
                 Id = raffle.Id,
-                RaffleSequence = raffle.RaffleSequence,
+                SequenceNumberRaffle = raffle.SequenceNumber,
                 EndAllocationDate = raffle.EndAllocationDate.Value,
                 EndReturnDate = raffle.EndReturnDate,
                 //Name = raffle.Name,
-                RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.Id,
-                Name = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
+                RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.SequenceNumber,
+                Name = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
                 RaffleDate = raffle.DateSolteo,
                 StartReturnDate = raffle.StartReturnDate,
                 Statu = raffle.Statu,
                 StatuDesc = context.Catalogs.FirstOrDefault(c => c.Id == raffle.Statu).NameDetail,
-                TicketProspectDesc = context.Prospects.FirstOrDefault(p => p.Id == raffle.ProspectId).Name
+                TicketProspectDesc = raffle.Prospect.Name
             };
 
             return raffleModel;
@@ -134,7 +135,7 @@ namespace Tickets.Models.Raffles
             var raffleModel = new RaffleModel()
             {
                 Id = raffle.Id,
-                RaffleSequence = raffle.RaffleSequence,
+                SequenceNumberRaffle = raffle.SequenceNumber,
                 CommodityId = raffle.Commodity,
                 CommodityDesc = raffle.Commodity > 0 ? context.Catalogs.FirstOrDefault(c => c.Id == raffle.Commodity).NameDetail : "",
                 EndAllocationDate = raffle.EndAllocationDate.Value,
@@ -165,8 +166,8 @@ namespace Tickets.Models.Raffles
                 TicketProspectDesc = context.Prospects.FirstOrDefault(p => p.Id == raffle.ProspectId).Name,
 
                 Symbol = raffle.Symbol,
-                RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.Id,
-                RaffleDesc = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString()
+                RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.SequenceNumber,
+                RaffleDesc = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString()
             };
             var prospectModel = new ProspectModel();
             if (hasTicketProspect == true)
@@ -240,11 +241,11 @@ namespace Tickets.Models.Raffles
             var raffles = context.Raffles.AsEnumerable().Where(s => statuList.Contains(s.Statu) || status.Count() == 0).Select(r => new
             {
                 r.Id,
-                r.RaffleSequence,
+                r.SequenceNumber,
                 r.Name,
                 r.Prospect.Production,
-                RaffleNomenclature = r.Symbol + r.Separator + r.Id,
-                RaffleDesc = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
+                RaffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
+                RaffleDesc = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                 ProspectName = r.Prospect.Name,
                 FractionCount = r.Prospect.LeafFraction * r.Prospect.LeafNumber
             }).ToList();
@@ -290,9 +291,10 @@ namespace Tickets.Models.Raffles
             {
                 awardList = raffle.Prospect.Awards.Where(a => typesAwardCreation.HasValue == false || a.TypesAward.Creation == (int)typesAwardCreation.Value).Select(a => new { a.Id, a.Name }),
                 RaffleId = raffle.Id,
+                SequenceNumberRaffle = raffle.SequenceNumber,
                 //RaffleName = raffle.Name,
-                RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.Id,
-                RaffleName = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
+                RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.SequenceNumber,
+                RaffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
                 ProspectName = raffle.Prospect.Name,
                 raffleAwards = raffle.RaffleAwards.Where(ra => raffleAwardType.HasValue == false || ra.RaffleAwardType == (int)raffleAwardType.Value).Select(r => new
                 {
@@ -453,9 +455,9 @@ namespace Tickets.Models.Raffles
                 .Select(r => new
                 {
                     value = r.Id,
-                    raffleSequence = r.RaffleSequence,
-                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
-                    text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString()
+                    sequenceNumberRaffle = r.SequenceNumber,
+                    raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
+                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToShortDateString()
                 }).ToList();
 
             return new RequestResponseModel()
@@ -475,9 +477,9 @@ namespace Tickets.Models.Raffles
                 .Select(r => new
                 {
                     value = r.Id,
-                    raffleSequence = r.RaffleSequence,
-                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
-                    text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
+                    sequenceNumberRaffle = r.SequenceNumber,
+                    raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
+                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                     ticketProspectId = r.ProspectId,
                     //poolProspectId = r.PoolsProspectId,
                     isActive = DateTime.Now <= r.EndAllocationDate
@@ -500,10 +502,10 @@ namespace Tickets.Models.Raffles
                 .Select(r => new
                 {
                     value = r.Id,
-                    raffleSequence = r.RaffleSequence,
+                    sequenceNumberRaffle = r.SequenceNumber,
                     //text = r.Name
-                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
-                    text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
+                    raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
+                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                 }).ToList();
 
             return new RequestResponseModel()
@@ -523,8 +525,8 @@ namespace Tickets.Models.Raffles
                 .Select(r => new
                 {
                     value = r.Id,
-                    raffleSequence = r.RaffleSequence,
-                    text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
+                    sequenceNumberRaffle = r.SequenceNumber,
+                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                     maxFraction = r.Prospect.LeafFraction * r.Prospect.LeafNumber,
                     production = r.Prospect.Production
                 }).ToList();
@@ -546,9 +548,9 @@ namespace Tickets.Models.Raffles
                 .Select(r => new
                 {
                     value = r.Id,
-                    raffleSequence = r.RaffleSequence,
-                    raffleNomenclature = r.Symbol + r.Separator + r.Id,
-                    text = r.Symbol + r.Separator + r.Id + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
+                    sequenceNumberRaffle = r.SequenceNumber,
+                    raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
+                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
                     maxFraction = r.Prospect.LeafFraction * r.Prospect.LeafNumber,
                     production = r.Prospect.Production
                 }).ToList();
@@ -575,7 +577,7 @@ namespace Tickets.Models.Raffles
                 return new RequestResponseModel()
                 {
                     Result = false,
-                    Message = "El sorto " + model.Id + " no existe."
+                    Message = "El sorto " + model.SequenceNumberRaffle + " no existe."
                 };
             }
 

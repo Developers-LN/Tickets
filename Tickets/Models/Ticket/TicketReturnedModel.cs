@@ -44,6 +44,9 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "numberCount")]
         public int NumberCount { get; set; }
 
+        [JsonProperty(PropertyName = "sequenceNumberRaffle")]
+        public string SequenceNumberRaffle {  get; set; }
+
         /*internal TicketReturnedModel ListaDevoluciones(List<TicketReturn> ticketReturneds, bool hasNumber = false)
         {
             var context = new TicketsEntities();
@@ -81,8 +84,9 @@ namespace Tickets.Models.Ticket
             var model = new TicketReturnedModel()
             {
                 RaffleId = ticketReturneds.FirstOrDefault().RaffleId,
+                SequenceNumberRaffle = raffleData.Symbol + raffleData.Separator + raffleData.SequenceNumber.Value,
                 //RaffleDesc = ticketReturneds.FirstOrDefault().Raffle.Name,
-                RaffleDesc = raffleData.Symbol + raffleData.Separator + raffleData.Id + " " + raffleData.Name + " " + raffleData.DateSolteo.ToShortDateString(),
+                RaffleDesc = raffleData.Symbol + raffleData.Separator + raffleData.SequenceNumber + " " + raffleData.Name + " " + raffleData.DateSolteo.ToShortDateString(),
                 ReturnedGroup = ticketReturneds.FirstOrDefault().ReturnedGroup,
                 ReturnedSubGroup = ticketReturneds.Count() == 1 ? ticketReturneds.FirstOrDefault().ReturnedGroup : ticketReturneds.Select(e => e.ReturnedGroup).Distinct().Aggregate((s, e) => s + ", " + e),
                 ReturnedDate = ticketReturneds.FirstOrDefault().ReturnedDate,

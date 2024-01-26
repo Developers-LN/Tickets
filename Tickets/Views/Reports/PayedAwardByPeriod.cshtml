@@ -3,11 +3,15 @@
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     ViewBag.Title = "Recibo por pago a premio";
 
+    var idRaffleList = Model.AsEnumerable().GroupBy(r => r.IdentifyBach.RaffleId).Select(s => s.Key).ToList();
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.LoteryAdmin : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
     var first = Model.FirstOrDefault();
+    var RaffleData = context.Raffles.Where(w => idRaffleList.Contains(w.Id)).ToList();
+    int totalFraction = 0;
+    decimal totalGeneral = 0;
 }
 
 <style>
@@ -57,8 +61,7 @@
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>
-                RECIBO DE PAGO POR PREMIO DEL SORTEO <br />
-                @first.IdentifyBach.Raffle.Symbol @first.IdentifyBach.Raffle.Separator @first.IdentifyBach.Raffle.Id @first.IdentifyBach.Raffle.Name
+                RECIBO DE PAGO POR PREMIO DE SORTEO <br />
             </b>
         </div>
     </div>
@@ -87,11 +90,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @{
-                        int totalFraction = 0;
-                        decimal totalGeneral = 0;
+                    @foreach (var raffle in idRaffleList)
+                    {
+                        var raffleInfo = RaffleData.FirstOrDefault(f => f.Id == raffle);
                         var identifyBachs = Model.OrderBy(i => i.IdentifyBachId);
-                        var raffleAwards = context.RaffleAwards.Where(r => r.RaffleId == first.IdentifyBach.RaffleId).ToList();
+                        var raffleAwards = context.RaffleAwards.Where(r => r.RaffleId == raffle).ToList();
                         var totalFraction2 = identifyBachs
                             .Select(s => new
                             {
@@ -102,61 +105,55 @@
                             }).Distinct().ToList();
                         totalFraction = totalFraction2.Sum(s => s.total);
 
-                        var rafflesId = Model.AsEnumerable().GroupBy(g => g.IdentifyBach.RaffleId).Select(s => new
+                        <tr>
+                            <th colspan="8" class="text-left">@raffleInfo.Symbol @raffleInfo.Separator @raffleInfo.SequenceNumber @raffleInfo.Name</th>
+                        </tr>
+                        foreach (var number in identifyBachs)
                         {
-                            raffleName = s.FirstOrDefault().IdentifyBach.RaffleId + " - " + s.FirstOrDefault().IdentifyBach.Raffle.Name,
-                            payByClient = s.GroupBy(gg => gg.IdentifyBach.ClientId).Select(ss => new
+                            if (number.IdentifyBachNumberType == (int)Tickets.Models.Enums.IdentifyBachNumberTypeEnum.Gamer)
                             {
+                                var raffleAwardList = raffleAwards.Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number &&
+                                       rw.Award.TypesAward.Creation != (int)Tickets.Models.Enums.TypesAwardCreationEnum.SameAwardDerived).ToList();
 
-                            })
-                        }).ToList();
-
-                    }
-                    @foreach (var number in identifyBachs)
-                    {
-                        if (number.IdentifyBachNumberType == (int)Tickets.Models.Enums.IdentifyBachNumberTypeEnum.Gamer)
-                        {
-                            var raffleAwardList = raffleAwards.Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number &&
-                                   rw.Award.TypesAward.Creation != (int)Tickets.Models.Enums.TypesAwardCreationEnum.SameAwardDerived).ToList();
-
-                            foreach (var raffleAward in raffleAwardList)
-                            {
-                                var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
-                                var total = (number.FractionTo - number.FractionFrom + 1) * price;
-                                <tr>
-                                    <td class="text-center">@number.IdentifyBachId</td>
-                                    <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToShortDateString()</td>
-                                    <td class="text-center">@number.TicketAllocationNumber.Number</td>
-                                    <td class="text-center">@raffleAward.Award.Name</td>
-                                    <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
-                                    <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
-                                    <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                    <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                </tr>
-                                totalGeneral += total;
+                                foreach (var raffleAward in raffleAwardList)
+                                {
+                                    var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
+                                    var total = (number.FractionTo - number.FractionFrom + 1) * price;
+                                    <tr>
+                                        <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
+                                        <td class="text-center">@number.IdentifyBach.CreateDate.ToShortDateString()</td>
+                                        <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((raffleInfo.Prospect.Production - 1).ToString().Length, '0')</td>
+                                        <td class="text-center">@raffleAward.Award.Name</td>
+                                        <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
+                                        <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
+                                        <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    </tr>
+                                    totalGeneral += total;
+                                }
                             }
-                        }
-                        else if (number.IdentifyBachNumberType == (int)Tickets.Models.Enums.IdentifyBachNumberTypeEnum.Seller)
-                        {
-                            var raffleAwardList = raffleAwards
-                            .Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number &&
-                                   rw.Award.TypesAward.Creation == (int)Tickets.Models.Enums.TypesAwardCreationEnum.SameAwardDerived).ToList();
-
-                            foreach (var raffleAward in raffleAwardList)
+                            else if (number.IdentifyBachNumberType == (int)Tickets.Models.Enums.IdentifyBachNumberTypeEnum.Seller)
                             {
-                                var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
-                                var total = (number.FractionTo - number.FractionFrom + 1) * price;
-                                <tr>
-                                    <td class="text-center">@number.IdentifyBachId</td>
-                                    <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToShortDateString()</td>
-                                    <td class="text-center">@number.TicketAllocationNumber.Number</td>
-                                    <td class="text-center">@raffleAward.Award.Name</td>
-                                    <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
-                                    <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
-                                    <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                    <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                </tr>
-                                totalGeneral += total;
+                                var raffleAwardList = raffleAwards
+                                .Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number &&
+                                       rw.Award.TypesAward.Creation == (int)Tickets.Models.Enums.TypesAwardCreationEnum.SameAwardDerived).ToList();
+
+                                foreach (var raffleAward in raffleAwardList)
+                                {
+                                    var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
+                                    var total = (number.FractionTo - number.FractionFrom + 1) * price;
+                                    <tr>
+                                        <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
+                                        <td class="text-center">@number.IdentifyBach.CreateDate.ToShortDateString()</td>
+                                        <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((raffleInfo.Prospect.Production - 1).ToString().Length, '0')</td>
+                                        <td class="text-center">@raffleAward.Award.Name</td>
+                                        <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
+                                        <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
+                                        <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                    </tr>
+                                    totalGeneral += total;
+                                }
                             }
                         }
                     }

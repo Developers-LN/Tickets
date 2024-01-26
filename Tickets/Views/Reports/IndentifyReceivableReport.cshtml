@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "RECIBO DE PAGO A PREMIO NO. " + Model.Id + " DEL SORTEO NO. " + Model.RaffleId;
+    ViewBag.Title = "RECIBO DE PAGO A PREMIO NO. " + Model.SequenceNumberPayment + " DEL SORTEO NO. " + Model.IdentifyBach.Raffle.Symbol + Model.IdentifyBach.Raffle.Separator + Model.IdentifyBach.Raffle.SequenceNumber;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -61,21 +61,21 @@
         <div class="col-lg-12 no-padder text-center">
             <b>
                 RECIBO DE PAGO POR PREMIO DEL SORTEO <br />
-                @RaffleData.Symbol @RaffleData.Separator @RaffleData.Id @RaffleData.Name @RaffleData.DateSolteo.ToShortDateString()
+                @RaffleData.Symbol @RaffleData.Separator @RaffleData.SequenceNumber @RaffleData.Name @RaffleData.DateSolteo.ToShortDateString()
             </b>
         </div>
     </div>
     <div class="col-lg-12 no-padder">
         <div class="col-lg-6 no-padder text-left">
             <b>Cliente: </b> @Model.ClientName<br />
-            <b>Recibo de pago: </b> @Model.Id<br />
             @if (Model.CreditNoteId == 0)
             {
+                <b>Recibo: </b> @Model.SequenceNumberPayment<br />
                 <b>Pago en efectivo</b><br />
             }
             else
             {
-                <b>Nota de Credito: #</b> @Model.CreditNoteId<br />
+                <b>Nota de Credito: </b> @(Model.Nomenclature == null ? Model.SequenceNumberPayment.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumberPayment.Value.ToString().PadLeft(5, '0')))<br />
             }
             @*<b>Usuario: #</b> @context.Users.FirstOrDefault(u => u.Id == Model.UserId).Name*@
         </div>
@@ -153,7 +153,7 @@
                                     total = raffleAward.Award.Value;
                                     //totalFraction += 1;
                                     <tr>
-                                        <td class="text-center">@number.IdentifyBachId</td>
+                                        <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Production.ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
@@ -166,7 +166,7 @@
                                 {
                                     //totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                     <tr>
-                                        <td class="text-center">@number.IdentifyBachId</td>
+                                        <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Production.ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
@@ -265,7 +265,7 @@
                                     total = raffleAward.Award.Value;
                                     //totalFraction += 1;
                                     <tr>
-                                        <td class="text-center">@number.IdentifyBachId</td>
+                                        <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Production.ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
@@ -278,7 +278,7 @@
                                 {
                                     //totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                     <tr>
-                                        <td class="text-center">@number.IdentifyBachId</td>
+                                        <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Production.ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@number.FractionFrom - @number.FractionTo</td>

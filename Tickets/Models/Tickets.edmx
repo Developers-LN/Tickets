@@ -255,7 +255,7 @@
           <Property Name="Nombre2" Type="varchar" MaxLength="500" />
           <Property Name="Trabajado" Type="int" />
           <Property Name="WinnerId" Type="int" />
-          <Property Name="IdentifyBachSequence" Type="int" />
+          <Property Name="SequenceNumber" Type="int" />
         </EntityType>
         <EntityType Name="IdentifyBach_CreditNote">
           <Key>
@@ -278,6 +278,7 @@
           <Property Name="CreateUser" Type="int" Nullable="false" />
           <Property Name="IdentifyBachId" Type="int" Nullable="false" />
           <Property Name="DiscountPercent" Type="int" Nullable="false" />
+          <Property Name="SequenceNumber" Type="int" />
         </EntityType>
         <EntityType Name="IdentifyNumber">
           <Key>
@@ -312,7 +313,7 @@
           <Property Name="DeleteUser" Type="int" />
           <Property Name="TaxReceipt" Type="int" />
           <Property Name="TaxReceiptAssignmentDate" Type="datetime" />
-          <Property Name="InvoiceSequence" Type="int" />
+          <Property Name="SequenceNumber" Type="int" />
         </EntityType>
         <EntityType Name="InvoiceDetails">
           <Key>
@@ -378,7 +379,9 @@
           <Property Name="TypeNote" Type="int" />
           <Property Name="ReceiptPaymentId" Type="int" />
           <Property Name="TaxReceiptNumberId" Type="int" />
-          <Property Name="NoteCreditSequence" Type="int" />
+          <Property Name="SequenceNumber" Type="int" />
+          <Property Name="SequenceType" Type="int" />
+          <Property Name="Nomenclature" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="NoteCreditReceiptPayment">
           <Key>
@@ -492,12 +495,12 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <Property Name="EndReturnDate" Type="datetime" Nullable="false" />
           <Property Name="EndAllocationDate" Type="datetime" />
           <Property Name="Symbol" Type="varchar" MaxLength="50" />
-          <Property Name="Separator" Type="char" MaxLength="1" />
+          <Property Name="Separator" Type="varchar" MaxLength="5" />
           <Property Name="Consignacion" Type="bit" />
           <Property Name="EndElectronicSales" Type="datetime" />
           <Property Name="DueRaffleDate" Type="datetime" />
           <Property Name="StartElectronicSales" Type="datetime" />
-          <Property Name="RaffleSequence" Type="int" />
+          <Property Name="SequenceNumber" Type="int" />
         </EntityType>
         <EntityType Name="RaffleAward">
           <Key>
@@ -536,7 +539,9 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <Property Name="Telefono" Type="varchar" MaxLength="50" />
           <Property Name="Codigo" Type="varchar" MaxLength="50" />
           <Property Name="Notas" Type="text" />
-          <Property Name="ReceiptSequence" Type="int" />
+          <Property Name="SequenceNumber" Type="int" />
+          <Property Name="SequenceType" Type="int" />
+          <Property Name="Nomenclature" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="ReceivablePayment">
           <Key>
@@ -689,7 +694,7 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <Property Name="CreateUser" Type="int" Nullable="false" />
           <Property Name="Statu" Type="int" Nullable="false" />
           <Property Name="Agente" Type="varchar" MaxLength="20" />
-          <Property Name="AllocationSequence" Type="int" />
+          <Property Name="SequenceNumber" Type="int" />
         </EntityType>
         <EntityType Name="TicketAllocationNumber">
           <Key>
@@ -748,7 +753,7 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <Property Name="Statu" Type="int" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="CreateUser" Type="int" Nullable="false" />
-          <Property Name="TicketRePrintSequence" Type="int" />
+          <Property Name="SequenceNumber" Type="int" />
         </EntityType>
         <EntityType Name="TicketRePrintNumber">
           <Key>
@@ -3694,7 +3699,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="Trabajado" Type="Int32" />
           <Property Name="WinnerId" Type="Int32" />
           <NavigationProperty Name="Winner" Relationship="TicketsModel.FK_Winner" FromRole="IdentifyBach" ToRole="Winner" />
-          <Property Name="IdentifyBachSequence" Type="Int32" />
+          <Property Name="SequenceNumber" Type="Int32" />
         </EntityType>
         <EntityType Name="IdentifyBachPayment">
           <Key>
@@ -3712,6 +3717,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="Cash" Relationship="TicketsModel.FK_RaffleAwardPayment_Cash" FromRole="IdentifyBachPayment" ToRole="Cash" />
           <NavigationProperty Name="Client" Relationship="TicketsModel.FK_RaffleAwardPayment_Client" FromRole="IdentifyBachPayment" ToRole="Client" />
           <NavigationProperty Name="IdentifyBach" Relationship="TicketsModel.FK_RaffleAwardPayment_IdentifyBach" FromRole="IdentifyBachPayment" ToRole="IdentifyBach" />
+          <Property Name="SequenceNumber" Type="Int32" />
         </EntityType>
         <EntityType Name="IdentifyNumber">
           <Key>
@@ -3758,7 +3764,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="TaxReceipt" Type="Int32" />
           <Property Name="TaxReceiptAssignmentDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="TaxReceiptNumbersHistories" Relationship="TicketsModel.FK_TaxReceiptNumbersHistory_Invoice" FromRole="Invoice" ToRole="TaxReceiptNumbersHistory" />
-          <Property Name="InvoiceSequence" Type="Int32" />
+          <Property Name="SequenceNumber" Type="Int32" />
         </EntityType>
         <EntityType Name="InvoiceDetail">
           <Key>
@@ -3836,7 +3842,9 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="ReceiptPaymentId" Type="Int32" />
           <Property Name="TaxReceiptNumberId" Type="Int32" />
           <NavigationProperty Name="TaxReceiptNumber" Relationship="TicketsModel.FK_NoteCredit_TaxReceipt" FromRole="NoteCredit" ToRole="TaxReceiptNumber" />
-          <Property Name="NoteCreditSequence" Type="Int32" />
+          <Property Name="SequenceNumber" Type="Int32" />
+          <Property Name="SequenceType" Type="Int32" />
+          <Property Name="Nomenclature" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="NoteCreditReceiptPayment">
           <Key>
@@ -3976,15 +3984,15 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="TicketReturns" Relationship="TicketsModel.FK_TicketReturn_Raffle" FromRole="Raffle" ToRole="TicketReturn" />
           <NavigationProperty Name="RaffleAwards" Relationship="TicketsModel.FK_RaffleAward_Raffle" FromRole="Raffle" ToRole="RaffleAward" />
           <Property Name="Symbol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Separator" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Separator" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="Consignacion" Type="Boolean" />
           <NavigationProperty Name="ElectronicTicketSales" Relationship="TicketsModel.FK_ElectronicTicketSales_Raffle1" FromRole="Raffle" ToRole="ElectronicTicketSale" />
           <Property Name="EndElectronicSales" Type="DateTime" Precision="3" />
           <Property Name="DueRaffleDate" Type="DateTime" Precision="3" />
           <Property Name="StartElectronicSales" Type="DateTime" Precision="3" />
           <NavigationProperty Name="TicketAllocationNumber_Delete" Relationship="TicketsModel.FK_TicketAllocationNumber_Delete_Raffle" FromRole="Raffle" ToRole="TicketAllocationNumber_Delete" />
-          <Property Name="RaffleSequence" Type="Int32" />
           <NavigationProperty Name="ElectronicAwardPayeds" Relationship="TicketsModel.FK_RaffleId" FromRole="Raffle" ToRole="ElectronicAwardPayed" />
+          <Property Name="SequenceNumber" Type="Int32" />
         </EntityType>
         <EntityType Name="ReceiptPayment">
           <Key>
@@ -4012,7 +4020,9 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Codigo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Notas" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="ReceiptSequence" Type="Int32" />
+          <Property Name="SequenceNumber" Type="Int32" />
+          <Property Name="SequenceType" Type="Int32" />
+          <Property Name="Nomenclature" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ReceivablePayment">
           <Key>
@@ -4136,7 +4146,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="TicketAllocationNumbers" Relationship="TicketsModel.FK_TicketAllocationNumber_TicketAllocation" FromRole="TicketAllocation" ToRole="TicketAllocationNumber" />
           <Property Name="Agente" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="TicketAllocationNumber_Delete" Relationship="TicketsModel.FK_TicketAllocationNumber_Delete" FromRole="TicketAllocation" ToRole="TicketAllocationNumber_Delete" />
-          <Property Name="AllocationSequence" Type="Int32" />
+          <Property Name="SequenceNumber" Type="Int32" />
         </EntityType>
         <EntityType Name="TicketAllocationNumber">
           <Key>
@@ -4180,7 +4190,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="CreateUser" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Raffle" Relationship="TicketsModel.FK_TicketRePrint_Raffle" FromRole="TicketRePrint" ToRole="Raffle" />
           <NavigationProperty Name="TicketRePrintNumbers" Relationship="TicketsModel.FK_TicketRePrintNumber_TicketRePrint" FromRole="TicketRePrint" ToRole="TicketRePrintNumber" />
-          <Property Name="TicketRePrintSequence" Type="Int32" />
+          <Property Name="SequenceNumber" Type="Int32" />
         </EntityType>
         <EntityType Name="TicketRePrintNumber">
           <Key>
@@ -6208,7 +6218,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="IdentifyBaches">
             <EntityTypeMapping TypeName="TicketsModel.IdentifyBach">
               <MappingFragment StoreEntitySet="IdentifyBach">
-                <ScalarProperty Name="IdentifyBachSequence" ColumnName="IdentifyBachSequence" />
+                <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="WinnerId" ColumnName="WinnerId" />
                 <ScalarProperty Name="Trabajado" ColumnName="Trabajado" />
                 <ScalarProperty Name="Nombre2" ColumnName="Nombre2" />
@@ -6232,6 +6242,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="IdentifyBachPayments">
             <EntityTypeMapping TypeName="TicketsModel.IdentifyBachPayment">
               <MappingFragment StoreEntitySet="IdentifyBachPayment">
+                <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="DiscountPercent" ColumnName="DiscountPercent" />
                 <ScalarProperty Name="IdentifyBachId" ColumnName="IdentifyBachId" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
@@ -6260,7 +6271,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="Invoices">
             <EntityTypeMapping TypeName="TicketsModel.Invoice">
               <MappingFragment StoreEntitySet="Invoice">
-                <ScalarProperty Name="InvoiceSequence" ColumnName="InvoiceSequence" />
+                <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="TaxReceiptAssignmentDate" ColumnName="TaxReceiptAssignmentDate" />
                 <ScalarProperty Name="TaxReceipt" ColumnName="TaxReceipt" />
                 <ScalarProperty Name="DeleteUser" ColumnName="DeleteUser" />
@@ -6334,7 +6345,9 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="NoteCredits">
             <EntityTypeMapping TypeName="TicketsModel.NoteCredit">
               <MappingFragment StoreEntitySet="NoteCredit">
-                <ScalarProperty Name="NoteCreditSequence" ColumnName="NoteCreditSequence" />
+                <ScalarProperty Name="Nomenclature" ColumnName="Nomenclature" />
+                <ScalarProperty Name="SequenceType" ColumnName="SequenceType" />
+                <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="TaxReceiptNumberId" ColumnName="TaxReceiptNumberId" />
                 <ScalarProperty Name="ReceiptPaymentId" ColumnName="ReceiptPaymentId" />
                 <ScalarProperty Name="TypeNote" ColumnName="TypeNote" />
@@ -6446,7 +6459,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="Raffles">
             <EntityTypeMapping TypeName="TicketsModel.Raffle">
               <MappingFragment StoreEntitySet="Raffle">
-                <ScalarProperty Name="RaffleSequence" ColumnName="RaffleSequence" />
+                <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="StartElectronicSales" ColumnName="StartElectronicSales" />
                 <ScalarProperty Name="DueRaffleDate" ColumnName="DueRaffleDate" />
                 <ScalarProperty Name="EndElectronicSales" ColumnName="EndElectronicSales" />
@@ -6471,7 +6484,9 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="ReceiptPayments">
             <EntityTypeMapping TypeName="TicketsModel.ReceiptPayment">
               <MappingFragment StoreEntitySet="ReceiptPayment">
-                <ScalarProperty Name="ReceiptSequence" ColumnName="ReceiptSequence" />
+                <ScalarProperty Name="Nomenclature" ColumnName="Nomenclature" />
+                <ScalarProperty Name="SequenceType" ColumnName="SequenceType" />
+                <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="Notas" ColumnName="Notas" />
                 <ScalarProperty Name="Codigo" ColumnName="Codigo" />
                 <ScalarProperty Name="Telefono" ColumnName="Telefono" />
@@ -6600,7 +6615,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="TicketAllocations">
             <EntityTypeMapping TypeName="TicketsModel.TicketAllocation">
               <MappingFragment StoreEntitySet="TicketAllocation">
-                <ScalarProperty Name="AllocationSequence" ColumnName="AllocationSequence" />
+                <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="Agente" ColumnName="Agente" />
                 <ScalarProperty Name="Statu" ColumnName="Statu" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
@@ -6639,7 +6654,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="TicketRePrints">
             <EntityTypeMapping TypeName="TicketsModel.TicketRePrint">
               <MappingFragment StoreEntitySet="TicketRePrint">
-                <ScalarProperty Name="TicketRePrintSequence" ColumnName="TicketRePrintSequence" />
+                <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Statu" ColumnName="Statu" />

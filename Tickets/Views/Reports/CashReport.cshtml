@@ -1,7 +1,7 @@
 ﻿@model Tickets.Models.IdentifyBach
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "RECIBO DE PAGO A PREMIO";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -72,10 +72,10 @@
                     {
                         <tr>
                             <td>
-                                @payment.Id
+                                @payment.SequenceNumber
                             </td>
                             <td>
-                                @payment.IdentifyBach.Raffle.Symbol @payment.IdentifyBach.Raffle.Separator @payment.IdentifyBach.Raffle.Id
+                                @payment.IdentifyBach.Raffle.Symbol @payment.IdentifyBach.Raffle.Separator @payment.IdentifyBach.Raffle.SequenceNumber
                             </td>
                             <td class="text-right" style="width:15%">
                                 @(payment.Value.ToString("c",  new System.Globalization.CultureInfo("es-DO")))

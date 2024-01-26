@@ -22,14 +22,14 @@
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
             <b>LOTE DE REIMPRESION NO. @Model.Id</b><br />
-            <b>SORTEO @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()</b><br />
+            <b>SORTEO @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()</b><br />
         </div>
         <div class="col-lg-6 no-padder">
             <div class="col-lg-12 no-padder text-left">
                 <b>CLIENTE: </b> @Model.TicketRePrintNumbers.FirstOrDefault().TicketAllocationNumber.TicketAllocation.ClientId - @Model.TicketRePrintNumbers.FirstOrDefault().TicketAllocationNumber.TicketAllocation.Client.Name
             </div>
             <div class="col-lg-12 no-padder text-left">
-                <b>ASIGNACION: </b> @Model.TicketRePrintNumbers.FirstOrDefault().TicketAllocationNumber.TicketAllocationId
+                <b>ASIGNACION: </b> @Model.TicketRePrintNumbers.FirstOrDefault().TicketAllocationNumber.TicketAllocation.SequenceNumber
             </div>
         </div>
         <div class="col-lg-6 no-padder text-right">

@@ -12,6 +12,9 @@ namespace Tickets.Models.Prospects
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
+        [JsonProperty(PropertyName = "nameAux")]
+        public string NameAux { get; set; }
+
         [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
 
@@ -58,6 +61,7 @@ namespace Tickets.Models.Prospects
             {
                 Id = award.Id,
                 Name = award.Name,
+                NameAux = award.Name,
                 Description = award.Description,
                 OrderAward = award.OrderAward,
                 ByFraction = award.ByFraction,

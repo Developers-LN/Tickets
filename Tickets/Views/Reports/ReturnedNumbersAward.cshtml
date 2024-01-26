@@ -20,7 +20,7 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
             <b>
                 LISTADO DE NÚMEROS PREMIADOS DEVUELTOS PARA EL SORTEO <br />
-                @Model.Symbol @Model.Separator @Model.Id @Model.Name
+                @Model.Symbol @Model.Separator @Model.SequenceNumber @Model.Name
             </b><br />
             FECHA DEL SORTEO: @Model.DateSolteo.ToLongDateString()
         </div>
@@ -49,8 +49,6 @@
                         award = Model.RaffleAwards.FirstOrDefault(a => a.RaffleId == Model.Id && a.ControlNumber == i.FirstOrDefault().TicketAllocationNumber.Number),
                         returnedGroup = i.FirstOrDefault().ReturnedGroup
                     });
-
-
 
                     var awards = returnedNumbers.Where(i =>
                         i.award != null).OrderByDescending(r => r.award.Award.Value).GroupBy(n => n.award.Award.TypesAwardId)

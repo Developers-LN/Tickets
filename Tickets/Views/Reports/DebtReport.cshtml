@@ -57,7 +57,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>
                 REPORTE DE DEUDAS PARA EL SORTEO <br />
-                @RaffleData.Symbol @RaffleData.Separator @RaffleData.Id @RaffleData.Name @RaffleData.DateSolteo.ToShortDateString()
+                @RaffleData.Symbol @RaffleData.Separator @RaffleData.SequenceNumber @RaffleData.Name @RaffleData.DateSolteo.ToShortDateString()
             </b>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
@@ -81,7 +81,7 @@
                     var awards = context.RaffleAwards.AsEnumerable().Where(r => r.RaffleId == Model.FirstOrDefault().RaffleId).ToList();
                     var IdentifyBachsPayed = Model.Where(i => Tickets.Models.Utils.IdentifyBachIsPayedMayor(i, awards) || Tickets.Models.Utils.IdentifyBachIsPayedMinor(i, awards)).GroupBy(r => r.RaffleId).Select(s => new
                     {
-                        raffleName = s.FirstOrDefault().RaffleId + " - " + s.FirstOrDefault().Raffle.Name,
+                        raffleName = s.FirstOrDefault().Raffle.Symbol + s.FirstOrDefault().Raffle.Separator + s.FirstOrDefault().Raffle.SequenceNumber + " - " + s.FirstOrDefault().Raffle.Name,
                         clients = s.GroupBy(i => i.ClientId).Select(i => new
                         {
                             clientName = i.FirstOrDefault().Client.Name,
@@ -91,7 +91,7 @@
 
                     var IdentifyBachsNoPayed = Model.Where(i => Tickets.Models.Utils.IdentifyBachIsPayedMayor(i, awards) == false && Tickets.Models.Utils.IdentifyBachIsPayedMinor(i, awards) == false).GroupBy(r => r.RaffleId).Select(s => new
                     {
-                        raffleName = s.FirstOrDefault().RaffleId + " - " + s.FirstOrDefault().Raffle.Name,
+                        raffleName = s.FirstOrDefault().Raffle.Symbol + s.FirstOrDefault().Raffle.Separator + s.FirstOrDefault().Raffle.SequenceNumber + " - " + s.FirstOrDefault().Raffle.Name,
                         clients = s.GroupBy(i => i.ClientId).Select(i => new
                         {
                             clientName = i.FirstOrDefault().Client.Name,
@@ -129,7 +129,7 @@
                             }
                             <tr>
                                 <td class="text-center"></td>
-                                <td class="text-center">@identify.Id</td>
+                                <td class="text-center">@identify.SequenceNumber</td>
                                 <td class="text-center">SI</td>
                                 <td class="text-center">@identifyFractions</td>
                                 <td class="text-right" style="font-weight:bold;">@(identifyFractionValue.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
@@ -181,7 +181,7 @@
                             }
                             <tr>
                                 <td class="text-center"></td>
-                                <td class="text-center">@identify.Id</td>
+                                <td class="text-center">@identify.SequenceNumber</td>
                                 <td class="text-center">NO</td>
                                 <td class="text-center">@identifyFractions</td>
                                 <td class="text-right" style="font-weight:bold;">@(identifyFractionValue.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>

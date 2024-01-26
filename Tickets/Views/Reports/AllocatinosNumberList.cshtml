@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "DETALLES DE LA ASIGNACION NO. " + Model.Id;
+    ViewBag.Title = "DETALLES DE LA ASIGNACION NO. " + Model.SequenceNumber;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -58,11 +58,13 @@
         @if (Model.TicketAllocationNumbers.Any())
         {
             <p>FECHA CREACION: <b>@(Model.CreateDate)</b></p>
+            <p>CREADA POR: <b>@Model.User.Employee.Name @Model.User.Employee.LastName</b></p>
             <p>FACTURADO A: <b>@Model.Client.Name @Model.TicketAllocationNumbers.Select(t => t.TicketAllocation.Agente).FirstOrDefault()</b></p>
         }
         else
         {
             <p>FECHA CREACION: <b>@(Model.CreateDate)</b></p>
+            <p>CREADA POR: <b>@Model.User.Employee.Name @Model.User.Employee.LastName</b></p>
             <p>FACTURADO A: <b>@Model.Client.Name @Model.TicketAllocationNumber_Delete.Select(t => t.TicketAllocation.Agente).FirstOrDefault()</b></p>
         }
     </div>
@@ -74,14 +76,14 @@
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
             <b>ASIGNACION DE BILLETES DEL SORTEO <br />
-            @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()</b>
+            @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()</b>
         </div>
     </div>
     <div class="col-lg-3  no-padder text-right">
         <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
         <b>HORA: </b> @DateTime.Now.ToShortTimeString() <br />
         <b>FECHA SORTEO:</b> @Model.Raffle.DateSolteo.ToShortDateString() <br />
-        <b>ASIGNACION: </b>@Model.Id
+        <b>ASIGNACION: </b>@Model.SequenceNumber
     </div>
     <div class="col-lg-12 col-md-12 no-padder col-sm-12">
 

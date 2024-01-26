@@ -28,17 +28,17 @@
                         <thead>
                             <tr>
                                 <th>Codigo</th>
-                                <th width="20%">Cliente</th>
+                                <th>Cliente</th>
                                 <th>Fecha</th>
                                 <th>Cantidad Pagado</th>
                                 <th>Cantidad Restante</th>
-                                <th width="30%">Concepto</th>
+                                <th>Concepto</th>
                                 <th>Acción</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="creditNote in creditNotes">
-                                <td>000-{{creditNote.Id}}</td>
+                                <td>{{creditNote.SequenceNumberNoteCredit}}</td>
                                 <td>{{creditNote.ClientDesc}}</td>
                                 <td>{{creditNote.NoteDate}}</td>
                                 <td>{{parseMoney(creditNote.TotalCash)}}</td>

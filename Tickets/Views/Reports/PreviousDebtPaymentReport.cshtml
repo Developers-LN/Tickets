@@ -1,7 +1,7 @@
 ﻿@model Tickets.Models.PreviousDebtPayment
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "RECIBI DE PAGO POR DEUDA ANTERIOR";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();

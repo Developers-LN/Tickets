@@ -73,12 +73,10 @@
             });
         }
         self.GetBatchNumbers = function () {
-
             $.ajax({
                 type: 'get',
                 dataType: 'json',
                 url: 'TicketAllocation/GetBatchList',
-
                 success: function (data) {
                     $scope.batchNumbers = data;
                 }

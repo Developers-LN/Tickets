@@ -125,10 +125,10 @@
                             {
                                 <tr>
                                     <td class="text-center">
-                                        @receiptPayment.Invoice.Id
+                                        @receiptPayment.Invoice.SequenceNumber
                                     </td>
                                     <td class="text-center">
-                                        @receiptPayment.Id
+                                        @(receiptPayment.Nomenclature == null ? receiptPayment.SequenceNumber.Value.ToString() : string.Concat(receiptPayment.Nomenclature, receiptPayment.SequenceNumber.Value.ToString().PadLeft(5, '0')))
                                     </td>
                                     <td>
                                         @if (receiptPayment.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)
@@ -142,7 +142,7 @@
                                     </td>
                                     <td>@receiptPayment.ReceiptDate.ToString()</td>
                                     <td class="text-center">
-                                        @receiptPayment.Invoice.Raffle.Symbol @receiptPayment.Invoice.Raffle.Separator @receiptPayment.Invoice.Raffle.Id @receiptPayment.Invoice.Raffle.Name
+                                        @receiptPayment.Invoice.Raffle.Symbol @receiptPayment.Invoice.Raffle.Separator @receiptPayment.Invoice.Raffle.SequenceNumber @receiptPayment.Invoice.Raffle.Name
                                     </td>
                                     <td>
                                         @if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
@@ -262,10 +262,10 @@
                         {
                             <tr>
                                 <td class="text-center">
-                                    @receiptPayment.Invoice.Id
+                                    @receiptPayment.Invoice.SequenceNumber
                                 </td>
                                 <td class="text-center">
-                                    @receiptPayment.Id
+                                    @(receiptPayment.Nomenclature == null ? receiptPayment.SequenceNumber.Value.ToString() : string.Concat(receiptPayment.Nomenclature, receiptPayment.SequenceNumber.Value.ToString().PadLeft(5, '0')))
                                 </td>
                                 <td>
                                     @if (receiptPayment.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)
@@ -278,7 +278,7 @@
                                     }
                                 </td>
                                 <td>@receiptPayment.ReceiptDate.ToString()</td>
-                                <td class="text-center">@receiptPayment.Invoice.Raffle.Id</td>
+                                <td class="text-center">@receiptPayment.Invoice.Raffle.Symbol @receiptPayment.Invoice.Raffle.Separator @receiptPayment.Invoice.Raffle.SequenceNumber</td>
                                 <td>
                                     @if (receiptPayment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
                                     {

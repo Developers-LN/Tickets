@@ -1,7 +1,7 @@
 ﻿@model List<Tickets.Models.Raffle>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "";
+    ViewBag.Title = "REPORTE DE SORTEO";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -79,7 +79,7 @@
                     @{
                         var infoRaffle = Model.AsEnumerable().GroupBy(r => r.Id).Select(i => new
                         {
-                            raffleName = i.FirstOrDefault().Id + " - " + i.FirstOrDefault().Name
+                            raffleName = i.FirstOrDefault().Symbol + i.FirstOrDefault().Separator + i.FirstOrDefault().SequenceNumber + "  " + i.FirstOrDefault().Name
                         });
                     }
 

@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Detalle de factura No. " + Model.Id;
+    ViewBag.Title = "Detalle de factura No. " + Model.SequenceNumber;
 
     var context = new Tickets.Models.TicketsEntities();
     var availableTicketsToInvoice = new Tickets.Models.Procedures.Procedure_AvailableTicketToInvoice();
@@ -79,7 +79,7 @@
                     </div>
                 }
                 <div class="col-lg-12 no-padder text-left">
-                    <b>FACTURA:</b> @Model.Id
+                    <b>FACTURA:</b> @Model.SequenceNumber
                 </div>
             </div>
             @if (Model.TaxReceiptNumbersHistories.Any())
@@ -120,7 +120,7 @@
             </div>
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>SORTEO: </b> @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id
+                    <b>SORTEO: </b> @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>FECHA DE SORTEO: </b> @Model.Raffle.DateSolteo.ToShortDateString()
@@ -316,7 +316,7 @@ else
             <div class="col-lg-12 no-padder text-center">
                 <b>
                     DETALLE DE FACTURAS SORTEO <br />
-                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
                 </b>
             </div>
             <div class="col-lg-6 no-padder">
@@ -332,7 +332,7 @@ else
             </div>
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Factura: </b> @Model.Id
+                    <b>Factura: </b> @Model.SequenceNumber
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
@@ -459,7 +459,7 @@ else
             <div class="col-lg-12 no-padder text-center">
                 <b>
                     DETALLE DE FACTURAS SORTEO <br />
-                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.Id @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+                    @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
                 </b>
             </div>
             <div class="col-lg-6 no-padder">
@@ -475,7 +475,7 @@ else
             </div>
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Factura: </b> @Model.Id
+                    <b>Factura: </b> @Model.SequenceNumber
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha: </b> @Model.CreateDate.ToShortDateString()

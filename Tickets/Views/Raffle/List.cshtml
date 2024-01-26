@@ -26,7 +26,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="raffle in raffles">
-                                <td>{{raffle.RaffleNomenclature}}</td>
+                                <td>{{raffle.raffleNomenclature}}</td>
                                 <td>{{raffle.ticketProspectDesc}}</td>
                                 <td>{{(raffle.raffleDate | date:"dd/MM/yyyy")}}</td>
                                 <td>{{(raffle.startReturnDate | date:"dd/MM/yyyy h:mm:ss a")}}</td>
@@ -35,7 +35,6 @@
                                 <td>
                                     <a href="#/raffle/raffle/{{raffle.id}}" ng-show="raffle.statu != '@((int)Tickets.Models.Enums.RaffleStatusEnum.Generated)'" title="Moificar Sorteo" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
                                     <a ng-show="raffle.statu != '@((int)Tickets.Models.Enums.RaffleStatusEnum.Generated)' && raffle.statu != '@((int)Tickets.Models.Enums.RaffleStatusEnum.Suspended)'" ng-click="deleteRaffle(raffle)" title="Suspender Sorteo" class="{{moduleCanDelete}}"><i class="fa fa-ban"></i></a>
-
                                     <a href="#/raffle/copy/{{raffle.id}}" ng-show="raffle.statu != '@((int)Tickets.Models.Enums.RaffleStatusEnum.Generated)'&& raffle.statu != '@((int)Tickets.Models.Enums.RaffleStatusEnum.Suspended)'" title="Copiar Asignaciones" class="{{moduleCanEdit}}"><i class="fa fa-files-o"></i></a>
                                 </td>
                             </tr>

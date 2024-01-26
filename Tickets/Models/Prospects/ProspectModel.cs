@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tickets.Models.AuxModels;
 using Tickets.Models.Enums;
 using WebMatrix.WebData;
 
@@ -99,7 +100,7 @@ namespace Tickets.Models.Prospects
         {
             var context = new TicketsEntities();
             var awardModel = new AwardModel();
-            var awardList = context.Awards.Where(w => w.ProspectId == prospect.Id).ToList();
+            var awardList = context.Awards.OrderBy(o => o.OrderAward).Where(w => w.ProspectId == prospect.Id).ToList();
             var prospectModel = new ProspectModel()
             {
                 Id = prospect.Id,
@@ -302,6 +303,7 @@ namespace Tickets.Models.Prospects
                         #endregion
 
                         #region Saveing awards
+                        var createdAwards = new List<AuxAward>();
                         model.Awards = model.Awards == null ? new List<AwardModel>() : model.Awards;
                         foreach (var awardModel in model.Awards.OrderBy(a => a.OrderAward))
                         {
@@ -318,17 +320,11 @@ namespace Tickets.Models.Prospects
                             {
                                 award = context.Awards.FirstOrDefault(a => a.Id == awardModel.Id);
                             }
-                            award.TotalValue = awardModel.Quantity * awardModel.Value;
-                            award.Description = awardModel.Description == null ? "" : awardModel.Description;
 
-                            if (awardModel.SourceAward.HasValue)
+                            if (awardModel.SourceAwardDescription != null)
                             {
-                                int test;
-                                if (int.TryParse(awardModel.SourceAward.Value.ToString(), out test))
-                                {
-                                    var sourceAward = context.Awards.Where(a => a.ProspectId == prospect.Id && a.Id == awardModel.SourceAward).FirstOrDefault();
-                                    awardModel.SourceAward = sourceAward.Id;
-                                }
+                                int? sourceAward = null;
+                                awardModel.SourceAward = createdAwards.Any(a => a.ProspectId == prospect.Id && (a.Name == awardModel.SourceAwardDescription.ToUpper() || a.Id == awardModel.SourceAward)) ? createdAwards.FirstOrDefault(a => a.ProspectId == prospect.Id && (a.Name == awardModel.SourceAwardDescription.ToUpper() || a.Id == awardModel.SourceAward)).Id : sourceAward;
                             }
 
                             award.Name = awardModel.Name.ToUpper();
@@ -339,7 +335,7 @@ namespace Tickets.Models.Prospects
                             award.Terminal = awardModel.Terminal;
                             award.ByFraction = awardModel.ByFraction;
                             award.Value = awardModel.Value;
-                            award.TotalValue = awardModel.TotalValue;
+                            award.TotalValue = awardModel.Quantity * awardModel.Value;
                             award.TypesAwardId = awardModel.TypesAwardId;
 
                             if (awardModel.Id == 0)
@@ -347,6 +343,26 @@ namespace Tickets.Models.Prospects
                                 context.Awards.Add(award);
                             }
                             context.SaveChanges();
+
+                            var auxAward = new AuxAward()
+                            {
+                                Id = award.Id,
+                                ProspectId = award.ProspectId,
+                                OrderAward = award.OrderAward,
+                                Name = award.Name,
+                                Description = award.Description,
+                                Quantity = award.Quantity,
+                                SourceAward = award.SourceAward,
+                                Terminal = award.Terminal,
+                                Value = award.Value,
+                                TotalValue = award.TotalValue,
+                                ByFraction = award.ByFraction,
+                                CreateDate = award.CreateDate,
+                                CreateUser = award.CreateUser,
+                                TypesAwardId = award.TypesAwardId
+                            };
+
+                            createdAwards.Add(auxAward);
                         }
                         #endregion
 

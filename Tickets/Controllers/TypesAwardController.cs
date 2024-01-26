@@ -131,17 +131,17 @@ namespace Tickets.Controllers
             var raffles1 = context.Raffles.Where(r => r.Statu != (int)RaffleStatusEnum.Suspended).Select(r => new
             {
                 r.Id,
-                r.RaffleSequence,
+                r.SequenceNumber,
                 r.Name,
-                raffleNomenclature = r.Symbol + r.Separator + r.Id,
-                text = r.Symbol + r.Separator + r.Id + " " + r.Name,
+                raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
+                text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name,
                 r.DateSolteo
             }).OrderByDescending(r => r.Id).ToList();
 
             var raffles2 = raffles1.Select(s => new
             {
                 s.Id,
-                s.RaffleSequence,
+                s.SequenceNumber,
                 s.Name,
                 s.raffleNomenclature,
                 text = s.text + " " + s.DateSolteo.ToShortDateString()
@@ -150,7 +150,7 @@ namespace Tickets.Controllers
             var raffles = raffles2.Select(s => new
             {
                 s.Id,
-                s.RaffleSequence,
+                s.SequenceNumber,
                 s.Name,
                 s.raffleNomenclature,
                 s.text

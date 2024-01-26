@@ -1,25 +1,23 @@
 ﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelProcedure_SalesAndPendingPayments>
 
 @{
+    var context = new Tickets.Models.TicketsEntities();
+    var config = context.SystemConfigs.FirstOrDefault();
     var idRaffleList = Model.AsEnumerable().GroupBy(r => r.IdRaffle).Select(s => s.Key).ToList();
-
+    var RaffleData = context.Raffles.Where(w => idRaffleList.Contains(w.Id)).ToList();
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     if (idRaffleList.Count() == 1)
     {
-        ViewBag.Title = "REPORTE DE COBROS REALIZADOS EN EL PERIODO " + ViewBag.startDate + " Y " + ViewBag.endDate + " DEL SORTEO " + @Model.FirstOrDefault().IdRaffle;
+        ViewBag.Title = "REPORTE DE COBROS REALIZADOS EN EL PERIODO " + ViewBag.startDate + " Y " + ViewBag.endDate + " DEL SORTEO " + RaffleData.FirstOrDefault().SequenceNumber;
     }
     else
     {
         ViewBag.Title = "REPORTE DE COBROS REALIZADOS EN EL PERIODO " + ViewBag.startDate + " y " + ViewBag.endDate;
     }
 
-    var context = new Tickets.Models.TicketsEntities();
-    var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.CreditosCobros : "";
     string adminCargo = config != null ? config.CreditosCobrosCargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
-
-    var RaffleData = context.Raffles.Where(w => idRaffleList.Contains(w.Id)).ToList();
 }
 
 <style>
@@ -73,7 +71,7 @@
             @if (idRaffleList.Count() == 1)
             {
                 var RaffleData2 = RaffleData.FirstOrDefault(f => f.Id == Model.FirstOrDefault().IdRaffle);
-                <b>DEL SORTEO @RaffleData2.Symbol @RaffleData2.Separator @RaffleData2.Id @RaffleData2.Name @RaffleData2.DateSolteo.ToShortDateString()</b>
+                <b>DEL SORTEO @RaffleData2.Symbol @RaffleData2.Separator @RaffleData2.SequenceNumber @RaffleData2.Name @RaffleData2.DateSolteo.ToShortDateString()</b>
             }
         </div>
     </div>
@@ -121,6 +119,7 @@
                                 {
                                     ClientId = i.FirstOrDefault().IdClient,
                                     InvoiceId = i.FirstOrDefault().IdInvoice,
+                                    SequenceNumberInvoice = i.FirstOrDefault().SequenceNumberInvoice,
                                     ReceivableStatus = i.FirstOrDefault().ReceivableStatusId,
                                     InvoiceDate = i.FirstOrDefault().DateInvoice.ToString("dd/MM/yyyy"),
                                     InvoiceStatus = i.FirstOrDefault().StatusInvoice,
@@ -151,6 +150,7 @@
                                         {
                                             i.ClientId,
                                             i.InvoiceId,
+                                            i.SequenceNumberInvoice,
                                             i.ReceivableStatus,
                                             i.InvoiceDate,
                                             i.InvoiceStatus,
@@ -179,6 +179,7 @@
                                         {
                                             i.ClientId,
                                             i.InvoiceId,
+                                            i.SequenceNumberInvoice,
                                             i.ReceivableStatus,
                                             i.InvoiceDate,
                                             i.InvoiceStatus,
@@ -207,6 +208,7 @@
                                         {
                                             i.ClientId,
                                             i.InvoiceId,
+                                            i.SequenceNumberInvoice,
                                             i.ReceivableStatus,
                                             i.InvoiceDate,
                                             i.InvoiceStatus,
@@ -235,6 +237,7 @@
                                         {
                                             i.ClientId,
                                             i.InvoiceId,
+                                            i.SequenceNumberInvoice,
                                             i.ReceivableStatus,
                                             i.InvoiceDate,
                                             i.InvoiceStatus,
@@ -286,7 +289,7 @@
                             foreach (var invoice in client.invoices)
                             {
                                 <tr>
-                                    <td class="text-center">@invoice.InvoiceId</td>
+                                    <td class="text-center">@invoice.SequenceNumberInvoice</td>
                                     <td class="text-center">@invoice.InvoiceDate</td>
                                     <td class="text-center">@invoice.InvoiceStatus</td>
                                     <td class="text-right">@invoice.InvoiceTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>

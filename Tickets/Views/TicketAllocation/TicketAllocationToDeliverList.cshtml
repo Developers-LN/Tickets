@@ -40,7 +40,7 @@
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
-                                <th>Numero</th>
+                                <th>Asignación</th>
                                 <th>Cliente</th>
                                 <th>Fecha</th>
                                 <th>Estado</th>
@@ -49,7 +49,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="allocation in allocations">
-                                <td>#{{allocation.id}}</td>
+                                <td>{{allocation.sequenceNumberTicketAllocation}}</td>
                                 <td>{{allocation.clientId}} - {{allocation.clientDesc}} {{allocation.Agente}}</td>
                                 <td>{{(allocation.createDate | date:"dd/MM/yyyy hh:mm:ss a")}}</td>
                                 <td>{{allocation.statuDesc}}</td>

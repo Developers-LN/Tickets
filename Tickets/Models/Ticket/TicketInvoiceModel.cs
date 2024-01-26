@@ -16,8 +16,8 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "id")]
         public int Id { get; set; }
 
-        [JsonProperty(PropertyName = "invoiceSequence")]
-        public int? InvoiceSequence { get; set; }
+        [JsonProperty(PropertyName = "sequenceNumberInvoice")]
+        public int? SequenceNumberInvoice { get; set; }
 
         [JsonProperty(PropertyName = "agencyId")]
         public int AgencyId { get; set; }
@@ -119,8 +119,8 @@ namespace Tickets.Models.Ticket
         [JsonProperty(PropertyName = "invoiceStatusProv")]
         public string InvoiceStatusProv { get; set; }
 
-        [JsonProperty(PropertyName = "raffleSequence")]
-        public int? RaffleSequence { get; set; }
+        [JsonProperty(PropertyName = "sequenceNumberRaffle")]
+        public int? SequenceNumberRaffle { get; set; }
 
         internal TicketInvoiceModel InvoiceDetails(Invoice model, bool hasAllocaation = false, bool hasNumber = false)
         {
@@ -132,17 +132,17 @@ namespace Tickets.Models.Ticket
             var invoice = new TicketInvoiceModel()
             {
                 Id = model.Id,
-                InvoiceSequence = model.InvoiceSequence,
+                SequenceNumberInvoice = model.SequenceNumber,
                 AgencyId = model.AgencyId,
                 AgencyDesc = context.Agencies.Where(r => r.Id == model.AgencyId).Select(c => c.Name).FirstOrDefault(),
                 ClientId = model.ClientId,
-                ClientDesc = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.Name).FirstOrDefault(),
+                ClientDesc = model.Client.Name,
                 Agente = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.TicketAllocations.Select(a => a.Agente).FirstOrDefault()).FirstOrDefault(),
                 RaffleId = model.RaffleId,
-                RaffleSequence = model.Raffle.RaffleSequence,
+                SequenceNumberRaffle = model.Raffle.SequenceNumber,
                 //RaffleDesc = context.Raffles.Where(r => r.Id == model.RaffleId).Select(c => c.Name).FirstOrDefault(),
-                RaffleNomenclature = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.Id,
-                RaffleDesc = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.Id + " " + model.Raffle.Name + " " + model.Raffle.DateSolteo.ToShortDateString(),
+                RaffleNomenclature = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.SequenceNumber,
+                RaffleDesc = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.SequenceNumber + " " + model.Raffle.Name + " " + model.Raffle.DateSolteo.ToShortDateString(),
                 PaymentType = model.PaymentType,
                 PaymentTypeDesc = context.Catalogs.Where(r => r.Id == model.PaymentType).Select(c => c.NameDetail).FirstOrDefault(),
                 InvoiceExpredDay = expiredDay,
@@ -184,17 +184,17 @@ namespace Tickets.Models.Ticket
             var invoice = new TicketInvoiceModel()
             {
                 Id = model.Id,
-                InvoiceSequence = model.InvoiceSequence,
+                SequenceNumberInvoice = model.SequenceNumber,
                 AgencyId = model.AgencyId,
                 AgencyDesc = context.Agencies.Where(r => r.Id == model.AgencyId).Select(c => c.Name).FirstOrDefault(),
                 ClientId = model.ClientId,
-                ClientDesc = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.Name).FirstOrDefault(),
+                ClientDesc = model.Client.Name,
                 Agente = context.Clients.Where(r => r.Id == model.ClientId).Select(c => c.TicketAllocations.Select(a => a.Agente).FirstOrDefault()).FirstOrDefault(),
                 RaffleId = model.RaffleId,
-                RaffleSequence = model.Raffle.RaffleSequence,
+                SequenceNumberRaffle = model.Raffle.SequenceNumber,
                 //RaffleDesc = context.Raffles.Where(r => r.Id == model.RaffleId).Select(c => c.Name).FirstOrDefault(),
-                RaffleNomenclature = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.Id,
-                RaffleDesc = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.Id + " " + model.Raffle.Name + " " + model.Raffle.DateSolteo.ToShortDateString(),
+                RaffleNomenclature = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.SequenceNumber,
+                RaffleDesc = model.Raffle.Symbol + model.Raffle.Separator + model.Raffle.SequenceNumber + " " + model.Raffle.Name + " " + model.Raffle.DateSolteo.ToShortDateString(),
                 PaymentType = model.PaymentType,
                 PaymentTypeDesc = context.Catalogs.Where(r => r.Id == model.PaymentType).Select(c => c.NameDetail).FirstOrDefault(),
                 InvoiceExpredDay = expiredDay,
@@ -334,7 +334,7 @@ namespace Tickets.Models.Ticket
                                             select new
                                             {
                                                 rp.Id,
-                                                rp.ReceiptSequence,
+                                                rp.SequenceNumber,
                                                 rp.InvoiceId,
                                                 rp.TotalCash,
                                                 rp.TotalCheck,

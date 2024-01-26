@@ -58,7 +58,7 @@
         <div class="col-lg-12 no-padder text-center">
             <b>
                 RECIBO DE PAGO POR PREMIO DEL SORTEO <br />
-                @first.IdentifyBach.Raffle.Symbol @first.IdentifyBach.Raffle.Separator @first.IdentifyBach.Raffle.Id @first.IdentifyBach.Raffle.Name
+                @first.IdentifyBach.Raffle.Symbol @first.IdentifyBach.Raffle.Separator @first.IdentifyBach.Raffle.SequenceNumber @first.IdentifyBach.Raffle.Name
             </b>
         </div>
     </div>
@@ -117,9 +117,9 @@
                                 var total = (number.FractionTo - number.FractionFrom + 1) * price;
                                 //totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                 <tr>
-                                    <td class="text-center">@number.IdentifyBachId</td>
+                                    <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
                                     <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToShortDateString()</td>
-                                    <td class="text-center">@number.TicketAllocationNumber.Number</td>
+                                    <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((number.TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
                                     <td class="text-center">@raffleAward.Award.Name</td>
                                     <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
                                     <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
@@ -141,9 +141,9 @@
                                 var total = (number.FractionTo - number.FractionFrom + 1) * price;
                                 //totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                 <tr>
-                                    <td class="text-center">@number.IdentifyBachId</td>
+                                    <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
                                     <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToShortDateString()</td>
-                                    <td class="text-center">@number.TicketAllocationNumber.Number</td>
+                                    <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((number.TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
                                     <td class="text-center">@raffleAward.Award.Name</td>
                                     <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
                                     <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>

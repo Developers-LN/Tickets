@@ -76,6 +76,12 @@ namespace Tickets.Models.Workflows
             [JsonProperty(PropertyName = "awards")]
             public List<AwardCertModel> Awards { get; set; }
 
+            [JsonProperty(PropertyName = "sequenceNumberRaffle")]
+            public int? SequenceNumberRaffle { get; set; }
+
+            [JsonProperty(PropertyName = "sequenceNumberIdentifyBach")]
+            public int? SequenceNumberIdentifyBach {  get; set; }
+
 
             internal IdentifyNumberModel ToObject(IdentifyNumber number)
             {
@@ -98,7 +104,8 @@ namespace Tickets.Models.Workflows
                         Fraction = s.Fraction,
                         Id = s.Id,
                         RaffleId = s.RaffleId,
-                        RaffleNomenclature = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.Id,
+                        SequenceNumberRaffle = s.Raffle.SequenceNumber.Value,
+                        RaffleNomenclature = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.SequenceNumber,
                         RaffleAwardType = s.RaffleAwardType
 
                     }).ToList();
@@ -134,7 +141,9 @@ namespace Tickets.Models.Workflows
                     IdentifyBachId = number.IdentifyBach.Id,
                     ClientName = number.IdentifyBach.Client.Name,
                     //RaffleDesc = (number.IdentifyBach.RaffleId + " - " + number.IdentifyBach.Raffle.Name).ToString(),
-                    RaffleDesc = number.IdentifyBach.Raffle.Symbol + number.IdentifyBach.Raffle.Separator + number.IdentifyBach.Raffle.Id + " " + number.IdentifyBach.Raffle.Name + " " + number.IdentifyBach.Raffle.DateSolteo.ToShortDateString(),
+                    SequenceNumberRaffle = number.IdentifyBach.Raffle.SequenceNumber.Value,
+                    SequenceNumberIdentifyBach = number.IdentifyBach.SequenceNumber.Value,
+                    RaffleDesc = number.IdentifyBach.Raffle.Symbol + number.IdentifyBach.Raffle.Separator + number.IdentifyBach.Raffle.SequenceNumber + " " + number.IdentifyBach.Raffle.Name + " " + number.IdentifyBach.Raffle.DateSolteo.ToShortDateString(),
                     Number = number.TicketAllocationNumber.Number,
                     Awards = awards
                 };

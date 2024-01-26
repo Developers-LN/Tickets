@@ -107,7 +107,7 @@
                                         <div class="checkbox c-checkbox col-lg-4" style="margin-top:5px;" ng-repeat="allocation in ticketAllocations">
                                             <label>
                                                 <input type="checkbox" id="allocation-{{allocation.id}}" ng-disabled="invoice.id > 0" ng-checked="invoice.id > 0" ng-click="updateAllocationNumbers()">
-                                                <span class="fa fa-check"></span>#{{allocation.id}} {{allocation.Agente}}
+                                                <span class="fa fa-check"></span>{{allocation.sequenceNumberTicketAllocation}} {{allocation.Agente}}
                                                 <a target="_blank" href="/Reports/AllocatinosNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-eye"></i></a>
                                             </label>
                                         </div>
@@ -128,7 +128,7 @@
                                         <div class="checkbox c-checkbox col-lg-4" style="margin-top:5px;" ng-repeat="allocation in poolAllocations">
                                             <label>
                                                 <input type="checkbox" id="allocation-{{allocation.id}}" ng-disabled="invoice.id > 0" ng-checked="invoice.id > 0" ng-click="updateAllocationNumbers()">
-                                                <span class="fa fa-check"></span>#{{allocation.id}}
+                                                <span class="fa fa-check"></span>{{allocation.sequenceNumberTicketAllocation}}
                                                 <a target="_blank" href="/Reports/AllocatinosNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-eye"></i></a>
                                             </label>
                                         </div>
@@ -170,7 +170,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="ticketNumber in invoice.ticketAllocations">
-                                <td class="text-center">#{{ticketNumber.id}}</td>
+                                <td class="text-center">{{ticketNumber.id}}</td>
                                 <td class="text-center">{{ticketNumber.returnFractions | number}}</td>
                                 <td class="text-center">{{ticketNumber.returnTickets | number}} - {{ticketNumber.restReturnFractions}}</td>
                                 <td class="text-center">{{ticketNumber.fractionCount | number}}</td>

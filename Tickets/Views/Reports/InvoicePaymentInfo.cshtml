@@ -2,19 +2,13 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Pago de pago No. " + Model.Id + " de la factura " + Model.InvoiceId;
+    ViewBag.Title = "Pago No. " + Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')) + " de la factura " + Model.InvoiceId;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.CajaGeneral : "";
     string adminCargo = config != null ? config.CajaGeneralCargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
-
-    /*var Efectivo = Tickets.Models.Enums.PaymentTypeTextEnum.Efectivo;
-    var Cheque = Tickets.Models.Enums.PaymentTypeTextEnum.Cheques;
-    var TargetaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.TarjetaDeCredito;
-    var NotaCredito = Tickets.Models.Enums.PaymentTypeTextEnum.NotaDeCredito;
-    var DepTransf = Tickets.Models.Enums.PaymentTypeTextEnum.DepTransf;*/
 }
 
 <style>
@@ -65,7 +59,7 @@
         <div class="col-lg-12 no-padder text-center">
             <b>
                 RECIBO DE PAGO DEL SORTEO <br />
-                @Model.Invoice.Raffle.Symbol @Model.Invoice.Raffle.Separator @Model.Invoice.Raffle.Id @Model.Invoice.Raffle.Name @Model.Invoice.Raffle.DateSolteo.ToShortDateString()
+                @Model.Invoice.Raffle.Symbol @Model.Invoice.Raffle.Separator @Model.Invoice.Raffle.SequenceNumber @Model.Invoice.Raffle.Name @Model.Invoice.Raffle.DateSolteo.ToShortDateString()
             </b>
         </div>
         <div class="col-lg-6 no-padder">
@@ -90,7 +84,7 @@
                     <b>Cliente: </b> @Model.Client.Id - @Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
                 </div>
                 <div class="col-lg-12 no-padder text-left">
-                    <b>Factura: </b> @Model.InvoiceId
+                    <b>Factura: </b> @Model.Invoice.SequenceNumber
                 </div>
             }
         </div>
@@ -98,10 +92,10 @@
         {
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Factura: </b> @Model.InvoiceId
+                    <b>Factura: </b> @Model.Invoice.SequenceNumber
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Recibo: </b>@Model.Id
+                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0'))) 
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
@@ -115,7 +109,7 @@
         {
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Recibo: </b>@Model.Id
+                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha de ingreso: </b>@Model.ReceiptDate.ToShortDateString()
@@ -169,7 +163,7 @@
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                     {
                         <td class="text-center">
-                            @Model.Recibo
+                            @(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
                         </td>
                     }
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TaxReceiptNoteCredit)
@@ -253,11 +247,11 @@
                     <div class="col-lg-12 no-padder text-right">
                         @if (CashAdvance.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.CashAdvance)
                         {
-                            <b>Avance No.: @CashAdvance.Id</b>
+                            <b>Avance: @(CashAdvance.Nomenclature == null ? CashAdvance.SequenceNumber.Value.ToString() : string.Concat(CashAdvance.Nomenclature, CashAdvance.SequenceNumber.Value.ToString().PadLeft(5, '0')))</b>
                         }
                         else if (CashAdvance.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.PositiveBalance)
                         {
-                            <b>Saldo No.: @CashAdvance.Id</b>
+                            <b>Saldo: @(CashAdvance.Nomenclature == null ? CashAdvance.SequenceNumber.Value.ToString() : string.Concat(CashAdvance.Nomenclature, CashAdvance.SequenceNumber.Value.ToString().PadLeft(5, '0')))</b>
                         }
                     </div>
                 </div>
@@ -334,7 +328,10 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
-            <b>RECIBO DE PAGO DEL SORTEO NO.@Model.Invoice.Raffle.Id DE FECHA @Model.Invoice.Raffle.DateSolteo.ToShortDateString()</b>
+            <b>
+                RECIBO DE PAGO DEL SORTEO <br />
+                @Model.Invoice.Raffle.Symbol @Model.Invoice.Raffle.Separator @Model.Invoice.Raffle.SequenceNumber @Model.Invoice.Raffle.Name @Model.Invoice.Raffle.DateSolteo.ToShortDateString()
+            </b>
         </div>
         <div class="col-lg-6 no-padder">
             @if (Model.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)
@@ -358,7 +355,7 @@
                     <b>Cliente: </b> @Model.Client.Id - @Model.Client.Name @Model.Invoice.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
                 </div>
                 <div class="col-lg-12 no-padder text-left">
-                    <b>Factura: </b> @Model.InvoiceId
+                    <b>Factura: </b> @Model.Invoice.SequenceNumber
                 </div>
             }
         </div>
@@ -366,10 +363,10 @@
         {
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Factura: </b> @Model.InvoiceId
+                    <b>Factura: </b> @Model.Invoice.SequenceNumber
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Recibo: </b>@Model.Id
+                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
@@ -383,7 +380,7 @@
         {
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Recibo: </b>@Model.Id
+                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha de ingreso: </b>@Model.ReceiptDate.ToShortDateString()
@@ -437,7 +434,7 @@
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                     {
                         <td class="text-center">
-                            @Model.Recibo
+                            @(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
                         </td>
                     }
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TaxReceiptNoteCredit)
@@ -521,11 +518,11 @@
                     <div class="col-lg-12 no-padder text-right">
                         @if (CashAdvance.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.CashAdvance)
                         {
-                            <b>Avance No.: @CashAdvance.Id</b>
+                            <b>Avance: @(CashAdvance.Nomenclature == null ? CashAdvance.SequenceNumber.Value.ToString() : string.Concat(CashAdvance.Nomenclature, CashAdvance.SequenceNumber.Value.ToString().PadLeft(5, '0')))</b>
                         }
                         else if (CashAdvance.TypeNote == (int)Tickets.Models.Enums.NoteCreditEnum.PositiveBalance)
                         {
-                            <b>Saldo No.: @CashAdvance.Id</b>
+                            <b>Saldo: @(CashAdvance.Nomenclature == null ? CashAdvance.SequenceNumber.Value.ToString() : string.Concat(CashAdvance.Nomenclature, CashAdvance.SequenceNumber.Value.ToString().PadLeft(5, '0')))</b>
                         }
                     </div>
                 </div>
