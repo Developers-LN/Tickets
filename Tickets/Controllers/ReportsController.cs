@@ -1039,9 +1039,9 @@ namespace Tickets.Controllers
 
             if (identifyNumbers.Count <= 0)
             {
-                return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo #" + invoiceDetail.RaffleId + "." });
+                return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo #" + invoiceDetail.Raffle.SequenceNumber + "." });
             }
-            ViewBag.invoiceDetailId = invoiceDetailId;
+            ViewBag.invoiceDetailId = invoiceDetail.SequenceNumber;
             ViewBag.invoiceDetailDate = invoiceDetail.CreateDate.ToShortDateString();
             ViewBag.invoiceDetailTime = invoiceDetail.CreateDate.ToShortTimeString();
             return View(identifyNumbers);
@@ -1584,10 +1584,10 @@ namespace Tickets.Controllers
         }
 
         //
-        //GET: Reports/AllocationSummaryby
+        //GET: Reports/AllocationSummaryBy
         [Authorize]
         [HttpGet]
-        public ActionResult AllocationSummaryby(int clientId, int raffleId)
+        public ActionResult AllocationSummaryBy(int clientId, int raffleId)
         {
             var context = new TicketsEntities();
             var allocations = context.TicketAllocations.AsEnumerable().Where(i =>

@@ -54,9 +54,7 @@ namespace Tickets.Models.Ticket
 
 			if (Allocation.Client.GroupId == (int)ClientGroupEnum.DistribuidorXML)
 			{
-				var electronicTickets = context.ElectronicTicketSales
-				.Where(w => w.TicketAllocationId == AllocationId).AsEnumerable()
-				.Select(s => this.ElectronicSaleObject(s)).FirstOrDefault();
+				var electronicTickets = context.ElectronicTicketSales.Where(w => w.TicketAllocationId == AllocationId).AsEnumerable().Select(s => this.ElectronicSaleObject(s)).FirstOrDefault();
 
 				if (electronicTickets == null)
 				{
@@ -75,9 +73,7 @@ namespace Tickets.Models.Ticket
 			}
 			else
 			{
-				var electronicTickets = context.ElectronicTicketSales
-				.Where(w => w.TicketAllocationId == AllocationId).AsEnumerable()
-				.Select(s => this.ElectronicSaleObject(s)).FirstOrDefault();
+				var electronicTickets = context.ElectronicTicketSales.Where(w => w.TicketAllocationId == AllocationId).AsEnumerable().Select(s => this.ElectronicSaleObject(s)).FirstOrDefault();
 
 				if (electronicTickets == null)
 				{
@@ -100,14 +96,9 @@ namespace Tickets.Models.Ticket
 		{
 			var context = new TicketsEntities();
 
-			var Clients = context.Clients
-				.Where(w => w.GroupId == (int)ClientGroupEnum.DistribuidorElectronico ||
-				w.GroupId == (int)ClientGroupEnum.DistribuidorXML).Select(s => s.Id).ToList();
+			var Clients = context.Clients.Where(w => w.GroupId == (int)ClientGroupEnum.DistribuidorElectronico || w.GroupId == (int)ClientGroupEnum.DistribuidorXML).Select(s => s.Id).ToList();
 
-			var electronicTickets = context.TicketAllocations
-				.Where(a => a.RaffleId == raffleId
-					&& Clients.Contains(a.ClientId)).AsEnumerable()
-				.Select(a => this.ListadoAsignaciones(a)).ToList();
+			var electronicTickets = context.TicketAllocations.Where(a => a.RaffleId == raffleId && Clients.Contains(a.ClientId)).AsEnumerable().Select(a => this.ListadoAsignaciones(a)).ToList();
 
 			return new RequestResponseModel()
 			{
@@ -252,7 +243,6 @@ namespace Tickets.Models.Ticket
 					};
 					electronicTickets.ElectronicTickets.Add(dataElectronicSale);
 				}
-
 			}
 
 			return electronicTickets;

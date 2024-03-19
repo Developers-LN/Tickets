@@ -2,6 +2,7 @@
     Layout = null;
     ViewBag.Title = "Listado de Billetes Facturados";
 }
+
 <div class="col-lg-12 no-padder" ng-controller="InvoiceListSuspendController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
@@ -36,7 +37,7 @@
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
-                                <th>Código</th>
+                                <th>Factura</th>
                                 <th>Cliente</th>
                                 <th>Asignaciones</th>
                                 <th>Fecha</th>
@@ -46,11 +47,11 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="invoice in invoices">
-                                <td>{{invoice.id}}</td>
+                                <td>{{invoice.sequenceNumberInvoice}}</td>
                                 <td>{{invoice.clientDesc}}</td>
                                 <td>
                                     <span ng-if="invoice.ticketAllocations.length > 0">{{invoice.ticketAllocations}}</span>
-                                    <a ng-click="showInvoiceDetails(invoice)" ng-if="invoice.ticketAllocations.length == 0" title="Mostrar asegnaciones"><i class="fa fa-eye"></i></a>
+                                    <a ng-click="showInvoiceDetails(invoice)" ng-if="invoice.ticketAllocations.length == 0" title="Mostrar asignaciones"><i class="fa fa-eye"></i></a>
                                 </td>
                                 <td>{{(invoice.invoiceDate | date:"dd/MM/yyyy")}}</td>
                                 <td>{{(invoice.invoiceExpredDate | date:"dd/MM/yyyy")}}</td>

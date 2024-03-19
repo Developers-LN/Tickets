@@ -1,11 +1,13 @@
 ﻿@model List<Tickets.Models.ElectronicAwardPayed>
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Premios pagados de manera electrónica";
+    ViewBag.Title = "REPORTE DE PREMIOS PAGADOS DE MANERA ELECTRONICA";
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.LoteryAdmin : "";
+    string adminName = config != null ? config.ControlPremio : "";
+    string adminCargo = config != null ? config.ControlPremioCargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
     var first = Model.FirstOrDefault();
 }
@@ -61,8 +63,8 @@
 
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>HORA: </b> @DateTime.Now.ToShortTimeString() <br />
         </div>
     </div>
     <div>
@@ -103,7 +105,7 @@
                                 <td class="text-center">@item.FractionTo</td>
                                 <td class="text-center">@item.NoTicket</td>
                                 <td class="text-center">@item.AwardName</td>
-                                <td class="text-center">@item.Payed</td>
+                                <td class="text-center">@item.Payed.Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                 <td class="text-center">@item.PayedDate.Value.ToString("dd/MM/yyyy hh:mm:ss tt")</td>
                             </tr>
                         }
@@ -133,43 +135,12 @@
         </div>
     </div>
 </div>
+
 <div class="col-lg-12 no-padder text-center">
-    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-        <div class="col-lg-12 no-padder text-center">
-            ______________________________
-        </div>
-        Firma cajero
-    </div>
-    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-        <div class="col-lg-12 no-padder text-center">
-            ______________________________
-        </div>
-        Recibido por Btes. Pdos.
-    </div>
-    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-        <div class="col-lg-12 no-padder text-center">
-            ______________________________
-        </div>
-        Perforado
-    </div>
+    <br />
+    <br />
+    <b>@adminName</b>
 </div>
-<div class="col-lg-12 no-padder text-center" style="margin-top:15px;">
-    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-        <div class="col-lg-12 no-padder text-center">
-            ______________________________
-        </div>
-        Firma enc. de caja
-    </div>
-    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-        <div class="col-lg-12 no-padder text-center">
-            ______________________________
-        </div>
-        Revisado por
-    </div>
-    <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-        <div class="col-lg-12 no-padder text-center">
-            ______________________________
-        </div>
-        Autorizado por
-    </div>
+<div class="col-lg-12 no-padder text-center">
+    <span>@adminCargo</span>
 </div>

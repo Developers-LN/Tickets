@@ -7,6 +7,7 @@
         Aproximeted = 2071,
         Hundred = 2080,
         LastBall = 2081,
-        SameAwardDerived = 5895
+        SameAwardDerived = 5895,
+        SalesAward = 5941
     }
 }

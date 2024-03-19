@@ -29,6 +29,8 @@ namespace Tickets.Models
         public int Statu { get; set; }
         public string Agente { get; set; }
         public Nullable<int> SequenceNumber { get; set; }
+        public Nullable<int> AllocationSequence { get; set; }
+        public Nullable<int> ImpresionType { get; set; }
     
         public virtual Client Client { get; set; }
         public virtual Raffle Raffle { get; set; }

@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "BILLETES ANULADOS DEL SORTEO NO. " + Model.FirstOrDefault().TicketAllocation.Raffle.SequenceNumber;
+    ViewBag.Title = "BILLETES ANULADOS DEL SORTEO " + Model.FirstOrDefault().TicketAllocation.Raffle.Symbol + Model.FirstOrDefault().TicketAllocation.Raffle.Separator + Model.FirstOrDefault().TicketAllocation.Raffle.SequenceNumber;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();

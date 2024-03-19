@@ -293,7 +293,6 @@
                                 $scope.showTotalValue -= $scope.IdentityAwards[i].TotalValue;
                                 $scope.IdentityAwards.splice(i, 1);
                                 i--;
-
                             }
                         }
 

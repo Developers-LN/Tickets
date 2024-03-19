@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     //Layout = "~/Views/Shared/_TicketsLayout.cshtml";
-    ViewBag.Title = "LOTE DE REIMPRECION NO. " + Model.Id;
+    ViewBag.Title = "LOTE DE REIMPRECION NO. " + Model.SequenceNumber;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -21,7 +21,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
             <b>MINISTERIO DE HACIENDA</b><br />
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b><br />
-            <b>LOTE DE REIMPRESION NO. @Model.Id</b><br />
+            <b>LOTE DE REIMPRESION NO. @Model.SequenceNumber</b><br />
             <b>SORTEO @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()</b><br />
         </div>
         <div class="col-lg-6 no-padder">

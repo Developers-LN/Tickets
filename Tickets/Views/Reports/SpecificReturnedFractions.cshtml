@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "DEVOLUCIONES POR FRACCIONES DEL CLIENTE " + Model.TicketReturns.FirstOrDefault().Client.Name + " PARA EL SORTEO " + Model.TicketReturns.FirstOrDefault().RaffleId;
+    ViewBag.Title = "DEVOLUCIONES POR FRACCIONES DEL CLIENTE " + Model.TicketReturns.FirstOrDefault().Client.Name + " PARA EL SORTEO " + Model.TicketReturns.FirstOrDefault().Raffle.Symbol + Model.TicketReturns.FirstOrDefault().Raffle.Separator + Model.TicketReturns.FirstOrDefault().Raffle.SequenceNumber;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();

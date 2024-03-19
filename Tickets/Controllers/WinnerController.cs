@@ -102,7 +102,6 @@ namespace Tickets.Controllers
                                     message = e.Message
                                 }
                             };
-
                         }
                         Utils.SaveLog(WebSecurity.CurrentUserName, winner.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Ganador", WinnerToObject(winner));
                         tx.Commit();
@@ -183,7 +182,7 @@ namespace Tickets.Controllers
                 {
                     s.Id,
                     sequenceNumberIdentifyBach = s.SequenceNumber,
-                    CreateDate = s.CreateDate.ToString("dd/MM/yyyy"),
+                    CreateDate = s.CreateDate.ToShortDateString(),
                     s.RaffleId,
                     sequenceNumberRaffle = s.Raffle.SequenceNumber,
                     raffleNomenclature = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.SequenceNumber,

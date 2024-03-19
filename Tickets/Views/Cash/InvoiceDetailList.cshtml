@@ -50,7 +50,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="invoiceDetail in invoiceDetails">
-                                <td class="text-center">{{invoiceDetail.Id}}</td>
+                                <td class="text-center">{{invoiceDetail.SequenceNumber}}</td>
                                 <td>{{invoiceDetail.RaffleDesc}}</td>
                                 <td>{{invoiceDetail.ClientId}} - {{invoiceDetail.ClientDesc}}</td>
                                 <td>{{(invoiceDetail.StartDate | date:"dd/MM/yyyy")}}</td>

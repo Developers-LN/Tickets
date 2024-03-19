@@ -105,13 +105,13 @@
                             <div class="form-group m-t-xs">
                                 <span class="col-lg-4 control-label">Estado del Lote:</span>
                                 <span class="col-lg-8" ng-if="identifyBach.Statu == 5866">
-                                    @*<b>{{identifyBach.isPayed == true ? 'Pagado' : 'No Pagado'}}</b>*@
                                     <b>{{((totalGeneral + (totalGeneral * identifyBach.percent / 100)) - totalpayment) == 0 ? 'Pagado' : 'En proceso de pago'}}</b>
                                 </span>
-                                <span>
-                                    <span class="col-lg-8" ng-if="identifyBach.Statu == 2077">
-                                        <b>Pendiente de aprobación</b>
-                                    </span>
+                                <span class="col-lg-8" ng-if="identifyBach.Statu == 5942">
+                                    <b>{{identifyBach.StatuDesc}}</b>
+                                </span>
+                                <span class="col-lg-8" ng-if="identifyBach.Statu == 2077">
+                                    <b>Pendiente de aprobación</b>
                                 </span>
                             </div>
                         </fieldset>
@@ -212,7 +212,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="identifyNumber in identifyBach.IdentifyNumbers">
-                                <td class="text-center" ng-bind="addZeroToNumber((production - 1), identifyNumber.NumberDesc)"></td>
+                                <td class="text-center" ng-bind="addZeroToNumber((productionLength - 1), identifyNumber.NumberDesc)"></td>
                                 <td class="text-center" ng-bind="identifyNumber.FractionFrom"></td>
                                 <td class="text-center" ng-bind="identifyNumber.FractionTo"></td>
                                 <td class="text-center" ng-bind="identifyNumber.RaffleAward.AwardName"></td>

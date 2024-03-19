@@ -40,6 +40,7 @@ namespace Tickets.Models
         public Nullable<int> SequenceNumber { get; set; }
         public Nullable<int> SequenceType { get; set; }
         public string Nomenclature { get; set; }
+        public Nullable<int> ReceiptSequence { get; set; }
     
         public virtual Cash Cash { get; set; }
         public virtual Client Client { get; set; }

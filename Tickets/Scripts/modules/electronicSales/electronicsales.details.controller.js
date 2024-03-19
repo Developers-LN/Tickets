@@ -31,6 +31,7 @@
                 success: function (response) {
                     window.loading.hide();
 
+                    $scope.sequenceNumberTicketAllocation = response.sequenceNumberTicketAllocation;
                     $scope.allocationId = response.allocationId;
                     $scope.allocateDate = response.allocateDate;
                     $scope.clientDiscount = response.clientDiscount;

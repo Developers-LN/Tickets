@@ -1,10 +1,12 @@
 ﻿@model List<Tickets.Models.TicketAllocation>
-@{
-    Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Resumen de asignaciones por cliente del sorteo " + Model.FirstOrDefault().Raffle.SequenceNumber;
 
+@{
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
+
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "RESUMEN DE ASIGNACIONES POR CLIENTE DEL SORTEO " + Model.FirstOrDefault().Raffle.Symbol + Model.FirstOrDefault().Raffle.Separator + Model.FirstOrDefault().Raffle.SequenceNumber;
+
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
     string adminName = config != null ? config.ControlPremio : "";
     string adminCargo = config != null ? config.ControlPremioCargo : "";
@@ -61,6 +63,7 @@
                             fractions = s.TicketAllocationNumbers.FirstOrDefault().FractionTo - s.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1,
                             numbers = s.TicketAllocationNumbers.Count,
                             amount = s.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == s.Client.PriceId).FactionPrice,
+                            prospectFraction = s.Raffle.Prospect.LeafFraction * s.Raffle.Prospect.LeafNumber,
                             sheets = s.Raffle.Prospect.LeafNumber
                         }).ToList()
                     }).ToList();
@@ -86,7 +89,7 @@
                     {
                         int Fractions = allocation.fractions * allocation.numbers;
                         var Value = allocation.amount * Fractions;
-                        int Sheets = allocation.numbers * allocation.sheets;
+                        int Sheets = Fractions / allocation.prospectFraction;
                         var discount = Math.Round(allocation.discount, 0);
                         var discountTotal = Value - ((Value * allocation.discount) / 100);
 

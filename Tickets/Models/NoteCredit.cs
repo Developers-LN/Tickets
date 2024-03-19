@@ -37,6 +37,7 @@ namespace Tickets.Models
         public Nullable<int> SequenceNumber { get; set; }
         public Nullable<int> SequenceType { get; set; }
         public string Nomenclature { get; set; }
+        public Nullable<int> NoteCreditSequence { get; set; }
     
         public virtual Client Client { get; set; }
         public virtual Raffle Raffle { get; set; }

@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Tickets.Models.Enums;
 using Tickets.Models.Procedures;
-using Tickets.Models.Procedures.Accounting;
 using WebMatrix.WebData;
 
 namespace Tickets.Models.Ticket
@@ -258,6 +257,7 @@ namespace Tickets.Models.Ticket
                 {
                     Id = 0,
                     Condition = 0,
+                    SequenceNumberInvoice = 0,
                     InvoiceExpredDay = 14,
                     InvoiceDateLong = DateTime.Now.ToUnixTime(),
                     TicketAllocations = new List<TicketAllocationModel>()

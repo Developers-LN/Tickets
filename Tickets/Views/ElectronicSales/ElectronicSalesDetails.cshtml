@@ -11,7 +11,7 @@
                 <div class="col-lg-12 well no-padder">
                     <fieldset>
                         <div class="col-lg-12 no-padder">
-                            <div class="col-lg-4">Número de asignación: <b>{{allocationId}}</b></div>
+                            <div class="col-lg-4">Número de asignación: <b>{{sequenceNumberTicketAllocation}}</b></div>
                             <div class="col-lg-4">Fecha de creación: <b>{{allocateDate}}</b></div>
                             <div class="col-lg-4">Cliente: <b>{{clientId}} - {{clientName}}</b></div>
                         </div>
@@ -37,16 +37,18 @@
                         <thead>
                             <tr>
                                 <th class="text-center">Fecha</th>
-                                <th class="text-center">Total vendido</th>
-                                <th class="text-center">Monto</th>
+                                <th class="text-center">Billetes - Fracciones <br /> Asignados</th>
+                                <th class="text-center">Billetes - Fracciones <br /> Vendidos</th>
+                                <th class="text-center">Billetes - Fracciones <br /> Anulados</th>
                                 <th class="text-center"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="item in electronicSalesByDate">
                                 <td class="text-center">{{item.date}}</td>
-                                <td class="text-center">{{item.totalSold | number}}</td>
-                                <td class="text-center">{{parseMoney(item.amount)}}</td>
+                                <td class="text-center">{{item.ticketsQuantity | number}} - {{item.fractionQuantity | number}}</td>
+                                <td class="text-center">{{item.allocationTicketsQuantity | number}} - {{item.allocationFractionQuantity | number}}</td>
+                                <td class="text-center">{{item.totalRestTickets | number}} - {{item.totalRest | number}}</td>
                                 <td class="text-center">
                                     <a ng-click="printReport(allocationId, item.date)" title="Reporte de pago"><i class="fa fa-print"></i></a>
                                 </td>

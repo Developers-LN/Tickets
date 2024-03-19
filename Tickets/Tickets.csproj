@@ -2540,6 +2540,7 @@
     <Content Include="Images\Sorting icons.psd" />
     <Content Include="packages.config" />
     <Content Include="libman.json" />
+    <None Include="Properties\PublishProfiles\Folder de Tickets.pubxml" />
     <None Include="Properties\PublishProfiles\Sistema Comercial.pubxml" />
     <None Include="Properties\PublishProfiles\Tickets IIS Express.pubxml" />
     <Content Include="Views\Agency\Create.cshtml">

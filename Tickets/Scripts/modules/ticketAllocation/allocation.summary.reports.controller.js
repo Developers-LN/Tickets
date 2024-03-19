@@ -57,7 +57,7 @@
             if (validateData($scope.allocation) === false) {
                 return;
             }
-            window.open('Reports/AllocationSummaryby?clientId=' + $scope.allocation.ClientId + '&raffleId=' + $scope.allocation.RaffleId);
+            window.open('Reports/AllocationSummaryBy?clientId=' + $scope.allocation.ClientId + '&raffleId=' + $scope.allocation.RaffleId);
         }
     }
 })();

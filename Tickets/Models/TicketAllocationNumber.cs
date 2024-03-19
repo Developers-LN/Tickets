@@ -49,5 +49,7 @@ namespace Tickets.Models
         public virtual ICollection<TicketRePrintNumber> TicketRePrintNumbers { get; set; }
         public virtual ICollection<TicketReturn> TicketReturns { get; set; }
         public virtual ICollection<ElectronicTicketSale> ElectronicTicketSales { get; set; }
+        public virtual Catalog Catalog { get; set; }
+        public virtual Raffle Raffle { get; set; }
     }
 }

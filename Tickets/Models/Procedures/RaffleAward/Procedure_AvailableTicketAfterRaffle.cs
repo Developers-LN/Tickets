@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-//using System.Text.Json;
 using Tickets.Models.ModelsProcedures.RaffleAward;
 
 namespace Tickets.Models.Procedures.RaffleAward
@@ -11,9 +12,8 @@ namespace Tickets.Models.Procedures.RaffleAward
     {
         public string ConDB = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public List<object> ListaFacturas(int raffle, int client)
+        public List<ModelProcedure_AvailableTicketsAfterRaffle> AvailableTicketsAfterRaffle(int raffle)
         {
-            var lista = new List<object>();
             var AuxList = new List<ModelProcedure_AvailableTicketsAfterRaffle>();
 
             using (SqlConnection sqlConnection = new SqlConnection(ConDB))
@@ -25,30 +25,31 @@ namespace Tickets.Models.Procedures.RaffleAward
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                 if (sqlDataReader.HasRows)
                 {
-                    var ItemList = sqlDataReader.Cast<IDataRecord>().Select(s => new
+                    var ItemList = sqlDataReader.Cast<IDataRecord>().AsEnumerable().Select(s => new
                     {
-                        RaffleId = s["RaffleId"],
-                        TicketNumber = s["Number"],
-                        AvailableFractions = s["AvailableFractions"]
+                        Data = true,
+                        RaffleId = Convert.ToInt32(s["RaffleId"].ToString()),
+                        TicketNumber = Convert.ToInt32(s["Number"].ToString()),
+                        AvailableFractions = Convert.ToInt32(s["AvailableFractions"].ToString())
                     }).ToList();
 
-                    //var jsonSerialize = JsonSerializer.Serialize(ItemList);
-                    //AuxList = JsonSerializer.Deserialize<List<ModelProcedure_AvailableTicketsAfterRaffle>>(jsonSerialize);
+                    var jsonSerialize = JsonConvert.SerializeObject(ItemList);
+                    AuxList = JsonConvert.DeserializeObject<List<ModelProcedure_AvailableTicketsAfterRaffle>>(jsonSerialize);
                 }
                 else
                 {
-                    var facturas = new ModelProcedure_AvailableTicketsAfterRaffle()
+                    var item = new ModelProcedure_AvailableTicketsAfterRaffle()
                     {
                         Data = false,
                         RaffleId = 0,
                         TicketNumber = 0,
                         AvailableFractions = 0
                     };
-                    lista.Add(facturas);
+                    AuxList.Add(item);
                 }
                 sqlConnection.Close();
             }
-            return lista;
+            return AuxList;
         }
     }
 }

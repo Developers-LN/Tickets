@@ -39,6 +39,7 @@ namespace Tickets.Models
         public Nullable<int> Trabajado { get; set; }
         public Nullable<int> WinnerId { get; set; }
         public Nullable<int> SequenceNumber { get; set; }
+        public Nullable<int> IdentifyBachSequence { get; set; }
     
         public virtual Client Client { get; set; }
         public virtual Raffle Raffle { get; set; }

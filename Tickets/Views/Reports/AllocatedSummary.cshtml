@@ -6,7 +6,7 @@
     int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
     var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Resumen de asignaciones del sorteo " + RaffleData.SequenceNumber;
+    ViewBag.Title = "RESUMEN DE ASIGNACION DEL SORTEO " + RaffleData.Symbol + RaffleData.Separator + RaffleData.SequenceNumber;
 
     string adminName = config != null ? config.Inspectoria : "";
     string adminCargo = config != null ? config.InspectoriaCargo : "";
@@ -24,8 +24,8 @@
             FECHA DEL SORTEO @RaffleData.DateSolteo.ToShortDateString()
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 text-center">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>HORA: </b> @DateTime.Now.ToShortTimeString()
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12">

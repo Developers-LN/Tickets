@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Tickets.Models.Enums;
+using Tickets.Models.ModelsProcedures.RaffleAward;
+using Tickets.Models.Procedures.RaffleAward;
 using WebMatrix.WebData;
 
 namespace Tickets.Models.Raffles
@@ -26,6 +28,8 @@ namespace Tickets.Models.Raffles
                     {
                         /*SAVING DIGITED NUMBER*/
                         var raffleDigitedAwardList = new List<RaffleAward>();
+                        var AvailableTickets = new List<ModelProcedure_AvailableTicketsAfterRaffle>();
+                        HashSet<int> AvailableTicketsNumbers = new HashSet<int>();
                         foreach (var raffleAwardModel in raffleAwards)
                         {
                             raffleAwardModel.RaffleAwardType = (int)RaffleAwardTypeEnum.Digite;
@@ -50,10 +54,15 @@ namespace Tickets.Models.Raffles
                         var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
                         var prospect = context.Prospects.FirstOrDefault(p => p.Id == raffle.ProspectId);
 
-                        var awardList = prospect.Awards
-                            .Where(a => a.TypesAward.Creation != (int)TypesAwardCreationEnum.Digited &&
-                                   a.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived)
-                            .OrderBy(a => a.OrderAward);
+                        if (prospect.Awards.Any(a => a.TypesAward.Creation == (int)TypesAwardCreationEnum.SalesAward))
+                        {
+                            Procedure_AvailableTicketAfterRaffle procedure_AvailableTicketAfterRaffle = new Procedure_AvailableTicketAfterRaffle();
+                            AvailableTickets = procedure_AvailableTicketAfterRaffle.AvailableTicketsAfterRaffle(raffleId);
+
+                            AvailableTickets.ForEach(f => AvailableTicketsNumbers.Add(f.TicketNumber));
+                        }
+
+                        var awardList = prospect.Awards.Where(a => a.TypesAward.Creation != (int)TypesAwardCreationEnum.Digited && a.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived).OrderBy(a => a.OrderAward);
 
                         Award currentAward;
                         List<RaffleAward> raffleAwardList = new List<RaffleAward>();
@@ -64,9 +73,7 @@ namespace Tickets.Models.Raffles
                         RaffleAward lastRaffleAward = null;
                         do
                         {
-                            currentAward = awardList.FirstOrDefault(a =>
-                                (raffle.RaffleAwards.Where(ra => ra.AwardId == a.Id).Count()
-                                + raffleAwardList.Where(ra => ra.AwardId == a.Id).Count()) < a.Quantity);
+                            currentAward = awardList.FirstOrDefault(a => (raffle.RaffleAwards.Where(ra => ra.AwardId == a.Id).Count() + raffleAwardList.Where(ra => ra.AwardId == a.Id).Count()) < a.Quantity);
 
                             if (currentAward != null)
                             {
@@ -90,7 +97,7 @@ namespace Tickets.Models.Raffles
                                             for (var n = 0; n < currentAward.Quantity; n++)
                                             {
                                                 var selectedNumberString = Utils.AddZeroToNumber((prospect.Production - 1).ToString().Length, (int)selectedNumber);
-                                                var randon = new Random();
+                                                //var randon = new Random();
                                                 string currentLastNumber = selectedNumberString.Substring(selectedNumberString.Length - lastNumber, lastNumber);
                                                 int number = int.Parse(n + currentLastNumber);
                                                 if (number == selectedNumber)
@@ -108,6 +115,9 @@ namespace Tickets.Models.Raffles
                                         {
                                             numbers = GetGenerateNumber(currentAward, sourceAward, prospect.Production, controlNumberList);
                                         }
+                                        break;
+                                    case (int)TypesAwardCreationEnum.SalesAward:
+                                        numbers = GetGenerateNumberFromSales(currentAward, prospect.Production, controlNumberList, AvailableTicketsNumbers);
                                         break;
                                     case (int)TypesAwardCreationEnum.Hundred:
                                         numbers = GetGenerateHundred(currentAward, sourceAward, prospect.Production);
@@ -130,7 +140,8 @@ namespace Tickets.Models.Raffles
                                         CreateDate = DateTime.Now,
                                         CreateUser = WebSecurity.CurrentUserId,
                                         Fraction = 0,
-                                        RaffleId = raffle.Id
+                                        RaffleId = raffle.Id//,
+                                        //RaffleAwardType = currentAward.TypesAwardId
                                     };
                                     raffleAwardList.Add(raffleAward);
                                     lastRaffleAward = raffleAward;
@@ -138,9 +149,7 @@ namespace Tickets.Models.Raffles
                             }
                         } while (currentAward != null);
 
-                        var awardListDerived = prospect.Awards
-                            .Where(a => a.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived)
-                            .OrderBy(a => a.OrderAward);
+                        var awardListDerived = prospect.Awards.Where(a => a.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived).OrderBy(a => a.OrderAward);
 
                         lastRaffleAward = null;
                         do
@@ -267,6 +276,7 @@ namespace Tickets.Models.Raffles
                     typeAwardId = a.FirstOrDefault().TypesAwardId,
                     quantity = a.Select(aq => aq.Quantity).Aggregate((e, i) => e + i) - raffle.RaffleAwards.Where(at => at.Award.TypesAwardId == a.FirstOrDefault().TypesAwardId).Count()
                 });
+
             var raffleAwardListByAward = raffle.RaffleAwards.GroupBy(ag => ag.Award.TypesAwardId).Select(asd => new
             {
                 typeAwardId = asd.FirstOrDefault().Award.TypesAwardId,
@@ -369,6 +379,15 @@ namespace Tickets.Models.Raffles
             return numbers;
         }
 
+        private List<int> GetGenerateNumberFromSales(Award currentAward, int production, HashSet<int> controlNumberList, HashSet<int> AvailableTicketsNumbers)
+        {
+            int number = 0;
+            number = GenerateRandonNumberAvailable(currentAward, controlNumberList, production, AvailableTicketsNumbers);
+            var numbers = new List<int>();
+            numbers.Add(number);
+            return numbers;
+        }
+
         /*Generation Award Type*/
         private List<int> GetAproximateNumbers(int selectedNumber, int production, int count)
         {
@@ -435,6 +454,36 @@ namespace Tickets.Models.Raffles
             while (controlNumberList.Where(controlNumber => controlNumber == number).Any())
             {
                 number = randon.Next(0, production);
+            }
+            return number;
+        }
+
+        private int GenerateRandonNumberAvailable(Award currentAward, HashSet<int> controlNumberList, int production, HashSet<int> AvailableTicketsNumbers)
+        {
+            var randon = new Random();
+            int number = 0;
+
+            if (AvailableTicketsNumbers.Count > 0 && currentAward.Quantity <= AvailableTicketsNumbers.Count && (AvailableTicketsNumbers.Count - controlNumberList.Count) >= currentAward.Quantity)
+            {
+                int randomIndex = 0;
+                var MaxLenght = AvailableTicketsNumbers.Count - 1;
+                randomIndex = randon.Next(0, MaxLenght);
+                number = AvailableTicketsNumbers.ToArray()[(int)randomIndex];
+
+                while (controlNumberList.Where(controlNumber => controlNumber == number).Any())
+                {
+                    randomIndex = randon.Next(0, MaxLenght);
+                    number = AvailableTicketsNumbers.ToArray()[(int)randomIndex];
+                }
+            }
+            else
+            {
+                number = randon.Next(0, production);
+
+                while (controlNumberList.Where(controlNumber => controlNumber == number).Any())
+                {
+                    number = randon.Next(0, production);
+                }
             }
             return number;
         }

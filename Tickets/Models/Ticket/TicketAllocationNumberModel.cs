@@ -645,6 +645,7 @@ namespace Tickets.Models.Ticket
                 .AsEnumerable().Join(awards.Where(a => a.Award.TypesAwardId != (int)AwardTypeEnum.Mayors && a.Award.TypesAwardId != (int)AwardTypeEnum.WinFraction).AsEnumerable(), i => i.TicketAllocationNumber.Number, a => a.ControlNumber, (i, a) => new
                 {
                     i.IdentifyBachId,
+                    i.IdentifyBach.SequenceNumber,
                     i.FractionTo,
                     i.FractionFrom,
                     AwardName = a.Award.Name,
@@ -657,6 +658,7 @@ namespace Tickets.Models.Ticket
                 .Where(a => a.Award.TypesAwardId == (int)AwardTypeEnum.Mayors || a.Award.TypesAwardId == (int)AwardTypeEnum.WinFraction).AsEnumerable(), i => i.TicketAllocationNumber.Number, a => a.ControlNumber, (i, a) => new
                 {
                     i.IdentifyBachId,
+                    i.IdentifyBach.SequenceNumber,
                     FractionTo = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionTo,
                     FractionFrom = a.Award.ByFraction == (int)ByFractionEnum.S ? a.Fraction : i.FractionFrom,
                     AwardName = a.Award.Name,

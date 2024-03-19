@@ -32,6 +32,7 @@ namespace Tickets.Models
             this.ElectronicTicketSales = new HashSet<ElectronicTicketSale>();
             this.TicketAllocationNumber_Delete = new HashSet<TicketAllocationNumber_Delete>();
             this.ElectronicAwardPayeds = new HashSet<ElectronicAwardPayed>();
+            this.TicketAllocationNumbers = new HashSet<TicketAllocationNumber>();
         }
     
         public int Id { get; set; }
@@ -53,6 +54,7 @@ namespace Tickets.Models
         public Nullable<System.DateTime> DueRaffleDate { get; set; }
         public Nullable<System.DateTime> StartElectronicSales { get; set; }
         public Nullable<int> SequenceNumber { get; set; }
+        public Nullable<int> RaffleSequence { get; set; }
     
         public virtual ICollection<IdentifyBach> IdentifyBaches { get; set; }
         public virtual ICollection<Invoice> Invoices { get; set; }
@@ -72,5 +74,6 @@ namespace Tickets.Models
         public virtual ICollection<ElectronicTicketSale> ElectronicTicketSales { get; set; }
         public virtual ICollection<TicketAllocationNumber_Delete> TicketAllocationNumber_Delete { get; set; }
         public virtual ICollection<ElectronicAwardPayed> ElectronicAwardPayeds { get; set; }
+        public virtual ICollection<TicketAllocationNumber> TicketAllocationNumbers { get; set; }
     }
 }

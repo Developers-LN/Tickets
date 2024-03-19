@@ -207,6 +207,7 @@ namespace Tickets.Controllers
             return new
             {
                 invoiceDetail.Id,
+                invoiceDetail.SequenceNumber,
                 EndDate = invoiceDetail.EndDate.ToUnixTime(),
                 StartDate = invoiceDetail.StartDate.ToUnixTime(),
                 invoiceDetail.RaffleId,

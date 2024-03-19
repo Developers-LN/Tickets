@@ -285,7 +285,6 @@ namespace Tickets.Controllers
                     Data = data,
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
-
             }
         }
 

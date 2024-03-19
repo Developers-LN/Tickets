@@ -1,9 +1,6 @@
 ﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelProcedure_CuadreSorteo>
 
 @{
-    Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "REPORTE RESUMIDO DEL SORTEO NO. " + Model.FirstOrDefault().RaffleId;
-
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
     string adminName = config != null ? config.ControlPremio : "";
@@ -16,6 +13,9 @@
     var houceQuantity = 0; var houceMont = 0.0m;
     var invoiceQuantity = 0; var invoiceMont = 0.0m;
     var noallocateQuantity = 0; var noallocateMont = 0.0m;
+
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "REPORTE RESUMIDO DEL SORTEO " + RaffleData.Symbol + RaffleData.Separator + RaffleData.SequenceNumber;
 }
 <style>
     .col-lg-12 {

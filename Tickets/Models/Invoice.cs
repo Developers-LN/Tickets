@@ -42,6 +42,7 @@ namespace Tickets.Models
         public Nullable<int> TaxReceipt { get; set; }
         public Nullable<System.DateTime> TaxReceiptAssignmentDate { get; set; }
         public Nullable<int> SequenceNumber { get; set; }
+        public Nullable<int> InvoiceSequence { get; set; }
     
         public virtual Agency Agency { get; set; }
         public virtual Client Client { get; set; }

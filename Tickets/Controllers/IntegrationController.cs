@@ -873,8 +873,8 @@ namespace Tickets.Controllers
                         {
                             RaffleDate = raffle.DateSolteo.ToShortDateString(),
                             RaffleId = raffle.Id,
-                            RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.Id,
-                            RaffleName = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
+                            RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.SequenceNumber,
+                            RaffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
                             User = WebSecurity.CurrentUserName,
                             CreateDate = DateTime.Now.ToString(),
                             TicketAllocationNumbers = new List<Models.XML.TicketAllocationNumber>()
@@ -1061,8 +1061,8 @@ namespace Tickets.Controllers
                         {
                             RaffleDate = raffle.DateSolteo.ToShortDateString(),
                             RaffleId = raffle.Id,
-                            RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.Id,
-                            RaffleName = raffle.Symbol + raffle.Separator + raffle.Id + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
+                            RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.SequenceNumber,
+                            RaffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
                             User = WebSecurity.CurrentUserName,
                             CreateDate = DateTime.Now.ToString(),
                             TicketNumbers = new List<Models.XML.AwardTicketNumber>()

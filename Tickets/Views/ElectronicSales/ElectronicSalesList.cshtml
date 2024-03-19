@@ -43,7 +43,7 @@
                                     <a ng-show="verifyCanView('app.electronicSalesDetails')" href="#/electronic/electronicSales/{{allocation.allocationId}}" title="Ventas por día" class="{{moduleCanView}}"><i class="fa fa-calendar"></i></a>
                                     @*<a target="_blank" href="/Reports/ElectronicSaleDetails?allocationId={{allocation.id}}" title="Detalle de venta electrónica"><i class="fa fa-print"></i></a>*@
                                     @*<a class="{{modulecanview}}" href="#/ticket/electronicSalesGroupDetails/{{allocation.allocationId}}" title="ver detalles del grupo"><i class="fa fa-eye"></i></a>*@
-                                    <a ng-click="validateElectronicSale(allocation)" ng-show="allocation.anyReturn != @((int)Tickets.Models.Enums.AllocationStatuEnum.ReturnsProcessed) && allocation.anyReturn != @((int)Tickets.Models.Enums.AllocationStatuEnum.Returned)" title="Validar venta" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>
+                                    @*<a ng-click="validateElectronicSale(allocation)" ng-show="allocation.anyReturn != @((int)Tickets.Models.Enums.AllocationStatuEnum.ReturnsProcessed) && allocation.anyReturn != @((int)Tickets.Models.Enums.AllocationStatuEnum.Returned)" title="Validar venta" class="{{moduleCanEdit}}"><i class="fa fa-external-link"></i></a>*@
                                 </td>
                             </tr>
                         </tbody>

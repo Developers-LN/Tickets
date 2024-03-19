@@ -80,8 +80,8 @@
                                     @*<a ng-if="identifyBach.hasPayment == false" href="/#/ticket/identifybach/{{identifyBach.Id}}" title="Modificar lote de identificación" class="{{moduleCanView}}"><i class="fa fa-pencil"></i></a>*@
                                     <a ng-if="identifyBach.hasPayment == false && identifyBach.Statu == 2077" href="/#/ticket/identifybach/{{identifyBach.Id}}" title="Modificar lote de identificación" class="{{moduleCanView}}"><i class="fa fa-pencil"></i></a>
                                     <a href="/#/ticket/identifybachdetail/{{identifyBach.Id}}" title="Ver detalles del lote" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
-                                    <a href="/Reports/ApprovedBach?bachId={{identifyBach.Id}}" target="_blank" title="Detalles del lote"><i class="fa fa-print"></i></a>
-                                    <a href="/Reports/ApprovedBach?bachId={{identifyBach.Id}}" target="_blank" title="Detalles del lote"><i class="fa fa-file-excel-o"></i></a>
+                                    @*<a href="/Reports/ApprovedBach?bachId={{identifyBach.Id}}" target="_blank" title="Detalles del lote"><i class="fa fa-print"></i></a>
+                                    <a href="/Reports/ApprovedBach?bachId={{identifyBach.Id}}" target="_blank" title="Detalles del lote"><i class="fa fa-file-excel-o"></i></a>*@
                                     <a ng-if="identifyBach.hasPayment == false && identifyBach.Statu == 2077" ng-click="deleteIdentifyBach(identifyBach)" title="Borrar Identificacion de Numeros"><i class="fa fa-times"></i></a>
                                     @*<a ng-if="identifyBach.hasPayment == false" ng-click="deleteIdentifyBach(identifyBach)" title="Borrar Identificacion de Numeros"><i class="fa fa-times"></i></a>*@
                                 </td>

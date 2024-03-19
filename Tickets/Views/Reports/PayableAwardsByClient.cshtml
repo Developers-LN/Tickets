@@ -1,13 +1,15 @@
 ﻿@model IEnumerable<Tickets.Models.ModelsProcedures.ModelProcedure_PayableAwardByClient>
 
 @{
-    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
-
-    Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "BILLETES PAGABLES POR CLIENTE DEL SORTEO NO. " + raffleid;
-
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
+
+    int raffleid = Model.Select(s => s.RaffleId).FirstOrDefault();
+    var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
+
+    Layout = "~/Views/Shared/_ReportLayout.cshtml";
+    ViewBag.Title = "BILLETES PAGABLES POR CLIENTE DEL SORTEO " + RaffleData.Symbol + RaffleData.Separator + RaffleData.SequenceNumber;
+
     string adminName = config != null ? config.ControlPremio : "";
     string adminCargo = config != null ? config.ControlPremioCargo : "";
 
@@ -15,7 +17,6 @@
     decimal TotalPagarCliente = 0;
     decimal ValorPremios = 0;
 
-    var RaffleData = context.Raffles.Where(w => w.Id == raffleid).FirstOrDefault();
     var clients = context.Clients.Select(s => new { s.Id, s.GroupId, s.Name }).ToList();
 
     var Pendiente = "Pendiente";
@@ -48,7 +49,7 @@
             <br />
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
-            <b>EFCHA: </b> @DateTime.Now.ToShortDateString()
+            <b>FECHA: </b> @DateTime.Now.ToShortDateString()
             <br />
             <b>HORA: </b> @DateTime.Now.ToShortTimeString()
         </div>

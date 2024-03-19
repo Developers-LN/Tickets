@@ -21,6 +21,7 @@ namespace Tickets.Models
         public System.DateTime EndDate { get; set; }
         public System.DateTime CreateDate { get; set; }
         public int CreateUser { get; set; }
+        public Nullable<int> SequenceNumber { get; set; }
     
         public virtual Client Client { get; set; }
         public virtual Raffle Raffle { get; set; }

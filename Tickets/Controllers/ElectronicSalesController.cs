@@ -60,7 +60,7 @@ namespace Tickets.Controllers
                             clientId = Allocation.Client.Id,
                             clientType = context.Catalogs.FirstOrDefault(f => f.Id == Allocation.Client.GroupId).NameDetail,
                             clientDiscount = Allocation.Client.Discount,
-                            allocateDate = Allocation.CreateDate.ToString("dd/MM/yyyy"),
+                            allocateDate = Allocation.CreateDate.ToShortDateString(),
                             raffleId = Allocation.Raffle.Id,
                             //raffleName = Allocation.Raffle.Name,
                             sequenceNumberRaffle = Allocation.Raffle.SequenceNumber,
@@ -87,7 +87,7 @@ namespace Tickets.Controllers
                             clientId = Allocation.Client.Id,
                             clientType = context.Catalogs.FirstOrDefault(f => f.Id == Allocation.Client.GroupId).NameDetail,
                             clientDiscount = Allocation.Client.Discount,
-                            allocateDate = Allocation.CreateDate.ToString("dd/MM/yyyy"),
+                            allocateDate = Allocation.CreateDate.ToShortDateString(),
                             raffleId = Allocation.Raffle.Id,
                             sequenceNumberRaffle = Allocation.Raffle.SequenceNumber,
                             raffleNomenclature = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.SequenceNumber,
@@ -100,7 +100,23 @@ namespace Tickets.Controllers
             }
             else
             {
-                var ElectronicTicketsList = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == allocationId).ToList();
+                var ElectronicTicketsListFirst = context.TicketAllocationNumbers.Select(s => new
+                {
+                    s.TicketAllocationId,
+                    s.PrintedDate,
+                    s.FractionFrom,
+                    s.FractionTo,
+                    s.Statu
+                }).Where(w => w.TicketAllocationId == allocationId).ToList();
+
+                var ElectronicTicketsList = ElectronicTicketsListFirst.Select(s => new
+                {
+                    s.TicketAllocationId,
+                    PrintedDate = s.PrintedDate.Value.ToShortDateString(),
+                    s.FractionFrom,
+                    s.FractionTo,
+                    s.Statu
+                }).Where(w => w.TicketAllocationId == allocationId).ToList();
 
                 return new JsonResult()
                 {
@@ -113,22 +129,26 @@ namespace Tickets.Controllers
                         clientId = Allocation.Client.Id,
                         clientType = context.Catalogs.FirstOrDefault(f => f.Id == Allocation.Client.GroupId).NameDetail,
                         clientDiscount = Allocation.Client.Discount,
-                        allocateDate = Allocation.CreateDate.ToString("dd/MM/yyyy"),
+                        allocateDate = Allocation.CreateDate.ToShortDateString(),
                         raffleId = Allocation.Raffle.Id,
                         sequenceNumberRaffle = Allocation.Raffle.SequenceNumber,
                         //raffleName = Allocation.Raffle.Name,
                         raffleNomenclature = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.SequenceNumber,
                         raffleName = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.SequenceNumber + " " + Allocation.Raffle.Name + " " + Allocation.Raffle.DateSolteo.ToShortDateString(),
-                        electronicSalesByDate = ElectronicTicketsList.GroupBy(g => g.PrintedDate.Value.ToShortDateString()).Select(s => new
+                        electronicSalesByDate = ElectronicTicketsList.GroupBy(g => g.PrintedDate).Select(s => new
                         {
                             date = s.Key,
-                            totalSold = s.Count()
+                            ticketsQuantity = ElectronicTicketsList.Where(w => w.PrintedDate == s.Key).Sum(ss => ss.FractionTo - ss.FractionFrom + 1) / (Allocation.Raffle.Prospect.LeafFraction * Allocation.Raffle.Prospect.LeafNumber),
+                            fractionQuantity = ElectronicTicketsList.Where(w => w.PrintedDate == s.Key).Sum(ss => ss.FractionTo - ss.FractionFrom + 1) % (Allocation.Raffle.Prospect.LeafFraction * Allocation.Raffle.Prospect.LeafNumber),
+                            allocationFractionQuantity = ElectronicTicketsList.Any(w => w.PrintedDate == s.Key && w.TicketAllocationId == allocationId && w.Statu != (int)TicketStatusEnum.Anulated) ? ElectronicTicketsList.Where(w => w.PrintedDate == s.Key && w.TicketAllocationId == allocationId && w.Statu != (int)TicketStatusEnum.Anulated).Select(ss => ss.FractionTo - ss.FractionFrom + 1).Sum() % (Allocation.Raffle.Prospect.LeafFraction * Allocation.Raffle.Prospect.LeafNumber) : 0,
+                            allocationTicketsQuantity = ElectronicTicketsList.Any(w => w.PrintedDate == s.Key && w.TicketAllocationId == allocationId && w.Statu != (int)TicketStatusEnum.Anulated) ? ElectronicTicketsList.Where(w => w.PrintedDate == s.Key && w.TicketAllocationId == allocationId && w.Statu != (int)TicketStatusEnum.Anulated).Select(ss => ss.FractionTo - ss.FractionFrom + 1).Sum() / (Allocation.Raffle.Prospect.LeafFraction * Allocation.Raffle.Prospect.LeafNumber) : 0,
+                            totalRest = ElectronicTicketsList.Any(w => w.PrintedDate == s.Key && w.TicketAllocationId == allocationId && w.Statu == (int)TicketStatusEnum.Anulated) ? ElectronicTicketsList.Where(w => w.PrintedDate == s.Key && w.TicketAllocationId == allocationId && w.Statu == (int)TicketStatusEnum.Anulated).Select(ss => ss.FractionTo - ss.FractionFrom + 1).Sum() % (Allocation.Raffle.Prospect.LeafFraction * Allocation.Raffle.Prospect.LeafNumber) : 0,
+                            totalRestTickets = ElectronicTicketsList.Any(w => w.PrintedDate == s.Key && w.TicketAllocationId == allocationId && w.Statu == (int)TicketStatusEnum.Anulated) ? ElectronicTicketsList.Where(w => w.PrintedDate == s.Key && w.TicketAllocationId == allocationId && w.Statu == (int)TicketStatusEnum.Anulated).Select(ss => ss.FractionTo - ss.FractionFrom + 1).Sum() / (Allocation.Raffle.Prospect.LeafFraction * Allocation.Raffle.Prospect.LeafNumber) : 0
                         }).ToList()
                     }
                 };
             }
         }
-
         [Authorize]
         [HttpPost]
         public JsonResult ElectronicSalesValidate(int AllocationId)

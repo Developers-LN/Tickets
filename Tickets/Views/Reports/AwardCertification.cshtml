@@ -113,7 +113,7 @@
             </table>
         </div>
         <div class="col-lg-12" style="font-size:14px;">
-            <p>Correspondientes al sorteo <span style="text-decoration:underline"><b>NO. @Model.RaffleAward.RaffleId</b></span> de fecha <span style="text-decoration:underline"><b>@Model.RaffleAward.Raffle.DateSolteo.ToShortDateString()</b></span></p>
+            <p>Correspondientes al sorteo <span style="text-decoration:underline"><b>NO. @Model.RaffleAward.Raffle.Symbol @Model.RaffleAward.Raffle.Separator @Model.RaffleAward.Raffle.SequenceNumber </b></span> de fecha <span style="text-decoration:underline"><b>@Model.RaffleAward.Raffle.DateSolteo.ToShortDateString()</b></span></p>
             <br />
             @{
                 if (Model.RaffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S)

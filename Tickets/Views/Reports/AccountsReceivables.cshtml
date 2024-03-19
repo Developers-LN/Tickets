@@ -1,7 +1,7 @@
 ﻿@model List<Tickets.Models.Invoice>
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "Reporte de cuentas por cobrar del sorteo No. " + Model.FirstOrDefault().Raffle.SequenceNumber;
+    ViewBag.Title = "REPORTES DE CUENTAS POR COBRAR DEL SORTEO " + Model.FirstOrDefault().Raffle.Symbol + Model.FirstOrDefault().Raffle.Separator +  Model.FirstOrDefault().Raffle.SequenceNumber;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -63,8 +63,8 @@
         <div class="col-lg-6 no-padder text-left">
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
+            <b>HORA: </b> @DateTime.Now.ToShortTimeString() <br />
         </div>
     </div>
     <div>
@@ -92,7 +92,7 @@
 
                         var invoiceByRaffle = Model.AsEnumerable().GroupBy(r => r.RaffleId).Select(i => new
                         {
-                            raffleName = i.FirstOrDefault().Raffle.Symbol + i.FirstOrDefault().Raffle.Separator + i.FirstOrDefault().SequenceNumber + " " + i.FirstOrDefault().Raffle.Name,
+                            raffleName = i.FirstOrDefault().Raffle.Symbol + i.FirstOrDefault().Raffle.Separator + i.FirstOrDefault().Raffle.SequenceNumber + " " + i.FirstOrDefault().Raffle.Name,
                             invoiceByClients = i.GroupBy(c => c.ClientId).Select(c => new
                             {
                                 clientName = c.FirstOrDefault().ClientId + " - " + c.FirstOrDefault().Client.Name,
@@ -100,7 +100,6 @@
                                 invoices = c.ToList()
                             })
                         }).ToList();
-
                     }
                     @foreach (var raffle in invoiceByRaffle)
                     {

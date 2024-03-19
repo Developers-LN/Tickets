@@ -187,6 +187,8 @@
         <EntityTypeShape EntityType="TicketsModel.ElectronicAwardPayed" Width="1.5" PointX="18.5" PointY="44.75" />
         <AssociationConnector Association="TicketsModel.FK_ClientId" />
         <AssociationConnector Association="TicketsModel.FK_RaffleId" />
+        <AssociationConnector Association="TicketsModel.FK_TicketAllocationNumber_Catalog_Statu" />
+        <AssociationConnector Association="TicketsModel.FK_TicketAllocationNumber_Raffle" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
