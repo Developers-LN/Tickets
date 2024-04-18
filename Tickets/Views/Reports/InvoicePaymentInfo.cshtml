@@ -163,7 +163,7 @@
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                     {
                         <td class="text-center">
-                            @(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                            @Model.Recibo
                         </td>
                     }
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TaxReceiptNoteCredit)
@@ -434,7 +434,7 @@
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TransDepDirect)
                     {
                         <td class="text-center">
-                            @(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                            @Model.Recibo
                         </td>
                     }
                     @if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.TaxReceiptNoteCredit)

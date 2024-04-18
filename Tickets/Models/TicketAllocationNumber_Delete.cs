@@ -33,6 +33,7 @@ namespace Tickets.Models
         public Nullable<int> NoOrden { get; set; }
         public Nullable<int> No_Ticket_Electronico { get; set; }
         public Nullable<int> TicketType { get; set; }
+        public Nullable<System.DateTime> DeleteDate { get; set; }
     
         public virtual Catalog Catalog { get; set; }
         public virtual Raffle Raffle { get; set; }

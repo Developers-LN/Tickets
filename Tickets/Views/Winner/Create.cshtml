@@ -17,9 +17,9 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Tipo documento: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <select ng-required="true" class="form-control input-sm" ng-model="winner.DocumentType" ng-change="typeDocument()">
+                                    <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="winner.DocumentType" ng-change="typeDocument()">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione un tipo de documento</option>
-                                        <option ng-repeat="documentType in documentTypes" value="{{documentType.Id}}" ng-selected="winner.DocumentType == documentType.Id">{{documentType.Name}}</option>
+                                        <option ng-repeat="documentType in documentTypes" value="{{documentType.Id}}" ng-selected="documentType.Id == winner.DocumentType">{{documentType.Name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -30,11 +30,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Documento: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <input type="text" id="documentNumber" style="text-transform:uppercase"
-                                           ng-model="winner.DocumentNumber"
-                                           ng-minlength="{{maxLenght}}"
-                                           class="form-control input-sm"
-                                           ng-required="true" />
+                                    <input type="text" id="documentNumber" style="text-transform:uppercase" ng-model="winner.DocumentNumber" ng-minlength="{{maxLenght}}" class="form-control input-sm" ng-required="true" />
                                 </div>
                             </div>
                         </fieldset>
@@ -44,9 +40,9 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Sexo: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <select ng-required="true" class="form-control input-sm" ng-model="winner.GenderId">
+                                    <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="winner.GenderId">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione un sexo</option>
-                                        <option ng-repeat="gender in genders" value="{{gender.Id}}">{{gender.Name}}</option>
+                                        <option ng-repeat="gender in genders" value="{{gender.Id}}" ng-selected="gender.Id == winner.GenderId">{{gender.Name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -57,10 +53,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Nombre: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <input type="text" style="text-transform:uppercase"
-                                           ng-model="winner.WinnerName"
-                                           class="form-control input-sm"
-                                           ng-required="true" />
+                                    <input type="text" style="text-transform:uppercase" ng-model="winner.WinnerName" class="form-control input-sm" ng-required="true" />
                                 </div>
                             </div>
                         </fieldset>
@@ -70,11 +63,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Teléfono: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <input type="text" id="phoneNumber"
-                                           ng-model="winner.Phone"
-                                           ng-minlength="14"
-                                           class="form-control input-sm"
-                                           ng-required="true" />
+                                    <input type="text" id="phoneNumber" ng-model="winner.Phone" ng-minlength="14" class="form-control input-sm" ng-required="true" />
                                 </div>
                             </div>
                         </fieldset>
@@ -96,4 +85,3 @@
         <a ng-click="saveWinnerForm()" class="mr btn btn-square btn-primary {{winner.Id > 0? moduleCanEdit: moduleCanAdd }}"><i class="fa fa-floppy-o"></i> Guardar</a>
     </div>
 </div>
-            

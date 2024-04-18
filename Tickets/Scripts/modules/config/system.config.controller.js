@@ -128,6 +128,7 @@
                             $scope.config = data.config;
                         }
                         $scope.$apply();
+                        $rootScope.createSelect2();
                     }, 0);
                 }
             });

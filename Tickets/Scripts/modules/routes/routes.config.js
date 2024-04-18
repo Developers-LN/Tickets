@@ -266,6 +266,31 @@
                 templateUrl: Route.base('Client/List'),
                 resolve: {}
             })
+            .state('app.otherincomesList', {
+                url: '/others/otherIncomes',
+                templateUrl: Route.base('OtherIncomes/OtherIncomesList'),
+                resolve: {}
+            })
+            .state('app.otherIncomeAccount', {
+                url: '/others/otherIncomes/:otherincomeId',
+                templateUrl: Route.base('OtherIncomes/Create'),
+                resolve: {}
+            })
+            .state('app.otherIncomesPaymentHistory', {
+                url: '/others/otherIncomesPaymentHistory/:otherincomeId',
+                templateUrl: Route.base('OtherIncomes/OtherIncomesPaymentHistory'),
+                resolve: {}
+            })
+            .state('app.otherincomesPaymentsList', {
+                url: '/others/otherIncomesPayment',
+                templateUrl: Route.base('OtherIncomes/OtherIncomesPaymentList'),
+                resolve: {}
+            })
+            .state('app.otherIncomeAccountPayment', {
+                url: '/others/otherIncomesPayment/:otherincomePaymentId',
+                templateUrl: Route.base('OtherIncomes/CreatePayment'),
+                resolve: {}
+            })
             .state('app.winnersList', {
                 url: '/winner/winners',
                 templateUrl: Route.base('Winner/List'),

@@ -35,6 +35,7 @@
                 $scope.updateProduction();
                 $scope.updateAllocate();
                 $scope.$apply();
+                $rootScope.createSelect2();
             }, function (error) {
                 window.loading.show();
                 console.log('Error: ' + error);

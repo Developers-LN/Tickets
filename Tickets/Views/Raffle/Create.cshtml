@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Prospecto de Billetes:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <select ng-required="true" class="form-control input-sm" ng-model="raffle.ticketProspectId" ng-change="prospectChange()">
+                                <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="raffle.ticketProspectId" ng-change="prospectChange()">
                                     <option selected="selected" disabled="disabled" value="0">Seleccione un prospecto</option>
                                     <option ng-repeat="prospect in ticketProspects" value="{{prospect.value}}" ng-selected="prospect.value == raffle.ticketProspectId">{{prospect.text}}</option>
                                 </select>
@@ -148,7 +148,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Estatus:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <select ng-required="true" class="form-control input-sm" ng-model="raffle.statu">
+                                <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="raffle.statu">
                                     <option selected="selected" disabled="disabled" value="0">Seleccione un estatus</option>
                                     <option ng-repeat="raffleStatu in raffleStatus" ng-if="raffleStatu.id != @((int)Tickets.Models.Enums.RaffleStatusEnum.Generated) && raffleStatu.id != @((int)Tickets.Models.Enums.RaffleStatusEnum.Active)" value="{{raffleStatu.id}}" ng-selected="raffleStatu.id == raffle.statu">{{raffleStatu.nameDetail}}</option>
                                 </select>
@@ -180,7 +180,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Mercancía: <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <select ng-required="true" class="form-control input-sm" ng-model="raffle.commodityId">
+                                <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="raffle.commodityId">
                                     <option selected="selected" disabled="disabled" value="0">Seleccione un mercancia</option>
                                     <option ng-repeat="commodity in commoditys" value="{{commodity.id}}" ng-selected="commodity.id == raffle.poolsProspectId">{{commodity.nameDetail}}</option>
                                 </select>

@@ -1,9 +1,8 @@
 @{
     Layout = null;
     ViewBag.Title = "Creación de cliente";
-
-    var context = new Tickets.Models.TicketsEntities();
 }
+
 <!-- START panel-->
 <div class="col-lg-12 no-padder" ng-controller="ClientCreateController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
@@ -16,10 +15,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <input type="text"
-                                       ng-model="client.Name"
-                                       class="form-control input-sm"
-                                       ng-required="true" maxlength="100"/>
+                                <input type="text" ng-model="client.Name" class="form-control input-sm" ng-required="true" maxlength="100" />
                             </div>
                         </div>
                     </fieldset>
@@ -27,9 +23,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Nombre comercial: </label>
                             <div class="col-lg-12">
-                                <input type="text"
-                                       ng-model="client.Tradename"
-                                       class="form-control input-sm" maxlength="150" />
+                                <input type="text" ng-model="client.Tradename" class="form-control input-sm" maxlength="150" />
                             </div>
                         </div>
                     </fieldset>
@@ -37,9 +31,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">RNC:</label>
                             <div class="col-lg-12">
-                                <input type="text"
-                                       ng-model="client.RNC"
-                                       class="form-control input-sm"  maxlength="50"/>
+                                <input type="text" ng-model="client.RNC" class="form-control input-sm" maxlength="50" />
                             </div>
                         </div>
                     </fieldset>
@@ -47,10 +39,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Fecha de nacimiento: <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <input type="date"
-                                       ng-model="client.Birthday"
-                                       class="form-control input-sm"
-                                       ng-required="true"/>
+                                <input type="date" ng-model="client.Birthday" class="form-control input-sm" ng-required="true" />
                             </div>
                         </div>
                     </fieldset>
@@ -58,10 +47,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Cédula: <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <input type="text"
-                                       ng-model="client.DocumentNumber"
-                                       class="form-control input-sm"
-                                       ng-required="true" maxlength="20"/>
+                                <input type="text" ng-model="client.DocumentNumber" class="form-control input-sm" ng-required="true" maxlength="20" />
                             </div>
                         </div>
                     </fieldset>
@@ -69,7 +55,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Estado civil: <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <select ng-required="true" class="form-control input-sm" ng-model="client.MaritalStatus">
+                                <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="client.MaritalStatus">
                                     <option selected="selected" disabled="disabled" value="0">Seleccione un estado civil</option>
                                     <option ng-repeat="matritalState in matritalStates" value="{{matritalState.Id}}">{{matritalState.Name}}</option>
                                 </select>
@@ -80,7 +66,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Precio para los billetes: <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <select ng-required="true" class="form-control input-sm" ng-model="client.PriceId">
+                                <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="client.PriceId">
                                     <option selected="selected" disabled="disabled" value="0">Seleccione un precio</option>
                                     <option ng-repeat="price in prices" value="{{price.Id}}">{{price.Name}}</option>
                                 </select>
@@ -94,10 +80,7 @@
                                 <a ng-click="uploadDocument('financy')" class="btn btn-sm btn-default"><i class="fa fa-cloud-upload"></i> Seleccione un Documento</a>
                                 <label style="font-size:10pt;" class="label label-info">{{filancyDocumentLabel}}</label>
                                 <a class="btn btn-danger btn-sm" ng-click="clearFinancyDocumentLabel()" ng-show="filancyDocumentLabel != ''"><i class="fa fa-times"></i></a>
-                                <input type="file"
-                                       accept="application/pdf"
-                                       id="financyDocumentFile"
-                                       class="form-control input-sm hide" />
+                                <input type="file" accept="application/pdf" id="financyDocumentFile" class="form-control input-sm hide" />
                             </div>
                         </div>
                     </fieldset>
@@ -107,7 +90,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Sexo: <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <select ng-required="false" class="form-control input-sm" ng-model="client.Gender">
+                                <select ng-required="false" class="form-control input-sm dropdown-select2" ng-model="client.Gender">
                                     <option selected="selected" disabled="disabled" value="0">Seleccione un sexo</option>
                                     <option ng-repeat="gender in genders" value="{{gender.Id}}">{{gender.Name}}</option>
                                 </select>
@@ -151,10 +134,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Dirección:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <input type="text"
-                                       ng-model="client.Addres"
-                                       class="form-control input-sm"
-                                       ng-required="true" />
+                                <input type="text" ng-model="client.Addres" class="form-control input-sm" ng-required="true" />
                             </div>
                         </div>
                     </fieldset>
@@ -162,10 +142,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Teléfono:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <input type="text"
-                                       ng-model="client.Phone"
-                                       class="form-control input-sm"
-                                       ng-required="true" maxlength="45" />
+                                <input type="text" ng-model="client.Phone" class="form-control input-sm" ng-required="true" maxlength="45" />
                             </div>
                         </div>
                     </fieldset>
@@ -173,9 +150,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Fax:</label>
                             <div class="col-lg-12">
-                                <input type="text"
-                                       ng-model="client.Fax"
-                                       class="form-control input-sm" maxlength="45"  />
+                                <input type="text" ng-model="client.Fax" class="form-control input-sm" maxlength="45" />
                             </div>
                         </div>
                     </fieldset>
@@ -186,10 +161,7 @@
                                 <a ng-click="uploadDocument('admin')" class="btn btn-sm btn-default"><i class="fa fa-cloud-upload"></i> Seleccione un Documento</a>
                                 <label style="font-size:10pt;" class="label label-info">{{adminDocumentLabel}}</label>
                                 <a class="btn btn-danger btn-sm" ng-click="clearAdminDocumentLabel()" ng-show="adminDocumentLabel != ''"><i class="fa fa-times"></i></a>
-                                <input type="file"
-                                       id="adminDocumentFile"
-                                       accept="application/pdf"
-                                       class="form-control input-sm hide" />
+                                <input type="file" id="adminDocumentFile" accept="application/pdf" class="form-control input-sm hide" />
                             </div>
                         </div>
                     </fieldset>
@@ -199,10 +171,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">E-Mail:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <input type="text"
-                                       ng-model="client.Email"
-                                       class="form-control input-sm"
-                                       ng-required="true" maxlength="100"/>
+                                <input type="text" ng-model="client.Email" class="form-control input-sm" ng-required="true" maxlength="100" />
                             </div>
                         </div>
                     </fieldset>
@@ -210,11 +179,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Deuda Anterior:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <input type="number"
-                                       step="any"
-                                       ng-model="client.PreviousDebt"
-                                       class="form-control input-sm"
-                                       ng-required="true" />
+                                <input type="number" step="any" ng-model="client.PreviousDebt" class="form-control input-sm" ng-required="true" />
                             </div>
                         </div>
                     </fieldset>
@@ -222,11 +187,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Limite de Crédito:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <input type="number"
-                                       step="any"
-                                       ng-model="client.CreditLimit"
-                                       class="form-control input-sm"
-                                       ng-required="true" />
+                                <input type="number" step="any" ng-model="client.CreditLimit" class="form-control input-sm" ng-required="true" />
                             </div>
                         </div>
                     </fieldset>
@@ -234,11 +195,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Monto de Fianza:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <input type="number"
-                                       step="any"
-                                       ng-model="client.AmountDeposit"
-                                       class="form-control input-sm"
-                                       ng-required="true" />
+                                <input type="number" step="any" ng-model="client.AmountDeposit" class="form-control input-sm" ng-required="true" />
                             </div>
                         </div>
                     </fieldset>
@@ -246,11 +203,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Descuento:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <input type="number"
-                                       step="any"
-                                       ng-model="client.Discount"
-                                       class="form-control input-sm"
-                                       ng-required="true" />
+                                <input type="number" step="any" ng-model="client.Discount" class="form-control input-sm" ng-required="true" />
                             </div>
                         </div>
                     </fieldset>
@@ -258,7 +211,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Tipo de Cliente:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <select ng-required="true" class="form-control input-sm" ng-model="client.ClientType">
+                                <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="client.ClientType">
                                     <option selected="selected" disabled="disabled" value="0">Seleccione un tipo de cliente</option>
                                     <option ng-repeat="clientType in clientTypes" value="{{clientType.Id}}">{{clientType.Name}}</option>
                                 </select>
@@ -269,7 +222,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Grupo:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <select ng-required="true" class="form-control input-sm" ng-model="client.GroupId">
+                                <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="client.GroupId">
                                     <option selected="selected" disabled="disabled" value="0">Seleccione un grupo</option>
                                     <option ng-repeat="clientGroup in clientGroups" value="{{clientGroup.Id}}">{{clientGroup.Name}}</option>
                                 </select>
@@ -280,9 +233,7 @@
                         <div class="form-group">
                             <label class="col-lg-12 control-label-left">Observación:</label>
                             <div class="col-lg-12">
-                                <textarea class="form-control input-sm"
-                                          ng-model="client.Comment"
-                                          style="max-height: 155px; height: 155px;"></textarea>
+                                <textarea class="form-control input-sm" ng-model="client.Comment" style="max-height: 155px; height: 155px;"></textarea>
                             </div>
                         </div>
                     </fieldset>

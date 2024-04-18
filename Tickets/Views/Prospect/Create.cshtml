@@ -113,7 +113,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Grupo:  <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <select ng-required="true" id="groupDescription" class="form-control input-sm" ng-model="prospect.GroupId">
+                                    <select ng-required="true" id="groupDescription" class="form-control input-sm dropdown-select2" ng-model="prospect.GroupId">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione un grupo</option>
                                         <option ng-repeat="group in groups" value="{{group.value}}">{{group.text}}</option>
                                     </select>
@@ -185,7 +185,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label">Formato de Impresión:  <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <select ng-required="true" id="impresionTypeDescription" class="form-control input-sm" ng-model="prospect.ImpresionType">
+                                    <select ng-required="true" id="impresionTypeDescription" class="form-control input-sm dropdown-select2" ng-model="prospect.ImpresionType">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione una forma de impresión</option>
                                         <option ng-repeat="printTechnique in printTechniques" value="{{printTechnique.value}}">{{printTechnique.text}}</option>
                                     </select>
@@ -196,7 +196,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Estado:  <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <select ng-show="prospect.Statu !== 22" ng-required="true" id="statuDescription" class="form-control input-sm" ng-model="prospect.Statu">
+                                    <select ng-show="prospect.Statu !== 22" ng-required="true" id="statuDescription" class="form-control input-sm dropdown-select2" ng-model="prospect.Statu">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione un estado</option>
                                         <option ng-repeat="statu in prospectStatus" ng-show="(statu.value===20 || statu.value===21)" value="{{statu.value}}">{{statu.text}}</option>
                                     </select>
@@ -354,7 +354,7 @@
                                                 <div class="form-group">
                                                     <label class="col-lg-12 control-label-left">Tipo de premio: <span class="color-red">*</span></label>
                                                     <div class="col-lg-12">
-                                                        <select id="typesAwardIdDropdown" class="form-control input-sm" ng-model="award.TypesAwardId" ng-change="updateAwardTypeValue()">
+                                                        <select id="typesAwardIdDropdown" class="form-control input-sm dropdown-select2" ng-model="award.TypesAwardId" ng-change="updateAwardTypeValue()">
                                                             <option selected="selected" disabled="disabled" value="0">Seleccione un tipo premio</option>
                                                             <option ng-repeat="awardType in awardTypes" value="{{awardType.value}}">{{awardType.text}}</option>
                                                         </select>
@@ -363,7 +363,7 @@
                                                 <div class="form-group">
                                                     <label class="col-lg-12 control-label-left">Premio origen: </label>
                                                     <div class="col-lg-12">
-                                                        <select id="sourceAwardDropdown" class="form-control input-sm" ng-model="award.SourceAward">
+                                                        <select id="sourceAwardDropdown" class="form-control input-sm dropdown-select2" ng-model="award.SourceAward">
                                                             <option selected="selected" value="Null"></option>
                                                             <option ng-repeat="award in prospect.Awards" value="{{award.OrderAward}}">{{award.Name}}</option>
                                                         </select>

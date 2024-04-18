@@ -41,6 +41,8 @@ namespace Tickets.Models
             this.AwardCertification = new HashSet<AwardCertification>();
             this.ElectronicTicketSales = new HashSet<ElectronicTicketSale>();
             this.TaxReceipts = new HashSet<TaxReceipt>();
+            this.OtherIncomes = new HashSet<OtherIncome>();
+            this.OtherIncomeDetails = new HashSet<OtherIncomeDetail>();
         }
     
         public int Id { get; set; }
@@ -76,5 +78,7 @@ namespace Tickets.Models
         public virtual ICollection<AwardCertification> AwardCertification { get; set; }
         public virtual ICollection<ElectronicTicketSale> ElectronicTicketSales { get; set; }
         public virtual ICollection<TaxReceipt> TaxReceipts { get; set; }
+        public virtual ICollection<OtherIncome> OtherIncomes { get; set; }
+        public virtual ICollection<OtherIncomeDetail> OtherIncomeDetails { get; set; }
     }
 }

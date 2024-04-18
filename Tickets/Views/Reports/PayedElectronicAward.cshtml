@@ -90,8 +90,13 @@
                     }
                     @foreach (var client in clients)
                     {
+                        var clientInfo = context.Clients.Where(w => w.Id == client).Select(s => String.Concat(s.Id, " - ", s.Name)).FirstOrDefault();
                         var payedAward = Model.AsEnumerable().Where(w => w.ClientId == client).ToList();
                         decimal totalPayedByClient = 0;
+
+                        <tr>
+                            <th colspan="9" class="text-center">@clientInfo</th>
+                        </tr>
 
                         foreach (var item in payedAward)
                         {

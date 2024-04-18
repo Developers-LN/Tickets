@@ -848,6 +848,15 @@ namespace Tickets.Controllers
 
         [Authorize]
         [HttpGet]
+        public ActionResult OtherPaymentReceipt(int paymentId)
+        {
+            var context = new TicketsEntities();
+            var payment = context.OtherIncomeDetails.FirstOrDefault(f => f.Id == paymentId);
+            return View(payment);
+        }
+
+        [Authorize]
+        [HttpGet]
         public ActionResult CashAdvanceReport(int cashAdvance)
         {
             var context = new TicketsEntities();
@@ -1039,7 +1048,7 @@ namespace Tickets.Controllers
 
             if (identifyNumbers.Count <= 0)
             {
-                return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo #" + invoiceDetail.Raffle.SequenceNumber + "." });
+                return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo " + invoiceDetail.Raffle.Symbol + invoiceDetail.Raffle.Separator + invoiceDetail.Raffle.SequenceNumber + "." });
             }
             ViewBag.invoiceDetailId = invoiceDetail.SequenceNumber;
             ViewBag.invoiceDetailDate = invoiceDetail.CreateDate.ToShortDateString();

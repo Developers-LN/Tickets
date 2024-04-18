@@ -12,7 +12,7 @@
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <label class=""><span>Seleccione el Modulo en el cual se mostrara el mensaje</span></label>
 
-                    <select class="form-control " ng-model="nameSelected" ng-change="update()">
+                    <select class="form-control dropdown-select2" ng-model="nameSelected" ng-change="update()">
                         <option ng-repeat="name in Names" value="{{name.Id}}">{{name.Id}} - {{name.Name}}</option>
                     </select>
                 </div>

@@ -45,6 +45,9 @@
         TaxReceiptNumberStatu = 43,
         CashAdvances = 46,
         AccountReceivableType = 47,
-        DocumentType = 48
+        DocumentType = 48,
+        OriginAccount = 56,
+        AccountType = 57,
+        PaymentPeriodicity = 58
     }
 }

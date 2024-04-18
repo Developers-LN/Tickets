@@ -339,6 +339,20 @@
                                 <span class="ripple"></span>
                             </a>
                         </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.otherincomesList')">
+                            <a ui-sref="app.otherincomesList" title="Listado de otros ingresos">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Otros ingresos</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-show="verifyCanView('app.otherincomesPaymentsList')">
+                            <a ui-sref="app.otherincomesPaymentsList" title="Listado de pagos por otros ingresos">
+                                <em class="sidebar-item-icon"></em>
+                                <span>Pagos por otros ingresos</span>
+                                <span class="ripple"></span>
+                            </a>
+                        </li>
                         <li ui-sref-active="active" ng-show="verifyCanView('app.winnersList')">
                             <a ui-sref="app.winnersList" title="Listado de Cliente">
                                 <em class="sidebar-item-icon"></em>

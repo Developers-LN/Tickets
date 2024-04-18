@@ -23,7 +23,7 @@
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Nuevo Grupo: </label>
                                     <div class="col-lg-12">
-                                        <select ng-required="true" class="form-control" style="width:100%;" ng-model="Group">
+                                        <select ng-required="true" class="form-control dropdown-select2" style="width:100%;" ng-model="Group">
                                             <option ng-repeat="group in groups" value="{{group.value}}" ng-selected="group.value== currentReturned.returnedGroup">{{group.text}}</option>
                                         </select>
                                     </div>
@@ -35,7 +35,7 @@
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Nuevo Cliente: </label>
                                     <div class="col-lg-12">
-                                        <select ng-required="true" class="form-control" style="width:100%;" ng-model="ClientId">
+                                        <select ng-required="true" class="form-control dropdown-select2" style="width:100%;" ng-model="ClientId">
                                             <option ng-repeat="client in clientList" value="{{client.value}}" ng-selected="client.value== currentReturned.clientId">{{client.text}}</option>
                                         </select>
                                     </div>

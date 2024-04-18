@@ -255,6 +255,7 @@
     </Compile>
     <Compile Include="Controllers\ElectronicSalesApiController.cs" />
     <Compile Include="Controllers\ElectronicSalesController.cs" />
+    <Compile Include="Controllers\OtherIncomesController.cs" />
     <Compile Include="Controllers\TaxReceiptController.cs" />
     <Compile Include="Controllers\TicketSuscriberApiController.cs" />
     <Compile Include="Controllers\TicketSuscriberController.cs" />
@@ -433,6 +434,12 @@
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NoteCreditReceiptPayment.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OtherIncome.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OtherIncomeDetail.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OverduelBill.cs">
@@ -903,6 +910,11 @@
     <Content Include="Scripts\modules\integration\electronic.ticket.xml.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\modules\otherincomes\otherincomepaytements.list.controller.js" />
+    <Content Include="Scripts\modules\otherincomes\otherincomes.create.controller.js" />
+    <Content Include="Scripts\modules\otherincomes\otherincomes.list.controller.js" />
+    <Content Include="Scripts\modules\otherincomes\otherincomespayment.create.controller.js" />
+    <Content Include="Scripts\modules\otherincomes\otherincomespayment.history.controller.js" />
     <Content Include="Scripts\modules\prospect\all.prospect.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -3283,6 +3295,12 @@
     <Content Include="Views\Cash\PayedBachByPeriodExcel.cshtml" />
     <Content Include="Views\Cash\ElectronicAwardPayed.cshtml" />
     <Content Include="Views\Reports\PayedElectronicAward.cshtml" />
+    <Content Include="Views\OtherIncomes\Create.cshtml" />
+    <Content Include="Views\OtherIncomes\OtherIncomesList.cshtml" />
+    <Content Include="Views\OtherIncomes\OtherIncomesPaymentList.cshtml" />
+    <Content Include="Views\OtherIncomes\CreatePayment.cshtml" />
+    <Content Include="Views\Reports\OtherPaymentReceipt.cshtml" />
+    <Content Include="Views\OtherIncomes\OtherIncomesPaymentHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

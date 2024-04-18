@@ -28,7 +28,8 @@
                         self.filterPriceList();
                         window.setTimeout(function () {
                             $scope.$apply();
-                        }, 100);
+                            $rootScope.createSelect2();
+                        }, 0);
                     }
                 });
             }

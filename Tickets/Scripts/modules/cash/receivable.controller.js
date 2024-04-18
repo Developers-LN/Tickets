@@ -115,10 +115,12 @@
                                 $scope.raffleName = data.raffleName;
                                 $scope.invoiceDate = data.invoiceDate;
                                 $scope.invoiceDiscount = data.invoiceDiscount;
+                                $scope.sequenceNumberInvoice = data.sequenceNumberInvoice;
 
                                 $rootScope.destroyDataTable();
                                 $scope.$apply();
                                 $rootScope.dataTable();
+                                $rootScope.createSelect2();
                                 rCheck($scope.creditNotes);
                                 rCheck($scope.cashAdvances);
                             }

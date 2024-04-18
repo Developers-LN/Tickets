@@ -22,6 +22,7 @@ namespace Tickets.Models
         public Nullable<int> Status { get; set; }
         public Nullable<int> IdentifyBachNumberType { get; set; }
         public Nullable<int> FirstValid { get; set; }
+        public Nullable<System.DateTime> ElectronicPayedDate { get; set; }
     
         public virtual IdentifyBach IdentifyBach { get; set; }
         public virtual TicketAllocationNumber TicketAllocationNumber { get; set; }

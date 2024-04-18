@@ -30,6 +30,10 @@ namespace Tickets.Models
             this.Winners1 = new HashSet<Winner>();
             this.TicketAllocationNumber_Delete = new HashSet<TicketAllocationNumber_Delete>();
             this.TicketAllocationNumbers = new HashSet<TicketAllocationNumber>();
+            this.OtherIncomes = new HashSet<OtherIncome>();
+            this.OtherIncomes1 = new HashSet<OtherIncome>();
+            this.OtherIncomes2 = new HashSet<OtherIncome>();
+            this.OtherIncomes3 = new HashSet<OtherIncome>();
         }
     
         public int Id { get; set; }
@@ -55,5 +59,9 @@ namespace Tickets.Models
         public virtual ICollection<Winner> Winners1 { get; set; }
         public virtual ICollection<TicketAllocationNumber_Delete> TicketAllocationNumber_Delete { get; set; }
         public virtual ICollection<TicketAllocationNumber> TicketAllocationNumbers { get; set; }
+        public virtual ICollection<OtherIncome> OtherIncomes { get; set; }
+        public virtual ICollection<OtherIncome> OtherIncomes1 { get; set; }
+        public virtual ICollection<OtherIncome> OtherIncomes2 { get; set; }
+        public virtual ICollection<OtherIncome> OtherIncomes3 { get; set; }
     }
 }

@@ -92,6 +92,7 @@
                     if (!$scope.$$phase) {
                         window.setTimeout(function () {
                             $scope.$apply();
+                            $rootScope.createSelect2();
                         }, 0);
                     }
                     $rootScope.destroyDataTable();

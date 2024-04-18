@@ -189,6 +189,15 @@
         <AssociationConnector Association="TicketsModel.FK_RaffleId" />
         <AssociationConnector Association="TicketsModel.FK_TicketAllocationNumber_Catalog_Statu" />
         <AssociationConnector Association="TicketsModel.FK_TicketAllocationNumber_Raffle" />
+        <EntityTypeShape EntityType="TicketsModel.OtherIncome" Width="1.5" PointX="8.25" PointY="66.125" />
+        <EntityTypeShape EntityType="TicketsModel.OtherIncomeDetail" Width="1.5" PointX="13.5" PointY="53.875" />
+        <AssociationConnector Association="TicketsModel.FK_AccountType_OtherIncome_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_Origin_OtherIncome_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_Periodicity_OtherIncome_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_Status_OtherIncome_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_CreateUser_OtherIncome_User" />
+        <AssociationConnector Association="TicketsModel.FK_ListAccountsOtherIncomeId_OtherIncomeDetails_OtherIncome" />
+        <AssociationConnector Association="TicketsModel.FK_CreateUser_OtherIncomeDetails_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

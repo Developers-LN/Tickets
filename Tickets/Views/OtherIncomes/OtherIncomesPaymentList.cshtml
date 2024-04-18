@@ -1,0 +1,63 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Listado de pagos por otros ingresos";
+}
+
+<div class="col-lg-12 no-padder" ng-controller="OtherIncomesPaymentListController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!-- START panel-->
+                <div class="col-lg-8 text-left m-b-xs no-padder">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label-left">Otros ingresos:  <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select ng-required="true" class="form-control dropdown-select2" ng-model="otherIncomeId" ng-change="changeValues()">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione una opción</option>
+                                    <option ng-repeat="otherIncome in otherIncomesList" value="{{otherIncome.Id}}">{{otherIncome.NoCatalogAccount}} - {{otherIncome.AccountName}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-4 text-right m-b-xs no-padder">
+                    <a href="#/others/otherIncomesPayment/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Agregar pago</a>
+                </div>
+                <div class="row-border hover">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th>Recibo</th>
+                                <th>Cuenta</th>
+                                <th>Nombre de cuenta</th>
+                                <th>Descripción</th>
+                                <th>Fecha de pago</th>
+                                <th>Total</th>
+                                <th class="editColumm">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="otherIncomesPayment in otherIncomesPayments">
+                                <td>{{otherIncomesPayment.SequenceNumber}}</td>
+                                <td>{{otherIncomesPayment.NoCatalogAccount}}</td>
+                                <td>{{otherIncomesPayment.AccountName}}</td>
+                                <td>{{otherIncomesPayment.Description}}</td>
+                                <td>{{(otherIncomesPayment.PaymentDate| date:"dd/MM/yyyy")}}</td>
+                                <td>{{parseMoney(otherIncomesPayment.Total)}}</td>
+                                <td>
+                                    <a href="#/others/otherIncomes/{{otherIncomesPayment.Id}}" title="Modificar cuenta" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
+                                    <a target="_blank" href="/Reports/OtherPaymentReceipt?paymentId={{otherIncomesPayment.Id}}" title="Reporte de pago"><i class="fa fa-print"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg">
+    <a ui-sref="app.dashboard" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

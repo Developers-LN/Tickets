@@ -2,22 +2,21 @@
     Layout = null;
     ViewBag.Title = "Ingresar Sorteo Tombolas";
 }
+
 <!-- START panel-->
 <div class="col-lg-12 no-padder" ng-controller="RaffleController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-lg-12 no-padder">
-                    <input type="hidden"
-                           ng-model="raffleAward.Id" />
-                    <input type="hidden"
-                           ng-model="raffleAward.RaffleId" />
+                    <input type="hidden" ng-model="raffleAward.Id" />
+                    <input type="hidden" ng-model="raffleAward.RaffleId" />
                     <fieldset>
                         <div class="form-group">
                             <div class="col-lg-4">
                                 <label class="col-lg-12 control-label-left no-padder">Premio:  <span class="color-red">*</span></label>
                                 <div class="col-lg-12 no-padder">
-                                    <select id="AwardId" ng-required="true" class="form-control input-sm" ng-model="raffleAward.AwardId">
+                                    <select id="AwardId" ng-required="true" class="form-control input-sm dropdown-select2" ng-model="raffleAward.AwardId">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione un premio</option>
                                         <option data-ng-repeat="award in awardList" value="{{award.Id}}">{{award.Name}}</option>
                                     </select>
@@ -26,23 +25,13 @@
                             <div class="col-lg-4">
                                 <label class="col-lg-12 control-label-left no-padder">Numero Ganador:  <span class="color-red">*</span></label>
                                 <div class="col-lg-12 no-padder">
-                                    <input type="text"
-                                           ng-model="raffleAward.ControlNumber"
-                                           class="form-control input-sm"
-                                           placeholder="Numero ganador"
-                                           ng-minlength="5"
-                                           ng-pattern="/^\d{5}$/"
-                                           ng-required="true" />
+                                    <input type="text" ng-model="raffleAward.ControlNumber" class="form-control input-sm" placeholder="Numero ganador" ng-minlength="5" ng-pattern="/^\d{5}$/" ng-required="true" />
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <label class="col-lg-12 control-label-left no-padder">Fracción: </label>
                                 <div class="col-lg-12 no-padder">
-                                    <input type="text"
-                                           ng-model="raffleAward.Fraction"
-                                           class="form-control input-sm"
-                                           maxlength="2"
-                                           placeholder="Fracción ganadora" />
+                                    <input type="text" ng-model="raffleAward.Fraction" class="form-control input-sm" maxlength="2" placeholder="Fracción ganadora" />
                                 </div>
                             </div>
                         </div>

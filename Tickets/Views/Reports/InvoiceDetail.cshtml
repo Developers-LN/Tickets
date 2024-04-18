@@ -113,7 +113,7 @@
                     <b>CODIGO: </b> @Model.Client.Id @Model.InvoiceTickets.Select(t => t.TicketAllocationNumber.TicketAllocation.Agente).FirstOrDefault()
                 </div>
                 <div class="col-lg-12 no-padder text-left">
-                    <b>CEDULA/RNC: </b> @Model.Client.DocumentNumber
+                    <b>CEDULA/RNC: </b> @(String.IsNullOrEmpty(Model.Client.RNC) ? Model.Client.DocumentNumber : Model.Client.RNC)
                 </div>
                 <div class="col-lg-12 no-padder text-left">
                     <b>RAZON SOCIAL/NOMBRE: </b> <br /> @Model.Client.Name

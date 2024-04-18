@@ -13,10 +13,7 @@
                     <div class="form-group">
                         <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
                         <div class="col-lg-12">
-                            <input type="text"
-                                   ng-model="typesAward.Name"
-                                   class="form-control"
-                                   ng-required="true" />
+                            <input type="text" ng-model="typesAward.Name" class="form-control" ng-required="true" />
                         </div>
                     </div>
                 </fieldset>
@@ -24,9 +21,7 @@
                     <div class="form-group">
                         <label class="col-lg-12 control-label-left">Descripción: </label>
                         <div class="col-lg-12">
-                            <textarea class="form-control"
-                                      ng-model="typesAward.Description"
-                                      style="max-height: 109px; height: 109px;"></textarea>
+                            <textarea class="form-control" ng-model="typesAward.Description" style="max-height: 109px; height: 109px;"></textarea>
                         </div>
                     </div>
                 </fieldset>
@@ -34,7 +29,7 @@
                     <div class="form-group">
                         <label class="col-lg-12 control-label-left">Grupo:  <span class="color-red">*</span></label>
                         <div class="col-lg-12">
-                            <select ng-required="true" class="form-control input-sm" ng-model="typesAward.GroupId">
+                            <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="typesAward.GroupId">
                                 <option selected="selected" disabled="disabled" value="0">Seleccione un grupo</option>
                                 @foreach (var catalog in context.Catalogs.Where(c => c.IdGroup == (int)Tickets.Models.Enums.CatalogGroupEnum.TypesAwardGroup && c.Statu == true).ToList())
                                 {
@@ -48,7 +43,7 @@
                     <div class="form-group">
                         <label class="col-lg-12 control-label-left">Creación: <span class="color-red">*</span></label>
                         <div class="col-lg-12">
-                            <select ng-required="true" class="form-control input-sm" ng-model="typesAward.Creation">
+                            <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="typesAward.Creation">
                                 <option selected="selected" disabled="disabled" value="0">Seleccione un creación</option>
                                 @foreach (var catalog in context.Catalogs.Where(c => c.IdGroup == (int)Tickets.Models.Enums.CatalogGroupEnum.TypesAwardCreation && c.Statu == true).ToList())
                                 {
