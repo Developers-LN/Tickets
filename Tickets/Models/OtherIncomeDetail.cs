@@ -22,8 +22,10 @@ namespace Tickets.Models
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<int> OtherIncomeId { get; set; }
         public Nullable<int> SequenceNumber { get; set; }
+        public Nullable<int> BankAccountCatalogId { get; set; }
     
         public virtual OtherIncome OtherIncome { get; set; }
         public virtual User User { get; set; }
+        public virtual Catalog Catalog { get; set; }
     }
 }

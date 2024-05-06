@@ -353,7 +353,7 @@ namespace Tickets.Models.Raffles
                         raffle.DueRaffleDate = model.DueRaffleDate;
                         raffle.StartElectronicSales = model.StartElectronicSales;
                         raffle.Symbol = model.Symbol != null ? model.Symbol : null;
-                        raffle.Separator = model.Symbol != null ? "-" : null;
+                        raffle.Separator = " ";
 
                         if (model.Id == 0)
                         {

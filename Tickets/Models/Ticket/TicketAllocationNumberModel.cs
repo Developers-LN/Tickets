@@ -37,7 +37,7 @@ namespace Tickets.Models.Ticket
         public int TicketAllocationId { get; set; }
 
         [JsonProperty(PropertyName = "sequenceNumberTicketAllocation")]
-        public int? SequenceNumberTicketAllocation {  get; set; }
+        public int? SequenceNumberTicketAllocation { get; set; }
 
         [JsonProperty(PropertyName = "serie")]
         public List<TicketAllocationSerieModel> Serie { get; set; }
@@ -338,25 +338,43 @@ namespace Tickets.Models.Ticket
 
                     var allocationNumber = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == id);
 
-                    var LastAllocations = context.TicketAllocations.Where(w => w.ClientId == allocation.ClientId
-                                                                          && w.RaffleId == allocation.RaffleId
-                                                                          && w.Statu == (int)AllocationStatuEnum.Consigned);
+                    var LastAllocations = context.TicketAllocations.Where(w => w.ClientId == allocation.ClientId && w.Statu == (int)AllocationStatuEnum.Consigned);
 
-                    var CashAdvances = context.NoteCredits.Where(w => w.ClientId == allocation.ClientId
-                                                                 && w.TypeNote == (int)NoteCreditEnum.CashAdvance
-                                                                 && w.RaffleId == allocation.RaffleId
-                                                                 && w.Statu == (int)GeneralStatusEnum.Active
-                                                                 && w.TotalRest > 0);
+                    var invoices = context.Invoices
+                        .Where(w => w.ClientId == allocation.ClientId && w.Statu == (int)InvoicePaymentStatuEnum.Pendient)
+                        .Select(s => new
+                        {
+                            InvoiceTickets = s.InvoiceTickets.Select(ss => new
+                            {
+                                ss.Quantity,
+                                ss.PricePerFraction
+                            }),
+                            ReceiptPayments = s.ReceiptPayments.Select(ss => new
+                            {
+                                ss.TotalCash,
+                                ss.TotalCheck,
+                                ss.TotalCredit,
+                                NoteCreditReceiptPayments = ss.NoteCreditReceiptPayments.Sum(sss => sss.TotalCash)
+                            })
+                        });
+
+                    var CashAdvances = context.NoteCredits
+                        .Where(w => w.ClientId == allocation.ClientId && (w.TypeNote == (int)NoteCreditEnum.CashAdvance || w.TypeNote == (int)NoteCreditEnum.PositiveBalance) &&
+                                    w.Statu == (int)GeneralStatusEnum.Active && w.TotalRest > 0);
+
                     var TotalEnConsignacion = 0.0m;
                     var totalCashAdvances = 0.0m;
-                    //var TotalEnFacturas = 0.0m;
+                    var TotalEnFacturas = 0.0m;
+                    var TotalEnPagos = 0.0m;
                     var TicketPrice = context.Prospect_Price.Where(w => w.ProspectId == allocation.Raffle.ProspectId && w.PriceId == allocation.Client.PriceId).FirstOrDefault().TicketPrice;
 
                     CashAdvances.ToList().ForEach(f => totalCashAdvances += f.TotalRest);
 
                     LastAllocations.ToList().ForEach(f => TotalEnConsignacion += f.TicketAllocationNumbers.Sum(s => ((s.FractionTo - s.FractionFrom) + 1) * TicketPrice));
+                    invoices.ToList().ForEach(f => TotalEnFacturas += f.InvoiceTickets.Sum(s => (s.Quantity * s.PricePerFraction)));
+                    invoices.ToList().ForEach(f => TotalEnPagos += f.ReceiptPayments.Sum(s => (s.TotalCash + s.TotalCheck + s.TotalCredit + s.NoteCreditReceiptPayments)));
 
-                    if ((((TotalEnConsignacion /*+ TotalEnFacturas*/) - ((TotalEnConsignacion * allocation.Client.Discount) / 100)) - totalCashAdvances) > allocation.Client.CreditLimit)
+                    if (((((TotalEnConsignacion + (TotalEnFacturas - TotalEnPagos)) * allocation.Client.Discount) / 100) - totalCashAdvances) > allocation.Client.CreditLimit)
                     {
                         Trans.Rollback();
                         return new RequestResponseModel()

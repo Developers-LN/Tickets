@@ -34,6 +34,7 @@ namespace Tickets.Models
             this.OtherIncomes1 = new HashSet<OtherIncome>();
             this.OtherIncomes2 = new HashSet<OtherIncome>();
             this.OtherIncomes3 = new HashSet<OtherIncome>();
+            this.OtherIncomeDetails = new HashSet<OtherIncomeDetail>();
         }
     
         public int Id { get; set; }
@@ -63,5 +64,6 @@ namespace Tickets.Models
         public virtual ICollection<OtherIncome> OtherIncomes1 { get; set; }
         public virtual ICollection<OtherIncome> OtherIncomes2 { get; set; }
         public virtual ICollection<OtherIncome> OtherIncomes3 { get; set; }
+        public virtual ICollection<OtherIncomeDetail> OtherIncomeDetails { get; set; }
     }
 }

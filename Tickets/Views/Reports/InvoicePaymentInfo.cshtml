@@ -95,7 +95,7 @@
                     <b>Factura: </b> @Model.Invoice.SequenceNumber
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0'))) 
+                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha: </b> @Model.CreateDate.ToShortDateString()
@@ -212,7 +212,7 @@
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
                         {
-                            @(context.NoteCreditReceiptPayments.FirstOrDefault(f=>f.ReceiptPaymentId == Model.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                            @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoNomina)
                         {
@@ -483,7 +483,7 @@
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CashAdvance)
                         {
-                            @(context.NoteCreditReceiptPayments.FirstOrDefault(f=>f.ReceiptPaymentId == Model.Id).TotalCash.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                            @(Model.NoteCreditReceiptPayments.Sum(s=>s.TotalCash).ToString("c", new System.Globalization.CultureInfo("es-DO")))
                         }
                         else if (Model.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.DescuentoNomina)
                         {

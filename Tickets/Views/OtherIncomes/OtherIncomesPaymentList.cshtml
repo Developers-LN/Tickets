@@ -39,7 +39,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="otherIncomesPayment in otherIncomesPayments">
-                                <td>{{otherIncomesPayment.SequenceNumber}}</td>
+                                <td>OT-{{otherIncomesPayment.SequenceNumber.toString().padStart(5, '0')}}</td>
                                 <td>{{otherIncomesPayment.NoCatalogAccount}}</td>
                                 <td>{{otherIncomesPayment.AccountName}}</td>
                                 <td>{{otherIncomesPayment.Description}}</td>

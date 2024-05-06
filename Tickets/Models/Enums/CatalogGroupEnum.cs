@@ -48,6 +48,7 @@
         DocumentType = 48,
         OriginAccount = 56,
         AccountType = 57,
-        PaymentPeriodicity = 58
+        PaymentPeriodicity = 58,
+        BankAccountCatalog = 59
     }
 }

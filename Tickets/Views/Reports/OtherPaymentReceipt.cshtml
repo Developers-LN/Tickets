@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "RECIBO DE INGRESO NO. " + Model.SequenceNumber.Value.ToString() + " DE FECHA " + Model.PaymentDate.Value.ToShortDateString();
+    ViewBag.Title = "RECIBO DE INGRESO NO. OT-" + Model.SequenceNumber.Value.ToString().PadLeft(5, '0') + " DE FECHA " + Model.PaymentDate.Value.ToShortDateString();
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -66,12 +66,15 @@
                 <b>Cliente: </b> @Model.OtherIncome.AccountName
             </div>
             <div class="col-lg-12 no-padder text-left">
-                <b>No. Cuenta: </b> @Model.OtherIncome.NoCatalogAccount
+                <b>No. Cuenta crédito: </b> @Model.OtherIncome.Description
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>No. Cuenta débito: </b> @Model.Catalog.NameDetail
             </div>
         </div>
         <div class="col-lg-6 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>Recibo: </b>RO-@Model.SequenceNumber 
+                <b>Recibo: </b>OT-@Model.SequenceNumber.ToString().PadLeft(5, '0') 
             </div>
             <div class="col-lg-12 no-padder text-right">
                 <b>Pagado en: </b> @Model.PaymentDate.Value.ToShortDateString()
@@ -102,7 +105,9 @@
     </div>
 
     <div class="col-lg-12 no-padder text-center">
-        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+        <br />
+        <br />
+        @*<div class="col-lg-4 col-md-6 col-sm-6 text-center">
             <div class="col-lg-12 no-padder text-center">
                 ______________________________
             </div>
@@ -118,7 +123,7 @@
                 ______________________________
             </div>
             Firma cajera
-        </div>
+        </div>*@
     </div>
     <div class="col-lg-12 no-padder text-center">
         <b>@adminName</b>
@@ -149,12 +154,15 @@
                 <b>Cliente: </b> @Model.OtherIncome.AccountName
             </div>
             <div class="col-lg-12 no-padder text-left">
-                <b>No. Cuenta: </b> @Model.OtherIncome.NoCatalogAccount
+                <b>No. Cuenta crédito: </b> @Model.OtherIncome.Description
+            </div>
+            <div class="col-lg-12 no-padder text-left">
+                <b>No. Cuenta débito: </b> @Model.Catalog.NameDetail
             </div>
         </div>
         <div class="col-lg-6 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>Recibo: </b>RO-@Model.SequenceNumber
+                <b>Recibo: </b>OT-@Model.SequenceNumber.ToString().PadLeft(5, '0')
             </div>
             <div class="col-lg-12 no-padder text-right">
                 <b>Pagado en: </b> @Model.PaymentDate.Value.ToShortDateString()
@@ -185,7 +193,9 @@
     </div>
 
     <div class="col-lg-12 no-padder text-center">
-        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+        <br />
+        <br />
+        @*<div class="col-lg-4 col-md-6 col-sm-6 text-center">
             <div class="col-lg-12 no-padder text-center">
                 ______________________________
             </div>
@@ -201,7 +211,7 @@
                 ______________________________
             </div>
             Firma cajera
-        </div>
+        </div>*@
     </div>
     <div class="col-lg-12 no-padder text-center">
         <b>@adminName</b>

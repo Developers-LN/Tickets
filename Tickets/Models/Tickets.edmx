@@ -425,6 +425,7 @@
           <Property Name="PaymentDate" Type="date" />
           <Property Name="OtherIncomeId" Type="int" />
           <Property Name="SequenceNumber" Type="int" />
+          <Property Name="BankAccountCatalogId" Type="int" />
         </EntityType>
         <EntityType Name="OverduelBill">
           <Key>
@@ -1212,6 +1213,18 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
             </Principal>
             <Dependent Role="AwardCertification">
               <PropertyRef Name="CreateUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankAccountCatalogId_OtherIncomeDetails">
+          <End Role="Catalog" Type="Self.Catalog" Multiplicity="0..1" />
+          <End Role="OtherIncomeDetails" Type="Self.OtherIncomeDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OtherIncomeDetails">
+              <PropertyRef Name="BankAccountCatalogId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2658,6 +2671,10 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             <End Role="User" EntitySet="User" />
             <End Role="AwardCertification" EntitySet="AwardCertification" />
           </AssociationSet>
+          <AssociationSet Name="FK_BankAccountCatalogId_OtherIncomeDetails" Association="Self.FK_BankAccountCatalogId_OtherIncomeDetails">
+            <End Role="Catalog" EntitySet="Catalog" />
+            <End Role="OtherIncomeDetails" EntitySet="OtherIncomeDetails" />
+          </AssociationSet>
           <AssociationSet Name="FK_Cash_Agency" Association="Self.FK_Cash_Agency">
             <End Role="Agency" EntitySet="Agency" />
             <End Role="Cash" EntitySet="Cash" />
@@ -3685,6 +3702,10 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             <End Role="User" EntitySet="Users" />
             <End Role="OtherIncomeDetail" EntitySet="OtherIncomeDetails" />
           </AssociationSet>
+          <AssociationSet Name="FK_BankAccountCatalogId_OtherIncomeDetails" Association="TicketsModel.FK_BankAccountCatalogId_OtherIncomeDetails">
+            <End Role="Catalog" EntitySet="Catalogs" />
+            <End Role="OtherIncomeDetail" EntitySet="OtherIncomeDetails" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Agency">
           <Key>
@@ -3807,6 +3828,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="OtherIncomes1" Relationship="TicketsModel.FK_Origin_OtherIncome_Catalog" FromRole="Catalog" ToRole="OtherIncome" />
           <NavigationProperty Name="OtherIncomes2" Relationship="TicketsModel.FK_Periodicity_OtherIncome_Catalog" FromRole="Catalog" ToRole="OtherIncome" />
           <NavigationProperty Name="OtherIncomes3" Relationship="TicketsModel.FK_Status_OtherIncome_Catalog" FromRole="Catalog" ToRole="OtherIncome" />
+          <NavigationProperty Name="OtherIncomeDetails" Relationship="TicketsModel.FK_BankAccountCatalogId_OtherIncomeDetails" FromRole="Catalog" ToRole="OtherIncomeDetail" />
         </EntityType>
         <EntityType Name="CertificationNumber">
           <Key>
@@ -6354,6 +6376,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="SequenceNumber" Type="Int32" />
           <NavigationProperty Name="OtherIncome" Relationship="TicketsModel.FK_ListAccountsOtherIncomeId_OtherIncomeDetails_OtherIncome" FromRole="OtherIncomeDetail" ToRole="OtherIncome" />
           <NavigationProperty Name="User" Relationship="TicketsModel.FK_CreateUser_OtherIncomeDetails_User" FromRole="OtherIncomeDetail" ToRole="User" />
+          <Property Name="BankAccountCatalogId" Type="Int32" />
+          <NavigationProperty Name="Catalog" Relationship="TicketsModel.FK_BankAccountCatalogId_OtherIncomeDetails" FromRole="OtherIncomeDetail" ToRole="Catalog" />
         </EntityType>
         <Association Name="FK_AccountType_OtherIncome_Catalog">
           <End Type="TicketsModel.Catalog" Role="Catalog" Multiplicity="0..1" />
@@ -6436,6 +6460,18 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
             </Principal>
             <Dependent Role="OtherIncomeDetail">
               <PropertyRef Name="CreateUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankAccountCatalogId_OtherIncomeDetails">
+          <End Type="TicketsModel.Catalog" Role="Catalog" Multiplicity="0..1" />
+          <End Type="TicketsModel.OtherIncomeDetail" Role="OtherIncomeDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OtherIncomeDetail">
+              <PropertyRef Name="BankAccountCatalogId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7453,6 +7489,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="OtherIncomeDetails">
             <EntityTypeMapping TypeName="TicketsModel.OtherIncomeDetail">
               <MappingFragment StoreEntitySet="OtherIncomeDetails">
+                <ScalarProperty Name="BankAccountCatalogId" ColumnName="BankAccountCatalogId" />
                 <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="OtherIncomeId" ColumnName="OtherIncomeId" />
                 <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />

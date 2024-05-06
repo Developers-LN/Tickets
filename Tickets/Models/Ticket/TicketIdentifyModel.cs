@@ -976,7 +976,7 @@ namespace Tickets.Models.Ticket
                                 Cedula = newWinner.DocumentNumber,
                                 Telefono = newWinner.Phone,*/
                                 Notas = identifyBach.Notes,
-                                IdentifyType = (int)IdentifyBachTypeEnum.Gamers,
+                                IdentifyType = (int)IdentifyBachTypeEnum.Sellers,
                                 WinnerId = newWinner.Id
                             };
 

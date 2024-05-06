@@ -145,6 +145,7 @@ namespace Tickets.Controllers
                             otherIncomePayement.CreateUser = WebSecurity.CurrentUserId;
                             otherIncomePayement.PaymentDate = otherIncomePayement.PaymentDate;
                             otherIncomePayement.OtherIncomeId = otherIncomePayement.OtherIncomeId;
+                            otherIncomePayement.BankAccountCatalogId = otherIncomePayement.BankAccountCatalogId;
                             context.OtherIncomeDetails.Add(otherIncomePayement);
                             context.SaveChanges();
                         }
@@ -286,16 +287,19 @@ namespace Tickets.Controllers
                 g.Id,
                 Name = g.NameDetail
             });
+
             var otherIncomeTypes = context.Catalogs.Where(c => c.IdGroup == (int)CatalogGroupEnum.AccountType).Select(g => new
             {
                 g.Id,
                 Name = g.NameDetail
             });
+
             var periodicities = context.Catalogs.Where(c => c.IdGroup == (int)CatalogGroupEnum.PaymentPeriodicity).Select(g => new
             {
                 g.Id,
                 Name = g.NameDetail
             });
+
             var status = context.Catalogs.Where(c => c.IdGroup == (int)CatalogGroupEnum.GeneralStatus).Select(g => new
             {
                 g.Id,
@@ -312,7 +316,13 @@ namespace Tickets.Controllers
             var context = new TicketsEntities();
             var otherIncome = context.OtherIncomes.AsEnumerable().Where(a => a.Status == (int)GeneralStatusEnum.Active).Select(e => OtherIncomeToObject(e)).ToList();
 
-            return new JsonResult() { Data = new { otherIncome }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            var bankAccount = context.Catalogs.Where(c => c.IdGroup == (int)CatalogGroupEnum.BankAccountCatalog).Select(g => new
+            {
+                g.Id,
+                Name = g.NameDetail
+            });
+
+            return new JsonResult() { Data = new { otherIncome, bankAccount }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         private object OtherIncomeToObject(OtherIncome c)

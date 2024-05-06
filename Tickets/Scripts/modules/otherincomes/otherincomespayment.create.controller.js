@@ -27,6 +27,9 @@
             if (otherIncomePayement.OtherIncomeId === undefined) {
                 error += 'La cuenta de otros ingresos' + isReq;
             }
+            if (otherIncomePayement.BankAccountCatalogId === undefined) {
+                error += 'La cuenta de banco' + isReq;
+            }
             if (error !== '') {
                 alertify.showError('Alerta', error);
             }
@@ -42,6 +45,7 @@
                 CreateUser: undefined,
                 PaymentDate: undefined,
                 OtherIncomeId: undefined,
+                BankAccountCatalogId: undefined,
                 SequenceNumber: undefined
             };
         }
@@ -82,6 +86,7 @@
                 success: function (data) {
                     window.loading.hide();
                     $scope.otherIncomeList = data.otherIncome;
+                    $scope.bankAccountList = data.bankAccount;
 
                     if ($stateParams.otherincomePaymentId == 0) {
                         self.clearOtherIncomePayment();
