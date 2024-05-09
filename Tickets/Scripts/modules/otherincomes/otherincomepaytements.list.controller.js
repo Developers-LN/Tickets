@@ -17,10 +17,10 @@
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                url: 'OtherIncomes/GetList',
+                url: 'OtherIncomes/GetOtherIncomeGroupsList',
                 success: function (data) {
                     window.loading.hide();
-                    $scope.otherIncomesList = data.otherIncomes;
+                    $scope.otherIncomesGroupList = data.otherIncomesGroup;
 
                     $scope.$apply();
                     $rootScope.createSelect2();
@@ -29,7 +29,7 @@
         }
 
         $scope.changeValues = function () {
-            if ($scope.otherIncomeId == 0) {
+            if ($scope.otherIncomeGroupId == 0) {
                 return;
             }
 
@@ -37,7 +37,7 @@
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                url: 'OtherIncomes/GetOtherIncomePaymentList?otherIncomeId=' + $scope.otherIncomeId,
+                url: 'OtherIncomes/GetOtherIncomePaymentList?otherIncomeGroupId=' + $scope.otherIncomeGroupId,
                 success: function (response) {
                     window.loading.hide();
                     console.log(response);

@@ -12,24 +12,24 @@ namespace Tickets.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class OtherIncomeDetail
+    public partial class OtherIncomesGroup
     {
+        public OtherIncomesGroup()
+        {
+            this.OtherIncomeDetails = new HashSet<OtherIncomeDetail>();
+        }
+    
         public int Id { get; set; }
-        public Nullable<decimal> Total { get; set; }
         public string Description { get; set; }
-        public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<int> CreateUser { get; set; }
-        public Nullable<System.DateTime> PaymentDate { get; set; }
-        public Nullable<int> OtherIncomeId { get; set; }
-        public Nullable<int> SequenceNumber { get; set; }
-        public Nullable<int> BankAccountCatalogId { get; set; }
-        public Nullable<int> OtherIncomeGroupId { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<int> Status { get; set; }
         public string Symbol { get; set; }
         public Nullable<int> LengthZero { get; set; }
+        public Nullable<int> SequenceNumber { get; set; }
     
-        public virtual OtherIncome OtherIncome { get; set; }
-        public virtual User User { get; set; }
         public virtual Catalog Catalog { get; set; }
-        public virtual OtherIncomesGroup OtherIncomesGroup { get; set; }
+        public virtual ICollection<OtherIncomeDetail> OtherIncomeDetails { get; set; }
+        public virtual User User { get; set; }
     }
 }

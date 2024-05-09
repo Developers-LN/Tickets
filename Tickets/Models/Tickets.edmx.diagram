@@ -199,6 +199,10 @@
         <AssociationConnector Association="TicketsModel.FK_ListAccountsOtherIncomeId_OtherIncomeDetails_OtherIncome" />
         <AssociationConnector Association="TicketsModel.FK_CreateUser_OtherIncomeDetails_User" />
         <AssociationConnector Association="TicketsModel.FK_BankAccountCatalogId_OtherIncomeDetails" />
+        <EntityTypeShape EntityType="TicketsModel.OtherIncomesGroup" Width="1.5" PointX="19.25" PointY="66" />
+        <AssociationConnector Association="TicketsModel.FK_Status_OtherIncomesGroup_Catalog" />
+        <AssociationConnector Association="TicketsModel.FK_OtherIncomeGroupId_OtherIncome_OtherIncomesGroup" />
+        <AssociationConnector Association="TicketsModel.FK_CreateUser_OtherIncomesGroup_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -11,43 +11,40 @@
                 <div class="col-lg-8 text-left m-b-xs no-padder">
                     <fieldset>
                         <div class="form-group">
-                            <label class="col-lg-12 control-label-left">Otros ingresos:  <span class="color-red">*</span></label>
+                            <label class="col-lg-12 control-label-left">Grupo de otros ingresos:  <span class="color-red">*</span></label>
                             <div class="col-lg-12">
-                                <select ng-required="true" class="form-control dropdown-select2" ng-model="otherIncomeId" ng-change="changeValues()">
-                                    <option selected="selected" disabled="disabled" value="0">Seleccione una opción</option>
-                                    <option ng-repeat="otherIncome in otherIncomesList" value="{{otherIncome.Id}}">{{otherIncome.NoCatalogAccount}} - {{otherIncome.AccountName}}</option>
+                                <select ng-required="true" class="form-control dropdown-select2" ng-model="otherIncomeGroupId" ng-change="changeValues()">
+                                    <option selected="selected" disabled="disabled" value="0">Todos los grupos</option>
+                                    <option ng-repeat="otherIncomeGroup in otherIncomesGroupList" value="{{otherIncomeGroup.Id}}">{{otherIncomeGroup.Text}}</option>
                                 </select>
                             </div>
                         </div>
                     </fieldset>
                 </div>
                 <div class="col-lg-4 text-right m-b-xs no-padder">
-                    <a href="#/others/otherIncomesPayment/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Agregar pago</a>
+                    <a href="#/others/otherIncomeGroup/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Agregar grupo de pago</a>
                 </div>
                 <div class="row-border hover">
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
-                                <th>Recibo</th>
-                                <th>Cuenta</th>
-                                <th>Nombre de cuenta</th>
+                                <th>Cuentas</th>
                                 <th>Descripción</th>
-                                <th>Fecha de pago</th>
+                                <th>Fecha de creación</th>
                                 <th>Total</th>
                                 <th class="editColumm">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="otherIncomesPayment in otherIncomesPayments">
-                                <td>OT-{{otherIncomesPayment.SequenceNumber.toString().padStart(5, '0')}}</td>
-                                <td>{{otherIncomesPayment.NoCatalogAccount}}</td>
-                                <td>{{otherIncomesPayment.AccountName}}</td>
+                                <td>{{otherIncomesPayment.Accounts}}</td>
                                 <td>{{otherIncomesPayment.Description}}</td>
-                                <td>{{(otherIncomesPayment.PaymentDate| date:"dd/MM/yyyy")}}</td>
+                                <td>{{(otherIncomesPayment.CreateDate| date:"dd/MM/yyyy")}}</td>
                                 <td>{{parseMoney(otherIncomesPayment.Total)}}</td>
                                 <td>
                                     <a href="#/others/otherIncomes/{{otherIncomesPayment.Id}}" title="Modificar cuenta" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
-                                    <a target="_blank" href="/Reports/OtherPaymentReceipt?paymentId={{otherIncomesPayment.Id}}" title="Reporte de pago"><i class="fa fa-print"></i></a>
+                                    <a ng-show="verifyCanView('app.otherIncomePaymentByGroup')" href="#/others/otherIncomePaymentByGroup/{{otherIncomesPayment.Id}}" title="Lista de pagos" class="{{moduleCanView}}"><i class="fa fa-file-text-o"></i></a>
+                                    <a target="_blank" href="/Reports/OtherPaymentGroup?groupId={{otherIncomesPayment.Id}}" title="Reporte de pago"><i class="fa fa-print"></i></a>
                                 </td>
                             </tr>
                         </tbody>

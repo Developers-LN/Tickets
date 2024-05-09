@@ -9,13 +9,14 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-lg-12 m-b-xs no-padder">
-                    <input type="hidden" ng-model="otherIncomePayement.Id" />
+                    <input type="hidden" ng-model="otherIncomePayment.Id" />
+                    <input type="hidden" ng-model="otherIncomePayment.OtherIncomesGroupId" />
                     <div class="col-lg-12 no-padder">
                         <fieldset>
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Tipo de cuenta: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="otherIncomePayement.OtherIncomeId">
+                                    <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="otherIncomePayment.OtherIncomeId">
                                         <option selected="selected" disabled="disabled" value="0">Seleccione una opción</option>
                                         <option ng-repeat="otherIncome in otherIncomeList" value="{{otherIncome.Id}}">{{otherIncome.NoCatalogAccount}} - {{otherIncome.AccountName}}</option>
                                     </select>
@@ -29,7 +30,7 @@
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Fecha de pago:  <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
-                                        <input type="date" ng-model="otherIncomePayement.PaymentDate" class="form-control input-sm" ng-required="true" maxlength="100" />
+                                        <input type="date" ng-model="otherIncomePayment.PaymentDate" class="form-control input-sm" ng-required="true" maxlength="100" />
                                     </div>
                                 </div>
                             </fieldset>
@@ -39,7 +40,7 @@
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Total pagado:  <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
-                                        <input type="number" ng-model="otherIncomePayement.Total" class="form-control input-sm" ng-required="true" maxlength="100" />
+                                        <input type="number" ng-model="otherIncomePayment.TotalPayment" class="form-control input-sm" ng-required="true" maxlength="100" />
                                     </div>
                                 </div>
                             </fieldset>
@@ -49,7 +50,7 @@
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Cuenta de banco: <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
-                                        <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="otherIncomePayement.BankAccountCatalogId">
+                                        <select ng-required="true" class="form-control input-sm dropdown-select2" ng-model="otherIncomePayment.BankAccountCatalogId">
                                             <option selected="selected" disabled="disabled" value="0">Seleccione una opción</option>
                                             <option ng-repeat="bankAccount in bankAccountList" value="{{bankAccount.Id}}">{{bankAccount.Name}}</option>
                                         </select>
@@ -61,9 +62,9 @@
                     <div class="col-lg-12 no-padder">
                         <fieldset>
                             <div class="form-group">
-                                <label class="col-lg-12 control-label-left">Descripción: <span class="color-red">*</span></label>
+                                <label class="col-lg-12 control-label-left">Descripción del pago: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <textarea class="form-control input-sm" style="height: 150px;" ng-required="true" ng-model="otherIncomePayement.Description"></textarea>
+                                    <textarea class="form-control input-sm" style="height: 100px;" ng-required="true" ng-model="otherIncomePayment.OtherIncomeDetailDescription"></textarea>
                                 </div>
                             </div>
                         </fieldset>

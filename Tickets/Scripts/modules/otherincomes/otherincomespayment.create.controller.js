@@ -13,21 +13,21 @@
     function OtherIncomesPaymentCreateController($scope, $rootScope, $state, $stateParams) {
         var self = this;
 
-        this.validateOtherIncomePaymentData = function (otherIncomePayement) {
+        this.validateOtherIncomePaymentData = function (otherIncomePayment) {
             var error = '', isReq = ' es un campo requerido. <br>';
-            if (otherIncomePayement.Total === undefined) {
+            if (otherIncomePayment.TotalPayment === undefined) {
                 error += 'El monto pagado' + isReq;
             }
-            if (otherIncomePayement.Description === undefined) {
-                error += 'La descripcion' + isReq;
+            if (otherIncomePayment.OtherIncomeDetailDescription === undefined) {
+                error += 'La descripcion de pago' + isReq;
             }
-            if (otherIncomePayement.PaymentDate === undefined) {
+            if (otherIncomePayment.PaymentDate === undefined) {
                 error += 'La fecha de pago' + isReq;
             }
-            if (otherIncomePayement.OtherIncomeId === undefined) {
+            if (otherIncomePayment.OtherIncomeId === undefined) {
                 error += 'La cuenta de otros ingresos' + isReq;
             }
-            if (otherIncomePayement.BankAccountCatalogId === undefined) {
+            if (otherIncomePayment.BankAccountCatalogId === undefined) {
                 error += 'La cuenta de banco' + isReq;
             }
             if (error !== '') {
@@ -37,24 +37,23 @@
         }
 
         this.clearOtherIncomePayment = function () {
-            $scope.otherIncomePayement = {
+            $scope.otherIncomePayment = {
                 Id: 0,
-                Total: undefined,
-                Description: undefined,
-                CreateDate: undefined,
-                CreateUser: undefined,
-                PaymentDate: undefined,
+                OtherIncomesGroupId: 0,
                 OtherIncomeId: undefined,
-                BankAccountCatalogId: undefined,
-                SequenceNumber: undefined
+                OtherIncomesGroupDescription: undefined,
+                OtherIncomeDetailDescription: undefined,
+                TotalPayment: undefined,
+                PaymentDate: undefined,
+                BankAccountCatalogId: undefined
             };
         }
 
         $scope.saveOtherIncomePaymentForm = function () {
             try {
-                $scope.otherIncomePayement.PaymentDate = $rootScope.parseDate($scope.otherIncomePayement.PaymentDate, $scope.otherIncomePayement.PaymentDate).toJSON();
+                $scope.otherIncomePayment.PaymentDate = $rootScope.parseDate($scope.otherIncomePayment.PaymentDate, $scope.otherIncomePayment.PaymentDate).toJSON();
             } catch (e) { }
-            if (self.validateOtherIncomePaymentData($scope.otherIncomePayement) === false) {
+            if (self.validateOtherIncomePaymentData($scope.otherIncomePayment) === false) {
                 return;
             }
             window.loading.show();
@@ -62,14 +61,14 @@
                 type: 'POST',
                 dataType: 'json',
                 url: 'OtherIncomes/CreatePayment',
-                data: $scope.otherIncomePayement,
+                data: $scope.otherIncomePayment,
                 success: function (data) {
                     window.loading.hide();
                     console.log(data);
                     if (data.result == true) {
                         window.open('/Reports/OtherPaymentReceipt?paymentId=' + data.paymentId);
+                        window.location.href = '#/others/otherIncomePaymentByGroup/' + data.groupId;
                         alertify.success('Cuenta guardada correctamente!');
-                        $state.go('app.otherincomesPaymentsList');
                     } else {
                         alertify.alert(data.message);
                     }
@@ -78,20 +77,29 @@
         }
 
         this.loadOtherIncomePaymentData = function () {
-            window.loading.show();
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                url: 'OtherIncomes/GetOtherIncomeList',
+                url: 'OtherIncomes/GetOtherIncomeDetailData?otherincomeGroupId=' + $stateParams.otherIncomeGroupId,
                 success: function (data) {
+                    console.log(data);
                     window.loading.hide();
                     $scope.otherIncomeList = data.otherIncome;
                     $scope.bankAccountList = data.bankAccount;
 
-                    if ($stateParams.otherincomePaymentId == 0) {
+                    if ($stateParams.otherIncomeGroupId == 0) {
                         self.clearOtherIncomePayment();
                     } else {
-                        $scope.otherIncomePayement = data.otherIncomePayement;
+                        $scope.otherIncomePayment = {
+                            Id: 0,
+                            OtherIncomesGroupId: data.otherIncomeGroup,
+                            OtherIncomeId: undefined,
+                            OtherIncomesGroupDescription: undefined,
+                            OtherIncomeDetailDescription: undefined,
+                            TotalPayment: undefined,
+                            PaymentDate: undefined,
+                            BankAccountCatalogId: undefined
+                        };
                     }
                     if (!$scope.$$phase) {
                         window.setTimeout(function () {

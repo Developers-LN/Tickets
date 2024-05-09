@@ -281,14 +281,24 @@
                 templateUrl: Route.base('OtherIncomes/OtherIncomesPaymentHistory'),
                 resolve: {}
             })
+            .state('app.otherIncomePaymentByGroup', {
+                url: '/others/otherIncomePaymentByGroup/:otherIncomeGroupId',
+                templateUrl: Route.base('OtherIncomes/OtherIncomePaymentByGroup'),
+                resolve: {}
+            })
             .state('app.otherincomesPaymentsList', {
                 url: '/others/otherIncomesPayment',
                 templateUrl: Route.base('OtherIncomes/OtherIncomesPaymentList'),
                 resolve: {}
             })
             .state('app.otherIncomeAccountPayment', {
-                url: '/others/otherIncomesPayment/:otherincomePaymentId',
+                url: '/others/otherIncomesPayment/:otherIncomeGroupId',
                 templateUrl: Route.base('OtherIncomes/CreatePayment'),
+                resolve: {}
+            })
+            .state('app.otherIncomeGroupPayment', {
+                url: '/others/otherIncomeGroup/:otherIncomeGroupId',
+                templateUrl: Route.base('OtherIncomes/CreateGroupPayment'),
                 resolve: {}
             })
             .state('app.winnersList', {

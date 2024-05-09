@@ -43,6 +43,7 @@ namespace Tickets.Models
             this.TaxReceipts = new HashSet<TaxReceipt>();
             this.OtherIncomes = new HashSet<OtherIncome>();
             this.OtherIncomeDetails = new HashSet<OtherIncomeDetail>();
+            this.OtherIncomesGroups = new HashSet<OtherIncomesGroup>();
         }
     
         public int Id { get; set; }
@@ -80,5 +81,6 @@ namespace Tickets.Models
         public virtual ICollection<TaxReceipt> TaxReceipts { get; set; }
         public virtual ICollection<OtherIncome> OtherIncomes { get; set; }
         public virtual ICollection<OtherIncomeDetail> OtherIncomeDetails { get; set; }
+        public virtual ICollection<OtherIncomesGroup> OtherIncomesGroups { get; set; }
     }
 }

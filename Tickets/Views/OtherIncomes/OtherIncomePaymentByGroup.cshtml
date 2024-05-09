@@ -1,0 +1,61 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Listado de pagos del grupo";
+}
+
+<div class="col-lg-12 no-padder" ng-controller="OtherIncomesGroupHistoryController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div class="col-lg-12 well no-padder">
+                    <fieldset>
+                        <div class="col-lg-12 no-padder">
+                            <div class="col-lg-4">Creado en: <b> {{(CreateDate | date:"dd/MM/yyyy")}}</b></div>
+                            <div class="col-lg-4">Estado: <b> {{statusDesc}}</b></div>
+                        </div>
+                    </fieldset>
+                    <br />
+                    <fieldset>
+                        <div class="col-lg-12 no-padder">
+                            <div class="col-lg-12">Descripción: <b>{{Description}}</b></div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-12 no-padder text-center">
+                    <a href="#/others/otherIncomesPayment/{{Id}}" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Agregar grupo de pago</a>
+                </div>
+
+                <div class="row-border hover">
+                    <table class="table dataTableGrid">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Recibo</th>
+                                <th class="text-center">Descripción</th>
+                                <th class="text-center">Fecha de pago</th>
+                                <th class="text-center">Total pagado</th>
+                                <th class="text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="payment in payments">
+                                <td class="text-center">{{payment.SequenceNumber}}</td>
+                                <td class="text-center">{{payment.Description}}</td>
+                                <td class="text-center">{{(payment.PaymentDate| date:"dd/MM/yyyy")}}</td>
+                                <td class="text-center">{{parseMoney(payment.Total)}}</td>
+                                <td class="text-center">
+                                    <a target="_blank" href="/Reports/OtherPaymentReceipt?paymentId={{payment.Id}}" title="Reporte de pago"><i class="fa fa-print"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- END table-responsive-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 no-padder text-left m-b-lg">
+    <a ui-sref="app.otherincomesPaymentsList" class="mr btn btn-square btn-default"><i class="fa fa-arrow-left "></i> Salir</a>
+</div>

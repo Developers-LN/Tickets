@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Grupo de otros ingresos";
+}
+
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="OtherIncomesGroupCreateController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-12 m-b-xs no-padder">
+                    <input type="hidden" ng-model="otherIncomeGroup.Id" />
+                    <div class="col-lg-12 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Descripción del grupo de ingreso: <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <textarea class="form-control input-sm" style="height: 100px;" ng-required="true" ng-model="otherIncomeGroup.Description"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a ui-sref="app.otherincomesPaymentsList" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
+        <a ng-click="saveOtherIncomeGroupPaymentForm()" class="mr btn btn-square btn-primary {{otherIncomeGroup.Id > 0? moduleCanEdit: moduleCanAdd }}"><i class="fa fa-floppy-o"></i> Guardar</a>
+    </div>
+</div>

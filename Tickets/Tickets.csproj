@@ -442,6 +442,9 @@
     <Compile Include="Models\OtherIncomeDetail.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OtherIncomesGroup.cs">
+      <DependentUpon>Tickets.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OverduelBill.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
     </Compile>
@@ -561,6 +564,8 @@
     </Compile>
     <Compile Include="Models\Ticket\ElectronicSalesModel.cs" />
     <Compile Include="Models\Ticket\ElectronicSalesNumberModel.cs" />
+    <Compile Include="Models\Ticket\OtherIncomesGroupModel.cs" />
+    <Compile Include="Models\Ticket\OtherIncomesModel.cs" />
     <Compile Include="Models\Ticket\TicketAllocationSerieModel.cs" />
     <Compile Include="Models\Ticket\TicketReturnedModel.cs" />
     <Compile Include="Models\Ticket\TicketInvoiceNumberModel.cs" />
@@ -913,6 +918,8 @@
     <Content Include="Scripts\modules\otherincomes\otherincomepaytements.list.controller.js" />
     <Content Include="Scripts\modules\otherincomes\otherincomes.create.controller.js" />
     <Content Include="Scripts\modules\otherincomes\otherincomes.list.controller.js" />
+    <Content Include="Scripts\modules\otherincomes\otherincomesbygroup.list.controller.js" />
+    <Content Include="Scripts\modules\otherincomes\otherincomesgroup.create.controller.js" />
     <Content Include="Scripts\modules\otherincomes\otherincomespayment.create.controller.js" />
     <Content Include="Scripts\modules\otherincomes\otherincomespayment.history.controller.js" />
     <Content Include="Scripts\modules\prospect\all.prospect.controller.js">
@@ -3301,6 +3308,9 @@
     <Content Include="Views\OtherIncomes\CreatePayment.cshtml" />
     <Content Include="Views\Reports\OtherPaymentReceipt.cshtml" />
     <Content Include="Views\OtherIncomes\OtherIncomesPaymentHistory.cshtml" />
+    <Content Include="Views\OtherIncomes\OtherIncomePaymentByGroup.cshtml" />
+    <Content Include="Views\OtherIncomes\CreateGroupPayment.cshtml" />
+    <Content Include="Views\Reports\OtherPaymentGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

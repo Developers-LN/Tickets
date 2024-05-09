@@ -91,6 +91,7 @@ namespace Tickets.Models
         public DbSet<ElectronicAwardPayed> ElectronicAwardPayeds { get; set; }
         public DbSet<OtherIncome> OtherIncomes { get; set; }
         public DbSet<OtherIncomeDetail> OtherIncomeDetails { get; set; }
+        public DbSet<OtherIncomesGroup> OtherIncomesGroups { get; set; }
     
         public virtual int procDelOverduelBill()
         {

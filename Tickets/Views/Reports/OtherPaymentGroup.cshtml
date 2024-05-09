@@ -1,8 +1,8 @@
-﻿@model Tickets.Models.OtherIncomeDetail
+﻿@model Tickets.Models.OtherIncomesGroup
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "RECIBO DE INGRESO NO. " + Model.Symbol + Model.SequenceNumber.Value.ToString().PadLeft(Model.LengthZero.Value, '0') + " DE FECHA " + Model.PaymentDate.Value.ToShortDateString();
+    ViewBag.Title = "GRUPO DE INGRESOS " + Model.Symbol + Model.SequenceNumber.Value.ToString().PadLeft(Model.LengthZero.Value, '0') + " DE FECHA " + Model.CreateDate.Value.ToShortDateString();
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
@@ -58,26 +58,17 @@
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>
-                RECIBO DE PAGO POR OTROS INGRESOS <br />
+                GRUPO DE OTROS INGRESOS <br />
             </b>
         </div>
-        <div class="col-lg-6 no-padder">
+        <div class="col-lg-9 no-padder text-left">
             <div class="col-lg-12 no-padder text-left">
-                <b>Cliente: </b> @Model.OtherIncome.AccountName
-            </div>
-            <div class="col-lg-12 no-padder text-left">
-                <b>No. Cuenta crédito: </b> @Model.OtherIncome.Description
-            </div>
-            <div class="col-lg-12 no-padder text-left">
-                <b>No. Cuenta débito: </b> @Model.Catalog.NameDetail
+                <b>Descripción: </b>@Model.Description
             </div>
         </div>
-        <div class="col-lg-6 no-padder text-right">
+        <div class="col-lg-3 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
-                <b>Recibo: </b>@(Model.Symbol + Model.SequenceNumber.Value.ToString().PadLeft(Model.LengthZero.Value, '0')) 
-            </div>
-            <div class="col-lg-12 no-padder text-right">
-                <b>Pagado en: </b> @Model.PaymentDate.Value.ToShortDateString()
+                <b>Recibo: </b>@(Model.Symbol + Model.SequenceNumber.Value.ToString().PadLeft(Model.LengthZero.Value, '0'))
             </div>
             <div class="col-lg-12 no-padder text-right">
                 <b>Creado en: </b> @Model.CreateDate.Value.ToShortDateString() - @Model.CreateDate.Value.ToShortTimeString()
@@ -88,42 +79,56 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th class="text-center">Concepto</th>
+                    <th class="text-center">No. recibo</th>
+                    <th>Concepto</th>
+                    <th class="text-center">Fecha de pago</th>
                     <th class="text-right" style="width:200px;">Monto</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="text-center">
-                        @Model.Description
-                    </td>
-                    <td class="text-right">
-                        @(Model.Total.Value.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                    </td>
-                </tr>
+                @foreach (var item in Model.OtherIncomeDetails)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @(item.Symbol + item.SequenceNumber.Value.ToString().PadLeft(item.LengthZero.Value, '0'))
+                        </td>
+                        <td>
+                            @item.Description
+                        </td>
+                        <td class="text-center">
+                            @item.PaymentDate.Value.ToShortDateString()
+                        </td>
+                        <td class="text-right">
+                            @(item.Total.Value.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        </td>
+                    </tr>
+                }
+            </tbody>
         </table>
     </div>
 
     <div class="col-lg-12 no-padder text-center">
         <br />
         <br />
-        @*<div class="col-lg-4 col-md-6 col-sm-6 text-center">
-            <div class="col-lg-12 no-padder text-center">
-                ______________________________
+        @*
+            <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+                <div class="col-lg-12 no-padder text-center">
+                    ______________________________
+                </div>
+                Firma Del Cliente
             </div>
-            Firma Del Cliente
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
-            <div class="col-lg-12 no-padder text-center">
+            <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+                <div class="col-lg-12 no-padder text-center">
 
+                </div>
             </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
-            <div class="col-lg-12 no-padder text-center">
-                ______________________________
+            <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+                <div class="col-lg-12 no-padder text-center">
+                    ______________________________
+                </div>
+                Firma cajera
             </div>
-            Firma cajera
-        </div>*@
+        *@
     </div>
     <div class="col-lg-12 no-padder text-center">
         <b>@adminName</b>
@@ -149,23 +154,14 @@
                 RECIBO DE PAGO POR OTROS INGRESOS <br />
             </b>
         </div>
-        <div class="col-lg-6 no-padder">
+        <div class="col-lg-9 no-padder text-left">
             <div class="col-lg-12 no-padder text-left">
-                <b>Cliente: </b> @Model.OtherIncome.AccountName
-            </div>
-            <div class="col-lg-12 no-padder text-left">
-                <b>No. Cuenta crédito: </b> @Model.OtherIncome.Description
-            </div>
-            <div class="col-lg-12 no-padder text-left">
-                <b>No. Cuenta débito: </b> @Model.Catalog.NameDetail
+                <b>Descripción: </b>@Model.Description
             </div>
         </div>
-        <div class="col-lg-6 no-padder text-right">
+        <div class="col-lg-3 no-padder text-right">
             <div class="col-lg-12 no-padder text-right">
                 <b>Recibo: </b>@(Model.Symbol + Model.SequenceNumber.Value.ToString().PadLeft(Model.LengthZero.Value, '0'))
-            </div>
-            <div class="col-lg-12 no-padder text-right">
-                <b>Pagado en: </b> @Model.PaymentDate.Value.ToShortDateString()
             </div>
             <div class="col-lg-12 no-padder text-right">
                 <b>Creado en: </b> @Model.CreateDate.Value.ToShortDateString() - @Model.CreateDate.Value.ToShortTimeString()
@@ -176,42 +172,56 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th class="text-center">Concepto</th>
+                    <th class="text-center">No. recibo</th>
+                    <th>Concepto</th>
+                    <th class="text-center">Fecha de pago</th>
                     <th class="text-right" style="width:200px;">Monto</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="text-center">
-                        @Model.Description
-                    </td>
-                    <td class="text-right">
-                        @(Model.Total.Value.ToString("c", new System.Globalization.CultureInfo("es-DO")))
-                    </td>
-                </tr>
+                @foreach (var item in Model.OtherIncomeDetails)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @(item.Symbol + item.SequenceNumber.Value.ToString().PadLeft(item.LengthZero.Value, '0'))
+                        </td>
+                        <td>
+                            @item.Description
+                        </td>
+                        <td class="text-center">
+                            @item.PaymentDate.Value.ToShortDateString()
+                        </td>
+                        <td class="text-right">
+                            @(item.Total.Value.ToString("c", new System.Globalization.CultureInfo("es-DO")))
+                        </td>
+                    </tr>
+                }
+            </tbody>
         </table>
     </div>
 
     <div class="col-lg-12 no-padder text-center">
         <br />
         <br />
-        @*<div class="col-lg-4 col-md-6 col-sm-6 text-center">
-            <div class="col-lg-12 no-padder text-center">
-                ______________________________
+        @*
+            <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+                <div class="col-lg-12 no-padder text-center">
+                    ______________________________
+                </div>
+                Firma Del Cliente
             </div>
-            Firma Del Cliente
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
-            <div class="col-lg-12 no-padder text-center">
+            <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+                <div class="col-lg-12 no-padder text-center">
 
+                </div>
             </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-6 text-center">
-            <div class="col-lg-12 no-padder text-center">
-                ______________________________
+            <div class="col-lg-4 col-md-6 col-sm-6 text-center">
+                <div class="col-lg-12 no-padder text-center">
+                    ______________________________
+                </div>
+                Firma cajera
             </div>
-            Firma cajera
-        </div>*@
+        *@
     </div>
     <div class="col-lg-12 no-padder text-center">
         <b>@adminName</b>
