@@ -474,22 +474,6 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
 
-            using (var dbContextTransaction = context.Database.BeginTransaction())
-            {
-                try
-                {
-                    var bach = context.IdentifyBaches.FirstOrDefault(r => r.Id == bachId);
-                    bach.Statu = (int)BachIdentifyStatuEnum.Approved;
-                    context.SaveChanges();
-                }
-                catch (Exception)
-                {
-                    dbContextTransaction.Rollback();
-                }
-
-                dbContextTransaction.Commit();
-            }
-
             var bachApproved = context.IdentifyBaches.FirstOrDefault(r => r.Id == bachId);
 
             return View(bachApproved);

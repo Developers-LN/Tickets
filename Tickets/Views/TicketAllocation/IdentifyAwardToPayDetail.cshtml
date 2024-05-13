@@ -212,7 +212,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="identifyNumber in identifyBach.IdentifyNumbers">
-                                <td class="text-center" ng-bind="addZeroToNumber((productionLength - 1), identifyNumber.NumberDesc)"></td>
+                                <td class="text-center" ng-bind="addZeroToNumber((identifyBach.productionLength - 1), identifyNumber.NumberDesc)"></td>
                                 <td class="text-center" ng-bind="identifyNumber.FractionFrom"></td>
                                 <td class="text-center" ng-bind="identifyNumber.FractionTo"></td>
                                 <td class="text-center" ng-bind="identifyNumber.RaffleAward.AwardName"></td>

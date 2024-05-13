@@ -88,6 +88,7 @@
                     $scope.otherIncomeTypes = data.otherIncomeTypes;
                     $scope.periodicities = data.periodicities;
                     $scope.status = data.status;
+                    $scope.otherIncome = data.otherIncome;
 
                     if ($stateParams.otherincomeId == 0) {
                         self.clearOtherIncome();

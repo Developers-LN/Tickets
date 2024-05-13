@@ -184,7 +184,6 @@
                     $scope.award.byFractionDescription = $('#byFractionDropdown option:selected').text();
                     $scope.award.typesAwardDesc = $('#typesAwardIdDropdown option:selected').text();
                     $scope.awards.push($scope.award);
-                    console.log($scope.awards);
                 }
 
                 setTimeout(function () {

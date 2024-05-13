@@ -267,7 +267,7 @@
                 resolve: {}
             })
             .state('app.otherincomesList', {
-                url: '/others/otherIncomes',
+                url: '/others/otherIncomesList',
                 templateUrl: Route.base('OtherIncomes/OtherIncomesList'),
                 resolve: {}
             })

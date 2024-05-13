@@ -64,7 +64,6 @@
                 data: $scope.otherIncomePayment,
                 success: function (data) {
                     window.loading.hide();
-                    console.log(data);
                     if (data.result == true) {
                         window.open('/Reports/OtherPaymentReceipt?paymentId=' + data.paymentId);
                         window.location.href = '#/others/otherIncomePaymentByGroup/' + data.groupId;
@@ -82,7 +81,6 @@
                 contentType: 'application/json; charset=utf-8',
                 url: 'OtherIncomes/GetOtherIncomeDetailData?otherincomeGroupId=' + $stateParams.otherIncomeGroupId,
                 success: function (data) {
-                    console.log(data);
                     window.loading.hide();
                     $scope.otherIncomeList = data.otherIncome;
                     $scope.bankAccountList = data.bankAccount;

@@ -9,6 +9,38 @@ namespace Tickets.Models.Ticket
 {
     public class TicketIdentifyModel
     {
+        internal RequestResponseModel ApproveBachPay(int id)
+        {
+            var context = new TicketsEntities();
+
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var bach = context.IdentifyBaches.FirstOrDefault(r => r.Id == id);
+                    bach.Statu = (int)BachIdentifyStatuEnum.Approved;
+                    context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    return new RequestResponseModel()
+                    {
+                        Result = true,
+                        Message = "Error aprobando el lote!"
+                    };
+                }
+
+                dbContextTransaction.Commit();
+            }
+
+            return new RequestResponseModel()
+            {
+                Result = true,
+                Message = "Lote aprobada!"
+            };
+        }
+
         internal object GetIdentifyListToPay(int raffleId = 0, int clientId = 0)
         {
             var context = new TicketsEntities();

@@ -40,7 +40,6 @@
                 url: 'OtherIncomes/GetOtherIncomePaymentList?otherIncomeGroupId=' + $scope.otherIncomeGroupId,
                 success: function (response) {
                     window.loading.hide();
-                    console.log(response);
                     $scope.otherIncomesPayments = response.otherIncomesPayments.map(function (payment) {
                         payment.PaymentDate = new Date(payment.PaymentDate);
                         return payment;

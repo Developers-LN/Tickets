@@ -1,5 +1,4 @@
-﻿//using AttributeRouting;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Tickets.Models;
 using Tickets.Models.Enums;
 using Tickets.Models.Ticket;
@@ -11,9 +10,18 @@ namespace Tickets.Controllers
     public class TicketAllocationApiController : ApiController
     {
         //
+        //  POST: ticket/identifyBachApi/approveBachPay
+        [HttpPost]
+        [ActionName("approveBachPay")]
+        public RequestResponseModel ApproveBachPay(int id)
+        {
+            var response = new TicketIdentifyModel().ApproveBachPay(id);
+            return response;
+        }
+
+        //
         //  GET: ticket/ticketAllocationApi/getTicketAllocationList
         [HttpGet]
-        [Authorize]
         [ActionName("getTicketAllocationList")]
         public RequestResponseModel GetTicketAllocationList(int raffleId, int clientId = 0)
         {
@@ -24,7 +32,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/getReturnedByGroup
         [HttpGet]
-        [Authorize]
         [ActionName("getReturnedByGroup")]
         public RequestResponseModel getReturnedByGroup(int raffleId)
         {
@@ -35,7 +42,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/getTicketAllocationToDeliverList
         [HttpGet]
-        [Authorize]
         [ActionName("getTicketAllocationToDeliverList")]
         public RequestResponseModel GetTicketAllocationToDeliverList(int raffleId, int clientId = 0)
         {
@@ -46,7 +52,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/getTicketAllocationConsignateList
         [HttpGet]
-        [Authorize]
         [ActionName("getTicketAllocationConsignateList")]
         public RequestResponseModel GetTicketAllocationConsignateList(int raffleId, int clientId = 0)
         {
@@ -57,7 +62,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/getReviewAllocations
         [HttpGet]
-        [Authorize]
         [ActionName("getReviewAllocations")]
         public RequestResponseModel GetReviewAllocations(int raffleId, int clientId = 0)
         {
@@ -68,7 +72,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/getPrintedAllocations
         [HttpGet]
-        [Authorize]
         [ActionName("getPrintedAllocations")]
         public RequestResponseModel GetPrintedAllocations(int raffleId, int clientId = 0)
         {
@@ -79,7 +82,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/getPendintPrintAllocations
         [HttpGet]
-        [Authorize]
         [ActionName("getPendintPrintAllocations")]
         public RequestResponseModel GetPendintPrintAllocations(int raffleId, int clientId = 0)
         {
@@ -90,7 +92,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/getAllocationMainList
         [HttpGet]
-        [Authorize]
         [ActionName("getAllocationMainList")]
         public RequestResponseModel GetAllocationMainList(int raffleId, int clientId = 0)
         {
@@ -101,7 +102,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/TicketAllocationListForPrint
         [HttpGet]
-        [Authorize]
         [ActionName("ticketAllocationListForPrint")]
         public RequestResponseModel TicketAllocationListForPrint(int raffleId, int clientId = 0)
         {
@@ -112,7 +112,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/getTicketAllocation
         [HttpGet]
-        [Authorize]
         [ActionName("getTicketAllocation")]
         public RequestResponseModel GetTicketAllocation(int id)
         {
@@ -123,7 +122,6 @@ namespace Tickets.Controllers
         //
         //  POST: ticket/ticketAllocationApi/copyAllocations
         [HttpPost]
-        [Authorize]
         [ActionName("copyAllocations")]
         public RequestResponseModel CopyAllocations(CopyAllocationModel model)
         {
@@ -134,7 +132,6 @@ namespace Tickets.Controllers
         //
         //  POST: ticket/ticketAllocationApi/validateAllocation
         [HttpPost]
-        [Authorize]
         [ActionName("validateAllocation")]
         public RequestResponseModel ValidateAllocation(TicketAllocationModel model)
         {
@@ -145,7 +142,6 @@ namespace Tickets.Controllers
         //
         //  POST: ticket/ticketAllocationApi/saveAllocation
         [HttpPost]
-        [Authorize]
         [ActionName("saveAllocation")]
         public RequestResponseModel SaveAllocation(TicketAllocationModel model)
         {
@@ -156,7 +152,6 @@ namespace Tickets.Controllers
         //
         //  POST: ticket/ticketAllocationApi/deleteAllocation
         [HttpPost]
-        [Authorize]
         [ActionName("deleteAllocation")]
         public RequestResponseModel DeleteAllocation(TicketAllocationModel model)
         {
@@ -167,7 +162,6 @@ namespace Tickets.Controllers
         //
         //  POST: ticket/ticketAllocationApi/deleteAllocationNumber
         [HttpPost]
-        [Authorize]
         [ActionName("deleteAllocationNumber")]
         public RequestResponseModel DeleteAllocationNumber(TicketAllocationNumberModel model)
         {
@@ -178,7 +172,6 @@ namespace Tickets.Controllers
         //
         //  POST: ticket/ticketAllocationApi/unConsignateNumber
         [HttpPost]
-        [Authorize]
         [ActionName("unConsignateNumber")]
         public RequestResponseModel UnConsignateNumber(TicketAllocationNumberModel model)
         {
@@ -189,7 +182,6 @@ namespace Tickets.Controllers
         //
         //  POST: ticket/ticketAllocationApi/removeAllocation
         [HttpPost]
-        [Authorize]
         [ActionName("removeAllocation")]
         public RequestResponseModel RemoveAllocation(int id)
         {
@@ -200,7 +192,6 @@ namespace Tickets.Controllers
         //
         //  POST: ticket/ticketAllocationApi/consingAllocation
         [HttpPost]
-        [Authorize]
         [ActionName("consingAllocation")]
         public RequestResponseModel ConsingAllocation(int id)
         {
@@ -211,7 +202,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/deliverAllocation
         [HttpPost]
-        [Authorize]
         [ActionName("deliverAllocation")]
         public RequestResponseModel DeliverAllocation(int id)
         {
@@ -222,7 +212,6 @@ namespace Tickets.Controllers
         //
         //  POST: ticket/ticketAllocationApi/startAllocationPrint
         [HttpPost]
-        [Authorize]
         [ActionName("startAllocationPrint")]
         public RequestResponseModel StartAllocationPrint(TicketAllocationModel model)
         {
@@ -233,7 +222,6 @@ namespace Tickets.Controllers
         //
         //  POST: ticket/ticketAllocationApi/ticketAllocationReassing
         [HttpPost]
-        [Authorize]
         [ActionName("ticketAllocationReassing")]
         public RequestResponseModel TicketAllocationReassing(ReassignModel model)
         {
@@ -244,7 +232,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/getTicketNumberDetails
         [HttpGet]
-        [Authorize]
         [ActionName("getTicketNumberDetails")]
         public RequestResponseModel GetTicketNumberDetails(int numberId)
         {
@@ -255,7 +242,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/getTicketNumberDetails
         [HttpGet]
-        [Authorize]
         [ActionName("awardNumberDetails")]
         public RequestResponseModel AwardNumberDetails(int number, int raffleId, int fractionFrom, int fractionTo)
         {
@@ -266,7 +252,6 @@ namespace Tickets.Controllers
         //
         //  GET: ticket/ticketAllocationApi/getTicketNumberDetails
         [HttpGet]
-        [Authorize]
         [ActionName("awardSellerNumberDetails")]
         public RequestResponseModel AwardSellerNumberDetails(int number, int raffleId, int fractionFrom, int fractionTo)
         {

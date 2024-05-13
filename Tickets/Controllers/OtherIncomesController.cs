@@ -61,7 +61,7 @@ namespace Tickets.Controllers
                         s.Description,
                         PaymentDate = s.PaymentDate.Value.ToShortDateString(),
                         s.OtherIncomeId,
-                        s.SequenceNumber
+                        SequenceNumber = String.Concat(s.Symbol, s.SequenceNumber.ToString().PadLeft(s.LengthZero.Value, '0'))
                     })
                 }
             };
@@ -435,32 +435,15 @@ namespace Tickets.Controllers
 
         // GET: OtherIncomes/GetOtherIncomeData
         [HttpGet]
-        public JsonResult GetOtherIncomeData(int otherincomeGroupId)
+        public JsonResult GetOtherIncomeData(int otherincomeId)
         {
             var context = new TicketsEntities();
-            object otherIncomeGroup = null;
-            if (otherincomeGroupId > 0)
-            {
-                otherIncomeGroup = context.OtherIncomesGroups.AsEnumerable().Where(a => a.Id == otherincomeGroupId).Select(e => e.Id).FirstOrDefault();
-            }
-            else
-            {
-                otherIncomeGroup = otherincomeGroupId;
-            }
 
-            var otherIncome = context.OtherIncomes.AsEnumerable().Where(w => w.Status == (int)GeneralStatusEnum.Active).Select(s => new
+            object otherIncome = null;
+            if (otherincomeId > 0)
             {
-                s.Id,
-                s.NoCatalogAccount,
-                s.AccountName
-            }).ToList();
-
-            var bankAccount = context.OtherIncomes.AsEnumerable().Where(w => w.Status == (int)GeneralStatusEnum.Active).Select(s => new
-            {
-                s.Id,
-                s.NoCatalogAccount,
-                s.AccountName
-            }).ToList();
+                otherIncome = context.OtherIncomes.AsEnumerable().Where(a => a.Id == otherincomeId).Select(e => OtherIncomeToObject(e)).FirstOrDefault();
+            }
 
             var origins = context.Catalogs.Where(c => c.IdGroup == (int)CatalogGroupEnum.OriginAccount).Select(g => new
             {
@@ -486,7 +469,7 @@ namespace Tickets.Controllers
                 Name = g.NameDetail
             });
 
-            return new JsonResult() { Data = new { otherIncomeGroup, origins, otherIncomeTypes, periodicities, status, otherIncome, bankAccount }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new JsonResult() { Data = new { otherIncome, origins, otherIncomeTypes, periodicities, status }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         // GET: OtherIncomes/GetOtherIncomeData

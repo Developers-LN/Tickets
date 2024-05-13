@@ -136,7 +136,7 @@
 
                 <div ng-if="identifyBach.Statu == 2077" class="col-lg-12 no-padder {{moduleCanAdd}}">
                     <div class="col-lg-12 m-b-xs no-padder text-right">
-                        <a href="/Reports/ApprovedBach?bachId={{identifyBach.Id}}" ng-click="refreshPage()" target="_blank" class="btn btn-success"><i class="fa fa-thumbs-o-up"></i> Autorizar pago</a>
+                        <a ng-click="approvePay(identifyBach.Id)" class="btn btn-success"><i class="fa fa-thumbs-o-up"></i> Autorizar pago</a>
                     </div>
                 </div>
 
@@ -193,7 +193,7 @@
                     </div>
                 </div>
 
-                <h4>Numeros</h4>
+                <h4>Números</h4>
                 <hr />
                 <div class="col-lg-12 m-b-xs no-padderrow-border hover">
                     <table class="table dataTableGrid">

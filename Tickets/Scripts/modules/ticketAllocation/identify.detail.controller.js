@@ -66,8 +66,28 @@
             return subTotal;
         }
 
-        $scope.refreshPage = function () {
-            location.reload();
+        $scope.approvePay = function (id) {
+            // confirm dialog
+            alertify.confirm("&iquest;Desea aprobar el pago de este lote?", function (e) {
+                if (e) {
+                    window.loading.show();
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        url: $rootScope.serverUrl + 'ticket/ticketAllocationApi/approveBachPay?id=' + id,
+                        success: function (response) {
+                            window.loading.hide();
+                            if (response.result == false) {
+                                alertify.alert(response.message);
+                            } else {
+                                window.open('Reports/ApprovedBach?bachId=' + id);
+                                self.loadIdentifyData();
+                                alertify.alert(response.message);
+                            }
+                        }
+                    });
+                }
+            });
         }
 
         $scope.showTotal = function () {
