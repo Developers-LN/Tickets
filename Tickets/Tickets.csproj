@@ -377,6 +377,7 @@
     <Compile Include="Models\Enums\TaxReceiptTypeEnum.cs" />
     <Compile Include="Models\Enums\TicketsTypeEnum.cs" />
     <Compile Include="Models\Enums\UserRolEnum.cs" />
+    <Compile Include="Models\Enums\WorkflowTypesEnum.cs" />
     <Compile Include="Models\GenericErrorResponse.cs" />
     <Compile Include="Models\IdentifyBach.cs">
       <DependentUpon>Tickets.tt</DependentUpon>
@@ -912,6 +913,7 @@
     <Content Include="Scripts\modules\electronicSales\electronicsales.list.controller.js" />
     <Content Include="Scripts\modules\electronicSales\electronicsales.details.controller.js" />
     <Content Include="Scripts\modules\identifyBach\bach.payed.by.period.controller.js" />
+    <Content Include="Scripts\modules\identifyBach\workflow.identifybachpayment.controller.js" />
     <Content Include="Scripts\modules\integration\electronic.ticket.xml.controller.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

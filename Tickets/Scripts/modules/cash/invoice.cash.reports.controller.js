@@ -15,7 +15,8 @@
             EndDate: undefined,
             StartDate: undefined,
             RaffleId: undefined,
-            ClientId: undefined
+            ClientId: undefined,
+            PayingFund: undefined
         };
 
         $scope.loadRaffles = function () {
@@ -27,7 +28,7 @@
                 success: function (data) {
                     window.loading.hide();
                     $scope.clients = data.clients;
-
+                    $scope.payingFunds = data.payingFund;
                     $scope.raffles = data.raffles;
 
                     $scope.$apply();

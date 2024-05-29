@@ -1030,7 +1030,9 @@ namespace Tickets.Controllers
             var invoiceDetail = context.InvoiceDetails.Where(i => i.Id == invoiceDetailId).FirstOrDefault();
 
             var awards = context.RaffleAwards.Where(a => a.RaffleId == invoiceDetail.RaffleId).ToList();
+            
             List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
+
             context.IdentifyBaches.AsEnumerable().Where(i =>
                 i.RaffleId == invoiceDetail.RaffleId &&
                 i.ClientId == invoiceDetail.ClientId &&

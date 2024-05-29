@@ -339,7 +339,13 @@ namespace Tickets.Controllers
                 text = s.text + " " + s.DateSolteo.ToShortDateString()
             }).ToList();
 
-            return new JsonResult() { Data = new { clients, raffles, users, accountReceivableTypes }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            var payingFund = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.PaymentFound && w.Statu == true).OrderBy(o => o.IdDetail).Select(s => new
+            {
+                value = s.Id,
+                text = s.NameDetail
+            });
+
+            return new JsonResult() { Data = new { clients, raffles, users, accountReceivableTypes, payingFund }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         //

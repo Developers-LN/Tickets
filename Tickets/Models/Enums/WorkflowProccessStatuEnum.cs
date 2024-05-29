@@ -5,5 +5,4 @@
         Approved = 24,
         Rejected = 25
     }
-
 }

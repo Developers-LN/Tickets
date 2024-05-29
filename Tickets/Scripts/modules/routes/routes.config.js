@@ -72,6 +72,11 @@
                 templateUrl: Route.base('Prospect/WorkflowList'),
                 resolve: {}
             })
+            .state('app.checkPaymentflowList', {
+                url: '/identifybachWorkFlow/workflows',
+                templateUrl: Route.base('Prospect/WorkflowList'),
+                resolve: {}
+            })
             .state('app.prospectApprovedProspectProcess', {
                 url: '/prospect/proccess/:id',
                 templateUrl: Route.base('Prospect/ApprovedProcess'),

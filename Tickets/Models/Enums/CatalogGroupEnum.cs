@@ -49,6 +49,7 @@
         OriginAccount = 56,
         AccountType = 57,
         PaymentPeriodicity = 58,
-        BankAccountCatalog = 59
+        BankAccountCatalog = 59,
+        PaymentFound = 60
     }
 }

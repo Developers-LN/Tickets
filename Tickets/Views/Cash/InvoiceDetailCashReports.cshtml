@@ -2,6 +2,7 @@
     Layout = null;
     ViewBag.Title = "Detalle de factura";
 }
+
 <!-- START panel-->
 <div class="col-lg-12 no-padder" ng-controller="InvoiceDetailCashReportsController" ng-init="app.title = '@(ViewBag.Title)'">
     <div class="col-lg-12 no-padder">
@@ -13,6 +14,7 @@
                             <label class="col-lg-12 control-label-left">Sorteos: <span class="color-red">*</span></label>
                             <div class="col-lg-12">
                                 <select class="form-control dropdown-select2" ng-model="cash.RaffleId">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione una opción...</option>
                                     <option ng-repeat="raffle in raffles" value="{{raffle.value}}">{{raffle.text}}</option>
                                 </select>
                             </div>
@@ -23,6 +25,7 @@
                             <label class="col-lg-12 control-label-left">Cliente: <span class="color-red">*</span></label>
                             <div class="col-lg-12">
                                 <select class="form-control dropdown-select2" ng-model="cash.ClientId">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione una opción...</option>
                                     <option ng-repeat="client in clients" value="{{client.value}}">{{client.value}} - {{client.text}}</option>
                                 </select>
                             </div>
@@ -47,6 +50,17 @@
                                        class="form-control"
                                        ng-model="cash.EndDate" ,
                                        ng-required="true" />
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 no-padder" hidden>
+                        <fieldset>
+                            <label class="col-lg-12 control-label-left">Fondo pagador: <span class="color-red">*</span></label>
+                            <div class="col-lg-12">
+                                <select class="form-control dropdown-select2" ng-model="cash.PayingFund">
+                                    <option selected="selected" disabled="disabled" value="0">Seleccione una opción...</option>
+                                    <option ng-repeat="fund in payingFunds" value="{{fund.value}}">{{fund.text}}</option>
+                                </select>
                             </div>
                         </fieldset>
                     </div>
