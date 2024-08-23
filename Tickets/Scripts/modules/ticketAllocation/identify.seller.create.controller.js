@@ -16,7 +16,7 @@
         $('#phoneNumber').mask("(999) 999-9999");
 
         $scope.totalFraction = 0;
-        $scope.showTotalValue = 0;
+        $scope.totalValue = 0;
         $scope.totalNumber = 0;
         $scope.totalGeneral = 0;
         $scope.pricePerFraction = 0;
@@ -24,7 +24,6 @@
         $scope.WinnerDocument = "";
         $scope.WinnerName = "";
         $scope.WinnerPhone = "";
-        $scope.AddWinner = 0;
         $scope.AddWinner = 0;
         $scope.GenderId = 0;
 
@@ -74,7 +73,6 @@
                 var currentPrice = self.getPrice(currentSorteo.Prices, currentClient.PriceId);
                 $scope.clientFractionPrice = currentPrice;
                 $scope.identifyBach.IdentifyNumbers.currentPrice = currentPrice;
-                //console.log(currentPrice);
             }
         }
 
@@ -118,7 +116,6 @@
                         Type: $rootScope.moduleCanDelete == '' ? 4007 : 4006,
                         IdentityAwards: [],
                     };
-                    //console.log(number);
                     number.RaffleId = Number(codeReadSplit[0]);
 
                     var error = '';
@@ -289,12 +286,11 @@
                 if (e) {
                     setTimeout(function () {
                         for (var i = 0; i < $scope.IdentityAwards.length; i++) {
-                            if (parseInt(number.NumberId) == $scope.IdentityAwards[i].AwardNumber && number.FractionFrom == $scope.IdentityAwards[i].FractionFrom
-                                && number.FractionTo == $scope.IdentityAwards[i].FractionTo) {
-                                $scope.showTotalValue -= $scope.IdentityAwards[i].TotalValue;
+                            if (parseInt(number.NumberId) == $scope.IdentityAwards[i].AwardNumber && number.FractionFrom == $scope.IdentityAwards[i].FractionFrom && number.FractionTo == $scope.IdentityAwards[i].FractionTo) {
+                                $scope.totalValue -= $scope.IdentityAwards[i].TotalValue;
+                                $scope.totalFraction -= $scope.IdentityAwards[i].Fractions;
                                 $scope.IdentityAwards.splice(i, 1);
                                 i--;
-
                             }
                         }
 
@@ -304,6 +300,7 @@
 
                         $scope.$apply();
                         showTotalValue();
+                        showFractionTotal();
                         alertify.success('Numero borrado correctamente!');
                     }, 0);
                 }
@@ -371,6 +368,7 @@
                         $scope.totalNumber = $scope.identifyBach.IdentifyNumbers.length;
                         $scope.$apply();
                         showTotalValue();
+                        showFractionTotal();
                     } else {
                         if (data.message) {
                             alertify.showError('Alerta', message);
@@ -490,26 +488,27 @@
         $rootScope.barcodeReader = self.barcodeReader;
         window.document.body.addEventListener('keydown', self.barcodeReader, false);
 
-        $scope.showFractionTotal = function () {
+        function showFractionTotal() {
             try {
                 var totalFractions = 0;
                 $scope.identifyBach.IdentifyNumbers.forEach(function (i) {
                     totalFractions += (i.FractionTo - i.FractionFrom + 1);
                 });
+                $scope.totalFraction = totalFractions;
                 return totalFractions;
             } catch (e) {
                 return 0;
             }
         }
 
-        //function showTotalValue() {
-        //        $scope.IdentityAwards.forEach(function (i) {
-        //            totalc += i.TotalValue;
-
-        //        });
-        //        $scope.showTotalValue = totalc;
-        //        return totalc;
-        //}
+        function showTotalValue() {
+            var totalc = 0;
+            $scope.IdentityAwards.forEach(function (i) {
+                totalc += i.TotalValue;
+            });
+            $scope.totalValue = totalc;
+            return totalc;
+        }
 
         $scope.editingNumber = null;
         function awardSellerDetail(number, raffleId, fractionFrom, fractionTo) {
@@ -522,9 +521,8 @@
 
                     var t = new GetAwardsObj($scope.numberDetails);
                     for (var i = 0; i < t.length; i++) {
-
                         $scope.IdentityAwards.push(t[i]);
-                        $scope.showTotalValue += t[i].TotalValue;
+                        $scope.totalValue += t[i].TotalValue;
                     }
                     $scope.$apply();
                 }

@@ -20,14 +20,14 @@ using Tickets.Models.Procedures.Returns;
 
 namespace Tickets.Controllers
 {
-    
+
     [InitializeSimpleMembership]
     public class ReportsController : Controller
     {
         //
         //  GET: Reports/ReportPaymenHistory
         [HttpGet]
-        
+
         public ActionResult ReportPaymenHistory(int raffleId = 0, string fecha = null, int clientId = 0)
         {
             if (!String.IsNullOrEmpty(fecha))
@@ -56,7 +56,7 @@ namespace Tickets.Controllers
         //
         //  GET: Reports/DebtReport
         [HttpGet]
-        
+
         public ActionResult DebtReport(int raffleId = 0, int clientId = 0)
         {
             var context = new TicketsEntities();
@@ -67,7 +67,7 @@ namespace Tickets.Controllers
         }
 
         [HttpGet]
-        
+
         public ActionResult DataByDay(int allocationId, string dateSale)
         {
             var context = new TicketsEntities();
@@ -80,7 +80,7 @@ namespace Tickets.Controllers
         // 
         //  GET: Reports/IndentifyReceivableReport
         [HttpGet]
-        
+
         public ActionResult IndentifyReceivableReport(int creditNoteId = 0, int paymentId = 0)
         {
             var context = new TicketsEntities();
@@ -128,7 +128,7 @@ namespace Tickets.Controllers
         // 
         //  GET: Reports/GenerarRaffle
         [HttpGet]
-        
+
         public ActionResult GenerarRaffle(int raffleId)
         {
             var context = new TicketsEntities();
@@ -139,7 +139,7 @@ namespace Tickets.Controllers
         // 
         //  GET: Reports/PreviousDebtPaymentReport
         [HttpGet]
-        
+
         public ActionResult PreviousDebtPaymentReport(int paymentId = 0, int clientId = 0)
         {
             var context = new TicketsEntities();
@@ -161,7 +161,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/CXCReport
-        
+
         [HttpGet]
         public ActionResult CXCReport(int clientId, DateTime startDate, DateTime endDate)
         {
@@ -175,7 +175,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/ReceivableReport
-        
+
         [HttpGet]
         public ActionResult ReceivableReport(int invoiceId)
         {
@@ -187,7 +187,7 @@ namespace Tickets.Controllers
         // 
         //  GET: Reports/SpecialAwardInline
         [HttpGet]
-        
+
         public ActionResult SpecialAwardInline(int raffleId)
         {
             var context = new TicketsEntities();
@@ -198,7 +198,7 @@ namespace Tickets.Controllers
         // 
         //  GET: Reports/IntermAwardInline
         [HttpGet]
-        
+
         public ActionResult IntermAwardInline(int raffleId)
         {
             var context = new TicketsEntities();
@@ -209,7 +209,7 @@ namespace Tickets.Controllers
         // 
         //  GET: Reports/MinorAwardInline
         [HttpGet]
-        
+
         public ActionResult MinorAwardInline(int raffleId)
         {
             var context = new TicketsEntities();
@@ -220,7 +220,7 @@ namespace Tickets.Controllers
         // 
         //  GET: Reports/ShowDocument
         [HttpGet]
-        
+
         public ActionResult ShowDocument(int clientId, string type)
         {
             var context = new TicketsEntities();
@@ -257,7 +257,7 @@ namespace Tickets.Controllers
         // 
         //  GET: Reports/PrintImage
         [HttpGet]
-        
+
         public JsonResult PrintImage(int raffleId)
         {
             var path = Server.MapPath("~") + "/generalRaffle";
@@ -336,7 +336,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/ProspectFormat
-        
+
         [HttpGet]
         public ActionResult ProspectFormat(int prospectId)
         {
@@ -347,7 +347,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/BilletesAnulados
-        
+
         [HttpGet]
         public ActionResult BilletesAnulados(int raffleId)
         {
@@ -358,7 +358,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/PrintedNumbesForRaffle
-        
+
         [HttpGet]
         public ActionResult PrintedNumbesForRaffle(int raffleId)
         {
@@ -369,7 +369,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/PrintedNumbersNotInvoiced
-        
+
         [HttpGet]
         public ActionResult PrintedNumbersNotInvoiced(int raffleId)
         {
@@ -380,7 +380,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/NoPrintedNumbesForRaffle
-        
+
         [HttpGet]
         public ActionResult NoPrintedNumbesForRaffle(int raffleId)
         {
@@ -389,7 +389,7 @@ namespace Tickets.Controllers
             return View(raffle);
         }
 
-        
+
         [HttpGet]
         public ActionResult BilletesVendidos(int raffleId)
         {
@@ -398,7 +398,7 @@ namespace Tickets.Controllers
             return View(Resultado);
         }
 
-        
+
         [HttpGet]
         public ActionResult BilletesDevueltos(int raffleId)
         {
@@ -407,7 +407,7 @@ namespace Tickets.Controllers
             return View(Resultado);
         }
 
-        
+
         [HttpGet]
         public ActionResult ClientDetails(int ClientId)
         {
@@ -416,7 +416,7 @@ namespace Tickets.Controllers
             return View(client);
         }
 
-        
+
         [HttpGet]
         public ActionResult DatosPorCliente(int raffleId)
         {
@@ -425,7 +425,7 @@ namespace Tickets.Controllers
             return View(Resultado);
         }
 
-        
+
         [HttpGet]
         public ActionResult PayableAwardsByClient(int raffleId)
         {
@@ -434,7 +434,7 @@ namespace Tickets.Controllers
             return View(Resultado);
         }
 
-        
+
         [HttpGet]
         public ActionResult PayableAwards(int raffleId)
         {
@@ -443,7 +443,7 @@ namespace Tickets.Controllers
             return View(Resultado);
         }
 
-        
+
         [HttpGet]
         public ActionResult AllPayableAwards(int raffleId)
         {
@@ -452,7 +452,7 @@ namespace Tickets.Controllers
             return View(Resultado);
         }
 
-        
+
         [HttpGet]
         public ActionResult PayNotPay(int raffleId)
         {
@@ -468,7 +468,7 @@ namespace Tickets.Controllers
             return View(Resultado);
         }
 
-        
+
         [HttpGet]
         public ActionResult ApprovedBach(int bachId)
         {
@@ -479,7 +479,7 @@ namespace Tickets.Controllers
             return View(bachApproved);
         }
 
-        
+
         [HttpGet]
         public ActionResult ElectronicSaleDetails(int allocationId)
         {
@@ -488,7 +488,7 @@ namespace Tickets.Controllers
             return View(Resultado);
         }
 
-        
+
         [HttpGet]
         public ActionResult BilletesCirculacion(int raffleId)
         {
@@ -497,7 +497,7 @@ namespace Tickets.Controllers
             return View(Resultado);
         }
 
-        
+
         [HttpGet]
         public ActionResult AllocationConsigNumberList(int allocationId)
         {
@@ -508,7 +508,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/NoPrintedNumbesAward
-        
+
         [HttpGet]
         public ActionResult NoPrintedNumbesAward(int raffleId)
         {
@@ -519,7 +519,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/InvoicedNumbersAward
-        
+
         [HttpGet]
         public ActionResult InvoicedNumbersAward(int raffleId)
         {
@@ -530,7 +530,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/ReturnedNumbersAward
-        
+
         [HttpGet]
         public ActionResult ReturnedNumbersAward(int raffleId)
         {
@@ -541,7 +541,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/ReturnedGroupAwards
-        
+
         [HttpGet]
         public ActionResult ReturnedGroupAwards(int raffleId, string groupId = "")
         {
@@ -578,7 +578,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/NumbesAward
-        
+
         [HttpGet]
         public ActionResult NumbesAward(int raffleId)
         {
@@ -589,7 +589,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/ClientNumbersAward
-        
+
         [HttpGet]
         public ActionResult ClientNumbersAward(int? raffleId, int clientId)
         {
@@ -601,7 +601,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/NumbesAwardExpired
-        
+
         [HttpGet]
         public ActionResult NumbesAwardExpired(int raffleId)
         {
@@ -624,7 +624,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/RaffleGeneralOver
-        
+
         [HttpGet]
         public ActionResult RaffleGeneralOver(int raffleId)
         {
@@ -650,7 +650,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/RaffleGeneralOverR
-        
+
         [HttpGet]
         public ActionResult RaffleGeneralOverR(int raffleId)
         {
@@ -675,7 +675,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/ReturnedNumbers
-        
+
         [HttpGet]
         public ActionResult ReturnedNumbers(int raffleId = 0, int clientId = 0)
         {
@@ -687,7 +687,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/SpecificReturnedFractions
-        
+
         [HttpGet]
         public ActionResult SpecificReturnedFractions(int raffleId = 0, int clientId = 0)
         {
@@ -699,7 +699,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/ReturnedNumbersGroup
-        
+
         [HttpGet]
         public ActionResult ReturnedNumbersGroup(int raffleId = 0, int clientId = 0)
         {
@@ -710,7 +710,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/ReturnedNumbersClient
-        
+
         [HttpGet]
         public ActionResult ReturnedNumbersClient(int raffleId)
         {
@@ -721,7 +721,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/AllocatinosNumbers
-        
+
         [HttpGet]
         public ActionResult AllocatinosNumbers(int raffleId = 0, int clientId = 0, int allocationId = 0)
         {
@@ -734,7 +734,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/AllocationSummary
-        
+
         [HttpGet]
         public ActionResult AllocationSummary(int raffleId = 0)
         {
@@ -745,7 +745,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/ReturnsSummary
-        
+
         [HttpGet]
         public ActionResult ReturnsSummary(int raffleId = 0)
         {
@@ -756,7 +756,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/AllocatinosNumberList
-        
+
         [HttpGet]
         public ActionResult AllocatinosNumberList(int allocationId)
         {
@@ -767,7 +767,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/InvoiceListPrint
-        
+
         [HttpGet]
         public ActionResult InvoicesByRaffle(int raffleId = 0, int clientId = 0, int invoiceId = 0)
         {
@@ -780,7 +780,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/InvoicesByRaffleAllocation
-        
+
         [HttpGet]
         public ActionResult InvoicesByRaffleAllocation(int raffleId)
         {
@@ -791,7 +791,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/Error
-        
+
         [HttpGet]
         public ActionResult Error(string message)
         {
@@ -801,7 +801,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/InvoiceDetail
-        
+
         [HttpGet]
         public ActionResult InvoiceDetail(int invoiceId)
         {
@@ -812,7 +812,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/InvoiceDetail
-        
+
         [HttpGet]
         public ActionResult InvoiceDetailUpdate(int invoiceId)
         {
@@ -821,7 +821,7 @@ namespace Tickets.Controllers
             return View(invoice);
         }
 
-        
+
         [HttpGet]
         public ActionResult InvoicePaymentInfo(int paymentId)
         {
@@ -830,7 +830,7 @@ namespace Tickets.Controllers
             return View(payment);
         }
 
-        
+
         [HttpGet]
         public ActionResult OtherPaymentReceipt(int paymentId)
         {
@@ -847,7 +847,7 @@ namespace Tickets.Controllers
             return View(payment);
         }
 
-        
+
         [HttpGet]
         public ActionResult CashAdvanceReport(int cashAdvance)
         {
@@ -856,7 +856,7 @@ namespace Tickets.Controllers
             return View(cash);
         }
 
-        
+
         [HttpGet]
         public ActionResult PositiveBalanceReport(int positiveBalance)
         {
@@ -865,7 +865,7 @@ namespace Tickets.Controllers
             return View(cash);
         }
 
-        
+
         [HttpGet]
         public ActionResult InvoicePayment(int paymentId)
         {
@@ -874,7 +874,7 @@ namespace Tickets.Controllers
             return View(payment);
         }
 
-        
+
         [HttpGet]
         public ActionResult NoteCreditDetail(int noteCreditId)
         {
@@ -883,7 +883,7 @@ namespace Tickets.Controllers
             return View(notecredit);
         }
 
-        
+
         [HttpGet]
         public ActionResult NoteCreditTaxReceiptDetail(int noteCreditId)
         {
@@ -894,7 +894,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/ReturnedDeatils
-        
+
         [HttpGet]
         public ActionResult ReturnedDeatils(int raffleId, string group = "", int clientId = 0, int statu = (int)TicketReturnedStatuEnum.Created)
         {
@@ -909,7 +909,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/Tickets
-        
+
         [HttpGet]
         public ActionResult Tickets(int allocationId)
         {
@@ -929,7 +929,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/TicketsChristmas
-        
+
         [HttpGet]
         public ActionResult TicketsChristmas(int allocationId)
         {
@@ -949,7 +949,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/CashReport
-        
+
         [HttpGet]
         public ActionResult CashReport(int IdentifyBachId)
         {
@@ -960,7 +960,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/NumberCertification
-        
+
         [HttpGet]
         public ActionResult NumberCertification(int CertificationNumberId)
         {
@@ -971,7 +971,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/AwardCertification
-        
+
         [HttpGet]
         public ActionResult AwardCertification(int CertificationNumberId)
         {
@@ -982,7 +982,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/ReturnedGroupClientDetails
-        
+
         [HttpGet]
         public ActionResult ReturnedGroupClientDetails(int raffleId, int clientId, string group)
         {
@@ -993,7 +993,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/GetCashReport
-        
+
         [HttpGet]
         public ActionResult GetCashReport(int userId, string Fecha)
         {
@@ -1022,37 +1022,44 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/InvoiceDeatilCashReport
-        
+
         [HttpGet]
         public ActionResult InvoiceDeatilCashReport(int invoiceDetailId)//int raffleId, int userId, DateTime startDate, DateTime endDate)
         {
             var context = new TicketsEntities();
             var invoiceDetail = context.InvoiceDetails.Where(i => i.Id == invoiceDetailId).FirstOrDefault();
+            var funds = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.PayingFund).ToList();
 
             var awards = context.RaffleAwards.Where(a => a.RaffleId == invoiceDetail.RaffleId).ToList();
-            
+
             List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
 
-            context.IdentifyBaches.AsEnumerable().Where(i =>
-                i.RaffleId == invoiceDetail.RaffleId &&
-                i.ClientId == invoiceDetail.ClientId &&
-                (i.IdentifyBachPayments.Any(p => p.CreateDate.Date >= invoiceDetail.StartDate.Date && p.CreateDate.Date <= invoiceDetail.EndDate.Date) == true)
-                && (Utils.IdentifyBachIsPayedMinor(i, awards) || Utils.IdentifyBachIsPayedMayor(i, awards))
+            context.IdentifyBaches.AsEnumerable()
+                .Where(i =>
+                    i.RaffleId == invoiceDetail.RaffleId &&
+                    i.ClientId == invoiceDetail.ClientId &&
+                    (i.IdentifyBachPayments.Any(p => p.CreateDate.Date >= invoiceDetail.StartDate.Date && p.CreateDate.Date <= invoiceDetail.EndDate.Date) == true)
+                    && (Utils.IdentifyBachIsPayedMinor(i, awards) || Utils.IdentifyBachIsPayedMayor(i, awards))
             ).ToList().ForEach(i => identifyNumbers.AddRange(i.IdentifyNumbers));
 
             if (identifyNumbers.Count <= 0)
             {
                 return RedirectToAction("Error", new { message = "No se encontraron pagos del sorteo " + invoiceDetail.Raffle.Symbol + invoiceDetail.Raffle.Separator + invoiceDetail.Raffle.SequenceNumber + "." });
             }
+
             ViewBag.invoiceDetailId = invoiceDetail.SequenceNumber;
             ViewBag.invoiceDetailDate = invoiceDetail.CreateDate.ToShortDateString();
             ViewBag.invoiceDetailTime = invoiceDetail.CreateDate.ToShortTimeString();
+            ViewBag.payingFund = invoiceDetail.PayingFund.HasValue && invoiceDetail.PayingFund.Value > 0 ? invoiceDetail.PayingFund.Value : 0;
+            ViewBag.payingFundName = invoiceDetail.PayingFund.HasValue && invoiceDetail.PayingFund.Value > 0 ? context.Catalogs.FirstOrDefault(f => f.Id == invoiceDetail.PayingFund).NameDetail : "N/A";
+            ViewBag.owner = invoiceDetail.PayingFund.HasValue && invoiceDetail.PayingFund.Value > 0 && funds.FirstOrDefault(f => f.Id == invoiceDetail.PayingFund).Description2 != null ? funds.FirstOrDefault(f => f.Id == invoiceDetail.PayingFund).Description2 : null;
+
             return View(identifyNumbers);
         }
 
         //
         //  GET: Reports/ReprintTickets
-        
+
         [HttpGet]
         public ActionResult ReprintTickets(int reprintId)
         {
@@ -1072,7 +1079,7 @@ namespace Tickets.Controllers
 
         //
         //  GET: Reports/ReprintTicketsChristmas
-        
+
         [HttpGet]
         public ActionResult ReprintTicketsChristmas(int reprintId)
         {
@@ -1089,7 +1096,7 @@ namespace Tickets.Controllers
             return View(reprint);
         }
 
-        
+
         [HttpGet]
         public ActionResult TaxReceiptInfo(int? receiptId)
         {
@@ -1105,7 +1112,7 @@ namespace Tickets.Controllers
             }
         }
 
-        
+
         [HttpGet]
         public ActionResult InvoicesDetail(int raffleId = 0, int taxtReceipt = 0)
         {
@@ -1145,7 +1152,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/AccountsReceivables
-        
+
         [HttpGet]
         public ActionResult AccountsReceivables(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
         {
@@ -1183,7 +1190,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/AccountsReceivablesByPeriod
-        
+
         [HttpGet]
         public ActionResult AccountsReceivablesByPeriod(string startDate = "undefined", string endDate = "undefined", int raffleId = 0, int receivableType = 0)
         {
@@ -1196,7 +1203,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/InvoiceByPeriod
-        
+
         [HttpGet]
         public ActionResult InvoiceByPeriod(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
         {
@@ -1235,7 +1242,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/PayedAwardByPeriod
-        
+
         [HttpGet]
         public ActionResult PayedAwardByPeriod(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
         {
@@ -1262,7 +1269,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/PayedElectronicAward
-        
+
         [HttpGet]
         public ActionResult PayedElectronicAward(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
         {
@@ -1286,7 +1293,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/AccountsPayments
-        
+
         [HttpGet]
         public ActionResult AccountsPayments(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
         {
@@ -1320,7 +1327,7 @@ namespace Tickets.Controllers
             }
         }
 
-        
+
         [HttpGet]
         public ActionResult ReporteSorteo(string startDate = "undefined", string endDate = "undefined")
         {
@@ -1373,7 +1380,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/ClientGeneralReport
-        
+
         [HttpGet]
         public ActionResult ClientGeneralReport(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
         {
@@ -1408,7 +1415,7 @@ namespace Tickets.Controllers
 
         //
         //Get: ClientBalanceGeneralReport
-        
+
         [HttpGet]
         public ActionResult ClientBalanceGeneralReport(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
         {
@@ -1444,7 +1451,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/GeneralClientReport
-        
+
         [HttpGet]
         public ActionResult GeneralClientReport(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
         {
@@ -1480,7 +1487,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/IdentifyAwardReportResumen
-        
+
         [HttpGet]
         public ActionResult IdentifyAwardsReportResumen(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
         {
@@ -1516,7 +1523,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/IdentifyAwardReport
-        
+
         [HttpGet]
         public ActionResult IdentifyAwardsReport(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
         {
@@ -1551,7 +1558,7 @@ namespace Tickets.Controllers
         }
 
         //GET: Reports/VentaLoteria365
-        
+
         [HttpGet]
         public ActionResult VentasLoteria365(int clientId, int raffleId)
         {
@@ -1569,7 +1576,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/RaffleDashboardReport
-        
+
         [HttpGet]
         public ActionResult RaffleDashboardReport(DateTime startDate, DateTime endDate, int clientId = 0, int raffleId = 0)
         {
@@ -1588,7 +1595,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/AllocationSummaryBy
-        
+
         [HttpGet]
         public ActionResult AllocationSummaryBy(int clientId, int raffleId)
         {
@@ -1608,7 +1615,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/DeliveredAllocation
-        
+
         [HttpGet]
         public ActionResult DeliveredAllocation(int clientId, int raffleId)
         {
@@ -1630,7 +1637,7 @@ namespace Tickets.Controllers
 
         //
         //GET: Reports/TicketReprinted
-        
+
         [HttpGet]
         public ActionResult TicketReprinted(int raffleId)
         {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using Tickets.Models.AuxModels;
 using Tickets.Models.Clients;
 using Tickets.Models.Enums;
 using Tickets.Models.Prospects;
@@ -36,6 +37,9 @@ namespace Tickets.Models.Workflows
 
         [JsonProperty(PropertyName = "prospect")]
         public ProspectModel Prospect { get; set; }
+
+        [JsonProperty(PropertyName = "identifyBach")]
+        public AuxIdentifyBach IdentifyBach { get; set; }
 
         [JsonProperty(PropertyName = "client")]
         public ClientModel Client { get; set; }
@@ -80,7 +84,7 @@ namespace Tickets.Models.Workflows
             public int? SequenceNumberRaffle { get; set; }
 
             [JsonProperty(PropertyName = "sequenceNumberIdentifyBach")]
-            public int? SequenceNumberIdentifyBach {  get; set; }
+            public int? SequenceNumberIdentifyBach { get; set; }
 
 
             internal IdentifyNumberModel ToObject(IdentifyNumber number)
@@ -170,6 +174,7 @@ namespace Tickets.Models.Workflows
             int prospectType = int.Parse(ConfigurationManager.AppSettings["ProspectApprovedWorkflowTypeId"].ToString());
             int clientType = int.Parse(ConfigurationManager.AppSettings["ClientApprovedWorkflowTypeId"].ToString());
             int reprintType = int.Parse(ConfigurationManager.AppSettings["ReprintApprovedWorkflowTypeId"].ToString());
+            int identifybachType = int.Parse(ConfigurationManager.AppSettings["IdentifyBachApprovedWorkflowTypeId"].ToString());
             int awardCertType = 6;
 
             if (type == prospectType)
@@ -187,7 +192,11 @@ namespace Tickets.Models.Workflows
                 var ticketReprintModel = new TicketReprintModel();
                 wordflow.Reprint = ticketReprintModel.ToObject(context.TicketRePrints.FirstOrDefault(p => p.Id == model.ProcessId), true);
             }
-
+            if (type == identifybachType)
+            {
+                var identifybach = new AuxIdentifyBach();
+                wordflow.IdentifyBach = identifybach.ToObject(context.IdentifyBaches.FirstOrDefault(f => f.Id == model.ProcessId));
+            }
             if (type == awardCertType)
             {
                 var identifyNumberModel = new IdentifyNumberModel();

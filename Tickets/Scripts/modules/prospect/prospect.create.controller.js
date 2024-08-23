@@ -110,7 +110,6 @@
             if (award.Name == '') {
                 error += 'Nombre' + isReq;
             }
-
             if (self.validateNumenber(award.OrderAward) === false) {
                 error += 'Orden' + isReq;
             }
@@ -127,6 +126,7 @@
             if (self.validateNumenber(award.Value) === false) {
                 error += 'Valor' + isReq;
             }
+
             var editing = $scope.editingAward || {};
             if ($scope.prospect.Awards.some(function (item) { return item.OrderAward === award.OrderAward && item.$$hashKey !== editing.$$hashKey; }) == true) {
                 error += 'El orden del premio esta duplicado.' + isReq;
@@ -178,6 +178,7 @@
                 }
             });
         }
+
         $scope.clearPrice = function (price) {
             $scope.price = {
                 Id: price ? price.Id : 0,

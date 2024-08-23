@@ -15,5 +15,14 @@
         $scope.officeList = [];
         configCatalog.init($rootScope, $scope, $state);
         configWorkflow.init($rootScope, $scope, $state);
+
+        this.loadLibrary = function(){
+            window.setTimeout(function () {
+                $scope.$apply();
+                $rootScope.createSelect2();
+            }, 0);
+        }
+
+        this.loadLibrary();
     }
 })();

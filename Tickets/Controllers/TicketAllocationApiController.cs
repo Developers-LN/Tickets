@@ -200,6 +200,16 @@ namespace Tickets.Controllers
         }
 
         //
+        //  POST: ticket/ticketAllocationApi/desconsingAllocation
+        [HttpPost]
+        [ActionName("unConsingAllocation")]
+        public RequestResponseModel DesonsingAllocation(int id)
+        {
+            var response = new TicketAllocationNumberModel().DesconsignateAllocation(id);
+            return response;
+        }
+
+        //
         //  GET: ticket/ticketAllocationApi/deliverAllocation
         [HttpPost]
         [ActionName("deliverAllocation")]

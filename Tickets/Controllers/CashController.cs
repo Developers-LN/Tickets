@@ -204,9 +204,18 @@ namespace Tickets.Controllers
 
         private object InvoiceDetailToObject(InvoiceDetail invoiceDetail)
         {
+            var context = new TicketsEntities();
+            var catalog = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.PayingFund).Select(s => new
+            {
+                s.Id,
+                s.NameDetail,
+                s.IdGroup
+            }).ToList();
+
             return new
             {
                 invoiceDetail.Id,
+                PayingFund = invoiceDetail.PayingFund.HasValue && invoiceDetail.PayingFund > 0 ? catalog.FirstOrDefault(f => f.Id == invoiceDetail.PayingFund.Value).NameDetail : "N/A",
                 invoiceDetail.SequenceNumber,
                 EndDate = invoiceDetail.EndDate.ToUnixTime(),
                 StartDate = invoiceDetail.StartDate.ToUnixTime(),
@@ -235,7 +244,7 @@ namespace Tickets.Controllers
                     try
                     {
                         var invoiceDetailExist = context.InvoiceDetails.Any(a => a.RaffleId == model.RaffleId && a.ClientId == model.ClientId
-                        && a.StartDate == model.StartDate.Date && a.EndDate == model.EndDate.Date);
+                        && a.StartDate == model.StartDate.Date && a.EndDate == model.EndDate.Date && a.PayingFund == model.PayingFund);
 
                         if (invoiceDetailExist == true)
                         {
@@ -244,7 +253,9 @@ namespace Tickets.Controllers
                         }
 
                         var awards = context.RaffleAwards.Where(a => a.RaffleId == model.RaffleId).ToList();
+
                         List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
+                        
                         context.IdentifyBaches.AsEnumerable().Where(i =>
                             i.RaffleId == model.RaffleId && i.ClientId == model.ClientId &&
                             (i.IdentifyBachPayments.Any(p => p.CreateDate.Date >= model.StartDate.Date && p.CreateDate.Date <= model.EndDate.Date) == true)
@@ -264,8 +275,10 @@ namespace Tickets.Controllers
                             EndDate = model.EndDate,
                             RaffleId = model.RaffleId,
                             ClientId = model.ClientId,
-                            StartDate = model.StartDate
+                            StartDate = model.StartDate,
+                            PayingFund = model.PayingFund
                         };
+
                         context.InvoiceDetails.Add(invoiceDetail);
                         context.SaveChanges();
 
@@ -277,7 +290,8 @@ namespace Tickets.Controllers
                             model.EndDate,
                             model.RaffleId,
                             model.ClientId,
-                            model.StartDate
+                            model.StartDate,
+                            model.PayingFund,
                         };
 
                         tx.Commit();
@@ -339,7 +353,7 @@ namespace Tickets.Controllers
                 text = s.text + " " + s.DateSolteo.ToShortDateString()
             }).ToList();
 
-            var payingFund = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.PaymentFound && w.Statu == true).OrderBy(o => o.IdDetail).Select(s => new
+            var payingFund = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.PayingFund && w.Statu == true).OrderBy(o => o.IdDetail).Select(s => new
             {
                 value = s.Id,
                 text = s.NameDetail

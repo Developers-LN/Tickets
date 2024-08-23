@@ -24,6 +24,7 @@ namespace Tickets.Models
         public int IdentifyBachId { get; set; }
         public int DiscountPercent { get; set; }
         public Nullable<int> SequenceNumber { get; set; }
+        public Nullable<int> PayingFund { get; set; }
     
         public virtual Cash Cash { get; set; }
         public virtual Client Client { get; set; }

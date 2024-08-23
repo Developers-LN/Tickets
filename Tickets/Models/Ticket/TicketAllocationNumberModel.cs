@@ -370,7 +370,7 @@ namespace Tickets.Models.Ticket
 
                     CashAdvances.ToList().ForEach(f => totalCashAdvances += f.TotalRest);
 
-                    LastAllocations.ToList().ForEach(f => TotalEnConsignacion += f.TicketAllocationNumbers.Sum(s => ((s.FractionTo - s.FractionFrom) + 1) * TicketPrice));
+                    LastAllocations.ToList().ForEach(f => TotalEnConsignacion += f.TicketAllocationNumbers.Sum(s => ((s.FractionTo - s.FractionFrom) + 1) * (TicketPrice / (s.FractionTo - s.FractionFrom + 1))));
                     invoices.ToList().ForEach(f => TotalEnFacturas += f.InvoiceTickets.Sum(s => (s.Quantity * s.PricePerFraction)));
                     invoices.ToList().ForEach(f => TotalEnPagos += f.ReceiptPayments.Sum(s => (s.TotalCash + s.TotalCheck + s.TotalCredit + s.NoteCreditReceiptPayments)));
 
@@ -418,6 +418,83 @@ namespace Tickets.Models.Ticket
                     {
                         Result = true,
                         Message = "La asingación fue consignada correctamente!"
+                    };
+                }
+                catch (Exception)
+                {
+                    Trans.Rollback();
+                    return new RequestResponseModel()
+                    {
+                        Result = false,
+                        Message = "Error al intentar realizar la consignacion!"
+                    };
+                }
+            }
+        }
+
+        internal RequestResponseModel DesconsignateAllocation(int id)
+        {
+            var context = new TicketsEntities();
+
+            using (var Trans = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var allocation = context.TicketAllocations.FirstOrDefault(n => n.Id == id);
+
+                    if (allocation == null)
+                    {
+                        Trans.Rollback();
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "El numero de asignación no fue encontrado!"
+                        };
+                    }
+
+                    var allocationNumber = context.TicketAllocationNumbers.Where(w => w.TicketAllocationId == id);
+
+
+                    if (allocation.Client.GroupId == (int)ClientGroupEnum.DistribuidorXML || allocation.Client.GroupId == (int)ClientGroupEnum.DistribuidorElectronico)
+                    {
+                        Trans.Rollback();
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "Las asignaciones de los distribuidores electrónico no se pueden desconsignar."
+                        };
+                    }
+                    if (allocation.Statu != (int)AllocationStatuEnum.Consigned)
+                    {
+                        Trans.Rollback();
+                        return new RequestResponseModel()
+                        {
+                            Result = false,
+                            Message = "Solo se pueden desconsignar las asignaciones que se encuentren consignadas."
+                        };
+                    }
+
+                    var CurrentUser = WebSecurity.CurrentUserId;
+
+                    allocationNumber.ToList().ForEach(f =>
+                    {
+                        f.UserConsigned = CurrentUser;
+                        f.Consignated = false;
+                        f.Statu = (int)TicketStatusEnum.Printed;
+                    });
+
+                    allocation.Statu = (int)AllocationStatuEnum.Printed;
+
+                    context.SaveChanges();
+
+                    Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Update, "Desconsignado de asignación", id);
+
+                    Trans.Commit();
+
+                    return new RequestResponseModel()
+                    {
+                        Result = true,
+                        Message = "La asingación fue desconsignada correctamente!"
                     };
                 }
                 catch (Exception)
@@ -521,7 +598,7 @@ namespace Tickets.Models.Ticket
 
             var numberDetails = awards.Select(s => new
             {
-                AwardNumber = s.ControlNumber,
+                AwardNumber = s.ControlNumber.ToString().PadLeft((s.Raffle.Prospect.Production - 1).ToString().Length, '0'),
                 FractionFrom = fFrom,
                 FractionTo = fTo,
                 Fractions = s.Award.ByFraction == (int)ByFractionEnum.S ? 1 : fTo - fFrom + 1,
@@ -582,7 +659,7 @@ namespace Tickets.Models.Ticket
 
             var numberDetails = awards.Select(s => new
             {
-                AwardNumber = s.ControlNumber,
+                AwardNumber = s.ControlNumber.ToString().PadLeft((s.Raffle.Prospect.Production - 1).ToString().Length, '0'),
                 FractionFrom = fFrom,
                 FractionTo = fTo,
                 Fractions = s.Award.ByFraction == (int)ByFractionEnum.S ? 1 : fTo - fFrom + 1,

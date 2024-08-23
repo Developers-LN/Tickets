@@ -24,6 +24,7 @@
                     if (response.result == true) {
                         $scope.prospects = response.object;
                         $scope.$apply();
+                        $rootScope.createSelect2();
                     } else {
                         alertify.alert(response.message);
                     }

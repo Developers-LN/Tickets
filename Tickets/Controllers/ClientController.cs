@@ -63,7 +63,7 @@ namespace Tickets.Controllers
                 r.SequenceNumber,
                 r.Name,
                 raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
-                text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name, 
+                text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name,
                 r.DateSolteo
             }).ToList();
 
@@ -396,7 +396,8 @@ namespace Tickets.Controllers
             int workFlowTypeId = int.Parse(ConfigurationManager.AppSettings["ClientApprovedWorkflowTypeId"].ToString());
             var usersApproveWorkflow = context.WorkflowTypes.FirstOrDefault(w => w.Id == workFlowTypeId).WorkflowType_User.Where(wu => wu.Statu != (int)GeneralStatusEnum.Delete);
 
-            var workflowList = context.Workflows.AsEnumerable().Where(w =>
+            var workflowList = context.Workflows.AsEnumerable()
+                .Where(w =>
                 w.WorkflowTypeId == workFlowTypeId &&
                 w.Statu == (int)WorkflowStatusEnum.Active &&
                 usersApproveWorkflow.Any(u => u.UserId == userId

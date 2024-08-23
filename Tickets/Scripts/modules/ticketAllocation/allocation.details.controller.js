@@ -112,6 +112,29 @@
             });
         }
 
+        $scope.desconsignarAsignacion = function (id) {
+            // confirm dialog
+            alertify.confirm("&iquest;Desea realizar la desconsignacion de esta asignacion?", function (e) {
+                if (e) {
+                    window.loading.show();
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        url: $rootScope.serverUrl + 'ticket/ticketAllocationApi/desconsingAllocation?id=' + id,
+                        success: function (response) {
+                            window.loading.hide();
+                            if (response.result == false) {
+                                alertify.alert(response.message);
+                            } else {
+                                self.loadAllocation();
+                                alertify.alert(response.message);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
         $scope.anularAsignacion = function (id) {
             // confirm dialog
             alertify.confirm("&iquest;Desea realizar el anulado de esta asignacion?", function (e) {

@@ -9,7 +9,6 @@ namespace Tickets.Controllers
     {
         // GET: Prospect/ProspectCreateWizard
         [HttpGet]
-        [Authorize]
         public ActionResult ProspectCreateWizard()
         {
             return View();
@@ -67,7 +66,6 @@ namespace Tickets.Controllers
 
         // GET: Prospect/List
         [HttpGet]
-        [Authorize]
         public ActionResult List()
         {
             return View();
@@ -75,7 +73,6 @@ namespace Tickets.Controllers
 
         // GET: Prospect/SuspendedList
         [HttpGet]
-        [Authorize]
         public ActionResult SuspendedList()
         {
             return View();
@@ -83,7 +80,6 @@ namespace Tickets.Controllers
 
         //
         //  GET: Prospect/AllProspects
-        [Authorize]
         [HttpGet]
         public ActionResult AllProspects()
         {
@@ -92,7 +88,6 @@ namespace Tickets.Controllers
 
         // GET: Prospect/WorkflowList
         [HttpGet]
-        [Authorize]
         public ActionResult WorkflowList()
         {
             return View();

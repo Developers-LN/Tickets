@@ -110,5 +110,22 @@
                 }
             });
         }
+
+        $scope.GenerateExcelAgrupadoReport = function () {
+            if (validateData($scope.cash) === false) {
+                return;
+            }
+            alertify.confirm("&iquest;Desea descargar el archivo Excel?", function (e) {
+                if (e) {
+                    try {
+                        $scope.cash.EndDate = $rootScope.parseDate($scope.cash.EndDate, $scope.cash.EndDate).toJSON();
+                        $scope.cash.StartDate = $rootScope.parseDate($scope.cash.StartDate, $scope.cash.StartDate).toJSON();
+                    }
+                    catch (err) { }
+
+                    window.open('Integration/PayedElectronicAwardExcelGroup?startDate=' + $scope.cash.StartDate + '&endDate=' + $scope.cash.EndDate + '&clientId=' + $scope.cash.ClientId + '&raffleId=' + $scope.cash.RaffleId);
+                }
+            });
+        }
     }
 })();

@@ -50,6 +50,6 @@
         AccountType = 57,
         PaymentPeriodicity = 58,
         BankAccountCatalog = 59,
-        PaymentFound = 60
+        PayingFund = 60
     }
 }

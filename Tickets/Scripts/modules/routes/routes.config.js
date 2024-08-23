@@ -74,7 +74,7 @@
             })
             .state('app.checkPaymentflowList', {
                 url: '/identifybachWorkFlow/workflows',
-                templateUrl: Route.base('Prospect/WorkflowList'),
+                templateUrl: Route.base('IdentifyBach/WorkflowList'),
                 resolve: {}
             })
             .state('app.prospectApprovedProspectProcess', {

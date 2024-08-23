@@ -57,8 +57,16 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
+            @if (Model.Invoice.Condition == (int)Tickets.Models.Enums.InvoiceConditionEnum.Credit)
+            {
+                <b>DETALLE DE RECIBO DE PAGO A FACTURA DEL SORTEO</b>
+            }
+            else
+            {
+                <b>DETALLE DE RECIBO DE PAGO DEL SORTEO</b>
+            }
+            <br />
             <b>
-                RECIBO DE PAGO DEL SORTEO <br />
                 @Model.Invoice.Raffle.Symbol @Model.Invoice.Raffle.Separator @Model.Invoice.Raffle.SequenceNumber @Model.Invoice.Raffle.Name @Model.Invoice.Raffle.DateSolteo.ToShortDateString()
             </b>
         </div>
@@ -328,8 +336,16 @@
             <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
         </div>
         <div class="col-lg-12 no-padder text-center">
+            @if (Model.Invoice.Condition == (int)Tickets.Models.Enums.InvoiceConditionEnum.Credit)
+            {
+                <b>RECIBO DE PAGO A FACTURA DEL SORTEO</b>
+            }
+            else
+            {
+                <b>RECIBO DE PAGO DEL SORTEO</b>
+            }
+            <br />
             <b>
-                RECIBO DE PAGO DEL SORTEO <br />
                 @Model.Invoice.Raffle.Symbol @Model.Invoice.Raffle.Separator @Model.Invoice.Raffle.SequenceNumber @Model.Invoice.Raffle.Name @Model.Invoice.Raffle.DateSolteo.ToShortDateString()
             </b>
         </div>

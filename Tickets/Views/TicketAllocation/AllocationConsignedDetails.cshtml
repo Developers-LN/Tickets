@@ -28,6 +28,7 @@
                     <div class="col-lg-12 no-padder text-center">
                         <a ng-if="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Consigned) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Delivered) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Invoiced) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Returned)" class="btn btn-success btn-sm" target="_blank" href="/Reports/AllocationConsigNumberList?allocationId={{allocation.id}}" title="Detalle de Asignacion"><i class="fa fa-print"></i> Detalle de consignación</a>
                         <a ng-if="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Review) || allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Printed)" ng-click="consignarAsignacion(allocation.id)" class="btn btn-success btn-sm"><i class="fa fa-check"></i> Consignar</a>
+                        <a ng-if="allocation.statuId == @((int)Tickets.Models.Enums.AllocationStatuEnum.Consigned)" ng-click="desconsignarAsignacion(allocation.id)" class="btn btn-success btn-sm"><i class="fa fa-ban"></i> Desconsignar</a>
                     </div>
                 </div>
                 <div class="row-border hover">

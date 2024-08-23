@@ -47,12 +47,12 @@
 	        return error === '';
 	}
 
-	    this.getUserList = function ( ) {
+	    this.getUserList = function () {
 	        $.ajax({
 	            type: 'GET',
 	            contentType: 'application/json; charset=utf-8',
 	            url: 'Security/GetUserList',
-	            success: function (data) {
+				success: function (data) {
 	                self.$scope.userList = data.users;
 	                self.$scope.employes = data.employes;
 	                self.$scope.userNameList = [];

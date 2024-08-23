@@ -48,7 +48,6 @@
                                     <span class="fa fa-circle"></span>Nuevo prospecto tomando uno existente.
                                 </label>
                             </div>
-
                             <fieldset class="hide" id="existenProspectDropDown">
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left no-padder">Prospectos existente:  <span class="color-red">*</span></label>
@@ -64,7 +63,7 @@
                     </div>
                     <div class="mt col-lg-12 no-padder">
                         <div class="col-lg-6 no-padder">
-                            <a ui-sref="app.prospectlist" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Cancelar</a>
+                            <a ui-sref="app.prospectlist" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
                         </div>
                         <div class="col-lg-6 no-padder text-right">
                             <a ng-click="goStepTow()" class="btn btn-primary">Siguiente <i class="fa fa-arrow-right"></i></a>
@@ -80,10 +79,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <input type="text"
-                                           ng-model="prospect.Name"
-                                           class="form-control input-sm"
-                                           ng-required="true" />
+                                    <input type="text" ng-model="prospect.Name" class="form-control input-sm" ng-required="true" />
                                 </div>
                             </div>
                         </fieldset>
@@ -91,9 +87,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Titulo: </label>
                                 <div class="col-lg-12">
-                                    <textarea class="form-control input-sm"
-                                              ng-model="prospect.Description"
-                                              style="max-height: 109px; height: 37px;"></textarea>
+                                    <textarea class="form-control input-sm" ng-model="prospect.Description" style="max-height: 109px; height: 37px;"></textarea>
                                 </div>
                             </div>
                         </fieldset>
@@ -101,11 +95,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Precio de venta por fracción: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <input type="number"
-                                           min="0"
-                                           ng-model="prospect.Price"
-                                           class="form-control input-sm"
-                                           ng-required="true">
+                                    <input type="number" min="0" ng-model="prospect.Price" class="form-control input-sm" ng-required="true">
                                 </div>
                             </div>
                         </fieldset>
@@ -124,11 +114,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Producción:  <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <input type="number"
-                                           min="0"
-                                           ng-model="prospect.Production"
-                                           class="form-control input-sm"
-                                           ng-required="true">
+                                    <input type="number" min="0" ng-model="prospect.Production" class="form-control input-sm" ng-required="true">
                                 </div>
                             </div>
                         </fieldset>
@@ -136,12 +122,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Porcentaje de devoluciones:  <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <input type="number"
-                                           ng-min="0"
-                                           ng-max="100"
-                                           ng-model="prospect.MaxReturnTickets"
-                                           class="form-control input-sm"
-                                           ng-required="true">
+                                    <input type="number" ng-min="0" ng-max="100" ng-model="prospect.MaxReturnTickets" class="form-control input-sm" ng-required="true">
                                 </div>
                             </div>
                         </fieldset>
@@ -151,11 +132,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label-left">Hojas por número: <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <input type="number"
-                                           min="0"
-                                           ng-model="prospect.LeafNumber"
-                                           class="form-control input-sm"
-                                           ng-required="true">
+                                    <input type="number" min="0" ng-model="prospect.LeafNumber" class="form-control input-sm" ng-required="true">
                                 </div>
                             </div>
                         </fieldset>
@@ -163,11 +140,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label">Fracción por hojas:  <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <input type="number"
-                                           min="0"
-                                           ng-model="prospect.LeafFraction"
-                                           class="form-control input-sm"
-                                           ng-required="true">
+                                    <input type="number" min="0" ng-model="prospect.LeafFraction" class="form-control input-sm" ng-required="true">
                                 </div>
                             </div>
                         </fieldset>
@@ -175,9 +148,7 @@
                             <div class="form-group">
                                 <label class="col-lg-12 control-label">Fecha de Expiración:  <span class="color-red">*</span></label>
                                 <div class="col-lg-12">
-                                    <input type="date"
-                                           ng-model="prospect.ExpirateDate"
-                                           class="form-control input-sm">
+                                    <input type="date" ng-model="prospect.ExpirateDate" class="form-control input-sm">
                                 </div>
                             </div>
                         </fieldset>
@@ -208,7 +179,7 @@
 
                     <div class="mt col-lg-12 no-padder">
                         <div class="col-lg-6 no-padder">
-                            <a ui-sref="app.prospectlist" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Cancelar</a>
+                            <a ui-sref="app.prospectlist" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
                         </div>
                         <div class="col-lg-6 no-padder text-right">
                             <a ng-click="activeStep=1" ng-show="prospect.Id==0" class="btn btn-default">Regresar <i class="fa fa-arrow-left"></i></a>
@@ -235,38 +206,25 @@
                         <div class="form-group col-lg-3">
                             <label class="col-lg-12 no-padder control-label-left">Precio Billete:  <span class="color-red">*</span></label>
                             <div class="col-lg-12 no-padder">
-                                <input type="number"
-                                       ng-min="0"
-                                       ng-model="price.TicketPrice"
-                                       ng-change="changeTicketPrice()"
-                                       step="any"
-                                       class="form-control input-sm" />
+                                <input type="number" ng-min="0" ng-model="price.TicketPrice" ng-change="changeTicketPrice()" step="any" class="form-control input-sm" />
                             </div>
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="col-lg-12 no-padder control-label-left">Precio Serie:  <span class="color-red">*</span></label>
                             <div class="col-lg-12 no-padder">
-                                <input type="number"
-                                       ng-min="0"
-                                       ng-model="price.SeriePrice"
-                                       step="any"
-                                       class="form-control input-sm" />
+                                <input type="number" ng-min="0" ng-model="price.SeriePrice" step="any" class="form-control input-sm" />
                             </div>
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="col-lg-12 no-padder control-label-left">Precio Fracción:  <span class="color-red">*</span></label>
                             <div class="col-lg-12 no-padder">
-                                <input type="number"
-                                       ng-min="0"
-                                       ng-model="price.FactionPrice"
-                                       step="any"
-                                       class="form-control input-sm" />
+                                <input type="number" ng-min="0" ng-model="price.FactionPrice" step="any" class="form-control input-sm" />
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-12 text-right m-b-xs">
-                        <button ng-click="clearPrice()" type="button" class="btn btn-default">Cancelar</button>
-                        <button ng-click="addPrice()" type="button" class="btn btn-primary">Guardar</button>
+                        <button ng-click="clearPrice()" type="button" class="btn btn-default"> Cancelar</button>
+                        <button ng-click="addPrice()" type="button" class="btn btn-primary"> Guardar</button>
                     </div>
 
                     <div class="col-lg-12 no-padder">
@@ -296,7 +254,7 @@
                     </div>
                     <div class="mt col-lg-12 no-padder">
                         <div class="col-lg-6 no-padder">
-                            <a ui-sref="app.prospectlist" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Cancelar</a>
+                            <a ui-sref="app.prospectlist" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
                         </div>
                         <div class="col-lg-6 no-padder text-right">
                             <a ng-click="activeStep=2" class="btn btn-default">Regresar <i class="fa fa-arrow-left"></i></a>
@@ -324,29 +282,19 @@
                                                 <div class="form-group">
                                                     <label class="col-lg-12 control-label-left">Nombre:  <span class="color-red">*</span></label>
                                                     <div class="col-lg-12">
-                                                        <input type="text"
-                                                               ng-model="award.Name"
-                                                               class="form-control input-sm"
-                                                               ng-required="true" />
+                                                        <input type="text" ng-model="award.Name" class="form-control input-sm" ng-required="true" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-lg-12 control-label-left">Descripción: </label>
                                                     <div class="col-lg-12">
-                                                        <textarea class="form-control input-sm"
-                                                                  ng-model="award.Description"
-                                                                  style="max-height: 109px; height: 37px;"></textarea>
+                                                        <textarea class="form-control input-sm" ng-model="award.Description" style="max-height: 109px; height: 37px;"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-lg-12 control-label-left">Orden:  <span class="color-red">*</span></label>
                                                     <div class="col-lg-12">
-                                                        <input type="number"
-                                                               min="0"
-                                                               ng-model="award.OrderAward"
-                                                               step="any"
-                                                               class="form-control input-sm"
-                                                               ng-required="true" />
+                                                        <input type="number" min="0" ng-model="award.OrderAward" step="any" class="form-control input-sm" ng-required="true" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -402,23 +350,13 @@
                                                 <div class="form-group">
                                                     <label class="col-lg-12 control-label">Valor:  <span class="color-red">*</span></label>
                                                     <div class="col-lg-12">
-                                                        <input step="any"
-                                                               type="number"
-                                                               min="0"
-                                                               ng-model="award.Value"
-                                                               class="form-control input-sm"
-                                                               ng-required="true" />
+                                                        <input step="any" type="number" min="0" ng-model="award.Value" class="form-control input-sm" ng-required="true" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-lg-12 control-label-left">Terminal: </label>
                                                     <div class="col-lg-12">
-                                                        <input type="number"
-                                                               ng-disabled="disabledTerminal == false"
-                                                               min="0"
-                                                               ng-model="award.Terminal"
-                                                               step="any"
-                                                               class="form-control input-sm" />
+                                                        <input type="number" ng-disabled="disabledTerminal == false" min="0" ng-model="award.Terminal" step="any" class="form-control input-sm" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -487,7 +425,7 @@
                     </div>
                     <div class="mt col-lg-12 no-padder">
                         <div class="col-lg-6 no-padder">
-                            <a ui-sref="app.prospectlist" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i>Cancelar</a>
+                            <a ui-sref="app.prospectlist" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Cancelar</a>
                         </div>
                         <div class="col-lg-6 no-padder text-right">
                             <a ng-click="activeStep=3" class="btn btn-default">Regresar <i class="fa fa-arrow-left"></i></a>

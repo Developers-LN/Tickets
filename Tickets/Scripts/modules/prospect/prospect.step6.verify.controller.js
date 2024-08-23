@@ -115,6 +115,7 @@
                     $scope.prospectList = data.prospects;
                     $scope.$apply();
                     $rootScope.dataTable();
+                    $rootScope.createSelect2();
                 }
             });
         }

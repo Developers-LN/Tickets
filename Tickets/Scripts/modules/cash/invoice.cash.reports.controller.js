@@ -55,6 +55,9 @@
             if (invoiceDetail.EndDate === undefined) {
                 error += 'La Fecha Fin' + isReq;
             }
+            if (invoiceDetail.PayingFund === undefined) {
+                error += 'El fondo' + isReq;
+            }
             if (error !== '') {
                 alertify.showError('Alerta', error);
             }

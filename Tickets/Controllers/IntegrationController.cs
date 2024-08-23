@@ -19,19 +19,18 @@ using WebMatrix.WebData;
 
 namespace Tickets.Controllers
 {
+    [Authorize]
     public class IntegrationController : Controller
     {
         //private static Random random = new Random();
 
         //GET: /Integration/ElectronicTicketXml
-        [Authorize]
         [HttpGet]
         public ActionResult ElectronicTicketXml()
         {
             return View();
         }
 
-        [Authorize]
         [HttpGet]
         public ActionResult PayableAwardsToExcel(int raffleId)
         {
@@ -94,7 +93,6 @@ namespace Tickets.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public ActionResult PayableAwardsByClientToExcel(int ClientId, int RaffleId)
         {
@@ -161,7 +159,6 @@ namespace Tickets.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public ActionResult ExportToExcel(string FechaInicio = null, string FechaFin = null, int raffleId = 0)
         {
@@ -264,7 +261,6 @@ namespace Tickets.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public ActionResult BachPayedByPeriod(string FechaInicio = null, string FechaFin = null, int raffleId = 0)
         {
@@ -406,7 +402,6 @@ namespace Tickets.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public ActionResult ExportReceivableCloseToExcel(string FechaInicio = null, string FechaFin = null, int raffleId = 0, int reportType = 0)
         {
@@ -454,7 +449,7 @@ namespace Tickets.Controllers
                     workSheet.Cell(curretRow, 11).Value = item.PriceTicket;
                     workSheet.Cell(curretRow, 12).Value = item.TotalInvoice;
                     workSheet.Cell(curretRow, 13).Value = item.DiscountPercent;
-                    workSheet.Cell(curretRow, 14).Value = item.TotalDiscount;
+                    workSheet.Cell(curretRow, 14).Value = String.Concat(item.TotalDiscount.ToString(), '%');
                     workSheet.Cell(curretRow, 15).Value = item.TotalToPay;
                     workSheet.Cell(curretRow, 16).Value = item.CashPayment;
                     workSheet.Cell(curretRow, 17).Value = item.NoteCreditPayment;
@@ -469,7 +464,7 @@ namespace Tickets.Controllers
                 workSheet.Column(9).Style.NumberFormat.Format = "#,##0";
                 workSheet.Column(11).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(12).Style.NumberFormat.Format = "$ #,##0.00";
-                workSheet.Column(14).Style.NumberFormat.Format = "$ #,##0.00";
+                //workSheet.Column(14).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(15).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(16).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(17).Style.NumberFormat.Format = "$ #,##0.00";
@@ -507,7 +502,6 @@ namespace Tickets.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public ActionResult PayedElectronicAwardExcel(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
         {
@@ -596,9 +590,124 @@ namespace Tickets.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult PayedElectronicAwardExcelGroup(string startDate = "undefined", string endDate = "undefined", int clientId = 0, int raffleId = 0)
+        {
+            var context = new TicketsEntities();
+            var startD = DateTime.Parse(startDate);
+            var endD = DateTime.Parse(endDate);
+
+            var electronicAwards = context.ElectronicAwardPayeds.AsEnumerable()
+                .Where(i =>
+                    (i.RaffleId == raffleId || raffleId == 0) &&
+                    (i.ClientId == clientId || clientId == 0) &&
+                    (i.PayedDate.Value.Date >= startD.Date && i.PayedDate.Value.Date <= endD.Date))
+                .GroupBy(g => new
+                {
+                    g.Raffle.Symbol,
+                    g.Raffle.Separator,
+                    g.Raffle.SequenceNumber,
+                    g.PayedDate,
+                    g.ControlNumber,
+                    g.Number,
+                    g.FractionFrom,
+                    g.FractionTo,
+                    g.ClientId,
+                    g.Client.Name
+                })
+                .Select(s => new
+                {
+                    s.Key.Symbol,
+                    s.Key.Separator,
+                    s.Key.SequenceNumber,
+                    s.Key.PayedDate,
+                    s.Key.ControlNumber,
+                    s.Key.Number,
+                    s.Key.FractionFrom,
+                    s.Key.FractionTo,
+                    s.Key.ClientId,
+                    s.Key.Name,
+                    Payed = s.Sum(x => x.Payed)
+                })
+                .ToList();
+
+            using (var workBook = new XLWorkbook())
+            {
+                var workSheet = workBook.Worksheets.Add("Cuentas");
+                var curretRow = 1;
+
+                workSheet.Cell(curretRow, 1).Value = "Sorteo";
+                workSheet.Cell(curretRow, 2).Value = "Fecha_Pago";
+                workSheet.Cell(curretRow, 3).Value = "No_Control";
+                workSheet.Cell(curretRow, 4).Value = "Numero";
+                workSheet.Cell(curretRow, 5).Value = "Desde";
+                workSheet.Cell(curretRow, 6).Value = "Hasta";
+                workSheet.Cell(curretRow, 7).Value = "Pagado";
+                workSheet.Cell(curretRow, 8).Value = "ID_Cliente";
+                workSheet.Cell(curretRow, 9).Value = "Nombre_Cliente";
+                //workSheet.Cell(curretRow, 10).Value = "No_Ticket";
+                //workSheet.Cell(curretRow, 11).Value = "Premio";
+
+                workSheet.Column(2).Style.NumberFormat.Format = "@";
+                workSheet.Column(3).Style.NumberFormat.Format = "@";
+                workSheet.Column(4).Style.NumberFormat.Format = "@";
+
+                foreach (var item in electronicAwards)
+                {
+                    curretRow++;
+                    workSheet.Cell(curretRow, 1).Value = (item.Symbol + item.Separator + item.SequenceNumber);
+                    workSheet.Cell(curretRow, 2).Value = item.PayedDate.Value.ToString("dd/MM/yyyy");
+                    workSheet.Cell(curretRow, 3).Value = item.ControlNumber;
+                    workSheet.Cell(curretRow, 4).Value = item.Number;
+                    workSheet.Cell(curretRow, 5).Value = item.FractionFrom;
+                    workSheet.Cell(curretRow, 6).Value = item.FractionTo;
+                    workSheet.Cell(curretRow, 7).Value = item.Payed;
+                    workSheet.Cell(curretRow, 8).Value = item.ClientId;
+                    workSheet.Cell(curretRow, 9).Value = item.Name;
+                    //workSheet.Cell(curretRow, 10).Value = item.NoTicket;
+                    //workSheet.Cell(curretRow, 11).Value = item.AwardName;
+                }
+
+                var range = workSheet.RangeUsed();
+                var table = range.CreateTable();
+                table.Theme = XLTableTheme.TableStyleLight9;
+                workSheet.Columns().AdjustToContents();
+                workSheet.Column(7).Style.NumberFormat.Format = "$ #,##0.00";
+
+                using (var stream = new MemoryStream())
+                {
+                    workBook.SaveAs(stream);
+                    var content = stream.ToArray();
+
+                    string Nombre;
+
+                    DateTime FI = Convert.ToDateTime(startD);
+                    DateTime FF = Convert.ToDateTime(endD);
+
+                    if (raffleId != 0 && clientId == 0)
+                    {
+                        Nombre = ("PREMIOS PAGADOS DE MANERA ELECTRONICA DEL SORTEO NO. " + raffleId + " DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + " (AGRUPADO).xlsx").ToString();
+                    }
+                    else if (raffleId == 0 && clientId != 0)
+                    {
+                        Nombre = ("PREMIOS PAGADOS DE MANERA ELECTRONICA POR EL CLIENTE " + electronicAwards.FirstOrDefault().Name + " DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + " (AGRUPADO).xlsx").ToString();
+                    }
+                    else if (raffleId != 0 && clientId != 0)
+                    {
+                        Nombre = ("PREMIOS PAGADOS DE MANERA ELECTRONICA POR EL CLIENTE " + electronicAwards.FirstOrDefault().Name + " DEL SORTEO NO. " + raffleId + " DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + " (AGRUPADO).xlsx").ToString();
+                    }
+                    else
+                    {
+                        Nombre = ("PREMIOS PAGADOS DE MANERA ELECTRONICA" + " DESDE " + FI.ToString("dd-MM-yyyy") + " HASTA " + FF.ToString("dd-MM-yyyy") + " (AGRUPADO).xlsx").ToString();
+                    }
+
+                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Nombre);
+                }
+            }
+        }
+
         //NUEVO CODIGO PARA GENERAR XML DE LOS PREMIOS
         //GET: /Integration/AllocationNumbers
-        [Authorize]
         [HttpGet]
         public JsonResult RaffleAwards(int ClientId, int RaffleId)
         {
@@ -724,7 +833,6 @@ namespace Tickets.Controllers
 
         //NUEVO CODIGO PARA GENERAR XML DE LAS ASIGNACIONES
         //GET: /Integration/AllocationNumbers
-        [Authorize]
         [HttpGet]
         public JsonResult AllocationNumbers(int id)
         {
@@ -858,7 +966,6 @@ namespace Tickets.Controllers
         }
 
         //GET: /Integration/AllocationNumberToXML
-        [Authorize]
         [HttpGet]
         public JsonResult AllocationNumberToXML(int raffleId)
         {
@@ -1045,7 +1152,6 @@ namespace Tickets.Controllers
         //}
 
 
-        [Authorize]
         [HttpGet]
         public JsonResult AwardNumberToXML(int raffleId)
         {
@@ -1149,7 +1255,6 @@ namespace Tickets.Controllers
         }
 
         //POST: /Integration/CreateInvoiceXML
-        [Authorize]
         [HttpPost]
         public JsonResult CreateInvoiceXML(int raffleId, string path)
         {
@@ -1355,7 +1460,6 @@ namespace Tickets.Controllers
         }
 
         //POST: /Integration/CreateBachXML
-        [Authorize]
         [HttpPost]
         public JsonResult CreateBachXML(int raffleId, string path)
         {

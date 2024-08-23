@@ -2,7 +2,7 @@
  * Module: WorkflowProspectsController.js
  =========================================================*/
 
-(function() {
+(function () {
     'use strict';
 
     angular

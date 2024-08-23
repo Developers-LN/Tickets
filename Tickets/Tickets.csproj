@@ -255,6 +255,7 @@
     </Compile>
     <Compile Include="Controllers\ElectronicSalesApiController.cs" />
     <Compile Include="Controllers\ElectronicSalesController.cs" />
+    <Compile Include="Controllers\IdentifyBachController.cs" />
     <Compile Include="Controllers\OtherIncomesController.cs" />
     <Compile Include="Controllers\TaxReceiptController.cs" />
     <Compile Include="Controllers\TicketSuscriberApiController.cs" />
@@ -2561,8 +2562,6 @@
     <Content Include="Images\Sorting icons.psd" />
     <Content Include="packages.config" />
     <Content Include="libman.json" />
-    <None Include="Properties\PublishProfiles\Folder de Tickets.pubxml" />
-    <None Include="Properties\PublishProfiles\Sistema Comercial.pubxml" />
     <None Include="Properties\PublishProfiles\Tickets IIS Express.pubxml" />
     <Content Include="Views\Agency\Create.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3313,6 +3312,9 @@
     <Content Include="Views\OtherIncomes\OtherIncomePaymentByGroup.cshtml" />
     <Content Include="Views\OtherIncomes\CreateGroupPayment.cshtml" />
     <Content Include="Views\Reports\OtherPaymentGroup.cshtml" />
+    <Content Include="Views\IdentifyBach\WorkflowList.cshtml" />
+    <None Include="Properties\PublishProfiles\Tickets Production.pubxml" />
+    <None Include="Properties\PublishProfiles\Tickets Test.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

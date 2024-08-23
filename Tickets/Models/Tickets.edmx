@@ -44,6 +44,7 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="CreateUser" Type="int" Nullable="false" />
           <Property Name="TypesAwardId" Type="int" Nullable="false" />
+          <Property Name="PayingFund" Type="int" />
         </EntityType>
         <EntityType Name="AwardCertification">
           <Key>
@@ -280,6 +281,7 @@
           <Property Name="IdentifyBachId" Type="int" Nullable="false" />
           <Property Name="DiscountPercent" Type="int" Nullable="false" />
           <Property Name="SequenceNumber" Type="int" />
+          <Property Name="PayingFund" Type="int" />
         </EntityType>
         <EntityType Name="IdentifyNumber">
           <Key>
@@ -331,6 +333,7 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="CreateUser" Type="int" Nullable="false" />
           <Property Name="SequenceNumber" Type="int" />
+          <Property Name="PayingFund" Type="int" />
         </EntityType>
         <EntityType Name="InvoiceTicket">
           <Key>
@@ -3838,6 +3841,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="TypesAward" Relationship="TicketsModel.FK_Award_TypesAward" FromRole="Award" ToRole="TypesAward" />
           <NavigationProperty Name="User" Relationship="TicketsModel.FK_Award_User" FromRole="Award" ToRole="User" />
           <NavigationProperty Name="RaffleAwards" Relationship="TicketsModel.FK_RaffleAward_Award" FromRole="Award" ToRole="RaffleAward" />
+          <Property Name="PayingFund" Type="Int32" />
         </EntityType>
         <EntityType Name="Cash">
           <Key>
@@ -4066,6 +4070,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="Client" Relationship="TicketsModel.FK_RaffleAwardPayment_Client" FromRole="IdentifyBachPayment" ToRole="Client" />
           <NavigationProperty Name="IdentifyBach" Relationship="TicketsModel.FK_RaffleAwardPayment_IdentifyBach" FromRole="IdentifyBachPayment" ToRole="IdentifyBach" />
           <Property Name="SequenceNumber" Type="Int32" />
+          <Property Name="PayingFund" Type="Int32" />
         </EntityType>
         <EntityType Name="IdentifyNumber">
           <Key>
@@ -4132,6 +4137,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="Raffle" Relationship="TicketsModel.FK_InvoiceDetails_Raffle" FromRole="InvoiceDetail" ToRole="Raffle" />
           <NavigationProperty Name="User" Relationship="TicketsModel.FK_InvoiceDetails_User" FromRole="InvoiceDetail" ToRole="User" />
           <Property Name="SequenceNumber" Type="Int32" />
+          <Property Name="PayingFund" Type="Int32" />
         </EntityType>
         <EntityType Name="InvoiceTicket">
           <Key>
@@ -6646,6 +6652,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="Awards">
             <EntityTypeMapping TypeName="TicketsModel.Award">
               <MappingFragment StoreEntitySet="Award">
+                <ScalarProperty Name="PayingFund" ColumnName="PayingFund" />
                 <ScalarProperty Name="TypesAwardId" ColumnName="TypesAwardId" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
@@ -6823,6 +6830,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="IdentifyBachPayments">
             <EntityTypeMapping TypeName="TicketsModel.IdentifyBachPayment">
               <MappingFragment StoreEntitySet="IdentifyBachPayment">
+                <ScalarProperty Name="PayingFund" ColumnName="PayingFund" />
                 <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="DiscountPercent" ColumnName="DiscountPercent" />
                 <ScalarProperty Name="IdentifyBachId" ColumnName="IdentifyBachId" />
@@ -6879,6 +6887,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="InvoiceDetails">
             <EntityTypeMapping TypeName="TicketsModel.InvoiceDetail">
               <MappingFragment StoreEntitySet="InvoiceDetails">
+                <ScalarProperty Name="PayingFund" ColumnName="PayingFund" />
                 <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />

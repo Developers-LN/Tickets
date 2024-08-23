@@ -43,6 +43,7 @@
                                 <th class="text-center">RF</th>
                                 <th>Sorteo</th>
                                 <th>Cliente</th>
+                                <th>Fondo Pagador</th>
                                 <th>Fecha Inicio</th>
                                 <th>Fecha Fin</th>
                                 <th class="editColumm text-center">Acción</th>
@@ -53,6 +54,7 @@
                                 <td class="text-center">{{invoiceDetail.SequenceNumber}}</td>
                                 <td>{{invoiceDetail.RaffleDesc}}</td>
                                 <td>{{invoiceDetail.ClientId}} - {{invoiceDetail.ClientDesc}}</td>
+                                <td>{{invoiceDetail.PayingFund}}</td>
                                 <td>{{(invoiceDetail.StartDate | date:"dd/MM/yyyy")}}</td>
                                 <td>{{(invoiceDetail.EndDate | date:"dd/MM/yyyy")}}</td>
                                 <td class="text-center">
