@@ -64,8 +64,8 @@
         <div class="col-lg-6 no-padder text-left">
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+            <b>Fecha: </b> @DateTime.Now.ToString("dd/MM/yyyy") <br />
+            <b>Hora: </b> @DateTime.Now.ToString("hh:mm:ss tt") <br />
         </div>
     </div>
     <div>
@@ -112,7 +112,7 @@
                         decimal totalCredit = 0.0m;
                         decimal totalOther = 0.0m;
 
-                        var raffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + "  " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString();
+                        var raffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + "  " + raffle.Name + " " + raffle.DateSolteo.ToString("dd/MM/yyyy");
                         var invoices = raffle.Invoices.Where(i => (i.ClientId == clientId || clientId == 0) && i.PaymentStatu != (int)Tickets.Models.Enums.InvoicePaymentStatuEnum.Suspended).AsEnumerable()
                             .GroupBy(g => g.ClientId)
                             .Select(i => new

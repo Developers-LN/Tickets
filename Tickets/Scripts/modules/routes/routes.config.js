@@ -296,6 +296,11 @@
                 templateUrl: Route.base('OtherIncomes/OtherIncomesPaymentList'),
                 resolve: {}
             })
+            .state('app.appoveOtherIncomesPayments', {
+                url: '/others/otherIncomesPayment',
+                templateUrl: Route.base('OtherIncomes/OtherIncomesPaymentList'),
+                resolve: {}
+            })
             .state('app.otherIncomeAccountPayment', {
                 url: '/others/otherIncomesPayment/:otherIncomeGroupId',
                 templateUrl: Route.base('OtherIncomes/CreatePayment'),

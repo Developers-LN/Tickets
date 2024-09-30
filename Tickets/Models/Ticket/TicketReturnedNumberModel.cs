@@ -146,7 +146,7 @@ namespace Tickets.Models.Ticket
                                  SequenceNumberRaffle = r.Raffle.SequenceNumber,
                                  //RaffleDesc = a.Raffle.Name,
                                  RaffleNomenclature = a.Raffle.Symbol + a.Raffle.Separator + a.Raffle.SequenceNumber,
-                                 RaffleDesc = a.Raffle.Symbol + a.Raffle.Separator + a.Raffle.SequenceNumber + " " + a.Raffle.Name + " " + a.Raffle.DateSolteo.ToShortDateString(),
+                                 RaffleDesc = a.Raffle.Symbol + a.Raffle.Separator + a.Raffle.SequenceNumber + " " + a.Raffle.Name + " " + a.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                                  ReturnedDate = r.ReturnedDate.ToString()
                              }).GroupBy(r => r.Number)
                                 .Select(n => new
@@ -182,7 +182,7 @@ namespace Tickets.Models.Ticket
                     SequenceNumberRaffle = r.SequenceNumber,
                     r.Name,
                     raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
-                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
+                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToString("dd/MM/yyyy"),
                 }).ToList();
 
             var clients = context.Clients.Where(s => s.Statu == (int)ClientStatuEnum.Approbed).Select(r => new
@@ -203,7 +203,7 @@ namespace Tickets.Models.Ticket
                 ).GroupBy(d => d.ReturnedGroup).Select(d => new
                 {
                     //RaffleName = d.FirstOrDefault().Raffle.Id + " - " + d.FirstOrDefault().Raffle.Name,
-                    RaffleName = d.FirstOrDefault().Raffle.Symbol + d.FirstOrDefault().Raffle.Separator + d.FirstOrDefault().Raffle.SequenceNumber + " " + d.FirstOrDefault().Raffle.Name + " " + d.FirstOrDefault().Raffle.DateSolteo.ToShortDateString(),
+                    RaffleName = d.FirstOrDefault().Raffle.Symbol + d.FirstOrDefault().Raffle.Separator + d.FirstOrDefault().Raffle.SequenceNumber + " " + d.FirstOrDefault().Raffle.Name + " " + d.FirstOrDefault().Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                     ClientName = d.FirstOrDefault().ClientId + " - " + d.FirstOrDefault().Client.Name,
                     ClientId = d.FirstOrDefault().ClientId,
                     Group = d.FirstOrDefault().ReturnedGroup,
@@ -246,7 +246,7 @@ namespace Tickets.Models.Ticket
                 s.value,
                 s.sequenceNumberRaffle,
                 s.raffleNomenclature,
-                text = s.text + " " + s.DateSolteo.ToShortDateString()
+                text = s.text + " " + s.DateSolteo.ToString("dd/MM/yyyy")
             }).ToList();
 
             /*var groups = context.TicketReturns.Where(w => w.RaffleId == raffleId).AsEnumerable().Select(o => int.Parse(Regex.Match(o.ReturnedGroup, @"\d+").Value))

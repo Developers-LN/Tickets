@@ -86,7 +86,7 @@ namespace Tickets.Models.Ticket
                 RaffleId = ticketReturneds.FirstOrDefault().RaffleId,
                 SequenceNumberRaffle = raffleData.Symbol + raffleData.Separator + raffleData.SequenceNumber.Value,
                 //RaffleDesc = ticketReturneds.FirstOrDefault().Raffle.Name,
-                RaffleDesc = raffleData.Symbol + raffleData.Separator + raffleData.SequenceNumber + " " + raffleData.Name + " " + raffleData.DateSolteo.ToShortDateString(),
+                RaffleDesc = raffleData.Symbol + raffleData.Separator + raffleData.SequenceNumber + " " + raffleData.Name + " " + raffleData.DateSolteo.ToString("dd/MM/yyyy"),
                 ReturnedGroup = ticketReturneds.FirstOrDefault().ReturnedGroup,
                 ReturnedSubGroup = ticketReturneds.Count() == 1 ? ticketReturneds.FirstOrDefault().ReturnedGroup : ticketReturneds.Select(e => e.ReturnedGroup).Distinct().Aggregate((s, e) => s + ", " + e),
                 ReturnedDate = ticketReturneds.FirstOrDefault().ReturnedDate,

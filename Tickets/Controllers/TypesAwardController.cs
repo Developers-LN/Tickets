@@ -144,7 +144,7 @@ namespace Tickets.Controllers
                 s.SequenceNumber,
                 s.Name,
                 s.raffleNomenclature,
-                text = s.text + " " + s.DateSolteo.ToShortDateString()
+                text = s.text + " " + s.DateSolteo.ToString("dd/MM/yyyy")
             }).ToList();
 
             var raffles = raffles2.Select(s => new

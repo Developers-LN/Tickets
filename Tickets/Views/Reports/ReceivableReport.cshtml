@@ -65,7 +65,7 @@
         <div class="col-lg-12 no-padder text-center">
             <b>
                 DETALLE DE PAGOS A FACTURA SORTEO <br /> 
-                @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToShortDateString()
+                @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToString("dd/MM/yyyy")
             </b>
         </div>
         <div class="col-lg-6 no-padder">
@@ -87,10 +87,10 @@
                     <b>Recibo: </b>#@lastReceivable.Id
                 </div>*@
             <div class="col-lg-12 no-padder text-right">
-                <b>FECHA: </b> @Model.CreateDate.ToShortDateString()
+                <b>FECHA: </b> @Model.CreateDate.ToString("dd/MM/yyyy")
             </div>
             <div class="col-lg-12 no-padder text-right">
-                <b>HORA: </b> @Model.CreateDate.ToShortTimeString()
+                <b>HORA: </b> @Model.CreateDate.ToString("hh:mm:ss tt")
             </div>
         </div>
     </div>
@@ -289,7 +289,7 @@
                 <b>ADMINISTRACION DE LA LOTERIA NACIONAL</b>
             </div>
             <div class="col-lg-12 no-padder text-center">
-                <b>DETALLE DE FACTURAS SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToShortDateString()</b>
+                <b>DETALLE DE FACTURAS SORTEO NO.@Model.Raffle.Id DE FECHA @Model.Raffle.DateSolteo.ToString("dd/MM/yyyy")</b>
             </div>
             <div class="col-lg-6 no-padder">
                 <div class="col-lg-12 no-padder text-left">
@@ -310,10 +310,10 @@
                     <b>Factura: </b> #@Model.Id
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Fecha: </b> @DateTime.Now.ToShortDateString()
+                    <b>Fecha: </b> @DateTime.Now.ToString("dd/MM/yyyy")
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Hora: </b> @DateTime.Now.ToShortTimeString()
+                    <b>Hora: </b> @DateTime.Now.ToString("hh:mm:ss tt")
                 </div>
             </div>
         </div>

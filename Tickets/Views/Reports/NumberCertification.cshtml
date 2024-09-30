@@ -122,7 +122,7 @@
         </div>
         <div class="col-lg-12" style="font-size:14px;">
             <p>
-                Correspondientes al sorteo <span style="text-decoration:underline"><b>NO. @Model.RaffleAward.Raffle.Symbol @Model.RaffleAward.Raffle.Separator @Model.RaffleAward.Raffle.SequenceNumber </b></span> de fecha <span style="text-decoration:underline"><b>@Model.RaffleAward.Raffle.DateSolteo.ToShortDateString()</b></span>
+                Correspondientes al sorteo <span style="text-decoration:underline"><b>NO. @Model.RaffleAward.Raffle.Symbol @Model.RaffleAward.Raffle.Separator @Model.RaffleAward.Raffle.SequenceNumber </b></span> de fecha <span style="text-decoration:underline"><b>@Model.RaffleAward.Raffle.DateSolteo.ToString("dd/MM/yyyy")</b></span>
                 <br />
                 Con un premio ganador de @value.ToString("c", new System.Globalization.CultureInfo("es-DO")) cada fracción. Lo que hace un total de @totalGeneral.ToString("c", new System.Globalization.CultureInfo("es-DO")).
             </p>

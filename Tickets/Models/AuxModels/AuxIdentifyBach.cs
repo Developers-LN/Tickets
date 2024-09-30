@@ -68,7 +68,7 @@ namespace Tickets.Models.AuxModels
                 WinnerPhone = identifyBach.Winner.Phone,
                 WinnerId = identifyBach.WinnerId,
                 RaffleId = identifyBach.RaffleId,
-                RaffleDesc = identifyBach.Raffle.Symbol + identifyBach.Raffle.Separator + identifyBach.Raffle.SequenceNumber + " " + identifyBach.Raffle.Name + " " + identifyBach.Raffle.DateSolteo.ToShortDateString(),
+                RaffleDesc = identifyBach.Raffle.Symbol + identifyBach.Raffle.Separator + identifyBach.Raffle.SequenceNumber + " " + identifyBach.Raffle.Name + " " + identifyBach.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                 CreateDate = identifyBach.CreateDate,
                 CreateUser = identifyBach.User.Name,
                 CreateUserId = identifyBach.CreateUser,

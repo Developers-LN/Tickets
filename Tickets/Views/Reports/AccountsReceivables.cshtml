@@ -63,8 +63,8 @@
         <div class="col-lg-6 no-padder text-left">
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>HORA: </b> @DateTime.Now.ToShortTimeString() <br />
+            <b>FECHA: </b> @DateTime.Now.ToString("dd/MM/yyyy") <br />
+            <b>HORA: </b> @DateTime.Now.ToString("hh:mm:ss tt") <br />
         </div>
     </div>
     <div>
@@ -158,7 +158,7 @@
 
                                 <tr>
                                     <td class="text-center">@invoice.SequenceNumber</td>
-                                    <td class="text-center">@invoice.InvoiceDate.ToShortDateString()</td>
+                                    <td class="text-center">@invoice.InvoiceDate.ToString("dd/MM/yyyy")</td>
                                     <td class="text-center">@(isXpired? "Caducada" : context.Catalogs.FirstOrDefault(c=> c.Id == invoice.PaymentStatu).NameDetail)</td>
                                     <td class="text-right">@((payment.totalInvoice).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
                                     <td class="text-right">@((payment.discount).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>

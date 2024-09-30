@@ -182,12 +182,12 @@ namespace Tickets.Controllers
                 {
                     s.Id,
                     sequenceNumberIdentifyBach = s.SequenceNumber,
-                    CreateDate = s.CreateDate.ToShortDateString(),
+                    CreateDate = s.CreateDate.ToString("dd/MM/yyyy"),
                     s.RaffleId,
                     sequenceNumberRaffle = s.Raffle.SequenceNumber,
                     raffleNomenclature = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.SequenceNumber,
                     //RaffleName = s.Raffle.Name
-                    RaffleName = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.SequenceNumber + " " + s.Raffle.Name + " " + s.Raffle.DateSolteo.ToShortDateString()
+                    RaffleName = s.Raffle.Symbol + s.Raffle.Separator + s.Raffle.SequenceNumber + " " + s.Raffle.Name + " " + s.Raffle.DateSolteo.ToString("dd/MM/yyyy")
                 }).ToList();
             }
 

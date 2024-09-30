@@ -365,6 +365,7 @@
     <Compile Include="Models\Enums\GeneralClientEnum.cs" />
     <Compile Include="Models\Enums\IdentifyBachNumberTypeEnum.cs" />
     <Compile Include="Models\Enums\NoteCreditEnum.cs" />
+    <Compile Include="Models\Enums\OtherIncomesStatusEnum.cs" />
     <Compile Include="Models\Enums\PaymentTypeTextEnum.cs" />
     <Compile Include="Models\Enums\PrintTypeProspect.cs" />
     <Compile Include="Models\Enums\ProspectIdEnum.cs" />

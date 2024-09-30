@@ -70,8 +70,8 @@
 
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+            <b>Fecha: </b> @DateTime.Now.ToString("dd/MM/yyyy") <br />
+            <b>Hora: </b> @DateTime.Now.ToString("hh:mm:ss tt") <br />
         </div>
     </div>
     <div>
@@ -121,7 +121,7 @@
                                     var total = (number.FractionTo - number.FractionFrom + 1) * price;
                                     <tr>
                                         <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
-                                        <td class="text-center">@number.IdentifyBach.CreateDate.ToShortDateString()</td>
+                                        <td class="text-center">@number.IdentifyBach.CreateDate.ToString("dd/MM/yyyy")</td>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((raffleInfo.Prospect.Production - 1).ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
@@ -144,7 +144,7 @@
                                     var total = (number.FractionTo - number.FractionFrom + 1) * price;
                                     <tr>
                                         <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
-                                        <td class="text-center">@number.IdentifyBach.CreateDate.ToShortDateString()</td>
+                                        <td class="text-center">@number.IdentifyBach.CreateDate.ToString("dd/MM/yyyy")</td>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((raffleInfo.Prospect.Production - 1).ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@number.FractionFrom - @number.FractionTo</td>

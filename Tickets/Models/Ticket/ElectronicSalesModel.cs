@@ -218,7 +218,7 @@ namespace Tickets.Models.Ticket
 				ClientDesc = electronicTicketSale.Client.Name,
                 //RaffleDesc = electronicTicketSale.Raffle.Name,
                 RaffleNomenclature = electronicTicketSale.Raffle.Symbol + electronicTicketSale.Raffle.Separator + electronicTicketSale.Raffle.SequenceNumber,
-                RaffleDesc = electronicTicketSale.Raffle.Symbol + electronicTicketSale.Raffle.Separator + electronicTicketSale.Raffle.SequenceNumber + " " + electronicTicketSale.Raffle.Name + " " + electronicTicketSale.Raffle.DateSolteo.ToShortDateString(),
+                RaffleDesc = electronicTicketSale.Raffle.Symbol + electronicTicketSale.Raffle.Separator + electronicTicketSale.Raffle.SequenceNumber + " " + electronicTicketSale.Raffle.Name + " " + electronicTicketSale.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                 RaffleId = electronicTicketSale.Raffle.Id,
 				SequenceNumberRaffle = electronicTicketSale.Raffle.SequenceNumber,
 				AllocationId = (int)electronicTicketSale.TicketAllocationId,

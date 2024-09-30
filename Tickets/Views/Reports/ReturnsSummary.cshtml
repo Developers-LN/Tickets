@@ -29,11 +29,11 @@
                     @RaffleData.Symbol @RaffleData.Separator @RaffleData.SequenceNumber @RaffleData.Name
                 </b>
             </h3><br />
-            FECHA DE SORTEO @RaffleData.DateSolteo.ToShortDateString()
+            FECHA DE SORTEO @RaffleData.DateSolteo.ToString("dd/MM/yyyy")
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 text-center">
-            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>HORA: </b> @DateTime.Now.ToShortTimeString()
+            <b>FECHA: </b> @DateTime.Now.ToString("dd/MM/yyyy") <br />
+            <b>HORA: </b> @DateTime.Now.ToString("hh:mm:ss tt")
         </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12">

@@ -854,10 +854,10 @@ namespace Tickets.Controllers
                             RaffleId = allocation.Raffle.SequenceNumber.Value,
                             //RaffleName = allocation.Raffle.Name,
                             RaffleNomenclature = allocation.Raffle.Symbol + allocation.Raffle.Separator + allocation.Raffle.SequenceNumber,
-                            RaffleName = allocation.Raffle.Symbol + allocation.Raffle.Separator + allocation.Raffle.SequenceNumber + " " + allocation.Raffle.Name + " " + allocation.Raffle.DateSolteo.ToShortDateString(),
+                            RaffleName = allocation.Raffle.Symbol + allocation.Raffle.Separator + allocation.Raffle.SequenceNumber + " " + allocation.Raffle.Name + " " + allocation.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                             FractionPrice = allocation.Raffle.Prospect.Price,
                             TicketPrice = ((allocation.Raffle.Prospect.LeafFraction * allocation.Raffle.Prospect.LeafNumber) * allocation.Raffle.Prospect.Price),
-                            RaffleDate = allocation.Raffle.DateSolteo.ToShortDateString(),
+                            RaffleDate = allocation.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                             StopSales = allocation.Raffle.EndReturnDate.AddHours(-1).ToString(),
                             CreateDate = DateTime.Now.ToString(),
                             Allocation = id,
@@ -978,10 +978,10 @@ namespace Tickets.Controllers
                         var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
                         var allocationXML = new Models.XML.TicketAllocateXML()
                         {
-                            RaffleDate = raffle.DateSolteo.ToShortDateString(),
+                            RaffleDate = raffle.DateSolteo.ToString("dd/MM/yyyy"),
                             RaffleId = raffle.Id,
                             RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.SequenceNumber,
-                            RaffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
+                            RaffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToString("dd/MM/yyyy"),
                             User = WebSecurity.CurrentUserName,
                             CreateDate = DateTime.Now.ToString(),
                             TicketAllocationNumbers = new List<Models.XML.TicketAllocationNumber>()
@@ -1064,7 +1064,7 @@ namespace Tickets.Controllers
         //                var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
         //                var awardNumbesXML = new Models.XML.AwardNumbesXML()
         //                {
-        //                    RaffleDate = raffle.DateSolteo.ToShortDateString(),
+        //                    RaffleDate = raffle.DateSolteo.ToString("dd/MM/yyyy"),
         //                    RaffleId = raffle.Id,
         //                    User = WebSecurity.CurrentUserName,
         //                    CreateDate = DateTime.Now.ToString(),
@@ -1165,10 +1165,10 @@ namespace Tickets.Controllers
                         var raffle = context.Raffles.FirstOrDefault(r => r.Id == raffleId);
                         var awardNumbesXML = new Models.XML.AwardNumbesXML()
                         {
-                            RaffleDate = raffle.DateSolteo.ToShortDateString(),
+                            RaffleDate = raffle.DateSolteo.ToString("dd/MM/yyyy"),
                             RaffleId = raffle.Id,
                             RaffleNomenclature = raffle.Symbol + raffle.Separator + raffle.SequenceNumber,
-                            RaffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString(),
+                            RaffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToString("dd/MM/yyyy"),
                             User = WebSecurity.CurrentUserName,
                             CreateDate = DateTime.Now.ToString(),
                             TicketNumbers = new List<Models.XML.AwardTicketNumber>()

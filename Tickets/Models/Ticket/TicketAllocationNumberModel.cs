@@ -717,7 +717,7 @@ namespace Tickets.Models.Ticket
                     SequenceNumberRaffle = n.TicketAllocation.Raffle.SequenceNumber,
                     //RaffleDesc = context.Raffles.FirstOrDefault(c => c.Id == n.TicketAllocation.RaffleId).Name,
                     RaffleNomenclature = n.TicketAllocation.Raffle.Symbol + n.TicketAllocation.Raffle.Separator + n.TicketAllocation.Raffle.SequenceNumber,
-                    RaffleDesc = n.TicketAllocation.Raffle.Symbol + n.TicketAllocation.Raffle.Separator + n.TicketAllocation.Raffle.SequenceNumber + " " + n.TicketAllocation.Raffle.Name + " " + n.TicketAllocation.Raffle.DateSolteo.ToShortDateString(),
+                    RaffleDesc = n.TicketAllocation.Raffle.Symbol + n.TicketAllocation.Raffle.Separator + n.TicketAllocation.Raffle.SequenceNumber + " " + n.TicketAllocation.Raffle.Name + " " + n.TicketAllocation.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                     Cedula = n.ElectronicTicketSales.Any(a => a.TicketAllocationNimberId == n.Id) ? n.ElectronicTicketSales.FirstOrDefault().Cedula : null,
                     Telefono = n.ElectronicTicketSales.Any(a => a.TicketAllocationNimberId == n.Id) ? n.ElectronicTicketSales.FirstOrDefault().PhoneNumber : null
                 },

@@ -21,6 +21,7 @@
                 success: function (data) {
                     window.loading.hide();
                     $scope.Id = data.Id;
+                    $scope.sequenceNumber = data.sequenceNumber;
                     $scope.Description = data.Description;
                     $scope.CreateDate = data.CreateDate;
                     $scope.Status = data.Status;
@@ -30,6 +31,29 @@
                     $rootScope.destroyDataTable();
                     $scope.$apply();
                     $rootScope.dataTable();
+                }
+            });
+        }
+
+        $scope.approvegroup = function(id){
+            // confirm dialog
+            alertify.confirm("&iquest;Desea realizar la aprobación de este grupo de ingresos?", function (e) {
+                if (e) {
+                    window.loading.show();
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        url: 'OtherIncomes/approveGroup?id=' + id,
+                        success: function (response) {
+                            window.loading.hide();
+                            if (response.result == false) {
+                                alertify.alert(response.message);
+                            } else {
+                                self.getPaymentHistory();
+                                alertify.alert(response.message);
+                            }
+                        }
+                    });
                 }
             });
         }

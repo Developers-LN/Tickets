@@ -147,7 +147,7 @@ namespace Tickets.Models.Workflows
                     //RaffleDesc = (number.IdentifyBach.RaffleId + " - " + number.IdentifyBach.Raffle.Name).ToString(),
                     SequenceNumberRaffle = number.IdentifyBach.Raffle.SequenceNumber.Value,
                     SequenceNumberIdentifyBach = number.IdentifyBach.SequenceNumber.Value,
-                    RaffleDesc = number.IdentifyBach.Raffle.Symbol + number.IdentifyBach.Raffle.Separator + number.IdentifyBach.Raffle.SequenceNumber + " " + number.IdentifyBach.Raffle.Name + " " + number.IdentifyBach.Raffle.DateSolteo.ToShortDateString(),
+                    RaffleDesc = number.IdentifyBach.Raffle.Symbol + number.IdentifyBach.Raffle.Separator + number.IdentifyBach.Raffle.SequenceNumber + " " + number.IdentifyBach.Raffle.Name + " " + number.IdentifyBach.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                     Number = number.TicketAllocationNumber.Number,
                     Awards = awards
                 };

@@ -45,6 +45,8 @@
           <Property Name="CreateUser" Type="int" Nullable="false" />
           <Property Name="TypesAwardId" Type="int" Nullable="false" />
           <Property Name="PayingFund" Type="int" />
+          <Property Name="DuePayingFund" Type="date" />
+          <Property Name="AlternativePayingFund" Type="int" />
         </EntityType>
         <EntityType Name="AwardCertification">
           <Key>
@@ -777,6 +779,7 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <Property Name="NoOrden" Type="int" />
           <Property Name="No_Ticket_Electronico" Type="int" />
           <Property Name="TicketType" Type="int" />
+          <Property Name="payment_code" Type="varchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="TicketAllocationNumber_Delete">
           <Key>
@@ -3842,6 +3845,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="User" Relationship="TicketsModel.FK_Award_User" FromRole="Award" ToRole="User" />
           <NavigationProperty Name="RaffleAwards" Relationship="TicketsModel.FK_RaffleAward_Award" FromRole="Award" ToRole="RaffleAward" />
           <Property Name="PayingFund" Type="Int32" />
+          <Property Name="DuePayingFund" Type="DateTime" Precision="0" />
+          <Property Name="AlternativePayingFund" Type="Int32" />
         </EntityType>
         <EntityType Name="Cash">
           <Key>
@@ -4544,6 +4549,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="TicketType" Type="Int32" />
           <NavigationProperty Name="Catalog" Relationship="TicketsModel.FK_TicketAllocationNumber_Catalog_Statu" FromRole="TicketAllocationNumber" ToRole="Catalog" />
           <NavigationProperty Name="Raffle" Relationship="TicketsModel.FK_TicketAllocationNumber_Raffle" FromRole="TicketAllocationNumber" ToRole="Raffle" />
+          <Property Name="payment_code" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="TicketRePrint">
           <Key>
@@ -6652,6 +6658,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="Awards">
             <EntityTypeMapping TypeName="TicketsModel.Award">
               <MappingFragment StoreEntitySet="Award">
+                <ScalarProperty Name="AlternativePayingFund" ColumnName="AlternativePayingFund" />
+                <ScalarProperty Name="DuePayingFund" ColumnName="DuePayingFund" />
                 <ScalarProperty Name="PayingFund" ColumnName="PayingFund" />
                 <ScalarProperty Name="TypesAwardId" ColumnName="TypesAwardId" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
@@ -7230,6 +7238,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="TicketAllocationNumbers">
             <EntityTypeMapping TypeName="TicketsModel.TicketAllocationNumber">
               <MappingFragment StoreEntitySet="TicketAllocationNumber">
+                <ScalarProperty Name="payment_code" ColumnName="payment_code" />
                 <ScalarProperty Name="TicketType" ColumnName="TicketType" />
                 <ScalarProperty Name="No_Ticket_Electronico" ColumnName="No_Ticket_Electronico" />
                 <ScalarProperty Name="NoOrden" ColumnName="NoOrden" />

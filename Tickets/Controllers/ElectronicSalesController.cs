@@ -60,11 +60,11 @@ namespace Tickets.Controllers
                             clientId = Allocation.Client.Id,
                             clientType = context.Catalogs.FirstOrDefault(f => f.Id == Allocation.Client.GroupId).NameDetail,
                             clientDiscount = Allocation.Client.Discount,
-                            allocateDate = Allocation.CreateDate.ToShortDateString(),
+                            allocateDate = Allocation.CreateDate.ToString("dd/MM/yyyy"),
                             raffleId = Allocation.Raffle.Id,
                             //raffleName = Allocation.Raffle.Name,
                             sequenceNumberRaffle = Allocation.Raffle.SequenceNumber,
-                            raffleName = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.SequenceNumber + " " + Allocation.Raffle.Name + " " + Allocation.Raffle.DateSolteo.ToShortDateString(),
+                            raffleName = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.SequenceNumber + " " + Allocation.Raffle.Name + " " + Allocation.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                             electronicSalesByDate = ElectronicTicketsList.GroupBy(g => g.SaleDate.ToShortDateString()).Select(s => new
                             {
                                 date = s.Key,
@@ -87,12 +87,12 @@ namespace Tickets.Controllers
                             clientId = Allocation.Client.Id,
                             clientType = context.Catalogs.FirstOrDefault(f => f.Id == Allocation.Client.GroupId).NameDetail,
                             clientDiscount = Allocation.Client.Discount,
-                            allocateDate = Allocation.CreateDate.ToShortDateString(),
+                            allocateDate = Allocation.CreateDate.ToString("dd/MM/yyyy"),
                             raffleId = Allocation.Raffle.Id,
                             sequenceNumberRaffle = Allocation.Raffle.SequenceNumber,
                             raffleNomenclature = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.SequenceNumber,
                             //raffleName = Allocation.Raffle.Name,
-                            raffleName = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.SequenceNumber + " " + Allocation.Raffle.Name + " " + Allocation.Raffle.DateSolteo.ToShortDateString(),
+                            raffleName = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.SequenceNumber + " " + Allocation.Raffle.Name + " " + Allocation.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                             electronicSalesByDate = 0
                         }
                     };
@@ -129,12 +129,12 @@ namespace Tickets.Controllers
                         clientId = Allocation.Client.Id,
                         clientType = context.Catalogs.FirstOrDefault(f => f.Id == Allocation.Client.GroupId).NameDetail,
                         clientDiscount = Allocation.Client.Discount,
-                        allocateDate = Allocation.CreateDate.ToShortDateString(),
+                        allocateDate = Allocation.CreateDate.ToString("dd/MM/yyyy"),
                         raffleId = Allocation.Raffle.Id,
                         sequenceNumberRaffle = Allocation.Raffle.SequenceNumber,
                         //raffleName = Allocation.Raffle.Name,
                         raffleNomenclature = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.SequenceNumber,
-                        raffleName = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.SequenceNumber + " " + Allocation.Raffle.Name + " " + Allocation.Raffle.DateSolteo.ToShortDateString(),
+                        raffleName = Allocation.Raffle.Symbol + Allocation.Raffle.Separator + Allocation.Raffle.SequenceNumber + " " + Allocation.Raffle.Name + " " + Allocation.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                         electronicSalesByDate = ElectronicTicketsList.GroupBy(g => g.PrintedDate).Select(s => new
                         {
                             date = s.Key,

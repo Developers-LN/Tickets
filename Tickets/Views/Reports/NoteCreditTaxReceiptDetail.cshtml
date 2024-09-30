@@ -101,7 +101,7 @@
                 <b>NOTA DE CREDITO </b> @(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
             </div>
             <div class="col-lg-12 no-padder text-right">
-                <b>FECHA DE CREACION </b> @Model.NoteDate.ToShortDateString()
+                <b>FECHA DE CREACION </b> @Model.NoteDate.ToString("dd/MM/yyyy")
             </div>
         </div>
     </div>

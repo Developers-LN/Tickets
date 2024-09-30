@@ -53,7 +53,7 @@ namespace Tickets.Controllers
                             }
                             else
                             {
-                                allocationJSON.RaffleDate = raffle.DateSolteo.ToShortDateString();
+                                allocationJSON.RaffleDate = raffle.DateSolteo.ToString("dd/MM/yyyy");
                                 allocationJSON.RaffleId = raffle.Id;
 
                                 raffle.TicketAllocations.ToList().ForEach(a => a.TicketAllocationNumbers.ToList().ForEach(t =>
@@ -113,7 +113,7 @@ namespace Tickets.Controllers
                             }
                             else
                             {
-                                allocationJSON.RaffleDate = raffle.DateSolteo.ToShortDateString();
+                                allocationJSON.RaffleDate = raffle.DateSolteo.ToString("dd/MM/yyyy");
                                 allocationJSON.RaffleId = raffle.Id;
 
                                 raffle.TicketAllocations.Where(t => t.ClientId == clientId).ToList().ForEach(a => a.TicketAllocationNumbers.ToList().ForEach(t =>
@@ -172,7 +172,7 @@ namespace Tickets.Controllers
                             }
                             else
                             {
-                                numberAwardsJSON.RaffleDate = raffle.DateSolteo.ToShortDateString();
+                                numberAwardsJSON.RaffleDate = raffle.DateSolteo.ToString("dd/MM/yyyy");
                                 numberAwardsJSON.RaffleId = raffle.Id;
                                 numberAwardsJSON.TicketNumbers = new List<Models.JSON.TicketNumberAward>();
 

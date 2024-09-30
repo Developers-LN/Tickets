@@ -1048,8 +1048,8 @@ namespace Tickets.Controllers
             }
 
             ViewBag.invoiceDetailId = invoiceDetail.SequenceNumber;
-            ViewBag.invoiceDetailDate = invoiceDetail.CreateDate.ToShortDateString();
-            ViewBag.invoiceDetailTime = invoiceDetail.CreateDate.ToShortTimeString();
+            ViewBag.invoiceDetailDate = invoiceDetail.CreateDate.ToString("dd/MM/yyyy");
+            ViewBag.invoiceDetailTime = invoiceDetail.CreateDate.ToString("hh:mm:ss tt");
             ViewBag.payingFund = invoiceDetail.PayingFund.HasValue && invoiceDetail.PayingFund.Value > 0 ? invoiceDetail.PayingFund.Value : 0;
             ViewBag.payingFundName = invoiceDetail.PayingFund.HasValue && invoiceDetail.PayingFund.Value > 0 ? context.Catalogs.FirstOrDefault(f => f.Id == invoiceDetail.PayingFund).NameDetail : "N/A";
             ViewBag.owner = invoiceDetail.PayingFund.HasValue && invoiceDetail.PayingFund.Value > 0 && funds.FirstOrDefault(f => f.Id == invoiceDetail.PayingFund).Description2 != null ? funds.FirstOrDefault(f => f.Id == invoiceDetail.PayingFund).Description2 : null;

@@ -55,7 +55,7 @@ namespace Tickets.Controllers
                     r.SequenceNumber,
                     DateSolteo = r.DateSolteo.ToUnixTime(),
                     raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
-                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToShortDateString()
+                    text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToString("dd/MM/yyyy")
                 }).OrderByDescending(r => r.Id).ToList();
             return new JsonResult()
             {

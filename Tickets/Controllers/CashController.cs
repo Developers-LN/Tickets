@@ -187,7 +187,7 @@ namespace Tickets.Controllers
                     s.SequenceNumber,
                     s.Name,
                     s.raffleNomenclature,
-                    text = s.text + " " + s.DateSolteo.ToShortDateString()
+                    text = s.text + " " + s.DateSolteo.ToString("dd/MM/yyyy")
                 }).ToList<object>();
             }
             else
@@ -221,7 +221,7 @@ namespace Tickets.Controllers
                 StartDate = invoiceDetail.StartDate.ToUnixTime(),
                 invoiceDetail.RaffleId,
                 //RaffleDesc = invoiceDetail.Raffle.Name,
-                RaffleDesc = invoiceDetail.Raffle.Symbol + invoiceDetail.Raffle.Separator + invoiceDetail.Raffle.SequenceNumber + " " + invoiceDetail.Raffle.Name + " " + invoiceDetail.Raffle.DateSolteo.ToShortDateString(),
+                RaffleDesc = invoiceDetail.Raffle.Symbol + invoiceDetail.Raffle.Separator + invoiceDetail.Raffle.SequenceNumber + " " + invoiceDetail.Raffle.Name + " " + invoiceDetail.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                 invoiceDetail.ClientId,
                 ClientDesc = invoiceDetail.Client.Name,
                 UserDesc = invoiceDetail.User.Name,
@@ -350,7 +350,7 @@ namespace Tickets.Controllers
                 s.value,
                 s.raffleSequence,
                 s.raffleNomenclature,
-                text = s.text + " " + s.DateSolteo.ToShortDateString()
+                text = s.text + " " + s.DateSolteo.ToString("dd/MM/yyyy")
             }).ToList();
 
             var payingFund = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.PayingFund && w.Statu == true).OrderBy(o => o.IdDetail).Select(s => new
@@ -989,7 +989,7 @@ namespace Tickets.Controllers
                     raffleId = invoice.RaffleId,
                     sequenceNumberRaffle = invoice.Raffle.SequenceNumber,
                     //raffleName = invoice.Raffle.Name
-                    raffleName = invoice.Raffle.Symbol + invoice.Raffle.Separator + invoice.Raffle.SequenceNumber + " " + invoice.Raffle.Name + " " + invoice.Raffle.DateSolteo.ToShortDateString()
+                    raffleName = invoice.Raffle.Symbol + invoice.Raffle.Separator + invoice.Raffle.SequenceNumber + " " + invoice.Raffle.Name + " " + invoice.Raffle.DateSolteo.ToString("dd/MM/yyyy")
                 }
             };
         }
@@ -1030,7 +1030,7 @@ namespace Tickets.Controllers
                     s.SequenceNumber,
                     s.Name,
                     s.raffleNomenclature,
-                    text = s.text + " " + s.DateSolteo.ToShortDateString()
+                    text = s.text + " " + s.DateSolteo.ToString("dd/MM/yyyy")
                 }).ToList<object>();
             }
             var clients = new List<object>();
@@ -1290,7 +1290,7 @@ namespace Tickets.Controllers
                 s.SequenceNumber,
                 s.Name,
                 s.raffleNomenclature,
-                text = s.text + " " + s.DateSolteo.ToShortDateString()
+                text = s.text + " " + s.DateSolteo.ToString("dd/MM/yyyy")
             }).ToList();
 
             return new JsonResult()
@@ -1326,7 +1326,7 @@ namespace Tickets.Controllers
                 s.Id,
                 s.SequenceNumber,
                 s.Name,
-                text = s.text + " " + s.DateSolteo.ToShortDateString()
+                text = s.text + " " + s.DateSolteo.ToString("dd/MM/yyyy")
             }).ToList();
 
             return new JsonResult()
@@ -1459,7 +1459,7 @@ namespace Tickets.Controllers
                 noteCredit.SequenceNumber,
                 noteCredit.Nomenclature,
                 noteCredit.ClientId,
-                CreateDate = noteCredit.CreateDate.ToShortDateString(),
+                CreateDate = noteCredit.CreateDate.ToString("dd/MM/yyyy"),
                 noteCredit.CreateUser,
                 NoteDate = noteCredit.NoteDate.ToShortDateString(),
                 noteCredit.Statu,

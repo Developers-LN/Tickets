@@ -35,6 +35,8 @@ namespace Tickets.Models
         public int CreateUser { get; set; }
         public int TypesAwardId { get; set; }
         public Nullable<int> PayingFund { get; set; }
+        public Nullable<System.DateTime> DuePayingFund { get; set; }
+        public Nullable<int> AlternativePayingFund { get; set; }
     
         public virtual ICollection<Award> Award1 { get; set; }
         public virtual Award Award2 { get; set; }

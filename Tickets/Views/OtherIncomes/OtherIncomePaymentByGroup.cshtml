@@ -11,6 +11,7 @@
                 <div class="col-lg-12 well no-padder">
                     <fieldset>
                         <div class="col-lg-12 no-padder">
+                            <div class="col-lg-4">No. grupo: <b> {{sequenceNumber}}</b></div>
                             <div class="col-lg-4">Creado en: <b> {{(CreateDate | date:"dd/MM/yyyy")}}</b></div>
                             <div class="col-lg-4">Estado: <b> {{statusDesc}}</b></div>
                         </div>
@@ -18,7 +19,10 @@
                     <br />
                     <fieldset>
                         <div class="col-lg-12 no-padder">
-                            <div class="col-lg-12">Descripción: <b>{{Description}}</b></div>
+                            <div class="col-lg-7">Descripción: <b>{{Description}}</b></div>
+                            <div ng-show="verifyCanView('app.appoveOtherIncomesPayments')" class="col-lg-5 text-center">
+                                <a class="btn btn-square btn-success {{moduleCanAdd}}" ng-click="approvegroup(Id)"><i class="fa fa-plus-square"></i> Aprobar grupo de ingreso</a>
+                            </div>
                         </div>
                     </fieldset>
                 </div>
@@ -31,6 +35,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center">Recibo</th>
+                                <th class="text-center">Cuenta</th>
                                 <th class="text-center">Descripción</th>
                                 <th class="text-center">Fecha de pago</th>
                                 <th class="text-center">Total pagado</th>
@@ -40,6 +45,7 @@
                         <tbody>
                             <tr data-ng-repeat="payment in payments">
                                 <td class="text-center">{{payment.SequenceNumber}}</td>
+                                <td class="text-center">{{payment.payAccount}}</td>
                                 <td class="text-center">{{payment.Description}}</td>
                                 <td class="text-center">{{(payment.PaymentDate| date:"dd/MM/yyyy")}}</td>
                                 <td class="text-center">{{parseMoney(payment.Total)}}</td>

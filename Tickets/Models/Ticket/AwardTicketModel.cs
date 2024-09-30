@@ -43,7 +43,7 @@ namespace Tickets.Models.Ticket
                               SequenceNumberRaffle = r.IdentifyBach.Raffle.SequenceNumber,
                               //RaffleDesc = a.Raffle.Name,
                               RaffleNomenclature = a.Raffle.Symbol + a.Raffle.Separator + a.Raffle.SequenceNumber,
-                              RaffleDesc = a.Raffle.Symbol + a.Raffle.Separator + a.Raffle.SequenceNumber + " " + a.Raffle.Name + " " + a.Raffle.DateSolteo.ToShortDateString(),
+                              RaffleDesc = a.Raffle.Symbol + a.Raffle.Separator + a.Raffle.SequenceNumber + " " + a.Raffle.Name + " " + a.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                               IdentifyBachId = r.IdentifyBachId,
                               SequenceNumberIdentifyBach = r.IdentifyBach.SequenceNumber,
                               IdentifyDate = r.IdentifyBach.CreateDate.ToString(),

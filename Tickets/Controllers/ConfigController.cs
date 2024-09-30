@@ -196,7 +196,7 @@ namespace Tickets.Controllers
                     s.id,
                     s.sequenceNumber,
                     s.raffleNomenclature,
-                    text = s.text + " " + s.DateSolteo.ToShortDateString()
+                    text = s.text + " " + s.DateSolteo.ToString("dd/MM/yyyy")
                 }).ToList();
 
                 return new JsonResult

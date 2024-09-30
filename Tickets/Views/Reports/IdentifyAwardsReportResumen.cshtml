@@ -65,8 +65,8 @@
         <div class="col-lg-6 no-padder text-right">
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>FECHA: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>HORA: </b> @DateTime.Now.ToShortTimeString() <br />
+            <b>FECHA: </b> @DateTime.Now.ToString("dd/MM/yyyy") <br />
+            <b>HORA: </b> @DateTime.Now.ToString("hh:mm:ss tt") <br />
         </div>
     </div>
     <div>
@@ -92,7 +92,7 @@
                     @foreach (var raffle in Model.Where(w => w.Statu == (int)Tickets.Models.Enums.RaffleStatusEnum.Generated))
                     {
                         var clients = context.Clients.Where(w => (w.Statu == (int)Tickets.Models.Enums.ClientStatuEnum.Approbed && w.IdentifyBaches.Count() > 0) && (clientId == 0 || w.Id == clientId)).ToList();
-                        var raffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToShortDateString();
+                        var raffleName = raffle.Symbol + raffle.Separator + raffle.SequenceNumber + " " + raffle.Name + " " + raffle.DateSolteo.ToString("dd/MM/yyyy");
                         <tr>
                             <th colspan="3" class="text-left">@raffleName</th>
                         </tr>

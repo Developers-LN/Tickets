@@ -71,7 +71,7 @@
             @if (idRaffleList.Count() == 1)
             {
                 var RaffleData2 = RaffleData.FirstOrDefault(f => f.Id == Model.FirstOrDefault().IdRaffle);
-                <b>DEL SORTEO @RaffleData2.Symbol @RaffleData2.Separator @RaffleData2.SequenceNumber @RaffleData2.Name @RaffleData2.DateSolteo.ToShortDateString()</b>
+                <b>DEL SORTEO @RaffleData2.Symbol @RaffleData2.Separator @RaffleData2.SequenceNumber @RaffleData2.Name @RaffleData2.DateSolteo.ToString("dd/MM/yyyy")</b>
             }
         </div>
     </div>
@@ -79,8 +79,8 @@
         <div class="col-lg-6 no-padder text-left">
         </div>
         <div class="col-lg-6 no-padder text-right">
-            <b>Fecha: </b> @DateTime.Now.ToShortDateString() <br />
-            <b>Hora: </b> @DateTime.Now.ToShortTimeString() <br />
+            <b>Fecha: </b> @DateTime.Now.ToString("dd/MM/yyyy") <br />
+            <b>Hora: </b> @DateTime.Now.ToString("hh:mm:ss tt") <br />
         </div>
     </div>
     <div>
@@ -267,7 +267,7 @@
 
                         var raffleName = RaffleData.Where(f => f.Id == raffle.RaffleId).Select(s => new
                         {
-                            Name = s.Symbol + s.Separator + s.Id + " " + s.Name + " " + s.DateSolteo.ToShortDateString()
+                            Name = s.Symbol + s.Separator + s.Id + " " + s.Name + " " + s.DateSolteo.ToString("dd/MM/yyyy")
                         }).FirstOrDefault();
 
                         <tr>

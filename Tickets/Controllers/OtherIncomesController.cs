@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 using Tickets.Models;
 using Tickets.Models.Enums;
@@ -80,6 +81,7 @@ namespace Tickets.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
                 Data = new
                 {
+                    sequenceNumber = String.Concat(otherIncomeGroupData.Symbol, otherIncomeGroupData.SequenceNumber.ToString().PadLeft(otherIncomeGroupData.LengthZero.Value, '0')),
                     otherIncomeGroupData.Id,
                     otherIncomeGroupData.Description,
                     CreateDate = otherIncomeGroupData.CreateDate.Value.ToString(),
@@ -90,10 +92,45 @@ namespace Tickets.Controllers
                         s.Id,
                         s.Total,
                         s.Description,
+                        payAccount = String.Concat(s.OtherIncome.NoCatalogAccount, " - ", s.OtherIncome.AccountName),
                         PaymentDate = s.PaymentDate.Value.ToShortDateString(),
                         s.OtherIncomeId,
                         SequenceNumber = String.Concat(s.Symbol, s.SequenceNumber.ToString().PadLeft(s.LengthZero.Value, '0'))
                     })
+                }
+            };
+        }
+
+        [HttpPost]
+        public JsonResult approveGroup(int id)
+        {
+            var context = new TicketsEntities();
+
+            var otherIncomeGroupData = context.OtherIncomesGroups.FirstOrDefault(f => f.Id == id);
+
+            if (otherIncomeGroupData == null)
+            {
+                return new JsonResult()
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                    Data = new
+                    {
+                        result = false,
+                        message = "No se encontró el grupo de ingresos"
+                    }
+                };
+            }
+
+            otherIncomeGroupData.Status = (int)OtherIncomesStatusEnum.Approve;
+            context.SaveChanges();
+
+            return new JsonResult()
+            {
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                Data = new
+                {
+                    result = true,
+                    message = "El grupo de ingresos fue aprobado"
                 }
             };
         }
@@ -281,7 +318,7 @@ namespace Tickets.Controllers
                                 CreateUser = WebSecurity.CurrentUserId,
                                 Symbol = null,
                                 LengthZero = null,
-                                Status = 1
+                                Status = (int)OtherIncomesStatusEnum.Pending
                             };
                             context.OtherIncomesGroups.Add(otherIncomesGroup);
                             context.SaveChanges();

@@ -79,7 +79,7 @@ namespace Tickets.Models.Raffles
                         r.SequenceNumber,
                         r.Id,
                         raffleNomenclature = r.Symbol + r.Separator + r.SequenceNumber,
-                        text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToShortDateString(),
+                        text = r.Symbol + r.Separator + r.SequenceNumber + " " + r.Name + " " + r.DateSolteo.ToString("dd/MM/yyyy"),
                     }).ToList<object>();
             }
             return new { ticketReprints, raffles };
@@ -131,7 +131,7 @@ namespace Tickets.Models.Raffles
                 SequenceNumberTicketRePrint = reprint.SequenceNumber.Value,
                 //RaffleDesc = context.Raffles.FirstOrDefault(r => r.Id == reprint.RaffleId).Name,
                 RaffleNomenclature = reprint.Raffle.Symbol + reprint.Raffle.Separator + reprint.Raffle.SequenceNumber,
-                RaffleDesc = reprint.Raffle.Symbol + reprint.Raffle.Separator + reprint.Raffle.SequenceNumber + " " + reprint.Raffle.Name + " " + reprint.Raffle.DateSolteo.ToShortDateString(),
+                RaffleDesc = reprint.Raffle.Symbol + reprint.Raffle.Separator + reprint.Raffle.SequenceNumber + " " + reprint.Raffle.Name + " " + reprint.Raffle.DateSolteo.ToString("dd/MM/yyyy"),
                 IsPrint = false,
                 CreateDate = reprint.CreateDate,
                 CreateDateLong = reprint.CreateDate.ToUnixTime(),
