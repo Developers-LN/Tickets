@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Web.Http.Results;
 using System.Web.Mvc;
 using Tickets.Models;
 using Tickets.Models.Enums;
@@ -95,6 +94,7 @@ namespace Tickets.Controllers
                         payAccount = String.Concat(s.OtherIncome.NoCatalogAccount, " - ", s.OtherIncome.AccountName),
                         PaymentDate = s.PaymentDate.Value.ToShortDateString(),
                         s.OtherIncomeId,
+                        s.OtherIncomeGroupId,
                         SequenceNumber = String.Concat(s.Symbol, s.SequenceNumber.ToString().PadLeft(s.LengthZero.Value, '0'))
                     })
                 }
@@ -157,7 +157,7 @@ namespace Tickets.Controllers
         public JsonResult GetOtherIncomeGroupsList()
         {
             var context = new TicketsEntities();
-            var otherIncomesGroup = context.OtherIncomesGroups.AsEnumerable().Where(w => w.Status == (int)GeneralStatusEnum.Active).Select(s => OtherIncomeGroupList(s)).ToList();
+            var otherIncomesGroup = context.OtherIncomesGroups.AsEnumerable().Select(s => OtherIncomeGroupList(s)).ToList();
 
             Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de otros ingresos");
 
@@ -511,17 +511,23 @@ namespace Tickets.Controllers
 
         // GET: OtherIncomes/GetOtherIncomeData
         [HttpGet]
-        public JsonResult GetOtherIncomeDetailData(int otherincomeGroupId)
+        public JsonResult GetOtherIncomeDetailData(int otherincomeDetailId)
         {
             var context = new TicketsEntities();
-            object otherIncomeGroup = null;
-            if (otherincomeGroupId > 0)
+            object otherIncomeDetail = null;
+            if (otherincomeDetailId > 0)
             {
-                otherIncomeGroup = context.OtherIncomesGroups.AsEnumerable().Where(a => a.Id == otherincomeGroupId).Select(e => e.Id).FirstOrDefault();
-            }
-            else
-            {
-                otherIncomeGroup = otherincomeGroupId;
+                otherIncomeDetail = context.OtherIncomeDetails.AsEnumerable().Where(a => a.Id == otherincomeDetailId).Select(e => new
+                {
+                    e.Id,
+                    OtherIncomesGroupId = e.OtherIncomeGroupId,
+                    e.OtherIncomeId,
+                    PaymentDate = e.PaymentDate.Value.ToUnixTime(),
+                    TotalPayment = e.Total,
+                    e.BankAccountCatalogId,
+                    OtherIncomeDetailDescription = e.Description,
+                    OtherIncomesGroupDescription = e.OtherIncomesGroup.Description
+                }).FirstOrDefault();
             }
 
             var otherIncome = context.OtherIncomes.AsEnumerable().Where(w => w.Status == (int)GeneralStatusEnum.Active).Select(s => new
@@ -537,7 +543,7 @@ namespace Tickets.Controllers
                 Name = g.NameDetail
             });
 
-            return new JsonResult() { Data = new { otherIncomeGroup, otherIncome, bankAccount }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new JsonResult() { Data = new { otherIncomeDetail, otherIncome, bankAccount }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         private object OtherIncomeGroupToObject(OtherIncomesGroupModel c)

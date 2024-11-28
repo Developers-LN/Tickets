@@ -39,7 +39,7 @@
         this.clearOtherIncomePayment = function () {
             $scope.otherIncomePayment = {
                 Id: 0,
-                OtherIncomesGroupId: 0,
+                OtherIncomesGroupId: $stateParams.otherincomeGroupId,
                 OtherIncomeId: undefined,
                 OtherIncomesGroupDescription: undefined,
                 OtherIncomeDetailDescription: undefined,
@@ -79,24 +79,22 @@
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                url: 'OtherIncomes/GetOtherIncomeDetailData?otherincomeGroupId=' + $stateParams.otherIncomeGroupId,
+                url: 'OtherIncomes/GetOtherIncomeDetailData?otherincomeDetailId=' + $stateParams.otherincomeDetailId,
                 success: function (data) {
-                    window.loading.hide();
                     $scope.otherIncomeList = data.otherIncome;
                     $scope.bankAccountList = data.bankAccount;
-
-                    if ($stateParams.otherIncomeGroupId == 0) {
+                    if ($stateParams.otherincomeDetailId == 0) {
                         self.clearOtherIncomePayment();
                     } else {
                         $scope.otherIncomePayment = {
-                            Id: 0,
-                            OtherIncomesGroupId: data.otherIncomeGroup,
-                            OtherIncomeId: undefined,
-                            OtherIncomesGroupDescription: undefined,
-                            OtherIncomeDetailDescription: undefined,
-                            TotalPayment: undefined,
-                            PaymentDate: undefined,
-                            BankAccountCatalogId: undefined
+                            Id: data.otherIncomeDetail.Id,
+                            OtherIncomesGroupId: data.otherIncomeDetail.OtherIncomesGroupId,
+                            OtherIncomeId: data.otherIncomeDetail.OtherIncomeId,
+                            OtherIncomesGroupDescription: data.otherIncomeDetail.OtherIncomesGroupDescription,
+                            OtherIncomeDetailDescription: data.otherIncomeDetail.OtherIncomeDetailDescription,
+                            TotalPayment: data.otherIncomeDetail.TotalPayment,
+                            PaymentDate: new Date(data.otherIncomeDetail.PaymentDate),
+                            BankAccountCatalogId: data.otherIncomeDetail.BankAccountCatalogId
                         };
                     }
                     if (!$scope.$$phase) {

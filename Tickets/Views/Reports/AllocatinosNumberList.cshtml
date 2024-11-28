@@ -91,14 +91,11 @@
             int rows = 1;
             int numberCount = 0;
             int line = 1;
+            int prospect_fraction = (Model.Raffle.Prospect.LeafNumber * Model.Raffle.Prospect.LeafFraction);
             var numbers = Model.TicketAllocationNumbers.Any() ? Model.TicketAllocationNumbers.OrderBy(o => o.Number).Select(s => s.Number).ToList() : Model.TicketAllocationNumber_Delete.OrderBy(o => o.Number).Select(s => s.Number).ToList();
             int length = (Model.Raffle.Prospect.Production - 1).ToString().Length;
-            var totalNumbers = Model.TicketAllocationNumbers.Any() ? Model.TicketAllocationNumbers.Count : Model.TicketAllocationNumber_Delete.Count;
             var production = Model.Raffle.Prospect.Production - 1;
-            var Leafs = Model.TicketAllocationNumbers.Any() ? ((Model.TicketAllocationNumbers.FirstOrDefault().FractionTo - Model.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1) / Model.Raffle.Prospect.LeafFraction) : ((Model.TicketAllocationNumber_Delete.FirstOrDefault().FractionTo - Model.TicketAllocationNumber_Delete.FirstOrDefault().FractionFrom + 1) / Model.Raffle.Prospect.LeafFraction);
-            var totalLeaf = totalNumbers * Leafs;
-            var fractions = Model.TicketAllocationNumbers.Any() ? (Model.TicketAllocationNumbers.FirstOrDefault().FractionTo - Model.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1) : (Model.TicketAllocationNumber_Delete.FirstOrDefault().FractionTo - Model.TicketAllocationNumber_Delete.FirstOrDefault().FractionFrom + 1);
-            var total = totalNumbers * fractions;
+            var fractions = Model.TicketAllocationNumbers.Any() ? (Model.TicketAllocationNumbers.Sum(s=> s.FractionTo - s.FractionFrom + 1)) : (Model.TicketAllocationNumber_Delete.Sum(s => s.FractionTo - s.FractionFrom + 1));
             var prospect = context.Prospects.FirstOrDefault(p => p.Id == Model.Raffle.ProspectId);
             var price = prospect.Prospect_Price.AsEnumerable().Where(pp => pp.PriceId == Model.Client.PriceId).FirstOrDefault().FactionPrice;
         }
@@ -164,14 +161,13 @@
                     <td class="text-center col-lg-6">
 
                         <div class="col-lg-6 no-padder text-right">
-                            Tot. de numeros: <b>@totalNumbers</b><br />
-                            Tot. de hojas: <b>@totalLeaf</b><br />
+                            TOTAL BOLETOS: <b>@(fractions / prospect_fraction)</b><br />
+                            TOTAL FRACCIONES: <b>@(fractions % prospect_fraction)</b><br />
                         </div>
                         <div class="col-lg-6 no-padder text-right">
                             <br />
-                            Total: <b>@((total * price).ToString("c",  new System.Globalization.CultureInfo("es-DO")) )</b>
+                            TOTAL: <b>@((fractions * price).ToString("c",  new System.Globalization.CultureInfo("es-DO")) )</b>
                         </div>
-
                     </td>
                 </tr>
             </tfoot>

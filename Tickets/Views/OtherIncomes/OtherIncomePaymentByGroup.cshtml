@@ -20,14 +20,14 @@
                     <fieldset>
                         <div class="col-lg-12 no-padder">
                             <div class="col-lg-7">Descripción: <b>{{Description}}</b></div>
-                            <div ng-show="verifyCanView('app.appoveOtherIncomesPayments')" class="col-lg-5 text-center">
+                            <div ng-show="verifyCanView('app.appoveOtherIncomesPayments') && Status != 5964" class="col-lg-5 text-center">
                                 <a class="btn btn-square btn-success {{moduleCanAdd}}" ng-click="approvegroup(Id)"><i class="fa fa-plus-square"></i> Aprobar grupo de ingreso</a>
                             </div>
                         </div>
                     </fieldset>
                 </div>
                 <div class="col-lg-12 no-padder text-center">
-                    <a href="#/others/otherIncomesPayment/{{Id}}" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Agregar pago</a>
+                    <a ng-show="Status != 5964" href="#/others/otherIncomesPayment/{{Id}}/0" class="btn btn-square btn-success {{moduleCanAdd}}"><i class="fa fa-plus-square"></i> Agregar pago</a>
                 </div>
 
                 <div class="row-border hover">
@@ -50,6 +50,7 @@
                                 <td class="text-center">{{(payment.PaymentDate| date:"dd/MM/yyyy")}}</td>
                                 <td class="text-center">{{parseMoney(payment.Total)}}</td>
                                 <td class="text-center">
+                                    <a ng-show="Status != 5964" href="#/others/otherIncomesPayment/{{payment.OtherIncomeGroupId}}/{{payment.Id}}" title="Moificar recibo" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
                                     <a target="_blank" href="/Reports/OtherPaymentReceipt?paymentId={{payment.Id}}" title="Reporte de pago"><i class="fa fa-print"></i></a>
                                 </td>
                             </tr>

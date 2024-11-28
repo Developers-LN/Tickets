@@ -191,7 +191,8 @@
                             total = subTotal - discount;
                             <tr>
                                 <td class="text-center">@number.SequenceNumberTicketAllocation</td>
-                                <td class="text-center">@number.Numbers.Count</td>
+                                @*<td class="text-center">@number.Numbers.Count</td>*@
+                                <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
                                 <td class="text-center">@(number.Numbers.Count)-@(number.Quantity % number.TicketFractions) </td>
                                 <td class="text-center">@number.PriceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                 <td class="text-center">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>

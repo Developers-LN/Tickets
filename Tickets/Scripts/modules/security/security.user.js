@@ -111,10 +111,13 @@
 	            url: 'Security/UserCreate',
 	            data: self.$scope.user,
 	            success: function (data) {
-	                if (data === true) {
-	                    alertify.success('Usuario guardado correctamente!');
-	                    self.$state.go('app.securityUserList');
-	                }
+					if (data.result === true) {
+						alertify.success(data.message);
+						self.$state.go('app.securityUserList');
+					}
+					else {
+						alertify.showError(data.message);
+					}
 	            }
 	        });
 	    }

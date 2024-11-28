@@ -49,7 +49,7 @@
                             if (response.result == false) {
                                 alertify.alert(response.message);
                             } else {
-                                self.getPaymentHistory();
+                                window.location.reload();
                                 alertify.alert(response.message);
                             }
                         }

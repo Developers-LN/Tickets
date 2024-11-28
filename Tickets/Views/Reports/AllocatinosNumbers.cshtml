@@ -44,7 +44,7 @@
                     var allocationId = ViewBag.AllocationId == null ? 0 : (int)ViewBag.AllocationId;
                     var allocateNumbers = context.TicketAllocationNumbers.Where(n => n.TicketAllocation.RaffleId == Model.Id
                         && (clientId == 0 || n.TicketAllocation.ClientId == clientId)
-                         && (allocationId == 0 || n.TicketAllocation.Id == allocationId));
+                        && (allocationId == 0 || n.TicketAllocation.Id == allocationId));
                     var clients = allocateNumbers.GroupBy(n => n.TicketAllocation.ClientId).Select(n => new
                     {
                         Client = n.FirstOrDefault().TicketAllocation.Client,
@@ -54,6 +54,7 @@
                     var totalValue = 0.0m;
                     int totalFraction = 0;
                     int totalNumber = 0;
+                    int production = (Model.Prospect.Production - 1);
                 }
                 @foreach (var client in clients)
                 {
@@ -65,18 +66,18 @@
                     foreach (var number in client.Number)
                     {
                         subTotalNumber += 1;
-                        subTotalFraction += 1;
                         var priceFraction = number.TicketAllocation.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == client.Client.PriceId).FactionPrice;
                         var stringNumber = number.Number.ToString();
                         var fractionQuantity = number.FractionTo - number.FractionFrom + 1;
                         var subTotal = fractionQuantity * priceFraction;
                         <tr>
-                            <td class="text-right">@stringNumber</td>
+                            <td class="text-right">@stringNumber.PadLeft(production.ToString().Length, '0')</td>
                             <td class="text-right">@fractionQuantity</td>
                             <td class="text-right">@priceFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                             <td class="text-right">@subTotal.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                         </tr>
                         subTotalValue += subTotal;
+                        subTotalFraction += fractionQuantity;
                     }
                     <tr class="sub-total">
                         <td class="text-right">@subTotalNumber</td>

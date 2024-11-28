@@ -302,7 +302,7 @@
                 resolve: {}
             })
             .state('app.otherIncomeAccountPayment', {
-                url: '/others/otherIncomesPayment/:otherIncomeGroupId',
+                url: '/others/otherIncomesPayment/:otherincomeGroupId/:otherincomeDetailId',
                 templateUrl: Route.base('OtherIncomes/CreatePayment'),
                 resolve: {}
             })

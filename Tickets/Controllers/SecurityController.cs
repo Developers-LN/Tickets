@@ -373,27 +373,47 @@ namespace Tickets.Controllers
         public JsonResult UserCreate(UserCreateModel user)
         {
             var context = new TicketsEntities();
-            if (user.Id <= 0)
+            try
             {
-                WebSecurity.CreateUserAndAccount(user.Name, user.Password);
-                var modifyUser = context.Users.FirstOrDefault(u => u.Name == user.Name);
-                modifyUser.Statu = user.Statu;
-                modifyUser.EmpleadoId = user.EmpleadoId;
-            }
-            else
-            {
-                if (user.Password != "")
+                if (user.Id <= 0)
                 {
-                    var passwordResetToken = WebSecurity.GeneratePasswordResetToken(user.Name);
-                    WebSecurity.ResetPassword(passwordResetToken, user.Password);
+                    if (!context.Users.Any(u => u.Name == user.Name))
+                    {
+                        WebSecurity.CreateUserAndAccount(user.Name, user.Password);
+                        var modifyUser = context.Users.FirstOrDefault(u => u.Name == user.Name);
+                        modifyUser.Statu = user.Statu;
+                        modifyUser.EmpleadoId = user.EmpleadoId;
+                    }
+                    else
+                    {
+                        return new JsonResult() { Data = new { result = false, Message = "El nombre de usuario ya esta en uso" } };
+                    }
                 }
-                var modifyUser = context.Users.FirstOrDefault(u => u.Id == user.Id);
-                modifyUser.Statu = user.Statu;
-                modifyUser.EmpleadoId = user.EmpleadoId;
+                else
+                {
+                    if (user.Password != "")
+                    {
+                        var passwordResetToken = WebSecurity.GeneratePasswordResetToken(user.Name);
+                        WebSecurity.ResetPassword(passwordResetToken, user.Password);
+                    }
+                    else
+                    {
+                        return new JsonResult() { Data = new { result = false, Message = "La contraseña no fue ingresada" } };
+                    }
+                    var modifyUser = context.Users.FirstOrDefault(u => u.Id == user.Id);
+                    modifyUser.Statu = user.Statu;
+                    modifyUser.EmpleadoId = user.EmpleadoId;
+                }
+
+                context.SaveChanges();
+                Utils.SaveLog(WebSecurity.CurrentUserName, user.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Usuarios");
+
+                return new JsonResult() { Data = new { result = true, Message = "Proceso completado correctamente" } };
             }
-            context.SaveChanges();
-            Utils.SaveLog(WebSecurity.CurrentUserName, user.Id == 0 ? LogActionsEnum.Insert : LogActionsEnum.Update, "Usuarios");
-            return new JsonResult() { Data = true };
+            catch(Exception ex)
+            {
+                return new JsonResult() { Data = new { result = false, Message = "Error durante el proceso" } };
+            }
         }
 
         #endregion
