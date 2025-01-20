@@ -207,7 +207,7 @@ namespace Tickets.Controllers
                     workSheet.Cell(curretRow, 11).Value = item.TotalFractions;
                     workSheet.Cell(curretRow, 12).Value = item.PriceTicket;
                     workSheet.Cell(curretRow, 13).Value = item.TotalInvoice;
-                    workSheet.Cell(curretRow, 14).Value = item.DiscountPercent;
+                    workSheet.Cell(curretRow, 14).Value = String.Concat(item.DiscountPercent.ToString(), '%');
                     workSheet.Cell(curretRow, 15).Value = item.TotalDiscount;
                     workSheet.Cell(curretRow, 16).Value = item.TotalToPay;
                     workSheet.Cell(curretRow, 17).Value = item.CashPayment;
@@ -223,7 +223,7 @@ namespace Tickets.Controllers
                 workSheet.Column(10).Style.NumberFormat.Format = "#,##0";
                 workSheet.Column(12).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(13).Style.NumberFormat.Format = "$ #,##0.00";
-                workSheet.Column(14).Style.NumberFormat.Format = "$ #,##0.00";
+                //workSheet.Column(14).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(15).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(16).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(17).Style.NumberFormat.Format = "$ #,##0.00";
@@ -448,8 +448,8 @@ namespace Tickets.Controllers
                     workSheet.Cell(curretRow, 10).Value = item.TotalFractions;
                     workSheet.Cell(curretRow, 11).Value = item.PriceTicket;
                     workSheet.Cell(curretRow, 12).Value = item.TotalInvoice;
-                    workSheet.Cell(curretRow, 13).Value = item.DiscountPercent;
-                    workSheet.Cell(curretRow, 14).Value = String.Concat(item.TotalDiscount.ToString(), '%');
+                    workSheet.Cell(curretRow, 13).Value = String.Concat(item.DiscountPercent.ToString(), '%');
+                    workSheet.Cell(curretRow, 14).Value = item.TotalDiscount;
                     workSheet.Cell(curretRow, 15).Value = item.TotalToPay;
                     workSheet.Cell(curretRow, 16).Value = item.CashPayment;
                     workSheet.Cell(curretRow, 17).Value = item.NoteCreditPayment;
@@ -464,7 +464,7 @@ namespace Tickets.Controllers
                 workSheet.Column(9).Style.NumberFormat.Format = "#,##0";
                 workSheet.Column(11).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(12).Style.NumberFormat.Format = "$ #,##0.00";
-                //workSheet.Column(14).Style.NumberFormat.Format = "$ #,##0.00";
+                workSheet.Column(14).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(15).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(16).Style.NumberFormat.Format = "$ #,##0.00";
                 workSheet.Column(17).Style.NumberFormat.Format = "$ #,##0.00";

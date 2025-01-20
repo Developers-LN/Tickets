@@ -45,7 +45,7 @@ namespace Tickets.Models.Ticket
         public int NumberCount { get; set; }
 
         [JsonProperty(PropertyName = "sequenceNumberRaffle")]
-        public string SequenceNumberRaffle {  get; set; }
+        public string SequenceNumberRaffle { get; set; }
 
         /*internal TicketReturnedModel ListaDevoluciones(List<TicketReturn> ticketReturneds, bool hasNumber = false)
         {
@@ -345,7 +345,7 @@ namespace Tickets.Models.Ticket
                             s.Prospect.MaxReturnTickets,
                             s.Statu,
                             s.EndReturnDate,
-                            Production = s.Prospect.Production.ToString().Length,
+                            Production = (s.Prospect.Production - 1).ToString().Length,
                             MaxFraction = s.Prospect.LeafNumber * s.Prospect.LeafFraction,
                             returnedOpens = s.ReturnedOpens.Select(r => r.EndReturnedDate)
                         }).FirstOrDefault();
@@ -370,6 +370,9 @@ namespace Tickets.Models.Ticket
                                        t.FractionTo,
                                        t.FractionFrom,
                                        t.Number,
+                                       t.TicketAllocation.Client.Name,
+                                       InvoiceCondition = t.InvoiceTickets.Select(s => s.Invoice.Condition).FirstOrDefault(),
+                                       Payment = t.InvoiceTickets.Select(s => s.Invoice.ReceiptPayments).Count(),
                                        clientDiscount = t.InvoiceTickets.Select(s => s.Invoice.Discount).FirstOrDefault()
                                    }).ToList();
 
@@ -391,7 +394,7 @@ namespace Tickets.Models.Ticket
                                 sb.Append(" Los billetes ");
                                 foreach (var ticket in DataFromOtherClients.Where(w => w.Name == client))
                                 {
-                                    sb.Append(ticket.Number.ToString().PadLeft((raffleData.Production - 1), '0'));
+                                    sb.Append(ticket.Number.ToString().PadLeft((raffleData.Production), '0'));
                                     sb.Append(", ");
                                 }
                                 sb.Append(" pertenecen al cliente ");
@@ -409,13 +412,81 @@ namespace Tickets.Models.Ticket
                             };
                         }
 
+                        var TicketsGroupList = model.TicketReturnedNumbers.Select(s => s.NumberId).GroupBy(g => g).ToList();
+
+                        foreach (var g in TicketsGroupList)
+                        {
+                            var TicketsRecords = model.TicketReturnedNumbers.Select(s => new { s.FractionFrom, s.FractionTo, s.NumberId }).Where(w => w.NumberId == g.Key).OrderBy(o => o.FractionFrom).ToArray();
+
+                            for (int b = 0; (b + 1) < TicketsRecords.Length; b++)
+                            {
+                                var reference = TicketsRecords[b];
+                                var test = TicketsRecords[b + 1].FractionFrom;
+
+                                if (test >= reference.FractionFrom && test <= reference.FractionTo)
+                                {
+                                    state = true;
+                                    sb.Append(TicketsRecords[b].NumberId.ToString().PadLeft((raffleData.Production), '0'));
+                                    sb.Append(", ");
+                                    b = TicketsRecords.Length;
+                                }
+                            }
+                        }
+                        if (state)
+                        {
+                            sb.Insert(0, " Los billetes ");
+                            sb.Append(" presentan problemas con las fracciones.");
+                            return new RequestResponseModel()
+                            {
+                                Result = false,
+                                Message = sb.ToString()
+                            };
+                        }
+
+                        if (ticketAllocationNumbers.Any(a => a.InvoiceCondition == (int)InvoiceConditionEnum.Counted) || ticketAllocationNumbers.Any(a => a.Payment != 0))
+                        {
+                            state = true;
+                            var countedTickets = ticketAllocationNumbers.Where(w => w.InvoiceCondition == (int)InvoiceConditionEnum.Counted && model.TicketReturnedNumbers.Select(s => s.NumberId).Contains((int)w.Number)).ToList();
+                            var payedTickets = ticketAllocationNumbers.Where(w => w.Payment != 0 && model.TicketReturnedNumbers.Select(s => s.NumberId).Contains((int)w.Number)).ToList();
+
+                            if (countedTickets.Any())
+                            {
+                                sb.Append(" Los billetes ");
+                                foreach (var ticket in countedTickets)
+                                {
+                                    sb.Append(ticket.Number.ToString().PadLeft((raffleData.Production), '0'));
+                                    sb.Append(", ");
+                                }
+                                sb.Append(" y estan al contado.");
+                                sb.AppendLine();
+                            }
+                            if (payedTickets.Any())
+                            {
+                                sb.Append(" Los billetes ");
+                                foreach (var ticket in payedTickets)
+                                {
+                                    sb.Append(ticket.Number.ToString().PadLeft((raffleData.Production), '0'));
+                                    sb.Append(", ");
+                                }
+                                sb.Append(" y estan pagos.");
+                                sb.AppendLine();
+                            }
+                        }
+                        if (state)
+                        {
+                            return new RequestResponseModel()
+                            {
+                                Result = false,
+                                Message = sb.ToString()
+                            };
+                        }
+
                         var totalTickets = 0;
                         ticketAllocationNumbers.ForEach(t => totalTickets += (t.FractionTo - t.FractionFrom + 1));
 
                         var returnTickets = 0;
 
-                        var returneds = context.TicketReturns.Where(r => r.RaffleId == model.RaffleId && r.ClientId == clientId)
-                                               .Select(r => new { r.FractionTo, r.FractionFrom, r.ClientId, r.TicketAllocationNimberId }).ToList();
+                        var returneds = context.TicketReturns.Where(r => r.RaffleId == model.RaffleId && r.ClientId == clientId).Select(r => new { r.FractionTo, r.FractionFrom, r.ClientId, r.TicketAllocationNimberId }).ToList();
 
                         returneds.Where(r => r.ClientId == clientId).ToList().ForEach(a => returnTickets += (a.FractionTo - a.FractionFrom + 1));
 

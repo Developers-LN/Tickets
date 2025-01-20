@@ -2,6 +2,7 @@
 @{
     var checkClientId = ViewBag.ClientId == null ? 0 : (int)ViewBag.ClientId;
     var checkInvoiceId = ViewBag.invoiceId == null ? 0 : (int)ViewBag.invoiceId;
+    var SequenceNumber = ViewBag.invoiceSequenceNumber == null ? 0 : (int)ViewBag.invoiceSequenceNumber;
 
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     if (checkClientId == 0 || checkInvoiceId == 0)
@@ -74,7 +75,7 @@
             }
             else
             {
-                <b>DETALLE DE LA FACTURA NO. @checkInvoiceId DE FECHA @Model.Invoices.FirstOrDefault(f => f.Id == checkInvoiceId).CreateDate.ToString("dd/MM/yyyy")</b>
+                <b>DETALLE DE LA FACTURA NO. @SequenceNumber DE FECHA @Model.Invoices.FirstOrDefault(f => f.Id == checkInvoiceId).CreateDate.ToString("dd/MM/yyyy") CORRESPONDIENTE AL SORTEO NO. @(Model.Symbol + Model.Separator + Model.SequenceNumber)</b>
             }
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-right">
@@ -107,7 +108,7 @@
                         {
                             Invoices = i,
                             Client = i.FirstOrDefault().Client
-                        });
+                        }).ToList();
 
                     var totalValue = 0.0m;
                     int totalFraction = 0;

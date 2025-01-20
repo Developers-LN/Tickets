@@ -773,7 +773,8 @@ namespace Tickets.Models.Ticket
                                             FractionFrom = number.FractionFrom,
                                             FractionTo = number.FractionTo,
                                             Status = (int)AwardCertificationStatuEnum.Identified,
-                                            IdentifyBachNumberType = (int)IdentifyBachNumberTypeEnum.Gamer
+                                            IdentifyBachNumberType = (int)IdentifyBachNumberTypeEnum.Gamer,
+                                            FirstValid = 1
                                         };
                                         identifyNumbers.Add(identifyNumber);
                                     }

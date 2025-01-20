@@ -29,6 +29,7 @@ namespace Tickets.Models
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<int> CreateUser { get; set; }
         public Nullable<int> Status { get; set; }
+        public string DocumentNumber { get; set; }
     
         public virtual Catalog Catalog { get; set; }
         public virtual Catalog Catalog1 { get; set; }

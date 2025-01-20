@@ -417,6 +417,7 @@
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="CreateUser" Type="int" />
           <Property Name="Status" Type="int" />
+          <Property Name="DocumentNumber" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="OtherIncomeDetails">
           <Key>
@@ -447,6 +448,7 @@
           <Property Name="Symbol" Type="varchar" MaxLength="5" />
           <Property Name="LengthZero" Type="int" />
           <Property Name="SequenceNumber" Type="int" />
+          <Property Name="DocumentNumber" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="OverduelBill">
           <Key>
@@ -6453,6 +6455,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="Catalog3" Relationship="TicketsModel.FK_Status_OtherIncome_Catalog" FromRole="OtherIncome" ToRole="Catalog" />
           <NavigationProperty Name="User" Relationship="TicketsModel.FK_CreateUser_OtherIncome_User" FromRole="OtherIncome" ToRole="User" />
           <NavigationProperty Name="OtherIncomeDetails" Relationship="TicketsModel.FK_ListAccountsOtherIncomeId_OtherIncomeDetails_OtherIncome" FromRole="OtherIncome" ToRole="OtherIncomeDetail" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="OtherIncomeDetail">
           <Key>
@@ -6586,6 +6589,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="Symbol" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="LengthZero" Type="Int32" />
           <Property Name="SequenceNumber" Type="Int32" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Status_OtherIncomesGroup_Catalog">
           <End Type="TicketsModel.Catalog" Role="Catalog" Multiplicity="0..1" />
@@ -7627,6 +7631,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="OtherIncomes">
             <EntityTypeMapping TypeName="TicketsModel.OtherIncome">
               <MappingFragment StoreEntitySet="OtherIncome">
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
@@ -7661,6 +7666,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="OtherIncomesGroups">
             <EntityTypeMapping TypeName="TicketsModel.OtherIncomesGroup">
               <MappingFragment StoreEntitySet="OtherIncomesGroup">
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
                 <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="LengthZero" ColumnName="LengthZero" />
                 <ScalarProperty Name="Symbol" ColumnName="Symbol" />

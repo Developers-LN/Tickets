@@ -27,6 +27,8 @@
         $scope.AddWinner = 0;
         $scope.GenderId = 0;
 
+        $scope.BachId = 0;
+
         this.clearIdentify = function () {
             $scope.identifyBach = {
                 Id: 0,
@@ -188,6 +190,7 @@
                     $scope.genders = data.genders;
 
                     if (data.identifyBach !== null) {
+                        $scope.BachId = data.identifyBach.Id;
                         $scope.identifyBach = data.identifyBach;
                         $scope.IdentityAwards = [];
                         $scope.identifyBach.IdentifyNumbers.forEach(function (i) {

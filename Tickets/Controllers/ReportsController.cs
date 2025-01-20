@@ -773,7 +773,8 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             ViewBag.ClientId = clientId;
-            ViewBag.invoiceId = context.Invoices.Any(a => a.Id == invoiceId) ? context.Invoices.Find(invoiceId).SequenceNumber : invoiceId;
+            ViewBag.invoiceId = context.Invoices.Any(a => a.Id == invoiceId) ? context.Invoices.Find(invoiceId).Id : invoiceId;
+            ViewBag.invoiceSequenceNumber = context.Invoices.Any(a => a.Id == invoiceId) ? context.Invoices.Find(invoiceId).SequenceNumber : invoiceId;
             var raffle = context.Raffles.FirstOrDefault(r => raffleId == 0 || r.Id == raffleId);
             return View(raffle);
         }

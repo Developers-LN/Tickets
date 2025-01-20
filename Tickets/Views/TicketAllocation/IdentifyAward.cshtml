@@ -14,20 +14,23 @@
                         <div class="col-lg-6 no-padder">
                             <fieldset>
                                 <div class="form-group">
-                                    <label class="col-lg-12 control-label-left">Sorteo:  <span class="color-red">*</span></label>
-                                    <div class="col-lg-12">
+                                    <label class="col-lg-12 control-label-left">Sorteo: <span class="color-red">*</span></label>
+                                    <div class="col-lg-12" @*ng-if="BachId == 0"*@>
                                         <select ng-required="true" class="form-control dropdown-select2" ng-model="identifyBach.RaffleId">
                                             <option selected="selected" disabled="disabled" value="0">Seleccione un sorteo</option>
                                             <option ng-repeat="raffle in raffles" value="{{raffle.Id}}" ng-selected="raffle.Id == identifyBach.RaffleId">{{raffle.text}}</option>
                                         </select>
                                     </div>
+                                    @*<div class="col-lg-12" ng-if="BachId != 0">
+                                        <h4><span class="label label-info">{{identifyBach.RaffleDesc}}</span></h4>
+                                    </div>*@
                                 </div>
                             </fieldset>
                         </div>
                         <div class="col-lg-6 no-padder">
                             <fieldset>
                                 <div class="form-group">
-                                    <label class="col-lg-12 control-label-left">Cliente:  <span class="color-red">*</span></label>
+                                    <label class="col-lg-12 control-label-left">Cliente: <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
                                         <select ng-required="true" class="form-control dropdown-select2" ng-model="identifyBach.ClientId">
                                             <option selected="selected" disabled="disabled" value="0">Seleccione un cliente</option>
@@ -39,7 +42,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-lg-12 well">
                     <div class="col-lg-8 no-padder">
                         <h4>Datos del ganador</h4>
@@ -188,16 +190,11 @@
                                 <div class="form-group">
                                     <label class="col-lg-12 control-label-left">Fracción Hasta:  <span class="color-red">*</span></label>
                                     <div class="col-lg-12">
-                                        <input type="number"
-                                               ng-min="number.FractionFrom"
-                                               ng-model="number.FractionTo"
-                                               class="form-control input-sm"
-                                               ng-required="true" />
+                                        <input type="number" ng-min="number.FractionFrom" ng-model="number.FractionTo" class="form-control input-sm" ng-required="true" />
                                     </div>
                                 </div>
                             </fieldset>
                         </div>
-
                         <div class="col-lg-12 m-b-xs no-padder text-right">
                             <a ng-click="cancelNumber()" class="btn btn-warning btn-sm"><i class="fa fa-times"></i> Cancelar</a>
                             <a ng-click="addNumber()" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Guardar</a>

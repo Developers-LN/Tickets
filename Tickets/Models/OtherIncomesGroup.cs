@@ -27,6 +27,7 @@ namespace Tickets.Models
         public string Symbol { get; set; }
         public Nullable<int> LengthZero { get; set; }
         public Nullable<int> SequenceNumber { get; set; }
+        public string DocumentNumber { get; set; }
     
         public virtual Catalog Catalog { get; set; }
         public virtual ICollection<OtherIncomeDetail> OtherIncomeDetails { get; set; }
