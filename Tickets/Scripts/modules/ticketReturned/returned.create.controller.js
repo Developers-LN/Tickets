@@ -49,7 +49,7 @@
             if (ticketNumber.fractionTo === undefined) {
                 error += 'El Fraccion Hasta' + isReq;
             }
-            //error += self.validateNumberInList(ticketNumber);
+            error += self.validateNumberInList(ticketNumber);
 
             if (error !== '') {
                 alertify.showError('Alerta', error);
@@ -241,7 +241,7 @@
                     };
 
                     var error = '';
-                    //error += self.validateNumberInList(currentTicketNumber);
+                    error += self.validateNumberInList(currentTicketNumber);
 
                     if (error !== '') {
                         self.clearTicket();

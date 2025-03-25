@@ -960,7 +960,7 @@ namespace Tickets.Controllers
                     .Select(s => new
                     {
                         s.Id,
-                        SequenceNumberReceiptPaymnet = s.Nomenclature == null ? s.SequenceNumber.Value.ToString() : string.Concat(s.Nomenclature, s.SequenceNumber.Value.ToString().PadLeft(5, '0')),
+                        SequenceNumberReceiptPaymnet = s.Nomenclature == null ? s.SequenceNumber.Value.ToString() : string.Concat(s.Nomenclature, s.SequenceNumber.Value.ToString().PadLeft((s.Digits != null ? (int)s.Digits : 0), '0')),
                         SequenceNumberInvoice = s.Invoice.SequenceNumber,
                         s.Nomenclature,
                         s.Nombre,

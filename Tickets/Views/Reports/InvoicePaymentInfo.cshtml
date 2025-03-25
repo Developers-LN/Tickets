@@ -1,6 +1,7 @@
 ﻿@model Tickets.Models.ReceiptPayment
 
 @{
+    int Digits = Model.Digits != null ? (int)Model.Digits : 0;
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     ViewBag.Title = "Pago No. " + Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')) + " de la factura " + Model.InvoiceId;
 
@@ -103,7 +104,7 @@
                     <b>Factura: </b> @Model.Invoice.SequenceNumber
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(Digits, '0')))
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha: </b> @Model.CreateDate.ToString("dd/MM/yyyy")
@@ -117,7 +118,7 @@
         {
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(Digits, '0')))
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha de ingreso: </b>@Model.ReceiptDate.ToString("dd/MM/yyyy")
@@ -382,7 +383,7 @@
                     <b>Factura: </b> @Model.Invoice.SequenceNumber
                 </div>
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(Digits, '0')))
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha: </b> @Model.CreateDate.ToString("dd/MM/yyyy")
@@ -396,7 +397,7 @@
         {
             <div class="col-lg-6 no-padder text-right">
                 <div class="col-lg-12 no-padder text-right">
-                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                    <b>Recibo: </b>@(Model.Nomenclature == null ? Model.SequenceNumber.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumber.Value.ToString().PadLeft(Digits, '0')))
                 </div>
                 <div class="col-lg-12 no-padder text-right">
                     <b>Fecha de ingreso: </b>@Model.ReceiptDate.ToString("dd/MM/yyyy")

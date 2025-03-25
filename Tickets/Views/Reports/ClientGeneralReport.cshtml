@@ -126,8 +126,8 @@
                                     createDate = s.CreateDate,
                                     client = s.Client.Name,
                                     clientId = s.ClientId,
-                                    fractions = s.TicketAllocationNumbers.FirstOrDefault().FractionTo - s.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1,
-                                    numbers = s.TicketAllocationNumbers.Count,
+                                    fractions = s.TicketAllocationNumbers.Any() ? s.TicketAllocationNumbers.FirstOrDefault().FractionTo - s.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1 : 0,
+                                    numbers = s.TicketAllocationNumbers.Any() ? s.TicketAllocationNumbers.Count : 0,
                                     amount = s.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == s.Client.PriceId).FactionPrice,
                                     sheets = s.Raffle.Prospect.LeafNumber
                                 }).ToList(),
@@ -140,8 +140,8 @@
                                     createDate = s.CreateDate,
                                     client = s.Client.Name,
                                     clientId = s.ClientId,
-                                    fractions = s.TicketAllocationNumbers.FirstOrDefault().FractionTo - s.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1,
-                                    numbers = s.TicketAllocationNumbers.Count,
+                                    fractions = s.TicketAllocationNumbers.Any() ? s.TicketAllocationNumbers.FirstOrDefault().FractionTo - s.TicketAllocationNumbers.FirstOrDefault().FractionFrom + 1 : 0,
+                                    numbers = s.TicketAllocationNumbers.Any() ? s.TicketAllocationNumbers.Count : 0,
                                     amount = s.Raffle.Prospect.Prospect_Price.FirstOrDefault(p => p.PriceId == s.Client.PriceId).FactionPrice,
                                     sheets = s.Raffle.Prospect.LeafNumber
                                 }).ToList(),

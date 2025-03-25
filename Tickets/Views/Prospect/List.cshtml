@@ -34,7 +34,7 @@
                                 <td>
                                     <a ng-if="prospect.statu === 20" ng-click="startWorkflowProspect(prospect)" title="Enviar prospecto a aprobación" class="{{moduleCanAdd}}"><i class="fa fa-external-link"></i></a>
                                     <a ng-if="prospect.statu !== 23" href="#/prospect/create/wizard/{{prospect.id}}" title="Modificar" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
-                                    <a ng-if="prospect.statu === 23" href="#/prospect/viewer/{{prospect.id}}" title="Visualizar" class="{{moduleCanEdit}}"><i class="fa fa-eye"></i></a>
+                                    <a ng-if="prospect.statu === 23" href="#/prospect/viewer/{{prospect.id}}" title="Visualizar" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                         </tbody>

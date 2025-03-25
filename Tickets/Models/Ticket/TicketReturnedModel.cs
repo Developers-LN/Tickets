@@ -164,6 +164,8 @@ namespace Tickets.Models.Ticket
 
                 var Client = context.Clients.Where(c => c.Id == model.ClientId).Select(c => new { clientId = c.Id, clientName = c.Name }).FirstOrDefault();
 
+                var raffleData = context.Raffles.Where(f => f.Id == model.RaffleId).Select(s => new { Production = (s.Prospect.Production - 1).ToString().Length }).FirstOrDefault();
+
                 var ticketAllocationNumbers = context.TicketAllocationNumbers
                     .Where(t => t.TicketAllocation.RaffleId == model.RaffleId && t.TicketAllocationId == allocationId).Select(a => new
                     {
@@ -182,7 +184,7 @@ namespace Tickets.Models.Ticket
                     {
                         if (tan.ClientId != item.ClientId)
                         {
-                            sb.Append(item.NumberId);
+                            sb.Append(item.NumberId.ToString().PadLeft((raffleData.Production), '0'));
                             sb.Append(",");
                             state = true;
                         }
@@ -435,7 +437,7 @@ namespace Tickets.Models.Ticket
                         if (state)
                         {
                             sb.Insert(0, " Los billetes ");
-                            sb.Append(" presentan problemas con las fracciones.");
+                            sb.Append(" presentan superposición de fracciones.");
                             return new RequestResponseModel()
                             {
                                 Result = false,
@@ -501,13 +503,10 @@ namespace Tickets.Models.Ticket
                             };
                         }
 
-                        if (((raffleData.Statu == (int)RaffleStatusEnum.Active
-                            || raffleData.Statu == (int)RaffleStatusEnum.Planned)
-                            && raffleData.EndReturnDate >= DateTime.Now)
-                            || raffleData.returnedOpens.Any()
-                            /*|| returnedOpens.Any()*/)
+                        if (((raffleData.Statu == (int)RaffleStatusEnum.Active || raffleData.Statu == (int)RaffleStatusEnum.Planned) && raffleData.EndReturnDate >= DateTime.Now) || raffleData.returnedOpens.Any())
                         {
-                            sb.Append("Las siguientes fracciones se encuentran devueltas\n ");
+                            sb.Append("No se pudo realizar el guardado debido a una superposición de fracciones. <br/>");
+                            sb.Append("Resultados del conflicto: <br/>");
 
                             foreach (var ticketReturn in model.TicketReturnedNumbers)
                             {
@@ -549,9 +548,7 @@ namespace Tickets.Models.Ticket
                                 }
 
                                 //Validacion si existe una fraccion ya devuelta
-                                var exists = returneds.Where(t => t.TicketAllocationNimberId == allocationNumber.Id &&
-                                    ((t.FractionFrom >= ticketReturn.FractionFrom && t.FractionFrom <= ticketReturn.FractionTo) ||
-                                    (t.FractionTo >= ticketReturn.FractionFrom && t.FractionTo <= ticketReturn.FractionTo))).FirstOrDefault();
+                                var exists = returneds.Where(t => t.TicketAllocationNimberId == allocationNumber.Id && (t.FractionFrom <= ticketReturn.FractionTo && t.FractionTo >= ticketReturn.FractionFrom)).FirstOrDefault();
 
                                 if (exists == null)
                                 {
@@ -559,13 +556,27 @@ namespace Tickets.Models.Ticket
                                 }
                                 else
                                 {
-                                    sb.Append("desde " + returnedTicket.FractionFrom);
+                                    state = true;
+                                    sb.Append("Ya existe el Billete " + allocationNumber.Number.ToString().PadLeft((raffleData.Production), '0'));
+                                    sb.Append(" desde " + exists.FractionFrom);
+                                    sb.Append(" hasta " + exists.FractionTo);
+                                    sb.Append("<br/>");
+                                    sb.Append("No se puede insertar el Billete " + allocationNumber.Number.ToString().PadLeft((raffleData.Production), '0'));
+                                    sb.Append(" desde " + returnedTicket.FractionFrom);
                                     sb.Append(" hasta " + returnedTicket.FractionTo);
-                                    sb.Append(",");
+                                    sb.Append("<br/>");
                                     notAllReturnet = true;
                                 }
                             }
-                            if (ticketNumberList.Count > 0)
+                            if (state)
+                            {
+                                return new RequestResponseModel()
+                                {
+                                    Result = false,
+                                    Message = sb.ToString()
+                                };
+                            }
+                            else
                             {
                                 context.TicketReturns.AddRange(ticketNumberList);
                                 context.SaveChanges();
@@ -584,10 +595,11 @@ namespace Tickets.Models.Ticket
                     catch (Exception e)
                     {
                         tx.Rollback();
+                        context.Dispose();
                         return new RequestResponseModel()
                         {
                             Result = false,
-                            Message = e.Message
+                            Message = e.InnerException.InnerException.Message.ToString() == null ? e.Message : e.InnerException.InnerException.Message.ToString()
                         };
                     }
                 }

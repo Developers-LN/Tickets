@@ -130,7 +130,7 @@
                                             @receiptPayment.Invoice.SequenceNumber
                                         </td>
                                         <td class="text-center">
-                                            @(receiptPayment.Nomenclature == null ? receiptPayment.SequenceNumber.Value.ToString() : string.Concat(receiptPayment.Nomenclature, receiptPayment.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                                            @(receiptPayment.Nomenclature == null ? receiptPayment.SequenceNumber.Value.ToString() : string.Concat(receiptPayment.Nomenclature, receiptPayment.SequenceNumber.Value.ToString().PadLeft((receiptPayment.Digits != null?(int)receiptPayment.Digits : 0), '0')))
                                         </td>
                                         <td>
                                             @if (receiptPayment.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)
@@ -317,7 +317,7 @@
                                         @receiptPayment.Invoice.SequenceNumber
                                     </td>
                                     <td class="text-center">
-                                        @(receiptPayment.Nomenclature == null ? receiptPayment.SequenceNumber.Value.ToString() : string.Concat(receiptPayment.Nomenclature, receiptPayment.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                                        @(receiptPayment.Nomenclature == null ? receiptPayment.SequenceNumber.Value.ToString() : string.Concat(receiptPayment.Nomenclature, receiptPayment.SequenceNumber.Value.ToString().PadLeft((receiptPayment.Digits != null ? (int)receiptPayment.Digits : 0), '0')))
                                     </td>
                                     <td>
                                         @if (receiptPayment.Client.GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.CajaDespachoExpress)

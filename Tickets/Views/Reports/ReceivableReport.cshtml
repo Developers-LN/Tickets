@@ -64,7 +64,7 @@
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>
-                DETALLE DE PAGOS A FACTURA SORTEO <br /> 
+                DETALLE DE PAGOS A FACTURA SORTEO <br />
                 @Model.Raffle.Symbol @Model.Raffle.Separator @Model.Raffle.SequenceNumber @Model.Raffle.Name @Model.Raffle.DateSolteo.ToString("dd/MM/yyyy")
             </b>
         </div>
@@ -116,6 +116,7 @@
                 @foreach (var payment in Model.ReceiptPayments)
                 {
                     var totalCash = payment.TotalCash > 0 ? payment.TotalCash : payment.TotalCheck > 0 ? payment.TotalCheck : payment.TotalCredit;
+                    int Digits = payment.Digits != null ? (int)payment.Digits : 0;
                     if (payment.ReceiptType == (int)Tickets.Models.Enums.PaymentTypeEnum.CreditNote)
                     {
                         foreach (var creditNote in payment.NoteCreditReceiptPayments)
@@ -123,7 +124,7 @@
                             totalPayment += creditNote.TotalCash;
                             <tr>
                                 <td style="vertical-align:middle;" class="text-center">
-                                    @(payment.Nomenclature == null ? payment.SequenceNumber.Value.ToString() : string.Concat(payment.Nomenclature, payment.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                                    @(payment.Nomenclature == null ? payment.SequenceNumber.Value.ToString() : string.Concat(payment.Nomenclature, payment.SequenceNumber.Value.ToString().PadLeft(Digits, '0')))
                                 </td>
                                 <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
                                 <td style="vertical-align:middle;">@payment.Recibo</td>
@@ -142,7 +143,7 @@
                             totalPayment += creditNote.TotalCash;
                             <tr>
                                 <td style="vertical-align:middle;" class="text-center">
-                                    @(payment.Nomenclature == null ? payment.SequenceNumber.Value.ToString() : string.Concat(payment.Nomenclature, payment.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                                    @(payment.Nomenclature == null ? payment.SequenceNumber.Value.ToString() : string.Concat(payment.Nomenclature, payment.SequenceNumber.Value.ToString().PadLeft(Digits, '0')))
                                 </td>
                                 <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
                                 <td style="vertical-align:middle;">@payment.Recibo</td>
@@ -161,7 +162,7 @@
                             totalPayment += creditNote.TotalCash;
                             <tr>
                                 <td style="vertical-align:middle;" class="text-center">
-                                    @(payment.Nomenclature == null ? payment.SequenceNumber.Value.ToString() : string.Concat(payment.Nomenclature, payment.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                                    @(payment.Nomenclature == null ? payment.SequenceNumber.Value.ToString() : string.Concat(payment.Nomenclature, payment.SequenceNumber.Value.ToString().PadLeft(Digits, '0')))
                                 </td>
                                 <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
                                 <td style="vertical-align:middle;">@payment.Recibo</td>
@@ -178,7 +179,7 @@
                         totalPayment += totalCash;
                         <tr>
                             <td style="vertical-align:middle;" class="text-center">
-                                @(payment.Nomenclature == null ? payment.SequenceNumber.Value.ToString() : string.Concat(payment.Nomenclature, payment.SequenceNumber.Value.ToString().PadLeft(5, '0')))
+                                @(payment.Nomenclature == null ? payment.SequenceNumber.Value.ToString() : string.Concat(payment.Nomenclature, payment.SequenceNumber.Value.ToString().PadLeft(Digits, '0')))
                             </td>
                             <td style="vertical-align:middle;" class="text-center">@context.Catalogs.FirstOrDefault(c => c.Id == payment.ReceiptType).NameDetail</td>
                             <td style="vertical-align:middle;" class="text-center">@payment.Recibo</td>

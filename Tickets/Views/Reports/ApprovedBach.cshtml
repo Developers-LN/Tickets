@@ -148,7 +148,7 @@
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((Model.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
-                                        <td class="text-center">@((raffleAward.Award.Value * ((decimal)context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100)).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
+                                        <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Award.Value.ToString("c", new System.Globalization.CultureInfo("es-DO")) : (raffleAward.Award.Value * ((decimal)context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100)).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</td>
                                         <td class="text-center">1</td>
                                         <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                     </tr>

@@ -154,6 +154,14 @@
                                 line++;
                                 NumberCount++;
                             }
+                            var totalbilletes = TotalFractions / (RaffleData.Prospect.LeafFraction * RaffleData.Prospect.LeafNumber);
+                            var totalfracciones = TotalFractions % (RaffleData.Prospect.LeafFraction * RaffleData.Prospect.LeafNumber);
+
+                            <tr class="row-footer" style="font-weight:bold">
+                                <td class="text-right" colspan="10">TOTAL DE FRACCIONES ANULADAS: @TotalFractions, EQUIVALENTES A @totalbilletes BILLETES@((totalfracciones > 0 ? " Y " + totalfracciones.ToString() + " FRACCIONES." : ".")) </td>
+                            </tr>
+
+                            @*
                             <tr class="row-footer" style="font-weight:bold">
                                 <td class="text-right" colspan="9">BILLETES ANULADOS: </td>
                                 <td class="text-center">@(TotalFractions / (RaffleData.Prospect.LeafFraction * RaffleData.Prospect.LeafNumber))</td>
@@ -162,6 +170,7 @@
                                 <td class="text-right" colspan="9">FRACCIONES ANULADAS: </td>
                                 <td class="text-center">@(TotalFractions % (RaffleData.Prospect.LeafFraction * RaffleData.Prospect.LeafNumber))</td>
                             </tr>
+                            *@
                         }
                     }
                 }
@@ -188,7 +197,10 @@
             var FraccionesRestantes = TotalFractions % (RaffleData.Prospect.LeafFraction * RaffleData.Prospect.LeafNumber);
             <b>TOTAL BILLETES ANULADOS: @Billetes.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b>
             <br />
-            <b>TOTAL FRACCIONES ANULADAS: @FraccionesRestantes</b>
+            if (FraccionesRestantes > 0)
+            {
+                <b>TOTAL FRACCIONES ANULADAS: @FraccionesRestantes</b>
+            }
         }
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 no-padder text-center">
