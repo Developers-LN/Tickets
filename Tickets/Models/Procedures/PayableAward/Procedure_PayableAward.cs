@@ -39,6 +39,9 @@ namespace Tickets.Models.Procedures.PayableAward
                             Fracciones = Convert.ToInt32(sqlDataReader["fracciones"].ToString()),
                             ValorPagar = Convert.ToDecimal(sqlDataReader["valorapagar"].ToString()),
                             Value = Convert.ToDecimal(sqlDataReader["value"].ToString()),
+                            status = sqlDataReader["estatus"].ToString(),
+                            tipoticket = sqlDataReader["TipoTicket"].ToString(),
+                            ordenpremio = Convert.ToInt32(sqlDataReader["ordenpremio"].ToString())
                         };
                         lista.Add(pagables);
                     }
@@ -60,6 +63,9 @@ namespace Tickets.Models.Procedures.PayableAward
                         Fracciones = 0,
                         ValorPagar = 0,
                         Value = 0,
+                        status = "N/A",
+                        tipoticket = "N/A",
+                        ordenpremio = 0
                     };
                     lista.Add(pagables);
                 }

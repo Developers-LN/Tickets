@@ -29,8 +29,6 @@ namespace Tickets.Models.Procedures.PayableAward
                             premios = true,
                             number = Convert.ToInt32(sqlDataReader["number"].ToString()),
                             tanId = Convert.ToInt32(sqlDataReader["tanid"].ToString()),
-                            //typeAward = sqlDataReader["typeAward"].ToString(),
-                            //payStatu = sqlDataReader["payStatu"].ToString(),
                             ClientId = Convert.ToInt32(sqlDataReader["ClientId"].ToString()),
                             Id_Name = sqlDataReader["Id_Name"].ToString(),
                             raffle = Convert.ToInt32(sqlDataReader["RaffleId"].ToString()),
@@ -40,6 +38,10 @@ namespace Tickets.Models.Procedures.PayableAward
                             fracciones = Convert.ToInt32(sqlDataReader["fracciones"].ToString()),
                             valorpagar = Convert.ToDecimal(sqlDataReader["valorapagar"].ToString()),
                             value = Convert.ToDecimal(sqlDataReader["value"].ToString()),
+                            status = sqlDataReader["estatus"].ToString(),
+                            tipoticket = sqlDataReader["TipoTicket"].ToString(),
+                            valorporfraccion = Convert.ToDecimal(sqlDataReader["valorporfraccion"].ToString()),
+                            ordenpremio = Convert.ToInt32(sqlDataReader["ordenpremio"].ToString())
                         };
                         lista.Add(pagables);
                     }
@@ -62,6 +64,10 @@ namespace Tickets.Models.Procedures.PayableAward
                         fracciones = 0,
                         valorpagar = 0,
                         value = 0,
+                        status = "N/A",
+                        tipoticket = "N/A",
+                        valorporfraccion = 0.0m,
+                        ordenpremio = 0
                     };
                     lista.Add(pagables);
                 }

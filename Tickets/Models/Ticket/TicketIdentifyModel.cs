@@ -1570,7 +1570,8 @@ namespace Tickets.Models.Ticket
                     p.ClientId,
                     ClientDesc = p.ClientId + " - " + p.Client.Name,
                     p.Value,
-                    p.Note
+                    p.Note,
+                    p.PaymentType
                 }),
                 IdentifyNumbers = context.IdentifyNumbers.AsEnumerable().Where(n => n.IdentifyBachId == identifyBach.Id)
                 .Select(n => IdentifyNumberToObejct(n)).ToList()
@@ -1624,7 +1625,8 @@ namespace Tickets.Models.Ticket
                     p.ClientId,
                     ClientDesc = p.ClientId + " - " + p.Client.Name,
                     p.Value,
-                    p.Note
+                    p.Note,
+                    p.PaymentType
                 }),
                 IdentifyNumbers = context.IdentifyNumbers.AsEnumerable().Where(n => n.IdentifyBachId == identifyBach.Id)
                 .Select(n => IdentifyNumberSellerToObejct(n)).ToList()

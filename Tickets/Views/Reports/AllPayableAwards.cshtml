@@ -20,9 +20,6 @@
     int TicketFractions = (RaffleData.Prospect.LeafNumber * RaffleData.Prospect.LeafFraction);
     var clients = context.Clients.Select(s => new {s.Id, s.GroupId}).ToList();
 
-    var Pendiente = "Pendiente";
-    var Pagado = "Pagado";
-
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 }
 
@@ -111,11 +108,12 @@
                                 .Select(s => new
                                 {
                                     name = s.Key,
-                                    monto = s.FirstOrDefault().value / TicketFractions,
+                                    monto = s.FirstOrDefault().valorporfraccion,
                                     cantidadFracciones = s.Sum(s1 => s1.fracciones),
                                     totalPremio = s.Sum(s1 => s1.value),
-                                    totalPagar = s.Sum(s2 => s2.valorpagar)
-                                });
+                                    totalPagar = s.Sum(s2 => s2.valorpagar),
+                                    order = s.FirstOrDefault().ordenpremio
+                                }).OrderBy(o => o.order);
                         }
                         @foreach (var item in resumenPremios)
                         {
@@ -180,22 +178,8 @@
                             <tr>
                                 <td class="text-center">@Contador</td>
                                 <td class="text-center">@item.number.ToString().PadLeft((RaffleData.Prospect.Production - 1).ToString().Length, '0')</td>
-                                @if (IdentifyTickets.Any(a => a.IdentifyNumbers.Any(a2 => a2.NumberId == item.tanId)))
-                                {
-                                    <td class="text-center">@Pagado</td>
-                                }
-                                else
-                                {
-                                    <td class="text-center">@Pendiente</td>
-                                }
-                                @if (clients.FirstOrDefault(w => w.Id == item.ClientId).GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)
-                                {
-                                    <td class="text-center">Electrónico</td>
-                                }
-                                else
-                                {
-                                    <td class="text-center">Tradicional</td>
-                                }
+                                <td class="text-center">@item.status</td>
+                                <td class="text-center">@item.tipoticket</td>
                                 <td class="text-center">@item.fracciones</td>
                                 <td class="text-center">@item.nameaward</td>
                                 <td class="text-center">@((item.value / TicketFractions).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>

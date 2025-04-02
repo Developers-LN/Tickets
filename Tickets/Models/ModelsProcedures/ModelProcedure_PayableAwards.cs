@@ -16,5 +16,9 @@
         public decimal value { get; set; }
         public int fracciones { get; set; }
         public decimal valorpagar { get; set; }
+        public string status { get; set; }
+        public string tipoticket { get; set; }
+        public decimal valorporfraccion { get; set; }
+        public int ordenpremio { get; set; }
     }
 }

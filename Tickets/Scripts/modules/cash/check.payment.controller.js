@@ -1,5 +1,5 @@
-/**=========================================================
- * Module: CashPaymentController.js
+﻿/**=========================================================
+ * Module: CheckPaymentController.js
  =========================================================*/
 
 (function () {
@@ -7,10 +7,10 @@
 
     angular
         .module('naut')
-        .controller('CashPaymentController', CashPaymentController);
+        .controller('CheckPaymentController', CheckPaymentController);
 
-    CashPaymentController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
-    function CashPaymentController($scope, $state, $rootScope, $stateParams) {
+    CheckPaymentController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
+    function CheckPaymentController($scope, $state, $rootScope, $stateParams) {
         $scope.payment = {
             Id: 0,
             CashId: '',
@@ -133,7 +133,7 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: 'Cash/Payment',
+                url: 'Cash/CheckPayment',
                 data: $scope.payment,
                 success: function (data) {
                     window.loading.hide();

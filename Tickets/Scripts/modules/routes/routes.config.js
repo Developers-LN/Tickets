@@ -779,6 +779,10 @@
                 url: '/cash/payment/:identifyBachId',
                 templateUrl: Route.base('Cash/Payment')
             })
+            .state('app.checkPayment', {
+                url: '/check/payment/:identifyBachId',
+                templateUrl: Route.base('Cash/CheckPayment')
+            })
             .state('app.invoiceDetailCashReport', {
                 url: '/report/invoiceDetail',
                 templateUrl: Route.base('Cash/InvoiceDetailCashReports')

@@ -6,8 +6,8 @@
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.CajaGeneral : "";
-    string adminCargo = config != null ? config.CajaGeneralCargo : "";
+    string adminName = config != null ? config.ControlPremio : "";
+    string adminCargo = config != null ? config.ControlPremioCargo : "";
     var raffleAwards = context.Raffles.FirstOrDefault(r => r.Id == Model.IdentifyBach.RaffleId).RaffleAwards.ToList();
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
     var RaffleData = context.Raffles.Where(w => w.Id == Model.RaffleId).FirstOrDefault();

@@ -16,5 +16,8 @@
         public int Fracciones { get; set; }
         public int RaffleAwardId { get; set; }
         public decimal ValorPagar { get; set; }
+        public string status { get; set; }
+        public string tipoticket { get; set; }
+        public int ordenpremio { get; set; }
     }
 }

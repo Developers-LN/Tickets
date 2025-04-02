@@ -284,6 +284,7 @@
           <Property Name="DiscountPercent" Type="int" Nullable="false" />
           <Property Name="SequenceNumber" Type="int" />
           <Property Name="PayingFund" Type="int" />
+          <Property Name="PaymentType" Type="int" />
         </EntityType>
         <EntityType Name="IdentifyNumber">
           <Key>
@@ -4079,6 +4080,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <NavigationProperty Name="IdentifyBach" Relationship="TicketsModel.FK_RaffleAwardPayment_IdentifyBach" FromRole="IdentifyBachPayment" ToRole="IdentifyBach" />
           <Property Name="SequenceNumber" Type="Int32" />
           <Property Name="PayingFund" Type="Int32" />
+          <Property Name="PaymentType" Type="Int32" />
         </EntityType>
         <EntityType Name="IdentifyNumber">
           <Key>
@@ -6844,6 +6846,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="IdentifyBachPayments">
             <EntityTypeMapping TypeName="TicketsModel.IdentifyBachPayment">
               <MappingFragment StoreEntitySet="IdentifyBachPayment">
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
                 <ScalarProperty Name="PayingFund" ColumnName="PayingFund" />
                 <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />
                 <ScalarProperty Name="DiscountPercent" ColumnName="DiscountPercent" />

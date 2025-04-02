@@ -17,6 +17,7 @@ using Tickets.Models.Procedures.PayableAward;
 using Tickets.Models.Procedures.Raffle;
 using Tickets.Models.Procedures.Receivables;
 using Tickets.Models.Procedures.Returns;
+using WebMatrix.WebData;
 
 namespace Tickets.Controllers
 {
@@ -67,7 +68,6 @@ namespace Tickets.Controllers
         }
 
         [HttpGet]
-
         public ActionResult DataByDay(int allocationId, string dateSale)
         {
             var context = new TicketsEntities();
@@ -77,10 +77,42 @@ namespace Tickets.Controllers
             return View(ticketAllocation);
         }
 
+        [HttpGet]
+        public ActionResult IdentifyBachDetails(int bachId = 0)
+        {
+            var context = new TicketsEntities();
+            var bachApproved = context.IdentifyBaches.FirstOrDefault(r => r.Id == bachId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Detalles de lote de pago a premios");
+            return View(bachApproved);
+        }
+
+        [HttpGet]
+        public ActionResult IndentifyReceivableReportCheck(int paymentId = 0)
+        {
+            var context = new TicketsEntities();
+            PaymentReceivableReportModel payment;
+
+            payment = context.IdentifyBachPayments.Where(p => p.Id == paymentId).Select(p => new PaymentReceivableReportModel
+            {
+                ClientName = p.ClientId + " - " + p.Client.Name,
+                PaymentType = "PAGO EN CHEQUE ",// + p.Id,
+                SequenceNumberPayment = p.SequenceNumber,
+                Value = p.Value,
+                Id = p.Id,
+                UserId = p.CreateUser,
+                RaffleId = p.IdentifyBach.RaffleId,
+                CreateDate = p.CreateDate,
+                IdentifyBach = p.IdentifyBach,
+                ReceivablePercent = p.DiscountPercent,
+                Production = p.IdentifyBach.Raffle.Prospect.Production - 1,
+            }).FirstOrDefault();
+
+            return View(payment);
+        }
+
         // 
         //  GET: Reports/IndentifyReceivableReport
         [HttpGet]
-
         public ActionResult IndentifyReceivableReport(int creditNoteId = 0, int paymentId = 0)
         {
             var context = new TicketsEntities();
@@ -353,6 +385,7 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var tickets = context.TicketAllocationNumbers.Where(w => w.RaffleId == raffleId && w.Statu == (int)TicketStatusEnum.Anulated);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de billetes anulados");
             return View(tickets);
         }
 
@@ -395,6 +428,7 @@ namespace Tickets.Controllers
         {
             Procedure_InvoicedTickets invoicedTicketsProcedure = new Procedure_InvoicedTickets();
             var Resultado = invoicedTicketsProcedure.ConsultaBilletesVendidos(raffleId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de billetes vendidos");
             return View(Resultado);
         }
 
@@ -404,6 +438,7 @@ namespace Tickets.Controllers
         {
             Procedure_ReturnedTickets returnedTicketsProcedure = new Procedure_ReturnedTickets();
             var Resultado = returnedTicketsProcedure.ConsultaBilletesDevueltos(raffleId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de billetes devueltos");
             return View(Resultado);
         }
 
@@ -413,6 +448,7 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var client = context.Clients.FirstOrDefault(r => r.Id == ClientId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Detalles del cliente");
             return View(client);
         }
 
@@ -422,6 +458,7 @@ namespace Tickets.Controllers
         {
             Procedure_NetSalesByClient netSalesByClientProcedure = new Procedure_NetSalesByClient();
             var Resultado = netSalesByClientProcedure.ConsultaVentaNetaPorCliente(raffleId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de billetes vendidos agrupados por cliente");
             return View(Resultado);
         }
 
@@ -431,6 +468,7 @@ namespace Tickets.Controllers
         {
             Procedure_PayableAward payableAwardProcedure = new Procedure_PayableAward();
             var Resultado = payableAwardProcedure.ConsultaBilletesPagables(raffleId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de billetes pagables agrupados por cliente");
             return View(Resultado);
         }
 
@@ -449,6 +487,7 @@ namespace Tickets.Controllers
         {
             Procedure_AllPayableAwards allPatyableAwardsProcedure = new Procedure_AllPayableAwards();
             var Resultado = allPatyableAwardsProcedure.ConsultaTodosBilletesPagables(raffleId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listadod de billetes pagables");
             return View(Resultado);
         }
 
@@ -458,6 +497,7 @@ namespace Tickets.Controllers
         {
             Procedure_PayableAwardSummary procedurePayableAwardSummary = new Procedure_PayableAwardSummary();
             var Resultado = procedurePayableAwardSummary.payableAwardSummary(raffleId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Resumen de premios pagables");
             return View(Resultado);
         }
 
@@ -465,6 +505,7 @@ namespace Tickets.Controllers
         {
             Procedure_AllocatedSummary allocatedSummaryProcedure = new Procedure_AllocatedSummary();
             var Resultado = allocatedSummaryProcedure.AllocatedSummary(raffleId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Resumen de asignación");
             return View(Resultado);
         }
 
@@ -473,9 +514,8 @@ namespace Tickets.Controllers
         public ActionResult ApprovedBach(int bachId)
         {
             var context = new TicketsEntities();
-
             var bachApproved = context.IdentifyBaches.FirstOrDefault(r => r.Id == bachId);
-
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Detalles de aprobación de pago a premios");
             return View(bachApproved);
         }
 
@@ -485,6 +525,7 @@ namespace Tickets.Controllers
         {
             Procedure_AvailableTickets availableTicketsProcedure = new Procedure_AvailableTickets();
             var Resultado = availableTicketsProcedure.ConsultaBilletesDisponible(allocationId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Detalle de ventas electrónicas");
             return View(Resultado);
         }
 
@@ -494,6 +535,7 @@ namespace Tickets.Controllers
         {
             Procedure_AvailableTickets availableTicketsProcedure = new Procedure_AvailableTickets();
             var Resultado = availableTicketsProcedure.ConsultaBilletesDisponible(raffleId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de billetes en circulación");
             return View(Resultado);
         }
 
@@ -503,6 +545,7 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
             var allocation = context.TicketAllocations.FirstOrDefault(r => r.Id == allocationId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Listado de billetes consignados");
             return View(allocation);
         }
 
@@ -630,6 +673,7 @@ namespace Tickets.Controllers
         {
             Procedure_CuadreSorteoResumido cuadreSorteoResumidoProcedure = new Procedure_CuadreSorteoResumido();
             var resultado = cuadreSorteoResumidoProcedure.CuadreSorteo(raffleId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Cuadre de sorteo detallado");
             return View(resultado);
 
             /*var context = new TicketsEntities();
@@ -656,6 +700,7 @@ namespace Tickets.Controllers
         {
             Procedure_CuadreSorteoResumido cuadreSorteoResumidoProcedure = new Procedure_CuadreSorteoResumido();
             var resultado = cuadreSorteoResumidoProcedure.CuadreSorteo(raffleId);
+            Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.View, "Cuadre de sorteo resumido");
             return View(resultado);
 
             /*var context = new TicketsEntities();

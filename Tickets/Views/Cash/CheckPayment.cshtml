@@ -1,0 +1,169 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Pago en cheque";
+}
+
+<!-- START panel-->
+<div class="col-lg-12 no-padder" ng-controller="CheckPaymentController" ng-init="app.title = '@(ViewBag.Title)'">
+    <div class="col-lg-12 no-padder">
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div class="col-lg-12 m-b-xs">
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Lote:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.SequenceNumberIdentifyBach}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Documento:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.DocumentNumber}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Nombre:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.WinnerName}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Teléfono:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.Phone}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset ng-if="identifyBach.Notas != null">
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Nota:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.Notas}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Sorteo:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.RaffleDesc}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset ng-if="identifyBach.percent > 0">
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-5 control-label">Comision Mayorista ({{identifyBach.percent}}%):</span>
+                                <span class="col-lg-7">
+                                    <b>{{parseMoney(totalAwards * identifyBach.percent / 100)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset ng-if="identifyBach.percent > 0">
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total en premios:</span>
+                                <span class="col-lg-8">
+                                    <b>{{parseMoney(totalGeneral)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 no-padder">
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-2 control-label">Cliente:</span>
+                                <span class="col-lg-10">
+                                    <b>{{identifyBach.ClientDesc}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        @*<fieldset>
+                                <div class="form-group m-t-xs">
+                                    <span class="col-lg-4 control-label-left">Referencia:</span>
+                                    <span class="col-lg-8">
+                                        <b>{{identifyBach.Reference}}</b>
+                                    </span>
+                                </div>
+                            </fieldset>*@
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total pagado:</span>
+                                <span class="col-lg-8">
+                                    <b>{{parseMoney(totalpayment)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total restante:</span>
+                                <span class="col-lg-8">
+                                    <b>{{parseMoney(totalRestant)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Estado del Lote:</span>
+                                <span class="col-lg-8">
+                                    @*<b>{{identifyBach.isPayed == true ? 'Pagado' : 'No Pagado'}}</b>*@
+                                    <b>{{((totalGeneral + (totalGeneral * identifyBach.percent / 100)) - totalpayment) == 0 ? 'Pagado' : 'En proceso de pago'}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group m-t-xs">
+                                <span class="col-lg-4 control-label">Total en premios:</span>
+                                <span class="col-lg-8">
+                                    <b>{{parseMoney(totalAwards)}}</b>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 m-b-xs no-padder">
+                    <div class="col-lg-12 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Monto:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <input type="number"
+                                           ng-model="payment.Value"
+                                           ng-max="totalRestant"
+                                           ng-min="0"
+                                           class="form-control input-sm"
+                                           ng-required="true" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 no-padder">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-12 control-label-left">Nota:  <span class="color-red">*</span></label>
+                                <div class="col-lg-12">
+                                    <textarea ng-model="payment.Note"
+                                              ng-required="true"
+                                              class="form-control input-sm"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 no-padder text-left m-b-lg">
+        <a href="#/ticket/identifybachtopaydetail/{{identifyBach.Id}}" class="mr btn btn-square btn-warning"><i class="fa fa-times"></i> Salir</a>
+        <a ng-click="saveForm()" class="mr btn btn-square btn-primary {{moduleCanAdd}}"><i class="fa fa-floppy-o"></i> Pagar</a>
+    </div>
+</div>

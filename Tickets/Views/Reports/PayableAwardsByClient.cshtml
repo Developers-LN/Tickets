@@ -19,11 +19,6 @@
 
     var clients = context.Clients.Select(s => new { s.Id, s.GroupId, s.Name }).ToList();
 
-    var Pendiente = "Pendiente";
-    var Pagado = "Pagado";
-
-    var TipoCliente = "";
-
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
 }
 
@@ -112,8 +107,9 @@
                                     monto = s.FirstOrDefault().Value,
                                     cantidad = s.Count(),
                                     totalPremio = s.Sum(s1 => s1.Value),
-                                    totalPagar = s.Sum(s2 => s2.ValorPagar)
-                                });
+                                    totalPagar = s.Sum(s2 => s2.ValorPagar),
+                                    order = s.FirstOrDefault().ordenpremio
+                                }).OrderBy(o => o.order);
                         }
                         @foreach (var item in resumenPremios)
                         {
@@ -165,8 +161,9 @@
                                     clientName = s.FirstOrDefault().ClientName,
                                     cantidad = s.Count(),
                                     totalPremio = s.Sum(s1 => s1.Value),
-                                    totalPagar = s.Sum(s2 => s2.ValorPagar)
-                                });
+                                    totalPagar = s.Sum(s2 => s2.ValorPagar),
+                                    orden = s.FirstOrDefault().ordenpremio
+                                }).OrderBy(o => o.orden);
                         }
                         @foreach (var item in resumenPremios2)
                         {
@@ -210,15 +207,6 @@
                     HashSet<int> totalFractions = new HashSet<int>();
                     Model.Distinct().Where(w => w.ClientId == client).ToList().ForEach(f => totalFractions.Add(f.Number));
 
-                    if (clients.FirstOrDefault(w => w.Id == client).GroupId == (int)Tickets.Models.Enums.ClientGroupEnum.DistribuidorElectronico)
-                    {
-                        TipoCliente = "Electrónico";
-                    }
-                    else
-                    {
-                        TipoCliente = "Tradicional";
-                    }
-
                     <table class="table" style="margin-top:15px;">
                         <thead>
                             <tr>
@@ -244,15 +232,8 @@
                                 <tr>
                                     <td class="text-center">@fila</td>
                                     <td class="text-center">@item.Number.ToString().PadLeft((RaffleData.Prospect.Production - 1).ToString().Length, '0')</td>
-                                    @if (IdentifyTickets.Any(a => a.IdentifyNumbers.Any(a2 => a2.NumberId == item.TanId)))
-                                    {
-                                        <td class="text-center">@Pagado</td>
-                                    }
-                                    else
-                                    {
-                                        <td class="text-center">@Pendiente</td>
-                                    }
-                                    <td class="text-center">@TipoCliente</td>
+                                    <td class="text-center">@item.status</td>
+                                    <td class="text-center">@item.tipoticket</td>
                                     <td class="text-center">@item.Fracciones</td>
                                     <td class="text-center">@item.NameAward</td>
                                     <td class="text-center">@item.Value.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>

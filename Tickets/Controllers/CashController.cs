@@ -315,19 +315,16 @@ namespace Tickets.Controllers
         {
             var context = new TicketsEntities();
 
-            var users = context.Users.Where(c => c.Statu == (int)UserStatusEnum.Active &&
-            c.webpages_Roles.Any(r => r.RoleName == UserRolEnum.Caja)).Select(r => new
+            var users = context.Users.Where(c => c.Statu == (int)UserStatusEnum.Active && c.Employee.Department == (int)DepartmentEnum.GeneralCashier).Select(r => new
             {
                 value = r.Id,
                 text = r.Employee.Name + " " + r.Employee.LastName
-
             }).ToList();
 
             var clients = context.Clients.Where(c => c.Statu == (int)ClientStatuEnum.Approbed).Select(r => new
             {
                 value = r.Id,
                 text = r.Name
-
             }).ToList();
 
             var accountReceivableTypes = context.Catalogs.Where(w => w.IdGroup == (int)CatalogGroupEnum.AccountReceivableType && w.Statu == true).OrderBy(o => o.IdDetail).Select(s => new
@@ -2119,6 +2116,15 @@ namespace Tickets.Controllers
         #endregion
         #region Payment
         //
+        // GET: /Cash/CheckPayment
+        [Authorize]
+        [HttpGet]
+        public ActionResult CheckPayment()
+        {
+            return View();
+        }
+
+        //
         // GET: /Cash/Payment
         [Authorize]
         [HttpGet]
@@ -2152,6 +2158,53 @@ namespace Tickets.Controllers
         }
 
         //
+        // POST: /Cash/CheckPayment
+        [Authorize]
+        [HttpPost]
+        public JsonResult CheckPayment(IdentifyBachPayment payment)
+        {
+            using (var context = new TicketsEntities())
+            {
+                using (var tx = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        payment.Note = string.IsNullOrEmpty(payment.Note) ? "" : payment.Note;
+                        var cash = context.Cashes.FirstOrDefault(c => c.Statu == (int)CashStatusEnum.Open && c.CreateUser == WebSecurity.CurrentUserId);
+                        var identifyBach = context.IdentifyBaches.Where(n => n.Id == payment.IdentifyBachId).FirstOrDefault();
+
+                        payment.DiscountPercent = identifyBach.Client.GroupId == (int)ClientGroupEnum.Mayorista ? 2 : 0;
+                        if (payment.Id == 0)
+                        {
+                            payment.CreateDate = DateTime.Now;
+                            payment.CreateUser = WebSecurity.CurrentUserId;
+                            payment.ClientId = identifyBach.ClientId;
+                            payment.CashId = cash.Id;
+                            payment.PaymentType = (int)BachPaymentTypeEnum.Check;
+                            context.IdentifyBachPayments.Add(payment);
+                        }
+                        else
+                        {
+                            var mPayment = context.IdentifyBachPayments.FirstOrDefault(n => n.Id == payment.Id);
+                            mPayment.ClientId = payment.ClientId;
+                            mPayment.Note = payment.Note;
+                            mPayment.Value = payment.Value;
+                            mPayment.PaymentType = (int)BachPaymentTypeEnum.Check;
+                        }
+                        context.SaveChanges();
+                        tx.Commit();
+                        return new JsonResult() { Data = new { result = true, message = "Pago Completado." } };
+                    }
+                    catch (Exception e)
+                    {
+                        tx.Rollback();
+                        return new JsonResult() { Data = new { result = false, message = e.Message } };
+                    }
+                }
+            }
+        }
+
+        //
         // POST: /Cash/Payment
         [Authorize]
         [HttpPost]
@@ -2174,6 +2227,7 @@ namespace Tickets.Controllers
                             payment.CreateUser = WebSecurity.CurrentUserId;
                             payment.ClientId = identifyBach.ClientId;
                             payment.CashId = cash.Id;
+                            payment.PaymentType = (int)BachPaymentTypeEnum.Cash;
                             context.IdentifyBachPayments.Add(payment);
                         }
                         else
@@ -2182,6 +2236,7 @@ namespace Tickets.Controllers
                             mPayment.ClientId = payment.ClientId;
                             mPayment.Note = payment.Note;
                             mPayment.Value = payment.Value;
+                            mPayment.PaymentType = (int)BachPaymentTypeEnum.Cash;
                         }
                         context.SaveChanges();
                         tx.Commit();

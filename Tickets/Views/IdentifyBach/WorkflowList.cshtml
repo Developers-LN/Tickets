@@ -11,7 +11,8 @@
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
-                                <th>Prospecto</th>
+                                <th>Sorteo</th>
+                                <th>Lote</th>
                                 <th>Sometido Por</th>
                                 <th>Fecha Sometido</th>
                                 <th>Aprobaciones</th>
@@ -20,6 +21,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="workflow in workflowList">
+                                <td>{{workflow.prospect.name}}</td>
                                 <td>{{workflow.prospect.name}}</td>
                                 <td>{{workflow.userName}}</td>
                                 <td>{{(workflow.createDate | date:"dd/MM/yyyy hh:mm:ss a")}}</td>

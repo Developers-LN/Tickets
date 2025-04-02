@@ -218,7 +218,40 @@ namespace Tickets.Models.Raffles
 
                         transManager.Commit();
                         //GUARDADO DE DATOS GENERADOS
-                        //Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Generacion de Sorteo", raffleAwardList);
+
+                        object generatedRaffle;
+
+                        generatedRaffle = new
+                        {
+                            RaffleId = raffle.Id,
+                            RsffleName = raffle.Name,
+                            RaffleDate = raffle.DateSolteo,
+                            ProspectId = raffle.Prospect.Id,
+                            ProspectName = raffle.Prospect.Name,
+                            GeneratedById = WebSecurity.CurrentUserId,
+                            GeneratedDate = DateTime.Now,
+                            AwardList = raffleAwardList.Select(s => new
+                            {
+                                RaffleAwardId = s.Id,
+                                s.AwardId,
+                                AwardName = s.Award.Name,
+                                s.Award.OrderAward,
+                                AwardDescription = s.Award.Description,
+                                AwardQuantity = s.Award.Quantity,
+                                AwardValue = s.Award.Value,
+                                SourceAwardId = s.Award.SourceAward,
+                                s.Award.Terminal,
+                                s.Award.ByFraction,
+                                TypeAward = s.Award.TypesAward.Name,
+                                TicketNumber = s.ControlNumber,
+                                s.Fraction,
+                                s.Paymentd,
+                                s.PaymentRequestId,
+                                s.RaffleAwardType
+                            }).ToList()
+                        };
+
+                        Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Generacion de Sorteo", generatedRaffle);
                         return new RequestResponseModel()
                         {
                             Result = true,
