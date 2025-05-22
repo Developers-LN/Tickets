@@ -26,6 +26,8 @@ namespace Tickets.Models
         public Nullable<int> SequenceNumber { get; set; }
         public Nullable<int> PayingFund { get; set; }
         public Nullable<int> PaymentType { get; set; }
+        public string Nomenclature { get; set; }
+        public Nullable<int> Digits { get; set; }
     
         public virtual Cash Cash { get; set; }
         public virtual Client Client { get; set; }

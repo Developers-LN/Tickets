@@ -285,6 +285,8 @@
           <Property Name="SequenceNumber" Type="int" />
           <Property Name="PayingFund" Type="int" />
           <Property Name="PaymentType" Type="int" />
+          <Property Name="Nomenclature" Type="varchar" MaxLength="5" />
+          <Property Name="Digits" Type="int" />
         </EntityType>
         <EntityType Name="IdentifyNumber">
           <Key>
@@ -4081,6 +4083,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="SequenceNumber" Type="Int32" />
           <Property Name="PayingFund" Type="Int32" />
           <Property Name="PaymentType" Type="Int32" />
+          <Property Name="Nomenclature" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Digits" Type="Int32" />
         </EntityType>
         <EntityType Name="IdentifyNumber">
           <Key>
@@ -6846,6 +6850,8 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="IdentifyBachPayments">
             <EntityTypeMapping TypeName="TicketsModel.IdentifyBachPayment">
               <MappingFragment StoreEntitySet="IdentifyBachPayment">
+                <ScalarProperty Name="Digits" ColumnName="Digits" />
+                <ScalarProperty Name="Nomenclature" ColumnName="Nomenclature" />
                 <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
                 <ScalarProperty Name="PayingFund" ColumnName="PayingFund" />
                 <ScalarProperty Name="SequenceNumber" ColumnName="SequenceNumber" />

@@ -105,6 +105,8 @@ namespace Tickets.Controllers
                 IdentifyBach = p.IdentifyBach,
                 ReceivablePercent = p.DiscountPercent,
                 Production = p.IdentifyBach.Raffle.Prospect.Production - 1,
+                Nomenclature = p.Nomenclature,
+                Digits = p.Digits ?? 0,
             }).FirstOrDefault();
 
             return View(payment);
@@ -123,6 +125,9 @@ namespace Tickets.Controllers
                 {
                     ClientName = p.ClientId + " - " + p.Client.Name,
                     PaymentType = "PAGO EN EFECTIVO ",// + p.Id,
+                    PaymentTypeId = p.PaymentType,
+                    Nomenclature = p.Nomenclature,
+                    Digits = p.Digits != null ? p.Digits.Value : 0,
                     SequenceNumberPayment = p.SequenceNumber,
                     Value = p.Value,
                     Id = p.Id,

@@ -255,7 +255,7 @@ namespace Tickets.Controllers
                         var awards = context.RaffleAwards.Where(a => a.RaffleId == model.RaffleId).ToList();
 
                         List<IdentifyNumber> identifyNumbers = new List<IdentifyNumber>();
-                        
+
                         context.IdentifyBaches.AsEnumerable().Where(i =>
                             i.RaffleId == model.RaffleId && i.ClientId == model.ClientId &&
                             (i.IdentifyBachPayments.Any(p => p.CreateDate.Date >= model.StartDate.Date && p.CreateDate.Date <= model.EndDate.Date) == true)
@@ -2125,6 +2125,15 @@ namespace Tickets.Controllers
         }
 
         //
+        // GET: /Cash/NaturePayment
+        [Authorize]
+        [HttpGet]
+        public ActionResult NaturePayment()
+        {
+            return View();
+        }
+
+        //
         // GET: /Cash/Payment
         [Authorize]
         [HttpGet]
@@ -2190,6 +2199,52 @@ namespace Tickets.Controllers
                             mPayment.Note = payment.Note;
                             mPayment.Value = payment.Value;
                             mPayment.PaymentType = (int)BachPaymentTypeEnum.Check;
+                        }
+                        context.SaveChanges();
+                        tx.Commit();
+                        return new JsonResult() { Data = new { result = true, message = "Pago Completado." } };
+                    }
+                    catch (Exception e)
+                    {
+                        tx.Rollback();
+                        return new JsonResult() { Data = new { result = false, message = e.Message } };
+                    }
+                }
+            }
+        }
+
+        //
+        // POST: /Cash/NaturePayment
+        [Authorize]
+        [HttpPost]
+        public JsonResult NaturePayment(IdentifyBachPayment payment)
+        {
+            using (var context = new TicketsEntities())
+            {
+                using (var tx = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        payment.Note = string.IsNullOrEmpty(payment.Note) ? "" : payment.Note;
+                        var cash = context.Cashes.FirstOrDefault(c => c.Statu == (int)CashStatusEnum.Open && c.CreateUser == WebSecurity.CurrentUserId);
+                        var identifyBach = context.IdentifyBaches.Where(n => n.Id == payment.IdentifyBachId).FirstOrDefault();
+
+                        if (payment.Id == 0)
+                        {
+                            payment.CreateDate = DateTime.Now;
+                            payment.CreateUser = WebSecurity.CurrentUserId;
+                            payment.ClientId = identifyBach.ClientId;
+                            payment.CashId = cash.Id;
+                            payment.PaymentType = (int)BachPaymentTypeEnum.Nature;
+                            context.IdentifyBachPayments.Add(payment);
+                        }
+                        else
+                        {
+                            var mPayment = context.IdentifyBachPayments.FirstOrDefault(n => n.Id == payment.Id);
+                            mPayment.ClientId = payment.ClientId;
+                            mPayment.Note = payment.Note;
+                            mPayment.Value = payment.Value;
+                            mPayment.PaymentType = (int)BachPaymentTypeEnum.Nature;
                         }
                         context.SaveChanges();
                         tx.Commit();

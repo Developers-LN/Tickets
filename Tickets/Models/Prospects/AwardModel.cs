@@ -73,8 +73,8 @@ namespace Tickets.Models.Prospects
                 Terminal = award.Terminal,
                 TotalValue = award.TotalValue,
                 Value = award.Value,
-                TypesAwardId = award.TypesAwardId,
-                TypesAwardDesc = context.TypesAwards.FirstOrDefault(sa => sa.Id == award.TypesAwardId).Name
+                TypesAwardId = award.TypesAwardId > 0 ? award.TypesAwardId : 1,
+                TypesAwardDesc = award.TypesAwardId > 0 ? context.TypesAwards.FirstOrDefault(sa => sa.Id == award.TypesAwardId).Name : ""
             };
 
             return awardModel;

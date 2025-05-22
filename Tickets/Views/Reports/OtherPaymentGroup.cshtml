@@ -9,6 +9,9 @@
     string adminName = config != null ? config.CajaGeneral : "";
     string adminCargo = config != null ? config.CajaGeneralCargo : "";
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-DO");
+
+    decimal TotalPayed = 0.0m;
+    int TotalReceipt = 0;
 }
 
 <style>
@@ -88,6 +91,8 @@
             <tbody>
                 @foreach (var item in Model.OtherIncomeDetails)
                 {
+                    TotalReceipt += 1;
+                    TotalPayed += item.Total.Value;
                     <tr>
                         <td class="text-center">
                             @(item.Symbol + item.SequenceNumber.Value.ToString().PadLeft(item.LengthZero.Value, '0'))
@@ -103,6 +108,13 @@
                         </td>
                     </tr>
                 }
+                <tr class="total">
+                    <td class="text-right"><b>@TotalReceipt.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-left"></td>
+                    <td class="text-left"></td>
+
+                    <td class="text-right"><b>@TotalPayed.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -196,6 +208,13 @@
                         </td>
                     </tr>
                 }
+                <tr class="total">
+                    <td class="text-right"><b>@TotalReceipt.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                    <td class="text-left"></td>
+                    <td class="text-left"></td>
+
+                    <td class="text-right"><b>@TotalPayed.ToString("c", new System.Globalization.CultureInfo("es-DO"))</b></td>
+                </tr>
             </tbody>
         </table>
     </div>

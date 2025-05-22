@@ -47,12 +47,18 @@
         $scope.totalAwards = 0;
 
         this.showTotal = function () {
-            var totalFraction = 0, totalNumber = 0, totalValue = 0;
+            var totalFraction = 0, totalNumber = 0, totalValue = 0, cashValue = 0.0, natureValue = 0.0;
             $scope.identifyBach.IdentifyNumbers.forEach(function (number) {
                 var fractions = (number.RaffleAward.FractionTo - number.RaffleAward.FractionFrom + 1);
                 totalFraction += fractions;
                 totalNumber += 1;
                 $scope.totalAwards += ((fractions * number.RaffleAward.AwardValue) - (fractions * number.RaffleAward.AwardValue) * (number.RaffleAward.LawDiscount / 100));;
+                if (number.RaffleAward.TypesAwardId != 16 && number.RaffleAward.TypesAwardId != 17) {
+                    cashValue += ((fractions * number.RaffleAward.AwardValue) - (fractions * number.RaffleAward.AwardValue) * (number.RaffleAward.LawDiscount / 100));
+                }
+                else {
+                    natureValue += ((fractions * number.RaffleAward.AwardValue) - (fractions * number.RaffleAward.AwardValue) * (number.RaffleAward.LawDiscount / 100));
+                }
             });
 
             $scope.identifyBach.IdentifyBachPayments.forEach(function (payment) {
@@ -65,7 +71,7 @@
             $scope.totalGeneral = $scope.totalAwards + ($scope.totalAwards * $scope.identifyBach.percent / 100);
 
             $scope.totalRestant = $scope.totalGeneral - $scope.totalpayment;
-            $scope.creditNote.TotalCash = $scope.totalRestant;
+            $scope.creditNote.TotalCash = ($scope.totalRestant - natureValue);
         }
 
         this.loadCreaditNote = function () {

@@ -1,5 +1,5 @@
-/**=========================================================
- * Module: CashPaymentController.js
+﻿/**=========================================================
+ * Module: NaturePaymentController.js
  =========================================================*/
 
 (function () {
@@ -7,16 +7,16 @@
 
     angular
         .module('naut')
-        .controller('CashPaymentController', CashPaymentController);
+        .controller('NaturePaymentController', NaturePaymentController);
 
-    CashPaymentController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
-    function CashPaymentController($scope, $state, $rootScope, $stateParams) {
+    NaturePaymentController.$inject = ['$scope', '$state', '$rootScope', '$stateParams'];
+    function NaturePaymentController($scope, $state, $rootScope, $stateParams) {
         $scope.payment = {
             Id: 0,
             CashId: '',
             ClientId: '',
             IdentifyBachId: $stateParams.identifyBachId,
-            Value: undefined,
+            Value: 0.0,
             Note: undefined,
             PaymentType: undefined
         };
@@ -129,7 +129,7 @@
             $scope.totalGeneral = $scope.totalAwards + ($scope.totalAwards * $scope.identifyBach.percent / 100);
 
             $scope.totalRestant = $scope.totalGeneral - $scope.totalpayment;
-            $scope.payment.Value = $scope.totalRestant - natureValue;
+            $scope.payment.Value = natureValue;
         }
 
         $scope.saveForm = function () {
@@ -140,7 +140,7 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: 'Cash/Payment',
+                url: 'Cash/NaturePayment',
                 data: $scope.payment,
                 success: function (data) {
                     window.loading.hide();

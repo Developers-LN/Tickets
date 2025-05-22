@@ -890,6 +890,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\modules\cash\check.payment.controller.js" />
+    <Content Include="Scripts\modules\cash\nature.payment.controller.js" />
     <Content Include="Scripts\modules\cash\payed.award.electronic.controller.js" />
     <Content Include="Scripts\modules\cash\positive.balance.controller.js" />
     <Content Include="Scripts\modules\cash\cash.positive.balance.list.controller.js" />
@@ -3353,6 +3354,7 @@
     <Content Include="Views\Cash\CheckPayment.cshtml" />
     <Content Include="Views\Reports\IdentifyBachDetails.cshtml" />
     <Content Include="Views\Reports\IndentifyReceivableReportCheck.cshtml" />
+    <Content Include="Views\Cash\NaturePayment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

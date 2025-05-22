@@ -10,6 +10,8 @@ namespace Tickets.Models
 
         public string PaymentType { get; set; }
 
+        public int? PaymentTypeId { get; set; }
+
         public decimal Value { get; set; }
         
         public int UserId { get; set; }
@@ -31,5 +33,7 @@ namespace Tickets.Models
         public int? SequenceNumberPayment { get; set; }
 
         public string Nomenclature { get; set; }
+
+        public int Digits { get; set; }
     }
 }

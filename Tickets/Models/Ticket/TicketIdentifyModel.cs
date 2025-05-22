@@ -727,9 +727,6 @@ namespace Tickets.Models.Ticket
                                 Statu = (int)BachIdentifyStatuEnum.Inproces,
                                 CreateDate = DateTime.Now,
                                 CreateUser = WebSecurity.CurrentUserId,
-                                /*Nombre = newWinner.WinnerName,
-                                Cedula = newWinner.DocumentNumber,
-                                Telefono = newWinner.Phone,*/
                                 Notas = identifyBach.Notes,
                                 IdentifyType = (int)IdentifyBachTypeEnum.Gamers,
                                 WinnerId = newWinner.Id
@@ -743,9 +740,6 @@ namespace Tickets.Models.Ticket
                             newIdentifyBach.RaffleId = identifyBach.RaffleId;
                             newIdentifyBach.ClientId = identifyBach.ClientId;
                             newIdentifyBach.Type = identifyBach.Type;
-                            /*newIdentifyBach.Nombre = identifyBach.WinnerName;
-                            newIdentifyBach.Cedula = identifyBach.DocumentNumber;
-                            newIdentifyBach.Telefono = identifyBach.WinnerPhone;*/
                             newIdentifyBach.Notas = identifyBach.Notes;
                             newIdentifyBach.WinnerId = newWinner.Id;
                         }
@@ -1636,6 +1630,32 @@ namespace Tickets.Models.Ticket
         private object IdentifyNumberToObejct(IdentifyNumber n)
         {
             var context = new TicketsEntities();
+
+            var LawDiscount = context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor;
+
+            var AwardData = context.RaffleAwards
+                .Where(ra =>
+                ra.RaffleId == n.IdentifyBach.RaffleId && ra.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived
+                && ra.ControlNumber == n.TicketAllocationNumber.Number
+                && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo) || ra.Award.ByFraction == (int)ByFractionEnum.N)
+                && ra.Award.Id == ra.AwardId).Select(s => new { s.Award.Value, s.Raffle.Prospect.LeafFraction, s.Raffle.Prospect.LeafNumber }).FirstOrDefault();
+
+            var RaffleAwards = context.RaffleAwards
+                .Where(ra =>
+                ra.RaffleId == n.IdentifyBach.RaffleId && ra.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived
+                && ra.ControlNumber == n.TicketAllocationNumber.Number
+                && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo) || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(ra => new
+                {
+                    ra.Award.Name,
+                    ra.Award.Value,
+                    ra.Raffle.Prospect.LeafFraction,
+                    ra.Raffle.Prospect.LeafNumber,
+                    ra.Award.ByFraction,
+                    ra.Fraction,
+                    ra.Id,
+                    ra.Award.TypesAwardId,
+                }).ToList();
+
             var identifyObject = new
             {
                 n.Id,
@@ -1647,37 +1667,33 @@ namespace Tickets.Models.Ticket
                 n.IdentifyBachNumberType,
                 Fractions = (n.FractionTo - n.FractionFrom) + 1,
                 n.Status,
-                AwardName = context.RaffleAwards.Where(ra =>
-                ra.RaffleId == n.IdentifyBach.RaffleId
-                && ra.ControlNumber == n.TicketAllocationNumber.Number
-                && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo)
-                || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(s => s.Award.Name).FirstOrDefault(),
 
-                Value = context.RaffleAwards.Where(ra =>
-                ra.RaffleId == n.IdentifyBach.RaffleId && ra.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived
-                && ra.ControlNumber == n.TicketAllocationNumber.Number
-                && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo)
-                || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(s => s.Award.Value / (s.Raffle.Prospect.LeafFraction * s.Raffle.Prospect.LeafNumber)).FirstOrDefault(),
-
-                Total = context.RaffleAwards.Where(ra =>
-                ra.RaffleId == n.IdentifyBach.RaffleId && ra.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived
-                && ra.ControlNumber == n.TicketAllocationNumber.Number
-                && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo) || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(s => (s.Award.Value / (s.Raffle.Prospect.LeafFraction * s.Raffle.Prospect.LeafNumber)) * ((n.FractionTo - n.FractionFrom) + 1)).FirstOrDefault(),
-
-                RaffleAwards = context.RaffleAwards.Where(ra =>
+                AwardName = context.RaffleAwards
+                .Where(ra =>
                     ra.RaffleId == n.IdentifyBach.RaffleId
                     && ra.ControlNumber == n.TicketAllocationNumber.Number
-                    && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo) || ra.Award.ByFraction == (int)ByFractionEnum.N)
-                    && ra.Award.TypesAward.Creation != (int)TypesAwardCreationEnum.SameAwardDerived).Select(
-                ra => new
+                    && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo)
+                    || ra.Award.ByFraction == (int)ByFractionEnum.N)
+                    && ra.Award.Id == ra.AwardId
+                ).Select(s => s.Award.Name).FirstOrDefault(),
+
+                Value = AwardData.Value / (AwardData.LeafFraction * AwardData.LeafNumber),
+
+                Total = AwardData.Value / (AwardData.LeafFraction * AwardData.LeafNumber) * ((n.FractionTo - n.FractionFrom) + 1),
+
+                RaffleAwards = RaffleAwards.Select(ra => new
                 {
-                    AwardName = ra.Award.Name,
-                    AwardValue = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Award.Value : ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber),
-                    FractionFrom = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionFrom,
-                    FractionTo = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionTo,
+                    AwardName = ra.Name,
+                    ra.ByFraction,
+                    ra.TypesAwardId,
+                    AwardValue = ra.ByFraction == (int)ByFractionEnum.S ? ra.Value : ra.Value / (ra.LeafFraction * ra.LeafNumber),
+                    FractionFrom = ra.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionFrom,
+                    FractionTo = ra.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionTo,
                     ra.Id,
-                    LawDiscount = ra.Award.ByFraction == (int)ByFractionEnum.S || ra.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor : 0,
-                    Total = ra.Award.ByFraction == (int)ByFractionEnum.S || ra.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100) : (ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber) * (n.FractionTo - n.FractionFrom + 1)) * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100)) : (ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber)),
+                    LawDiscount = ra.ByFraction == (int)ByFractionEnum.S || ra.TypesAwardId == (int)AwardTypeEnum.Mayors ? LawDiscount : 0,
+                    Retention = (ra.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || ra.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && ra.Value > 100000 ? LawDiscount : 0,
+                    Total = ra.ByFraction == (int)ByFractionEnum.S || ra.TypesAwardId == (int)AwardTypeEnum.Mayors ? (ra.ByFraction == (int)ByFractionEnum.S ? ra.Value * (LawDiscount / 100) : (ra.Value / (ra.LeafFraction * ra.LeafNumber) * (n.FractionTo - n.FractionFrom + 1)) * (LawDiscount / 100)) : (ra.Value / (ra.LeafFraction * ra.LeafNumber)),
+                    TotalRetention = (ra.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || ra.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && ra.Value > 100000 ? (ra.Value * LawDiscount / 100) : 0
                 }).ToList()
             };
             return identifyObject;
@@ -1686,6 +1702,32 @@ namespace Tickets.Models.Ticket
         private object IdentifyNumberSellerToObejct(IdentifyNumber n)
         {
             var context = new TicketsEntities();
+
+            var LawDiscount = context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor;
+
+            var AwardData = context.RaffleAwards
+                .Where(ra =>
+                ra.RaffleId == n.IdentifyBach.RaffleId && ra.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived
+                && ra.ControlNumber == n.TicketAllocationNumber.Number
+                && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo) || ra.Award.ByFraction == (int)ByFractionEnum.N)
+                && ra.Award.Id == ra.AwardId).Select(s => new { s.Award.Value, s.Raffle.Prospect.LeafFraction, s.Raffle.Prospect.LeafNumber }).FirstOrDefault();
+
+            var RaffleAwards = context.RaffleAwards
+                .Where(ra =>
+                ra.RaffleId == n.IdentifyBach.RaffleId && ra.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived
+                && ra.ControlNumber == n.TicketAllocationNumber.Number
+                && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo) || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(ra => new
+                {
+                    ra.Award.Name,
+                    ra.Award.Value,
+                    ra.Raffle.Prospect.LeafFraction,
+                    ra.Raffle.Prospect.LeafNumber,
+                    ra.Award.ByFraction,
+                    ra.Fraction,
+                    ra.Id,
+                    ra.Award.TypesAwardId,
+                }).ToList();
+
             var identifyObject = new
             {
                 n.Id,
@@ -1698,37 +1740,32 @@ namespace Tickets.Models.Ticket
                 Fractions = (n.FractionTo - n.FractionFrom) + 1,
                 n.Status,
 
-                AwardName = context.RaffleAwards.Where(ra =>
-                ra.RaffleId == n.IdentifyBach.RaffleId
-                && ra.ControlNumber == n.TicketAllocationNumber.Number
-                && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo)
-                || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(s => s.Award.Name).FirstOrDefault(),
+                AwardName = context.RaffleAwards
+                .Where(ra =>
+                    ra.RaffleId == n.IdentifyBach.RaffleId
+                    && ra.ControlNumber == n.TicketAllocationNumber.Number
+                    && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo)
+                    || ra.Award.ByFraction == (int)ByFractionEnum.N)
+                    && ra.Award.Id == ra.AwardId
+                ).Select(s => s.Award.Name).FirstOrDefault(),
 
-                Value = context.RaffleAwards.Where(ra =>
-                ra.RaffleId == n.IdentifyBach.RaffleId && ra.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived
-                && ra.ControlNumber == n.TicketAllocationNumber.Number
-                && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo)
-                || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(s => s.Award.Value / (s.Raffle.Prospect.LeafFraction * s.Raffle.Prospect.LeafNumber)).FirstOrDefault(),
+                Value = AwardData.Value / (AwardData.LeafFraction * AwardData.LeafNumber),
 
-                Total = context.RaffleAwards.Where(ra =>
-                ra.RaffleId == n.IdentifyBach.RaffleId && ra.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived
-                && ra.ControlNumber == n.TicketAllocationNumber.Number
-                && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo) || ra.Award.ByFraction == (int)ByFractionEnum.N)).Select(s => (s.Award.Value / (s.Raffle.Prospect.LeafFraction * s.Raffle.Prospect.LeafNumber)) * ((n.FractionTo - n.FractionFrom) + 1)).FirstOrDefault(),
+                Total = AwardData.Value / (AwardData.LeafFraction * AwardData.LeafNumber) * ((n.FractionTo - n.FractionFrom) + 1),
 
-                RaffleAwards = context.RaffleAwards.Where(ra =>
-                ra.RaffleId == n.IdentifyBach.RaffleId
-                && ra.ControlNumber == n.TicketAllocationNumber.Number
-                && ((ra.Fraction >= n.FractionFrom && ra.Fraction <= n.FractionTo) || ra.Award.ByFraction == (int)ByFractionEnum.N)
-                && ra.Award.TypesAward.Creation == (int)TypesAwardCreationEnum.SameAwardDerived).Select(
-                ra => new
+                RaffleAwards = RaffleAwards.Select(ra => new
                 {
-                    AwardName = ra.Award.Name,
-                    AwardValue = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Award.Value : ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber),
-                    FractionFrom = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionFrom,
-                    FractionTo = ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionTo,
+                    AwardName = ra.Name,
+                    ra.ByFraction,
+                    ra.TypesAwardId,
+                    AwardValue = ra.ByFraction == (int)ByFractionEnum.S ? ra.Value : ra.Value / (ra.LeafFraction * ra.LeafNumber),
+                    FractionFrom = ra.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionFrom,
+                    FractionTo = ra.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionTo,
                     ra.Id,
-                    LawDiscount = ra.Award.ByFraction == (int)ByFractionEnum.S || ra.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor : 0,
-                    Total = ra.Award.ByFraction == (int)ByFractionEnum.S || ra.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (ra.Award.ByFraction == (int)ByFractionEnum.S ? ra.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100) : (ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber) * (n.FractionTo - n.FractionFrom + 1)) * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100)) : (ra.Award.Value / (ra.Raffle.Prospect.LeafFraction * ra.Raffle.Prospect.LeafNumber)),
+                    LawDiscount = ra.ByFraction == (int)ByFractionEnum.S || ra.TypesAwardId == (int)AwardTypeEnum.Mayors ? LawDiscount : 0,
+                    Retention = (ra.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || ra.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && ra.Value > 100000 ? LawDiscount : 0,
+                    Total = ra.ByFraction == (int)ByFractionEnum.S || ra.TypesAwardId == (int)AwardTypeEnum.Mayors ? (ra.ByFraction == (int)ByFractionEnum.S ? ra.Value * (LawDiscount / 100) : (ra.Value / (ra.LeafFraction * ra.LeafNumber) * (n.FractionTo - n.FractionFrom + 1)) * (LawDiscount / 100)) : (ra.Value / (ra.LeafFraction * ra.LeafNumber)),
+                    TotalRetention = (ra.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || ra.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && ra.Value > 100000 ? (ra.Value * LawDiscount / 100) : 0
                 }).ToList()
             };
 

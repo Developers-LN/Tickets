@@ -20,6 +20,8 @@
         $scope.pricePerFraction = 0;
 
         $scope.showPayments = true;
+        $scope.hasNaturePayment = false;
+        $scope.hasCashPayment = false;
 
         $rootScope.returnUrl = "/#/ticket/identifybachtopaydetail/" + $stateParams.identifyId;
         $scope.totalpayment = 0;
@@ -75,8 +77,14 @@
                 var fractions = (number.RaffleAward.FractionTo - number.RaffleAward.FractionFrom + 1);
                 $scope.totalFraction += fractions;
                 $scope.totalNumber += 1;
-                $scope.totalValue += (number.RaffleAward.AwardValue / fractions);
+                $scope.totalValue += number.RaffleAward.ByFraction == 14 ? number.RaffleAward.AwardValue : (number.RaffleAward.AwardValue / fractions);
                 $scope.totalGeneral += ((fractions * number.RaffleAward.AwardValue) - (fractions * number.RaffleAward.AwardValue) * (number.RaffleAward.LawDiscount / 100));
+                if (number.RaffleAward.TypesAwardId != 16 && number.RaffleAward.TypesAwardId != 17) {
+                    $scope.hasCashPayment = true;
+                }
+                else {
+                    $scope.hasNaturePayment = true;
+                }
             });
 
             $scope.identifyBach.IdentifyBachPayments.forEach(function (payment) {

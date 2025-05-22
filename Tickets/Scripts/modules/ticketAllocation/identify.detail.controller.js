@@ -96,6 +96,7 @@
                 $scope.totalFraction += fractions;
                 $scope.totalNumber += 1;
                 $scope.totalValue += (number.RaffleAward.AwardValue / fractions);
+                $scope.totalToPay += (number.RaffleAward.AwardValue - (number.RaffleAward.AwardValue * (number.RaffleAward.LawDiscount / 100))) / fractions;
                 $scope.totalGeneral += ((fractions * number.RaffleAward.AwardValue) - (fractions * number.RaffleAward.AwardValue) * (number.RaffleAward.LawDiscount / 100));
             });
 

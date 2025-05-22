@@ -224,7 +224,7 @@ namespace Tickets.Models.Raffles
                         generatedRaffle = new
                         {
                             RaffleId = raffle.Id,
-                            RsffleName = raffle.Name,
+                            RaffleName = raffle.Name,
                             RaffleDate = raffle.DateSolteo,
                             ProspectId = raffle.Prospect.Id,
                             ProspectName = raffle.Prospect.Name,
@@ -251,7 +251,7 @@ namespace Tickets.Models.Raffles
                             }).ToList()
                         };
 
-                        Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Generacion de Sorteo", generatedRaffle);
+                        Utils.SaveLog(WebSecurity.CurrentUserName, LogActionsEnum.Insert, "Generación del Sorteo", generatedRaffle);
                         return new RequestResponseModel()
                         {
                             Result = true,

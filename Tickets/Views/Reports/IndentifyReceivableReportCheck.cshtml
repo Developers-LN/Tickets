@@ -1,16 +1,18 @@
 ﻿@model Tickets.Models.PaymentReceivableReportModel
+@using Tickets.Models.Enums
 
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
-    ViewBag.Title = "RECIBO DE PAGO A PREMIO NO. " + Model.SequenceNumberPayment + " DEL SORTEO NO. " + Model.IdentifyBach.Raffle.Symbol + Model.IdentifyBach.Raffle.Separator + Model.IdentifyBach.Raffle.SequenceNumber;
+    ViewBag.Title = "RECIBO DE PAGO A PREMIO NO. " + String.Concat(Model.Nomenclature, "-", Model.SequenceNumberPayment.Value.ToString().PadLeft(Model.Digits, '0')) + " DEL SORTEO NO. " + Model.IdentifyBach.Raffle.Symbol + Model.IdentifyBach.Raffle.Separator + Model.IdentifyBach.Raffle.SequenceNumber;
 
     var context = new Tickets.Models.TicketsEntities();
     var config = context.SystemConfigs.FirstOrDefault();
-    string adminName = config != null ? config.ControlPremio : "";
-    string adminCargo = config != null ? config.ControlPremioCargo : "";
+    string adminName = config != null ? config.CajaGeneral : "";
+    string adminCargo = config != null ? config.CajaGeneralCargo : "";
     var raffleAwards = context.Raffles.FirstOrDefault(r => r.Id == Model.IdentifyBach.RaffleId).RaffleAwards.ToList();
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
     var RaffleData = context.Raffles.Where(w => w.Id == Model.RaffleId).FirstOrDefault();
+    var LawDiscount = context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor;
 }
 
 <style>
@@ -60,7 +62,7 @@
         </div>
         <div class="col-lg-12 no-padder text-center">
             <b>
-                RECIBO DE PAGO POR PREMIO DEL SORTEO <br />
+                RECIBO DE PAGO A PREMIO DEL SORTEO <br />
                 @RaffleData.Symbol @RaffleData.Separator @RaffleData.SequenceNumber @RaffleData.Name @RaffleData.DateSolteo.ToString("dd/MM/yyyy")
             </b>
         </div>
@@ -70,14 +72,23 @@
             <b>Cliente: </b> @Model.ClientName<br />
             @if (Model.CreditNoteId == 0)
             {
-                <b>Recibo: </b> @Model.SequenceNumberPayment<br />
-                <b>Pago en efectivo</b><br />
+                if (!String.IsNullOrEmpty(Model.PaymentType) && Convert.ToInt32(Model.PaymentType) == (int)BachPaymentTypeEnum.Cash)
+                {
+                    <b>Recibo pago en efectivo: </b> @(String.Concat(Model.Nomenclature, "-", Model.SequenceNumberPayment.Value.ToString().PadLeft(Model.Digits, '0')))<br />
+                }
+                else if (!String.IsNullOrEmpty(Model.PaymentType) && Convert.ToInt32(Model.PaymentType) == (int)BachPaymentTypeEnum.Check)
+                {
+                    <b>Recibo pago en cheque: </b> @(String.Concat(Model.Nomenclature, "-", Model.SequenceNumberPayment.Value.ToString().PadLeft(Model.Digits, '0')))<br />
+                }
+                else if (!String.IsNullOrEmpty(Model.PaymentType) && Convert.ToInt32(Model.PaymentType) == (int)BachPaymentTypeEnum.Nature)
+                {
+                    <b>Recibo pago en naturaleza: </b> @(String.Concat(Model.Nomenclature, "-", Model.SequenceNumberPayment.Value.ToString().PadLeft(Model.Digits, '0')))<br />
+                }
             }
             else
             {
                 <b>Nota de Credito: </b> @(Model.Nomenclature == null ? Model.SequenceNumberPayment.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumberPayment.Value.ToString().PadLeft(5, '0')))<br />
             }
-            @*<b>Usuario: #</b> @context.Users.FirstOrDefault(u => u.Id == Model.UserId).Name*@
         </div>
         <div class="col-lg-6 no-padder text-right">
             <b>Fecha: </b> @Model.CreateDate.ToString("dd/MM/yyyy") <br />
@@ -91,10 +102,15 @@
                     <tr>
                         <th class="text-center">LOTE</th>
                         <th class="text-center">NUMERO</th>
-                        <th class="text-center">TIPO DE PREMIO</th>
-                        <th class="text-center">FRACCIONES DESDE-HASTA</th>
-                        <th class="text-center">CANTIDAD FRACCIONES</th>
-                        <th class="text-center">VALOR FRACCCION</th>
+                        <th class="text-center">PREMIO</th>
+                        <th class="text-center">FRAC.</th>
+                        <th class="text-center">CANT. FRAC.</th>
+                        <th class="text-center">VALOR FRAC.</th>
+                        <th class="text-center">TOTAL FRAC.</th>
+                        <th class="text-center">DESC.</th>
+                        <th class="text-center">RETEN..</th>
+                        <th class="text-center">TOTAL DESC.</th>
+                        <th class="text-center">TOTAL RETEN.</th>
                         <th class="text-right">TOTAL</th>
                     </tr>
                 </thead>
@@ -102,6 +118,8 @@
                     @{
                         int totalFraction = 0;
                         decimal totalGeneral = 0;
+                        decimal totalDescuento = 0;
+                        decimal totalfrac = 0;
                         var totalFraction2 = Model.IdentifyBach.IdentifyNumbers
                             .Select(s => new
                             {
@@ -147,11 +165,12 @@
                             {
                                 var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
                                 var total = (number.FractionTo - number.FractionFrom + 1) * price;
+                                decimal discount = 0;
 
                                 if (raffleAward.Award.TypesAward.Id == (int)Tickets.Models.Enums.AwardTypeEnum.WinFraction)
                                 {
                                     total = raffleAward.Award.Value;
-                                    //totalFraction += 1;
+                                    discount = total * ((decimal)LawDiscount / 100);
                                     <tr>
                                         <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Production.ToString().Length, '0')</td>
@@ -159,12 +178,17 @@
                                         <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
                                         <td class="text-center">1</td>
                                         <td class="text-center">@(raffleAward.Award.Value.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
-                                        <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@LawDiscount %</td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center">@((total * ((decimal)LawDiscount / 100)).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                        <td class="text-center"></td>
+                                        <td class="text-right">@((total - (total * ((decimal)LawDiscount / 100))).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                                     </tr>
                                 }
                                 else
                                 {
-                                    //totalFraction += (number.FractionTo - number.FractionFrom + 1);
+                                    discount = total * ((decimal)LawDiscount / 100);
                                     <tr>
                                         <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Production.ToString().Length, '0')</td>
@@ -172,10 +196,17 @@
                                         <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
                                         <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
                                         <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                        <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@LawDiscount %</td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center">@((total * ((decimal)LawDiscount / 100)).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                        <td class="text-center"></td>
+                                        <td class="text-right">@((total - (total * ((decimal)LawDiscount / 100))).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                                     </tr>
                                 }
-                                totalGeneral += total;
+                                totalGeneral += total - discount;
+                                totalfrac += total;
+                                totalDescuento += discount;
                             }
                         }
 
@@ -199,7 +230,17 @@
                             <td></td>
                             <td></td>
                             <td class="text-center"><strong>@totalFraction.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</strong></td>
-                            <td class="text-right" colspan="2">Subtotal a pagar: <strong> @((totalGeneral).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                            <td></td>
+                            <td class="text-center"><strong>@totalfrac.ToString("c", new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                            <td></td>
+                            <td class="text-center"><strong>@totalDescuento.ToString("c", new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                            <td class="text-right"><strong> @((totalGeneral).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         if (Model.ReceivablePercent > 0)
                         {
@@ -208,21 +249,13 @@
                             </tr>
                         }
                         <tr>
-                            <td class="text-right" style="border-top: none;" colspan="7">Pagos anteriores: <strong> @(((totalPayment + percentValue) - (Model.Value + percentValue) ).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                            <td class="text-right" style="border-top: none;" colspan="10">MONTO EN PREMIOS: <strong> @((totalfrac.ToString("c",  new System.Globalization.CultureInfo("es-DO"))))</strong></td>
                         </tr>
                         <tr>
-                            <td class="text-right" style="border-top: none;" colspan="7">Pago actual: <strong> @(Model.Value.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                            <td class="text-right" style="border-top: none;" colspan="10">MONTO DESCONTADO: <strong> @(totalDescuento.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
                         </tr>
                         <tr>
-                            @if (Model.CreditNoteId != 0)
-                            {
-                                <td colspan="4" style="font-size:small; border-top:none;"><b>Concepto:</b> @Model.Concept</td>
-                                <td class="text-right" style="border-top: none;" colspan="3">Pendiente por Pagar: <strong> @((totalGeneral + percentValue - totalPayment).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
-                            }
-                            else
-                            {
-                                <td class="text-right" style="border-top: none;" colspan="7">Pendiente por Pagar: <strong> @((totalGeneral + percentValue - totalPayment).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
-                            }
+                            <td class="text-right" style="border-top: none;" colspan="10">TOTAL A PAGAR: <strong> @(totalGeneral.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
                         </tr>
                     }
                     else if (Model.IdentifyBach.IdentifyType == (int)Tickets.Models.Enums.IdentifyBachTypeEnum.Sellers)
@@ -259,24 +292,30 @@
                             {
                                 var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
                                 var total = (number.FractionTo - number.FractionFrom + 1) * price;
+                                decimal discount = 0;
 
                                 if (raffleAward.Award.TypesAward.Id == (int)Tickets.Models.Enums.AwardTypeEnum.WinFraction)
                                 {
                                     total = raffleAward.Award.Value;
-                                    //totalFraction += 1;
+                                    discount = total * ((decimal)LawDiscount / 100);
                                     <tr>
                                         <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Production.ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
                                         <td class="text-center">1</td>
-                                        <td class="text-center">@(raffleAward.Award.Value * (context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor / 100)).ToString("c",  new System.Globalization.CultureInfo("es-DO"))</td>
-                                        <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@(raffleAward.Award.Value.ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                        <td class="text-center">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@LawDiscount %</td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center">@((total * ((decimal)LawDiscount / 100)).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                        <td class="text-center"></td>
+                                        <td class="text-right">@((total - (total * ((decimal)LawDiscount / 100))).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                                     </tr>
                                 }
                                 else
                                 {
-                                    //totalFraction += (number.FractionTo - number.FractionFrom + 1);
+                                    discount = total * ((decimal)LawDiscount / 100);
                                     <tr>
                                         <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft(Model.Production.ToString().Length, '0')</td>
@@ -284,10 +323,17 @@
                                         <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
                                         <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
                                         <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                        <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@LawDiscount %</td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center">@((total * ((decimal)LawDiscount / 100)).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
+                                        <td class="text-center"></td>
+                                        <td class="text-right">@((total - (total * ((decimal)LawDiscount / 100))).ToString("c", new System.Globalization.CultureInfo("es-DO")))</td>
                                     </tr>
                                 }
-                                totalGeneral += total;
+                                totalGeneral += total - discount;
+                                totalfrac += total;
+                                totalDescuento += discount;
                             }
                         }
 
@@ -311,7 +357,17 @@
                             <td></td>
                             <td></td>
                             <td class="text-center"><strong>@totalFraction.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</strong></td>
-                            <td class="text-right" colspan="2">Subtotal a pagar: <strong> @((totalGeneral).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                            <td></td>
+                            <td class="text-center"><strong>@totalfrac.ToString("c", new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                            <td></td>
+                            <td class="text-center"><strong>@totalDescuento.ToString("c", new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                            <td class="text-right"><strong> @((totalGeneral).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         if (Model.ReceivablePercent > 0)
                         {
@@ -320,21 +376,13 @@
                             </tr>
                         }
                         <tr>
-                            <td class="text-right" style="border-top: none;" colspan="7">Pagos anteriores: <strong> @(((totalPayment + percentValue) - (Model.Value + percentValue) ).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                            <td class="text-right" style="border-top: none;" colspan="10">MONTO EN PREMIOS: <strong> @((totalfrac.ToString("c",  new System.Globalization.CultureInfo("es-DO"))))</strong></td>
                         </tr>
                         <tr>
-                            <td class="text-right" style="border-top: none;" colspan="7">Pago actual: <strong> @(Model.Value.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
+                            <td class="text-right" style="border-top: none;" colspan="10">MONTO DESCONTADO: <strong> @(totalDescuento.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
                         </tr>
                         <tr>
-                            @if (Model.CreditNoteId != 0)
-                            {
-                                <td colspan="4" style="font-size:small; border-top:none;"><b>Concepto:</b> @Model.Concept</td>
-                                <td class="text-right" style="border-top: none;" colspan="3">Pendiente por Pagar: <strong> @((totalGeneral + percentValue - totalPayment).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
-                            }
-                            else
-                            {
-                                <td class="text-right" style="border-top: none;" colspan="7">Pendiente por Pagar: <strong> @((totalGeneral + percentValue - totalPayment).ToString("c", new System.Globalization.CultureInfo("es-DO")))</strong></td>
-                            }
+                            <td class="text-right" style="border-top: none;" colspan="10">TOTAL A PAGAR: <strong> @(totalGeneral.ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong></td>
                         </tr>
                     }
                 </tbody>

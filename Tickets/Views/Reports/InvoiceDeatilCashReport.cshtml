@@ -94,7 +94,7 @@
                         <th class="text-center">TIPO DE PREMIO</th>
                         <th class="text-center">FRACCIONES DESDE-HASTA</th>
                         <th class="text-center">CANTIDAD FRACCIONES</th>
-                        <th class="text-center">VALOR FRACCCION</th>
+                        <th class="text-center">VALOR FRACCION</th>
                         <th class="text-right">TOTAL</th>
                     </tr>
                 </thead>
@@ -120,121 +120,124 @@
 
                         foreach (var number in identifyBachs)
                         {
-                            if (number.IdentifyBachNumberType == (int)Tickets.Models.Enums.IdentifyBachNumberTypeEnum.Gamer)
+                            if (number.IdentifyBach.IdentifyBachPayments.FirstOrDefault().PaymentType != (int)Tickets.Models.Enums.BachPaymentTypeEnum.Check)
                             {
-                                var raffleAwardList = raffleAwards
-                                .Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number &&
-                                rw.Award.TypesAward.Creation != (int)Tickets.Models.Enums.TypesAwardCreationEnum.SameAwardDerived &&
-                                rw.Award.PayingFund == Fund).ToList();
-
-                                if (raffleAwardList.Count == 0)
+                                if (number.IdentifyBachNumberType == (int)Tickets.Models.Enums.IdentifyBachNumberTypeEnum.Gamer)
                                 {
-                                    var raffleAwardList2 = raffleAwards
+                                    var raffleAwardList = raffleAwards
                                     .Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number &&
                                     rw.Award.TypesAward.Creation != (int)Tickets.Models.Enums.TypesAwardCreationEnum.SameAwardDerived &&
-                                    rw.Award.AlternativePayingFund == Fund).ToList();
+                                    rw.Award.PayingFund == Fund).ToList();
 
-                                    foreach (var raffleAward in raffleAwardList2)
+                                    if (raffleAwardList.Count == 0)
                                     {
-                                        var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
-                                        var total = (number.FractionTo - number.FractionFrom + 1) * price;
-                                        <tr>
-                                            <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
-                                            <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToString("dd/MM/yyyy")</td>
-                                            <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((number.TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
-                                            <td class="text-center">@raffleAward.Award.Name</td>
-                                            <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
-                                            <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
-                                            <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                            <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                        </tr>
-                                        if (!numberList.Any(a => a.Key == String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo)))
+                                        var raffleAwardList2 = raffleAwards
+                                        .Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number &&
+                                        rw.Award.TypesAward.Creation != (int)Tickets.Models.Enums.TypesAwardCreationEnum.SameAwardDerived &&
+                                        rw.Award.AlternativePayingFund == Fund).ToList();
+
+                                        foreach (var raffleAward in raffleAwardList2)
                                         {
-                                            numberList.Add(String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo), (number.FractionTo - number.FractionFrom + 1));
+                                            var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
+                                            var total = (number.FractionTo - number.FractionFrom + 1) * price;
+                                            <tr>
+                                                <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
+                                                <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToString("dd/MM/yyyy")</td>
+                                                <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((number.TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
+                                                <td class="text-center">@raffleAward.Award.Name</td>
+                                                <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
+                                                <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
+                                                <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                                <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                            </tr>
+                                            if (!numberList.Any(a => a.Key == String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo)))
+                                            {
+                                                numberList.Add(String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo), (number.FractionTo - number.FractionFrom + 1));
+                                            }
+                                            totalGeneral += total;
                                         }
-                                        totalGeneral += total;
+                                    }
+                                    else
+                                    {
+                                        foreach (var raffleAward in raffleAwardList)
+                                        {
+                                            var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
+                                            var total = (number.FractionTo - number.FractionFrom + 1) * price;
+                                            <tr>
+                                                <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
+                                                <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToString("dd/MM/yyyy")</td>
+                                                <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((number.TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
+                                                <td class="text-center">@raffleAward.Award.Name</td>
+                                                <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
+                                                <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
+                                                <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                                <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                            </tr>
+                                            if (!numberList.Any(a => a.Key == String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo)))
+                                            {
+                                                numberList.Add(String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo), (number.FractionTo - number.FractionFrom + 1));
+                                            }
+                                            totalGeneral += total;
+                                        }
                                     }
                                 }
-                                else
+                                else if (number.IdentifyBachNumberType == (int)Tickets.Models.Enums.IdentifyBachNumberTypeEnum.Seller)
                                 {
-                                    foreach (var raffleAward in raffleAwardList)
-                                    {
-                                        var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
-                                        var total = (number.FractionTo - number.FractionFrom + 1) * price;
-                                        <tr>
-                                            <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
-                                            <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToString("dd/MM/yyyy")</td>
-                                            <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((number.TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
-                                            <td class="text-center">@raffleAward.Award.Name</td>
-                                            <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
-                                            <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
-                                            <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                            <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                        </tr>
-                                        if (!numberList.Any(a => a.Key == String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo)))
-                                        {
-                                            numberList.Add(String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo), (number.FractionTo - number.FractionFrom + 1));
-                                        }
-                                        totalGeneral += total;
-                                    }
-                                }
-                            }
-                            else if (number.IdentifyBachNumberType == (int)Tickets.Models.Enums.IdentifyBachNumberTypeEnum.Seller)
-                            {
-                                var raffleAwardList = raffleAwards
-                                .Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number &&
-                                       rw.Award.TypesAward.Creation == (int)Tickets.Models.Enums.TypesAwardCreationEnum.SameAwardDerived &&
-                                       rw.Award.PayingFund == Fund).ToList();
-
-                                if (raffleAwardList.Count == 0)
-                                {
-                                    var raffleAwardList2 = raffleAwards
+                                    var raffleAwardList = raffleAwards
                                     .Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number &&
-                                    rw.Award.TypesAward.Creation == (int)Tickets.Models.Enums.TypesAwardCreationEnum.SameAwardDerived &&
-                                    rw.Award.AlternativePayingFund == Fund).ToList();
+                                           rw.Award.TypesAward.Creation == (int)Tickets.Models.Enums.TypesAwardCreationEnum.SameAwardDerived &&
+                                           rw.Award.PayingFund == Fund).ToList();
 
-                                    foreach (var raffleAward in raffleAwardList2)
+                                    if (raffleAwardList.Count == 0)
                                     {
-                                        var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
-                                        var total = (number.FractionTo - number.FractionFrom + 1) * price;
-                                        <tr>
-                                            <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
-                                            <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToString("dd/MM/yyyy")</td>
-                                            <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((number.TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
-                                            <td class="text-center">@raffleAward.Award.Name</td>
-                                            <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
-                                            <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
-                                            <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                            <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                        </tr>
-                                        if (!numberList.Any(a => a.Key == String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo)))
+                                        var raffleAwardList2 = raffleAwards
+                                        .Where(rw => rw.ControlNumber == number.TicketAllocationNumber.Number &&
+                                        rw.Award.TypesAward.Creation == (int)Tickets.Models.Enums.TypesAwardCreationEnum.SameAwardDerived &&
+                                        rw.Award.AlternativePayingFund == Fund).ToList();
+
+                                        foreach (var raffleAward in raffleAwardList2)
                                         {
-                                            numberList.Add(String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo), (number.FractionTo - number.FractionFrom + 1));
+                                            var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
+                                            var total = (number.FractionTo - number.FractionFrom + 1) * price;
+                                            <tr>
+                                                <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
+                                                <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToString("dd/MM/yyyy")</td>
+                                                <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((number.TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
+                                                <td class="text-center">@raffleAward.Award.Name</td>
+                                                <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
+                                                <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
+                                                <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                                <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                            </tr>
+                                            if (!numberList.Any(a => a.Key == String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo)))
+                                            {
+                                                numberList.Add(String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo), (number.FractionTo - number.FractionFrom + 1));
+                                            }
+                                            totalGeneral += total;
                                         }
-                                        totalGeneral += total;
                                     }
-                                }
-                                else
-                                {
-                                    foreach (var raffleAward in raffleAwardList)
+                                    else
                                     {
-                                        var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
-                                        var total = (number.FractionTo - number.FractionFrom + 1) * price;
-                                        <tr>
-                                            <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
-                                            <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToString("dd/MM/yyyy")</td>
-                                            <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((number.TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
-                                            <td class="text-center">@raffleAward.Award.Name</td>
-                                            <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
-                                            <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
-                                            <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                            <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                        </tr>
-                                        if (!numberList.Any(a => a.Key == String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo)))
+                                        foreach (var raffleAward in raffleAwardList)
                                         {
-                                            numberList.Add(String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo), (number.FractionTo - number.FractionFrom + 1));
+                                            var price = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
+                                            var total = (number.FractionTo - number.FractionFrom + 1) * price;
+                                            <tr>
+                                                <td class="text-center">@number.IdentifyBach.SequenceNumber</td>
+                                                <td class="text-center">@number.IdentifyBach.IdentifyBachPayments.ToList().Last().CreateDate.ToString("dd/MM/yyyy")</td>
+                                                <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((number.TicketAllocationNumber.TicketAllocation.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
+                                                <td class="text-center">@raffleAward.Award.Name</td>
+                                                <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
+                                                <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
+                                                <td class="text-center">@price.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                                <td class="text-right">@total.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                            </tr>
+                                            if (!numberList.Any(a => a.Key == String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo)))
+                                            {
+                                                numberList.Add(String.Concat(number.TicketAllocationNumber.Number.ToString(), number.FractionFrom, '-', number.FractionTo), (number.FractionTo - number.FractionFrom + 1));
+                                            }
+                                            totalGeneral += total;
                                         }
-                                        totalGeneral += total;
                                     }
                                 }
                             }

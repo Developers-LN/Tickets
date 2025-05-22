@@ -171,7 +171,8 @@
                                     <td>{{payment.Note}}</td>
                                     <td>{{parseMoney(payment.Value)}}</td>
                                     <td class="text-center">
-                                        <a target="_blank" href="~/Reports/IndentifyReceivableReport?paymentId={{payment.Id}}" title="Impresion pago en efectivo"><i class="fa fa-file-o"></i></a>
+                                        <a ng-show="payment.PaymentType == 5969" target="_blank" href="~/Reports/IndentifyReceivableReport?paymentId={{payment.Id}}" title="Impresion pago en efectivo"><i class="fa fa-file-o"></i></a>
+                                        <a ng-show="payment.PaymentType == 5968" target="_blank" href="~/Reports/IndentifyReceivableReportCheck?paymentId={{payment.Id}}" title="Impresion pago en cheque"><i class="fa fa-file-o"></i></a>
                                     </td>
                                 </tr>
                                 <tr data-ng-repeat="noteCredit in identifyBach.NoteCredits">
@@ -199,16 +200,18 @@
                     <table class="table dataTableGrid">
                         <thead>
                             <tr>
-                                <th class="text-center">Numero</th>
-                                <th class="text-center">Frac. Desde</th>
-                                <th class="text-center">Frac. Hasta</th>
+                                <th class="text-center">Número</th>
+                                <th class="text-center">Desde</th>
+                                <th class="text-center">Hasta</th>
                                 <th class="text-center">Premio</th>
-                                <th class="text-center">Cantidad Frac.</th>
-                                <th class="text-right">Valor</th>
-                                <th class="text-right">Total</th>
-                                <th class="text-right">Desc. Ley</th>
-                                <th class="text-right">Valor Total</th>
-                                <th class="text-center" style="width: 100px;">Transacciones</th>
+                                <th class="text-center">Cant. Frac.</th>
+                                <th class="text-right">Valor Premio</th>
+                                <th class="text-right">Valor Frac.</th>
+                                <th class="text-center">Desc.</th>
+                                <th class="text-center">Reten.</th>
+                                <th class="text-center">Total Reten.</th>
+                                <th class="text-center">Total Pagar</th>
+                                <th class="text-center">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -221,7 +224,9 @@
                                 <td class="text-right" ng-bind="parseMoney(identifyNumber.RaffleAward.AwardValue)"></td>
                                 <td class="text-right" ng-bind="parseMoney(showSubTotal(identifyNumber))"></td>
                                 <td class="text-center">{{identifyNumber.RaffleAward.LawDiscount}} %</td>
-                                <td class="text-center">{{parseMoney(showSubTotal(identifyNumber) - (showSubTotal(identifyNumber) * (identifyNumber.RaffleAward.LawDiscount/100)))}}</td>
+                                <td class="text-center">{{identifyNumber.RaffleAward.Retention}} %</td>
+                                <td class="text-right" ng-bind="parseMoney(identifyNumber.RaffleAward.TotalRetention)"></td>
+                                <td class="text-right">{{parseMoney(showSubTotal(identifyNumber) - (showSubTotal(identifyNumber) * (identifyNumber.RaffleAward.LawDiscount/100)))}}</td>
                                 <td class="text-center">
                                     <a href="/#/ticket/numberdetail/{{identifyNumber.NumberId}}" title="Ver detalles del Número" class="{{moduleCanView}}"><i class="fa fa-eye"></i></a>
                                 </td>
@@ -235,6 +240,8 @@
                                 <td></td>
                                 <td class="text-center" ng-bind="totalFraction"></td>
                                 <td class="text-right" ng-bind="parseMoney(totalValue)"></td>
+                                <td></td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td class="text-right" ng-bind="parseMoney(totalGeneral)"></td>

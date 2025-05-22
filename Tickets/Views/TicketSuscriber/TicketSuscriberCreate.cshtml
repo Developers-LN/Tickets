@@ -32,11 +32,11 @@
                         <div class="radio c-radio  m-l-xs">
                             <label>
                                 <input type="radio" name="numbers" id="ticketAllocateNumber" value="number" checked="checked">
-                                <span class="fa fa-circle"></span>Numero
+                                <span class="fa fa-circle"></span>Número
                             </label>
                             <label>
                                 <input type="radio" name="numbers" value="range" id="ticketAllocateRangeNumber">
-                                <span class="fa fa-circle"></span>Rango de Numero
+                                <span class="fa fa-circle"></span>Rango de Número
                             </label>
                         </div>
                         <div class="col-lg-12" id="numberContainer">
@@ -81,7 +81,7 @@
                 <table class="table dataTableGrid">
                     <thead>
                         <tr>
-                            <th>Numero</th>
+                            <th>Número</th>
                             <th class="editColumm">Acción</th>
                         </tr>
                     </thead>
@@ -89,7 +89,7 @@
                         <tr data-ng-repeat="number in suscriber.ticketSuscriberNumbers">
                             <td ng-bind="number.number"></td>
                             <td>
-                                <a ng-if="number.id == 0" ng-click="deleteNumber(number)" title="Borrar Numero"><i class="fa fa-times"></i></a>
+                                <a ng-if="number.id == 0" ng-click="deleteNumber(number)" title="Borrar Número"><i class="fa fa-times"></i></a>
                             </td>
                         </tr>
                     </tbody>

@@ -10,6 +10,8 @@
         Aprox = 7,
         Hundred = 8,
         Terminal = 9,
-        LastBall = 10
+        LastBall = 10,
+        AutomaticAwardInNature = 16,
+        AdditionalAwardInNature = 17
     }
 }
