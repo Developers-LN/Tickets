@@ -42,7 +42,7 @@
                                 <td>{{(otherIncomesPayment.CreateDate| date:"dd/MM/yyyy")}}</td>
                                 <td>{{parseMoney(otherIncomesPayment.Total)}}</td>
                                 <td>
-                                    @*<a href="#/others/otherIncomeGroup/{{otherIncomesPayment.Id}}" title="Modificar grupo" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>*@
+                                    <a href="#/others/otherIncomeGroup/{{otherIncomesPayment.Id}}" title="Modificar grupo" class="{{moduleCanEdit}}"><i class="fa fa-pencil-square-o"></i></a>
                                     <a ng-show="verifyCanView('app.otherIncomePaymentByGroup')" href="#/others/otherIncomePaymentByGroup/{{otherIncomesPayment.Id}}" title="Lista de pagos" class="{{moduleCanView}}"><i class="fa fa-file-text-o"></i></a>
                                     <a target="_blank" href="/Reports/OtherPaymentGroup?groupId={{otherIncomesPayment.Id}}" title="Reporte de pago"><i class="fa fa-print"></i></a>
                                 </td>

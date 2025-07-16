@@ -167,17 +167,16 @@
                             <tbody>
                                 <tr data-ng-repeat="payment in identifyBach.IdentifyBachPayments">
                                     <td>{{payment.ClientDesc}}</td>
-                                    <td>Pago en efectivo</td>
+                                    <td>{{payment.PaymentType}}</td>
                                     <td>{{payment.Note}}</td>
                                     <td>{{parseMoney(payment.Value)}}</td>
                                     <td class="text-center">
-                                        <a ng-show="payment.PaymentType == 5969" target="_blank" href="~/Reports/IndentifyReceivableReport?paymentId={{payment.Id}}" title="Impresion pago en efectivo"><i class="fa fa-file-o"></i></a>
-                                        <a ng-show="payment.PaymentType == 5968" target="_blank" href="~/Reports/IndentifyReceivableReportCheck?paymentId={{payment.Id}}" title="Impresion pago en cheque"><i class="fa fa-file-o"></i></a>
+                                        <a target="_blank" href="~/Reports/IndentifyReceivableReport?paymentId={{payment.Id}}" title="Impresion recibo de pago"><i class="fa fa-file-o"></i></a>
                                     </td>
                                 </tr>
                                 <tr data-ng-repeat="noteCredit in identifyBach.NoteCredits">
                                     <td>{{noteCredit.ClientDesc}}</td>
-                                    <td>Nota de credito</td>
+                                    <td>{{payment.PaymentType}}</td>
                                     <td>{{noteCredit.Note}}</td>
                                     <td>{{parseMoney(noteCredit.TotalCash)}}</td>
                                     <td class="text-center">

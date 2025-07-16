@@ -1,5 +1,6 @@
 ﻿@model Tickets.Models.IdentifyBach
 @using Tickets.Models.Enums
+
 @{
     Layout = "~/Views/Shared/_ReportLayout.cshtml";
     ViewBag.Title = "APROBACION DE PAGO A PREMIO DEL LOTE NO. " + Model.SequenceNumber + " DEL SORTEO NO. " + Model.Raffle.Symbol + Model.Raffle.Separator + Model.Raffle.SequenceNumber;
@@ -11,6 +12,7 @@
     var raffleAwards = context.Raffles.FirstOrDefault(r => r.Id == Model.RaffleId).RaffleAwards.ToList();
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
     var LawDiscount = context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor;
+    var LawRetent = context.SystemConfigs.FirstOrDefault().LawRetentPercent;
 }
 
 <style>
@@ -86,30 +88,34 @@
                     <tr>
                         <th class="text-center">NUMERO</th>
                         <th class="text-center">PREMIO</th>
-                        <th class="text-center">DESDE-HASTA</th>
+                        <th class="text-center">FRAC.</th>
                         <th class="text-center">CANT. FRAC.</th>
-                        <th class="text-right">VALOR FRAC.</th>
+                        <th class="text-center">VALOR FRAC.</th>
+                        <th class="text-center">TOTAL FRAC.</th>
                         <th class="text-center">DESC.</th>
                         <th class="text-center">RETEN.</th>
-                        <th class="text-right">TOTAL RETEN.</th>
-                        <th class="text-right">TOTAL PAGAR</th>
+                        <th class="text-center">TOTAL DESC.</th>
+                        <th class="text-center">TOTAL RETEN.</th>
+                        <th class="text-right">TOTAL</th>
                     </tr>
                 </thead>
                 <tbody>
                     @{
                         int TotalFraction = 0;
-                        decimal TotalGeneral = 0;
-                        decimal TotalRetentionGeneral = 0;
+                        decimal TotalAwardByFraction = 0.0m;
+                        decimal TotalAwardMountDiscount = 0.0m;
+                        decimal TotalAwardMountReten = 0.0m;
+                        decimal TotalGeneralToPay = 0.0m;
 
-                        var totalFraction2 = Model.IdentifyNumbers
-                        .Select(s => new
-                        {
-                            s.NumberId,
-                            total = s.FractionTo - s.FractionFrom + 1,
-                            s.FractionFrom,
-                            s.FractionTo
-                        }).Distinct().ToList();
-                        TotalFraction = totalFraction2.Sum(s => s.total);
+                        var TotalFraction2 = Model.IdentifyNumbers
+                            .Select(s => new
+                            {
+                                s.NumberId,
+                                total = s.FractionTo - s.FractionFrom + 1,
+                                s.FractionFrom,
+                                s.FractionTo
+                            }).Distinct().ToList();
+                        TotalFraction = TotalFraction2.Sum(s => s.total);
                     }
 
                     @if (Model.IdentifyType == (int)Tickets.Models.Enums.IdentifyBachTypeEnum.Gamers)
@@ -145,45 +151,52 @@
 
                             foreach (var raffleAward in raffleAwardList)
                             {
-                                var ValuePerFracction = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber) * (number.FractionTo - number.FractionFrom + 1);
-                                var TotalToPay = raffleAward.Award.ByFraction == (int)ByFractionEnum.S || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (raffleAward.Award.ByFraction == (int)ByFractionEnum.S ? raffleAward.Award.Value * ((decimal)LawDiscount / 100) : (raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber) * (number.FractionTo - number.FractionFrom + 1)) * (1 - (decimal)LawDiscount / 100)) : (raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber));
-                                var Discount = raffleAward.Award.ByFraction == (int)ByFractionEnum.S || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? LawDiscount : 0;
-                                var Retention = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? LawDiscount : 0;
-                                var TotalRetention = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (raffleAward.Award.Value * (decimal)LawDiscount / 100) : 0;
+                                decimal AwardByFraction = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
+                                decimal AwardValue = raffleAward.Award.Value;
+                                var Fractions = number.FractionTo - number.FractionFrom + 1;
+                                decimal AwardLawDiscount = raffleAward.Award.ByFraction == (int)ByFractionEnum.S || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (decimal)LawDiscount : 0;
+                                decimal AwardLawReten = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (decimal)LawRetent : 0;
+                                decimal AwardMountDiscount = raffleAward.Award.ByFraction == (int)ByFractionEnum.S || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (AwardByFraction * ((decimal)LawDiscount / 100)) : 0;
+                                decimal AwardMountReten = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (raffleAward.Award.Value * (decimal)LawRetent / 100) : 0;
+                                decimal TotalByFraction = AwardByFraction * Fractions;
+                                decimal TotalToPay = TotalByFraction - AwardMountDiscount;
 
                                 if (raffleAward.Award.TypesAward.Id == (int)Tickets.Models.Enums.AwardTypeEnum.WinFraction)
                                 {
-                                    TotalToPay = raffleAward.Award.Value;
-                                    //totalFraction += 1;
                                     <tr>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((Model.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
-                                        <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
+                                        <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
                                         <td class="text-center">1</td>
-                                        <td class="text-right">@ValuePerFracction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                        <td class="text-center">@Discount %</td>
-                                        <td class="text-center">@Retention %</td>
-                                        <td class="text-right">@TotalRetention.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@AwardValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@AwardValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@AwardLawDiscount %</td>
+                                        <td class="text-center">@AwardLawReten %</td>
+                                        <td class="text-center">@AwardMountDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@AwardMountReten.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                         <td class="text-right">@TotalToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                     </tr>
                                 }
                                 else
                                 {
-                                    //totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                     <tr>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((Model.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
-                                        <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
-                                        <td class="text-right">@ValuePerFracction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                        <td class="text-center">@Discount %</td>
-                                        <td class="text-center">@Retention %</td>
-                                        <td class="text-right">@TotalRetention.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@Fractions</td>
+                                        <td class="text-center">@AwardByFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@TotalByFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@AwardLawDiscount %</td>
+                                        <td class="text-center">@AwardLawReten %</td>
+                                        <td class="text-center">@AwardMountDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@AwardMountReten.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                         <td class="text-right">@TotalToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                     </tr>
                                 }
-                                TotalGeneral += TotalToPay;
-                                TotalRetentionGeneral += TotalRetention;
+                                TotalAwardByFraction += AwardByFraction;
+                                TotalAwardMountDiscount += AwardMountDiscount;
+                                TotalAwardMountReten += AwardMountReten;
+                                TotalGeneralToPay += TotalToPay;
                             }
                         }
                     }
@@ -220,45 +233,52 @@
 
                             foreach (var raffleAward in raffleAwardList)
                             {
-                                var ValuePerFracction = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber) * (number.FractionTo - number.FractionFrom + 1);
-                                var TotalToPay = raffleAward.Award.ByFraction == (int)ByFractionEnum.S || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (raffleAward.Award.ByFraction == (int)ByFractionEnum.S ? raffleAward.Award.Value * ((decimal)LawDiscount / 100) : (raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber) * (number.FractionTo - number.FractionFrom + 1)) * (1 - (decimal)LawDiscount / 100)) : (raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber));
-                                var Discount = raffleAward.Award.ByFraction == (int)ByFractionEnum.S || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? LawDiscount : 0;
-                                var Retention = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? LawDiscount : 0;
-                                var TotalRetention = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (raffleAward.Award.Value * (decimal)LawDiscount / 100) : 0;
+                                decimal AwardByFraction = raffleAward.Award.Value / (raffleAward.Raffle.Prospect.LeafFraction * raffleAward.Raffle.Prospect.LeafNumber);
+                                decimal AwardValue = raffleAward.Award.Value;
+                                var Fractions = number.FractionTo - number.FractionFrom + 1;
+                                decimal AwardLawDiscount = raffleAward.Award.ByFraction == (int)ByFractionEnum.S || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (decimal)LawDiscount : 0;
+                                decimal AwardLawReten = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (decimal)LawRetent : 0;
+                                decimal AwardMountDiscount = raffleAward.Award.ByFraction == (int)ByFractionEnum.S || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (AwardByFraction * ((decimal)LawDiscount / 100)) : 0;
+                                decimal AwardMountReten = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (raffleAward.Award.Value * (decimal)LawRetent / 100) : 0;
+                                decimal TotalByFraction = AwardByFraction * Fractions;
+                                decimal TotalToPay = TotalByFraction - AwardMountDiscount;
 
                                 if (raffleAward.Award.TypesAward.Id == (int)Tickets.Models.Enums.AwardTypeEnum.WinFraction)
                                 {
-                                    TotalToPay = raffleAward.Award.Value;
-                                    //totalFraction += 1;
                                     <tr>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((Model.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
-                                        <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
+                                        <td class="text-center">@(raffleAward.Award.ByFraction == (int)Tickets.Models.Enums.ByFractionEnum.S ? raffleAward.Fraction.ToString() : "")</td>
                                         <td class="text-center">1</td>
-                                        <td class="text-right">@ValuePerFracction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                        <td class="text-center">@Discount %</td>
-                                        <td class="text-center">@Retention %</td>
-                                        <td class="text-right">@TotalRetention.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@AwardValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@AwardValue.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@AwardLawDiscount %</td>
+                                        <td class="text-center">@AwardLawReten %</td>
+                                        <td class="text-center">@AwardMountDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@AwardMountReten.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                         <td class="text-right">@TotalToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                     </tr>
                                 }
                                 else
                                 {
-                                    //totalFraction += (number.FractionTo - number.FractionFrom + 1);
                                     <tr>
                                         <td class="text-center">@number.TicketAllocationNumber.Number.ToString().PadLeft((Model.Raffle.Prospect.Production - 1).ToString().Length, '0')</td>
                                         <td class="text-center">@raffleAward.Award.Name</td>
                                         <td class="text-center">@number.FractionFrom - @number.FractionTo</td>
-                                        <td class="text-center">@(number.FractionTo - number.FractionFrom + 1)</td>
-                                        <td class="text-right">@ValuePerFracction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
-                                        <td class="text-center">@Discount %</td>
-                                        <td class="text-center">@Retention %</td>
-                                        <td class="text-right">@TotalRetention.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@Fractions</td>
+                                        <td class="text-center">@AwardByFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@TotalByFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@AwardLawDiscount %</td>
+                                        <td class="text-center">@AwardLawReten %</td>
+                                        <td class="text-center">@AwardMountDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
+                                        <td class="text-center">@AwardMountReten.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                         <td class="text-right">@TotalToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</td>
                                     </tr>
                                 }
-                                TotalGeneral += TotalToPay;
-                                TotalRetentionGeneral += TotalRetention;
+                                TotalAwardByFraction += AwardByFraction;
+                                TotalAwardMountDiscount += AwardMountDiscount;
+                                TotalAwardMountReten += AwardMountReten;
+                                TotalGeneralToPay += TotalToPay;
                             }
                         }
                     }
@@ -266,17 +286,14 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="text-center"><strong>@TotalFraction</strong></td>
+                        <td class="text-center"><strong>@TotalFraction.ToString("n0", new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                        <td></td>
+                        <td class="text-center"><strong>@TotalAwardByFraction.ToString("c", new System.Globalization.CultureInfo("es-DO"))</strong></td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td class="text-right" colspan="2">
-                            <br />
-                            Subtotal a pagar: <strong> @((TotalGeneral).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong>
-                            <br />
-                            <br />
-                            Total a retener: <strong> @((TotalRetentionGeneral).ToString("c",  new System.Globalization.CultureInfo("es-DO")))</strong>
-                        </td>
+                        <td class="text-center"><strong>@TotalAwardMountDiscount.ToString("c", new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                        <td class="text-center"><strong>@TotalAwardMountReten.ToString("c", new System.Globalization.CultureInfo("es-DO"))</strong></td>
+                        <td class="text-right"><strong> @TotalGeneralToPay.ToString("c", new System.Globalization.CultureInfo("es-DO"))</strong></td>
                     </tr>
                 </tbody>
             </table>
@@ -294,10 +311,7 @@
         Personal de caja
     </div>
     <div class="col-lg-4 col-md-6 col-sm-6 text-center">
-        <div class="col-lg-12 no-padder text-center">
-            ______________________________
-        </div>
-        Firma del ganador
+        <div class="col-lg-12 no-padder text-center"></div>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-6 text-center">
         <div class="col-lg-12 no-padder text-center">

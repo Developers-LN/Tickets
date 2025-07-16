@@ -13,6 +13,7 @@
     System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
     var RaffleData = context.Raffles.Where(w => w.Id == Model.RaffleId).FirstOrDefault();
     var LawDiscount = context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor;
+    var LawRetent = context.SystemConfigs.FirstOrDefault().LawRetentPercent;
 }
 
 <style>
@@ -88,6 +89,7 @@
             else
             {
                 <b>Nota de Credito: </b> @(Model.Nomenclature == null ? Model.SequenceNumberPayment.Value.ToString() : string.Concat(Model.Nomenclature, Model.SequenceNumberPayment.Value.ToString().PadLeft(5, '0')))<br />
+                <b>Concepto: </b> @Model.Concept
             }
         </div>
         <div class="col-lg-6 no-padder text-right">
@@ -122,7 +124,7 @@
                         decimal TotalAwardMountReten = 0.0m;
                         decimal TotalGeneralToPay = 0.0m;
 
-                        var totalFraction2 = Model.IdentifyBach.IdentifyNumbers
+                        var TotalFraction2 = Model.IdentifyBach.IdentifyNumbers
                             .Select(s => new
                             {
                                 s.NumberId,
@@ -130,7 +132,7 @@
                                 s.FractionFrom,
                                 s.FractionTo
                             }).Distinct().ToList();
-                        TotalFraction = totalFraction2.Sum(s => s.total);
+                        TotalFraction = TotalFraction2.Sum(s => s.total);
                     }
 
                     @if (Model.IdentifyBach.IdentifyType == (int)Tickets.Models.Enums.IdentifyBachTypeEnum.Gamers)
@@ -183,9 +185,9 @@
                                 decimal AwardValue = raffleAward.Award.Value;
                                 var Fractions = number.FractionTo - number.FractionFrom + 1;
                                 decimal AwardLawDiscount = raffleAward.Award.ByFraction == (int)ByFractionEnum.S || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (decimal)LawDiscount : 0;
-                                decimal AwardLawReten = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (decimal)LawDiscount : 0;
+                                decimal AwardLawReten = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (decimal)LawRetent : 0;
                                 decimal AwardMountDiscount = raffleAward.Award.ByFraction == (int)ByFractionEnum.S || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (AwardByFraction * ((decimal)LawDiscount / 100)) : 0;
-                                decimal AwardMountReten = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (raffleAward.Award.Value * (decimal)LawDiscount / 100) : 0;
+                                decimal AwardMountReten = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (raffleAward.Award.Value * (decimal)LawRetent / 100) : 0;
                                 decimal TotalByFraction = AwardByFraction * Fractions;
                                 decimal TotalToPay = TotalByFraction - AwardMountDiscount;
 
@@ -325,9 +327,9 @@
                                 decimal AwardValue = raffleAward.Award.Value;
                                 var Fractions = number.FractionTo - number.FractionFrom + 1;
                                 decimal AwardLawDiscount = raffleAward.Award.ByFraction == (int)ByFractionEnum.S || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (decimal)LawDiscount : 0;
-                                decimal AwardLawReten = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (decimal)LawDiscount : 0;
+                                decimal AwardLawReten = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (decimal)LawRetent : 0;
                                 decimal AwardMountDiscount = raffleAward.Award.ByFraction == (int)ByFractionEnum.S || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.Mayors ? (AwardByFraction * ((decimal)LawDiscount / 100)) : 0;
-                                decimal AwardMountReten = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (raffleAward.Award.Value * (decimal)LawDiscount / 100) : 0;
+                                decimal AwardMountReten = (raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || raffleAward.Award.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && raffleAward.Award.Value > 100000 ? (raffleAward.Award.Value * (decimal)LawRetent / 100) : 0;
                                 decimal TotalByFraction = AwardByFraction * Fractions;
                                 decimal TotalToPay = TotalByFraction - AwardMountDiscount;
 

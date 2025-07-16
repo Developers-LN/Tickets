@@ -714,6 +714,7 @@ warning 6002: The table/view 'Tickets.dbo.ProspectFractions' does not have a pri
           <Property Name="FacturacionCargo" Type="varchar" MaxLength="100" />
           <Property Name="Comercial" Type="varchar" MaxLength="100" />
           <Property Name="ComercialCargo" Type="varchar" MaxLength="100" />
+          <Property Name="LawRetentPercent" Type="int" />
         </EntityType>
         <EntityType Name="TaxReceipt">
           <Key>
@@ -4506,6 +4507,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <Property Name="CreditosCobros" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Comercial" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ComercialCargo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LawRetentPercent" Type="Int32" />
         </EntityType>
         <EntityType Name="TicketAllocation">
           <Key>
@@ -7210,6 +7212,7 @@ FROM [dbo].[ProspectFractions] AS [ProspectFractions]</DefiningQuery>
           <EntitySetMapping Name="SystemConfigs">
             <EntityTypeMapping TypeName="TicketsModel.SystemConfig">
               <MappingFragment StoreEntitySet="SystemConfig">
+                <ScalarProperty Name="LawRetentPercent" ColumnName="LawRetentPercent" />
                 <ScalarProperty Name="ComercialCargo" ColumnName="ComercialCargo" />
                 <ScalarProperty Name="Comercial" ColumnName="Comercial" />
                 <ScalarProperty Name="CreditosCobros" ColumnName="CreditosCobros" />

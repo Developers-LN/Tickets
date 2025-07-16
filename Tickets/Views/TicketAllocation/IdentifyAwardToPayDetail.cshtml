@@ -168,7 +168,7 @@
                             <tbody>
                                 <tr data-ng-repeat="payment in identifyBach.IdentifyBachPayments">
                                     <td>{{payment.ClientDesc}}</td>
-                                    <td>Pago en efectivo</td>
+                                    <td>{{payment.PaymentType}}</td>
                                     <td>{{payment.Note}}</td>
                                     <td class="text-right">{{parseMoney(payment.Value)}}</td>
                                     <td class="text-center">
@@ -177,7 +177,7 @@
                                 </tr>
                                 <tr data-ng-repeat="noteCredit in identifyBach.NoteCredits">
                                     <td>{{noteCredit.ClientDesc}}</td>
-                                    <td>Nota de credito</td>
+                                    <td>{{noteCredit.PaymentType}}</td>
                                     <td>{{noteCredit.Note}}</td>
                                     <td class="text-right">{{parseMoney(noteCredit.TotalCash)}}</td>
                                     <td class="text-center">

@@ -35,5 +35,6 @@ namespace Tickets.Models
         public string CreditosCobros { get; set; }
         public string Comercial { get; set; }
         public string ComercialCargo { get; set; }
+        public Nullable<int> LawRetentPercent { get; set; }
     }
 }

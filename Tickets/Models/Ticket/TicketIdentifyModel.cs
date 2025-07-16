@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.EMMA;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tickets.Models.AuxModels;
@@ -1555,7 +1556,8 @@ namespace Tickets.Models.Ticket
                     c.ClientId,
                     ClientDesc = c.ClientId + " - " + c.Client.Name,
                     c.TotalCash,
-                    Note = c.Concepts
+                    Note = c.Concepts,
+                    PaymentType = "Nota de crédito"
                 }),
                 IdentifyBachPayments = context.IdentifyBachPayments.Where(ib => ib.IdentifyBachId == identifyBach.Id).Select(p => new
                 {
@@ -1565,7 +1567,7 @@ namespace Tickets.Models.Ticket
                     ClientDesc = p.ClientId + " - " + p.Client.Name,
                     p.Value,
                     p.Note,
-                    p.PaymentType
+                    PaymentType = (p.PaymentType != null || p.PaymentType == null) && p.PaymentType == (int)BachPaymentTypeEnum.Cash ? "Efectivo" : p.PaymentType == (int)BachPaymentTypeEnum.Check ? "Cheque" : p.PaymentType == (int)BachPaymentTypeEnum.Nature ? "Naturaleza" : ""
                 }),
                 IdentifyNumbers = context.IdentifyNumbers.AsEnumerable().Where(n => n.IdentifyBachId == identifyBach.Id)
                 .Select(n => IdentifyNumberToObejct(n)).ToList()
@@ -1610,7 +1612,8 @@ namespace Tickets.Models.Ticket
                     c.ClientId,
                     ClientDesc = c.ClientId + " - " + c.Client.Name,
                     c.TotalCash,
-                    Note = c.Concepts
+                    Note = c.Concepts,
+                    PaymentType = "Nota de crédito"
                 }),
                 IdentifyBachPayments = context.IdentifyBachPayments.Where(ib => ib.IdentifyBachId == identifyBach.Id).Select(p => new
                 {
@@ -1620,7 +1623,7 @@ namespace Tickets.Models.Ticket
                     ClientDesc = p.ClientId + " - " + p.Client.Name,
                     p.Value,
                     p.Note,
-                    p.PaymentType
+                    PaymentType = (p.PaymentType != null || p.PaymentType == null) && p.PaymentType == (int)BachPaymentTypeEnum.Cash ? "Efectivo" : p.PaymentType == (int)BachPaymentTypeEnum.Check ? "Cheque" : p.PaymentType == (int)BachPaymentTypeEnum.Nature ? "Naturaleza" : ""
                 }),
                 IdentifyNumbers = context.IdentifyNumbers.AsEnumerable().Where(n => n.IdentifyBachId == identifyBach.Id)
                 .Select(n => IdentifyNumberSellerToObejct(n)).ToList()
@@ -1632,6 +1635,7 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
 
             var LawDiscount = context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor;
+            var LawRetent = context.SystemConfigs.FirstOrDefault().LawRetentPercent;
 
             var AwardData = context.RaffleAwards
                 .Where(ra =>
@@ -1691,9 +1695,9 @@ namespace Tickets.Models.Ticket
                     FractionTo = ra.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionTo,
                     ra.Id,
                     LawDiscount = ra.ByFraction == (int)ByFractionEnum.S || ra.TypesAwardId == (int)AwardTypeEnum.Mayors ? LawDiscount : 0,
-                    Retention = (ra.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || ra.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && ra.Value > 100000 ? LawDiscount : 0,
+                    Retention = (ra.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || ra.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && ra.Value > 100000 ? LawRetent : 0,
                     Total = ra.ByFraction == (int)ByFractionEnum.S || ra.TypesAwardId == (int)AwardTypeEnum.Mayors ? (ra.ByFraction == (int)ByFractionEnum.S ? ra.Value * (LawDiscount / 100) : (ra.Value / (ra.LeafFraction * ra.LeafNumber) * (n.FractionTo - n.FractionFrom + 1)) * (LawDiscount / 100)) : (ra.Value / (ra.LeafFraction * ra.LeafNumber)),
-                    TotalRetention = (ra.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || ra.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && ra.Value > 100000 ? (ra.Value * LawDiscount / 100) : 0
+                    TotalRetention = (ra.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || ra.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && ra.Value > 100000 ? (ra.Value * LawRetent / 100) : 0
                 }).ToList()
             };
             return identifyObject;
@@ -1704,6 +1708,7 @@ namespace Tickets.Models.Ticket
             var context = new TicketsEntities();
 
             var LawDiscount = context.SystemConfigs.FirstOrDefault().LawDiscountPercentMayor;
+            var LawRetent = context.SystemConfigs.FirstOrDefault().LawRetentPercent;
 
             var AwardData = context.RaffleAwards
                 .Where(ra =>
@@ -1763,9 +1768,9 @@ namespace Tickets.Models.Ticket
                     FractionTo = ra.ByFraction == (int)ByFractionEnum.S ? ra.Fraction : n.FractionTo,
                     ra.Id,
                     LawDiscount = ra.ByFraction == (int)ByFractionEnum.S || ra.TypesAwardId == (int)AwardTypeEnum.Mayors ? LawDiscount : 0,
-                    Retention = (ra.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || ra.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && ra.Value > 100000 ? LawDiscount : 0,
+                    Retention = (ra.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || ra.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && ra.Value > 100000 ? LawRetent : 0,
                     Total = ra.ByFraction == (int)ByFractionEnum.S || ra.TypesAwardId == (int)AwardTypeEnum.Mayors ? (ra.ByFraction == (int)ByFractionEnum.S ? ra.Value * (LawDiscount / 100) : (ra.Value / (ra.LeafFraction * ra.LeafNumber) * (n.FractionTo - n.FractionFrom + 1)) * (LawDiscount / 100)) : (ra.Value / (ra.LeafFraction * ra.LeafNumber)),
-                    TotalRetention = (ra.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || ra.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && ra.Value > 100000 ? (ra.Value * LawDiscount / 100) : 0
+                    TotalRetention = (ra.TypesAwardId == (int)AwardTypeEnum.AdditionalAwardInNature || ra.TypesAwardId == (int)AwardTypeEnum.AutomaticAwardInNature) && ra.Value > 100000 ? (ra.Value * LawRetent / 100) : 0
                 }).ToList()
             };
 
